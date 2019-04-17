@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.util;
 
+import com.cqut.czb.bn.util.config.Config;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,7 +10,6 @@ import java.util.Map;
 
 public class HttpJiamiUtils {
     public static String DDMSign(Map<String,String> map){
-        long time = System.currentTimeMillis();
         List<String> list = new ArrayList<>();
 
         //等号赋值 key=value 赋值到list中
@@ -48,7 +49,17 @@ public class HttpJiamiUtils {
         for (String s : list){
             r+=s+"&";
         }
+        if("ios".equals(map.get("F")))  {
+            r = r+"clientKey="+ Config.IOSKEY+"&"+"timestamp="+map.get("timestamp")+"&"+"F="+"ios";
+        }
+        if("android".equals(map.get("F"))) {
+            r = r+"clientKey="+ Config.ANDROIDKEY+"&"+"timestamp="+map.get("timestamp")+"&"+"F="+"android";
+        }
+        if("backstage".equals(map.get("F"))) {
+            r = r+"clientKey="+ Config.BACKSTAGEKEY+"&"+"timestamp="+map.get("timestamp")+"&"+"F="+"backstage";
+        }
         r = MD5Utils.MD5Encode(r,"utf-8");
         return r;
     }
+
 }
