@@ -1,0 +1,41 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.12.RELEASE'
+    }
+    repositories {
+        maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
+
+group = 'com.cqut'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: "https://repo.spring.io/milestone" }
+}
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.12.RELEASE'
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
+    compile group: 'org.springframework.boot', name : 'spring-boot-starter-web', version: '1.5.12.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '1.5.12.RELEASE'
+
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
+
+    compile project(':czb-bn:bn-dao')
+    compile project(':czb-bn:bn-entity')
+}
+
+
+

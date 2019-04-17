@@ -1,0 +1,39 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.12.RELEASE'
+    }
+    repositories {
+        maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.12.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
+
+group 'com.cqut.czb'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: "https://repo.spring.io/milestone" }
+}
+
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+//    compile("org.springframework.boot:spring-boot-starter-hateoas:${springBootVersion}")
+
+    compile project(':czb-bn:bn-service-impl')
+    compile project(':czb-bn:bn-util')
+    compile project(':czb-global')
+
+    compile project(':czb-auth')
+
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+}

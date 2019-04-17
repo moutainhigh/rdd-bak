@@ -1,0 +1,49 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+**/bin
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+.vscode
+
+**/output
+node_module/
+
+out/*
+
+/czb-auth/out/
+/czb-global/out/
+/czb-bn/bn-api/out/
+/czb-bn/bn-dao/out/
+/czb-bn/bn-entity/out/
+/czb-bn/bn-service/out/
+/czb-bn/bn-service-impl/out/
+/czb-bn/bn-util/out/
+/.idea/
+/.gradle/
+/.idea/workspace.xml
+/.idea/gradle.xml
+/$RIZ85O9.sql
+/czb-bn/bn-dao/src/main/resources/generatorConfig.xml

@@ -1,0 +1,28 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.12.RELEASE'
+    }
+    repositories {
+        maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.12.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: "https://repo.spring.io/milestone" }
+}
+
+dependencies {
+    compile project(":czb-bn:bn-dao")
+    compile project(":czb-bn:bn-util")
+    compile project(":czb-bn:bn-service")
+}

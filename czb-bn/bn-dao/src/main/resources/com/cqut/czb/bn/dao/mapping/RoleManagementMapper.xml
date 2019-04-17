@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RoleManagementMapper">
+    <resultMap id="ResultMap" type="com.cqut.czb.bn.entity.dto.role.ResultRoleDTO">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="isAllowEdit" column="is_allow_edit"/>
+        <result property="isAllowDelete" column="is_Allow_Delete"/>
+        <result property="actualAllowEdit" column="actualAllowEdit"/>
+        <result property="createId" column="create_Id"/>
+        <result property="createTime" column="createT"/>
+        <result property="updateId" column="update_Id"/>
+        <result property="updateTime" column="updateT"/>
+        <result property="isDelete" column="is_Delete"/>
+        <result property="createPerson" column="createPerson"/>
+        <result property="updatePerson" column="updatePerson"/>
+        <result property="roleType" column="role_type"/>
+    </resultMap>
+
+    <select id="selectRole" parameterType="com.cqut.czb.bn.entity.dto.role.GetRoleDTO" resultMap="ResultMap">
+        SELECT
+        sys_role.role_id,
+        sys_role.role_name,
+        sys_role.is_allow_edit,
+        sys_role.is_Allow_Delete,
+        sys_role.role_type,
+        (sys_role.is_allow_edit OR (sys_role.create_Id = #{id,jdbcType=VARCHAR})) AS actualAllowEdit,
+        sys_role.create_Id,
+        DATE_FORMAT(
+        sys_role.create_Time,
+        "%Y-%m-%d %H:%i:%S"
+        ) AS createT,
+        sys_role.update_Id,
+        DATE_FORMAT(
+        sys_role.update_Time,
+        "%Y-%m-%d %H:%i:%S"
+        ) AS updateT,
+        sys_role.is_Delete,
+        s1.user_name createPerson,
+        s2.user_name updatePerson
+        FROM
+        sys_role
+        LEFT JOIN sys_user s1 ON sys_role.create_Id = s1.user_id
+        LEFT JOIN sys_user s2 ON sys_role.update_id = s2.user_id
+        WHERE sys_role.is_delete = FALSE
+        <if test="dataScope != null">
+            AND ${dataScope}
+        </if>
+        <if test="role.roleName != null">
+            AND role_name LIKE CONCAT('%',#{role.roleName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="role.isAllowEdit != null">
+            AND is_allow_edit = #{role.isAllowEdit,jdbcType=TINYINT}
+        </if>
+        <if test="role.isAllowDelete != null">
+            AND is_Allow_Delete = #{role.isAllowDelete,jdbcType=TINYINT}
+        </if>
+    </select>
+
+    <select id="selectRoleCreateBySelf" parameterType="com.cqut.czb.bn.entity.dto.role.GetRoleDTO" resultMap="ResultMap">
+        SELECT
+        sys_role.role_id,
+        sys_role.role_name,
+        sys_role.is_allow_edit,
+        sys_role.is_Allow_Delete,
+        sys_role.role_type,
+        (sys_role.is_allow_edit OR (sys_role.create_Id = #{id,jdbcType=VARCHAR})) AS actualAllowEdit,
+        sys_role.create_Id,
+        DATE_FORMAT(
+        sys_role.create_Time,
+        "%Y-%m-%d %H:%i:%S"
+        ) AS createT,
+        sys_role.update_Id,
+        DATE_FORMAT(
+        sys_role.update_Time,
+        "%Y-%m-%d %H:%i:%S"
+        ) AS updateT,
+        sys_role.is_Delete,
+        s1.user_name createPerson,
+        s2.user_name updatePerson
+        FROM
+        sys_role
+        LEFT JOIN sys_user s1 ON sys_role.create_Id = s1.user_id
+        LEFT JOIN sys_user s2 ON sys_role.update_id = s2.user_id
+        WHERE sys_role.is_delete = FALSE
+        AND sys_role.create_Id = #{id, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getARole" parameterType="java.lang.String" resultMap="ResultMap">
+        SELECT
+        sys_role.role_id,
+        sys_role.role_name,
+        sys_role.is_allow_edit,
+        sys_role.is_Allow_Delete,
+        sys_role.create_Id,
+        sys_role.role_type
+        FROM
+        sys_role
+        WHERE sys_role.is_delete = FALSE
+          AND role_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Role">
+        INSERT INTO sys_role (
+            role_id,
+            role_name,
+            is_allow_edit,
+            is_allow_delete,
+            create_id,
+            create_time,
+            is_delete,
+            role_type
+        )
+        VALUES (#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{isAllowEdit,jdbcType=TINYINT},
+        #{isAllowDelete,jdbcType=TINYINT}, #{createId,jdbcType=VARCHAR} , now(), FALSE, #{roleType,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="com.cqut.czb.bn.entity.entity.Role">
+        update sys_role
+        set
+        <if test="roleName != null">
+            role_name = #{roleName,jdbcType=VARCHAR},
+        </if>
+        <if test="isAllowEdit != null">
+            is_allow_edit = #{isAllowEdit,jdbcType=TINYINT},
+        </if>
+        <if test="isAllowDelete != null">
+            is_allow_delete = #{isAllowDelete,jdbcType=TINYINT},
+        </if>
+        <if test="roleType != null">
+            role_type = #{roleType,jdbcType=VARCHAR},
+        </if>
+        update_time = now(),
+        update_id = #{updateId,jdbcType=VARCHAR}
+        where role_id = #{roleId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="delete" parameterType="java.lang.String">
+        update sys_role
+        set is_delete = TRUE
+        where role_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="deleteRoles" parameterType="java.lang.String">
+        update sys_role
+        set is_delete = TRUE
+        where role_id IN
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <select id="selectSource" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.role.ElTreeDTO">
+        SELECT
+        resource_id id,
+        resource_name label,
+        parent_resource_id parentId
+        FROM
+	    sys_resource
+    </select>
+
+    <select id="selectRoleSource" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+        resource_id resourceId
+        FROM
+        sys_resource_role
+        WHERE role_id = #{id,jdbcType=VARCHAR}
+        AND resource_id NOT IN (
+            SELECT
+                parent_resource_id
+            FROM
+                sys_resource
+            WHERE
+			    parent_resource_id IS NOT NULL
+            )
+    </select>
+
+    <delete id="deleteSource" parameterType="java.lang.String">
+        DELETE
+          FROM
+	      sys_resource_role
+          WHERE
+	    role_id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="setSource">
+        INSERT INTO sys_resource_role(
+          role_id,
+          resource_id
+         )
+        VALUES
+        <foreach item="res" collection="resource" index="index"  separator=",">
+            (#{id,jdbcType=VARCHAR}, #{res,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <select id="getTotalNum" resultType="java.lang.Integer">
+        SELECT
+	      COUNT(role_id)
+        FROM
+          sys_role
+        WHERE
+	      is_delete = 0
+    </select>
+
+    <update id="setDataScope" parameterType="java.lang.String">
+        UPDATE sys_role
+        SET data_scope = #{dataScope,jdbcType=VARCHAR}
+        WHERE
+            role_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="setCustomDataScope">
+        INSERT INTO sys_data_scope_role(
+        role_id,
+        organization_id
+        )
+        VALUES
+        <foreach item="res" collection="dataScope" index="index"  separator=",">
+            (#{id,jdbcType=VARCHAR}, #{res,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <delete id="deleteCustomDataScope" parameterType="java.lang.String">
+        DELETE
+        FROM
+        sys_data_scope_role
+        WHERE
+        role_id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectCustomDataScope" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            organization_id organizationId
+        FROM
+            sys_data_scope_role
+        WHERE
+            role_id = #{id,jdbcType=VARCHAR}
+        AND organization_id NOT IN (
+            SELECT
+                parent_organization_id
+            FROM
+                sys_organization
+            WHERE
+                parent_organization_id IS NOT NULL
+        )
+    </select>
+
+    <select id="selectDataScope" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+          data_scope dataScope
+        from sys_role
+        where role_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectRoleType" resultType="com.cqut.czb.bn.entity.dto.role.RoleTypeDTO">
+        SELECT
+        LAST_ 'label',
+        ID_ 'value'
+        FROM
+        act_id_user
+        WHERE
+        ID_ &lt;> 'admin'
+    </select>
+
+    <insert id="insertTest">
+        INSERT INTO `test_table` VALUES ('test')
+    </insert>
+</mapper>

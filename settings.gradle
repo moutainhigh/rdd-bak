@@ -1,0 +1,11 @@
+rootProject.name = 'czb'
+
+include "czb-bn:bn-entity"
+include "czb-bn:bn-util"
+include "czb-bn:bn-dao"
+include "czb-bn:bn-api"
+include "czb-bn:bn-service"
+include "czb-bn:bn-service-impl"
+
+include "czb-global"
+include "czb-auth"

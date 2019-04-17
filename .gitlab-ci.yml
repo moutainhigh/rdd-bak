@@ -1,0 +1,11 @@
+stages:
+  - deploy
+
+deploy_dev:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - ssh root@192.168.1.10 "kubectl scale --replicas=0 deployment/server  -n bazhong && kubectl scale --replicas=1 deployment/server  -n bazhong "
+  only:
+    - master

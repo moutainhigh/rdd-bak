@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  mh:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        GIT_USER:
+        GIT_PASSWD:
+        BRANCH: master
+    image: inner.registry.cn-su.net/bazhong/server:latest

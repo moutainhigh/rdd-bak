@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+}
+
+dependencies {
+    compile group: 'com.github.pagehelper', name: 'pagehelper-spring-boot-starter', version: '1.2.3'
+    compile project(":czb-bn:bn-entity")
+}

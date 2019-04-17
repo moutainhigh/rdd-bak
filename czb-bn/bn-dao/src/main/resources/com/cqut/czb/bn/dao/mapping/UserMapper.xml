@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.User" >
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    *
+    from sys_user
+    where account = #{account,jdbcType=VARCHAR}
+  </select>
+
+  <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
+    SELECT
+        count(user_id)
+    FROM
+        sys_user
+    WHERE
+        account = #{account,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insertUser" parameterType="com.cqut.czb.bn.dao.mapper.UserMapper">
+    INSERT INTO `sys_user` (
+      `user_id`,
+      `user_name`,
+      `account`,
+      `password`
+    )
+    VALUES(#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+  </insert>
+</mapper>

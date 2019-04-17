@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url System.getenv("MAVEN_REPOSITORY_URL") ?: 'https://repo1.maven.org/maven2' }
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.apache.mina/mina-core
+    compile group: 'org.apache.mina', name: 'mina-core', version: '2.0.4'
+
+    // https://mvnrepository.com/artifact/org.slf4j/jcl-over-slf4j
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.1'
+
+    // https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
+    compile group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '2.2.1'
+
+    compile("org.springframework.boot:spring-boot-starter-web:1.5.12.RELEASE")
+
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.8.0'
+
+    compile group: 'com.github.dozermapper', name: 'dozer-core', version: '6.2.0'
+
+    compile group: 'org.jodd', name: 'jodd-http', version: '4.3.2'
+
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
+
+    // https://mvnrepository.com/artifact/org.jeecg/easypoi-base
+    compile group: 'cn.afterturn', name: 'easypoi-base', version: '3.1.0'
+// https://mvnrepository.com/artifact/org.jeecg/easypoi-annotation
+    compile group: 'cn.afterturn', name: 'easypoi-annotation', version: '3.1.0'
+// https://mvnrepository.com/artifact/org.jeecg/easypoi-web
+    compile group: 'cn.afterturn', name: 'easypoi-web', version: '3.1.0'
+}
