@@ -1,4 +1,4 @@
-package com.cqut.czb.auth.serviceI;
+package com.cqut.czb.auth.service;
 
 import com.cqut.czb.bn.entity.entity.User;
 
