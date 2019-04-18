@@ -1,6 +1,6 @@
-package com.cqut.czb.auth.service;
+package com.cqut.czb.auth.serviceImpl;
 
-import com.cqut.czb.auth.serviceI.UserDetailService;
+import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailService{
+public class UserDetailServiceImpl implements UserDetailService {
     @Autowired
     private UserMapper userMapper;
 

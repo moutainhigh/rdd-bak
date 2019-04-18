@@ -1,4 +1,4 @@
-package com.cqut.czb.auth.service;
+package com.cqut.czb.auth.serviceImpl;
 
 import com.cqut.czb.auth.jwt.JwtUser;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
