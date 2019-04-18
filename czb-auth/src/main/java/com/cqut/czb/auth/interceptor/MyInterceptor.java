@@ -24,8 +24,8 @@ public class MyInterceptor implements HandlerInterceptor {
             czbMap.remove("sign");
 
             String requestSigh = map.get("sign")[0];
-            String ddmSign = HttpJiamiUtils.CZBSign(czbMap);
-            if (requestSigh.equals(ddmSign)) {
+            String czbSign = HttpJiamiUtils.CZBSign(czbMap);
+            if (requestSigh.equals(czbSign)) {
                 return true;
             }
         }
