@@ -11,7 +11,10 @@ import java.util.Map;
 public class HttpJiamiUtils {
     public static String DDMSign(Map<String,String> map){
         List<String> list = new ArrayList<>();
-
+        String time = map.get("timestamp");
+        map.remove("timestamp");
+        String F = map.get("F");
+        map.remove("F");
         //等号赋值 key=value 赋值到list中
         for (String s : map.keySet()){
             String r = s+"="+map.get(s);
@@ -49,15 +52,16 @@ public class HttpJiamiUtils {
         for (String s : list){
             r+=s+"&";
         }
-        if("ios".equals(map.get("F")))  {
-            r = r+"clientKey="+ Config.IOSKEY+"&"+"timestamp="+map.get("timestamp")+"&"+"F="+"ios";
+        if("ios".equals(F))  {
+            r = r+"clientKey="+ Config.IOSKEY+"&"+"timestamp="+time+"&"+"F="+"ios";
         }
-        if("android".equals(map.get("F"))) {
-            r = r+"clientKey="+ Config.ANDROIDKEY+"&"+"timestamp="+map.get("timestamp")+"&"+"F="+"android";
+        if("android".equals(F)) {
+            r = r+"clientKey="+ Config.ANDROIDKEY+"&"+"timestamp="+time;
         }
-        if("backstage".equals(map.get("F"))) {
-            r = r+"clientKey="+ Config.BACKSTAGEKEY+"&"+"timestamp="+map.get("timestamp")+"&"+"F="+"backstage";
+        if("backstage".equals(F)) {
+            r = r+"clientKey="+ Config.BACKSTAGEKEY+"&"+"timestamp="+time+"&"+"F="+"backstage";
         }
+        System.out.println(r);
         r = MD5Utils.MD5Encode(r,"utf-8");
         return r;
     }
