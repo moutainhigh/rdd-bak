@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ServicePlanMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ServicePlan" >
+    <id column="plan_id" property="planId" jdbcType="VARCHAR" />
+    <result column="plan_name" property="planName" jdbcType="VARCHAR" />
+    <result column="plan_amoount" property="planAmoount" jdbcType="DOUBLE" />
+    <result column="plan_time" property="planTime" jdbcType="INTEGER" />
+    <result column="rent_back_money" property="rentBackMoney" jdbcType="DOUBLE" />
+    <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
+    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    plan_id, plan_name, plan_amoount, plan_time, rent_back_money, pay_money, ctreate_at, 
+    update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_service_plan
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_service_plan
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
+    insert into czb_service_plan (plan_id, plan_name, plan_amoount, 
+      plan_time, rent_back_money, pay_money, 
+      ctreate_at, update_at)
+    values (#{planId,jdbcType=VARCHAR}, #{planName,jdbcType=VARCHAR}, #{planAmoount,jdbcType=DOUBLE}, 
+      #{planTime,jdbcType=INTEGER}, #{rentBackMoney,jdbcType=DOUBLE}, #{payMoney,jdbcType=DOUBLE}, 
+      #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
+    insert into czb_service_plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="planName != null" >
+        plan_name,
+      </if>
+      <if test="planAmoount != null" >
+        plan_amoount,
+      </if>
+      <if test="planTime != null" >
+        plan_time,
+      </if>
+      <if test="rentBackMoney != null" >
+        rent_back_money,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null" >
+        #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planAmoount != null" >
+        #{planAmoount,jdbcType=DOUBLE},
+      </if>
+      <if test="planTime != null" >
+        #{planTime,jdbcType=INTEGER},
+      </if>
+      <if test="rentBackMoney != null" >
+        #{rentBackMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="ctreateAt != null" >
+        #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
+    update czb_service_plan
+    <set >
+      <if test="planName != null" >
+        plan_name = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planAmoount != null" >
+        plan_amoount = #{planAmoount,jdbcType=DOUBLE},
+      </if>
+      <if test="planTime != null" >
+        plan_time = #{planTime,jdbcType=INTEGER},
+      </if>
+      <if test="rentBackMoney != null" >
+        rent_back_money = #{rentBackMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
+    update czb_service_plan
+    set plan_name = #{planName,jdbcType=VARCHAR},
+      plan_amoount = #{planAmoount,jdbcType=DOUBLE},
+      plan_time = #{planTime,jdbcType=INTEGER},
+      rent_back_money = #{rentBackMoney,jdbcType=DOUBLE},
+      pay_money = #{payMoney,jdbcType=DOUBLE},
+      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </update>
+</mapper>

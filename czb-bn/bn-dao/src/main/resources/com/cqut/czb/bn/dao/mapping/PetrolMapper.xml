@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Petrol" >
+    <id column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+    <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+    <result column="petrol_psw" property="petrolPsw" jdbcType="VARCHAR" />
+    <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+    <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+    <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+    <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price, 
+    state, discount, area, owner_id, petrol_type, ctreate_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_petrol
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_petrol
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
+    insert into czb_petrol (petrol_id, petrol_num, petrol_psw, 
+      petrol_kind, petrol_denomination, petrol_price, 
+      state, discount, area, 
+      owner_id, petrol_type, ctreate_at, 
+      update_at)
+    values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR}, 
+      #{petrolKind,jdbcType=INTEGER}, #{petrolDenomination,jdbcType=DOUBLE}, #{petrolPrice,jdbcType=DOUBLE}, 
+      #{state,jdbcType=INTEGER}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=VARCHAR}, 
+      #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{ctreateAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
+    insert into czb_petrol
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="petrolId != null" >
+        petrol_id,
+      </if>
+      <if test="petrolNum != null" >
+        petrol_num,
+      </if>
+      <if test="petrolPsw != null" >
+        petrol_psw,
+      </if>
+      <if test="petrolKind != null" >
+        petrol_kind,
+      </if>
+      <if test="petrolDenomination != null" >
+        petrol_denomination,
+      </if>
+      <if test="petrolPrice != null" >
+        petrol_price,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="petrolType != null" >
+        petrol_type,
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="petrolId != null" >
+        #{petrolId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolNum != null" >
+        #{petrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolPsw != null" >
+        #{petrolPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolKind != null" >
+        #{petrolKind,jdbcType=INTEGER},
+      </if>
+      <if test="petrolDenomination != null" >
+        #{petrolDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="petrolPrice != null" >
+        #{petrolPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="ctreateAt != null" >
+        #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
+    update czb_petrol
+    <set >
+      <if test="petrolNum != null" >
+        petrol_num = #{petrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolPsw != null" >
+        petrol_psw = #{petrolPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolKind != null" >
+        petrol_kind = #{petrolKind,jdbcType=INTEGER},
+      </if>
+      <if test="petrolDenomination != null" >
+        petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="petrolPrice != null" >
+        petrol_price = #{petrolPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        petrol_type = #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
+    update czb_petrol
+    set petrol_num = #{petrolNum,jdbcType=VARCHAR},
+      petrol_psw = #{petrolPsw,jdbcType=VARCHAR},
+      petrol_kind = #{petrolKind,jdbcType=INTEGER},
+      petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE},
+      petrol_price = #{petrolPrice,jdbcType=DOUBLE},
+      state = #{state,jdbcType=INTEGER},
+      discount = #{discount,jdbcType=DOUBLE},
+      area = #{area,jdbcType=VARCHAR},
+      owner_id = #{ownerId,jdbcType=VARCHAR},
+      petrol_type = #{petrolType,jdbcType=INTEGER},
+      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </update>
+</mapper>

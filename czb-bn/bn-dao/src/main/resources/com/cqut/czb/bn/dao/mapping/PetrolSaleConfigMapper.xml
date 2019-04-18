@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolSaleConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
+    <id column="petrol_config_id" property="petrolConfigId" jdbcType="VARCHAR" />
+    <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="sale_state" property="saleState" jdbcType="INTEGER" />
+    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    petrol_config_id, petrol_type, area, sale_state, ctreate_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_petrol_sale_config
+    where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_petrol_sale_config
+    where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
+    insert into czb_petrol_sale_config (petrol_config_id, petrol_type, area, 
+      sale_state, ctreate_at, update_at
+      )
+    values (#{petrolConfigId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR}, 
+      #{saleState,jdbcType=INTEGER}, #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
+    insert into czb_petrol_sale_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="petrolConfigId != null" >
+        petrol_config_id,
+      </if>
+      <if test="petrolType != null" >
+        petrol_type,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="saleState != null" >
+        sale_state,
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="petrolConfigId != null" >
+        #{petrolConfigId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="saleState != null" >
+        #{saleState,jdbcType=INTEGER},
+      </if>
+      <if test="ctreateAt != null" >
+        #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
+    update czb_petrol_sale_config
+    <set >
+      <if test="petrolType != null" >
+        petrol_type = #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="saleState != null" >
+        sale_state = #{saleState,jdbcType=INTEGER},
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
+    update czb_petrol_sale_config
+    set petrol_type = #{petrolType,jdbcType=INTEGER},
+      area = #{area,jdbcType=VARCHAR},
+      sale_state = #{saleState,jdbcType=INTEGER},
+      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+  </update>
+</mapper>
