@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CarsPersonsMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.CarsPersons" >
+    <id column="person_car_id" property="personCarId" jdbcType="VARCHAR" />
+    <result column="person_name" property="personName" jdbcType="VARCHAR" />
+    <result column="person_id_card" property="personIdCard" jdbcType="VARCHAR" />
+    <result column="car_model" property="carModel" jdbcType="VARCHAR" />
+    <result column="car_license" property="carLicense" jdbcType="VARCHAR" />
+    <result column="contract_record_id" property="contractRecordId" jdbcType="VARCHAR" />
+    <result column="plan_id" property="planId" jdbcType="VARCHAR" />
+    <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+    <result column="is_signed" property="isSigned" jdbcType="INTEGER" />
+    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    person_car_id, person_name, person_id_card, car_model, car_license, contract_record_id, 
+    plan_id, petrol_type, is_signed, ctreate_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_cars_persons
+    where person_car_id = #{personCarId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_cars_persons
+    where person_car_id = #{personCarId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.CarsPersons" >
+    insert into czb_cars_persons (person_car_id, person_name, person_id_card, 
+      car_model, car_license, contract_record_id, 
+      plan_id, petrol_type, is_signed, 
+      ctreate_at, update_at)
+    values (#{personCarId,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, #{personIdCard,jdbcType=VARCHAR}, 
+      #{carModel,jdbcType=VARCHAR}, #{carLicense,jdbcType=VARCHAR}, #{contractRecordId,jdbcType=VARCHAR}, 
+      #{planId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{isSigned,jdbcType=INTEGER}, 
+      #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.CarsPersons" >
+    insert into czb_cars_persons
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="personCarId != null" >
+        person_car_id,
+      </if>
+      <if test="personName != null" >
+        person_name,
+      </if>
+      <if test="personIdCard != null" >
+        person_id_card,
+      </if>
+      <if test="carModel != null" >
+        car_model,
+      </if>
+      <if test="carLicense != null" >
+        car_license,
+      </if>
+      <if test="contractRecordId != null" >
+        contract_record_id,
+      </if>
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="petrolType != null" >
+        petrol_type,
+      </if>
+      <if test="isSigned != null" >
+        is_signed,
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="personCarId != null" >
+        #{personCarId,jdbcType=VARCHAR},
+      </if>
+      <if test="personName != null" >
+        #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="personIdCard != null" >
+        #{personIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="carModel != null" >
+        #{carModel,jdbcType=VARCHAR},
+      </if>
+      <if test="carLicense != null" >
+        #{carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="contractRecordId != null" >
+        #{contractRecordId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="isSigned != null" >
+        #{isSigned,jdbcType=INTEGER},
+      </if>
+      <if test="ctreateAt != null" >
+        #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.CarsPersons" >
+    update czb_cars_persons
+    <set >
+      <if test="personName != null" >
+        person_name = #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="personIdCard != null" >
+        person_id_card = #{personIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="carModel != null" >
+        car_model = #{carModel,jdbcType=VARCHAR},
+      </if>
+      <if test="carLicense != null" >
+        car_license = #{carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="contractRecordId != null" >
+        contract_record_id = #{contractRecordId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        petrol_type = #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="isSigned != null" >
+        is_signed = #{isSigned,jdbcType=INTEGER},
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where person_car_id = #{personCarId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.CarsPersons" >
+    update czb_cars_persons
+    set person_name = #{personName,jdbcType=VARCHAR},
+      person_id_card = #{personIdCard,jdbcType=VARCHAR},
+      car_model = #{carModel,jdbcType=VARCHAR},
+      car_license = #{carLicense,jdbcType=VARCHAR},
+      contract_record_id = #{contractRecordId,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=VARCHAR},
+      petrol_type = #{petrolType,jdbcType=INTEGER},
+      is_signed = #{isSigned,jdbcType=INTEGER},
+      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where person_car_id = #{personCarId,jdbcType=VARCHAR}
+  </update>
+</mapper>

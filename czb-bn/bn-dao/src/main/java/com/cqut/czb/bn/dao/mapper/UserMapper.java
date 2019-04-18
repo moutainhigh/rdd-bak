@@ -1,11 +1,17 @@
 package com.cqut.czb.bn.dao.mapper;
 
-
 import com.cqut.czb.bn.entity.entity.User;
-import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
-    User findUserByAccount(String account);
-    Boolean insertUser(User user);
-    Boolean checkAccount(@Param("account") String account);
+    int deleteByPrimaryKey(String userId);
+
+    int insert(User record);
+
+    int insertSelective(User record);
+
+    User selectByPrimaryKey(String userId);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }

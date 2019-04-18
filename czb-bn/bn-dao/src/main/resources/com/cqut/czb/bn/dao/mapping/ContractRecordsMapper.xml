@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ContractRecordsMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ContractRecords" >
+    <result column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="signed_time" property="signedTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="contract_start_time" property="contractStartTime" jdbcType="TIMESTAMP" />
+    <result column="contract_end_time" property="contractEndTime" jdbcType="TIMESTAMP" />
+    <result column="contract_state" property="contractState" jdbcType="INTEGER" />
+    <result column="contract_type" property="contractType" jdbcType="INTEGER" />
+    <result column="rent" property="rent" jdbcType="DOUBLE" />
+    <result column="third_contract_num" property="thirdContractNum" jdbcType="VARCHAR" />
+    <result column="got_total_money" property="gotTotalMoney" jdbcType="DOUBLE" />
+    <result column="judge_user_id" property="judgeUserId" jdbcType="VARCHAR" />
+    <result column="judge_time" property="judgeTime" jdbcType="TIMESTAMP" />
+    <result column="pay_total_money" property="payTotalMoney" jdbcType="DOUBLE" />
+    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
+    insert into czb_contract_records (record_id, signed_time, user_id, 
+      contract_start_time, contract_end_time, 
+      contract_state, contract_type, rent, 
+      third_contract_num, got_total_money, judge_user_id, 
+      judge_time, pay_total_money, ctreate_at, 
+      update_at)
+    values (#{recordId,jdbcType=VARCHAR}, #{signedTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, 
+      #{contractStartTime,jdbcType=TIMESTAMP}, #{contractEndTime,jdbcType=TIMESTAMP}, 
+      #{contractState,jdbcType=INTEGER}, #{contractType,jdbcType=INTEGER}, #{rent,jdbcType=DOUBLE}, 
+      #{thirdContractNum,jdbcType=VARCHAR}, #{gotTotalMoney,jdbcType=DOUBLE}, #{judgeUserId,jdbcType=VARCHAR}, 
+      #{judgeTime,jdbcType=TIMESTAMP}, #{payTotalMoney,jdbcType=DOUBLE}, #{ctreateAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
+    insert into czb_contract_records
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="signedTime != null" >
+        signed_time,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="contractStartTime != null" >
+        contract_start_time,
+      </if>
+      <if test="contractEndTime != null" >
+        contract_end_time,
+      </if>
+      <if test="contractState != null" >
+        contract_state,
+      </if>
+      <if test="contractType != null" >
+        contract_type,
+      </if>
+      <if test="rent != null" >
+        rent,
+      </if>
+      <if test="thirdContractNum != null" >
+        third_contract_num,
+      </if>
+      <if test="gotTotalMoney != null" >
+        got_total_money,
+      </if>
+      <if test="judgeUserId != null" >
+        judge_user_id,
+      </if>
+      <if test="judgeTime != null" >
+        judge_time,
+      </if>
+      <if test="payTotalMoney != null" >
+        pay_total_money,
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=VARCHAR},
+      </if>
+      <if test="signedTime != null" >
+        #{signedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStartTime != null" >
+        #{contractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndTime != null" >
+        #{contractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractState != null" >
+        #{contractState,jdbcType=INTEGER},
+      </if>
+      <if test="contractType != null" >
+        #{contractType,jdbcType=INTEGER},
+      </if>
+      <if test="rent != null" >
+        #{rent,jdbcType=DOUBLE},
+      </if>
+      <if test="thirdContractNum != null" >
+        #{thirdContractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="gotTotalMoney != null" >
+        #{gotTotalMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="judgeUserId != null" >
+        #{judgeUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="judgeTime != null" >
+        #{judgeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTotalMoney != null" >
+        #{payTotalMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="ctreateAt != null" >
+        #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

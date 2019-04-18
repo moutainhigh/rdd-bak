@@ -1,76 +1,82 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cqut.czb.bn.dao.mapper.RoleMapper">
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Role">
-        <constructor>
-            <idArg column="role_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="role_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="is_allow_edit" javaType="java.lang.Boolean" jdbcType="BIT"/>
-            <arg column="is_allow_delete" javaType="java.lang.Boolean" jdbcType="BIT"/>
-            <arg column="create_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-            <arg column="update_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-            <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT"/>
-            <arg column="data_scope" javaType="java.lang.String" jdbcType="CHAR"/>
-            <arg column="role_type" javaType="java.lang.String" jdbcType="CHAR"/>
-        </constructor>
-    </resultMap>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-        delete from sys_role
-        where role_id = #{roleId,jdbcType=VARCHAR}
-    </delete>
-
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Role">
-        insert into sys_role (role_id, role_name, is_allow_edit,
-            is_allow_delete, create_id, create_time,
-            update_id, update_time, is_delete,
-            data_scope)
-        values (#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{isAllowEdit,jdbcType=BIT},
-            #{isAllowDelete,jdbcType=BIT}, #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-            #{updateId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT},
-            #{dataScope,jdbcType=CHAR})
-    </insert>
-
-    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Role">
-        update sys_role
-        set role_name = #{roleName,jdbcType=VARCHAR},
-            is_allow_edit = #{isAllowEdit,jdbcType=BIT},
-            is_allow_delete = #{isAllowDelete,jdbcType=BIT},
-            create_id = #{createId,jdbcType=VARCHAR},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
-            update_id = #{updateId,jdbcType=VARCHAR},
-            update_time = #{updateTime,jdbcType=TIMESTAMP},
-            is_delete = #{isDelete,jdbcType=BIT},
-            data_scope = #{dataScope,jdbcType=CHAR}
-        where role_id = #{roleId,jdbcType=VARCHAR}
-    </update>
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select role_id, role_name, is_allow_edit, is_allow_delete, create_id, create_time,
-            update_id, update_time, is_delete, data_scope, role_type
-        from sys_role
-        where role_id = #{roleId,jdbcType=VARCHAR}
-    </select>
-
-    <select id="selectAll" resultMap="BaseResultMap">
-        select role_id, role_name, is_allow_edit, is_allow_delete, create_id, create_time,
-            update_id, update_time, is_delete, data_scope, role_type
-        from sys_role
-    </select>
-
-    <select id="selectUserRoles" resultType="com.cqut.czb.bn.entity.entity.Role">
-        SELECT
-            role_id roleId,
-            data_scope dataScope,
-            role_type roleType
-        FROM
-            sys_role
-        WHERE role_id IN (
-            <foreach collection="roleIds" item="roleId" separator=",">
-                #{roleId, jdbcType = VARCHAR}
-            </foreach>
-        )
-    </select>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Role" >
+    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_id, role_name, ctreate_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Role" >
+    insert into czb_role (role_id, role_name, ctreate_at, 
+      update_at)
+    values (#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{ctreateAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Role" >
+    insert into czb_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="roleName != null" >
+        role_name,
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="ctreateAt != null" >
+        #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Role" >
+    update czb_role
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="ctreateAt != null" >
+        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Role" >
+    update czb_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
 </mapper>
