@@ -61,7 +61,6 @@ public class HttpJiamiUtils {
         if("backstage".equals(F)) {
             r = r+"clientKey="+ Config.BACKSTAGEKEY+"&"+"timestamp="+time+"&"+"F="+"backstage";
         }
-        System.out.println(r);
         r = MD5Utils.MD5Encode(r,"utf-8");
         return r;
     }
