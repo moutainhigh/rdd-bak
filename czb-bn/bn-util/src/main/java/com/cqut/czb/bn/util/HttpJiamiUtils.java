@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpJiamiUtils {
-    public static String DDMSign(Map<String,String> map){
+    public static String CZBSign(Map<String,String> map){
         List<String> list = new ArrayList<>();
         String time = map.get("timestamp");
         map.remove("timestamp");
@@ -53,13 +53,10 @@ public class HttpJiamiUtils {
             r+=s+"&";
         }
         if("ios".equals(F))  {
-            r = r+"clientKey="+ Config.IOSKEY+"&"+"timestamp="+time+"&"+"F="+"ios";
+            r = r+"clientKey="+ Config.IOSKEY+"&"+"timestamp="+time;
         }
         if("android".equals(F)) {
             r = r+"clientKey="+ Config.ANDROIDKEY+"&"+"timestamp="+time;
-        }
-        if("backstage".equals(F)) {
-            r = r+"clientKey="+ Config.BACKSTAGEKEY+"&"+"timestamp="+time+"&"+"F="+"backstage";
         }
         r = MD5Utils.MD5Encode(r,"utf-8");
         return r;

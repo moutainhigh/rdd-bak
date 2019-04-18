@@ -13,18 +13,18 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Map<String, String[]> map = request.getParameterMap();
-        Map<String, String> ddmMap = new HashMap<>();
+        Map<String, String> czbMap = new HashMap<>();
 
         if (map.get("sign") != null && map.get("sign")[0] != null) {
 //            map.remove("sign");
 
             for (String s : map.keySet()) {
-                ddmMap.put(s, map.get(s)[0]);
+                czbMap.put(s, map.get(s)[0]);
             }
-            ddmMap.remove("sign");
+            czbMap.remove("sign");
 
             String requestSigh = map.get("sign")[0];
-            String ddmSign = HttpJiamiUtils.DDMSign(ddmMap);
+            String ddmSign = HttpJiamiUtils.CZBSign(czbMap);
             if (requestSigh.equals(ddmSign)) {
                 return true;
             }
