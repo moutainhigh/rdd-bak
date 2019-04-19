@@ -1,6 +1,6 @@
 package com.cqut.czb.auth.interceptor;
 
-import com.cqut.czb.auth.redis.RedisUtils;
+import com.cqut.czb.auth.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;

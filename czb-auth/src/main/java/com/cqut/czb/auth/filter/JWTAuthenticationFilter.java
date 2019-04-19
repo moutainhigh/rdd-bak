@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
-import com.cqut.czb.auth.redis.RedisUtils;
-import com.cqut.czb.auth.redis.SpringUtils;
+import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
 import com.cqut.czb.bn.entity.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,17 +64,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
         // 所以就是JwtUser啦
         JwtUser jwtUser = (JwtUser) authResult.getPrincipal();
-        String token = JwtTool.createToken(jwtUser.getUsername(), false);
+        String token = JwtTool.createToken(jwtUser.getAccount(), false);
 
         if(redisUtils == null){
             redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
 
         User user=new User();
-        user.setUserAccount(jwtUser.getUsername());
+        user.setUserAccount(jwtUser.getAccount());
         user.setUserPsw(jwtUser.getPassword());
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
-        redisUtils.put(jwtUser.getUsername(), user);
+        redisUtils.put(jwtUser.getAccount(), user);
 
         // 返回创建成功的token
         JSONObject result = new JSONObject();

@@ -18,7 +18,7 @@ public class AuthUserServiceImpl implements UserDetailsService {
     private UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new JwtUser(userMapper.findUserByAccount(username));
+    public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
+        return new JwtUser(userMapper.findUserByAccount(account));
     }
 }

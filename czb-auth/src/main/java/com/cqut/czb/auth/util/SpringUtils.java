@@ -1,10 +1,17 @@
-package com.cqut.czb.auth.redis;
+package com.cqut.czb.auth.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+/**
+ * 创建者：杨强、曹渝
+ * 创建时间：2019/04/18
+ *
+ * 有的服务里面它们自己调用的类没被纳入spring管理
+ * ，@Autowired无效的情况通过spring工具类获取它们的bean
+ * */
 @Component
 public class SpringUtils implements ApplicationContextAware {
 

@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.cqut.czb.auth.redis.RedisUtils;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.NotificationInputDTO;
 import com.cqut.czb.bn.entity.dto.NotifyInsertInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
