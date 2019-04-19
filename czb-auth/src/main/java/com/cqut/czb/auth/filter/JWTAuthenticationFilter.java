@@ -1,11 +1,10 @@
 package com.cqut.czb.auth.filter;
 
-import com.alibaba.druid.support.spring.stat.SpringStatUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
-import com.cqut.czb.auth.redis.RedisUtil;
+import com.cqut.czb.auth.redis.RedisUtils;
 import com.cqut.czb.auth.redis.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
 import com.cqut.czb.bn.entity.entity.User;
@@ -32,7 +31,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtils redisUtils;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -67,15 +66,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         JwtUser jwtUser = (JwtUser) authResult.getPrincipal();
         String token = JwtTool.createToken(jwtUser.getUsername(), false);
 
-        if(redisUtil == null){
-            redisUtil = SpringUtils.getBean(RedisUtil.class);
+        if(redisUtils == null){
+            redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
 
         User user=new User();
         user.setUserAccount(jwtUser.getUsername());
         user.setUserPsw(jwtUser.getPassword());
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
-        redisUtil.put(jwtUser.getUsername(), user);
+        redisUtils.put(jwtUser.getUsername(), user);
 
         // 返回创建成功的token
         JSONObject result = new JSONObject();
