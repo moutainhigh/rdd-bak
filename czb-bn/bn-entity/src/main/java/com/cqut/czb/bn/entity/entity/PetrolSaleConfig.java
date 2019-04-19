@@ -11,7 +11,7 @@ public class PetrolSaleConfig {
 
     private Integer saleState;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     private Date updateAt;
 
@@ -47,12 +47,12 @@ public class PetrolSaleConfig {
         this.saleState = saleState;
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {

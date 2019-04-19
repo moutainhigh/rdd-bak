@@ -19,7 +19,7 @@ public class Announcement {
 
     private String locationCode;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     private Date updateAt;
 
@@ -87,12 +87,12 @@ public class Announcement {
         this.locationCode = locationCode == null ? null : locationCode.trim();
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {

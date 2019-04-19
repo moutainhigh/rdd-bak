@@ -10,12 +10,12 @@
     <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="order" property="order" jdbcType="INTEGER" />
     <result column="location_code" property="locationCode" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     announcement_id, announcement_title, announcement_content, announcement_type, img_file_id, 
-    is_show, order, location_code, ctreate_at, update_at
+    is_show, order, location_code, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -31,12 +31,12 @@
     insert into czb_announcement (announcement_id, announcement_title, 
       announcement_content, announcement_type, 
       img_file_id, is_show, order, 
-      location_code, ctreate_at, update_at
+      location_code, create_at, update_at
       )
     values (#{announcementId,jdbcType=VARCHAR}, #{announcementTitle,jdbcType=VARCHAR}, 
       #{announcementContent,jdbcType=VARCHAR}, #{announcementType,jdbcType=INTEGER}, 
       #{imgFileId,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{order,jdbcType=INTEGER}, 
-      #{locationCode,jdbcType=VARCHAR}, #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{locationCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
@@ -66,8 +66,8 @@
       <if test="locationCode != null" >
         location_code,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -98,8 +98,8 @@
       <if test="locationCode != null" >
         #{locationCode,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -130,8 +130,8 @@
       <if test="locationCode != null" >
         location_code = #{locationCode,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -148,7 +148,7 @@
       is_show = #{isShow,jdbcType=INTEGER},
       order = #{order,jdbcType=INTEGER},
       location_code = #{locationCode,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where announcement_id = #{announcementId,jdbcType=VARCHAR}
   </update>

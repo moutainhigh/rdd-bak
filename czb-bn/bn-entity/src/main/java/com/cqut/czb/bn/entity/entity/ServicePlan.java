@@ -15,7 +15,7 @@ public class ServicePlan {
 
     private Double payMoney;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     private Date updateAt;
 
@@ -67,12 +67,12 @@ public class ServicePlan {
         this.payMoney = payMoney;
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {

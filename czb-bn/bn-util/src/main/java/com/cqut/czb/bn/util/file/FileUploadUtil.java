@@ -5,6 +5,9 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.cqut.czb.bn.util.string.StringUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
 
@@ -16,12 +19,12 @@ import java.util.Date;
 public class FileUploadUtil {
 
     //个人注册OSS建立实例Bucket的accessKeyId和accessKeySecret
-    private static final String accessKeyId = "LTAIRSulxMCGzBvE";
-    private static final String accessKeySecret = "YiIIWTZl39DthuuxTmh1QuDp1NpMMG";
+    private static final String accessKeyId = "LTAIjqFIGExMo9vx";
+    private static final String accessKeySecret = "Z5nx3lPe88P7koYa3aY5NsZykSZAID";
     //OSS的访问地址
-    private static final String endPoint = "oss-cn-shanghai.aliyuncs.com";
+    private static final String endPoint = "oss-cn-zhangjiakou.aliyuncs.com";
     //Bucket的名称
-    private static final String bucketName = "img-file-library";
+    private static final String bucketName = "czb-file";
 
     /**
      * 上传文件到文件系统
@@ -44,7 +47,16 @@ public class FileUploadUtil {
         }
         return url;
     }
+/*public static void main(String[] args){
 
+    try {
+        FileInputStream fileInputStream = new FileInputStream(new File("C:\\Users\\lin\\Desktop\\TIM图片20190317200703.jpg"));
+
+       System.out.println( putObject("test.jpg",fileInputStream));
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+}*/
 
     /**
      * 通过文件名判断并获取OSS服务文件上传时文件的contentType

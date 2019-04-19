@@ -11,7 +11,7 @@ public class File {
 
     private String savePath;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     private Date updateAt;
 
@@ -47,12 +47,12 @@ public class File {
         this.savePath = savePath == null ? null : savePath.trim();
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {

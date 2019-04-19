@@ -8,11 +8,11 @@
     <result column="plan_time" property="planTime" jdbcType="INTEGER" />
     <result column="rent_back_money" property="rentBackMoney" jdbcType="DOUBLE" />
     <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    plan_id, plan_name, plan_amoount, plan_time, rent_back_money, pay_money, ctreate_at, 
+    plan_id, plan_name, plan_amoount, plan_time, rent_back_money, pay_money, create_at, 
     update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -28,10 +28,10 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
     insert into czb_service_plan (plan_id, plan_name, plan_amoount, 
       plan_time, rent_back_money, pay_money, 
-      ctreate_at, update_at)
+      create_at, update_at)
     values (#{planId,jdbcType=VARCHAR}, #{planName,jdbcType=VARCHAR}, #{planAmoount,jdbcType=DOUBLE}, 
       #{planTime,jdbcType=INTEGER}, #{rentBackMoney,jdbcType=DOUBLE}, #{payMoney,jdbcType=DOUBLE}, 
-      #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
     insert into czb_service_plan
@@ -54,8 +54,8 @@
       <if test="payMoney != null" >
         pay_money,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -80,8 +80,8 @@
       <if test="payMoney != null" >
         #{payMoney,jdbcType=DOUBLE},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -106,8 +106,8 @@
       <if test="payMoney != null" >
         pay_money = #{payMoney,jdbcType=DOUBLE},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -122,7 +122,7 @@
       plan_time = #{planTime,jdbcType=INTEGER},
       rent_back_money = #{rentBackMoney,jdbcType=DOUBLE},
       pay_money = #{payMoney,jdbcType=DOUBLE},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where plan_id = #{planId,jdbcType=VARCHAR}
   </update>

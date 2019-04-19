@@ -15,7 +15,7 @@
     <result column="judge_user_id" property="judgeUserId" jdbcType="VARCHAR" />
     <result column="judge_time" property="judgeTime" jdbcType="TIMESTAMP" />
     <result column="pay_total_money" property="payTotalMoney" jdbcType="DOUBLE" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
@@ -23,13 +23,13 @@
       contract_start_time, contract_end_time, 
       contract_state, contract_type, rent, 
       third_contract_num, got_total_money, judge_user_id, 
-      judge_time, pay_total_money, ctreate_at, 
+      judge_time, pay_total_money, create_at, 
       update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{signedTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, 
       #{contractStartTime,jdbcType=TIMESTAMP}, #{contractEndTime,jdbcType=TIMESTAMP}, 
       #{contractState,jdbcType=INTEGER}, #{contractType,jdbcType=INTEGER}, #{rent,jdbcType=DOUBLE}, 
       #{thirdContractNum,jdbcType=VARCHAR}, #{gotTotalMoney,jdbcType=DOUBLE}, #{judgeUserId,jdbcType=VARCHAR}, 
-      #{judgeTime,jdbcType=TIMESTAMP}, #{payTotalMoney,jdbcType=DOUBLE}, #{ctreateAt,jdbcType=TIMESTAMP}, 
+      #{judgeTime,jdbcType=TIMESTAMP}, #{payTotalMoney,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, 
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
@@ -74,8 +74,8 @@
       <if test="payTotalMoney != null" >
         pay_total_money,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -121,8 +121,8 @@
       <if test="payTotalMoney != null" >
         #{payTotalMoney,jdbcType=DOUBLE},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},

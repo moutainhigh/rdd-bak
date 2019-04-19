@@ -29,7 +29,7 @@ public class ContractRecords {
 
     private Double payTotalMoney;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     private Date updateAt;
 
@@ -137,12 +137,12 @@ public class ContractRecords {
         this.payTotalMoney = payTotalMoney;
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {

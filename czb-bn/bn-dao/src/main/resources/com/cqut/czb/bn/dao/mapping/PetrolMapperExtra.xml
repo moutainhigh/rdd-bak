@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Petrol" >
+    <id column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+    <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+    <result column="petrol_psw" property="petrolPsw" jdbcType="VARCHAR" />
+    <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+    <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+    <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+    <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
+    state, discount, area, owner_id, petrol_type, create_at, update_at
+  </sql>
+  <select id="getPetrolList" resultMap="BaseResultMap" resultType="com.cqut.czb.bn.entity.entity.Petrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
+    select <include refid="Base_Column_List"/> from czb_petrol
+    <where>
+      <if test="petrolNum != null" >
+        AND petrol_num = #{petrolNum,jdbcType=VARCHAR}
+      </if>
+      <if test="petrolKind != null" >
+        AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="petrolDenomination != null" >
+        AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}
+      </if>
+      <if test="petrolPrice != null" >
+        AND petrol_price = #{petrolPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="state != null" >
+        AND state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="area != null" >
+        AND area = #{area,jdbcType=VARCHAR}
+      </if>
+      <if test="petrolType != null" >
+      AND petrol_type = #{petrolType,jdbcType=INTEGER}
+    </if>
+    <if test="createAt != null" >
+      AND create_at > #{createAt,jdbcType=TIMESTAMP}
+    </if>
+  </where>
+  </select>
+</mapper>

@@ -5,11 +5,11 @@
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="VARCHAR" />
     <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, role_id, menu_id, ctreate_at, update_at
+    id, role_id, menu_id, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -23,9 +23,9 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.RoleMenu" >
     insert into czb_role_menu (id, role_id, menu_id, 
-      ctreate_at, update_at)
+      create_at, update_at)
     values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}, 
-      #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.RoleMenu" >
     insert into czb_role_menu
@@ -39,8 +39,8 @@
       <if test="menuId != null" >
         menu_id,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -56,8 +56,8 @@
       <if test="menuId != null" >
         #{menuId,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -73,8 +73,8 @@
       <if test="menuId != null" >
         menu_id = #{menuId,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -86,7 +86,7 @@
     update czb_role_menu
     set role_id = #{roleId,jdbcType=VARCHAR},
       menu_id = #{menuId,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>

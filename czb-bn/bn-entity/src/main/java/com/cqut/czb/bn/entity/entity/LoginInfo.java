@@ -15,7 +15,7 @@ public class LoginInfo {
 
     private String latitude;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     public String getRecordId() {
         return recordId;
@@ -65,11 +65,11 @@ public class LoginInfo {
         this.latitude = latitude == null ? null : latitude.trim();
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 }

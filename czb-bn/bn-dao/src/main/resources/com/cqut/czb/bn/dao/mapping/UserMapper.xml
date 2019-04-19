@@ -12,12 +12,12 @@
     <result column="is_login_pc" property="isLoginPc" jdbcType="INTEGER" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
-    is_login_pc, user_name, user_id_card, ctreate_at, update_at
+    is_login_pc, user_name, user_id_card, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -33,12 +33,12 @@
     insert into czb_user (user_id, user_account, user_psw, 
       user_type, user_rank, is_identified, 
       superior_user, is_login_pc, user_name, 
-      user_id_card, ctreate_at, update_at
+      user_id_card, create_at, update_at
       )
     values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
       #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
       #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
-      #{userIdCard,jdbcType=VARCHAR}, #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
@@ -74,8 +74,8 @@
       <if test="userIdCard != null" >
         user_id_card,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -112,8 +112,8 @@
       <if test="userIdCard != null" >
         #{userIdCard,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -150,8 +150,8 @@
       <if test="userIdCard != null" >
         user_id_card = #{userIdCard,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -170,24 +170,8 @@
       is_login_pc = #{isLoginPc,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
       user_id_card = #{userIdCard,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
-
-    <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    *
-    from czb_user
-    where user_account = #{account,jdbcType=VARCHAR}
-  </select>
-
-    <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
-    SELECT
-        count(user_id)
-    FROM
-        czb_user
-    WHERE
-        user_account = #{account,jdbcType=VARCHAR}
-  </select>
 </mapper>

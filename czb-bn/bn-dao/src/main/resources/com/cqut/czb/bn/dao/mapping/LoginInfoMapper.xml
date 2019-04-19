@@ -8,10 +8,10 @@
     <result column="system_version" property="systemVersion" jdbcType="VARCHAR" />
     <result column="longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="latitude" property="latitude" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, login_time, device_type, system_version, longitude, latitude, ctreate_at
+    record_id, login_time, device_type, system_version, longitude, latitude, create_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -26,10 +26,10 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info (record_id, login_time, device_type, 
       system_version, longitude, latitude, 
-      ctreate_at)
+      create_at)
     values (#{recordId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, 
       #{systemVersion,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
-      #{ctreateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info
@@ -52,8 +52,8 @@
       <if test="latitude != null" >
         latitude,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -75,8 +75,8 @@
       <if test="latitude != null" >
         #{latitude,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -98,8 +98,8 @@
       <if test="latitude != null" >
         latitude = #{latitude,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
@@ -111,7 +111,7 @@
       system_version = #{systemVersion,jdbcType=VARCHAR},
       longitude = #{longitude,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP}
+      create_at = #{createAt,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>

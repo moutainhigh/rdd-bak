@@ -6,11 +6,11 @@
     <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="sale_state" property="saleState" jdbcType="INTEGER" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    petrol_config_id, petrol_type, area, sale_state, ctreate_at, update_at
+    petrol_config_id, petrol_type, area, sale_state, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,10 +24,10 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
     insert into czb_petrol_sale_config (petrol_config_id, petrol_type, area, 
-      sale_state, ctreate_at, update_at
+      sale_state, create_at, update_at
       )
     values (#{petrolConfigId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR}, 
-      #{saleState,jdbcType=INTEGER}, #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{saleState,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSaleConfig" >
@@ -45,8 +45,8 @@
       <if test="saleState != null" >
         sale_state,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -65,8 +65,8 @@
       <if test="saleState != null" >
         #{saleState,jdbcType=INTEGER},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -85,8 +85,8 @@
       <if test="saleState != null" >
         sale_state = #{saleState,jdbcType=INTEGER},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -99,7 +99,7 @@
     set petrol_type = #{petrolType,jdbcType=INTEGER},
       area = #{area,jdbcType=VARCHAR},
       sale_state = #{saleState,jdbcType=INTEGER},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
   </update>

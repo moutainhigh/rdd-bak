@@ -9,12 +9,12 @@
     <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="icon_path_id" property="iconPathId" jdbcType="VARCHAR" />
     <result column="menu_identity_code" property="menuIdentityCode" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     router_id, app_type, menu_name, menu_path, is_show, icon_path_id, menu_identity_code, 
-    ctreate_at, update_at
+    create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -29,11 +29,11 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
     insert into czb_app_router (router_id, app_type, menu_name, 
       menu_path, is_show, icon_path_id, 
-      menu_identity_code, ctreate_at, update_at
+      menu_identity_code, create_at, update_at
       )
     values (#{routerId,jdbcType=VARCHAR}, #{appType,jdbcType=INTEGER}, #{menuName,jdbcType=VARCHAR}, 
       #{menuPath,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{iconPathId,jdbcType=VARCHAR}, 
-      #{menuIdentityCode,jdbcType=VARCHAR}, #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{menuIdentityCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
@@ -60,8 +60,8 @@
       <if test="menuIdentityCode != null" >
         menu_identity_code,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -89,8 +89,8 @@
       <if test="menuIdentityCode != null" >
         #{menuIdentityCode,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -118,8 +118,8 @@
       <if test="menuIdentityCode != null" >
         menu_identity_code = #{menuIdentityCode,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -135,7 +135,7 @@
       is_show = #{isShow,jdbcType=INTEGER},
       icon_path_id = #{iconPathId,jdbcType=VARCHAR},
       menu_identity_code = #{menuIdentityCode,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where router_id = #{routerId,jdbcType=VARCHAR}
   </update>

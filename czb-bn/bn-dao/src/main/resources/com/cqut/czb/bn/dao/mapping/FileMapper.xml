@@ -6,11 +6,11 @@
     <result column="file_name" property="fileName" jdbcType="VARCHAR" />
     <result column="uploader" property="uploader" jdbcType="VARCHAR" />
     <result column="save_path" property="savePath" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    file_id, file_name, uploader, save_path, ctreate_at, update_at
+    file_id, file_name, uploader, save_path, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,10 +24,10 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.File" >
     insert into czb_file (file_id, file_name, uploader, 
-      save_path, ctreate_at, update_at
+      save_path, create_at, update_at
       )
     values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR}, 
-      #{savePath,jdbcType=VARCHAR}, #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{savePath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.File" >
@@ -45,8 +45,8 @@
       <if test="savePath != null" >
         save_path,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -65,8 +65,8 @@
       <if test="savePath != null" >
         #{savePath,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -85,8 +85,8 @@
       <if test="savePath != null" >
         save_path = #{savePath,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -99,7 +99,7 @@
     set file_name = #{fileName,jdbcType=VARCHAR},
       uploader = #{uploader,jdbcType=VARCHAR},
       save_path = #{savePath,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where file_id = #{fileId,jdbcType=VARCHAR}
   </update>

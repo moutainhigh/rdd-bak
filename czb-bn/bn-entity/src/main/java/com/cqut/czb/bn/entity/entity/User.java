@@ -1,12 +1,10 @@
 package com.cqut.czb.bn.entity.entity;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class User {
     private String userId;
 
-    @NotNull(message = "账号不能为空")
     private String userAccount;
 
     private String userPsw;
@@ -25,7 +23,7 @@ public class User {
 
     private String userIdCard;
 
-    private Date ctreateAt;
+    private Date createAt;
 
     private Date updateAt;
 
@@ -109,12 +107,12 @@ public class User {
         this.userIdCard = userIdCard == null ? null : userIdCard.trim();
     }
 
-    public Date getCtreateAt() {
-        return ctreateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCtreateAt(Date ctreateAt) {
-        this.ctreateAt = ctreateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {

@@ -13,12 +13,12 @@
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
     <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price, 
-    state, discount, area, owner_id, petrol_type, ctreate_at, update_at
+    state, discount, area, owner_id, petrol_type, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -34,12 +34,12 @@
     insert into czb_petrol (petrol_id, petrol_num, petrol_psw, 
       petrol_kind, petrol_denomination, petrol_price, 
       state, discount, area, 
-      owner_id, petrol_type, ctreate_at, 
+      owner_id, petrol_type, create_at, 
       update_at)
     values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR}, 
       #{petrolKind,jdbcType=INTEGER}, #{petrolDenomination,jdbcType=DOUBLE}, #{petrolPrice,jdbcType=DOUBLE}, 
       #{state,jdbcType=INTEGER}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=VARCHAR}, 
-      #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{ctreateAt,jdbcType=TIMESTAMP}, 
+      #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
@@ -78,8 +78,8 @@
       <if test="petrolType != null" >
         petrol_type,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -119,8 +119,8 @@
       <if test="petrolType != null" >
         #{petrolType,jdbcType=INTEGER},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -160,8 +160,8 @@
       <if test="petrolType != null" >
         petrol_type = #{petrolType,jdbcType=INTEGER},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -181,7 +181,7 @@
       area = #{area,jdbcType=VARCHAR},
       owner_id = #{ownerId,jdbcType=VARCHAR},
       petrol_type = #{petrolType,jdbcType=INTEGER},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>

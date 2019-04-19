@@ -8,11 +8,11 @@
     <result column="amount" property="amount" jdbcType="DOUBLE" />
     <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
     <result column="payer_id" property="payerId" jdbcType="VARCHAR" />
-    <result column="ctreate_at" property="ctreateAt" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, payer, pay_time, amount, is_recharged, payer_id, ctreate_at, update_at
+    record_id, payer, pay_time, amount, is_recharged, payer_id, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -27,10 +27,10 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.DepositRecords" >
     insert into czb_deposit_records (record_id, payer, pay_time, 
       amount, is_recharged, payer_id, 
-      ctreate_at, update_at)
+      create_at, update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{payer,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
       #{amount,jdbcType=DOUBLE}, #{isRecharged,jdbcType=INTEGER}, #{payerId,jdbcType=VARCHAR}, 
-      #{ctreateAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.DepositRecords" >
     insert into czb_deposit_records
@@ -53,8 +53,8 @@
       <if test="payerId != null" >
         payer_id,
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at,
+      <if test="createAt != null" >
+        create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
@@ -79,8 +79,8 @@
       <if test="payerId != null" >
         #{payerId,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
@@ -105,8 +105,8 @@
       <if test="payerId != null" >
         payer_id = #{payerId,jdbcType=VARCHAR},
       </if>
-      <if test="ctreateAt != null" >
-        ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
@@ -121,7 +121,7 @@
       amount = #{amount,jdbcType=DOUBLE},
       is_recharged = #{isRecharged,jdbcType=INTEGER},
       payer_id = #{payerId,jdbcType=VARCHAR},
-      ctreate_at = #{ctreateAt,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
