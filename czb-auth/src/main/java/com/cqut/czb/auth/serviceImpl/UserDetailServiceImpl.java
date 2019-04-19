@@ -18,14 +18,14 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     public Boolean register(User user) {
-        if(userMapper.checkAccount(user.getAccount())) return new Boolean(false);
+        if(userMapper.checkAccount(user.getUserAccount())) return new Boolean(false);
         user.setUserId(StringUtil.createId());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userMapper.insertUser(user);
+        user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
+        return userMapper.insertSelective(user) > 0;
     }
 
     @Override
     public Boolean checkAccount(User user) {
-        return userMapper.checkAccount(user.getAccount());
+        return userMapper.checkAccount(user.getUserAccount());
     }
 }

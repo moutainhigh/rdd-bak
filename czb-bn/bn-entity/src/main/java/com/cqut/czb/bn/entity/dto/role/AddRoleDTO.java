@@ -73,10 +73,7 @@ public class AddRoleDTO{
 
         Role role = new Role();
         role.setRoleId(StringUtil.createId());
-        role.setIsAllowDelete((isAllowDelete == 0)?false:true);
-        role.setIsAllowEdit((isAllowEdit == 0)?false:true);
-        role.setRoleName(roleName);
-        role.setRoleType(roleType);
+
 
         return role;
     }

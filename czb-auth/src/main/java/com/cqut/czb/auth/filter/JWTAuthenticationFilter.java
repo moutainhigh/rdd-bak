@@ -72,8 +72,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         User user=new User();
-        user.setAccount(jwtUser.getUsername());
-        user.setPassword(jwtUser.getPassword());
+        user.setUserAccount(jwtUser.getUsername());
+        user.setUserPsw(jwtUser.getPassword());
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
         redisUtil.put(jwtUser.getUsername(), user);
 

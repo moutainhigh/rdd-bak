@@ -1,10 +1,12 @@
 package com.cqut.czb.bn.entity.entity;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class User {
     private String userId;
 
+    @NotNull(message = "账号不能为空")
     private String userAccount;
 
     private String userPsw;
