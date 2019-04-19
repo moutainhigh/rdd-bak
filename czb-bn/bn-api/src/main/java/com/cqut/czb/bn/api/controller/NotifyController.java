@@ -42,8 +42,8 @@ public class NotifyController {
     }
 
     @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public JSONResult getNotificationList(Principal principal) throws InterruptedException {
+    public JSONResult getNotificationList(Principal principal){
         User user = redisUtils.get(principal.getName());
-        return new JSONResult(user.getUserAccount());
+        return new JSONResult(redisUtils.hasKey(principal.getName()));
     }
 }

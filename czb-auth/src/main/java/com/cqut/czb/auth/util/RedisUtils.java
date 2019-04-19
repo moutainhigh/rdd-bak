@@ -25,6 +25,7 @@ public class RedisUtils {
      * */
     public void put(String key, User user) {
         ValueOperations<String, User> operations=redisTemplate.opsForValue();
+        // 默认1天登录超时
         operations.set(key, user,60*60*24, TimeUnit.SECONDS);
     }
 
@@ -34,5 +35,12 @@ public class RedisUtils {
     public User get(String key) {
         ValueOperations<String, User> operations=redisTemplate.opsForValue();
         return operations.get(key);
+    }
+
+    /**
+     * 判断redis是否有该数据
+     * */
+    public Boolean hasKey(String key) {
+        return redisTemplate.opsForValue().getOperations().hasKey(key);
     }
 }

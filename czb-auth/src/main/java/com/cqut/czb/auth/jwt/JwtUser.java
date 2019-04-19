@@ -43,6 +43,10 @@ public class JwtUser implements UserDetails {
         return password;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String getUsername() {
         return username;
