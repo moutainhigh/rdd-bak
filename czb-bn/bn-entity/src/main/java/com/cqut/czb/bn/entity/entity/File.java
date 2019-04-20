@@ -15,6 +15,8 @@ public class File {
 
     private Date updateAt;
 
+    private String remark;
+
     public String getFileId() {
         return fileId;
     }
@@ -61,5 +63,13 @@ public class File {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }
