@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50725
 File Encoding         : 65001
 
-Date: 2019-04-20 20:01:29
+Date: 2019-04-18 22:59:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -18,6 +18,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for czb_address
 -- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
 DROP TABLE IF EXISTS `czb_address`;
 CREATE TABLE `czb_address` (
   `address_id` varchar(20) NOT NULL,
@@ -30,10 +31,6 @@ CREATE TABLE `czb_address` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`address_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_address
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_announcement
@@ -54,11 +51,6 @@ CREATE TABLE `czb_announcement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_announcement
--- ----------------------------
-INSERT INTO `czb_announcement` VALUES ('1', '11', '11', '11', '11', '11', '11', '11', null, null);
-
--- ----------------------------
 -- Table structure for czb_app_router
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_app_router`;
@@ -74,10 +66,6 @@ CREATE TABLE `czb_app_router` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`router_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_app_router
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_cars_persons
@@ -97,10 +85,6 @@ CREATE TABLE `czb_cars_persons` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`person_car_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_cars_persons
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_contract_records
@@ -125,10 +109,6 @@ CREATE TABLE `czb_contract_records` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_contract_records
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_deposit_records
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_deposit_records`;
@@ -143,10 +123,6 @@ CREATE TABLE `czb_deposit_records` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`record_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_deposit_records
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_enterprise_info
@@ -166,10 +142,6 @@ CREATE TABLE `czb_enterprise_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_enterprise_info
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_file
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_file`;
@@ -178,15 +150,11 @@ CREATE TABLE `czb_file` (
   `file_name` varchar(20) DEFAULT NULL,
   `uploader` varchar(20) DEFAULT NULL,
   `save_path` varchar(100) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`file_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_file
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_income_log
@@ -206,10 +174,6 @@ CREATE TABLE `czb_income_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_income_log
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_menu`;
@@ -222,10 +186,6 @@ CREATE TABLE `czb_menu` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`menu_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_menu
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_petrol
@@ -249,11 +209,6 @@ CREATE TABLE `czb_petrol` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_petrol
--- ----------------------------
-INSERT INTO `czb_petrol` VALUES ('4654', '454', '545', '1', '21', '20', '1', '1', '重庆市', null, '1', '2019-04-19 20:53:58', '2019-04-19 20:54:01');
-
--- ----------------------------
 -- Table structure for czb_petrol_sales_records
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_petrol_sales_records`;
@@ -274,10 +229,6 @@ CREATE TABLE `czb_petrol_sales_records` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_petrol_sales_records
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_petrol_sale_config
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_petrol_sale_config`;
@@ -292,10 +243,6 @@ CREATE TABLE `czb_petrol_sale_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_petrol_sale_config
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_role
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_role`;
@@ -306,10 +253,6 @@ CREATE TABLE `czb_role` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_role
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_role_menu
@@ -323,10 +266,6 @@ CREATE TABLE `czb_role_menu` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_role_menu
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_service_plan
@@ -343,10 +282,6 @@ CREATE TABLE `czb_service_plan` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`plan_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_service_plan
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for czb_user
@@ -369,10 +304,6 @@ CREATE TABLE `czb_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_user
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_user_income_info
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_user_income_info`;
@@ -390,10 +321,6 @@ CREATE TABLE `czb_user_income_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_user_income_info
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_user_login_info
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_user_login_info`;
@@ -409,10 +336,6 @@ CREATE TABLE `czb_user_login_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of czb_user_login_info
--- ----------------------------
-
--- ----------------------------
 -- Table structure for czb_user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_user_role`;
@@ -424,37 +347,3 @@ CREATE TABLE `czb_user_role` (
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of czb_user_role
--- ----------------------------
-
--- ----------------------------
--- Table structure for schema_version
--- ----------------------------
-DROP TABLE IF EXISTS `schema_version`;
-CREATE TABLE `schema_version` (
-  `version_rank` int(11) NOT NULL,
-  `installed_rank` int(11) NOT NULL,
-  `version` varchar(50) NOT NULL,
-  `description` varchar(200) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `script` varchar(1000) NOT NULL,
-  `checksum` int(11) DEFAULT NULL,
-  `installed_by` varchar(100) NOT NULL,
-  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `execution_time` int(11) NOT NULL,
-  `success` tinyint(1) NOT NULL,
-  PRIMARY KEY (`version`),
-  KEY `schema_version_vr_idx` (`version_rank`),
-  KEY `schema_version_ir_idx` (`installed_rank`),
-  KEY `schema_version_s_idx` (`success`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of schema_version
--- ----------------------------
-INSERT INTO `schema_version` VALUES ('1', '1', '1', '<< Flyway Baseline >>', 'BASELINE', '<< Flyway Baseline >>', null, 'root', '2019-04-19 10:37:23', '0', '1');
-INSERT INTO `schema_version` VALUES ('2', '2', '1.1', 'init', 'SQL', 'V1.1__init.sql', '1564218184', 'root', '2019-04-19 10:37:25', '872', '1');
-INSERT INTO `schema_version` VALUES ('3', '3', '1.2', 'init2', 'SQL', 'V1.2__init2.sql', '-2043651957', 'root', '2019-04-19 10:37:33', '7331', '1');
-INSERT INTO `schema_version` VALUES ('4', '4', '1.3', 'modify', 'SQL', 'V1.3__modify.sql', '804185081', 'root', '2019-04-19 20:48:33', '7482', '1');
