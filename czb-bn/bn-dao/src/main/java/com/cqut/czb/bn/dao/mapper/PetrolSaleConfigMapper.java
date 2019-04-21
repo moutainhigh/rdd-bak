@@ -2,6 +2,8 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 
+import java.util.List;
+
 public interface PetrolSaleConfigMapper {
     int deleteByPrimaryKey(String petrolConfigId);
 
@@ -14,4 +16,6 @@ public interface PetrolSaleConfigMapper {
     int updateByPrimaryKeySelective(PetrolSaleConfig record);
 
     int updateByPrimaryKey(PetrolSaleConfig record);
+
+    List<PetrolSaleConfig> selectPetrolSaleConfig();
 }

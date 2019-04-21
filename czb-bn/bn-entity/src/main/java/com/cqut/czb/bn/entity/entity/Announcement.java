@@ -15,7 +15,7 @@ public class Announcement {
 
     private Integer isShow;
 
-    private Integer order;
+    private Integer announcementOrder;
 
     private String locationCode;
 
@@ -71,12 +71,12 @@ public class Announcement {
         this.isShow = isShow;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getAnnouncementOrder() {
+        return announcementOrder;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setAnnouncementOrder(Integer announcementOrder) {
+        this.announcementOrder = announcementOrder;
     }
 
     public String getLocationCode() {
