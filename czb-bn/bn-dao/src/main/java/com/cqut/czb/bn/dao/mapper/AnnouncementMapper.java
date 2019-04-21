@@ -2,6 +2,8 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.Announcement;
 
+import java.util.List;
+
 public interface AnnouncementMapper {
     int deleteByPrimaryKey(String announcementId);
 
@@ -14,4 +16,6 @@ public interface AnnouncementMapper {
     int updateByPrimaryKeySelective(Announcement record);
 
     int updateByPrimaryKey(Announcement record);
+
+    List<Announcement> selectAnnouncement();
 }
