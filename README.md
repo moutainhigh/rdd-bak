@@ -25,3 +25,5 @@ public class DocServiceImpl implements IDocService {<br>
         &emsp;&emsp;&emsp;&emsp;return pageInfo;<br>
    &emsp;&emsp; }<br>
 }
+
+3. ID使用StringUtil的createId方法生成
