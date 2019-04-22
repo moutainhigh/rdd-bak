@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.NotifyMapper">
+   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Notify">
+       insert into notify (notify_id,pay_type,money,state,date) value
+       (#{notifyId,jdbcType=VARCHAR},#{payType,jdbcType=VARCHAR},#{money,jdbcType=DOUBLE},#{state,jdbcType=INTEGER},now())
+   </insert>
+
+    <select id="getList" resultType="com.cqut.czb.bn.entity.entity.Notify">
+        select notify_id notifyId,pay_type payType,money,state,date from notify
+        <where>
+            <if test="payType != null and payType != ''">
+               and pay_type = #{payType,jdbcType=VARCHAR}
+            </if>
+            <if test="money != null and money != ''">
+               and money = #{money,jdbcType=DOUBLE}
+            </if>
+            <if test="state != null and state != '' ">
+                and state = #{state,jdbcType=INTEGER}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="getCount" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.CountDTO">
+        SELECT
+        *
+        FROM
+            (
+                SELECT
+                    COUNT(*) total
+                FROM
+                    notify
+                WHERE
+                     pay_type = #{type,jdbcType=VARCHAR}
+            ) AS temp_total,
+            (
+                SELECT
+                    COUNT(*) success
+                FROM
+                    notify
+                WHERE
+                    pay_type = #{type,jdbcType=VARCHAR}
+                AND state = 0
+            ) AS temp_success,
+            (
+                SELECT
+                    COUNT(*) failure
+                FROM
+                    notify
+                WHERE
+                   pay_type = #{type,jdbcType=VARCHAR}
+                AND state = 1
+            ) AS temp_failure
+    </select>
+
+</mapper>
