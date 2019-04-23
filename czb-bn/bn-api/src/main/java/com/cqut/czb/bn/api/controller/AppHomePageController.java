@@ -1,17 +1,14 @@
 package com.cqut.czb.bn.api.controller;
 
 
-import com.cqut.czb.bn.entity.entity.Announcement;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
-import com.cqut.czb.bn.entity.entity.ServicePlan;
+import com.cqut.czb.auth.service.UserDetailService;
+import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
+import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,8 +26,6 @@ public class AppHomePageController {
 
     @Autowired
     AppHomePageService appHomePageService;
-
-
 
     /**
      * app广告展示
@@ -63,9 +58,9 @@ public class AppHomePageController {
      * app油卡专区，对应油卡表未售出的油卡
      * @return
      */
-    @RequestMapping(value = "/selectPetrol",method = RequestMethod.GET)
+    @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
     public JSONResult selectPetrol(){
-        return new JSONResult<List<Petrol>>(appHomePageService.selectPetrol());
+        return new JSONResult<List<PetrolZoneDTO>>(appHomePageService.selectPetrolZone());
     }
 
 }

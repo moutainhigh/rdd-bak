@@ -32,4 +32,9 @@ public class UserDetailServiceImpl implements UserDetailService {
     public Boolean checkAccount(User user) {
         return userMapperExtra.checkAccount(user.getUserAccount());
     }
+
+    @Override
+    public Boolean changePW(User user) {
+        return userMapper.updateByPrimaryKeySelective(user)>0;
+    }
 }

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface PetrolMapper {
      * 获取未售出的油卡信息
      * @return
      */
-    List<Petrol> selectPetrolUnsold();
+    List<PetrolZoneDTO> selectPetrolZone();
 }
