@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.dto.user;
 
 public class LoginUser {
     private String account;
-    private String passWord;
+    private String password;
     private String remember;
 
     public String getAccount() {
@@ -14,11 +14,11 @@ public class LoginUser {
     }
 
     public String getPassWord() {
-        return passWord;
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassWord(String password) {
+        this.password = password;
     }
 
     public String getRemember() {
