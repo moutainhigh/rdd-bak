@@ -2,6 +2,7 @@ package com.cqut.czb.auth.serviceImpl;
 
 import com.cqut.czb.auth.jwt.JwtUser;
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

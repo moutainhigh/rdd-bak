@@ -14,7 +14,7 @@
     file_id, file_name, uploader, save_path, create_at, update_at, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_file
     where file_id = #{fileId,jdbcType=VARCHAR}
@@ -24,11 +24,11 @@
     where file_id = #{fileId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.File" >
-    insert into czb_file (file_id, file_name, uploader, 
-      save_path, create_at, update_at, 
+    insert into czb_file (file_id, file_name, uploader,
+      save_path, create_at, update_at,
       remark)
-    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR}, 
-      #{savePath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR},
+      #{savePath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
       #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.File" >

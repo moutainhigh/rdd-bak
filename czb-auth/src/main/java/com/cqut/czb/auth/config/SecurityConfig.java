@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 // 设置需要身份认证的接口
-                .antMatchers("/api/**").authenticated()
+//                .antMatchers("/api/**").authenticated()
                 // 其余放行，可以不设置
                 .anyRequest().permitAll()
                 .and()

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ExpressMapper" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.ExpressDTO" >
+        <id column="express_id" property="expressId" jdbcType="VARCHAR" />
+        <result column="express_number" property="expressNumber" jdbcType="VARCHAR" />
+        <result column="express_company" property="expressCompany" jdbcType="VARCHAR" />
+        <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+        <result column="send_time" property="sendTime" jdbcType="INTEGER" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        express_number, express_company, consignee, send_time, state,
+        express_id
+    </sql>
+    <select id="selectExpress" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_express
+        <where>
+            <if test='expressNumber!=""'>
+                 express_number = #{expressNumber,jdbcType=VARCHAR}</if>
+            <if test='expressNumber!=""'>
+                AND express_company = #{expressCompany,jdbcType=VARCHAR}</if>
+            <if test='expressNumber!=""'>
+                AND  consignee = #{consignee,jdbcType=VARCHAR}</if>
+        </where>
+    </select>
+
+    <insert id="addExpress" parameterType="com.cqut.czb.bn.entity.dto.ExpressDTO" >
+        insert into czb_express (express_id, express_number,
+        express_company, consignee,
+        send_time, state)
+        values (#{express.expressId,jdbcType=VARCHAR}, #{express.expressNumber,jdbcType=VARCHAR},
+        #{express.expressCompany,jdbcType=VARCHAR}, #{express.consignee,jdbcType=VARCHAR},
+        #{express.sendTime,jdbcType=TIMESTAMP}, #{express.state,jdbcType=INTEGER},
+        )
+    </insert>
+
+</mapper>

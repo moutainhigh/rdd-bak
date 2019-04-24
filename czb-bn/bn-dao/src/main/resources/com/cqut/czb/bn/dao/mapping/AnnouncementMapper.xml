@@ -14,11 +14,11 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    announcement_id, announcement_title, announcement_content, announcement_type, img_file_id, 
+    announcement_id, announcement_title, announcement_content, announcement_type, img_file_id,
     is_show, announcement_order, location_code, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_announcement
     where announcement_id = #{announcementId,jdbcType=VARCHAR}
@@ -28,14 +28,14 @@
     where announcement_id = #{announcementId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
-    insert into czb_announcement (announcement_id, announcement_title, 
-      announcement_content, announcement_type, 
-      img_file_id, is_show, announcement_order, 
+    insert into czb_announcement (announcement_id, announcement_title,
+      announcement_content, announcement_type,
+      img_file_id, is_show, announcement_order,
       location_code, create_at, update_at
       )
-    values (#{announcementId,jdbcType=VARCHAR}, #{announcementTitle,jdbcType=VARCHAR}, 
-      #{announcementContent,jdbcType=VARCHAR}, #{announcementType,jdbcType=INTEGER}, 
-      #{imgFileId,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{announcementOrder,jdbcType=INTEGER}, 
+    values (#{announcementId,jdbcType=VARCHAR}, #{announcementTitle,jdbcType=VARCHAR},
+      #{announcementContent,jdbcType=VARCHAR}, #{announcementType,jdbcType=INTEGER},
+      #{imgFileId,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{announcementOrder,jdbcType=INTEGER},
       #{locationCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -152,4 +152,12 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where announcement_id = #{announcementId,jdbcType=VARCHAR}
   </update>
+
+
+  <select id="selectAnnouncement" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_announcement
+    where is_show=1
+  </select>
 </mapper>

@@ -18,6 +18,9 @@ public class UserDetailServiceImpl implements UserDetailService {
     private UserMapper userMapper;
 
     @Autowired
+    private UserMapperExtra userMapperExtra;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -31,5 +34,10 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public Boolean checkAccount(User user) {
         return userMapperExtra.checkAccount(user.getUserAccount());
+    }
+
+    @Override
+    public Boolean changePW(User user) {
+        return userMapper.updateByPrimaryKeySelective(user)>0;
     }
 }

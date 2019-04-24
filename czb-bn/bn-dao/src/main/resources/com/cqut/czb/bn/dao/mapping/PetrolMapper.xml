@@ -185,4 +185,26 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>
+
+  <!--<select id="" resultMap="BaseResultMap" >-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from czb_petrol-->
+    <!--where state=2-->
+  <!--</select>-->
+
+  <select id="selectPetrolZone" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO" >
+    select
+	DISTINCT
+    petrol_kind AS petrolKind,
+    petrol_denomination AS petrolDenomination,
+    petrol_price AS petrolPrice,
+    discount AS discount
+    from czb_petrol
+    wherez
+    state=2
+    GROUP BY petrolKind , petrolPrice,petrolDenomination,discount
+    ORDER BY petrolPrice  DESC
+  </select>
+
 </mapper>
