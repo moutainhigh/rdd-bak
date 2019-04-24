@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserMapperExtra {
-
     User findUserByAccount(String account);
 
     Boolean checkAccount(@Param("account") String account);
