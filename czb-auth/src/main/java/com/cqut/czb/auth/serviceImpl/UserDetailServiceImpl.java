@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailService {
-    @Autowired
-    private UserMapperExtra userMapperExtra;
 
     @Autowired
     private UserMapper userMapper;

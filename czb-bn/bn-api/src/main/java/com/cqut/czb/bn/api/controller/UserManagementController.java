@@ -4,7 +4,9 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,17 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/userManagement")
 public class UserManagementController {
 
-
-
-    @RequestMapping(value = "/insertUser",method = RequestMethod.POST)
-    public JSONResult insertUser(@Validated @RequestBody UserInputDTO userInputDTO){
-        boolean isInsert = userService.insertUser(userInputDTO);
-        if(isInsert) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "新增成功");
-        } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "新增失败");
-        }
-    }
+    @Autowired
+    IUserService userService;
 
     @RequestMapping(value = "/deleteUser",method = RequestMethod.POST)
     public JSONResult deleteUser(@Validated @RequestBody UserIdDTO userIdDTO){
