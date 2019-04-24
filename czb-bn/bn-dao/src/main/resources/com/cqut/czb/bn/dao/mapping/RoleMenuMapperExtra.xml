@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RoleMenuMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.RoleMenu" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_id, menu_id, create_at, update_at
+  </sql>
+  <insert id="insertRoleMenu" parameterType="com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO">
+    insert into czb_role_menu (id, role_id, menu_id, create_at)
+    values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}, now())
+  </insert>
+  <delete id="deleteRoleMenu" parameterType="com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO" >
+    delete from czb_role_menu
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertRoleMenus" parameterType="java.util.List">
+    insert into czb_role_menu (id, role_id, menu_id, create_at)
+    values
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item.id,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.menuId,jdbcType=VARCHAR}, now()
+    </foreach>
+  </insert>
+  <delete id="deleteRoleMenus" parameterType="java.util.List" >
+    delete from czb_role_menu
+    where id in
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </delete>
+  <select id="selectRoleMenuList" resultType="com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    select
+    id, role_id as 'roleId', menu_id as 'menuId'
+    from czb_role_menu
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </select>
+</mapper>

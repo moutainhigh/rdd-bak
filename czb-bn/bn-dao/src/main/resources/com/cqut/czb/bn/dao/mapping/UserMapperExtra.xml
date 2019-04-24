@@ -34,4 +34,13 @@
     WHERE
         user_account = #{account,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+    select
+
+    from czb_user
+    <where>
+
+    </where>
+  </select>
 </mapper>
