@@ -6,13 +6,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class GetPetrolListInputDTO extends PageDTO {
-    private String petrolNum;
-    private String petrolKind;
-    private String petrolType;
-    private String state;
-    private String petrolDenomination;
-    private String petrolPrice;
-    private String area;
+    private String petrolNum;//油卡号吗
+    private String petrolKind;//油卡种类 0 国通，1 中石油，2 中石化
+    private String petrolType;//油卡类型 0 虚拟卡，1 实体卡
+    private String state;//油卡状态
+    private String petrolDenomination;//油卡面额
+    private String petrolPrice;//油卡售价
+    private String area;//所属地区
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
     public Date getCreateAt() {
