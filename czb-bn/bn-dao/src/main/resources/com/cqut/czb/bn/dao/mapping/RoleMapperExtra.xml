@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RoleMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Role" >
+    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_id, role_name, create_at, update_at
+  </sql>
+  <select id="selectRole" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_role
+    where role_name like concat('%',#{roleName,jdbcType=VARCHAR},'%')
+  </select>
+  <delete id="deleteRole" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    delete from czb_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertRole" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    insert into czb_role (role_id, role_name, create_at)
+    values (#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, now())
+  </insert>
+  <update id="updateRole" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    update czb_role
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

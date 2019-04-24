@@ -174,4 +174,21 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+  <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    *
+    from czb_user
+    where user_account = #{account,jdbcType=VARCHAR}
+  </select>
+
+  <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
+    SELECT
+        count(user_id)
+    FROM
+        czb_user
+    WHERE
+        user_account = #{account,jdbcType=VARCHAR}
+  </select>
+
+
 </mapper>

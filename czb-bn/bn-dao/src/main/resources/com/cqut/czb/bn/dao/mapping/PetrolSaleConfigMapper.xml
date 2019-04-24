@@ -103,4 +103,11 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectPetrolSaleConfig" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_petrol_sale_config
+    where sale_state=1
+  </select>
 </mapper>
