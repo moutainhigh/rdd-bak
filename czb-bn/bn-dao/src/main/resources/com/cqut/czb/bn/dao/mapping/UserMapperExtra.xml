@@ -37,8 +37,9 @@
 
   <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-
-    from czb_user
+      user_account as 'userAccount', user_name as 'userName', enterprise_name as 'enterpriseName', user_rank as 'userRank', cu.create_at as 'createAt'
+    from czb_user cu
+    left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
 
     </where>

@@ -12,13 +12,11 @@ public class UserDTO {
 
     private String enterpriseName;
 
-    private Integer userType;
-
     private Integer userRank;
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date createdAt;
+    private Date createAt;
 
     public String getUserAccount() {
         return userAccount;
@@ -52,19 +50,12 @@ public class UserDTO {
         this.userRank = userRank;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
-    public Integer getUserType() {
-        return userType;
-    }
-
-    public void setUserType(Integer userType) {
-        this.userType = userType;
-    }
 }
