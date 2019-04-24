@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 
@@ -24,6 +25,6 @@ public interface AppPersonalCenterService {
      * @param userId
      * @return
      */
-    List<UserIncomeInfo> selectUserIncomeInfo(String userId);
+    List<UserIncomeInfoDTO> selectUserIncomeInfo(String userId);
 
 }
