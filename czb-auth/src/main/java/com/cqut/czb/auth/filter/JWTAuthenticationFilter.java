@@ -45,7 +45,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                                 HttpServletResponse response) throws AuthenticationException {
         LoginUser loginUser = new LoginUser();
         try {
-            loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            loginUser.setAccount(request.getParameter("account"));
+            loginUser.setPassword(request.getParameter("password"));
+            if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
