@@ -87,6 +87,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         redisUtils.put(jwtUser.getAccount()+AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
 
         // 返回创建成功的token
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json;charset=utf-8");
         JSONObject result = new JSONObject();
         result.put(AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
         result.put(AuthConfig.STATUS, true);
