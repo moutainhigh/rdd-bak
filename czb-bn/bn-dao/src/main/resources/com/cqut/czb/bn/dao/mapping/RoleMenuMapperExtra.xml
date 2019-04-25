@@ -22,8 +22,8 @@
   <insert id="insertRoleMenus" parameterType="java.util.List">
     insert into czb_role_menu (id, role_id, menu_id, create_at)
     values
-    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-      #{item.id,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.menuId,jdbcType=VARCHAR}, now()
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.menuId,jdbcType=VARCHAR}, now())
     </foreach>
   </insert>
   <delete id="deleteRoleMenus" parameterType="java.util.List" >
@@ -38,5 +38,11 @@
     id, role_id as 'roleId', menu_id as 'menuId'
     from czb_role_menu
     where role_id = #{roleId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectRoleMenuList2" resultType="com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
+    select
+    id, role_id as 'roleId', menu_id as 'menuId'
+    from czb_role_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
   </select>
 </mapper>

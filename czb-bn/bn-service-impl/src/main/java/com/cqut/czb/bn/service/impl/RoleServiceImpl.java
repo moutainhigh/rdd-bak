@@ -3,12 +3,14 @@ package com.cqut.czb.bn.service.impl;
 import com.cqut.czb.bn.dao.mapper.MenuMapperExtra;
 import com.cqut.czb.bn.dao.mapper.RoleMapperExtra;
 import com.cqut.czb.bn.dao.mapper.RoleMenuMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO;
+import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IRoleService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -31,6 +33,9 @@ public class RoleServiceImpl implements IRoleService {
     @Autowired
     MenuMapperExtra menuMapperExtra;
 
+    @Autowired
+    UserRoleMapperExtra userRoleMapperExtra;
+
     @Override
     public boolean insertRole(RoleInputDTO roleInputDTO) {
         roleInputDTO.setRoleId(StringUtil.createId());
@@ -49,10 +54,20 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public boolean deleteRole(RoleIdDTO roleIdDTO) {
         RoleInputDTO roleInputDTO = new RoleInputDTO();
-        roleInputDTO.setRoleId(roleIdDTO.getId());
+        roleInputDTO.setRoleId(roleIdDTO.getRoleId());
         List<RoleMenuDTO> roleMenuDTOList = roleMenuMapperExtra.selectRoleMenuList(roleInputDTO);
-        boolean isDeleteRoleMenu = roleMenuMapperExtra.deleteRoleMenus(roleMenuDTOList) > 0;
-        if(isDeleteRoleMenu) {
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(roleIdDTO.getRoleId());
+        List<UserRole> userRoleList = userRoleMapperExtra.slectUserRoleList(userRole);
+        boolean isDleteUserRole = true;
+        if(userRoleList.size() >0) {
+            isDleteUserRole = userRoleMapperExtra.deleteUserRoles(userRoleList) > 0;
+        }
+        boolean isDeleteRoleMenu = true;
+        if(roleMenuDTOList.size() > 0) {
+            isDeleteRoleMenu = roleMenuMapperExtra.deleteRoleMenus(roleMenuDTOList) > 0;
+        }
+        if(isDleteUserRole && isDeleteRoleMenu) {
             return roleMapperExtra.deleteRole(roleInputDTO) > 0;
         } else {
             return false;
@@ -61,19 +76,25 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public boolean updateRole(RoleInputDTO roleInputDTO) {
+        List<RoleMenuDTO> tempList = new ArrayList<>();
         List<RoleMenuDTO> deleteList = roleMenuMapperExtra.selectRoleMenuList(roleInputDTO);
         boolean isInsert = true;
         if(roleInputDTO.getAuthorities() != null) {
             List<RoleMenuDTO> insertList = initRoleMenuList(roleInputDTO);
             for(RoleMenuDTO insert : insertList) {
-                for(RoleMenuDTO delete : deleteList) {
-                    if(delete.getMenuId().equals(insert.getMenuId())) {
-                        insertList.remove(insert);
-                        deleteList.remove(delete);
+                for (RoleMenuDTO delete : deleteList) {
+                    if (delete.getMenuId().equals(insert.getMenuId())) {
+                        tempList.add(delete);
                     }
                 }
             }
-            isInsert = roleMenuMapperExtra.insertRoleMenus(insertList) > 0;
+            for(RoleMenuDTO temp: tempList) {
+                insertList.remove(temp);
+                deleteList.remove(temp);
+            }
+            if(insertList.size() > 0) {
+                isInsert = roleMenuMapperExtra.insertRoleMenus(insertList) > 0;
+            }
         }
         boolean isDelete = true;
         if(deleteList.size() > 0) {

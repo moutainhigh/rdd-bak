@@ -26,6 +26,10 @@ public class UserInputDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createAt;
 
+    private Date createStartTime;
+
+    private Date createEndTime;
+
     public Date getCreateAt() {
         return createAt;
     }
@@ -72,5 +76,21 @@ public class UserInputDTO {
 
     public void setUserRank(Integer userRank) {
         this.userRank = userRank;
+    }
+
+    public Date getCreateStartTime() {
+        return createStartTime;
+    }
+
+    public void setCreateStartTime(Date createStartTime) {
+        this.createStartTime = createStartTime;
+    }
+
+    public Date getCreateEndTime() {
+        return createEndTime;
+    }
+
+    public void setCreateEndTime(Date createEndTime) {
+        this.createEndTime = createEndTime;
     }
 }

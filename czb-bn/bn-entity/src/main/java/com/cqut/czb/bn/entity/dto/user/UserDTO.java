@@ -1,10 +1,14 @@
 package com.cqut.czb.bn.entity.dto.user;
 
+import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserDTO {
+
+    private String userId;
 
     private String userAccount;
 
@@ -14,6 +18,7 @@ public class UserDTO {
 
     private Integer userRank;
 
+    private List<RoleDTO> roleList;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createAt;
@@ -58,4 +63,19 @@ public class UserDTO {
         this.createAt = createAt;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public List<RoleDTO> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<RoleDTO> roleList) {
+        this.roleList = roleList;
+    }
 }

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO;
 
@@ -16,4 +17,6 @@ public interface RoleMenuMapperExtra {
     int deleteRoleMenu(RoleMenuDTO roleMenuDTO);
 
     List<RoleMenuDTO> selectRoleMenuList(RoleInputDTO roleInputDTO);
+
+    List<RoleMenuDTO> selectRoleMenuList2(MenuInputDTO menuInputDTO);
 }

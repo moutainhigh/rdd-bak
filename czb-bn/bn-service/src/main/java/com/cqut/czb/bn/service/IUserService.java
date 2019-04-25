@@ -1,9 +1,9 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
-import com.cqut.czb.bn.entity.entity.User;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -17,5 +17,5 @@ public interface IUserService {
 
     boolean updateUser(UserInputDTO userInputDTO);
 
-    PageInfo<User> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO);
+    PageInfo<UserDTO> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO);
 }

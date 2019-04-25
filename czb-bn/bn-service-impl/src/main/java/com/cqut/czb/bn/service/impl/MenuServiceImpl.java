@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.MenuMapperExtra;
+import com.cqut.czb.bn.dao.mapper.RoleMenuMapperExtra;
 import com.cqut.czb.bn.entity.dto.menu.MenuIdDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO;
 import com.cqut.czb.bn.entity.entity.Menu;
 import com.cqut.czb.bn.service.IMenuService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -20,6 +22,9 @@ public class MenuServiceImpl implements IMenuService {
     @Autowired
     MenuMapperExtra menuMapperExtra;
 
+    @Autowired
+    RoleMenuMapperExtra roleMenuMapperExtra;
+
     @Override
     public boolean insertMenu(MenuInputDTO menuInputDTO) {
         menuInputDTO.setMenuId(StringUtil.createId());
@@ -30,7 +35,16 @@ public class MenuServiceImpl implements IMenuService {
     public boolean deleteMenu(MenuIdDTO menuIdDTO) {
         MenuInputDTO menuInputDTO = new MenuInputDTO();
         menuInputDTO.setMenuId(menuIdDTO.getMenuId());
-        return menuMapperExtra.deleteMenu(menuInputDTO) > 0;
+        List<RoleMenuDTO> roleMenuDTOList = roleMenuMapperExtra.selectRoleMenuList2(menuInputDTO);
+        boolean isDeleteRoleMenu = true;
+        if(roleMenuDTOList.size() > 0) {
+            isDeleteRoleMenu = roleMenuMapperExtra.deleteRoleMenus(roleMenuDTOList) > 0;
+        }
+        if(isDeleteRoleMenu) {
+            return menuMapperExtra.deleteMenu(menuInputDTO) > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override

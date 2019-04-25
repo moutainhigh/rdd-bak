@@ -37,11 +37,27 @@
 
   <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-      user_account as 'userAccount', user_name as 'userName', enterprise_name as 'enterpriseName', user_rank as 'userRank', cu.create_at as 'createAt'
+    cu.user_id as 'userId', user_account as 'userAccount', user_name as 'userName', enterprise_name as 'enterpriseName', user_rank as 'userRank', cu.create_at as 'createAt'
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
-
+      <if test="userAccount != null and userAccount != ''">
+        and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userName != null and userName != ''">
+        and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createAt != null">
+        and cu.create_at between #{createStartTime} and #{createEndTime}
+      </if>
     </where>
   </select>
+
+  <delete id="deleteUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+    update czb_user
+    <set >
+        is_delete = 1
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
 </mapper>
