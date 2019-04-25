@@ -98,6 +98,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // 这是验证失败时候调用的方法
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json;charset=utf-8");
         JSONObject result = new JSONObject();
         result.put(AuthConfig.FAILED_REASON, failed.getMessage());
         result.put(AuthConfig.STATUS, false);
