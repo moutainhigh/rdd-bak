@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.api.controller.rentCarServer;
+package com.cqut.czb.bn.util.method;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
