@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
 /**
@@ -8,6 +9,16 @@ import com.cqut.czb.bn.entity.entity.*;
  * 作用：购买油卡
  */
 public interface AppBuyPetrolService {
+
+    /**
+     * 购买油卡
+     */
+    boolean BuyPetrol(PetrolInputDTO petrolInputDTO);
+
+    /**
+     * 支付成功后回调
+     */
+    boolean ConfirmBuyPetrol(Petrol petrol,PetrolSalesRecords petrolSalesRecords);
 
     /**
      * 更改油卡状态
@@ -31,10 +42,13 @@ public interface AppBuyPetrolService {
     boolean insertDepositRecords(DepositRecords depositRecords);
 
     /**
-     *
-     * @param userIncomeInfo
+     * 插入用户收益信息表
+     * @param petrol
      * @return
      */
-    boolean insertUserIncomeInfo(UserIncomeInfo userIncomeInfo);
+    boolean insertUserIncomeInfo(Petrol petrol);
+
+
+
 
 }

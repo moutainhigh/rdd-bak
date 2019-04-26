@@ -20,4 +20,6 @@ public interface AnnouncementMapper {
     Boolean updateByPrimaryKeySelective(Announcement record);
 
     int updateByPrimaryKey(Announcement record);
+
+    List<Announcement> selectAnnouncement();
 }

@@ -33,8 +33,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<Announcement> selectAnnouncement() {
-//        return announcementMapper.selectAnnouncement();
-        return null;
+        return announcementMapper.selectAnnouncement();
     }
 
     @Override
@@ -49,9 +48,8 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<PetrolZoneDTO> selectPetrolZone() {
-        //读取所有的油卡存储下来
-        List<Petrol> k=petrolMapper.selectPetrol();
-        AllPetrolDTO allPetrolDTO=new AllPetrolDTO(k);
+        //读取所有的油卡存储下来进入map中
+        AllPetrolDTO allPetrolDTO=new AllPetrolDTO(petrolMapper.selectPetrol());
         return petrolMapper.selectPetrolZone();
     }
 }
