@@ -17,19 +17,34 @@
     org_code, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
+    select
+    enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_account,
+    org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at
     from czb_enterprise_info
-    where
-    <if test="enterprise_info_id!=null">
-    enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
+    LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
+    <where>
+    <if test="enterpriseInfo.enterpriseInfoId!=null">
+    enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
     </if>
-    <!--<if test="">-->
-      <!--enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}-->
-    <!--</if>-->
-    <!--<if test="">-->
-      <!--enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}-->
-    <!--</if>-->
+      <if test="enterpriseInfo.enterpriseInfoName!=null">
+        AND enterprise_name= #{enterpriseInfo.enterpriseInfoName,jdbcType=VARCHAR}
+      </if>
+      <if test="enterpriseInfo.userAccount!=null">
+      AND  user_account= #{enterpriseInfo.userAccount,jdbcType=VARCHAR}
+      </if>
+      <if test="enterpriseInfo.contactInfo!=null">
+        AND contact_info=#{enterpriseInfo.contactInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="enterpriseInfo.startTime!=null and enterpriseInfo.endTime ==null">
+        AND create_at >= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime == null">
+        AND  #{enterpriseInfo.endTime,jdbcType=TIMESTAMP} >=create_at
+      </if>
+      <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime != null">
+        AND   #{enterpriseInfo.endTime,jdbcType=TIMESTAMP}>= create_at >=#{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_enterprise_info

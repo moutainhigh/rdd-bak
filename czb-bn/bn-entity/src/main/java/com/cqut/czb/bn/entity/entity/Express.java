@@ -5,7 +5,7 @@ import java.util.Date;
 public class Express {
     private String expressId;
 
-    private String expressNnumber;
+    private String expressNumber;
 
     private String expressCompany;
 
@@ -27,12 +27,12 @@ public class Express {
         this.expressId = expressId;
     }
 
-    public String getExpressNnumber() {
-        return expressNnumber;
+    public String getExpressNumber() {
+        return expressNumber;
     }
 
-    public void setExpressNnumber(String expresNnumber) {
-        this.expressNnumber = expresNnumber;
+    public void setExpressNumber(String expresNumber) {
+        this.expressNumber = expresNumber;
     }
 
     public String getExpressCompany() {

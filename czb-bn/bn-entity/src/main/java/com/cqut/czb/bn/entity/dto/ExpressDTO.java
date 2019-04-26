@@ -6,7 +6,7 @@ public class ExpressDTO {
     //快递单id
     private String expressId;
     //快递单号
-    private String expressNnumber;
+    private String expressNumber;
     //快递公司
     private String expressCompany;
     //收货人
@@ -28,12 +28,12 @@ public class ExpressDTO {
         this.expressId = expressId;
     }
 
-    public String getExpressNnumber() {
-        return expressNnumber;
+    public String getExpressNumber() {
+        return expressNumber;
     }
 
-    public void setExpressNnumber(String expresNnumber) {
-        this.expressNnumber = expresNnumber;
+    public void setExpressNumber(String expresNumber) {
+        this.expressNumber = expresNumber;
     }
 
     public String getExpressCompany() {

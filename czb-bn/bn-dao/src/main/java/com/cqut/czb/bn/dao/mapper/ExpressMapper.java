@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public interface ExpressMapper {
-    List<ExpressDTO> selectExpress(@Param("expresNnumber")String expresNnumber,@Param("expressCompany")String expressCompany, @Param("consignee")String consignee);
+    List<ExpressDTO> selectExpress(@Param("expressNumber")String expressNumber,@Param("expressCompany")String expressCompany, @Param("consignee")String consignee);
 
     Boolean addExpress(@Param("express") ExpressDTO expressDTO);
 }

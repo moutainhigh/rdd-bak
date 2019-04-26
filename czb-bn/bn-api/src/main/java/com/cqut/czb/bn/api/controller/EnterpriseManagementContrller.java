@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
+import com.cqut.czb.bn.entity.dto.EnterpriseInfoDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.EnterpriseInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class EnterpriseManagementContrller {
     EnterpriseInfoService enterpriseInfoService;
 
     @GetMapping("/getEnterprise")
-    public JSONResult getEnterprise(EnterpriseInfo enterpriseInfo){
-        return new JSONResult(enterpriseInfoService.getEnterpriseInfo(enterpriseInfo));
+    public JSONResult getEnterprise(EnterpriseInfoDTO enterpriseInfoDTO){
+        return new JSONResult(enterpriseInfoService.getEnterpriseInfo(enterpriseInfoDTO));
     }
     @GetMapping("/deleteEnterprise")
     public Boolean deleteEnterprise(String id){

@@ -15,14 +15,14 @@
     </sql>
     <select id="selectExpress" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
-        <include refid="Base_Column_List" />
+       *
         from czb_express
         <where>
-            <if test='expressNumber!=""'>
+            <if test="expressNumber!=null">
                  express_number = #{expressNumber,jdbcType=VARCHAR}</if>
-            <if test='expressNumber!=""'>
+            <if test="expressCompany!=null">
                 AND express_company = #{expressCompany,jdbcType=VARCHAR}</if>
-            <if test='expressNumber!=""'>
+            <if test="consignee!=null">
                 AND  consignee = #{consignee,jdbcType=VARCHAR}</if>
         </where>
     </select>
@@ -33,7 +33,7 @@
         send_time, state)
         values (#{express.expressId,jdbcType=VARCHAR}, #{express.expressNumber,jdbcType=VARCHAR},
         #{express.expressCompany,jdbcType=VARCHAR}, #{express.consignee,jdbcType=VARCHAR},
-        #{express.sendTime,jdbcType=TIMESTAMP}, #{express.state,jdbcType=INTEGER},
+        #{express.sendTime,jdbcType=TIMESTAMP}, #{express.state,jdbcType=INTEGER}
         )
     </insert>
 
