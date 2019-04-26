@@ -38,7 +38,7 @@ FROM
 		FROM
 			czb_petrol_sales_records AS records
 		<where>
-          <if test="paymentMethod != null ">
+          <if test="paymentMethod != null and paymentMethod != ''">
             and records.payment_method = #{paymentMethod,jdbcType=INTEGER}
           </if>
           <if test="transactionTime != null">
@@ -71,12 +71,15 @@ INNER JOIN (
       <if test="petrolNum != null and petrolNum != ''">
         AND petrol.petrol_num = #{petrolNum,jdbcType=VARCHAR}
       </if>
-      <if test="petrolPrice != null ">
+      <if test="petrolPrice != null and petrolPrice != ''">
         AND petrol.petrol_price = #{petrolPrice,jdbcType = DOUBLE}
       </if>
-      <if test="petrolDenomination != null ">
+      <if test="petrolDenomination != null and petrolDenomination != '' ">
         AND petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
       </if>
+        <if test="petrolKind != null and petrolKind != '' ">
+            and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+        </if>
     </where>
 ) AS t3 ON t3.petrol_id = t1.petrol_id
   </select>
