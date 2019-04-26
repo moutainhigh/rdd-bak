@@ -32,7 +32,8 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<Announcement> selectAnnouncement() {
-        return announcementMapper.selectAnnouncement();
+//        return announcementMapper.selectAnnouncement();
+        return null;
     }
 
     @Override

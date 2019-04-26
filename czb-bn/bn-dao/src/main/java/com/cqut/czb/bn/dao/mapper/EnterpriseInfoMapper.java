@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.EnterpriseInfoDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ public interface EnterpriseInfoMapper {
 
     int insertSelective(EnterpriseInfo record);
 
-    List<EnterpriseInfo> selectByPrimaryKey(@Param("enterpriseInfo") EnterpriseInfo enterpriseInfo);
+    List<EnterpriseInfoDTO> selectByPrimaryKey(@Param("enterpriseInfo") EnterpriseInfoDTO enterpriseInfoDTO);
 
     int updateByPrimaryKeySelective(EnterpriseInfo record);
 
