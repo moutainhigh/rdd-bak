@@ -45,7 +45,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                                 HttpServletResponse response) throws AuthenticationException {
         LoginUser loginUser = new LoginUser();
         try {
-            loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            loginUser.setAccount(request.getParameter("account"));
+            loginUser.setPassword(request.getParameter("password"));
+            if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,8 +81,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         user.setUserName(jwtUser.getUsername());
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
         redisUtils.put(jwtUser.getAccount(), user);
+        if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {
+            redisUtils.remove(jwtUser.getAccount()+AuthConfig.TOKEN);
+        }
+        redisUtils.put(jwtUser.getAccount()+AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
 
         // 返回创建成功的token
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json;charset=utf-8");
         JSONObject result = new JSONObject();
         result.put(AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
         result.put(AuthConfig.STATUS, true);
@@ -88,6 +98,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // 这是验证失败时候调用的方法
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json;charset=utf-8");
         JSONObject result = new JSONObject();
         result.put(AuthConfig.FAILED_REASON, failed.getMessage());
         result.put(AuthConfig.STATUS, false);

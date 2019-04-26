@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PetrolMapperExtra {
     List<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO);
+    int insertPetrolList(List<Petrol> list);
 }

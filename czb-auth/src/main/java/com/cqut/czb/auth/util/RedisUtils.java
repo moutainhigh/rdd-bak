@@ -1,7 +1,7 @@
 package com.cqut.czb.auth.util;
 
-import com.cqut.czb.bn.entity.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -23,18 +23,23 @@ public class RedisUtils {
     /**
      * 将用户信息存入redis
      * */
-    public void put(String key, User user) {
-        ValueOperations<String, User> operations=redisTemplate.opsForValue();
+    public void put(String key, Object object) {
+        ValueOperations<String, Object> operations=redisTemplate.opsForValue();
         // 默认1天登录超时
-        operations.set(key, user,60*60*24, TimeUnit.SECONDS);
+        operations.set(key, object,60*60*24, TimeUnit.SECONDS);
     }
 
     /**
-     * 将用户信息从redis取出
+     * 将信息从redis取出
      * */
-    public User get(String key) {
-        ValueOperations<String, User> operations=redisTemplate.opsForValue();
+    public Object get(String key) {
+        ValueOperations<String, Object> operations=redisTemplate.opsForValue();
         return operations.get(key);
+    }
+
+    public void remove(String key) {
+        RedisOperations<String, Object> operations = redisTemplate.opsForValue().getOperations();
+        operations.delete(key);
     }
 
     /**

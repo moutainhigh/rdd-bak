@@ -2,9 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.MyWalletMapper">
     <select id="getUserAllIncome" resultType="java.lang.Double">
-        select (sum(fanyong_income) + SUM(share_income) + SUM(other_income)) AS allIncome
+        select ((sum(fanyong_income) + SUM(share_income) + SUM(other_income)) - withdrawed) AS allIncome
         from czb_user_income_info
         where user_id = #{userId}
+    </select>
+
+    <update id="increaseWithdrawed" parameterType="java.lang.Double">
+        UPDATE czb_user_income_info
+        SET withdrawed = withdrawed + #{paymentAmount}
+    </update>
+
+    <select id="getPsw" parameterType="java.lang.String" resultType="java.lang.String">
+        select user_psw
+        FROM czb_user
+        WHERE user_id = #{userId}
     </select>
 
 </mapper>

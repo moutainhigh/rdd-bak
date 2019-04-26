@@ -19,6 +19,10 @@ public class Address {
 
     private Date updateAt;
 
+    private String contactNumber;
+
+    private String receiver;
+
     public String getAddressId() {
         return addressId;
     }
@@ -81,5 +85,21 @@ public class Address {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber == null ? null : contactNumber.trim();
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver == null ? null : receiver.trim();
     }
 }

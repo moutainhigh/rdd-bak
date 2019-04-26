@@ -1,21 +1,20 @@
 package com.cqut.czb.bn.entity.dto.role;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * RoleInputDTO 角色信息DTO
+ * RoleInputDTO 角色输入DTO
  * 设计者:   曹渝
- * 更新日期: 2018/4/5
+ * 更新日期: 2018/4/24
  */
 public class RoleInputDTO {
 
     private String roleId;
 
+    @NotNull(message = "角色名不能为空")
     private String roleName;
 
-    private List<String> authorities;
+    private String authorities;
 
     public String getRoleName() {
         return roleName;
@@ -33,11 +32,11 @@ public class RoleInputDTO {
         this.roleId = roleId;
     }
 
-    public List<String> getAuthorities() {
+    public String getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(List<String> authorities) {
+    public void setAuthorities(String authorities) {
         this.authorities = authorities;
     }
 }

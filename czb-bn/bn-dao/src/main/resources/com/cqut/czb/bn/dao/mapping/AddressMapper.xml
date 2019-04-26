@@ -10,9 +10,12 @@
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    address_id, province, city, area, detail, user_id, create_at, update_at
+    address_id, province, city, area, detail, user_id, create_at, update_at, contact_number, 
+    receiver
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -27,10 +30,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Address" >
     insert into czb_address (address_id, province, city, 
       area, detail, user_id, 
-      create_at, update_at)
+      create_at, update_at, contact_number, 
+      receiver)
     values (#{addressId,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{area,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Address" >
     insert into czb_address
@@ -59,6 +64,12 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="contactNumber != null" >
+        contact_number,
+      </if>
+      <if test="receiver != null" >
+        receiver,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="addressId != null" >
@@ -84,6 +95,12 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contactNumber != null" >
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -111,6 +128,12 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="contactNumber != null" >
+        contact_number = #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
     </set>
     where address_id = #{addressId,jdbcType=VARCHAR}
   </update>
@@ -122,7 +145,9 @@
       detail = #{detail,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      contact_number = #{contactNumber,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR}
     where address_id = #{addressId,jdbcType=VARCHAR}
   </update>
 </mapper>

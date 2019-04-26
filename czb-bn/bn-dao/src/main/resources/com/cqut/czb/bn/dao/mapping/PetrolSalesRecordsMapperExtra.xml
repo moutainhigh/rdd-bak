@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+    <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
+    <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
+    <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
+    <result column="turnover_amount" property="turnoverAmount" jdbcType="DOUBLE" />
+    <result column="transaction_time" property="transactionTime" jdbcType="TIMESTAMP" />
+    <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount, 
+    transaction_time, petrol_id, state, contract_id, create_at, update_at
+  </sql>
+  <select id="getPetrolSaleInfoList" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO">
+    SELECT
+	t2.user_account 'owner',
+	t1.transaction_time transactionTime,
+	t1.payment_method paymentMethod,
+    t1.turnover_amount turnoverAmount,
+	t3.area area,
+	t3.petrol_price petrolPrice,
+	t3.petrol_denomination petrolDenomination,
+	t3.petrol_kind petrolKind,
+	t3.petrol_num petrolNum
+
+FROM
+	(
+		SELECT
+			*
+		FROM
+			czb_petrol_sales_records AS records
+		<where>
+          <if test="paymentMethod != null ">
+            and records.payment_method = #{paymentMethod,jdbcType=INTEGER}
+          </if>
+          <if test="transactionTime != null">
+            and records.transaction_time = #{transactionTime,jdbcType=TIMESTAMP}
+          </if>
+
+        </where>
+	) AS t1
+INNER JOIN (
+	SELECT
+		_user.user_id,
+		_user.user_account
+	FROM
+		czb_user AS _user
+    <where>
+      <if test="owner != null and owner != ''">
+        and _user.user_account = #{owner,jdbcType = VARCHAR}
+      </if>
+    </where>
+) AS t2 ON t1.buyer_id = t2.user_id
+INNER JOIN (
+	SELECT
+		*
+	FROM
+		czb_petrol AS petrol
+    <where>
+      <if test="area != null and area !=''">
+        AND petrol.area = #{area,jdbcType=VARCHAR}
+      </if>
+      <if test="petrolNum != null and petrolNum != ''">
+        AND petrol.petrol_num = #{petrolNum,jdbcType=VARCHAR}
+      </if>
+      <if test="petrolPrice != null ">
+        AND petrol.petrol_price = #{petrolPrice,jdbcType = DOUBLE}
+      </if>
+      <if test="petrolDenomination != null ">
+        AND petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
+      </if>
+    </where>
+) AS t3 ON t3.petrol_id = t1.petrol_id
+  </select>
+
+</mapper>
