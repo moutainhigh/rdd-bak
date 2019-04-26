@@ -2,19 +2,16 @@ package com.cqut.czb.bn.entity.dto.role;
 
 import javax.validation.constraints.NotNull;
 
-public class RoleIdDTO
-{
-    /**
-     * 角色名
-     */
-    @NotNull(message = "角色id不能为空")
-    private String id;
+public class RoleIdDTO {
 
-    public String getId() {
-        return id;
+    @NotNull(message = "角色id不能为空")
+    private String roleId;
+
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }

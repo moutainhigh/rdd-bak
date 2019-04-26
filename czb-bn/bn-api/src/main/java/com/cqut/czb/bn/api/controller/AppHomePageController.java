@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller;
 
 
 import com.cqut.czb.auth.service.UserDetailService;
+import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;

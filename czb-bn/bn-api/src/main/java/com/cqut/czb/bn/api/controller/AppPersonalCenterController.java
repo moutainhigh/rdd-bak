@@ -3,11 +3,9 @@ package com.cqut.czb.bn.api.controller;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +50,7 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value = "/selectWallet",method = RequestMethod.GET)
     public JSONResult selectWallet(Principal principal){
-        User user = redisUtils.get(principal.getName());
+        User user = (User)redisUtils.get(principal.getName());
         return new JSONResult<List<UserIncomeInfoDTO>>(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
     }
 

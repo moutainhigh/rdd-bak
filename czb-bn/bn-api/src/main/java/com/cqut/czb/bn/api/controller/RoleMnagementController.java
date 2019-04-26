@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IRoleService;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 更新日期: 2019/04/21
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/roleManagement")
 public class RoleMnagementController {
 
     @Autowired
@@ -35,9 +36,9 @@ public class RoleMnagementController {
     }
 
     @RequestMapping(value = "/deleteRole",method = RequestMethod.POST)
-    public JSONResult deleteRole(@Validated  @RequestBody RoleInputDTO roleInputDTO){
+    public JSONResult deleteRole(@Validated @RequestBody RoleIdDTO roleIdDTO){
 
-        boolean isDelete = roleService.deleteRole(roleInputDTO);
+        boolean isDelete = roleService.deleteRole(roleIdDTO);
         if(isDelete) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "删除成功");
         } else {
