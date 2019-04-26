@@ -9,4 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public interface MyWalletMapper {
     Double getUserAllIncome(@Param("userId") String userId);
 
+    int increaseWithdrawed(@Param("paymentAmount") double paymentAmount);
+
+    String getPsw(@Param("userId") String userId);
 }

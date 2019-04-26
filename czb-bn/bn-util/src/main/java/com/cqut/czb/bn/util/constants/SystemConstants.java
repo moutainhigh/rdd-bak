@@ -6,6 +6,8 @@ public class SystemConstants {
 
     public static String COMMA_REGEX = ",";
 
+
+    public static final String IPAPI="https://www.ddcattom.com:8443";
     /**
      * 表示数据库中false的值
      * */

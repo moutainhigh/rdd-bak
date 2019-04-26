@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.personCenter;
+package com.cqut.czb.bn.service.personCenterService;
 
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.AlipayRecordDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.LoginInfoDTO;
