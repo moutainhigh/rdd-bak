@@ -47,8 +47,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public Boolean addAnnouncement(Announcement announcement,  MultipartFile file) throws Exception {
             String address="";
         if (file!=null||!file.isEmpty()) {
-                 address = FileUploadUtil.putObject(announcement.getAnnouncementTitle(), file.getInputStream());//返回图片储存路径
+                 address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
             }
+            System.out.println("5555555"+address);
             String id = StringUtil.createId();
             announcement.setAnnouncementId(id);
             File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
