@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface IUserAddressService {
     List<Address> getUserAddressList(String userId);
+    boolean addAddress(Address address,String userId);
+    boolean modifyAddress(Address address);
+    boolean deleteAddress(Address address,String userId);
 }

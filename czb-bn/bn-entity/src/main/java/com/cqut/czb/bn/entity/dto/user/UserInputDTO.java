@@ -20,6 +20,8 @@ public class UserInputDTO {
     private Integer userType;
 
     private Integer userRank;
+
+    private String roleId;
     /**
      * 注册时间
      * */
@@ -92,5 +94,13 @@ public class UserInputDTO {
 
     public void setCreateEndTime(Date createEndTime) {
         this.createEndTime = createEndTime;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }

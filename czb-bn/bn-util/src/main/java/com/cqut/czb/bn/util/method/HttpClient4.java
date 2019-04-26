@@ -72,7 +72,7 @@ public class HttpClient4 {
     }
 
     //Map<String, Object> paramMap
-    public static String doPost(String url, JSONObject json) {
+    public static String doPost(String url, JSONObject json , int type) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse httpResponse = null;
         String result = "";
@@ -89,7 +89,7 @@ public class HttpClient4 {
         httpPost.setConfig(requestConfig);
 
         // 在请求头设置方法中 设置请求头
-        httpPost = getContractTokenHeader(httpPost);
+        httpPost = getContractTokenHeader(httpPost , json, type);
 
         // 封装post请求参数
 //        if (null != paramMap && paramMap.size() > 0) {
@@ -110,6 +110,8 @@ public class HttpClient4 {
 //                e.printStackTrace();
 //            }
 //        }
+        // 根据不同的请求处理json数据
+        json = deal(json, type);
 
         StringEntity requestEntity = new StringEntity(json.toString(), ContentType.APPLICATION_JSON);
         httpPost.setEntity(requestEntity);
@@ -117,7 +119,7 @@ public class HttpClient4 {
             // httpClient对象执行post请求,并返回响应参数对象
             httpResponse = httpClient.execute(httpPost);
             // 从响应对象中获取响应内容(调用相应的响应信息处理方法)
-            result = getContractTokenResponse(httpResponse);
+            result = getContractTokenResponse(httpResponse, type);
 //            HttpEntity entity = httpResponse.getEntity();
 //            result = EntityUtils.toString(entity);
         } catch (ClientProtocolException e) {
@@ -147,9 +149,19 @@ public class HttpClient4 {
     /**
      * 获取token时，设置请求头信息
      */
-    private static HttpPost getContractTokenHeader(HttpPost httpPost){
+    private static HttpPost getContractTokenHeader(HttpPost httpPost, JSONObject json, int type){
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("charset", "UTF-8");
+        switch(type){
+            case 0:
+                break;
+            case 1:
+                httpPost.addHeader("token", json.getString("token"));
+                break;
+            case 2:
+                httpPost.addHeader("token", json.getString("token"));
+                break;
+        }
 
         return httpPost;
     }
@@ -157,7 +169,37 @@ public class HttpClient4 {
     /**
      * 获取token时，响应信息处理方法
      */
-    private static String getContractTokenResponse(CloseableHttpResponse httpResponse){
-        return httpResponse.getFirstHeader("token").toString();
+    private static String getContractTokenResponse(CloseableHttpResponse httpResponse, int type) throws IOException {
+        String responseString = new String();
+        HttpEntity entity = httpResponse.getEntity();
+        switch(type){
+            case 0:
+                responseString = httpResponse.getFirstHeader("token").toString();
+                break;
+            case 1:
+                responseString = EntityUtils.toString(entity);
+                break;
+            case 2:
+                responseString = EntityUtils.toString(entity);
+                break;
+        }
+        return responseString;
+    }
+
+    /**
+     * 处理json方法
+     */
+    private static JSONObject deal(JSONObject json, int type){
+        switch(type){
+            case 0:
+                break;
+            case 1:
+                json.remove("token");
+                break;
+            case 2:
+                json.remove("token");
+                break;
+        }
+        return json;
     }
 }

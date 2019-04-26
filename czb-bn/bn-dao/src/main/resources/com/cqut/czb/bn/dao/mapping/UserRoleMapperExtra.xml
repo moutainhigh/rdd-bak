@@ -31,4 +31,11 @@
       #{item.id,jdbcType=VARCHAR}
     </foreach>
   </delete>
+  <insert id="insertUserRoles" parameterType="java.util.List">
+    insert into czb_user_role (id, user_id, role_id, create_at)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=VARCHAR},#{item.userId,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR}, now())
+    </foreach>
+  </insert>
 </mapper>
