@@ -22,7 +22,8 @@
         <include refid="Base_Column_List" />
         from czb_announcement
         <where>
-            announcement_type = #{announcementType,jdbcType=INTEGER}
+           <if test='announcementType!="" and announcementType!=null'>
+            announcement_type = #{announcementType,jdbcType=INTEGER}</if>
         <if test='announcementId!=""'>
         AND announcement_id = #{announcementId,jdbcType=VARCHAR}</if>
         </where>

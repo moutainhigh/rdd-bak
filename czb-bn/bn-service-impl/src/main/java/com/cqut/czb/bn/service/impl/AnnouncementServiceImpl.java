@@ -73,9 +73,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return fileMapper.selectByPrimaryKey(id);
     }
 
-    public Boolean deleteAnnouncement(Announcement announcement){
-        fileMapper.deleteByPrimaryKey(announcement.getImgFileId());
-        return announcementMapper.deleteByPrimaryKey(announcement.getAnnouncementId());
+    public Boolean deleteAnnouncement(String id){
+        List<Announcement> announcements = announcementMapper.selectByPrimaryKey(id,null);
+        fileMapper.deleteByPrimaryKey(announcements.get(0).getImgFileId());
+        return announcementMapper.deleteByPrimaryKey(id);
     }
 
     /**

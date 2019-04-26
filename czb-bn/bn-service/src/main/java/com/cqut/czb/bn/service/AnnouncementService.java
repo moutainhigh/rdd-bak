@@ -19,7 +19,7 @@ public interface AnnouncementService {
 
     Boolean addAnnouncement(Announcement announcement,  MultipartFile file) throws Exception;
 
-    Boolean deleteAnnouncement(Announcement announcement);
+    Boolean deleteAnnouncement(String id);
 //User user,
     Boolean updateAnnouncement(Announcement announcement,  MultipartFile file);
 

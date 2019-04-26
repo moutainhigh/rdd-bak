@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.entity.Announcement;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AnnouncementService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,9 +44,9 @@ public class AppConfigManageController {
     /**
      * 公告删除
      */
-    @DeleteMapping("/deleteAnnouncement")
-    public JSONResult deletAnnouncement(Announcement announcement){
-        return new JSONResult(announcementService.deleteAnnouncement(announcement ));
+    @GetMapping("/deleteAnnouncement")
+    public JSONResult deletAnnouncement( @RequestParam("id") String id){
+        return new JSONResult(announcementService.deleteAnnouncement(id ));
     }
 
     /**
