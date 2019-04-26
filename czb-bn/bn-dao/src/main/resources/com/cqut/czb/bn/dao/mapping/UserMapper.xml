@@ -190,5 +190,15 @@
         user_account = #{account,jdbcType=VARCHAR}
   </select>
 
+  <update id="updateUserPSW" parameterType="java.lang.String" >
+    update czb_user
+    <set >
+      <if test="userPsw != null" >
+        user_psw = #{userPsw,jdbcType=VARCHAR},
+        update_at = now()
+      </if>
+    </set>
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </update>
 
 </mapper>

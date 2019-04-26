@@ -23,4 +23,6 @@ public interface PetrolMapper {
      * @return
      */
     List<PetrolZoneDTO> selectPetrolZone();
+
+    List<Petrol> selectPetrol();
 }
