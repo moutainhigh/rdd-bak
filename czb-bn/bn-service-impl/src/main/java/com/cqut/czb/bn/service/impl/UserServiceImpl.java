@@ -9,15 +9,16 @@ import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
-import com.cqut.czb.bn.entity.entity.Role;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.date.DateUtil;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -75,5 +76,49 @@ public class UserServiceImpl implements IUserService {
             }
         }
         return new PageInfo<>(userList);
+    }
+
+    @Override
+    public boolean assignRole(UserInputDTO userInputDTO) {
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userInputDTO.getUserId());
+        List<UserRole> deleteList = userRoleMapperExtra.slectUserRoleList(userRole);
+        boolean isInsert = true;
+        if(userInputDTO.getRoleId() != null) {
+            List<UserRole> tempList = new ArrayList<>();
+            List<UserRole> insertList = initUserRoleList(userInputDTO);
+            for(UserRole insert: insertList) {
+                for(UserRole delete: deleteList) {
+                    if(delete.getRoleId().equals(insert.getRoleId())) {
+                        tempList.add(delete);
+                    }
+                }
+            }
+            for(UserRole temp: tempList) {
+                insertList.remove(temp);
+                deleteList.remove(temp);
+            }
+            if(insertList.size() > 0) {
+                isInsert = userRoleMapperExtra.insertUserRoles(insertList) > 0;
+            }
+        }
+        boolean isDelete = true;
+        if(deleteList.size() > 0) {
+            isDelete = userRoleMapperExtra.deleteUserRoles(deleteList) > 0;
+        }
+        return isInsert && isDelete;
+    }
+
+    public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {
+        List<UserRole> userRoleList = new ArrayList<>();
+        for(String roleId : userInputDTO.getRoleId().split(",")) {
+            UserRole userRole = new UserRole();
+            userRole.setId(StringUtil.createId());
+            userRole.setUserId(userInputDTO.getUserId());
+            userRole.setRoleId(roleId);
+            userRoleList.add(userRole);
+        }
+
+        return userRoleList;
     }
 }

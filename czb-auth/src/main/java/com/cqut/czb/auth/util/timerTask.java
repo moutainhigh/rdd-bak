@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.global;
+package com.cqut.czb.auth.util;
 
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.bn.entity.entity.VerificationCode;

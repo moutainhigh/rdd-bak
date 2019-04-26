@@ -51,4 +51,15 @@ public class UserManagementController {
 
         return new JSONResult(userService.selectUser(userInputDTO, pageDTO));
     }
+
+    @RequestMapping(value = "/assignRole", method = RequestMethod.POST)
+    public  JSONResult assignRole(@Validated UserInputDTO userInputDTO){
+
+        boolean isAssign = userService.assignRole(userInputDTO);
+        if(isAssign) {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "更新角色成功");
+        } else {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "更新角色失败");
+        }
+    }
 }

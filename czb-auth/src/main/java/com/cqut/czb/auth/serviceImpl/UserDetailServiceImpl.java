@@ -6,14 +6,13 @@ import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.VerificationCodeMapper;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
-import com.cqut.czb.bn.entity.global.timerTask;
+import com.cqut.czb.auth.util.timerTask;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailService {

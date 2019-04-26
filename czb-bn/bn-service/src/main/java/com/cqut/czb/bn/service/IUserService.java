@@ -18,4 +18,6 @@ public interface IUserService {
     boolean updateUser(UserInputDTO userInputDTO);
 
     PageInfo<UserDTO> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO);
+
+    boolean assignRole(UserInputDTO userInputDTO);
 }
