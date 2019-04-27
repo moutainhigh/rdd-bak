@@ -22,7 +22,7 @@
       </if>
     </where>
   </select>
-  <select id="slectRolesMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO">
+  <select id="selectRolesMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO">
     select
     <include refid="Base_Column_List" />
     from czb_menu
