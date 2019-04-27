@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -20,4 +21,6 @@ public interface IUserService {
     PageInfo<UserDTO> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO);
 
     boolean assignRole(UserInputDTO userInputDTO);
+
+    UserDTO selectUserInfo(User user);
 }

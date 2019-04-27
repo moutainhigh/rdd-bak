@@ -71,8 +71,8 @@ public class UserManagementController {
     }
 
     @RequestMapping(value = "/selectUserInfo", method = RequestMethod.GET)
-    public  JSONResult selectUserMenu(Principal principal){
+    public  JSONResult selectUserInfo(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(user);
+        return new JSONResult(userService.selectUserInfo(user));
     }
 }

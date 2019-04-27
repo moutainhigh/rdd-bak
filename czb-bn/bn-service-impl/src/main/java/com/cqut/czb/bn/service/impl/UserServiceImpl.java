@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.date.DateUtil;
@@ -107,6 +108,25 @@ public class UserServiceImpl implements IUserService {
             isDelete = userRoleMapperExtra.deleteUserRoles(deleteList) > 0;
         }
         return isInsert && isDelete;
+    }
+
+    @Override
+    public UserDTO selectUserInfo(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserAccount(user.getUserAccount());
+        userDTO.setUserName(user.getUserName());
+
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userDTO.getUserId());
+        List<UserRole> userRoleList = userRoleMapperExtra.slectUserRoleList(userRole);
+        for(UserRole userRole1: userRoleList) {
+            RoleInputDTO roleInputDTO = new RoleInputDTO();
+            roleInputDTO.setRoleId(userRole1.getRoleId());
+            List<RoleDTO> roleDTOList = roleMapperExtra.selectRole(roleInputDTO);
+            userDTO.setRoleList(roleDTOList);
+        }
+        return userDTO;
     }
 
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {
