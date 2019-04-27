@@ -1,14 +1,10 @@
 package com.cqut.czb.bn.api.controller;
 
-
-import com.cqut.czb.auth.service.UserDetailService;
-import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +52,7 @@ public class AppHomePageController {
     }
 
     /**
-     * app油卡专区，对应油卡表未售出的油卡
+     * app油卡专区，查找出对应油卡表未售出的油卡，以及获取保存未售出油卡
      * @return
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)

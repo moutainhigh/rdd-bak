@@ -25,6 +25,7 @@ public class timerTask extends TimerTask {
     public void run() {
          if(verificationCode!=null){
             boolean isChange=userDetailService.checkVerificationCode(verificationCode);
+             this.cancel();
          }
         this.cancel();
     }

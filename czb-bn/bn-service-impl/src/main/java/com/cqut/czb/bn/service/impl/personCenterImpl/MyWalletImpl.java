@@ -23,7 +23,7 @@ public class MyWalletImpl implements MyWallet {
         }
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal(0)) < 0){
-            return new String("余额不能是负数");
+            return new String("提现金额不能是负数");
         }
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(balance) > 0){
