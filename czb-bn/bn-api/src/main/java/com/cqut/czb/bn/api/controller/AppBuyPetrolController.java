@@ -33,11 +33,11 @@ public class AppBuyPetrolController {
         Petrol petrol=allPetrolDTO.randomPetrol(petrolInputDTO);
         if(petrol==null)
             return new JSONResult(ResponseCodeConstants.FAILURE, "油卡申请失败，无此类油卡");
-        boolean BuyPetrol=appBuyPetrolService.BuyPetrol(petrolInputDTO);
-        if(BuyPetrol) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "油卡申请成功");
-        } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "油卡申请失败");
-        }
+        String BuyPetrol=appBuyPetrolService.BuyPetrol(petrol,petrolInputDTO);
+
+        return new JSONResult(BuyPetrol);
     }
+
+
+
 }

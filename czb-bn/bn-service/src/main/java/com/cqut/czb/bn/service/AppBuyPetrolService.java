@@ -13,7 +13,7 @@ public interface AppBuyPetrolService {
     /**
      * 购买油卡
      */
-    boolean BuyPetrol(PetrolInputDTO petrolInputDTO);
+    String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO);
 
     /**
      * 支付成功后回调

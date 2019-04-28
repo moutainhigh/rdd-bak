@@ -1,14 +1,21 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.DepositRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapper;
 import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
+import com.cqut.czb.bn.service.impl.paymentRecord.GetAlipayClient;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 @Service
 public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolService {
@@ -32,16 +40,40 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
     UserIncomeInfoMapper userIncomeInfoMapper;
 
     @Override
-    public boolean BuyPetrol(PetrolInputDTO petrolInputDTO) {
+    public String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO) {
         //随机获取一张卡
-        AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
-        Petrol petrol=allPetrolDTO.randomPetrol(petrolInputDTO);
-        if(petrol==null)
-            return false;
+        if(petrol==null&&petrolInputDTO==null)
+            return null;
+        /**
+         * 生成起调参数串
+         */
+         String rs=null;
+         GetAlipayClient getAlipayClient=GetAlipayClient.getInstance();
+         AlipayClient alipayClient=getAlipayClient.getAlipayClient();
+         AlipayTradeAppPayRequest request=new AlipayTradeAppPayRequest();
+
+         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+
+        //要对其进行数据的改变
+        PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();
+//        petrolSalesRecordsDTO.getPaymentMethod()-----支付类型
+        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId, "支付宝",
+                petrolSalesRecordsDTO.getTurnoverAmount(),1));
+        request.setNotifyUrl(getAlipayClient.getCallBackUrl());
+
+        try {
+            // 这里和普通的接口调用不同，使用的是sdkExecute
+            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+            rs = response.getBody();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+//        LogUtil.sysPrint(loginInfoDTO.getCurUserid(), "DD猫支付宝订单创建2__" + paymentRecordDTO.getPayType());
+
         // 构建油卡购买记录表对象
-        PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
-        petrolSalesRecords.setBuyerId(petrolInputDTO.getOwnerId());
-        petrolSalesRecords.setPetrolId(petrol.getPetrolId());
+//        PetrolSalesRecords PetrolSalesRecordsDTO=new PetrolSalesRecords();
+//        PetrolSalesRecordsDTO.setBuyerId(petrolInputDTO.getOwnerId());
+//        PetrolSalesRecordsDTO.setPetrolId(petrol.getPetrolId());
 
         /**
          * 插入计时器进行检测5分钟之内是否支付
@@ -49,7 +81,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
         Timer timer=new Timer();
         timer.schedule(this,300000);
 
-        return true;
+        return rs;
     }
 
     @Override
