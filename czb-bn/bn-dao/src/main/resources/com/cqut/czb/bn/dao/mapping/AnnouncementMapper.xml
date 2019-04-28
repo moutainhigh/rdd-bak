@@ -22,9 +22,9 @@
         <include refid="Base_Column_List" />
         from czb_announcement
         <where>
-           <if test='announcementType!="" and announcementType!=null'>
+           <if test="announcementType!=null">
             announcement_type = #{announcementType,jdbcType=INTEGER}</if>
-        <if test='announcementId!=""'>
+        <if test="announcementId!=null and announcementId!=''">
         AND announcement_id = #{announcementId,jdbcType=VARCHAR}</if>
         </where>
     </select>

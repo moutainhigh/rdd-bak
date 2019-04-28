@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AnnouncementService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -35,28 +36,37 @@ public class AppConfigManageController {
      * 公告新增
      */
     @PostMapping("/addAnnouncement")
-    // Principal principal
-    public JSONResult addAnnouncement( Announcement announcement,@RequestParam("file") MultipartFile file) throws Exception {
-//        User user = redisUtils.get(principal.getName());user,
+    //
+    public JSONResult addAnnouncement( Announcement announcement,Principal principal,@RequestParam("file") MultipartFile file) throws Exception {
+//        User user = (User) redisUtils.get(principal.getName());
+//        System.out.println("88888888"+user.getUserName());
         return new JSONResult(announcementService.addAnnouncement(announcement,file));
     }
 
     /**
      * 公告删除
      */
-    @GetMapping("/deleteAnnouncement")
-    public JSONResult deletAnnouncement( @RequestParam("id") String id){
-        return new JSONResult(announcementService.deleteAnnouncement(id ));
+    @PostMapping ("/deleteAnnouncement")
+    public JSONResult deletAnnouncement(@RequestBody Announcement announcement){
+        return new JSONResult(announcementService.deleteAnnouncement(announcement.getAnnouncementId() ));
+    }
+
+    /**
+     * 公告修改+修改上传图片
+     */
+    @PostMapping("/updateAnnouncementFile")
+    //Principal principal,
+    public JSONResult updateAnnouncementFile(Announcement announcement,@RequestParam("file")MultipartFile file) throws Exception{
+//        User user = redisUtils.get(principal.getName());user,
+        return new JSONResult(announcementService.updateAnnouncementFile(announcement,file));
     }
 
     /**
      * 公告修改
      */
-    @GetMapping("/updateAnnouncement")
-    //Principal principal,
-    public JSONResult updateAnnouncement(Announcement announcement,MultipartFile file){
-//        User user = redisUtils.get(principal.getName());user,
-        return new JSONResult(announcementService.updateAnnouncement(announcement,file));
+    @PostMapping("/updateAnnouncement")
+    public JSONResult updateAnnouncement( @RequestBody Announcement announcement){
+        return new JSONResult(announcementService.updateAnnouncement(announcement));
     }
 
     /**
@@ -71,7 +81,7 @@ public class AppConfigManageController {
      * 获取图片路径
      */
     @GetMapping("/getPicPath")
-    public JSONResult getPicPath(String id){
+    public JSONResult getPicPath(@RequestParam("id") String id){
         return new JSONResult(announcementService.getFileById(id));
     }
 
