@@ -8,6 +8,7 @@ import com.cqut.czb.bn.service.AppBuyPetrolService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class AppBuyPetrolController {
     AppBuyPetrolService appBuyPetrolService;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(@Validated PetrolInputDTO petrolInputDTO){
+    public JSONResult buyPetrol(@Validated @RequestBody PetrolInputDTO petrolInputDTO){
         //随机获取一张卡
         AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
         Petrol petrol=allPetrolDTO.randomPetrol(petrolInputDTO);
