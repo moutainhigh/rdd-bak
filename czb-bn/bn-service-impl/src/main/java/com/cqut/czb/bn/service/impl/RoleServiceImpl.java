@@ -120,7 +120,7 @@ public class RoleServiceImpl implements IRoleService {
             for(RoleMenuDTO roleMenuDTO: roleMenuDTOList)  {
                 menuInputDTO.getMenuIds().add(roleMenuDTO.getMenuId());
             }
-            roleDTO.setMenuList(menuMapperExtra.slectRolesMenu(menuInputDTO));
+            roleDTO.setMenuList(menuMapperExtra.selectRolesMenu(menuInputDTO));
         }
         return new PageInfo<>(roleList);
     }

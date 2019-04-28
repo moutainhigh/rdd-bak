@@ -15,13 +15,16 @@ import java.util.List;
 
 @Service
 public interface AnnouncementService {
+    //公告获取
     PageInfo<Announcement> getAnnouncement(Announcement announcement);
-
+    //公告新增
     Boolean addAnnouncement(Announcement announcement,  MultipartFile file) throws Exception;
-
+    //公告删除
     Boolean deleteAnnouncement(String id);
-//User user,
-    Boolean updateAnnouncement(Announcement announcement,  MultipartFile file);
-
-    File getFileById(String id);
+//User user,带文件更新
+    Boolean updateAnnouncementFile (Announcement announcement,  MultipartFile file)throws Exception;
+    //不带文件更新
+    Boolean updateAnnouncement(Announcement announcement);
+    //获取文件路径
+    String getFileById(String id);
 }
