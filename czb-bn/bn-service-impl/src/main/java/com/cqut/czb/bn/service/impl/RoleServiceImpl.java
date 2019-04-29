@@ -59,15 +59,15 @@ public class RoleServiceImpl implements IRoleService {
         UserRole userRole = new UserRole();
         userRole.setRoleId(roleIdDTO.getRoleId());
         List<UserRole> userRoleList = userRoleMapperExtra.slectUserRoleList(userRole);
-        boolean isDleteUserRole = true;
+        boolean isDeleteUserRole = true;
         if(userRoleList.size() >0) {
-            isDleteUserRole = userRoleMapperExtra.deleteUserRoles(userRoleList) > 0;
+            isDeleteUserRole = userRoleMapperExtra.deleteUserRoles(userRoleList) > 0;
         }
         boolean isDeleteRoleMenu = true;
         if(roleMenuDTOList.size() > 0) {
             isDeleteRoleMenu = roleMenuMapperExtra.deleteRoleMenus(roleMenuDTOList) > 0;
         }
-        if(isDleteUserRole && isDeleteRoleMenu) {
+        if(isDeleteUserRole && isDeleteRoleMenu) {
             return roleMapperExtra.deleteRole(roleInputDTO) > 0;
         } else {
             return false;

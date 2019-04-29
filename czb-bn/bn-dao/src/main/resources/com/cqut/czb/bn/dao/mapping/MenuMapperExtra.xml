@@ -6,11 +6,12 @@
     <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
     <result column="menu_path" property="menuPath" jdbcType="VARCHAR" />
     <result column="menu_level" property="menuLevel" jdbcType="INTEGER" />
+    <result column="parent" property="parent" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    menu_id, menu_name, menu_path, menu_level, create_at, update_at
+    menu_id, menu_name, menu_path, menu_level, parent, create_at, update_at
   </sql>
   <select id="selectMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
     select
@@ -19,6 +20,9 @@
     <where>
       <if test="menuName != null and menuName != ''">
         menu_name like concat('%',#{menuName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="menuId != null and menuName != ''">
+        menu_id = #{menuId,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
@@ -43,8 +47,43 @@
     where menu_id = #{menuId,jdbcType=VARCHAR}
   </delete>
   <insert id="insertMenu" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
-    insert into czb_menu (menu_id, menu_name, menu_path, menu_level, create_at)
-    values (#{menuId,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{menuPath,jdbcType=VARCHAR}, #{menuLevel,jdbcType=INTEGER}, now())
+    insert into czb_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="menuPath != null" >
+        menu_path,
+      </if>
+      <if test="menuLevel != null" >
+        menu_level,
+      </if>
+      <if test="parent != null">
+        parent,
+      </if>
+        create_at,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuPath != null" >
+        #{menuPath,jdbcType=VARCHAR},
+      </if>
+      <if test="menuLevel != null" >
+        #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null">
+        #{parent,jdbcType=VARCHAR},
+      </if>
+        now(),
+    </trim>
   </insert>
   <update id="updateMenu" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
     update czb_menu
@@ -57,6 +96,9 @@
       </if>
       <if test="menuLevel != null and menuLevel > 0" >
         menu_level = #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null">
+        parent = #{parent,jdbcType=VARCHAR},
       </if>
     </set>
     where menu_id = #{menuId,jdbcType=VARCHAR}

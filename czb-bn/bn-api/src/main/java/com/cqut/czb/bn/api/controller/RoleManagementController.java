@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/roleManagement")
-public class RoleMnagementController {
+public class RoleManagementController {
 
     @Autowired
     private IRoleService roleService;
@@ -37,7 +37,6 @@ public class RoleMnagementController {
 
     @RequestMapping(value = "/deleteRole",method = RequestMethod.POST)
     public JSONResult deleteRole(@Validated @RequestBody RoleIdDTO roleIdDTO){
-
         boolean isDelete = roleService.deleteRole(roleIdDTO);
         if(isDelete) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "删除成功");
