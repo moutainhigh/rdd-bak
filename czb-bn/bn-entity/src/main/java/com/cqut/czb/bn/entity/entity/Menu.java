@@ -11,6 +11,8 @@ public class Menu {
 
     private Integer menuLevel;
 
+    private String parent;
+
     private Date createAt;
 
     private Date updateAt;
@@ -61,5 +63,13 @@ public class Menu {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
     }
 }

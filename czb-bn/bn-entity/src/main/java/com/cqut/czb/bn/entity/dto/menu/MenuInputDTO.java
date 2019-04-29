@@ -23,6 +23,8 @@ public class MenuInputDTO {
 
     private Integer menuLevel;
 
+    private String parent;
+
     public String getMenuId() {
         return menuId;
     }
@@ -69,5 +71,13 @@ public class MenuInputDTO {
 
     public void setMenuIds(List<String> menuIds) {
         this.menuIds = menuIds;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
     }
 }
