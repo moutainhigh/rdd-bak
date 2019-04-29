@@ -1,7 +1,8 @@
 package com.cqut.czb.bn.entity.dto.appBuyPetrol;
 
 import com.alipay.api.domain.AlipayTradeAppPayModel;
-import com.cqut.czb.bn.service.impl.paymentRecord.AiHuAlipayConfig;
+
+import com.cqut.czb.bn.entity.dto.paymentRecord.AiHuAlipayConfig;
 import com.cqut.czb.bn.util.string.StringUtil;
 
 import java.util.Date;

@@ -2,7 +2,6 @@ package com.cqut.czb.bn.service.impl;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.DepositRecordsMapper;
@@ -13,15 +12,12 @@ import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.entity.*;
-import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
-import com.cqut.czb.bn.service.impl.paymentRecord.GetAlipayClient;
-import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import com.cqut.czb.bn.entity.dto.paymentRecord.GetAlipayClient;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
@@ -54,10 +50,10 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
 
          String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
 
-        //要对其进行数据的改变
+        //要对其进行数据的改变——死数据
         PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();
 //        petrolSalesRecordsDTO.getPaymentMethod()-----支付类型
-        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId, "支付宝",
+        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId, "3",
                 petrolSalesRecordsDTO.getTurnoverAmount(),1));
         request.setNotifyUrl(getAlipayClient.getCallBackUrl());
 
@@ -68,7 +64,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-//        LogUtil.sysPrint(loginInfoDTO.getCurUserid(), "DD猫支付宝订单创建2__" + paymentRecordDTO.getPayType());
+//        LogUtil.sysPrint(loginInfoDTO.getCurUserid(), "DD猫支付宝订单创建2__" + paymentRecord.getPayType());
 
         // 构建油卡购买记录表对象
 //        PetrolSalesRecords PetrolSalesRecordsDTO=new PetrolSalesRecords();
@@ -76,10 +72,10 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
 //        PetrolSalesRecordsDTO.setPetrolId(petrol.getPetrolId());
 
         /**
-         * 插入计时器进行检测5分钟之内是否支付
+         * 插入计时器进行检测5分钟之内是否支付——暂时关闭便于测试
          */
-        Timer timer=new Timer();
-        timer.schedule(this,300000);
+//        Timer timer=new Timer();
+//        timer.schedule(this,300000);
 
         return rs;
     }
