@@ -6,12 +6,12 @@
     <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
     <result column="menu_path" property="menuPath" jdbcType="VARCHAR" />
     <result column="menu_level" property="menuLevel" jdbcType="INTEGER" />
-    <result column="parent" property="parent" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="parent" property="parent" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    menu_id, menu_name, menu_path, menu_level, parent, create_at, update_at
+    menu_id, menu_name, menu_path, menu_level, create_at, update_at, parent
   </sql>
   <select id="selectMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
     select
