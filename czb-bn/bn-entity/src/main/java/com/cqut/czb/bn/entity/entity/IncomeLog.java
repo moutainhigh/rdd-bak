@@ -21,12 +21,6 @@ public class IncomeLog {
 
     private Date updateAt;
 
-    private String withdrawTo;
-
-    private String withdrawName;
-
-    private Double withdrawAccount;
-
     public String getRecordId() {
         return recordId;
     }
@@ -97,29 +91,5 @@ public class IncomeLog {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public String getWithdrawTo() {
-        return withdrawTo;
-    }
-
-    public void setWithdrawTo(String withdrawTo) {
-        this.withdrawTo = withdrawTo == null ? null : withdrawTo.trim();
-    }
-
-    public String getWithdrawName() {
-        return withdrawName;
-    }
-
-    public void setWithdrawName(String withdrawName) {
-        this.withdrawName = withdrawName == null ? null : withdrawName.trim();
-    }
-
-    public Double getWithdrawAccount() {
-        return withdrawAccount;
-    }
-
-    public void setWithdrawAccount(Double withdrawAccount) {
-        this.withdrawAccount = withdrawAccount;
     }
 }

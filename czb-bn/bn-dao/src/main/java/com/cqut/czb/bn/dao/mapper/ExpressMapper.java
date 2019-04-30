@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface ExpressMapperExtra {
+public interface ExpressMapper {
     List<ExpressDTO> selectExpress(@Param("expressNumber")String expressNumber,@Param("expressCompany")String expressCompany, @Param("consignee")String consignee);
 
     Boolean addExpress(@Param("express") ExpressDTO expressDTO);

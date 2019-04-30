@@ -8,10 +8,9 @@
     <result column="menu_level" property="menuLevel" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="parent" property="parent" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    menu_id, menu_name, menu_path, menu_level, create_at, update_at, parent
+    menu_id, menu_name, menu_path, menu_level, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -25,11 +24,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Menu" >
     insert into czb_menu (menu_id, menu_name, menu_path, 
-      menu_level, create_at, update_at, 
-      parent)
+      menu_level, create_at, update_at
+      )
     values (#{menuId,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{menuPath,jdbcType=VARCHAR}, 
-      #{menuLevel,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{parent,jdbcType=VARCHAR})
+      #{menuLevel,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Menu" >
     insert into czb_menu
@@ -52,9 +51,6 @@
       <if test="updateAt != null" >
         update_at,
       </if>
-      <if test="parent != null" >
-        parent,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="menuId != null" >
@@ -74,9 +70,6 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="parent != null" >
-        #{parent,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -98,9 +91,6 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="parent != null" >
-        parent = #{parent,jdbcType=VARCHAR},
-      </if>
     </set>
     where menu_id = #{menuId,jdbcType=VARCHAR}
   </update>
@@ -110,8 +100,7 @@
       menu_path = #{menuPath,jdbcType=VARCHAR},
       menu_level = #{menuLevel,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      parent = #{parent,jdbcType=VARCHAR}
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
     where menu_id = #{menuId,jdbcType=VARCHAR}
   </update>
 </mapper>

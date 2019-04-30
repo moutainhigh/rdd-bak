@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.EnterpriseInfoMapper;
-import com.cqut.czb.bn.dao.mapper.EnterpriseInfoMapperExtra;
 import com.cqut.czb.bn.entity.dto.EnterpriseInfoDTO;
 import com.cqut.czb.bn.service.EnterpriseInfoService;
 import com.github.pagehelper.PageInfo;
@@ -12,15 +11,15 @@ import org.springframework.stereotype.Service;
 public class EnterpriseInfoServiceImpl  implements EnterpriseInfoService {
 
     @Autowired
-    EnterpriseInfoMapperExtra enterpriseInfoMapperExtra;
+    EnterpriseInfoMapper enterpriseInfoMapper;
 
     @Override
     public PageInfo<EnterpriseInfoDTO> getEnterpriseInfo(EnterpriseInfoDTO enterpriseInfoDTO) {
-        return new PageInfo<>( enterpriseInfoMapperExtra.selectByPrimaryKey(enterpriseInfoDTO));
+        return new PageInfo<>( enterpriseInfoMapper.selectByPrimaryKey(enterpriseInfoDTO));
     }
 
     @Override
     public Boolean deleteEnterpriseInfo(String id) {
-        return enterpriseInfoMapperExtra.deleteByPrimaryKey(id);
+        return enterpriseInfoMapper.deleteByPrimaryKey(id);
     }
 }

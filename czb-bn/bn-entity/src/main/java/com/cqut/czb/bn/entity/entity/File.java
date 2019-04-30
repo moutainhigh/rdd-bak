@@ -11,11 +11,11 @@ public class File {
 
     private String savePath;
 
-    private String remark;
-
     private Date createAt;
 
     private Date updateAt;
+
+    private String remark;
 
     public String getFileId() {
         return fileId;
@@ -49,14 +49,6 @@ public class File {
         this.savePath = savePath == null ? null : savePath.trim();
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
     public Date getCreateAt() {
         return createAt;
     }
@@ -71,5 +63,13 @@ public class File {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

@@ -5,17 +5,16 @@
     <id column="router_id" property="routerId" jdbcType="VARCHAR" />
     <result column="app_type" property="appType" jdbcType="INTEGER" />
     <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="menu_path" property="menuPath" jdbcType="VARCHAR" />
     <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="icon_path_id" property="iconPathId" jdbcType="VARCHAR" />
     <result column="menu_identity_code" property="menuIdentityCode" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="android_path" property="androidPath" jdbcType="VARCHAR" />
-    <result column="ios_path" property="iosPath" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    router_id, app_type, menu_name, is_show, icon_path_id, menu_identity_code, create_at, 
-    update_at, android_path, ios_path
+    router_id, app_type, menu_name, menu_path, is_show, icon_path_id, menu_identity_code, 
+    create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -32,13 +31,13 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
     insert into czb_app_router (router_id, app_type, menu_name, 
-      is_show, icon_path_id, menu_identity_code, 
-      create_at, update_at, android_path, 
-      ios_path)
+      menu_path, is_show, icon_path_id, 
+      menu_identity_code, create_at, update_at
+      )
     values (#{routerId,jdbcType=VARCHAR}, #{appType,jdbcType=INTEGER}, #{menuName,jdbcType=VARCHAR}, 
-      #{isShow,jdbcType=INTEGER}, #{iconPathId,jdbcType=VARCHAR}, #{menuIdentityCode,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{androidPath,jdbcType=VARCHAR}, 
-      #{iosPath,jdbcType=VARCHAR})
+      #{menuPath,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{iconPathId,jdbcType=VARCHAR}, 
+      #{menuIdentityCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
     insert into czb_app_router
@@ -51,6 +50,9 @@
       </if>
       <if test="menuName != null" >
         menu_name,
+      </if>
+      <if test="menuPath != null" >
+        menu_path,
       </if>
       <if test="isShow != null" >
         is_show,
@@ -67,12 +69,6 @@
       <if test="updateAt != null" >
         update_at,
       </if>
-      <if test="androidPath != null" >
-        android_path,
-      </if>
-      <if test="iosPath != null" >
-        ios_path,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="routerId != null" >
@@ -83,6 +79,9 @@
       </if>
       <if test="menuName != null" >
         #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuPath != null" >
+        #{menuPath,jdbcType=VARCHAR},
       </if>
       <if test="isShow != null" >
         #{isShow,jdbcType=INTEGER},
@@ -99,12 +98,6 @@
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="androidPath != null" >
-        #{androidPath,jdbcType=VARCHAR},
-      </if>
-      <if test="iosPath != null" >
-        #{iosPath,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
@@ -115,6 +108,9 @@
       </if>
       <if test="menuName != null" >
         menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuPath != null" >
+        menu_path = #{menuPath,jdbcType=VARCHAR},
       </if>
       <if test="isShow != null" >
         is_show = #{isShow,jdbcType=INTEGER},
@@ -131,12 +127,6 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="androidPath != null" >
-        android_path = #{androidPath,jdbcType=VARCHAR},
-      </if>
-      <if test="iosPath != null" >
-        ios_path = #{iosPath,jdbcType=VARCHAR},
-      </if>
     </set>
     where router_id = #{routerId,jdbcType=VARCHAR}
   </update>
@@ -144,13 +134,12 @@
     update czb_app_router
     set app_type = #{appType,jdbcType=INTEGER},
       menu_name = #{menuName,jdbcType=VARCHAR},
+      menu_path = #{menuPath,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=INTEGER},
       icon_path_id = #{iconPathId,jdbcType=VARCHAR},
       menu_identity_code = #{menuIdentityCode,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      android_path = #{androidPath,jdbcType=VARCHAR},
-      ios_path = #{iosPath,jdbcType=VARCHAR}
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
     where router_id = #{routerId,jdbcType=VARCHAR}
   </update>
 </mapper>

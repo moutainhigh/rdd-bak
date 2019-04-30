@@ -4,7 +4,7 @@ import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 
 import java.util.List;
 
-public interface PetrolSaleConfigMapper {
+public interface PetrolSaleConfigMapperExtra {
     int deleteByPrimaryKey(String petrolConfigId);
 
     int insert(PetrolSaleConfig record);
