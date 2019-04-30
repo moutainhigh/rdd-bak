@@ -27,10 +27,6 @@ public class User {
 
     private Date updateAt;
 
-    private String userYunId;
-
-    private Integer isDeleted;
-
     public String getUserId() {
         return userId;
     }
@@ -125,21 +121,5 @@ public class User {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public String getUserYunId() {
-        return userYunId;
-    }
-
-    public void setUserYunId(String userYunId) {
-        this.userYunId = userYunId == null ? null : userYunId.trim();
-    }
-
-    public Integer getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
     }
 }

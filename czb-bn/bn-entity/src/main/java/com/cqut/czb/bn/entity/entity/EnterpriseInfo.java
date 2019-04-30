@@ -21,8 +21,6 @@ public class EnterpriseInfo {
 
     private Date updateAt;
 
-    private String enterpriseYunId;
-
     public String getEnterpriseInfoId() {
         return enterpriseInfoId;
     }
@@ -93,13 +91,5 @@ public class EnterpriseInfo {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public String getEnterpriseYunId() {
-        return enterpriseYunId;
-    }
-
-    public void setEnterpriseYunId(String enterpriseYunId) {
-        this.enterpriseYunId = enterpriseYunId == null ? null : enterpriseYunId.trim();
     }
 }

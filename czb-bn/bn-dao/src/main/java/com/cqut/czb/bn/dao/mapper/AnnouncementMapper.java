@@ -1,17 +1,25 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.Announcement;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+@Component
 public interface AnnouncementMapper {
-    int deleteByPrimaryKey(String announcementId);
+    Boolean deleteByPrimaryKey(String announcementId);
 
     int insert(Announcement record);
 
-    int insertSelective(Announcement record);
+    Boolean insertSelective(Announcement record);
 
-    Announcement selectByPrimaryKey(String announcementId);
+    List<Announcement> selectByPrimaryKey(@Param("announcementId") String announcementId, @Param("announcementType") Integer announcementType);
 
-    int updateByPrimaryKeySelective(Announcement record);
+    Boolean updateByPrimaryKeySelective(Announcement record);
 
     int updateByPrimaryKey(Announcement record);
+
+    List<Announcement> selectAnnouncement();
 }

@@ -22,10 +22,10 @@
         <include refid="Base_Column_List" />
         from czb_announcement
         <where>
-            <if test="announcementType!=null">
-                announcement_type = #{announcementType,jdbcType=INTEGER}</if>
-            <if test="announcementId!=null and announcementId!=''">
-                AND announcement_id = #{announcementId,jdbcType=VARCHAR}</if>
+           <if test="announcementType!=null">
+            announcement_type = #{announcementType,jdbcType=INTEGER}</if>
+        <if test="announcementId!=null and announcementId!=''">
+        AND announcement_id = #{announcementId,jdbcType=VARCHAR}</if>
         </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
@@ -145,24 +145,24 @@
         where announcement_id = #{announcementId,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
-        update czb_announcement
-        set announcement_title = #{announcementTitle,jdbcType=VARCHAR},
-        announcement_content = #{announcementContent,jdbcType=VARCHAR},
-        announcement_type = #{announcementType,jdbcType=INTEGER},
-        img_file_id = #{imgFileId,jdbcType=VARCHAR},
-        is_show = #{isShow,jdbcType=INTEGER},
-        announcement_order = #{announcementOrder,jdbcType=INTEGER},
-        location_code = #{locationCode,jdbcType=VARCHAR},
-        create_at = #{createAt,jdbcType=TIMESTAMP},
-        update_at = #{updateAt,jdbcType=TIMESTAMP}
-        where announcement_id = #{announcementId,jdbcType=VARCHAR}
-    </update>
+    update czb_announcement
+    set announcement_title = #{announcementTitle,jdbcType=VARCHAR},
+      announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      announcement_type = #{announcementType,jdbcType=INTEGER},
+      img_file_id = #{imgFileId,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=INTEGER},
+      announcement_order = #{announcementOrder,jdbcType=INTEGER},
+      location_code = #{locationCode,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where announcement_id = #{announcementId,jdbcType=VARCHAR}
+  </update>
 
 
-    <select id="selectAnnouncement" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from czb_announcement
-        where is_show=1
-    </select>
+  <select id="selectAnnouncement" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_announcement
+    where is_show=1
+  </select>
 </mapper>

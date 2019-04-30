@@ -14,12 +14,10 @@
     <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="user_yun_id" property="userYunId" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
-    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted
+    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
+    is_login_pc, user_name, user_id_card, create_at, update_at
   </sql>
   <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select

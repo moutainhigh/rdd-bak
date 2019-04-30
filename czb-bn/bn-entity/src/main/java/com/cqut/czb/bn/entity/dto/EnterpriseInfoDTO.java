@@ -3,7 +3,6 @@ package com.cqut.czb.bn.entity.dto;
 import java.util.Date;
 
 public class EnterpriseInfoDTO {
-    //企业id
     private String enterpriseInfoId;
     //企业名称
     private String enterpriseInfoName;
@@ -13,7 +12,7 @@ public class EnterpriseInfoDTO {
     private String contactInfo;
     //是否删除   0没删   1删除
     private Integer isDeleted;
-    //用户id 外键
+
     private String userId;
     //组织机构代码
     private String orgCode;

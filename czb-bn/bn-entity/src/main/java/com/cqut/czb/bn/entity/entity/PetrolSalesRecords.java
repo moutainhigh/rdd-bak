@@ -27,10 +27,6 @@ public class PetrolSalesRecords {
 
     private Date updateAt;
 
-    private Integer recordType;
-
-    private Integer isRecharged;
-
     public String getRecordId() {
         return recordId;
     }
@@ -125,21 +121,5 @@ public class PetrolSalesRecords {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public Integer getRecordType() {
-        return recordType;
-    }
-
-    public void setRecordType(Integer recordType) {
-        this.recordType = recordType;
-    }
-
-    public Integer getIsRecharged() {
-        return isRecharged;
-    }
-
-    public void setIsRecharged(Integer isRecharged) {
-        this.isRecharged = isRecharged;
     }
 }
