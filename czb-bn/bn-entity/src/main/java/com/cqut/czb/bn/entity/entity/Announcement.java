@@ -1,5 +1,9 @@
 package com.cqut.czb.bn.entity.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
 public class Announcement {
@@ -18,10 +22,24 @@ public class Announcement {
     private Integer announcementOrder;
 
     private String locationCode;
-
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date createAt;
-
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date updateAt;
+
+    private Integer pageNum;
+
+    private Integer pageSize;
+
+//    private MultipartFile[] file;
+//
+//    public MultipartFile[] getFile() {
+//        return file;
+//    }
+//
+//    public void setFile(MultipartFile[] file) {
+//        this.file = file;
+//    }
 
     public String getAnnouncementId() {
         return announcementId;
@@ -101,5 +119,21 @@ public class Announcement {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

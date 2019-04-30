@@ -5,7 +5,7 @@ import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 
 import java.util.List;
 
-public interface UserIncomeInfoMapper {
+public interface UserIncomeInfoMapperExtra {
     int deleteByPrimaryKey(String infoId);
 
     int insert(UserIncomeInfo record);

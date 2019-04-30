@@ -1,7 +1,11 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.File;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+@Component
 public interface FileMapper {
     int deleteByPrimaryKey(String fileId);
 

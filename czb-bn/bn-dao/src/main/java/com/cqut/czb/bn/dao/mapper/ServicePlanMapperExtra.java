@@ -4,7 +4,7 @@ import com.cqut.czb.bn.entity.entity.ServicePlan;
 
 import java.util.List;
 
-public interface ServicePlanMapper {
+public interface ServicePlanMapperExtra {
     int deleteByPrimaryKey(String planId);
 
     int insert(ServicePlan record);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.AnnouncementMapper" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.AnnouncementMapperExtra" >
     <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Announcement" >
         <id column="announcement_id" property="announcementId" jdbcType="VARCHAR" />
         <result column="announcement_title" property="announcementTitle" jdbcType="VARCHAR" />

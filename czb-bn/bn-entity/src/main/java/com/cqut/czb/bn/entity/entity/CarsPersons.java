@@ -25,8 +25,6 @@ public class CarsPersons {
 
     private Date updateAt;
 
-    private Date identifyCode;
-
     public String getPersonCarId() {
         return personCarId;
     }
@@ -113,13 +111,5 @@ public class CarsPersons {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public Date getIdentifyCode() {
-        return identifyCode;
-    }
-
-    public void setIdentifyCode(Date identifyCode) {
-        this.identifyCode = identifyCode;
     }
 }

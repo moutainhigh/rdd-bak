@@ -18,4 +18,6 @@ public interface UserMapperExtra {
     int updateUser(UserInputDTO userInputDTO);
 
     List<UserDTO> selectUser(UserInputDTO userInputDTO);
+
+    int updateUserPSW(String userPsw);
 }

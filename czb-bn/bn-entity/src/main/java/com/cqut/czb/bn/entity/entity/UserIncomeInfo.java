@@ -21,8 +21,6 @@ public class UserIncomeInfo {
 
     private Date updateAt;
 
-    private Double withdrawed;
-
     public String getInfoId() {
         return infoId;
     }
@@ -93,13 +91,5 @@ public class UserIncomeInfo {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
-    }
-
-    public Double getWithdrawed() {
-        return withdrawed;
-    }
-
-    public void setWithdrawed(Double withdrawed) {
-        this.withdrawed = withdrawed;
     }
 }
