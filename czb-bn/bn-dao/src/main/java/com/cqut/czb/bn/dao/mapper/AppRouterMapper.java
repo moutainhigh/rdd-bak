@@ -1,17 +1,20 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.AppRouter;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+@Component
 public interface AppRouterMapper {
-    int deleteByPrimaryKey(String routerId);
+    Boolean deleteByPrimaryKey(String routerId);
 
-    int insert(AppRouter record);
+    Boolean insert(AppRouter record);
 
-    int insertSelective(AppRouter record);
+    Boolean insertSelective(AppRouter record);
 
-    AppRouter selectByPrimaryKey(String routerId);
+    List<AppRouter> selectByPrimaryKey(AppRouter appRouter);
 
-    int updateByPrimaryKeySelective(AppRouter record);
+    Boolean updateByPrimaryKeySelective(AppRouter record);
 
-    int updateByPrimaryKey(AppRouter record);
+    Boolean updateByPrimaryKey(AppRouter record);
 }
