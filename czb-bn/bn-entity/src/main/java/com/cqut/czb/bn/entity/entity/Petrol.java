@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.entity;
 
-import com.alipay.api.domain.AlipayTradeAppPayModel;
-
 import java.util.Date;
 
 public class Petrol {
@@ -134,5 +132,4 @@ public class Petrol {
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
     }
-
 }
