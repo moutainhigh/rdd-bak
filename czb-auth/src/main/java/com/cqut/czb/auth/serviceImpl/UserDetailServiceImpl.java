@@ -55,7 +55,7 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public boolean checkVerificationCode(VerificationCode verificationCode) {
         if(verificationCodeMapper.selectVerificationCode(verificationCode)!=0){
-            boolean updateUserPSW= userMapper.updateUserPSW(verificationCode.getUserPsw())>0;
+            boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCode.getUserPsw())>0;
             boolean updateVerificationCode=verificationCodeMapper.updateVerificationCode(verificationCode)>0;
             if(updateUserPSW==updateVerificationCode==true){
                 return true;
