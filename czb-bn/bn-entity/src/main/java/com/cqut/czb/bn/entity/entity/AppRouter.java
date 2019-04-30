@@ -9,8 +9,6 @@ public class AppRouter {
 
     private String menuName;
 
-    private String menuPath;
-
     private Integer isShow;
 
     private String iconPathId;
@@ -20,6 +18,10 @@ public class AppRouter {
     private Date createAt;
 
     private Date updateAt;
+
+    private String androidPath;
+
+    private String iosPath;
 
     public String getRouterId() {
         return routerId;
@@ -43,14 +45,6 @@ public class AppRouter {
 
     public void setMenuName(String menuName) {
         this.menuName = menuName == null ? null : menuName.trim();
-    }
-
-    public String getMenuPath() {
-        return menuPath;
-    }
-
-    public void setMenuPath(String menuPath) {
-        this.menuPath = menuPath == null ? null : menuPath.trim();
     }
 
     public Integer getIsShow() {
@@ -91,5 +85,21 @@ public class AppRouter {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getAndroidPath() {
+        return androidPath;
+    }
+
+    public void setAndroidPath(String androidPath) {
+        this.androidPath = androidPath == null ? null : androidPath.trim();
+    }
+
+    public String getIosPath() {
+        return iosPath;
+    }
+
+    public void setIosPath(String iosPath) {
+        this.iosPath = iosPath == null ? null : iosPath.trim();
     }
 }

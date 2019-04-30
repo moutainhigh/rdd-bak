@@ -35,12 +35,12 @@
     insert into czb_user (user_id, user_account, user_psw, 
       user_type, user_rank, is_identified, 
       superior_user, is_login_pc, user_name, 
-      user_id_card, create_at, update_at,
+      user_id_card, create_at, update_at, 
       user_yun_id, is_deleted)
     values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
       #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
       #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
-      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
       #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
