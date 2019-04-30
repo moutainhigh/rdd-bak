@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public interface AnnouncementService {
     //公告获取
-    PageInfo<Announcement> getAnnouncement(Announcement announcement);
+    PageInfo<Announcement> getAnnouncement(AnnouncementDTO announcementDTO);
     //公告新增
     Boolean addAnnouncement(Announcement announcement,  MultipartFile file) throws Exception;
     //公告删除

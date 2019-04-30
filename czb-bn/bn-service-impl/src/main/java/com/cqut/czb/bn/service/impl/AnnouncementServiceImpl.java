@@ -34,9 +34,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private FileMapper fileMapper;
 
     @Override //获取公告数据
-    public PageInfo<Announcement> getAnnouncement(Announcement announcement) {
-        PageHelper.startPage(announcement.getPageNum(),announcement.getPageSize());
-        List<Announcement > announcements =announcementMapper.selectByPrimaryKey(announcement.getAnnouncementId(),announcement.getAnnouncementType());
+    public PageInfo<Announcement> getAnnouncement(AnnouncementDTO announcementDTO) {
+        PageHelper.startPage(announcementDTO.getPageNum(),announcementDTO.getPageSize());
+        List<Announcement > announcements =announcementMapper.selectByPrimaryKey(announcementDTO.getAnnouncementId(),announcementDTO.getAnnouncementType());
         PageInfo<Announcement> pageInfo = new PageInfo<>(announcements);
         return  pageInfo;
 

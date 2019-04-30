@@ -21,7 +21,10 @@
     select 
     <include refid="Base_Column_List" />
     from czb_app_router
-    where router_id = #{routerId,jdbcType=VARCHAR}
+    <where>
+      <if test="menuName!=null and menuName!=''">
+        menu_name = #{menuName,jdbcType=VARCHAR}</if>
+    </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_app_router
