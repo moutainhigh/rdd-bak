@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.AnnouncementDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -73,8 +74,8 @@ public class AppConfigManageController {
      * 公告查询
      */
     @GetMapping("/getAnnouncement")
-    public JSONResult getAnnouncement(Announcement announcement){
-        return new JSONResult(announcementService.getAnnouncement(announcement));
+    public JSONResult getAnnouncement(AnnouncementDTO announcementDTO){
+        return new JSONResult(announcementService.getAnnouncement(announcementDTO));
     }
 
     /**

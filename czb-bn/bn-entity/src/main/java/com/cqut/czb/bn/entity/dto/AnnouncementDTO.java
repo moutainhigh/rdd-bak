@@ -23,7 +23,27 @@ public class AnnouncementDTO {
 
     private Date createAt;
 
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
     private Date updateAt;
+
+    private Integer pageNum;
+
+    private Integer pageSize;
 
     public String getAnnouncementId() {
         return announcementId;
