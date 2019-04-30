@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class AnnouncementDTO {
@@ -20,10 +22,15 @@ public class AnnouncementDTO {
     private String locationCode;
 
     private String path;
-
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date createAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date updateAt;
+
+    private Integer pageNum;
+
+    private Integer pageSize;
 
     public String getAnnouncementId() {
         return announcementId;
@@ -111,5 +118,21 @@ public class AnnouncementDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }
