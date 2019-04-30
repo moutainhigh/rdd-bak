@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.AnnouncementMapper;
+import com.cqut.czb.bn.dao.mapper.AnnouncementMapperExtra;
 import com.cqut.czb.bn.dao.mapper.FileMapper;
+import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.entity.dto.AnnouncementDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
 import com.cqut.czb.bn.entity.entity.File;
@@ -29,14 +31,14 @@ import java.util.List;
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
     @Autowired
-    private AnnouncementMapper announcementMapper;
+    private AnnouncementMapperExtra announcementMapperExtra;
     @Autowired
-    private FileMapper fileMapper;
+    private FileMapperExtra fileMapperExtra;
 
     @Override //获取公告数据
     public PageInfo<Announcement> getAnnouncement(AnnouncementDTO announcementDTO) {
         PageHelper.startPage(announcementDTO.getPageNum(),announcementDTO.getPageSize());
-        List<Announcement > announcements =announcementMapper.selectByPrimaryKey(announcementDTO.getAnnouncementId(),announcementDTO.getAnnouncementType());
+        List<Announcement > announcements =announcementMapperExtra.selectByPrimaryKey(announcementDTO.getAnnouncementId(),announcementDTO.getAnnouncementType());
         PageInfo<Announcement> pageInfo = new PageInfo<>(announcements);
         return  pageInfo;
 
@@ -53,9 +55,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             announcement.setAnnouncementId(id);
             announcement.setIsShow(0);   //添加时默认不展示
             File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
-            fileMapper.insertSelective(file1);
+            fileMapperExtra.insertSelective(file1);
             announcement.setImgFileId(file1.getFileId()); //更新文件存储后的id
-            return announcementMapper.insertSelective(announcement);
+            return announcementMapperExtra.insertSelective(announcement);
     }
 
     @Override //带文件更新
@@ -66,18 +68,18 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         }
         File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
         file1.setFileId(announcement.getImgFileId());
-        fileMapper.updateByPrimaryKeySelective(file1);
-        return announcementMapper.updateByPrimaryKeySelective(announcement);
+        fileMapperExtra.updateByPrimaryKeySelective(file1);
+        return announcementMapperExtra.updateByPrimaryKeySelective(announcement);
     }
 
     @Override //无文件更新
     public Boolean updateAnnouncement(Announcement announcement) {
-        return announcementMapper.updateByPrimaryKeySelective(announcement);
+        return announcementMapperExtra.updateByPrimaryKeySelective(announcement);
     }
 
     @Override //根据文件id得到图片路径
     public String getFileById(String id) {
-        File file = fileMapper.selectByPrimaryKey(id);
+        File file = fileMapperExtra.selectByPrimaryKey(id);
         if (file!=null)
         return file.getSavePath();
         else
@@ -85,9 +87,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
     @Override //根据id删除公告
     public Boolean deleteAnnouncement(String id){
-        List<Announcement> announcements = announcementMapper.selectByPrimaryKey(id,null);
-        fileMapper.deleteByPrimaryKey(announcements.get(0).getImgFileId());
-        return announcementMapper.deleteByPrimaryKey(id);
+        List<Announcement> announcements = announcementMapperExtra.selectByPrimaryKey(id,null);
+        fileMapperExtra.deleteByPrimaryKey(announcements.get(0).getImgFileId());
+        return announcementMapperExtra.deleteByPrimaryKey(id);
     }
 
     /**
