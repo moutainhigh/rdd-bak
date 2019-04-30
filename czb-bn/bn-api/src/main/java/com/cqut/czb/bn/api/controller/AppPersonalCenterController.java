@@ -54,4 +54,10 @@ public class AppPersonalCenterController {
         return new JSONResult<List<UserIncomeInfoDTO>>(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
     }
 
+    @RequestMapping(value = "/getShareInfo",method = RequestMethod.GET)
+    public JSONResult getShareInfo(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(user.getUserAccount());
+    }
+
 }
