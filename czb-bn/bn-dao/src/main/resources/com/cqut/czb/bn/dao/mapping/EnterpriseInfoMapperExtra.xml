@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.EnterpriseInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+        <id column="enterprise_info_id" property="enterpriseInfoId" jdbcType="VARCHAR" />
+        <result column="enterprise_name" property="enterpriseName" jdbcType="VARCHAR" />
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+        <result column="contact_info" property="contactInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_id,
+        org_code, create_at, update_at
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_account,
+        org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at
+        from czb_enterprise_info
+        LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
+        <where>
+            <if test="enterpriseInfo.enterpriseInfoId!=null">
+                enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
+            </if>
+            <if test="enterpriseInfo.enterpriseInfoName!=null">
+                AND enterprise_name= #{enterpriseInfo.enterpriseInfoName,jdbcType=VARCHAR}
+            </if>
+            <if test="enterpriseInfo.userAccount!=null">
+                AND  user_account= #{enterpriseInfo.userAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="enterpriseInfo.contactInfo!=null">
+                AND contact_info=#{enterpriseInfo.contactInfo,jdbcType=VARCHAR}
+            </if>
+            <if test="enterpriseInfo.startTime!=null and enterpriseInfo.endTime ==null">
+                AND create_at >= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime == null">
+                AND  #{enterpriseInfo.endTime,jdbcType=TIMESTAMP} >=create_at
+            </if>
+            <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime != null">
+                AND   #{enterpriseInfo.endTime,jdbcType=TIMESTAMP}>= create_at >=#{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_enterprise_info
+        where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+        insert into czb_enterprise_info (enterprise_info_id, enterprise_name,
+        legal_person, contact_info, is_deleted,
+        user_id, org_code, create_at,
+        update_at)
+        values (#{enterpriseInfoId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR},
+        #{legalPerson,jdbcType=VARCHAR}, #{contactInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER},
+        #{userId,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+        #{updateAt,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+        insert into czb_enterprise_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="enterpriseInfoId != null" >
+                enterprise_info_id,
+            </if>
+            <if test="enterpriseName != null" >
+                enterprise_name,
+            </if>
+            <if test="legalPerson != null" >
+                legal_person,
+            </if>
+            <if test="contactInfo != null" >
+                contact_info,
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="orgCode != null" >
+                org_code,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="enterpriseInfoId != null" >
+                #{enterpriseInfoId,jdbcType=VARCHAR},
+            </if>
+            <if test="enterpriseName != null" >
+                #{enterpriseName,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null" >
+                #{legalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="contactInfo != null" >
+                #{contactInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null" >
+                #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="orgCode != null" >
+                #{orgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+        update czb_enterprise_info
+        <set >
+            <if test="enterpriseName != null" >
+                enterprise_name = #{enterpriseName,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null" >
+                legal_person = #{legalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="contactInfo != null" >
+                contact_info = #{contactInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted = #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="orgCode != null" >
+                org_code = #{orgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+        update czb_enterprise_info
+        set enterprise_name = #{enterpriseName,jdbcType=VARCHAR},
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+        contact_info = #{contactInfo,jdbcType=VARCHAR},
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=VARCHAR},
+        org_code = #{orgCode,jdbcType=VARCHAR},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
+    </update>
+</mapper>
