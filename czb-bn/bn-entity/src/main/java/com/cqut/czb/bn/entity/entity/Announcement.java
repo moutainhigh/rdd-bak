@@ -22,10 +22,14 @@ public class Announcement {
     private Integer announcementOrder;
 
     private String locationCode;
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+
     private Date createAt;
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+
     private Date updateAt;
+
+    private Integer pageNum;
+
+    private Integer pageSize;
 
 //    private MultipartFile[] file;
 //
@@ -117,5 +121,19 @@ public class Announcement {
         this.updateAt = updateAt;
     }
 
+    public Integer getPageNum() {
+        return pageNum;
+    }
 
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 }

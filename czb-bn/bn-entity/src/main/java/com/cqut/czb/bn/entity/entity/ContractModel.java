@@ -7,6 +7,8 @@ public class ContractModel {
 
     private String yunModelId;
 
+    private String fileId;
+
     private String modelName;
 
     private Date createAt;
@@ -27,6 +29,14 @@ public class ContractModel {
 
     public void setYunModelId(String yunModelId) {
         this.yunModelId = yunModelId == null ? null : yunModelId.trim();
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId == null ? null : fileId.trim();
     }
 
     public String getModelName() {
