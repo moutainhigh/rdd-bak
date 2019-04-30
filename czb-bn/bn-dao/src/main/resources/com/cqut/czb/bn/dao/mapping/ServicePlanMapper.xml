@@ -126,10 +126,4 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where plan_id = #{planId,jdbcType=VARCHAR}
   </update>
-
-  <select id="selectServicePlan" resultMap="BaseResultMap" >
-    select
-    <include refid="Base_Column_List" />
-    from czb_service_plan
-  </select>
 </mapper>

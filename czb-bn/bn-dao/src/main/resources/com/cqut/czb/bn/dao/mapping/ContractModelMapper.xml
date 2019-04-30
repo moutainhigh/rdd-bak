@@ -4,12 +4,13 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ContractModel" >
     <id column="model_id" property="modelId" jdbcType="VARCHAR" />
     <result column="yun_model_id" property="yunModelId" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
     <result column="model_name" property="modelName" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    model_id, yun_model_id, model_name, create_at, update_at
+    model_id, yun_model_id, file_id, model_name, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -22,10 +23,12 @@
     where model_id = #{modelId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ContractModel" >
-    insert into czb_contract_model (model_id, yun_model_id, model_name, 
-      create_at, update_at)
-    values (#{modelId,jdbcType=VARCHAR}, #{yunModelId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+    insert into czb_contract_model (model_id, yun_model_id, file_id, 
+      model_name, create_at, update_at
+      )
+    values (#{modelId,jdbcType=VARCHAR}, #{yunModelId,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{modelName,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ContractModel" >
     insert into czb_contract_model
@@ -35,6 +38,9 @@
       </if>
       <if test="yunModelId != null" >
         yun_model_id,
+      </if>
+      <if test="fileId != null" >
+        file_id,
       </if>
       <if test="modelName != null" >
         model_name,
@@ -53,6 +59,9 @@
       <if test="yunModelId != null" >
         #{yunModelId,jdbcType=VARCHAR},
       </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
       <if test="modelName != null" >
         #{modelName,jdbcType=VARCHAR},
       </if>
@@ -70,6 +79,9 @@
       <if test="yunModelId != null" >
         yun_model_id = #{yunModelId,jdbcType=VARCHAR},
       </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
       <if test="modelName != null" >
         model_name = #{modelName,jdbcType=VARCHAR},
       </if>
@@ -85,6 +97,7 @@
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.ContractModel" >
     update czb_contract_model
     set yun_model_id = #{yunModelId,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
       model_name = #{modelName,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}

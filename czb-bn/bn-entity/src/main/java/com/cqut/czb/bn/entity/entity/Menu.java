@@ -11,11 +11,11 @@ public class Menu {
 
     private Integer menuLevel;
 
-    private String parent;
-
     private Date createAt;
 
     private Date updateAt;
+
+    private String parent;
 
     public String getMenuId() {
         return menuId;
@@ -70,6 +70,6 @@ public class Menu {
     }
 
     public void setParent(String parent) {
-        this.parent = parent;
+        this.parent = parent == null ? null : parent.trim();
     }
 }

@@ -14,10 +14,13 @@
     <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="record_type" property="recordType" jdbcType="INTEGER" />
+    <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount, 
-    transaction_time, petrol_id, state, contract_id, create_at, update_at
+    transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type, 
+    is_recharged
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -33,13 +36,13 @@
     insert into czb_petrol_sales_records (record_id, petrol_num, buyer_id, 
       payment_method, third_order_id, turnover_amount, 
       transaction_time, petrol_id, state, 
-      contract_id, create_at, update_at
-      )
+      contract_id, create_at, update_at, 
+      record_type, is_recharged)
     values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
       #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR}, #{turnoverAmount,jdbcType=DOUBLE}, 
       #{transactionTime,jdbcType=TIMESTAMP}, #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
-      #{contractId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{contractId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
     insert into czb_petrol_sales_records
@@ -80,6 +83,12 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="recordType != null" >
+        record_type,
+      </if>
+      <if test="isRecharged != null" >
+        is_recharged,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -117,6 +126,12 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordType != null" >
+        #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="isRecharged != null" >
+        #{isRecharged,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -156,6 +171,12 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="recordType != null" >
+        record_type = #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="isRecharged != null" >
+        is_recharged = #{isRecharged,jdbcType=INTEGER},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -171,7 +192,9 @@
       state = #{state,jdbcType=INTEGER},
       contract_id = #{contractId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      record_type = #{recordType,jdbcType=INTEGER},
+      is_recharged = #{isRecharged,jdbcType=INTEGER}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>
