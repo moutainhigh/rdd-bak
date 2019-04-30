@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
-//import com.cqut.czb.bn.entity.dto.petrolSaleConfig.PetrolSaleConfigOutputDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleConfig.PetrolSaleConfigOutputDTO;
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 
 import java.util.List;
@@ -20,5 +20,5 @@ public interface PetrolSaleConfigMapperExtra {
 
     List<PetrolSaleConfig> selectPetrolSaleConfig();
 
-//    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
+    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
 }
