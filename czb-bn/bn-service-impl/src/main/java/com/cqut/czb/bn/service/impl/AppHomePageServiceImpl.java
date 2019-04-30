@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
@@ -44,7 +45,9 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     PetrolMapperExtra petrolMapperExtra;
 
     @Override
-    public List<Announcement> selectAnnouncement() {
+    public List<appAnnouncementDTO> selectAnnouncement() {
+
+
         return announcementMapperExtra.selectAnnouncement();
     }
 
