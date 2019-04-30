@@ -4,6 +4,7 @@ import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.VerificationCodeMapper;
+import com.cqut.czb.bn.dao.mapper.VerificationCodeMapperExtra;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
 import com.cqut.czb.auth.util.timerTask;
@@ -29,6 +30,9 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Autowired
     private VerificationCodeMapper verificationCodeMapper;
 
+    @Autowired
+    private VerificationCodeMapperExtra verificationCodeMapperExtra;
+
     @Override
     public Boolean register(User user) {
         if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
@@ -49,14 +53,14 @@ public class UserDetailServiceImpl implements UserDetailService {
         timerTask task=new timerTask(verificationCode);
         Timer timer=new Timer();
         timer.schedule(task,300000);
-        return verificationCodeMapper.insert(verificationCode)>0;
+        return verificationCodeMapperExtra.insert(verificationCode)>0;
     }
 
     @Override
     public boolean checkVerificationCode(VerificationCode verificationCode) {
-        if(verificationCodeMapper.selectVerificationCode(verificationCode)!=0){
-            boolean updateUserPSW= userMapper.updateUserPSW(verificationCode.getUserPsw())>0;
-            boolean updateVerificationCode=verificationCodeMapper.updateVerificationCode(verificationCode)>0;
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCode)!=0){
+            boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCode.getUserPsw())>0;
+            boolean updateVerificationCode=verificationCodeMapperExtra.updateVerificationCode(verificationCode)>0;
             if(updateUserPSW==updateVerificationCode==true){
                 return true;
             }

@@ -1,6 +1,9 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.entity.dto.paymentRecord;
 
 import com.cqut.czb.bn.util.constants.SystemConstants;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class AiHuAlipayConfig {
 	
@@ -18,7 +21,8 @@ public class AiHuAlipayConfig {
    
 	// 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问113.96.132.117
 //	public static String notify_url = "http://222.178.158.125:9080/TinklingCat/api/verifyAsyn/verifyAsynNoticeInfoAiHu";
-	public static String notify_url = SystemConstants.IPAPI+"/czb/api/verifyAsyn/verifyAsynNoticeInfoAiHu";
+//	public static String notify_url = SystemConstants.IPAPI+"/czb/api/verifyAsyn/verifyAsynNoticeInfoAiHu";
+	public static String notify_url ;
 
 	// 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
 //	public static String return_url = "http://" + StringUtil.getIpAddress() +":9080/NewCar/api/paymentRecord/verifyAsynNoticeInfo";
@@ -43,4 +47,15 @@ public class AiHuAlipayConfig {
 	
 	//失败
 	public static String response_fail = "failure";
+
+	public AiHuAlipayConfig() {
+		InetAddress addr = null;
+		try {
+			addr = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		String ip=addr.getHostAddress().toString(); //获取本机ip
+		notify_url="http://"+ip+"8899//czb/api/verifyAsyn/verifyAsynNoticeInfoAiHu";
+	}
 }

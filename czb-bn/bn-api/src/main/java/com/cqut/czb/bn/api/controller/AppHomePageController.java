@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
@@ -30,7 +31,7 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectAnnouncement",method = RequestMethod.GET)
     public JSONResult selectAnnouncement(){
-        return new JSONResult<List<Announcement>>(appHomePageService.selectAnnouncement());
+        return new JSONResult<List<appAnnouncementDTO>>(appHomePageService.selectAnnouncement());
     }
 
     /**

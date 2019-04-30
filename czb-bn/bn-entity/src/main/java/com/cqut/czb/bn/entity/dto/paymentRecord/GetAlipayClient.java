@@ -1,8 +1,7 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.entity.dto.paymentRecord;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.cqut.czb.bn.service.impl.paymentRecord.AiHuAlipayConfig;
 
 public class GetAlipayClient {
 	private  AlipayClient alipayClient;

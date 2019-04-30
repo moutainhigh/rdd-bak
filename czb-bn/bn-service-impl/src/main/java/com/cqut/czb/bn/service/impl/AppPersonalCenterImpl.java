@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapper;
+import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
@@ -20,6 +22,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     @Autowired
     UserIncomeInfoMapper userIncomeInfoMapper;
 
+    @Autowired
+    UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
+
     @Override
     public User selectUser(String userId) {
         return userMapper.selectByPrimaryKey(userId);
@@ -27,6 +32,6 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Override
     public List<UserIncomeInfoDTO> selectUserIncomeInfo(String userId) {
-        return userIncomeInfoMapper.selectUserIncomeInfo(userId);
+        return userIncomeInfoMapperExtra.selectUserIncomeInfo(userId);
     }
 }
