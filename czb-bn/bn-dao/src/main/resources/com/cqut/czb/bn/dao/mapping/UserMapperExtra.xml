@@ -24,7 +24,7 @@
     *
     from czb_user
     where user_account = #{account,jdbcType=VARCHAR}
-    and is_delete = 0
+    and is_deleted = 0
   </select>
 
   <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
@@ -34,7 +34,7 @@
         czb_user
     WHERE
         user_account = #{account,jdbcType=VARCHAR}
-        and is_delete = 0
+        and is_deleted = 0
   </select>
 
   <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
@@ -52,7 +52,7 @@
       <if test="createAt != null">
         and cu.create_at between #{createStartTime} and #{createEndTime}
       </if>
-      and is_delete = 0
+      and cu.is_deleted = 0
     </where>
   </select>
 
