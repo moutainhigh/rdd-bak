@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.File;
+import org.springframework.stereotype.Component;
 
-public interface FileMapper {
+@Component
+public interface FileMapperExtra {
     int deleteByPrimaryKey(String fileId);
 
     int insert(File record);

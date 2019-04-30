@@ -11,10 +11,13 @@
     <result column="souse_id" property="souseId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="withdraw_to" property="withdrawTo" jdbcType="VARCHAR" />
+    <result column="withdraw_name" property="withdrawName" jdbcType="VARCHAR" />
+    <result column="withdraw_account" property="withdrawAccount" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, amount, type, info_id, before_change_income, remark, souse_id, create_at, 
-    update_at
+    update_at, withdraw_to, withdraw_name, withdraw_account
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -29,11 +32,13 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
     insert into czb_income_log (record_id, amount, type, 
       info_id, before_change_income, remark, 
-      souse_id, create_at, update_at
+      souse_id, create_at, update_at, 
+      withdraw_to, withdraw_name, withdraw_account
       )
     values (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
       #{infoId,jdbcType=VARCHAR}, #{beforeChangeIncome,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
-      #{souseId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{souseId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
@@ -66,6 +71,15 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="withdrawTo != null" >
+        withdraw_to,
+      </if>
+      <if test="withdrawName != null" >
+        withdraw_name,
+      </if>
+      <if test="withdrawAccount != null" >
+        withdraw_account,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -94,6 +108,15 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="withdrawTo != null" >
+        #{withdrawTo,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawName != null" >
+        #{withdrawName,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawAccount != null" >
+        #{withdrawAccount,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -124,6 +147,15 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="withdrawTo != null" >
+        withdraw_to = #{withdrawTo,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawName != null" >
+        withdraw_name = #{withdrawName,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawAccount != null" >
+        withdraw_account = #{withdrawAccount,jdbcType=DOUBLE},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -136,7 +168,10 @@
       remark = #{remark,jdbcType=VARCHAR},
       souse_id = #{souseId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      withdraw_to = #{withdrawTo,jdbcType=VARCHAR},
+      withdraw_name = #{withdrawName,jdbcType=VARCHAR},
+      withdraw_account = #{withdrawAccount,jdbcType=DOUBLE}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>

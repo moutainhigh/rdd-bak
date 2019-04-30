@@ -11,7 +11,7 @@ public class Announcement {
 
     private String announcementTitle;
 
-    private String announcementContent;
+    private String announcementContent; //公告内容
 
     private Integer announcementType;
 
@@ -19,7 +19,7 @@ public class Announcement {
 
     private Integer isShow;
 
-    private Integer announcementOrder;
+    private Integer announcementOrder; //顺序
 
     private String locationCode;
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
@@ -30,16 +30,6 @@ public class Announcement {
     private Integer pageNum;
 
     private Integer pageSize;
-
-//    private MultipartFile[] file;
-//
-//    public MultipartFile[] getFile() {
-//        return file;
-//    }
-//
-//    public void setFile(MultipartFile[] file) {
-//        this.file = file;
-//    }
 
     public String getAnnouncementId() {
         return announcementId;
