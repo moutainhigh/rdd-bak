@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -20,5 +21,5 @@ public interface AnnouncementMapperExtra {
 
     int updateByPrimaryKey(Announcement record);
 
-    List<Announcement> selectAnnouncement();
+    List<appAnnouncementDTO> selectAnnouncement();
 }

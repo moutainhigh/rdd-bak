@@ -159,10 +159,18 @@
   </update>
 
 
-  <select id="selectAnnouncement" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from czb_announcement
-    where is_show=1
+  <select id="selectAnnouncement" resultType="com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO">
+   select
+    announcement_title AS announcementTitle,
+    announcement_content AS announcementContent,
+    announcement_type AS announcementType,
+    announcement_order AS announcementOrder,
+    location_code as locationCode,
+    file_name AS fileName,
+    uploader AS uploader,
+    save_path AS savePath,
+    remark
+    from czb_announcement as a,czb_file as c
+    where is_show=1 AND a.img_file_id=c.file_id
   </select>
 </mapper>
