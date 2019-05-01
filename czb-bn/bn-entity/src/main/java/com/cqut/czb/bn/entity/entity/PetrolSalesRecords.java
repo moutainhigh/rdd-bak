@@ -31,6 +31,8 @@ public class PetrolSalesRecords {
 
     private Integer isRecharged;
 
+    private Integer petrolkind;
+
     public String getRecordId() {
         return recordId;
     }
@@ -141,5 +143,13 @@ public class PetrolSalesRecords {
 
     public void setIsRecharged(Integer isRecharged) {
         this.isRecharged = isRecharged;
+    }
+
+    public Integer getPetrolkind() {
+        return petrolkind;
+    }
+
+    public void setPetrolkind(Integer petrolkind) {
+        this.petrolkind = petrolkind;
     }
 }

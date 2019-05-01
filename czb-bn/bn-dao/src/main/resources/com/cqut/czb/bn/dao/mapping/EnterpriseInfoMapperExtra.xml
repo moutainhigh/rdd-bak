@@ -11,11 +11,12 @@
         <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="enterprise_yun_id" property="enterpriseYunId" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-        enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_id,
-        org_code, create_at, update_at
-    </sql>
+    enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_id,
+    org_code, create_at, update_at, enterprise_yun_id
+  </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_account,
