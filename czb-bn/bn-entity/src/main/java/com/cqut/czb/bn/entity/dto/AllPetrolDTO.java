@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 public class AllPetrolDTO {
     //用于储存油卡
-    private static Map<String,Petrol> petrolMap=new HashMap<String,Petrol>();
+    private static Map<String,Petrol> petrolMap=new ConcurrentHashMap<String,Petrol>();
 
     private static Petrol currentPetrol;
 
@@ -25,13 +26,10 @@ public class AllPetrolDTO {
      */
     public AllPetrolDTO() {}
 
-    /**
-     *带参构造，传入油卡序列
-     * @param petrolList
-     */
-    public AllPetrolDTO(List<Petrol> petrolList) {
-        this.changePetrolMap(petrolList);
+    public AllPetrolDTO( Map<String,Petrol> petrolMap){
+        AllPetrolDTO.petrolMap=petrolMap;
     }
+
 
     public static void setPetrolMap(Map<String, Petrol> petrolMap) {
         AllPetrolDTO.petrolMap = petrolMap;

@@ -17,7 +17,7 @@ public class VerificationCodeDTO {
     public VerificationCodeDTO(String userAccount , String content) {
         this.userAccount = userAccount;
         this.verificationCodeId= StringUtil.createId();
-        this.content=getContent();
+        this.content=content;
         this.state=0;
     }
 
