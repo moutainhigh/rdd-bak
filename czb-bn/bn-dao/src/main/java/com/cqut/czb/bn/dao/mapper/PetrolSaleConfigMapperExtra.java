@@ -20,5 +20,5 @@ public interface PetrolSaleConfigMapperExtra {
 
     List<PetrolSaleConfig> selectPetrolSaleConfig();
 
-//    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
+    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
 }
