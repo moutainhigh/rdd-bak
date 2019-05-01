@@ -41,18 +41,18 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(),address,"wo",new Date());
         fileMapperExtra.insertSelective(file1);
         appRouter.setIconPathId(file1.getFileId());
-        return appRouterMapperExtra.insertSelective(appRouter);
+        return (appRouterMapperExtra.insertSelective(appRouter)>0);
     }
 
     @Override
     public Boolean deleteMenu(AppRouter appRouter) {
         fileMapperExtra.deleteByPrimaryKey(appRouter.getIconPathId());
-        return appRouterMapperExtra.deleteByPrimaryKey(appRouter.getRouterId());
+        return (appRouterMapperExtra.deleteByPrimaryKey(appRouter.getRouterId())>0);
     }
 
     @Override
     public Boolean updateMenuNoFile(AppRouter appRouter) {
-        return appRouterMapperExtra.updateByPrimaryKeySelective(appRouter);
+        return (appRouterMapperExtra.updateByPrimaryKeySelective(appRouter)>0);
     }
 
     @Override
@@ -61,6 +61,6 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         file1.setSavePath(FileUploadUtil.putObject(file.getOriginalFilename(),file.getInputStream()));
         file1.setUpdateAt(new Date());
         fileMapperExtra.updateByPrimaryKeySelective(file1);
-        return appRouterMapperExtra.updateByPrimaryKeySelective(appRouter);
+        return (appRouterMapperExtra.updateByPrimaryKeySelective(appRouter)>0);
     }
 }

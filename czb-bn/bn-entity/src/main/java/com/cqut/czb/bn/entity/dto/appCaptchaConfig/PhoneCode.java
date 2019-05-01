@@ -12,14 +12,35 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 
 
+
 /**
  * 创建人：陈德强
  * 作用：阿里云短信服务操作配置
  */
 public class PhoneCode {
-    private static String code ;
+    private  String code ;
 
-//    public  void main(String[] args) {
+    public  String getCode() {
+        return code;
+    }
+
+    public  void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * 生成6位随机数验证码
+     * @return
+     */
+    public String vcode(){
+        String vcode = "";
+        for (int i = 0; i < 6; i++) {
+            vcode = vcode + (int)(Math.random() * 9);
+        }
+        return vcode;
+    }
+
+    //    public  void main(String[] args) {
 //        String phone = "15730353007"; //此处可输入你的手机号码进行测试
 //        this.getPhonemsg(phone);
 //    }
@@ -29,19 +50,20 @@ public class PhoneCode {
      * @param mobile
      * @return
      */
-    public String getPhonemsg(String mobile) {
+    public String getPhonemsg(String mobile,String code) {
 
         /**
          * 进行正则关系校验
          */
+        System.out.println(mobile);
         if (mobile == null || mobile == "") {
             System.out.println("手机号为空");
             return "";
         }
-
         /**
-         * 短信验证
+         * 短信验证---阿里大于工具
          */
+
         // 设置超时时间-可自行调整
         System.setProperty(VcodeConfig.defaultConnectTimeout, VcodeConfig.Timeout);
         System.setProperty(VcodeConfig.defaultReadTimeout, VcodeConfig.Timeout);
@@ -62,7 +84,7 @@ public class PhoneCode {
         }
 
         //获取验证码
-        code = this.vcode();
+//        code = vcode();
 
         IAcsClient acsClient = new DefaultAcsClient(profile);
         // 组装请求对象
@@ -77,11 +99,11 @@ public class PhoneCode {
         request.setTemplateCode(VcodeConfig.TemplateCode);
         // 可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
         // 友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
-        request.setTemplateParam("{ \"number\":\""+code+"\"}");
+        request.setTemplateParam("{ \"code\":\""+code+"\"}");
         // 可选-上行短信扩展码(无特殊需求用户请忽略此字段)
         // request.setSmsUpExtendCode("90997");
         // 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-        request.setOutId("yourOutId");//************************************************
+        //request.setOutId("yourOutId");
         // 请求失败这里会抛ClientException异常
         SendSmsResponse sendSmsResponse;
         try {
@@ -91,9 +113,9 @@ public class PhoneCode {
                 // 请求成功
                 System.out.println("获取验证码成功！！！");
             } else {
-                    //如果验证码出错，会输出错误码告诉你具体原因
-                     System.out.println(sendSmsResponse.getCode());
-                    System.out.println("获取验证码失败...");
+                //如果验证码出错，会输出错误码告诉你具体原因
+                System.out.println(sendSmsResponse.getCode());
+                System.out.println("获取验证码失败...");
             }
         } catch (ServerException e) {
             e.printStackTrace();
@@ -105,15 +127,4 @@ public class PhoneCode {
         return "true";
     }
 
-    /**
-     * 生成6位随机数验证码
-     * @return
-     */
-    public String vcode(){
-        String vcode = "";
-        for (int i = 0; i < 6; i++) {
-            vcode = vcode + (int)(Math.random() * 9);
-        }
-        return vcode;
-    }
 }

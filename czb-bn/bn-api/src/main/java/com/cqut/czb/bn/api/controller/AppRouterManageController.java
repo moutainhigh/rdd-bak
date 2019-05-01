@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 @RestController
-@RequestMapping("/appMenu")
+@RequestMapping("/appRouter")
 public class AppRouterManageController {
 
     @Autowired

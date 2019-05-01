@@ -9,15 +9,15 @@ import java.util.List;
 
 @Component
 public interface AnnouncementMapperExtra {
-    Boolean deleteByPrimaryKey(String announcementId);
+    int deleteByPrimaryKey(String announcementId);
 
     int insert(Announcement record);
 
-    Boolean insertSelective(Announcement record);
+    int insertSelective(Announcement record);
 
     List<Announcement> selectByPrimaryKey(@Param("announcementId") String announcementId, @Param("announcementType") Integer announcementType);
 
-    Boolean updateByPrimaryKeySelective(Announcement record);
+    int updateByPrimaryKeySelective(Announcement record);
 
     int updateByPrimaryKey(Announcement record);
 
