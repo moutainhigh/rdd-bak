@@ -11,13 +11,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * ServicePlanController 服务套餐接口
  * 设计者:   曹渝
  * 更新日期: 2019/05/01
  */
-public class ServicePlanController {
+@RestController
+@RequestMapping("/api/ServicePlanManagement")
+public class ServicePlanManagementController {
 
     @Autowired
     IServicePlanService servicePlanService;
