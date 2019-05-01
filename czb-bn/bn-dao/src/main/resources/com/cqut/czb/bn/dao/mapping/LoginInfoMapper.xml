@@ -9,9 +9,11 @@
     <result column="longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, login_time, device_type, system_version, longitude, latitude, create_at
+    record_id, login_time, device_type, system_version, longitude, latitude, create_at, 
+    update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -26,10 +28,10 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info (record_id, login_time, device_type, 
       system_version, longitude, latitude, 
-      create_at)
+      create_at, update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, 
       #{systemVersion,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info
@@ -55,6 +57,9 @@
       <if test="createAt != null" >
         create_at,
       </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -77,6 +82,9 @@
       </if>
       <if test="createAt != null" >
         #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -101,6 +109,9 @@
       <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -111,7 +122,8 @@
       system_version = #{systemVersion,jdbcType=VARCHAR},
       longitude = #{longitude,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=VARCHAR},
-      create_at = #{createAt,jdbcType=TIMESTAMP}
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -8,9 +8,12 @@
     <result column="delivery_state" property="deliveryState" jdbcType="INTEGER" />
     <result column="delivery_num" property="deliveryNum" jdbcType="VARCHAR" />
     <result column="delivery_company" property="deliveryCompany" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, petrol_num, address_id, delivery_state, delivery_num, delivery_company
+    record_id, petrol_num, address_id, delivery_state, delivery_num, delivery_company, 
+    create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
     insert into czb_petrol_delivery_records (record_id, petrol_num, address_id, 
-      delivery_state, delivery_num, delivery_company
-      )
+      delivery_state, delivery_num, delivery_company, 
+      create_at, update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{addressId,jdbcType=VARCHAR}, 
-      #{deliveryState,jdbcType=INTEGER}, #{deliveryNum,jdbcType=VARCHAR}, #{deliveryCompany,jdbcType=VARCHAR}
-      )
+      #{deliveryState,jdbcType=INTEGER}, #{deliveryNum,jdbcType=VARCHAR}, #{deliveryCompany,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
     insert into czb_petrol_delivery_records
@@ -51,6 +54,12 @@
       <if test="deliveryCompany != null" >
         delivery_company,
       </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -70,6 +79,12 @@
       </if>
       <if test="deliveryCompany != null" >
         #{deliveryCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -91,6 +106,12 @@
       <if test="deliveryCompany != null" >
         delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
       </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +121,9 @@
       address_id = #{addressId,jdbcType=VARCHAR},
       delivery_state = #{deliveryState,jdbcType=INTEGER},
       delivery_num = #{deliveryNum,jdbcType=VARCHAR},
-      delivery_company = #{deliveryCompany,jdbcType=VARCHAR}
+      delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>
