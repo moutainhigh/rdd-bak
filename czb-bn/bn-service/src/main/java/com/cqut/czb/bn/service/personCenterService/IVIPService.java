@@ -1,6 +1,10 @@
 package com.cqut.czb.bn.service.personCenterService;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface IVIPService {
 
-    boolean createVIPOrder();
+    String createVIPOrder(String userId);
+
+    boolean purchaseVIP(HttpServletRequest request);
 }

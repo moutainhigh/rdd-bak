@@ -113,17 +113,17 @@
 
 
   <!--地区销售配置级联查询-->
-  <resultMap type="com.cqut.czb.bn.entity.dto.petrolSaleConfig.PetrolSaleConfigOutputDTO" id="saleConfigResult">
-    <result property="area" column="area"/>
-    <collection property="areaConfigs" column="area" javaType="list" select="getAreaConfig"/>
-  </resultMap>
+  <!--<resultMap type="com.cqut.czb.bn.entity.dto.petrolSaleConfig.PetrolSaleConfigOutputDTO" id="saleConfigResult">-->
+    <!--<result property="area" column="area"/>-->
+    <!--<collection property="areaConfigs" column="area" javaType="list" select="getAreaConfig"/>-->
+  <!--</resultMap>-->
 
-  <select id="getPetrolSaleConfigs" resultMap="saleConfigResult">
-    select * from czb_petrol_sale_config group by area
-  </select>
+  <!--<select id="getPetrolSaleConfigs" resultMap="saleConfigResult">-->
+    <!--select * from czb_petrol_sale_config group by area-->
+  <!--</select>-->
 
-  <select id="getAreaConfig" resultMap="BaseResultMap">
-    select * from czb_petrol_sale_config where area = #{area}
-  </select>
+  <!--<select id="getAreaConfig" resultMap="BaseResultMap">-->
+    <!--select * from czb_petrol_sale_config where area = #{area}-->
+  <!--</select>-->
 
 </mapper>
