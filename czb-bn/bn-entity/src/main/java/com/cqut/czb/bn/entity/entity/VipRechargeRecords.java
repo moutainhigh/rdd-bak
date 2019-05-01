@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.entity;
 
+import java.util.Date;
+
 public class VipRechargeRecords {
     private String recordId;
 
@@ -12,6 +14,10 @@ public class VipRechargeRecords {
     private Integer isReceived;
 
     private String thirdTradeNum;
+
+    private Date createAt;
+
+    private Date updateAt;
 
     public String getRecordId() {
         return recordId;
@@ -59,5 +65,21 @@ public class VipRechargeRecords {
 
     public void setThirdTradeNum(String thirdTradeNum) {
         this.thirdTradeNum = thirdTradeNum == null ? null : thirdTradeNum.trim();
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

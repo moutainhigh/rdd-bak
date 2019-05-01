@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.entity;
 
+import java.util.Date;
+
 public class ContractYunInfo {
     private String yunContractId;
 
@@ -8,6 +10,10 @@ public class ContractYunInfo {
     private String contractId;
 
     private String czId;
+
+    private Date createAt;
+
+    private Date updateAt;
 
     public String getYunContractId() {
         return yunContractId;
@@ -39,5 +45,21 @@ public class ContractYunInfo {
 
     public void setCzId(String czId) {
         this.czId = czId == null ? null : czId.trim();
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

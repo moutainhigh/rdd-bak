@@ -17,6 +17,8 @@ public class LoginInfo {
 
     private Date createAt;
 
+    private Date updateAt;
+
     public String getRecordId() {
         return recordId;
     }
@@ -71,5 +73,13 @@ public class LoginInfo {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }
