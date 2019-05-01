@@ -57,7 +57,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
             fileMapperExtra.insertSelective(file1);
             announcement.setImgFileId(file1.getFileId()); //更新文件存储后的id
-            return announcementMapperExtra.insertSelective(announcement);
+            return (announcementMapperExtra.insertSelective(announcement)>0);
     }
 
     @Override //带文件更新
@@ -69,13 +69,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
         file1.setFileId(announcement.getImgFileId());
         fileMapperExtra.updateByPrimaryKeySelective(file1);
-        return announcementMapperExtra.updateByPrimaryKeySelective(announcement);
+        return (announcementMapperExtra.updateByPrimaryKeySelective(announcement)>0);
     }
 
     @Override //无文件更新
     public Boolean updateAnnouncement(Announcement announcement) {
-        return announcementMapperExtra.updateByPrimaryKeySelective(announcement);
-    }
+        return (announcementMapperExtra.updateByPrimaryKeySelective(announcement)>0);  }
 
     @Override //根据文件id得到图片路径
     public String getFileById(String id) {
@@ -89,7 +88,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public Boolean deleteAnnouncement(String id){
         List<Announcement> announcements = announcementMapperExtra.selectByPrimaryKey(id,null);
         fileMapperExtra.deleteByPrimaryKey(announcements.get(0).getImgFileId());
-        return announcementMapperExtra.deleteByPrimaryKey(id);
+        return (announcementMapperExtra.deleteByPrimaryKey(id)>0);
     }
 
     /**
