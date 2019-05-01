@@ -60,4 +60,18 @@ public class AppPersonalCenterController {
         return new JSONResult(user.getUserAccount());
     }
 
+    @RequestMapping(value= "/getMyGTPetrolList",method = RequestMethod.GET)
+    public JSONResult getMyGTPetrolList(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+     return new JSONResult(appPersonalCenterService.getGTSoldPetrolForUser(user.getUserId()));
+
+    }
+
+    @RequestMapping(value= "/getMyPhysicalPetrolList",method = RequestMethod.GET)
+    public JSONResult getMyPetrolList(Principal principal,String petrolKind){
+        User user = (User)redisUtils.get(principal.getName());
+            return new JSONResult(appPersonalCenterService.getPhysicalCardRechargeRecords(user.getUserId(),petrolKind));
+    }
+
+
 }

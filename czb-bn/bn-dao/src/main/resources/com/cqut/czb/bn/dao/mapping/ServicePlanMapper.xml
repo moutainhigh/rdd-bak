@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ServicePlan" >
     <id column="plan_id" property="planId" jdbcType="VARCHAR" />
     <result column="plan_name" property="planName" jdbcType="VARCHAR" />
-    <result column="plan_amoount" property="planAmoount" jdbcType="DOUBLE" />
+    <result column="plan_amount" property="planAmount" jdbcType="DOUBLE" />
     <result column="plan_time" property="planTime" jdbcType="INTEGER" />
     <result column="rent_back_money" property="rentBackMoney" jdbcType="DOUBLE" />
     <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
@@ -12,7 +12,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    plan_id, plan_name, plan_amoount, plan_time, rent_back_money, pay_money, create_at, 
+    plan_id, plan_name, plan_amount, plan_time, rent_back_money, pay_money, create_at, 
     update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -26,10 +26,10 @@
     where plan_id = #{planId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
-    insert into czb_service_plan (plan_id, plan_name, plan_amoount, 
+    insert into czb_service_plan (plan_id, plan_name, plan_amount, 
       plan_time, rent_back_money, pay_money, 
       create_at, update_at)
-    values (#{planId,jdbcType=VARCHAR}, #{planName,jdbcType=VARCHAR}, #{planAmoount,jdbcType=DOUBLE}, 
+    values (#{planId,jdbcType=VARCHAR}, #{planName,jdbcType=VARCHAR}, #{planAmount,jdbcType=DOUBLE}, 
       #{planTime,jdbcType=INTEGER}, #{rentBackMoney,jdbcType=DOUBLE}, #{payMoney,jdbcType=DOUBLE}, 
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
@@ -42,8 +42,8 @@
       <if test="planName != null" >
         plan_name,
       </if>
-      <if test="planAmoount != null" >
-        plan_amoount,
+      <if test="planAmount != null" >
+        plan_amount,
       </if>
       <if test="planTime != null" >
         plan_time,
@@ -68,8 +68,8 @@
       <if test="planName != null" >
         #{planName,jdbcType=VARCHAR},
       </if>
-      <if test="planAmoount != null" >
-        #{planAmoount,jdbcType=DOUBLE},
+      <if test="planAmount != null" >
+        #{planAmount,jdbcType=DOUBLE},
       </if>
       <if test="planTime != null" >
         #{planTime,jdbcType=INTEGER},
@@ -94,8 +94,8 @@
       <if test="planName != null" >
         plan_name = #{planName,jdbcType=VARCHAR},
       </if>
-      <if test="planAmoount != null" >
-        plan_amoount = #{planAmoount,jdbcType=DOUBLE},
+      <if test="planAmount != null" >
+        plan_amount = #{planAmount,jdbcType=DOUBLE},
       </if>
       <if test="planTime != null" >
         plan_time = #{planTime,jdbcType=INTEGER},
@@ -118,7 +118,7 @@
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.ServicePlan" >
     update czb_service_plan
     set plan_name = #{planName,jdbcType=VARCHAR},
-      plan_amoount = #{planAmoount,jdbcType=DOUBLE},
+      plan_amount = #{planAmount,jdbcType=DOUBLE},
       plan_time = #{planTime,jdbcType=INTEGER},
       rent_back_money = #{rentBackMoney,jdbcType=DOUBLE},
       pay_money = #{payMoney,jdbcType=DOUBLE},

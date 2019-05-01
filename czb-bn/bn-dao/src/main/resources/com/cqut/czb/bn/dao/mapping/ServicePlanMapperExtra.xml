@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ServicePlan" >
     <id column="plan_id" property="planId" jdbcType="VARCHAR" />
     <result column="plan_name" property="planName" jdbcType="VARCHAR" />
-    <result column="plan_amoount" property="planAmoount" jdbcType="DOUBLE" />
+    <result column="plan_amount" property="planAmount" jdbcType="DOUBLE" />
     <result column="plan_time" property="planTime" jdbcType="INTEGER" />
     <result column="rent_back_money" property="rentBackMoney" jdbcType="DOUBLE" />
     <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
@@ -12,7 +12,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    plan_id, plan_name, plan_amoount, plan_time, rent_back_money, pay_money, create_at, 
+    plan_id, plan_name, plan_amount, plan_time, rent_back_money, pay_money, create_at,
     update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >

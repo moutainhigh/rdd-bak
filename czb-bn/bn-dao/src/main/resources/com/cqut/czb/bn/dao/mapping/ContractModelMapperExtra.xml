@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ContractModelMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ContractModel" >
+    <id column="model_id" property="modelId" jdbcType="VARCHAR" />
+    <result column="yun_model_id" property="yunModelId" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="model_name" property="modelName" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    model_id, yun_model_id, file_id, model_name, create_at, update_at
+  </sql>
+  <insert id="insertContractModel" parameterType="com.cqut.czb.bn.entity.entity.ContractModel" >
+    insert into czb_contract_model
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="modelId != null and modelId != ''" >
+        model_id,
+      </if>
+      <if test="yunModelId != null and yunModelId != ''" >
+        yun_model_id,
+      </if>
+      <if test="fileId != null and yunModelId != ''" >
+        file_id,
+      </if>
+      <if test="modelName != null and yunModelId != ''" >
+        model_name,
+      </if>
+        create_at,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="modelId != null and yunModelId != ''" >
+        #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="yunModelId != null and yunModelId != ''" >
+        #{yunModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null and yunModelId != ''" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null and yunModelId != ''" >
+        #{modelName,jdbcType=VARCHAR},
+      </if>
+      now(),
+    </trim>
+  </insert>
+  <select id="selectContractModelList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_contract_model
+  </select>
+</mapper>

@@ -7,7 +7,7 @@ public class ServicePlan {
 
     private String planName;
 
-    private Double planAmoount;
+    private Double planAmount;
 
     private Integer planTime;
 
@@ -35,12 +35,12 @@ public class ServicePlan {
         this.planName = planName == null ? null : planName.trim();
     }
 
-    public Double getPlanAmoount() {
-        return planAmoount;
+    public Double getPlanAmount() {
+        return planAmount;
     }
 
-    public void setPlanAmoount(Double planAmoount) {
-        this.planAmoount = planAmoount;
+    public void setPlanAmount(Double planAmount) {
+        this.planAmount = planAmount;
     }
 
     public Integer getPlanTime() {

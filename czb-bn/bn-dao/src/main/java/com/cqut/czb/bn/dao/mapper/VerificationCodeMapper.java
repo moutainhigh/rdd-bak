@@ -3,28 +3,15 @@ package com.cqut.czb.bn.dao.mapper;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
 
 public interface VerificationCodeMapper {
-    /**
-     * 添加验证码内容
-     * @param verificationCode
-     * @return
-     */
-    int insert(VerificationCode verificationCode);
+    int deleteByPrimaryKey(String verificationCodeId);
 
-    /**
-     * 找出对应的验证码
-     * @param verificationCode
-     * @return
-     */
-    int selectVerificationCode(VerificationCode verificationCode);
+    int insert(VerificationCode record);
 
-    /**
-     * 更改验证码的状态
-     * @param verificationCode
-     * @return
-     */
-    int updateVerificationCode(VerificationCode verificationCode);
+    int insertSelective(VerificationCode record);
 
-    /**
-     *
-     */
+    VerificationCode selectByPrimaryKey(String verificationCodeId);
+
+    int updateByPrimaryKeySelective(VerificationCode record);
+
+    int updateByPrimaryKey(VerificationCode record);
 }

@@ -25,7 +25,7 @@ import java.util.List;
 public class AppBuyPetrolController {
 
     @Autowired
-    AppBuyPetrolService appBuyPetrolService;
+    private  AppBuyPetrolService appBuyPetrolService;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
     public JSONResult buyPetrol(@Validated @RequestBody PetrolInputDTO petrolInputDTO){
@@ -38,6 +38,8 @@ public class AppBuyPetrolController {
 
         return new JSONResult(BuyPetrol);
     }
+
+
 
 
 

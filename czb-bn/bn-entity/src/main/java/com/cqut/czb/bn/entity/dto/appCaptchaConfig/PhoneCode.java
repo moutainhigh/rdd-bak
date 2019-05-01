@@ -19,17 +19,17 @@ import com.aliyuncs.profile.IClientProfile;
 public class PhoneCode {
     private static String code ;
 
-    public  void main(String[] args) {
-        String phone = "15730353007"; //此处可输入你的手机号码进行测试
-        this.getPhonemsg(phone);
-    }
+//    public  void main(String[] args) {
+//        String phone = "15730353007"; //此处可输入你的手机号码进行测试
+//        this.getPhonemsg(phone);
+//    }
 
     /**
      * 阿里云短信服务配置
      * @param mobile
      * @return
      */
-    public  String getPhonemsg(String mobile) {
+    public String getPhonemsg(String mobile) {
 
         /**
          * 进行正则关系校验
@@ -109,7 +109,7 @@ public class PhoneCode {
      * 生成6位随机数验证码
      * @return
      */
-    public  String vcode(){
+    public String vcode(){
         String vcode = "";
         for (int i = 0; i < 6; i++) {
             vcode = vcode + (int)(Math.random() * 9);

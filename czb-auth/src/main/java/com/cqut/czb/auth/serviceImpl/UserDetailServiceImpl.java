@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.VerificationCodeMapper;
 import com.cqut.czb.bn.dao.mapper.VerificationCodeMapperExtra;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
 import com.cqut.czb.auth.util.timerTask;
@@ -48,19 +49,20 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     public Boolean insertVerificationCode(String phone) {
-        VerificationCode verificationCode=new VerificationCode(phone);
-        //计时器——5000分钟之后执行
-        timerTask task=new timerTask(verificationCode);
+        //创建一个发送短信的对象（对象）
+        VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(phone,"122");
+        //计时器——5分钟之后执行
+        timerTask task=new timerTask(verificationCodeDTO);
         Timer timer=new Timer();
         timer.schedule(task,300000);
-        return verificationCodeMapperExtra.insert(verificationCode)>0;
+        return verificationCodeMapperExtra.insert(verificationCodeDTO)>0;
     }
 
     @Override
-    public boolean checkVerificationCode(VerificationCode verificationCode) {
-        if(verificationCodeMapperExtra.selectVerificationCode(verificationCode)!=0){
-            boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCode.getUserPsw())>0;
-            boolean updateVerificationCode=verificationCodeMapperExtra.updateVerificationCode(verificationCode)>0;
+    public boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO) {
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)!=0){
+            boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCodeDTO.getUserPsw())>0;
+            boolean updateVerificationCode=verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO)>0;
             if(updateUserPSW==updateVerificationCode==true){
                 return true;
             }

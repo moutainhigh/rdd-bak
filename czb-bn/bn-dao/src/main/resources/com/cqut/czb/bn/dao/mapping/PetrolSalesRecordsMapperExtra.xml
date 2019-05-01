@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
-    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
-    <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
-    <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
-    <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
-    <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
-    <result column="turnover_amount" property="turnoverAmount" jdbcType="DOUBLE" />
-    <result column="transaction_time" property="transactionTime" jdbcType="TIMESTAMP" />
-    <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
-    <result column="state" property="state" jdbcType="INTEGER" />
-    <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
-    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount, 
-    transaction_time, petrol_id, state, contract_id, create_at, update_at
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
+        <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
+        <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
+        <result column="turnover_amount" property="turnoverAmount" jdbcType="DOUBLE" />
+        <result column="transaction_time" property="transactionTime" jdbcType="TIMESTAMP" />
+        <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="record_type" property="recordType" jdbcType="INTEGER" />
+        <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
+        <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount,
+    transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type,
+    is_recharged, petrol_kind
   </sql>
   <select id="getPetrolSaleInfoList" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO">
     SELECT
@@ -83,5 +87,50 @@ INNER JOIN (
     </where>
 ) AS t3 ON t3.petrol_id = t1.petrol_id
   </select>
+
+    <!--个人中心油卡信息查看-->
+    <resultMap id="PetrolResultMap" type="com.cqut.czb.bn.entity.entity.Petrol" >
+        <id column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="petrol_psw" property="petrolPsw" jdbcType="VARCHAR" />
+        <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+        <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+        <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="discount" property="discount" jdbcType="DOUBLE" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+        <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Petrol" >
+    petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
+    state, discount, area, owner_id, petrol_type, create_at, update_at
+  </sql>
+
+<select id="getGTSoldPetrolForUser" resultMap="PetrolResultMap" parameterType="java.lang.String">
+    SELECT
+      <include refid="Petrol"/>
+    FROM
+        czb_petrol
+    WHERE
+        petrol_kind = 0
+    AND petrol_id IN (
+        SELECT
+            petrol_id
+        FROM
+            czb_petrol_sales_records
+        WHERE
+            buyer_id = #{userId,jdbcType = VARCHAR}
+        ORDER BY
+            transaction_time DESC
+    )
+</select>
+
+    <select id="getPhysicalCardsForUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        
+    </select>
 
 </mapper>
