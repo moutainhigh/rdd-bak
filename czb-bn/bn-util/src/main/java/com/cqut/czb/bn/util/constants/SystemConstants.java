@@ -6,6 +6,7 @@ public class SystemConstants {
 
     public static String COMMA_REGEX = ",";
 
+    public static Double  VIP_PRICE = 0.01;
 
     public static final String IPAPI="https://www.ddcattom.com:8443";
     /**
