@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class ContractServiceImpl implements IContractService {
+public class ContractManagementServiceImpl implements IContractService {
 
     @Autowired
     private ContractModelMapperExtra contractModelMapperExtra;
