@@ -13,4 +13,14 @@ public interface ContractService {
     String registerPersonalContractAccount(PersonalRegisterDTO personalRegisterDTO, String token);
 
     String registerEnterpriseContractAccount(EnterpriseRegisterDTO enterpriseRegisterDTO, String token);
+
+    String createContract(String token);
+
+    String addContractOwner(String token);
+
+    String signerContract(String token);
+
+    String czContract(String token );
+
+    String getContractId();
 }
