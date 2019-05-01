@@ -14,11 +14,12 @@ public class MyWalletImpl implements MyWallet {
     @Autowired
     private MyWalletMapper myWalletMapper;
 
+    // TODO 用户id需要修改，这里写死
     @Override
-    public synchronized String withDraw(AlipayRecordDTO alipayRecordDTO, LoginInfoDTO loginInfoDTO, String keyWord) {
-        BigDecimal balance = new BigDecimal(myWalletMapper.getUserAllIncome(loginInfoDTO.getUserId()));
+    public synchronized String withDraw(AlipayRecordDTO alipayRecordDTO, String keyWord) {
+        BigDecimal balance = new BigDecimal(myWalletMapper.getUserAllIncome("1"));
 
-        if(!myWalletMapper.getPsw(loginInfoDTO.getUserId()).equals(keyWord)){
+        if(!myWalletMapper.getPsw("1").equals(keyWord)){
             return new String("账户密码错误");
         }
 

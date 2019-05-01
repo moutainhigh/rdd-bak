@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 public interface  MyWallet {
-    String withDraw(AlipayRecordDTO alipayRecordDTO, LoginInfoDTO loginInfoDTO, String keyWord);
+    String withDraw(AlipayRecordDTO alipayRecordDTO, String keyWord);
 }
