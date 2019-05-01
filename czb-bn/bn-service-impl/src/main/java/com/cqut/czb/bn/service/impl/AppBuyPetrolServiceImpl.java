@@ -24,16 +24,16 @@ import java.util.UUID;
 @Service
 public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolService {
     @Autowired
-    PetrolMapper petrolMapper;
+    private PetrolMapper petrolMapper;
 
     @Autowired
-    PetrolSalesRecordsMapper petrolSalesRecordsMapper;
+    private PetrolSalesRecordsMapper petrolSalesRecordsMapper;
 
     @Autowired
-    DepositRecordsMapper depositRecordsMapper;
+    private DepositRecordsMapper depositRecordsMapper;
 
     @Autowired
-    UserIncomeInfoMapper userIncomeInfoMapper;
+    private UserIncomeInfoMapper userIncomeInfoMapper;
 
     @Override
     public String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO) {

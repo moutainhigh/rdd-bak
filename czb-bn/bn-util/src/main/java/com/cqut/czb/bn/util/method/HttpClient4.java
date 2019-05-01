@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -23,7 +24,7 @@ import org.apache.http.util.EntityUtils;
 
 public class HttpClient4 {
 
-    public static String doGet(String url) {
+    public static String doGet(String url, String token) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         String result = "";
@@ -32,8 +33,12 @@ public class HttpClient4 {
             httpClient = HttpClients.createDefault();
             // 创建httpGet远程连接实例
             HttpGet httpGet = new HttpGet(url);
+
             // 设置请求头信息，鉴权
-            httpGet.setHeader("Authorization", "Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0");
+            httpGet.addHeader("Content-Type", "application/json");
+            httpGet.addHeader("charset", "UTF-8");
+            httpGet.addHeader("token", token);
+
             // 设置配置请求参数
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(35000)// 连接主机服务超时时间
                     .setConnectionRequestTimeout(35000)// 请求超时时间
@@ -85,10 +90,15 @@ public class HttpClient4 {
                 .setConnectionRequestTimeout(35000)// 设置连接请求超时时间
                 .setSocketTimeout(60000)// 设置读取数据连接超时时间
                 .build();
-        // 为httpPost实例设置配置
+        /**
+         *
+         * 为httpPost实例设置配置
+          */
         httpPost.setConfig(requestConfig);
 
-        // 在请求头设置方法中 设置请求头
+        /**
+         * 在请求头设置方法中 设置请求头
+         */
         httpPost = getContractTokenHeader(httpPost , json, type);
 
         // 封装post请求参数
@@ -110,7 +120,10 @@ public class HttpClient4 {
 //                e.printStackTrace();
 //            }
 //        }
-        // 根据不同的请求处理json数据
+
+        /**
+         * 根据不同的请求处理json数据
+         */
         json = deal(json, type);
 
         StringEntity requestEntity = new StringEntity(json.toString(), ContentType.APPLICATION_JSON);
@@ -158,9 +171,6 @@ public class HttpClient4 {
             case 1:
                 httpPost.addHeader("token", json.getString("token"));
                 break;
-            case 2:
-                httpPost.addHeader("token", json.getString("token"));
-                break;
         }
 
         return httpPost;
@@ -179,9 +189,6 @@ public class HttpClient4 {
             case 1:
                 responseString = EntityUtils.toString(entity);
                 break;
-            case 2:
-                responseString = EntityUtils.toString(entity);
-                break;
         }
         return responseString;
     }
@@ -194,9 +201,6 @@ public class HttpClient4 {
             case 0:
                 break;
             case 1:
-                json.remove("token");
-                break;
-            case 2:
                 json.remove("token");
                 break;
         }

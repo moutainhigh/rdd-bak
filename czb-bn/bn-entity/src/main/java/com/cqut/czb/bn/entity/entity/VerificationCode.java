@@ -1,53 +1,26 @@
 package com.cqut.czb.bn.entity.entity;
 
-import com.cqut.czb.bn.util.string.StringUtil;
-
-import java.util.Random;
+import java.util.Date;
 
 public class VerificationCode {
-
-    private String userPsw;
-
     private String verificationCodeId;
 
     private String userAccount;
 
     private String content;
 
-    private int state;
+    private Date createAt;
 
-    public VerificationCode(String userAccount) {
-        this.userAccount = userAccount;
-        this.verificationCodeId= StringUtil.createId();
-        this.content=creatVerificationCode();
-        this.state=0;
-    }
+    private Date updateAt;
 
-    /**
-     * 自动生成验证码
-     * @return
-     */
-    public String  creatVerificationCode(){
-        Random random = new Random();
-        int randomNum = random.nextInt(1000000);
-        String randomCode = String.format("%06d", randomNum);
-        return randomCode;
-    }
-
-    public String getUserPsw() {
-        return userPsw;
-    }
-
-    public void setUserPsw(String userPsw) {
-        this.userPsw = userPsw;
-    }
+    private Byte state;
 
     public String getVerificationCodeId() {
         return verificationCodeId;
     }
 
     public void setVerificationCodeId(String verificationCodeId) {
-        this.verificationCodeId = verificationCodeId;
+        this.verificationCodeId = verificationCodeId == null ? null : verificationCodeId.trim();
     }
 
     public String getUserAccount() {
@@ -55,7 +28,7 @@ public class VerificationCode {
     }
 
     public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount;
+        this.userAccount = userAccount == null ? null : userAccount.trim();
     }
 
     public String getContent() {
@@ -63,15 +36,30 @@ public class VerificationCode {
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.content = content == null ? null : content.trim();
     }
 
-    public int getState() {
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public Byte getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(Byte state) {
         this.state = state;
     }
-
 }

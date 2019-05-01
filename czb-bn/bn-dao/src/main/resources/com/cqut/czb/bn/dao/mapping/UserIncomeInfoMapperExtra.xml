@@ -11,10 +11,11 @@
     <result column="other_income" property="otherIncome" jdbcType="DOUBLE" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="withdrawed" property="withdrawed" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    info_id, user_id, fanyong_income, share_income, pay_total_rent, got_total_rent, other_income, 
-    create_at, update_at
+    info_id, user_id, fanyong_income, share_income, pay_total_rent, got_total_rent, other_income,
+    create_at, update_at, withdrawed
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

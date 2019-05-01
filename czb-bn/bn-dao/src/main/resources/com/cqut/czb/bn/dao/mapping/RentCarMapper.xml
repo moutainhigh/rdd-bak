@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org// DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RentCarMapper">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.rentCar.personIncome">
+        <result column="fanyong_income" jdbcType="DOUBLE" property="fanYongIncome"></result>
+        <result column="share_income" jdbcType="DOUBLE" property="shareIncome"></result>
+        <result column="got_total_rent" jdbcType="DOUBLE" property="rentIncome"></result>
+        <result column="other_income" jdbcType="DOUBLE" property="otherIncome"></result>
+        <result column="withdrawed" jdbcType="DOUBLE" property="withDrawed"></result>
+    </resultMap>
+    <select id="getPersonIncome" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        fanyong_income,
+        share_income,
+        got_total_income,
+        other_income,
+        withdrawed
+        FROM czb_user_income_info
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

@@ -19,16 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/signContract")
 public class ContractController {
+    private final ContractService contractService;
+
     @Autowired
-    private ContractService contractService;
+    public ContractController(ContractService contractService) {
+        this.contractService = contractService;
+    }
 
     /**
      * 获得平台在云合同长效令牌token，客户端需要定时更新，后续操作都需要传入token
      * @return token字符串
      */
-    @RequestMapping(value = "/getContractToken", method = RequestMethod.GET)
+    @RequestMapping(value = "/getContractToken", method = RequestMethod.POST)
     public JSONResult getContractToken(){
         return new JSONResult(contractService.getContractToken());
+    }
+
+    /**
+     * 获取合同id
+     */
+    @RequestMapping(value = "/getContractId", method = RequestMethod.POST)
+    public JSONResult getContractId(){
+        return new JSONResult(contractService.getContractId());
     }
 
     /**
@@ -42,6 +54,7 @@ public class ContractController {
     }
 
     /**
+     * 企业注册云合同
      * 给用户（个人、或企业）注册云合同唯一id，此id需存入数据库维护
      * @param enterpriseRegisterDTO,token
      * @return 云合同返回的用户（个人或企业）id
@@ -55,8 +68,33 @@ public class ContractController {
      * 根据合同模板生成合同（此时还未签署合同）
      */
     @RequestMapping(value = "/createContract", method = RequestMethod.POST)
-    public JSONResult createContract(){
+    public JSONResult createContract(String token){
+        return new JSONResult(contractService.createContract(token));
+    }
 
-        return new JSONResult();
+    /**
+     * 添加合同签署者
+     */
+    @RequestMapping(value = "/addContractOwner", method = RequestMethod.POST)
+    public JSONResult downloadContract(String token){
+        return new JSONResult(contractService.addContractOwner(token));
+    }
+
+    /**
+     * 合同签署
+     * 在生成模板、添加签署者之后，可以进行合同签署了
+     */
+    @RequestMapping(value = "/signerContract", method = RequestMethod.POST)
+    public JSONResult signerContract(String token){
+        return new JSONResult(contractService.signerContract(token));
+    }
+
+    /**
+     * 合同存证
+     * 签署合同后要进行存证，出事儿可进行公证
+     */
+    @RequestMapping(value = "/czContract", method= RequestMethod.POST)
+    public JSONResult czContract(String token){
+        return new JSONResult(contractService.czContract(token));
     }
 }
