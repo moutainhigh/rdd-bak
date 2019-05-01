@@ -303,7 +303,6 @@ public class ContractServiceImpl implements ContractService{
         } catch(Exception e){
             return "合同存证失败";
         }
-
         return "1";
     }
 }

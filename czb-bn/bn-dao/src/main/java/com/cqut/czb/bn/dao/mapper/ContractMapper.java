@@ -14,4 +14,5 @@ public interface ContractMapper {
     int insertContractId(@Param("userId") String userId, @Param("contractId") String contractId);
 
     String getEnterpriseId(@Param("userId")String userId);
+
 }

@@ -23,4 +23,5 @@ public interface ContractService {
     String czContract(String token );
 
     String getContractId();
+
 }
