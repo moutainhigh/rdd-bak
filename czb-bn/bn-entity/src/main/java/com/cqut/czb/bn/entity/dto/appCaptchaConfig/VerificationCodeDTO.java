@@ -1,10 +1,8 @@
-package com.cqut.czb.bn.entity.entity;
+package com.cqut.czb.bn.entity.dto.appCaptchaConfig;
 
 import com.cqut.czb.bn.util.string.StringUtil;
 
-import java.util.Random;
-
-public class VerificationCode {
+public class VerificationCodeDTO {
 
     private String userPsw;
 
@@ -16,7 +14,7 @@ public class VerificationCode {
 
     private int state;
 
-    public VerificationCode(String userAccount ,String content) {
+    public VerificationCodeDTO(String userAccount , String content) {
         this.userAccount = userAccount;
         this.verificationCodeId= StringUtil.createId();
         this.content=getContent();

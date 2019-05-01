@@ -1,5 +1,6 @@
 package com.cqut.czb.auth.controller;
 
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.auth.service.UserDetailService;
@@ -34,6 +35,7 @@ public class AuthController {
 
     /**
      * 修改密码第一个接口：发送验证码并存入验证码
+     * author：陈德强
      * @param phone
      * @return
      */
@@ -48,13 +50,14 @@ public class AuthController {
     }
 
     /**
-     * 修改密码第一个接口：检查验证码
-     * @param verificationCode
+     * 修改密码第二个接口：检查验证码
+     * *author：陈德强
+     * @param verificationCodeDTO
      * @return
      */
     @PostMapping("/checkVerificationCode")
-    public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCode verificationCode){
-        boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCode);
+    public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
+        boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
         if(checkVerificationCode) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
         } else {

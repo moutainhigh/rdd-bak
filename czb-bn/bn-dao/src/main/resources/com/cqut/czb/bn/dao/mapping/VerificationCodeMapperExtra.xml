@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.VerificationCodeMapperExtra" >
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode">
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
        insert into czb_verification_code (
        verification_code_id,
        user_account,
@@ -19,7 +19,7 @@
        now()
        )
    </insert>
-   <select id="selectVerificationCode" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode">
+   <select id="selectVerificationCode" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
       select
       count (*)
       from czb_verification_code
@@ -29,7 +29,7 @@
       user_account=#{userAccount,jdbcType=VARCHAR}
    </select>
 
-   <update id="updateVerificationCode" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
+   <update id="updateVerificationCode" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO" >
       update czb_verification_code
       <set >
          state=1

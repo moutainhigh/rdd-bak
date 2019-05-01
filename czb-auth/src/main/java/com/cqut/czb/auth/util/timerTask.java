@@ -1,6 +1,7 @@
 package com.cqut.czb.auth.util;
 
 import com.cqut.czb.auth.service.UserDetailService;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
 
 
@@ -13,18 +14,18 @@ import java.util.TimerTask;
  */
 public class timerTask extends TimerTask {
 
-    private VerificationCode verificationCode;
+    private VerificationCodeDTO verificationCodeDTO;
 
     private UserDetailService userDetailService;
 
-    public timerTask(VerificationCode verificationCode) {
-        this.verificationCode = verificationCode;
+    public timerTask(VerificationCodeDTO verificationCodeDTO) {
+        this.verificationCodeDTO = verificationCodeDTO;
     }
 
     @Override
     public void run() {
-         if(verificationCode!=null){
-            boolean isChange=userDetailService.checkVerificationCode(verificationCode);
+         if(verificationCodeDTO!=null){
+            boolean isChange=userDetailService.checkVerificationCode(verificationCodeDTO);
              this.cancel();
          }
         this.cancel();
