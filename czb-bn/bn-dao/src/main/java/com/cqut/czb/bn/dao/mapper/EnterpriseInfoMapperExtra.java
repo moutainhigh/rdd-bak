@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public interface EnterpriseInfoMapperExtra {
 
-    Boolean deleteByPrimaryKey(String enterpriseInfoId);
+    int deleteByPrimaryKey(String enterpriseInfoId);
 
     int insert(EnterpriseInfo record);
 

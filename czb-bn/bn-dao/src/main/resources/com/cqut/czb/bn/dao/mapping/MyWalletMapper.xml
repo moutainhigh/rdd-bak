@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.MyWalletMapper">
     <select id="getUserAllIncome" resultType="java.lang.Double">
-        select ((sum(fanyong_income) + SUM(share_income) + SUM(other_income)) - withdrawed) AS allIncome
+        select (fanyong_income + share_income + other_income - withdrawed) AS allIncome
         from czb_user_income_info
         where user_id = #{userId}
     </select>

@@ -10,6 +10,18 @@ public interface PetrolMapperExtra {
     List<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO);
     int insertPetrolList(List<Petrol> list);
 
+    int deleteByPrimaryKey(String petrolId);
+
+    int insert(Petrol record);
+
+    int insertSelective(Petrol record);
+
+    Petrol selectByPrimaryKey(String petrolId);
+
+    int updateByPrimaryKeySelective(Petrol record);
+
+    int updateByPrimaryKey(Petrol record);
+
     /**
      * 获取未售出的油卡信息
      * @return

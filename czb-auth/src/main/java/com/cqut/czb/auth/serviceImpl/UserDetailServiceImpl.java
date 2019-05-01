@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.VerificationCodeMapper;
 import com.cqut.czb.bn.dao.mapper.VerificationCodeMapperExtra;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
@@ -51,12 +52,22 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public Boolean insertVerificationCode(String phone) {
         //创建一个发送短信的对象（对象）
-        VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(phone,"122");
+        PhoneCode phoneCode=new PhoneCode();
+        String content=phoneCode.vcode();
+        VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(phone,content);
+        //验证码保存数据库
+        Boolean isSaveCode=verificationCodeMapperExtra.insert(verificationCodeDTO)>0;
+        //验证码发送
+        String isSend=phoneCode.getPhonemsg(phone,content);
+
+        if(isSaveCode!=true&&isSend!="true"){
+            return false;
+        }
         //计时器——5分钟之后执行
         timerTask task=new timerTask(verificationCodeDTO);
         Timer timer=new Timer();
         timer.schedule(task,300000);
-        return verificationCodeMapperExtra.insert(verificationCodeDTO)>0;
+        return true;
     }
 
     @Override
