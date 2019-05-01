@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 创建人：陈德强
@@ -64,7 +66,20 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     @Override
     public List<PetrolZoneDTO> selectPetrolZone() {
         //读取所有的油卡存储下来进入map中
-        AllPetrolDTO allPetrolDTO=new AllPetrolDTO(petrolMapperExtra.selectPetrol());
+//        System.out.println("sdjflksdjf");
+        Map<String,Petrol> petrolMap=new ConcurrentHashMap<String,Petrol>();
+        List<Petrol> petrols=petrolMapperExtra.selectPetrol();
+        for( int i = 0 ; i < petrols.size() ; i++) {//内部不锁定，效率最高，但在多线程要考虑并发操作的问题。
+            petrolMap.put(petrols.get(i).getPetrolId(),petrols.get(i));
+        }
+        AllPetrolDTO allPetrolDTO=new AllPetrolDTO(petrolMap);
         return petrolMapperExtra.selectPetrolZone();
+    }
+
+    @Override
+    public List<Petrol> selectAllPetrol() {
+        //读取所有的油卡存储下来进入map中
+//        AllPetrolDTO allPetrolDTO=new AllPetrolDTO(petrolMapperExtra.selectPetrol());
+        return null;
     }
 }

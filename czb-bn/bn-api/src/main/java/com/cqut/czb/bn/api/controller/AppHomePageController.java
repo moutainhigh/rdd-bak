@@ -58,6 +58,7 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
     public JSONResult selectPetrol(){
+
         return new JSONResult<List<PetrolZoneDTO>>(appHomePageService.selectPetrolZone());
     }
 
