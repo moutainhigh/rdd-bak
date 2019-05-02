@@ -31,4 +31,9 @@ public class MyWalletController {
         jsonResult.setMessage(myWallet.withDraw(alipayRecordDTO, keyWord));
         return jsonResult;
     }
+
+    @RequestMapping(value = "/getBalance", method = RequestMethod.GET)
+    public JSONResult getBalance(){
+        return new JSONResult(myWallet.getBalance());
+    }
 }

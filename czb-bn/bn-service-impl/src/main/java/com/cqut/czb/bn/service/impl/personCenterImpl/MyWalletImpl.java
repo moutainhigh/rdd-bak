@@ -1,9 +1,9 @@
 package com.cqut.czb.bn.service.impl.personCenterImpl;
 
-import com.cqut.czb.bn.dao.mapper.MyWalletMapper;
+import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.AlipayRecordDTO;
-import com.cqut.czb.bn.entity.dto.personCenter.myWallet.LoginInfoDTO;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,15 @@ import java.math.BigDecimal;
 @Service
 public class MyWalletImpl implements MyWallet {
     @Autowired
-    private MyWalletMapper myWalletMapper;
+    private MyWalletMapperExtra myWalletMapper;
+
+    // TODO 用户id需要修改，这里写死
+    @Override
+    public JSONObject getBalance(){
+        JSONObject json = new JSONObject();
+        json.put("balance",myWalletMapper.getUserAllIncome("1"));
+        return json;
+    }
 
     // TODO 用户id需要修改，这里写死
     @Override
