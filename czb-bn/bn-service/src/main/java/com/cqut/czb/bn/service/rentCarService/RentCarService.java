@@ -1,9 +1,6 @@
 package com.cqut.czb.bn.service.rentCarService;
 
-import com.cqut.czb.bn.entity.dto.rentCar.OneContractInfoDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.OneContractInfoInputDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.PersonalContractDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.personIncome;
+import com.cqut.czb.bn.entity.dto.rentCar.*;
 
 import java.util.List;
 
@@ -14,4 +11,9 @@ public interface RentCarService {
 
     List<PersonalContractDTO> getPersonalContractList();
 
+    List<CompanyContractInfoDTO> getCompanyContractList();
+
+    List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo();
+
+    int addCompanyContract(AddCompanyContractList addCompanyContractList);
 }
