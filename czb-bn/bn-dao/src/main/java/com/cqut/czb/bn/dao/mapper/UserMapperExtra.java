@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
@@ -19,5 +20,5 @@ public interface UserMapperExtra {
 
     List<UserDTO> selectUser(UserInputDTO userInputDTO);
 
-    int updateUserPSW(String userPsw);
+    int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
 }
