@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.servicePlan.ServicePlanInputDTO;
 import com.cqut.czb.bn.entity.entity.ServicePlan;
 import com.cqut.czb.bn.service.IServicePlanService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class ServicePlanServiceImpl implements IServicePlanService {
 
     @Override
     public boolean insertServicePlan(ServicePlanInputDTO servicePlanInputDTO) {
+        servicePlanInputDTO.setPlanId(StringUtil.createId());
         return servicePlanMapperExtra.insertServicePlan(servicePlanInputDTO) > 0;
     }
 
