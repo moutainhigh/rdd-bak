@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/AppPersonalCenter")
+@RequestMapping("/api/AppPersonalCenter")
 public class AppPersonalCenterController {
 
     @Autowired
@@ -70,7 +70,7 @@ public class AppPersonalCenterController {
     @RequestMapping(value= "/getMyPhysicalPetrolList",method = RequestMethod.GET)
     public JSONResult getMyPetrolList(Principal principal,String petrolKind){
         User user = (User)redisUtils.get(principal.getName());
-            return new JSONResult(appPersonalCenterService.getPhysicalCardRechargeRecords(user.getUserId(),petrolKind));
+        return new JSONResult(appPersonalCenterService.getPhysicalCardRechargeRecords(user.getUserId(),petrolKind));
     }
 
 

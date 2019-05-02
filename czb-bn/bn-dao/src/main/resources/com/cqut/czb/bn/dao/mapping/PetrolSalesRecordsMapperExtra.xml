@@ -130,7 +130,13 @@ INNER JOIN (
 
     <select id="getPhysicalCardsForUser" parameterType="java.lang.String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        
+        FROM
+        czb_petrol_sales_records
+        WHERE
+        buyer_id = #{userId,jdbcType=VARCHAR}
+        AND petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+        ORDER BY
+        update_at DESC
     </select>
 
 </mapper>
