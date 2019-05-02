@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.api.controller.personCenter;
 
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.AlipayRecordDTO;
-import com.cqut.czb.bn.entity.dto.personCenter.myWallet.LoginInfoDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
 import net.sf.json.JSONObject;
