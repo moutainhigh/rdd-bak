@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra">
-    <select id="getUserAllIncome" resultType="java.lang.Double">
-        select (fanyong_income + share_income + other_income - withdrawed) AS allIncome
+    <select id="getUserAllIncome" resultType="com.cqut.czb.bn.entity.dto.personCenter.myWallet.BalanceAndInfoIdDTO">
+        select info_id as infoId, (fanyong_income + share_income + other_income - withdrawed) AS balance
         from czb_user_income_info
         where user_id = #{userId}
     </select>
@@ -17,5 +17,38 @@
         FROM czb_user
         WHERE user_id = #{userId}
     </select>
+
+    <insert id="insertIncomeLog" parameterType="com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO">
+        INSERT INTO czb_db.czb_income_log (
+            record_id,
+            amount,
+            type,
+            info_id,
+            before_change_income,
+            remark,
+            souse_id,
+            withdraw_to,
+            withdraw_name,
+            withdraw_account,
+            create_at,
+            update_at
+        )
+        VALUES
+            (
+                #{recordId},
+                #{amount},
+                #{type},
+                #{infoId},
+                #{beforeChangeIncome},
+                #{remark},
+                #{sourceId},
+                #{withdrawTo},
+                #{withdrawName},
+                #{withdrawAmount},
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP
+            );
+
+    </insert>
 
 </mapper>
