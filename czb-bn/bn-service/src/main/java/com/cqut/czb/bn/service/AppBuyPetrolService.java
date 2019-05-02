@@ -12,6 +12,7 @@ public interface AppBuyPetrolService {
 
     /**
      * 购买油卡
+     * 生成起调参数串——返回给app（支付订单）
      */
     String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO);
 

@@ -37,26 +37,30 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
 
     @Override
     public String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO) {
-        //随机获取一张卡
+
+        //检验是否都为空
         if(petrol==null&&petrolInputDTO==null)
             return null;
         /**
-         * 生成起调参数串
+         * 生成起调参数串——返回给app（支付订单）
          */
-         String rs=null;
+         String rs=null;//用于保存起调参数
          GetAlipayClient getAlipayClient=GetAlipayClient.getInstance();
          AlipayClient alipayClient=getAlipayClient.getAlipayClient();
          AlipayTradeAppPayRequest request=new AlipayTradeAppPayRequest();
 
+         //订单标识
          String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-
-        //要对其进行数据的改变——死数据
+         //支付类型(没有对应的类型值，默认回调后执行3类型，暂时只是支持支付宝支付)/死数据****************/
+         String payType="3";
+         //支付的金额
+         Double money=petrol.getPetrolPrice();
+         //购买的数量/******************/
+         Integer count=1;
         PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();
 //        petrolSalesRecordsDTO.getPaymentMethod()-----支付类型
-        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId, "3",
-                petrolSalesRecordsDTO.getTurnoverAmount(),1));
+        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId,payType,money,count));
         request.setNotifyUrl(getAlipayClient.getCallBackUrl());
-
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
@@ -134,7 +138,8 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
     public void run() {
         AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
         if (AllPetrolDTO.getCurrentPetrol()!=null){
-            AllPetrolDTO.getPetrolMap().put(AllPetrolDTO.getCurrentPetrol().getPetrolId(),AllPetrolDTO.getCurrentPetrol());
+            /***************************************************************/
+            AllPetrolDTO.getPetrolMap().put(AllPetrolDTO.getCurrentPetrol().get(0).getPetrolId(),AllPetrolDTO.getCurrentPetrol().get(0));
             AllPetrolDTO.setCurrentPetrol(null);
             this.cancel();
         }
