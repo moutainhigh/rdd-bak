@@ -152,10 +152,8 @@ public class PetrolSalesRecordsDTO {
         return StringUtil.transMapToStringOther(pbp);
     }
 
-
     /**
      * 转换为支付宝支付实体
-     *
      * @return
      */
     public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType, Double money, Integer count) {
@@ -164,7 +162,7 @@ public class PetrolSalesRecordsDTO {
         model.setSubject("爱虎支付宝支付");
         model.setOutTradeNo(orgId);
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
-//        turnoverAmount.toString()——死数据（方便测试）
+//        turnoverAmount.toString()——死数据（方便测试）/******************************/默认为0.01元
         model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
         model.setPassbackParams(getPassbackParams(orgId, payType, money, count));

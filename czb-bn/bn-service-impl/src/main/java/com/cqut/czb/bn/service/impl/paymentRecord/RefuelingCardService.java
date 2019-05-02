@@ -73,8 +73,8 @@ public class RefuelingCardService implements IRefuelingCard {
 		} else if ("1".equals(tt)) {
 			System.out.println("this is 1——购买油卡");
 //			此处插入购油的相关信息，油卡购买记录
-//			修改相应油卡的信息
-			appBuyPetrolService.updatePetrol(AllPetrolDTO.getCurrentPetrol());
+//			修改相应油卡的信息/***************************/死数据只修改了第一张
+			appBuyPetrolService.updatePetrol(AllPetrolDTO.getCurrentPetrol().get(0));
 
 		} else if ("2".equals(tt)) {
 			System.out.println("优惠卷");

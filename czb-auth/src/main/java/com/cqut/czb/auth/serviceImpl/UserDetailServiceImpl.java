@@ -16,9 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailService {
+public class UserDetailServiceImpl extends TimerTask implements UserDetailService {
 
     @Autowired
     private UserMapper userMapper;
@@ -58,15 +59,20 @@ public class UserDetailServiceImpl implements UserDetailService {
         //验证码保存数据库
         Boolean isSaveCode=verificationCodeMapperExtra.insert(verificationCodeDTO)>0;
         //验证码发送
-        String isSend=phoneCode.getPhonemsg(phone,content);
+//        String isSend=phoneCode.getPhonemsg(phone,content);
+        String isSend="true";
 
         if(isSaveCode!=true&&isSend!="true"){
             return false;
         }
         //计时器——5分钟之后执行
         timerTask task=new timerTask(verificationCodeDTO);
+        System.out.println("task");
         Timer timer=new Timer();
-        timer.schedule(task,300000);
+        System.out.println("new");
+        timer.schedule(task,3000);
+        System.out.println("schdeule");
+
         return true;
     }
 
@@ -83,5 +89,12 @@ public class UserDetailServiceImpl implements UserDetailService {
         return false;
     }
 
+
+    @Override
+    public void run() {
+//            boolean isChange=checkVerificationCode(verificationCodeDTO);
+//            System.out.println(isChange);
+        this.cancel();
+    }
 
 }

@@ -3,6 +3,7 @@ package com.cqut.czb.auth.util;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.TimerTask;
@@ -16,6 +17,7 @@ public class timerTask extends TimerTask {
 
     private VerificationCodeDTO verificationCodeDTO;
 
+    @Autowired
     private UserDetailService userDetailService;
 
     public timerTask(VerificationCodeDTO verificationCodeDTO) {
@@ -25,7 +27,9 @@ public class timerTask extends TimerTask {
     @Override
     public void run() {
          if(verificationCodeDTO!=null){
-            boolean isChange=userDetailService.checkVerificationCode(verificationCodeDTO);
+             System.out.println("run");
+//            boolean isChange=userDetailService.checkVerificationCode(verificationCodeDTO);
+//            System.out.println(isChange);
              this.cancel();
          }
         this.cancel();

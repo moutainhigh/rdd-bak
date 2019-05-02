@@ -28,19 +28,13 @@ public class AppBuyPetrolController {
     private  AppBuyPetrolService appBuyPetrolService;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(@Validated @RequestBody PetrolInputDTO petrolInputDTO){
+    public JSONResult buyPetrol(@Validated  PetrolInputDTO petrolInputDTO){
         //随机获取一张卡
-        AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
-        Petrol petrol=allPetrolDTO.randomPetrol(petrolInputDTO);
+        Petrol petrol=AllPetrolDTO.randomPetrol(petrolInputDTO);
         if(petrol==null)
             return new JSONResult(ResponseCodeConstants.FAILURE, "油卡申请失败，无此类油卡");
         String BuyPetrol=appBuyPetrolService.BuyPetrol(petrol,petrolInputDTO);
-
         return new JSONResult(BuyPetrol);
     }
-
-
-
-
 
 }
