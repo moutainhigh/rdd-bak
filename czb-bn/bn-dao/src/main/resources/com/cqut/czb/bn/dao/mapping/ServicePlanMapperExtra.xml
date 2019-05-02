@@ -20,6 +20,7 @@
     select
     <include refid="Base_Column_List" />
     from czb_service_plan
+    order by create_time
   </select>
 
   <insert id="insertServicePlan" parameterType="com.cqut.czb.bn.entity.dto.servicePlan.ServicePlanInputDTO" >
