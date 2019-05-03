@@ -66,7 +66,6 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     @Override
     public List<PetrolZoneDTO> selectPetrolZone() {
         //读取所有的油卡存储下来进入map中
-//        System.out.println("sdjflksdjf");
         Map<String,Petrol> petrolMap=new ConcurrentHashMap<String,Petrol>();
         List<Petrol> petrols=petrolMapperExtra.selectPetrol();
         for( int i = 0 ; i < petrols.size() ; i++) {//内部不锁定，效率最高，但在多线程要考虑并发操作的问题。

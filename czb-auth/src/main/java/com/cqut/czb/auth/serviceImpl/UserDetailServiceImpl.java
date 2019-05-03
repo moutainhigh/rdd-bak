@@ -62,7 +62,7 @@ public class UserDetailServiceImpl  implements UserDetailService {
         if(isSaveCode!=true){
             return false;
         }
-        //计时器——2分钟之后执行
+        //计时器——1分钟之后执行
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
@@ -71,7 +71,7 @@ public class UserDetailServiceImpl  implements UserDetailService {
                 //将所有的验证码的都改状态为失效
                 verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO);
             }
-        }, 120000);
+        }, 60000);
         return true;
     }
 

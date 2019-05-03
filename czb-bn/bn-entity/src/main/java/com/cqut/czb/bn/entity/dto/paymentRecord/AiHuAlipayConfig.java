@@ -36,7 +36,7 @@ public class AiHuAlipayConfig {
 	//参数返回格式
 	public static String format = "json";
 	
-	//订单允许的最晚付款时间
+	//订单允许的最晚付款时间30分钟
 	public static String timeout_express = "30m";
 	
 	//产品码
