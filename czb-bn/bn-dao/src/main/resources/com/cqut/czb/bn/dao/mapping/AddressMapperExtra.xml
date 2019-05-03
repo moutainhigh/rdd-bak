@@ -11,11 +11,11 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
-    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="is_default" property="isDefault" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     address_id, province, city, area, detail, user_id, create_at, update_at, contact_number,
-    receiver
+    receiver, is_default
   </sql>
  <select id="getUserAddressList" resultMap="BaseResultMap" parameterType="java.lang.String">
    select <include refid="Base_Column_List"/>
