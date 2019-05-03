@@ -25,6 +25,8 @@ public class PetrolDeliveryDTO {
 
     private String city;
 
+    private String area;
+
     private String detail;
 
     private Date createAt;
@@ -133,6 +135,14 @@ public class PetrolDeliveryDTO {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getDetail() {

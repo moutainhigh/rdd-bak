@@ -20,6 +20,7 @@
         <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
         <result column="province" property="province" jdbcType="VARCHAR" />
         <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
         <result column="detail" property="detail" jdbcType="VARCHAR" />
         <result column="delivery_state" property="deliveryState" jdbcType="INTEGER" />
         <result column="delivery_num" property="deliveryNum" jdbcType="VARCHAR" />
@@ -44,6 +45,7 @@
             contact_number,
             province,
             city,
+            c.area,
             detail,
             a.create_at,
             a.update_at
@@ -59,10 +61,12 @@
                AND petrol_kind = #{petrolKind, jdbcType=INTEGER}
            </if>
            <if test="deliveryState!=null">
-               AND delivery_state = # {deliveryState, jdbcType=INTEGER}
+               AND delivery_state = #{deliveryState, jdbcType=INTEGER}
            </if>
-           <if test="startTime!=null and endTime!=null">
-               AND #{endTime,jdbcType=TIMESTAMP}>=a.create_at AND a.create_at>=#{startTime,jdbcType=TIMESTAMP}
+           <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+               AND a.create_at >=#{startTime,jdbcType=VARCHAR}
+               and #{endTime,jdbcType=VARCHAR}>=a.create_at
+--
            </if>
        </where>
     </select>
@@ -170,14 +174,41 @@
         </set>
         where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
-    <update id="updatereceivePetrolDeliveryState">
+    <update id="updateReceivePetrolDeliveryState" parameterType="java.lang.String">
         UPDATE  czb_petrol_delivery_records
         SET
-        delivery_state = '2'
+        delivery_state = 2
         WHERE record_id in
         <foreach collection="array" item="item" index="index"
                  separator="," open="(" close=")">
             #{item,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateImportRecords" parameterType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput" >
+        update czb_petrol_delivery_records
+        <set>
+            delivery_state = CASE
+            <foreach collection="list" item="item" index="index"
+                     separator="" open="" close="end,">
+                when delivery_state = 0 then #{item.deliveryState,jdbcType=INTEGER}
+            </foreach>
+          delivery_num = CASE
+        <foreach collection="list" item="item" index="index"
+                                    separator="" open="" close="end,">
+          when   petrol_num =#{item.petrolNum,jdbcType=VARCHAR} THEN #{item.deliveryNum,jdbcType=VARCHAR}
+        </foreach>
+          delivery_company = CASE
+            <foreach collection="list" item="item" index="index"
+                     separator="" open="" close="end">
+                when  petrol_num= #{item.petrolNum,jdbcType=VARCHAR} THEN #{item.deliveryCompany,jdbcType=VARCHAR}
+            </foreach>
+
+        </set>
+        where petrol_num in
+        <foreach collection="list" item="item" index="index"
+                                   separator="," open="(" close=")">
+        #{item.petrolNum,jdbcType=VARCHAR}
         </foreach>
     </update>
 </mapper>

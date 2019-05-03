@@ -39,9 +39,8 @@ public class AppConfigManageController {
     @PostMapping("/addAnnouncement")
     //
     public JSONResult addAnnouncement( Announcement announcement,Principal principal,@RequestParam("file") MultipartFile file) throws Exception {
-//        User user = (User) redisUtils.get(principal.getName());
-//        System.out.println("88888888"+user.getUserName());
-        return new JSONResult(announcementService.addAnnouncement(announcement,file));
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(announcementService.addAnnouncement(announcement,file,user));
     }
 
     /**
@@ -57,9 +56,9 @@ public class AppConfigManageController {
      */
     @PostMapping("/updateAnnouncementFile")
     //Principal principal,
-    public JSONResult updateAnnouncementFile(Announcement announcement,@RequestParam("file")MultipartFile file) throws Exception{
-//        User user = redisUtils.get(principal.getName());user,
-        return new JSONResult(announcementService.updateAnnouncementFile(announcement,file));
+    public JSONResult updateAnnouncementFile(Announcement announcement,Principal principal,@RequestParam("file")MultipartFile file) throws Exception{
+        User user =(User)redisUtils.get(principal.getName());
+        return new JSONResult(announcementService.updateAnnouncementFile(announcement,file,user));
     }
 
     /**

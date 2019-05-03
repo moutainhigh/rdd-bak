@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
-@RestController
-@CrossOrigin
 public interface MyWalletMapperExtra {
     BalanceAndInfoIdDTO getUserAllIncome(@Param("userId") String userId);
 

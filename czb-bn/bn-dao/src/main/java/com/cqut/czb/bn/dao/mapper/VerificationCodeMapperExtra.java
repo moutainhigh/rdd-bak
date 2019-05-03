@@ -24,7 +24,4 @@ public interface VerificationCodeMapperExtra {
      */
     int updateVerificationCode(VerificationCodeDTO verificationCodeDTO);
 
-    /**
-     *
-     */
 }
