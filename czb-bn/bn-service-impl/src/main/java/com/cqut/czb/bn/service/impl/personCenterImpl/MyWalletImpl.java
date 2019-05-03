@@ -8,6 +8,7 @@ import com.cqut.czb.bn.service.personCenterService.MyWallet;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,34 +18,35 @@ public class MyWalletImpl implements MyWallet {
     @Autowired
     private MyWalletMapperExtra myWalletMapper;
 
-    // TODO 用户id需要修改，这里写死
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
-    public JSONObject getBalance(){
+    public JSONObject getBalance(String userId){
         JSONObject json = new JSONObject();
-        json.put("balance",myWalletMapper.getUserAllIncome("1"));
+        json.put("balance",myWalletMapper.getUserAllIncome(userId));
         return json;
     }
 
-    // TODO 用户id需要修改，这里写死
     @Override
-    public synchronized String withDraw(AlipayRecordDTO alipayRecordDTO, String keyWord) {
-        BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome("1");
+    public synchronized int withDraw(AlipayRecordDTO alipayRecordDTO, String userId) {
+        BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(userId);
 
-        if(!myWalletMapper.getPsw("1").equals(keyWord)){
-            return new String("账户密码错误");
+        if(!bCryptPasswordEncoder.matches(alipayRecordDTO.getKeyWord(), myWalletMapper.getPsw(userId))){
+            return 100;
         }
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal(0)) < 0){
-            return new String("提现金额不能是负数");
+            return 101;
         }
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(balanceAndInfoId.getBalance()) > 0){
-            return new String("提现金额超出余额");
+            return 102;
         }
 
         int compareValue = alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal("0.1"));
         if(!(compareValue == 0 || compareValue > 0)){
-            return new String("提现金额不能低于0.1元");
+            return 103;
         }
 
         myWalletMapper.increaseWithdrawed(alipayRecordDTO.getPaymentAmount().doubleValue());
@@ -92,6 +94,6 @@ public class MyWalletImpl implements MyWallet {
 //            e.printStackTrace();
 //            return "0";
 //        }
-        return new String("成功提现");
+        return 1;
     }
 }

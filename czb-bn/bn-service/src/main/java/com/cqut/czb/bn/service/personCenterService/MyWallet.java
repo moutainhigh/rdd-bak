@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 
 public interface  MyWallet {
-    String withDraw(AlipayRecordDTO alipayRecordDTO, String keyWord);
+    int withDraw(AlipayRecordDTO alipayRecordDTO, String userId);
 
-    JSONObject getBalance();
+    JSONObject getBalance(String userId);
 }
