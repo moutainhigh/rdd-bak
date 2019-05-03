@@ -18,11 +18,11 @@ public interface AnnouncementService {
     //公告获取
     PageInfo<Announcement> getAnnouncement(AnnouncementDTO announcementDTO);
     //公告新增
-    Boolean addAnnouncement(Announcement announcement,  MultipartFile file) throws Exception;
+    Boolean addAnnouncement(Announcement announcement,  MultipartFile file,User user) throws Exception;
     //公告删除
     Boolean deleteAnnouncement(String id);
 //User user,带文件更新
-    Boolean updateAnnouncementFile (Announcement announcement,  MultipartFile file)throws Exception;
+    Boolean updateAnnouncementFile (Announcement announcement,  MultipartFile file,User user)throws Exception;
     //不带文件更新
     Boolean updateAnnouncement(Announcement announcement);
     //获取文件路径

@@ -43,7 +43,8 @@
                 AND  #{enterpriseInfo.endTime,jdbcType=TIMESTAMP} >=create_at
             </if>
             <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime != null">
-                AND   #{enterpriseInfo.endTime,jdbcType=TIMESTAMP}>= create_at > AND create_at>= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
+                AND   #{enterpriseInfo.endTime,jdbcType=TIMESTAMP}>= create_at
+                AND create_at>= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
