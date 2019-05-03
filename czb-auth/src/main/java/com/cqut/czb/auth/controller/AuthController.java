@@ -9,10 +9,7 @@ import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 该类是注册的api接口，密码使用BCryptPasswordEncoder加密
@@ -52,11 +49,13 @@ public class AuthController {
     /**
      * 修改密码第二个接口：检查验证码
      * *author：陈德强
-     * @param verificationCodeDTO
+     * @param input
      * @return
      */
-    @PostMapping("/checkVerificationCode")
-    public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
+    @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
+    public  JSONResult checkVerificationCode(@Validated  VerificationCodeDTO input){
+        VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
+        verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
         if(checkVerificationCode) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");

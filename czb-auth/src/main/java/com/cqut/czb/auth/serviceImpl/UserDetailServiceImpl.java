@@ -1,15 +1,10 @@
 package com.cqut.czb.auth.serviceImpl;
 
 import com.cqut.czb.auth.service.UserDetailService;
-import com.cqut.czb.bn.dao.mapper.UserMapper;
-import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
-import com.cqut.czb.bn.dao.mapper.VerificationCodeMapper;
-import com.cqut.czb.bn.dao.mapper.VerificationCodeMapperExtra;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.VerificationCode;
-import com.cqut.czb.auth.util.timerTask;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,7 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @Service
-public class UserDetailServiceImpl extends TimerTask implements UserDetailService {
+public class UserDetailServiceImpl  implements UserDetailService {
 
     @Autowired
     private UserMapper userMapper;
@@ -31,10 +26,10 @@ public class UserDetailServiceImpl extends TimerTask implements UserDetailServic
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private VerificationCodeMapper verificationCodeMapper;
+    private VerificationCodeMapperExtra verificationCodeMapperExtra;
 
     @Autowired
-    private VerificationCodeMapperExtra verificationCodeMapperExtra;
+    PetrolMapperExtra petrolMapperExtra;
 
     @Override
     public Boolean register(User user) {
@@ -57,44 +52,44 @@ public class UserDetailServiceImpl extends TimerTask implements UserDetailServic
         String content=phoneCode.vcode();
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(phone,content);
         //验证码保存数据库
-        Boolean isSaveCode=verificationCodeMapperExtra.insert(verificationCodeDTO)>0;
+        Boolean isSaveCode=false;
         //验证码发送
-//        String isSend=phoneCode.getPhonemsg(phone,content);
-        String isSend="true";
-
-        if(isSaveCode!=true&&isSend!="true"){
+        String isSend=phoneCode.getPhonemsg(phone,content);
+//        String isSend="true";
+        if(isSend=="true"){
+            isSaveCode=verificationCodeMapperExtra.insert(verificationCodeDTO)>0;
+        }
+        if(isSaveCode!=true){
             return false;
         }
-        //计时器——5分钟之后执行
-        timerTask task=new timerTask(verificationCodeDTO);
-        System.out.println("task");
-        Timer timer=new Timer();
-        System.out.println("new");
-        timer.schedule(task,3000);
-        System.out.println("schdeule");
-
+        //计时器——2分钟之后执行
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                System.out.println("已经进入了1");
+                System.out.println(isSend);
+                //将所有的验证码的都改状态为失效
+                verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO);
+            }
+        }, 120000);
         return true;
     }
 
     @Override
     public boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO) {
-        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)!=0){
-            boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCodeDTO.getUserPsw())>0;
+        //判断信息是否为空
+        if(verificationCodeDTO==null)
+            return false;
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)!=0){//如果不为零则验证码未过期
+            //更改用户的密码
+            boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCodeDTO)>0;
+            //更改验证码的状态
             boolean updateVerificationCode=verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO)>0;
-            if(updateUserPSW==updateVerificationCode==true){
+            if(updateUserPSW==true&&updateVerificationCode==true){
                 return true;
             }
             return false;
         }
         return false;
     }
-
-
-    @Override
-    public void run() {
-//            boolean isChange=checkVerificationCode(verificationCodeDTO);
-//            System.out.println(isChange);
-        this.cancel();
-    }
-
 }

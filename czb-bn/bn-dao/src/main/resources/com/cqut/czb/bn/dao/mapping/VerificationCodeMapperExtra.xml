@@ -21,7 +21,7 @@
    </insert>
    <select id="selectVerificationCode" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
       select
-      count (*)
+      count(*)
       from czb_verification_code
       where
       state = 0 and
