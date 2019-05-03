@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.userAddress;
 
 import com.cqut.czb.bn.dao.mapper.AddressMapper;
 import com.cqut.czb.bn.dao.mapper.AddressMapperExtra;
+import com.cqut.czb.bn.entity.dto.address.AddressInputDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 import com.cqut.czb.bn.service.userAddress.IUserAddressService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -24,25 +25,37 @@ public class UserAddressServiceImpl implements IUserAddressService {
     }
 
     @Override
-    public boolean addAddress(Address address, String userId) {
+    public boolean addAddress(AddressInputDTO address, String userId) {
         address.setUserId(userId);
         address.setAddressId(StringUtil.createId());
         address.setCreateAt(new Date());
-        return addressMapper.insert(address)>0;
+        return addressMapper.insert(address.getAddressEntity())>0;
     }
 
     @Override
-    public boolean modifyAddress(Address address){
+    public boolean modifyAddress(AddressInputDTO address){
         address.setUpdateAt(new Date());
-        return  addressMapper.updateByPrimaryKeySelective(address) > 0;
+        return  addressMapperExtra.updateByPrimaryKeySelective(address.getAddressEntity()) > 0;
     }
 
     @Override
-    public boolean deleteAddress(Address address, String userId) {
+    public boolean deleteAddress(String addressId, String userId) {
         if(addressMapperExtra.getUserAddressList(userId).size() <= 1){
             return false;
         }
 
-        return addressMapper.deleteByPrimaryKey(address.getAddressId()) > 0;
+        return addressMapper.deleteByPrimaryKey(addressId) > 0;
+    }
+
+    @Override
+    public boolean setDefaultAddress(String addressId,String userId) {
+        addressMapperExtra.cancelDefault(userId);
+
+        return  addressMapperExtra.setDefault(addressId,userId) >0;
+    }
+
+    @Override
+    public Address getDefaultAddress(String userId) {
+        return addressMapperExtra.getDefaultAddress(userId);
     }
 }
