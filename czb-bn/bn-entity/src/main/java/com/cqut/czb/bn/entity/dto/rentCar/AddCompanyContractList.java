@@ -2,6 +2,9 @@ package com.cqut.czb.bn.entity.dto.rentCar;
 
 import java.util.List;
 
+/**
+ * 此类去接收json数据
+ */
 public class AddCompanyContractList {
     private String startTime;
 

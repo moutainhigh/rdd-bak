@@ -95,6 +95,7 @@ public class rentCarServiceImpl implements RentCarService {
 
         String contractId = StringUtil.createId();
         contractLog.setRecordId(contractId);
+        // TODO 此di需要从redis中获取，暂时写死
         contractLog.setUserId("3");
         contractLog.setStartTime(addCompanyContractList.getStartTime());
         contractLog.setEndTime(addCompanyContractList.getEndTime());
@@ -126,6 +127,54 @@ public class rentCarServiceImpl implements RentCarService {
         return 1;
     }
 
+    /**
+     * 个人租约新增
+     */
+    @Override
+    public int addPersonContract(String personId, String identifyCode){
+        int isSigned = rentCarMapper.getIsSigned(personId, identifyCode);
+        if(isSigned == 1){
+            return 99;
+        }
+
+        // 如果存在personId、identifyCode都有的车辆人员服务记录，则修改签订状态，并且插入一条合同记录数据
+        int ifUpdate = 0;
+        try{
+            ifUpdate = rentCarMapper.updateCarPerson(personId, identifyCode);
+        } catch(Exception e){
+            e.printStackTrace();
+            return 100;
+        }
+
+        // 出错，更新了多条数据的is_signed
+        if(ifUpdate > 1){
+            return 101; // 数据库中出现相同identifyCode和personId
+        } else if(ifUpdate ==0){
+            return 103; // 没有更新
+        }else if(ifUpdate ==1){
+            ContractLog contractLog = new ContractLog();
+
+            String contractId = StringUtil.createId();
+            contractLog.setRecordId(contractId);
+            // TODO 此id需要从redis中获取，暂时写死
+            contractLog.setUserId("4");
+
+            // TODO 此开始和结束时间存在争议,是用企业的，还是个人自己去填，租金也是，是企业和个人约定好的？怎么算的？——参照真实合同最好
+            contractLog.setStartTime("2019-04-02 22:22:22");
+            contractLog.setEndTime("2020-04-02 22:22:22");
+            contractLog.setRent(500);
+
+            try{
+                rentCarMapper.insertContractLogPerson(contractLog);
+            } catch (Exception e){
+                e.printStackTrace();
+                return 102;// 插入个人合同记录出错
+            }
+        }
+
+        return 1;
+    }
+
     private String getIdentityCode(String id, String num){
         String identityCode = new String();
         String identity1 = id.substring(0,6);
@@ -140,7 +189,7 @@ public class rentCarServiceImpl implements RentCarService {
         int[] index3 = new int[2];
         index3[1] = -1;
 
-        //如果在随机排列身份证前6为何后6为的过程中，重复出现了相同的下标，则在这中间插入车牌号第2-6中的随机两位字符
+        //如果在随机排列身份证前6为和后6为的过程中，重复出现了相同的下标，则在这中间插入车牌号第2-6中的随机两位字符
         boolean ifInto = false;
 
         for(int i = 0; index1[2] == -1 && index2[2] == -1; i++ ){

@@ -149,6 +149,7 @@
         GROUP BY person_name, license, carId, is_signed, rent
     </select>
 
+    <!--企业合同插入-->
     <insert id="insertContractLog" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
         INSERT INTO czb_contract_records (
             record_id,
@@ -171,6 +172,32 @@
             )
     </insert>
 
+    <!--个人合同插入-->
+    <insert id="insertContractLogPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        INSERT INTO czb_contract_records (
+        record_id,
+        user_id,
+        contract_start_time,
+        contract_end_time,
+        contract_state,
+        contract_type,
+        signed_time,
+        rent
+        )
+        VALUES
+        (
+        #{recordId},
+        #{userId},
+        #{startTime},
+        #{endTime},
+        '0',
+        '1',
+        CURRENT_TIMESTAMP,
+        #{rent}
+        )
+    </insert>
+
+    <!--企业插入添加的人员信息-->
     <insert id="insertCompanyPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonCar">
         INSERT INTO czb_cars_persons (
             person_car_id,
@@ -200,5 +227,25 @@
                 CURRENT_TIMESTAMP
             )
     </insert>
+
+    <!--个人签订租赁前确认是否已签订-->
+    <select id="getIsSigned" resultType="java.lang.Integer">
+        SELECT is_signed
+        FROM
+        czb_cars_persons
+        WHERE
+        person_id_card = #{personId}
+        AND
+        identify_code = #{identifyCode}
+    </select>
+
+    <!--个人签订租赁-->
+    <update id="updateCarPerson" parameterType="java.lang.String">
+        UPDATE czb_cars_persons pc
+        SET pc.is_signed = 1
+        WHERE
+            pc.person_id_card = #{personId}
+        AND pc.identify_code = #{identifyCode}
+    </update>
 
 </mapper>

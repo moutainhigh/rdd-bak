@@ -16,4 +16,6 @@ public interface RentCarService {
     List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo();
 
     int addCompanyContract(AddCompanyContractList addCompanyContractList);
+
+    int addPersonContract(String personId, String identifyCode);
 }
