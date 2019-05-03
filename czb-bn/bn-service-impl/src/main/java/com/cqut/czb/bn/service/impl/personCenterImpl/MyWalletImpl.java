@@ -22,10 +22,8 @@ public class MyWalletImpl implements MyWallet {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public JSONObject getBalance(String userId){
-        JSONObject json = new JSONObject();
-        json.put("balance",myWalletMapper.getUserAllIncome(userId));
-        return json;
+    public BalanceAndInfoIdDTO getBalance(String userId){
+        return myWalletMapper.getUserAllIncome(userId);
     }
 
     @Override
