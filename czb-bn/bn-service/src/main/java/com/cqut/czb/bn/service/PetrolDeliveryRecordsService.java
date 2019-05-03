@@ -25,4 +25,6 @@ public interface PetrolDeliveryRecordsService {
     Workbook exportDeliveryRecords(DeliveryInput deliveryInput) throws Exception;
 
     int ImportDeliveryRecords(MultipartFile file) throws Exception;
+
+    String selectLogistics();
 }

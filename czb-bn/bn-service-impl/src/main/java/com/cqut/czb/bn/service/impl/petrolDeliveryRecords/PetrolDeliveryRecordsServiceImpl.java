@@ -86,6 +86,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             for (int i = 0 ; i<petrolDeliveryDTOS.size(); i++){
                 int count = 0;
                 row = sheet.createRow(i+1);
+
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getPetrolNum());
                 if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
                     row.createCell(count++).setCellValue("国通");
@@ -99,12 +100,20 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                     row.createCell(count++).setCellValue("寄送中");
                 else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
                     row.createCell(count++).setCellValue("已收货");
+//                row.createCell(count++).setCellType(CellType.STRING);
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getReceiver());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(petrolDeliveryDTOS.get(i).getCreateAt()));
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getContactNumber());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getProvince()+petrolDeliveryDTOS.get(i).getCity()+petrolDeliveryDTOS.get(i).getArea());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDetail());
-                row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDeliveryNum());
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count++).setCellValue(""+petrolDeliveryDTOS.get(i).getDeliveryNum());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDeliveryCompany());
             }
             return workbook;
@@ -116,7 +125,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         List<PetrolDeliveryDTO> petrolDeliveryDTOList = null;
         Map<String, PetrolDeliveryDTO> petrolMap = new HashMap<>();
         petrolDeliveryDTOList = ImportPetrolDelivery.readExcel(file.getOriginalFilename(), inputStream);
-        System.out.println("99999999"+petrolDeliveryDTOList.get(0).getDeliveryCompany());
+        System.out.println("99999999"+petrolDeliveryDTOList.get(0).getDeliveryState());
         /**
          * 按petrolNum为key 做到去重复的效果
          */
@@ -132,5 +141,10 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
 //        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
+    }
+
+    @Override
+    public String selectLogistics() {
+        return null;
     }
 }

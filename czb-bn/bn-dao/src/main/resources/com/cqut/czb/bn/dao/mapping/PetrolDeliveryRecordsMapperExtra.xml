@@ -188,11 +188,7 @@
     <update id="updateImportRecords" parameterType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput" >
         update czb_petrol_delivery_records
         <set>
-            delivery_state = CASE
-            <foreach collection="list" item="item" index="index"
-                     separator="" open="" close="end,">
-                when delivery_state = 0 then #{item.deliveryState,jdbcType=INTEGER}
-            </foreach>
+            delivery_state = 1,
           delivery_num = CASE
         <foreach collection="list" item="item" index="index"
                                     separator="" open="" close="end,">
@@ -209,6 +205,6 @@
         <foreach collection="list" item="item" index="index"
                                    separator="," open="(" close=")">
         #{item.petrolNum,jdbcType=VARCHAR}
-        </foreach>
+        </foreach> AND  delivery_state = 0
     </update>
 </mapper>

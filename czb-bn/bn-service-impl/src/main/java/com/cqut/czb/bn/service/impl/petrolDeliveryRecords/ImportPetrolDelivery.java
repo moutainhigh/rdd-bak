@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -99,13 +100,6 @@ public class ImportPetrolDelivery {
      * @return
      */
     private static PetrolDeliveryDTO resolveXlsx(XSSFRow xssfRow)  {
-
-        System.out.println(xssfRow.toString());
-        Iterator iterator =  xssfRow.cellIterator();
-        while (iterator.hasNext()){
-            System.out.println(iterator.next().toString());
-
-        }
         if (xssfRow.getCell(0) == null || xssfRow.getCell(0).toString() == "") {
             return null;
         }
@@ -122,6 +116,7 @@ public class ImportPetrolDelivery {
             petrolDeliveryDTO.setDeliveryState(1);
         }
         petrolDeliveryDTO.setReceiver((getStringValue(xssfRow.getCell(3))));
+        System.out.println(getStringValue(xssfRow.getCell(3)));
 //        petrolDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(4))));
         petrolDeliveryDTO.setContactNumber(getStringValue(xssfRow.getCell(5)));
         petrolDeliveryDTO.setProvince((getStringValue(xssfRow.getCell(6))));
@@ -169,7 +164,6 @@ public class ImportPetrolDelivery {
     }
 
     private static PetrolDeliveryDTO resolveXls(HSSFRow hssfRow) {
-
         PetrolDeliveryDTO petrolDeliveryDTO = new PetrolDeliveryDTO();
         if (hssfRow.getCell(0) == null || hssfRow.getCell(0).toString() == "") {
             return null;
@@ -246,7 +240,8 @@ public class ImportPetrolDelivery {
         if (hssfCell == null)
             return null;
 //        hssfCell.setCellStyle();
-        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        hssfCell.setCellType(CellType.STRING);
         return hssfCell.getStringCellValue();
     }
 
@@ -254,7 +249,8 @@ public class ImportPetrolDelivery {
         if (xssfCell == null)
             return null;
 //        xssfCell.setCellStyle(XSSFCell.CELL_TYPE_STRING);
-        xssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        xssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        xssfCell.setCellType(CellType.STRING);
         return xssfCell.getStringCellValue();
     }
 }
