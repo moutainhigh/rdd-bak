@@ -143,6 +143,8 @@
 
   <select id="selectUserIncomeInfo" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO" parameterType="java.lang.String" >
     select
+      user_id as userId,
+      info_id as infoId,
       fanyong_income AS fanyongIncome,
       share_income as shareIncome,
       pay_total_rent AS payTotalRent,

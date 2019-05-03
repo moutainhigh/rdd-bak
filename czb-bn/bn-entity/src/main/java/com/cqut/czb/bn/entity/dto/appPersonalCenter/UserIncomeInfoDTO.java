@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class UserIncomeInfoDTO {
 
+    private String infoId;
+
+    private String userId;
+
     private Double fanyongIncome;
 
     private Double shareIncome;
@@ -18,6 +22,22 @@ public class UserIncomeInfoDTO {
     private Double gotTotalRent;
 
     private Double otherIncome;
+
+    public String getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public Double getFanyongIncome() {
         return fanyongIncome;
