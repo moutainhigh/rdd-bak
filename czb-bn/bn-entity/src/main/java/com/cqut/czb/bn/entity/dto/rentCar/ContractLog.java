@@ -25,6 +25,8 @@ public class ContractLog {
      */
     private String endTime;
 
+    private double rent;
+
     public String getRecordId() {
         return recordId;
     }
@@ -55,5 +57,13 @@ public class ContractLog {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public double getRent() {
+        return rent;
+    }
+
+    public void setRent(double rent) {
+        this.rent = rent;
     }
 }

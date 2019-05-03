@@ -22,9 +22,21 @@ public interface RentCarMapperExtra {
 
     List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(@Param("userId") String userId);
 
-    // 插入一条合同记录
+    // 插入一条企业合同记录
     int insertContractLog(ContractLog contractLog);
 
     // 插入合同记录后，插入相应的所有租车者到车辆人员服务表中
     int insertCompanyPerson(PersonCar personCar);
+
+    // 个人签订租赁前确认是否已签过
+    int getIsSigned(@Param("personId") String personId, @Param("identifyCode") String identifyCode);
+
+    // 修改车辆人员服务表
+    int updateCarPerson(@Param("personId") String personId, @Param("identifyCode") String identifyCode);
+
+    // 插入一条个人合同记录
+    int insertContractLogPerson(ContractLog contractLog);
+
+    // 获取个人收益信息列表
+    List<Income> getPersonalIncome(@Param("userId") String userId);
 }
