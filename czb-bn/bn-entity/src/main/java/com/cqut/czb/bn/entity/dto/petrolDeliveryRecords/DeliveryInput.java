@@ -16,9 +16,11 @@ public class DeliveryInput {
 
     private String deliveryCompany;
 
-    private Date startTime;
+    private String ids;
 
-    private Date endTime;
+    private String startTime;
+
+    private String endTime;
 
     public String getRecordId() {
         return recordId;
@@ -68,19 +70,27 @@ public class DeliveryInput {
         this.deliveryCompany = deliveryCompany;
     }
 
-    public Date getStartTime() {
+    public String getIds() {
+        return ids;
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 }

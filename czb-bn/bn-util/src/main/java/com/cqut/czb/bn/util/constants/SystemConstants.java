@@ -58,4 +58,9 @@ public class SystemConstants {
     /*使用权*/
     public static  String HOLD_TYPE_USE="2";
 
+    /**
+     * 导出油卡寄送记录excel的excel头部
+     */
+    public static final String[] PETROL_DELIVERY_RECORD_HEAD = { "油卡编号", "油卡类型","寄送状态","收卡人姓名", "购卡时间","收卡人电话", "收卡主地址", "收卡详细地址","快递单号","快递公司" };
+
 }

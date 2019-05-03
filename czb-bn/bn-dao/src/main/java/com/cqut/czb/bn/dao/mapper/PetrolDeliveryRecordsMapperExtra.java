@@ -23,5 +23,7 @@ public interface PetrolDeliveryRecordsMapperExtra {
 
     int updateByPrimaryKey(DeliveryInput deliveryInput);
 
-    int updatereceivePetrolDeliveryState(@Param("array") String[] recordId);
+    int updateReceivePetrolDeliveryState( String[] array);
+
+    int updateImportRecords(List<PetrolDeliveryDTO> list);
 }

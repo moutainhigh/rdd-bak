@@ -46,7 +46,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     //User user,  添加公告
-    public Boolean addAnnouncement(Announcement announcement,  MultipartFile file) throws Exception {
+    public Boolean addAnnouncement(Announcement announcement,  MultipartFile file,User user) throws Exception {
             String address="";
         if (file!=null||!file.isEmpty()) {
                  address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
@@ -54,19 +54,19 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             String id = StringUtil.createId();
             announcement.setAnnouncementId(id);
             announcement.setIsShow(0);   //添加时默认不展示
-            File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
+            File file1 = setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
             fileMapperExtra.insertSelective(file1);
             announcement.setImgFileId(file1.getFileId()); //更新文件存储后的id
             return (announcementMapperExtra.insertSelective(announcement)>0);
     }
 
     @Override //带文件更新
-    public Boolean updateAnnouncementFile(Announcement announcement, MultipartFile file) throws Exception{
+    public Boolean updateAnnouncementFile(Announcement announcement, MultipartFile file,User user) throws Exception{
         String address="";
         if (file!=null||!file.isEmpty()) {
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
         }
-        File file1 = setFile(file.getOriginalFilename(),address,"wo",new Date());
+        File file1 = setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
         file1.setFileId(announcement.getImgFileId());
         fileMapperExtra.updateByPrimaryKeySelective(file1);
         return (announcementMapperExtra.updateByPrimaryKeySelective(announcement)>0);
