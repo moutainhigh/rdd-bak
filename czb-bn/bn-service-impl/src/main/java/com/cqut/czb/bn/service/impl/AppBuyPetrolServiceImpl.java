@@ -18,6 +18,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
 
         //检验是否都为空
         if(petrol==null&&petrolInputDTO==null)
-            return null;
+            return "没有油卡或传入数据有误（为空）";
         /**
          * 生成起调参数串——返回给app（支付订单）
          */
@@ -52,15 +53,33 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          //订单标识
          String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
          //支付类型(没有对应的类型值，默认回调后执行3类型，暂时只是支持支付宝支付)/死数据****************/
-         String payType="3";
+         String payType="2";//3代表爱虎支付宝(后面可能涉及到多种支付方式)
          //支付的金额
          Double money=petrol.getPetrolPrice();
+        System.out.println("money"+money);
          //购买的数量/******************/
          Integer count=1;
+         //购买的油卡类型
+         Integer petrolKind=petrol.getPetrolKind();
+        System.out.println("petrolKind"+petrolKind);
+        //购买的油卡号
+        String petrolNum=petrol.getPetrolNum();
+        System.out.println("petrolNum"+petrolNum);
+
+         //购买人的id
+         String ownerId=petrol.getOwnerId();
+        System.out.println("ownerId"+ownerId);
+
         PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();
-//        petrolSalesRecordsDTO.getPaymentMethod()-----支付类型
-        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId,payType,money,count));
-        request.setNotifyUrl(getAlipayClient.getCallBackUrl());
+
+        //对判断是否能生成订单
+        if(orgId==null&&payType==null&&money==null&&count==null&&petrolKind==null&&ownerId==null&&petrolNum==null)
+            return "无法生成支付订单";
+
+        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId,payType,money,count,petrolKind,ownerId,petrolNum));//支付订单
+
+        request.setNotifyUrl(getAlipayClient.getCallBackUrl());//支付回调接口
+
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
@@ -80,7 +99,18 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          */
 //        Timer timer=new Timer();
 //        timer.schedule(this,300000);
-
+        //计时器——2分钟之后执行
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                System.out.println("已经进入了油卡倒计时");
+                boolean isHave=AllPetrolDTO.isContainPetorlMap(AllPetrolDTO.getCurrentPetrolMap(),petrol.getPetrolNum());
+                if(isHave==false){
+                    AllPetrolDTO.putBackPetrol(AllPetrolDTO.getAllpetrolMap(),petrol);
+                    System.out.println("已经放回");
+                }
+            }
+        }, 10000);
         return rs;
     }
 
@@ -137,13 +167,13 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
     @Override
     public void run() {
         AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
-        if (AllPetrolDTO.getCurrentPetrol()!=null){
-            /***************************************************************/
-            AllPetrolDTO.getPetrolMap().put(AllPetrolDTO.getCurrentPetrol().get(0).getPetrolId(),AllPetrolDTO.getCurrentPetrol().get(0));
-            AllPetrolDTO.setCurrentPetrol(null);
-            this.cancel();
-        }
-        AllPetrolDTO.setCurrentPetrol(null);
+//        if (AllPetrolDTO.getCurrentPetrol()!=null){
+//            /***************************************************************/
+//            AllPetrolDTO.getPetrolMap().put(AllPetrolDTO.getCurrentPetrol().get(0).getPetrolId(),AllPetrolDTO.getCurrentPetrol().get(0));
+//            AllPetrolDTO.setCurrentPetrol(null);
+//            this.cancel();
+//        }
+//        AllPetrolDTO.setCurrentPetrol(null);
         this.cancel();
     }
 }

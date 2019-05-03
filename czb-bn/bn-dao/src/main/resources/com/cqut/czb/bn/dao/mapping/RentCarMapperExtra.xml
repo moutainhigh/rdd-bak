@@ -248,4 +248,15 @@
         AND pc.identify_code = #{identifyCode}
     </update>
 
+    <!--查看个人收益-->
+    <select id="getPersonalIncome" resultType="com.cqut.czb.bn.entity.dto.rentCar.Income">
+        SELECT
+            amount,
+            date_format(pay_time, '%Y.%m.%d') time
+        FROM
+            czb_deposit_records
+        WHERE
+            payer_id = #{userId}
+    </select>
+
 </mapper>
