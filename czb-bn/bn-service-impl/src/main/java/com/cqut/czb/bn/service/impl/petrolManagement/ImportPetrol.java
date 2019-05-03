@@ -227,14 +227,14 @@ public class ImportPetrol {
         if (hssfCell == null)
             return null;
 //        hssfCell.setCellStyle();
-        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
         return hssfCell.getStringCellValue();
     }
     private static String getStringValue(XSSFCell xssfCell){
         if (xssfCell == null)
             return null;
 //        xssfCell.setCellStyle(XSSFCell.CELL_TYPE_STRING);
-        xssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        xssfCell.setCellType(Cell.CELL_TYPE_STRING);
         return xssfCell.getStringCellValue();
     }
 

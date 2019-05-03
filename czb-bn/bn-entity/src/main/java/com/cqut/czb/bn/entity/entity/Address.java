@@ -23,6 +23,8 @@ public class Address {
 
     private String receiver;
 
+    private Integer isDefault;
+
     public String getAddressId() {
         return addressId;
     }
@@ -101,5 +103,13 @@ public class Address {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver == null ? null : receiver.trim();
+    }
+
+    public Integer getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Integer isDefault) {
+        this.isDefault = isDefault;
     }
 }
