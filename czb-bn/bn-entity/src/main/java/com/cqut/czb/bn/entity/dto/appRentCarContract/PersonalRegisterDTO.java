@@ -7,37 +7,31 @@ public class PersonalRegisterDTO {
     /**
      * 用户姓名（最长 15 字符）
      */
-    @NotNull(message = "用户姓名不能为空")
     private String userName;
 
     /**
      * 身份地区：0 大陆，1 香港，2 台湾，3 澳门，4 外籍人员
      */
-    @NotNull(message = "身份地区不能为空")
     private String identityRegion;
 
     /**
      * 证件类型：a 身份证， b 护照， d 港澳通行证， e 台胞证， f 港澳居民来往内地通行证， z 其他
      */
-    @NotNull(message = "证件类型不能为空")
     private String certifyType;
 
     /**
      * 身份证号码，应用内唯一。
      */
-    @NotNull(message = "身份证号码不能为空")
     private String certifyNum;
 
     /**
      * 手机号地区：0 大陆，1 香港、澳门，2 台湾
      */
-    @NotNull(message = "手机号地区不能为空")
     private String phoneRegion;
 
     /**
      * 手机号：1.大陆,首位为 1，长度 11 位纯数字；2.香港、澳门,长度为 8 的纯数字；3.台湾,长度为 10 的纯数字
      */
-    @NotNull(message = "手机号不能为空")
     private String phoneNo;
 
     public String getUserName() {

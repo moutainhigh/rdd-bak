@@ -1,14 +1,19 @@
 package com.cqut.czb.bn.api.controller.rentCarServer;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * 作者：谭深哈
@@ -20,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/signContract")
 public class ContractController {
     private final ContractService contractService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @Autowired
     public ContractController(ContractService contractService) {
@@ -45,23 +53,25 @@ public class ContractController {
 
     /**
      * 给用户（个人）注册云合同唯一id，此id需存入数据库维护
-     * @param personalRegisterDTO,token
+     * @param principal,token
      * @return 云合同返回的用户（个人或企业）id
      */
     @RequestMapping(value = "/registerPersonalContractAccount", method = RequestMethod.POST)
-    public JSONResult registerPersonalContractAccount(@Validated  PersonalRegisterDTO personalRegisterDTO, String token, Integer type){
-        return new JSONResult(contractService.registerPersonalContractAccount(personalRegisterDTO, token));
+    public JSONResult registerPersonalContractAccount(@RequestBody Principal principal, String yunToken){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(contractService.registerPersonalContractAccount(user.getUserId(), yunToken));
     }
 
     /**
      * 企业注册云合同
      * 给用户（个人、或企业）注册云合同唯一id，此id需存入数据库维护
-     * @param enterpriseRegisterDTO,token
+     * @param principal,token
      * @return 云合同返回的用户（个人或企业）id
      */
     @RequestMapping(value = "/registerEnterpriseContractAccount", method = RequestMethod.POST)
-    public JSONResult registerEnterpriseContractAccount(@Validated EnterpriseRegisterDTO enterpriseRegisterDTO, String token, Integer type){
-        return new JSONResult(contractService.registerEnterpriseContractAccount(enterpriseRegisterDTO, token));
+    public JSONResult registerEnterpriseContractAccount(@RequestBody Principal principal, String token){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(contractService.registerEnterpriseContractAccount(user.getUserId(), token));
     }
 
     /**

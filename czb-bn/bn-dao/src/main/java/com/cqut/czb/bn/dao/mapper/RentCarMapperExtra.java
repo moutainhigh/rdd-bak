@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@CrossOrigin
 public interface RentCarMapperExtra {
     personIncome getPersonIncome(@Param("userId") String userId);
 
