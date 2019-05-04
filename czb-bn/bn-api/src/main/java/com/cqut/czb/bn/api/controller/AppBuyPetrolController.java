@@ -32,7 +32,7 @@ public class AppBuyPetrolController {
     private AppHomePageService appHomePageService;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(@Validated  PetrolInputDTO petrolInputDTO){
+    public JSONResult buyPetrol(@Validated @RequestBody PetrolInputDTO petrolInputDTO){
         if(petrolInputDTO==null)
             new JSONResult(ResponseCodeConstants.FAILURE, "申请数据有误");
         //暂时先调用

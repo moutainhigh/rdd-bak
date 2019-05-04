@@ -167,7 +167,7 @@ public class AllPetrolDTO {
             petrol = entry.getValue();//当前遍历的油卡值
             if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice) {
                 isHave=true;
-//                petrol.setOwnerId(ownerId);
+                petrol.setOwnerId(ownerId);
                 //将其放入当前暂存的一个currentPetrolMap中,同时判断是否已经存在相应的卡
                 if(isContainPetorlMap(currentPetrolMap,petrol.getPetrolNum())==false)
                 {
