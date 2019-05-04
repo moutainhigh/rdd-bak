@@ -15,7 +15,7 @@ import java.io.IOException;
  * @date 2017/9/20
  * */
 @RestController
-@RequestMapping("/api/verifyAsyn")
+@RequestMapping("/verifyAsyn")
 public class VerifyAsynNoticeInfoController {
 	
 	@Resource(name="paymentRecordService")
