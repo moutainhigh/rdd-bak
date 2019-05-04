@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PetrolSalesRecordsDTO {
+    private Integer petrolKind;
+
     private String recordId;
 
     private String petrolNum;
@@ -20,7 +22,7 @@ public class PetrolSalesRecordsDTO {
 
     private String thirdOrderId;
 
-    private Double turnoverAmount;
+    private Double turnoverAmount;//成交金额
 
     private Date transactionTime;
 
@@ -36,6 +38,14 @@ public class PetrolSalesRecordsDTO {
 
     // 备注
     private String remark;
+
+    public Integer getPetrolKind() {
+        return petrolKind;
+    }
+
+    public void setPetrolKind(Integer petrolKind) {
+        this.petrolKind = petrolKind;
+    }
 
     public String getRemark() {
         return remark;
@@ -141,14 +151,21 @@ public class PetrolSalesRecordsDTO {
         this.updateAt = updateAt;
     }
 
-    public String getPassbackParams(String orgId, String payType, Double money, Integer count) {
+
+
+    public String getPassbackParams(String orgId, String payType,
+                                    Double money, Integer count,
+                                    Integer petrolKind ,String ownerId,
+                                    String petrolNum) {
         Map<String, Object> pbp = new HashMap<>();
 
         pbp.put("orgId", orgId);
         pbp.put("payType", payType);
         pbp.put("money", money);
         pbp.put("count", count);
-
+        pbp.put("petrolKind", petrolKind);
+        pbp.put("ownerId", ownerId);
+        pbp.put("petrolNum", petrolNum);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -156,16 +173,18 @@ public class PetrolSalesRecordsDTO {
      * 转换为支付宝支付实体
      * @return
      */
-    public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType, Double money, Integer count) {
+    public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,
+                                                           Double money, Integer count,
+                                                           Integer petrolKind ,String ownerId,
+                                                           String petrolNum) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
-        model.setSubject("爱虎支付宝支付");
+        model.setSubject("爱虎购油");
         model.setOutTradeNo(orgId);
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
-//        turnoverAmount.toString()——死数据（方便测试）/******************************/默认为0.01元
         model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
-        model.setPassbackParams(getPassbackParams(orgId, payType, money, count));
+        model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum));
         return model;
     }
 }

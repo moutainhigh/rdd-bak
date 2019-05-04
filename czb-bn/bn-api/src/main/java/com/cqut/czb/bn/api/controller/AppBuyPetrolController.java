@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
+import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,10 +28,22 @@ public class AppBuyPetrolController {
     @Autowired
     private  AppBuyPetrolService appBuyPetrolService;
 
+    @Autowired
+    private AppHomePageService appHomePageService;
+
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(@Validated  PetrolInputDTO petrolInputDTO){
+    public JSONResult buyPetrol(@Validated @RequestBody PetrolInputDTO petrolInputDTO){
+        if(petrolInputDTO==null)
+            new JSONResult(ResponseCodeConstants.FAILURE, "申请数据有误");
+        //暂时先调用
+        System.out.println("油卡刷新"+appHomePageService.selectPetrolZone());
         //随机获取一张卡
+        System.out.println("AllpetrolMap.size():"+AllPetrolDTO.AllpetrolMap.size());
+        System.out.println("currentPetrolMap.size():"+AllPetrolDTO.currentPetrolMap.size());
         Petrol petrol=AllPetrolDTO.randomPetrol(petrolInputDTO);
+        System.out.println("********************************");
+        System.out.println("2AllpetrolMap.size():"+AllPetrolDTO.AllpetrolMap.size());
+        System.out.println("2currentPetrolMap.size():"+AllPetrolDTO.currentPetrolMap.size());
         if(petrol==null)
             return new JSONResult(ResponseCodeConstants.FAILURE, "油卡申请失败，无此类油卡");
         String BuyPetrol=appBuyPetrolService.BuyPetrol(petrol,petrolInputDTO);
