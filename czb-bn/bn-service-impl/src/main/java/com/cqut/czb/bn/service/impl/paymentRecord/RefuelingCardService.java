@@ -166,15 +166,27 @@ public class RefuelingCardService implements IRefuelingCard {
 		System.out.println("新增购买记录表完毕"+insertPetrolSalesRecords);
 
 		//查找出用户之前的收益信息
+        //查出的数据可能为空
+        //1、为空则插入；2、不为空则修改
+        boolean ischangeUserIncomeInfo;
 		UserIncomeInfoDTO oldUserIncomeInfo=userIncomeInfoMapperExtra.selectOneUserIncomeInfo(petrol.getOwnerId());
-
-		//用户收益信息表——更改
-		UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
-		userIncomeInfo.setUserId(petrol.getOwnerId());
-		userIncomeInfo.setFanyongIncome(oldUserIncomeInfo.getFanyongIncome()+petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-		userIncomeInfo.setInfoId(oldUserIncomeInfo.getInfoId());
-		boolean updateUserIncomeInfo=updateUserIncomeInfo(userIncomeInfo);
-		System.out.println("更改用户收益信息表完毕"+updateUserIncomeInfo);
+        if(oldUserIncomeInfo==null){
+            //用户收益信息表——新增
+            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
+            userIncomeInfo.setUserId(petrol.getOwnerId());
+            userIncomeInfo.setFanyongIncome(petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
+            userIncomeInfo.setInfoId(StringUtil.createId());
+            ischangeUserIncomeInfo=userIncomeInfoMapper.insert(userIncomeInfo)>0;
+            System.out.println("新增用户收益信息表完毕"+ischangeUserIncomeInfo);
+        }else {
+            //用户收益信息表——更改
+            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
+            userIncomeInfo.setUserId(petrol.getOwnerId());
+            userIncomeInfo.setFanyongIncome(oldUserIncomeInfo.getFanyongIncome()+petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
+            userIncomeInfo.setInfoId(oldUserIncomeInfo.getInfoId());
+            ischangeUserIncomeInfo=updateUserIncomeInfo(userIncomeInfo);
+            System.out.println("更改用户收益信息表完毕"+ischangeUserIncomeInfo);
+        }
 
 		//收益变更记录表——插入
 		IncomeLog incomeLog=new IncomeLog();
@@ -186,7 +198,7 @@ public class RefuelingCardService implements IRefuelingCard {
 		boolean incomeLogMapper=insertIncomeLog(incomeLog);
 		System.out.println("新增收益变更记录表完毕"+incomeLogMapper);
 
-		if(updatePetrol==false&&incomeLogMapper==false&&updateUserIncomeInfo==false&&insertPetrolSalesRecords==false){
+		if(updatePetrol==false&&incomeLogMapper==false&&ischangeUserIncomeInfo==false&&insertPetrolSalesRecords==false){
 			return false;
 		}
 		return true;
