@@ -22,4 +22,5 @@ public interface UserDetailService {
      */
     boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO);
 
+
 }

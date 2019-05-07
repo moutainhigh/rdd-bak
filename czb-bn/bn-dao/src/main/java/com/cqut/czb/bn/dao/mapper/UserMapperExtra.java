@@ -21,4 +21,5 @@ public interface UserMapperExtra {
     List<UserDTO> selectUser(UserInputDTO userInputDTO);
 
     int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
+
 }

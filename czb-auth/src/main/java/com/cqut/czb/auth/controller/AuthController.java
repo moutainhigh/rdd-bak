@@ -40,6 +40,19 @@ public class AuthController {
      */
     @PostMapping("/sendVerificationCode")
     public  JSONResult sendtVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
+        //判断电话号码是否为空
+        if(verificationCodeDTO==null||verificationCodeDTO.getUserAccount()==null){
+            return new JSONResult(ResponseCodeConstants.FAILURE, "电话号码不能为空");
+        }
+
+        //判断此电话号码是否注册
+        User user=new User();
+        user.setUserAccount(verificationCodeDTO.getUserAccount());
+        boolean isRegistered=userDetailService.checkAccount(user);
+        if (isRegistered==false){
+            return new JSONResult(ResponseCodeConstants.FAILURE, "电话为被注册");
+        }
+
         boolean sendVerificationCode=userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
         if(sendVerificationCode) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "发送成功");
@@ -56,6 +69,10 @@ public class AuthController {
      */
     @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
     public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO input){
+        //判断验证码是否为空
+        if(input==null||input.getUserAccount()==null||input.getUserPsw()==null||input.getContent()==null){
+            return new JSONResult(ResponseCodeConstants.FAILURE, "输入内容有误，请检查！！");
+        }
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
