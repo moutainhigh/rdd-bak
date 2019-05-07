@@ -169,13 +169,15 @@ public class RefuelingCardService implements IRefuelingCard {
         //查出的数据可能为空
         //1、为空则插入；2、不为空则修改
         boolean ischangeUserIncomeInfo;
+        //新生成的id号（可能要用）
+        String uuid=StringUtil.createId();
 		UserIncomeInfoDTO oldUserIncomeInfo=userIncomeInfoMapperExtra.selectOneUserIncomeInfo(petrol.getOwnerId());
         if(oldUserIncomeInfo==null){
             //用户收益信息表——新增
             UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
             userIncomeInfo.setUserId(petrol.getOwnerId());
             userIncomeInfo.setFanyongIncome(petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-            userIncomeInfo.setInfoId(StringUtil.createId());
+            userIncomeInfo.setInfoId(uuid);
             ischangeUserIncomeInfo=userIncomeInfoMapper.insert(userIncomeInfo)>0;
             System.out.println("新增用户收益信息表完毕"+ischangeUserIncomeInfo);
         }else {
@@ -193,8 +195,13 @@ public class RefuelingCardService implements IRefuelingCard {
 		incomeLog.setRecordId(StringUtil.createId());
 		incomeLog.setAmount(petrol.getPetrolPrice()*0.01);//暂时设定为0.01
 		incomeLog.setType(0);//0为返佣
-		incomeLog.setBeforeChangeIncome(oldUserIncomeInfo.getFanyongIncome());
-		incomeLog.setInfoId(oldUserIncomeInfo.getInfoId());
+		if(oldUserIncomeInfo==null){
+			incomeLog.setBeforeChangeIncome(0.0);
+			incomeLog.setInfoId(uuid);
+		}else {
+			incomeLog.setBeforeChangeIncome(oldUserIncomeInfo.getFanyongIncome());
+			incomeLog.setInfoId(oldUserIncomeInfo.getInfoId());
+		}
 		boolean incomeLogMapper=insertIncomeLog(incomeLog);
 		System.out.println("新增收益变更记录表完毕"+incomeLogMapper);
 
