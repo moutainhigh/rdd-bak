@@ -2,7 +2,7 @@ package com.cqut.czb.bn.service.impl.rentCarImpl;
 
 import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
 import com.cqut.czb.bn.util.method.HttpClient4;
-import com.cqut.czb.bn.dao.mapper.ContractMapper;
+import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
 import net.sf.json.JSONArray;
@@ -16,10 +16,10 @@ import java.util.Map;
 
 @Service
 public class ContractServiceImpl implements ContractService{
-    private final ContractMapper contractMapper;
+    private final ContractMapperExtra contractMapper;
 
     @Autowired
-    public ContractServiceImpl(ContractMapper contractMapper) {
+    public ContractServiceImpl(ContractMapperExtra contractMapper) {
         this.contractMapper = contractMapper;
     }
 
@@ -41,6 +41,7 @@ public class ContractServiceImpl implements ContractService{
         return response;
     }
 
+    // TODO 谭深化——此接口需要修改
     /**
      * 获取合同id
      */
@@ -52,23 +53,26 @@ public class ContractServiceImpl implements ContractService{
 
         return json.toString();
     }
+
     /**
      * 为个人创建云合同
-     * @param personalRegisterDTO
+     * @param userId
      * @param token
      * @return message
      */
     @Override
-    public String registerPersonalContractAccount(PersonalRegisterDTO personalRegisterDTO, String token){
+    public String registerPersonalContractAccount(String userId, String token){
+        PersonalRegisterDTO personalRegisterDTO = contractMapper.getPersonInfo(userId);
+
         JSONObject requestJson = new JSONObject();
         requestJson.put("userName", personalRegisterDTO.getUserName()); //姓名
-        requestJson.put("identityRegion", personalRegisterDTO.getIdentityRegion()); //身份
-        requestJson.put("certifyType", personalRegisterDTO.getCertifyType());
-        requestJson.put("certifyNum", personalRegisterDTO.getCertifyNum());
-        requestJson.put("phoneRegion", personalRegisterDTO.getPhoneRegion());
-        requestJson.put("phoneNo", personalRegisterDTO.getPhoneNo());
-        requestJson.put("caType", "B2");
-        requestJson.put("token", token);
+        requestJson.put("identityRegion", "0"); //身份地区大陆
+        requestJson.put("certifyType", "a"); // 证件类型，身份证
+        requestJson.put("certifyNum", personalRegisterDTO.getCertifyNum()); // 身份证号
+        requestJson.put("phoneRegion", "0"); // 手机地区大陆
+        requestJson.put("phoneNo", personalRegisterDTO.getPhoneNo()); // 手机号码
+        requestJson.put("caType", "B2"); // 固定字段，证书类型
+        requestJson.put("token", token); // 前端token
 
         String response = new String();
         String yunId;
@@ -97,27 +101,27 @@ public class ContractServiceImpl implements ContractService{
 
         }
 
-        // TODO 这里需要根据公共信息获取userId，再去将获得的云合同注册id插入到对应表去，这里先写死数据
-        int userType = 1;
         // 向user表里插入云合同注册id
-        contractMapper.insertUserContractYunId("1", yunId);
+        contractMapper.insertUserContractYunId(userId, yunId);
 
         return "1";
     }
 
     /**
      * 为企业用户创建云合同
-     * @param enterpriseRegisterDTO
+     * @param userId
      * @param token
      * @return message
      */
     @Override
-    public String registerEnterpriseContractAccount(EnterpriseRegisterDTO enterpriseRegisterDTO, String token){
+    public String registerEnterpriseContractAccount(String userId, String token){
+        EnterpriseRegisterDTO enterpriseRegisterDTO = contractMapper.getEnterpriseInfo(userId);
+
         JSONObject requestJson = new JSONObject();
-        requestJson.put("userName", enterpriseRegisterDTO.getUserName());
-        requestJson.put("certifyType", enterpriseRegisterDTO.getCertifyType());
-        requestJson.put("certifyNum", enterpriseRegisterDTO.getCertifyNum());
-        requestJson.put("phoneNo", enterpriseRegisterDTO.getPhoneNo());
+        requestJson.put("userName", enterpriseRegisterDTO.getUserName()); // 企业名称
+        requestJson.put("certifyType", "3"); // 企业证件类型
+        requestJson.put("certifyNum", enterpriseRegisterDTO.getCertifyNum()); // 企业证件号
+        requestJson.put("phoneNo", enterpriseRegisterDTO.getPhoneNo()); // 企业用户手机号
         requestJson.put("caType", "B2");
         requestJson.put("token", token);
 
@@ -151,15 +155,13 @@ public class ContractServiceImpl implements ContractService{
             }
         }
 
-        // TODO 这里需要根据公共信息获取userId，再去将获得的云合同注册id插入到对应表去，这里先写死数据
-        int userType = 1;
-        // 向enterprise表里插入云合同注册id
-        contractMapper.insertEnterpriseContractYunId(contractMapper.getEnterpriseId("1"), yunId);
+        // 向user表里插入云合同注册id
+        contractMapper.insertUserContractYunId(userId, yunId);
 
         return "1";
     }
 
-    // TODO 现在公司那边没有定制合同，所以这边合同是一个测试用的，需一份专门的合同
+    // TODO 谭深化——现在公司那边没有定制合同，所以这边合同是一个测试用的，需一份专门的合同
     /**
      * 合成合同模板
      * @param token
@@ -199,7 +201,7 @@ public class ContractServiceImpl implements ContractService{
             return "创建合同模板出错";
         }
 
-        // TODO 此接口需待完善,userId是写死的
+        // TODO 谭深化——此接口需待完善,userId是写死的
         // 将提取出的合同id，插入到数据库中
         if(contractId != null && !contractId.equals("")){
             contractMapper.insertContractId("1", contractId);
@@ -214,7 +216,7 @@ public class ContractServiceImpl implements ContractService{
      * @param token
      * @return message
      */
-    // TODO 此接口中的签署者来源，待完善
+    // TODO 谭深化——此接口中的签署者来源，待完善
     @Override
     public String addContractOwner(String token){
         JSONObject json = new JSONObject();
@@ -265,7 +267,7 @@ public class ContractServiceImpl implements ContractService{
      * @param token
      * @return message
      */
-    // TODO 此接口中，合同id，签署者id来源需完善
+    // TODO 谭深化——此接口中，合同id，签署者id来源需完善
     @Override
     public String signerContract(String token){
         JSONObject json = new JSONObject();
@@ -289,7 +291,7 @@ public class ContractServiceImpl implements ContractService{
      * @param token
      * @return message
      */
-    // TODO 合同id来源，存证id需插入数据库，便于维护
+    // TODO 谭深化——合同id来源，存证id需插入数据库，便于维护
     @Override
     public String czContract(String token){
         JSONObject json = new JSONObject();

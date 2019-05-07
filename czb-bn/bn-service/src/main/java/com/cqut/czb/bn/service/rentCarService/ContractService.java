@@ -5,14 +5,12 @@ import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@CrossOrigin
 public interface ContractService {
     String getContractToken();
 
-    String registerPersonalContractAccount(PersonalRegisterDTO personalRegisterDTO, String token);
+    String registerPersonalContractAccount(String userId, String token);
 
-    String registerEnterpriseContractAccount(EnterpriseRegisterDTO enterpriseRegisterDTO, String token);
+    String registerEnterpriseContractAccount(String userId, String token);
 
     String createContract(String token);
 

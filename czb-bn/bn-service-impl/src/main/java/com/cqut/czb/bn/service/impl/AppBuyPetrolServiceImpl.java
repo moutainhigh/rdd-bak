@@ -110,7 +110,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
                     System.out.println("已经放回");
                 }
             }
-        }, 10000);
+        }, 300000);
         return rs;
     }
 

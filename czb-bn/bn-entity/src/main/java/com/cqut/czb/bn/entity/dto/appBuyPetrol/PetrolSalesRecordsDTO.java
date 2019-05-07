@@ -179,10 +179,10 @@ public class PetrolSalesRecordsDTO {
                                                            String petrolNum) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
-        model.setSubject("爱虎支付宝支付");
+        model.setSubject("爱虎购油");
         model.setOutTradeNo(orgId);
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
-        model.setTotalAmount(money.toString());
+        model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
         model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum));
         return model;

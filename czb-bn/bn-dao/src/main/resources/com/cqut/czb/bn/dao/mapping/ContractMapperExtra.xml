@@ -1,0 +1,49 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ContractMapperExtra">
+
+    <update id="insertUserContractYunId" parameterType="java.lang.String">
+        UPDATE czb_user
+        SET  user_yun_id = #{userYunId}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!--根据userId获得个人信息-->
+    <select id="getPersonInfo" resultType="com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO">
+        SELECT
+            user_account AS phoneNo,
+            user_name AS userName,
+            user_id_card AS certifyNum
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!--根据userId获得企业信息-->
+    <select id="getEnterpriseInfo" resultType="com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO">
+       SELECT
+            enterprise_name AS userName,
+            org_code AS certifyNum,
+            contact_info AS phoneNo
+        FROM
+            czb_enterprise_info
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <update id="insertEnterpriseContractYunId">
+        UPDATE czb_enterprise_info
+        SET enterprise_yun_id = #{enterpriseYunId}
+        WHERE enterprise_info_id = #{enterpriseId}
+    </update>
+
+    <select id="getEnterpriseId" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT enterprise_info_id
+        FROM czb_enterprise_info
+        WHERE user_id = #{userId}
+    </select>
+
+
+
+</mapper>

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 /**
  * 该类是注册的api接口，密码使用BCryptPasswordEncoder加密
  */
@@ -33,12 +35,12 @@ public class AuthController {
     /**
      * 修改密码第一个接口：发送验证码并存入验证码
      * author：陈德强
-     * @param phone
+     * @param verificationCodeDTO
      * @return
      */
     @PostMapping("/sendVerificationCode")
-    public  JSONResult sendtVerificationCode(@Validated @RequestBody String phone){
-        boolean sendVerificationCode=userDetailService.insertVerificationCode(phone);
+    public  JSONResult sendtVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
+        boolean sendVerificationCode=userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
         if(sendVerificationCode) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "发送成功");
         } else {
@@ -53,7 +55,7 @@ public class AuthController {
      * @return
      */
     @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
-    public  JSONResult checkVerificationCode(@Validated  VerificationCodeDTO input){
+    public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO input){
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);

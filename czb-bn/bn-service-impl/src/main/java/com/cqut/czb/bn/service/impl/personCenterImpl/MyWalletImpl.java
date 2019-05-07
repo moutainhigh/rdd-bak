@@ -55,7 +55,7 @@ public class MyWalletImpl implements MyWallet {
         incomeLog.setRecordId(StringUtil.createId());
         System.out.println(incomeLog.getRecordId());
         incomeLog.setRemark("支付宝提现");
-        // TODO 支付宝提现订单号先写死
+        // TODO 谭深化——支付宝提现订单号先写死
         incomeLog.setSourceId("111111");
         incomeLog.setType(1);
         incomeLog.setWithdrawAmount(alipayRecordDTO.getPaymentAmount().doubleValue());

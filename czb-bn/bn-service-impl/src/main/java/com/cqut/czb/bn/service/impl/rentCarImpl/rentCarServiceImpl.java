@@ -158,7 +158,7 @@ public class rentCarServiceImpl implements RentCarService {
             contractLog.setRecordId(contractId);
             contractLog.setUserId(userId);
 
-            // TODO 此开始和结束时间存在争议,是用企业的，还是个人自己去填，租金也是，是企业和个人约定好的？怎么算的？——参照真实合同最好
+            // TODO 谭深化——此开始和结束时间存在争议,是用企业的，还是个人自己去填，租金也是，是企业和个人约定好的？怎么算的？——参照真实合同最好
             contractLog.setStartTime("2019-04-02 22:22:22");
             contractLog.setEndTime("2020-04-02 22:22:22");
             contractLog.setRent(500);
