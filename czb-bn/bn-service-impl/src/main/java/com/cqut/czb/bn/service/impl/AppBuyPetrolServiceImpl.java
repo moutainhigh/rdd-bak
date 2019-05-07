@@ -53,7 +53,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          //订单标识
          String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
          //支付类型(没有对应的类型值，默认回调后执行3类型，暂时只是支持支付宝支付)/死数据****************/
-         String payType="2";//3代表爱虎支付宝(后面可能涉及到多种支付方式)
+         String payType="1";//3代表爱虎支付宝(后面可能涉及到多种支付方式)
          //支付的金额
          Double money=petrol.getPetrolPrice();
         System.out.println("money"+money);

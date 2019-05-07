@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author wengmingyang
- * @date 2017/9/20
- * */
+ * @author 陈德强
+ * @date 2019/5/7
+ *  */
+
 @RestController
 @RequestMapping("/verifyAsyn")
 public class VerifyAsynNoticeInfoController {
