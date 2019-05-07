@@ -19,28 +19,16 @@ import java.util.*;
 public class RefuelingCardService implements IRefuelingCard {
 
 	@Autowired
-	private  AppBuyPetrolService appBuyPetrolService;
-
-	@Resource(name = "paymentRecordService")
-	private PaymentRecordService paymentRecordService;
+	private PetrolMapperExtra petrolMapperExtra;
 
 	@Autowired
-	private PetrolMapper petrolMapper;
-
-	@Autowired
-	private PetrolSalesRecordsMapper petrolSalesRecordsMapper;
-
-	@Autowired
-	private DepositRecordsMapper depositRecordsMapper;
+	private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
 	@Autowired
 	private UserIncomeInfoMapper userIncomeInfoMapper;
 
 	@Autowired
 	private UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
-
-	@Autowired
-	private LoginInfoMapper loginInfoMapper;
 
 	@Autowired
 	private IncomeLogMapper incomeLogMapper;
@@ -150,6 +138,7 @@ public class RefuelingCardService implements IRefuelingCard {
 			return false;
 		}
 		petrol.setOwnerId(ownerId);
+		petrol.setState(2);
 		boolean updatePetrol=updatePetrol(petrol);
 		System.out.println("更改油卡状态完毕"+updatePetrol);
 
@@ -162,6 +151,8 @@ public class RefuelingCardService implements IRefuelingCard {
 		petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
 		petrolSalesRecords.setRecordId(StringUtil.createId());
 		petrolSalesRecords.setState(1);//1为已支付
+		petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+		petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
 		boolean insertPetrolSalesRecords=insertPetrolSalesRecords(petrolSalesRecords);
 		System.out.println("新增购买记录表完毕"+insertPetrolSalesRecords);
 
@@ -215,13 +206,13 @@ public class RefuelingCardService implements IRefuelingCard {
 	//油卡表——更改相应油卡的状态（用户的id，卡号）——更改
 	@Override
 	public boolean updatePetrol(Petrol petrol) {
-		return petrolMapper.updateByPrimaryKeySelective(petrol)>0;
+		return petrolMapperExtra.updateByPrimaryKeySelective(petrol)>0;
 	}
 
 	//新增购买记录表——插入
 	@Override
 	public boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords) {
-		return petrolSalesRecordsMapper.insert(petrolSalesRecords)>0;
+		return petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
 	}
 
 	//收益变更记录表——插入
