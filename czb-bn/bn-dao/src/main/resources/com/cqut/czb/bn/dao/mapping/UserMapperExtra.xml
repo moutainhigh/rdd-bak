@@ -76,4 +76,15 @@
     </set>
     where user_account = #{userAccount,jdbcType=VARCHAR}
   </update>
+
+  <update id="changePWD" parameterType="com.cqut.czb.bn.entity.entity.User" >
+    update czb_user
+    <set >
+      <if test="userPsw != null" >
+        user_psw = #{userPsw,jdbcType=VARCHAR},
+        update_at = now()
+      </if>
+    </set>
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </update>
 </mapper>

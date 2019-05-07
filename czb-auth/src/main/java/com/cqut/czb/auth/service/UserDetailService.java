@@ -22,5 +22,13 @@ public interface UserDetailService {
      */
     boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO);
 
+    /**
+     * 修改密码
+     * @param user
+     * @param pwd
+     * @return
+     */
+    boolean changePWD(User user,String pwd);
+
 
 }

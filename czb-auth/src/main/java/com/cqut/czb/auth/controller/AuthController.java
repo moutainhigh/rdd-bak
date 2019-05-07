@@ -1,5 +1,6 @@
 package com.cqut.czb.auth.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -22,6 +23,9 @@ public class AuthController {
     @Autowired
     UserDetailService userDetailService;
 
+    @Autowired
+    RedisUtils redisUtils;
+
     @PostMapping("/register")
     public JSONResult registerUser(@Validated @RequestBody User user){
         return new JSONResult(userDetailService.register(user));
@@ -33,7 +37,7 @@ public class AuthController {
     }
 
     /**
-     * 修改密码第一个接口：发送验证码并存入验证码
+     * 忘记密码第一个接口：发送验证码并存入验证码
      * author：陈德强
      * @param verificationCodeDTO
      * @return
@@ -62,7 +66,7 @@ public class AuthController {
     }
 
     /**
-     * 修改密码第二个接口：检查验证码
+     *忘记密码第二个接口：检查验证码
      * *author：陈德强
      * @param input
      * @return
@@ -79,10 +83,29 @@ public class AuthController {
         if(checkVerificationCode) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改成功");
+            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
         }
     }
 
+    /**
+     * 修改密码——个人中心
+     * @param principal
+     * @param pwd
+     * @return
+     */
+    @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
+    public  JSONResult changePWD(@Validated @RequestBody Principal principal,String pwd) {
+        if(principal==null||pwd==""||pwd==null){
+            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        boolean ischange=userDetailService.changePWD(user,pwd);
+        if(ischange) {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+        } else {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+        }
+    }
 
 }
 
