@@ -84,11 +84,15 @@ public class AuthController {
      * @return
      */
     @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
-    public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO input){
+    public  JSONResult checkVerificationCode(@RequestBody VerificationCodeDTO input){
         //判断验证码是否为空
-        if(input==null||input.getUserAccount()==null||input.getUserPsw()==null||input.getContent()==null){
+        if(input==null){
+            System.out.println("为空");
             return new JSONResult(false);
         }
+        System.out.println(input.getContent());
+        System.out.println(input.getUserAccount());
+        System.out.println(input.getUserPsw());
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
@@ -113,7 +117,9 @@ public class AuthController {
         }
         User user = (User)redisUtils.get(principal.getName());
         String oldPWD=verificationCodeDTO.getOldPsw();
+        System.out.println(oldPWD);
         String newPWD=verificationCodeDTO.getNewPsw();
+        System.out.println(newPWD);
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
 //            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");

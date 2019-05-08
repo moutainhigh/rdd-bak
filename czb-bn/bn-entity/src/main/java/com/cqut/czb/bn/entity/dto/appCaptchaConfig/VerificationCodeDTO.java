@@ -49,7 +49,8 @@ public class VerificationCodeDTO {
     }
 
     public void setUserPsw(String userPsw) {
-        this.userPsw = userPsw;
+        this.userPsw = userPsw == null ? null : userPsw.trim();
+//        this.userPsw = userPsw;
     }
 
     public String getVerificationCodeId() {
