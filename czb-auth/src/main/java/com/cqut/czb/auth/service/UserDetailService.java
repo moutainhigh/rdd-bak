@@ -2,10 +2,9 @@ package com.cqut.czb.auth.service;
 
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.VerificationCode;
 
 public interface UserDetailService {
-    Boolean register(User user);
+    Boolean register(User user, VerificationCodeDTO verificationCodeDTO);
     Boolean checkAccount(User user);
 
     /**

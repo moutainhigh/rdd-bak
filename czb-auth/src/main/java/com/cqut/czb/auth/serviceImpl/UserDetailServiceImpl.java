@@ -32,8 +32,10 @@ public class UserDetailServiceImpl  implements UserDetailService {
     PetrolMapperExtra petrolMapperExtra;
 
     @Override
-    public Boolean register(User user) {
+    public Boolean register(User user, VerificationCodeDTO verificationCodeDTO) {
         if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
+
         user.setUserId(StringUtil.createId());
         user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
         user.setIsDeleted(0);
