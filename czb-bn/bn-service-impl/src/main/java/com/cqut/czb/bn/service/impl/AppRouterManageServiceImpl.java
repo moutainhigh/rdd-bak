@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.AppRouterManageService;
 import com.cqut.czb.bn.util.file.FileUploadUtil;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
         fileMapperExtra.insertSelective(file1);
         appRouter.setIconPathId(file1.getFileId());
+        appRouter.setRouterId(StringUtil.createId());
         return (appRouterMapperExtra.insertSelective(appRouter)>0);
     }
 
