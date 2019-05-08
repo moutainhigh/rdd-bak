@@ -107,7 +107,7 @@ public class AuthController {
      * @return
      */
     @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
-    public  JSONResult changePWD(@Validated @RequestBody Principal principal,VerificationCodeDTO verificationCodeDTO) {
+    public  JSONResult changePWD(Principal principal,@RequestBody VerificationCodeDTO verificationCodeDTO) {
         if(principal==null||verificationCodeDTO==null){
             return new JSONResult(false);
         }

@@ -66,7 +66,7 @@ public class UserDetailServiceImpl  implements UserDetailService {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                System.out.println("已经进入了1");
+                System.out.println("计时器起吊");
                 System.out.println(isSend);
                 //将所有的验证码的都改状态为失效
                 verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO);
@@ -77,11 +77,12 @@ public class UserDetailServiceImpl  implements UserDetailService {
 
     @Override
     public boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO) {
-        //判断信息是否为空
+        //判断信息是否为空 user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
         if(verificationCodeDTO==null)
             return false;
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)!=0){//如果不为零则验证码未过期（返回的是验证码个数）
             //更改用户的密码
+            verificationCodeDTO.setUserPsw(bCryptPasswordEncoder.encode(verificationCodeDTO.getUserPsw()));
             boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCodeDTO)>0;
             //更改验证码的状态
             boolean updateVerificationCode=verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO)>0;
@@ -97,12 +98,12 @@ public class UserDetailServiceImpl  implements UserDetailService {
     public boolean changePWD(User user, String oldPWD,String newPWD) {
         //检验密码是否一致。
         User checkUser=userMapperExtra.findUserByAccount(user.getUserAccount());//通过电话号码来查询
-        if(checkUser.getUserPsw()!=oldPWD)
+        if(checkUser.getUserPsw()!=bCryptPasswordEncoder.encode(oldPWD))
             return false;
         else
         {
             //进行修改密码
-            checkUser.setUserPsw(newPWD);
+            checkUser.setUserPsw(bCryptPasswordEncoder.encode(newPWD));
             boolean ischangePWD=userMapperExtra.changePWD(checkUser)>0;
             return ischangePWD;
         }
