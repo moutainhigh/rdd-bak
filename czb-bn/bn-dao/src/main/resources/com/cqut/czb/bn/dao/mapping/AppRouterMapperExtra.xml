@@ -143,4 +143,13 @@
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where router_id = #{routerId,jdbcType=VARCHAR}
     </update>
+
+    <select id="selectAppRouters" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_app_router
+        where
+        app_type=#{appType,jdbcType=INTEGER} and
+        menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR}
+    </select>
 </mapper>

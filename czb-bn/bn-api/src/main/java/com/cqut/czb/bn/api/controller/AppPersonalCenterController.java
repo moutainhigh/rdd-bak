@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/AppPersonalCenter")
+@RequestMapping("/AppPersonalCenter")
 public class AppPersonalCenterController {
 
     @Autowired
@@ -72,7 +72,7 @@ public class AppPersonalCenterController {
     @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)
     public JSONResult getPersonalCenterMenu(@Validated @RequestBody AppRouter appRouter){
 
-        return new JSONResult(false);
+        return new JSONResult(appPersonalCenterService.getAppRouters(appRouter));
     }
 
 }
