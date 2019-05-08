@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/AppPersonalCenter")
+@RequestMapping("/api/AppPersonalCenter")
 public class AppPersonalCenterController {
 
     @Autowired
