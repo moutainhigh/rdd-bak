@@ -45,13 +45,13 @@ public class AuthController {
     @PostMapping("/checkIsRegistered")
     public JSONResult checkIsRegistered(@Validated @RequestBody User user){
         if(user==null||user.getUserAccount()==null)
-            return new JSONResult(ResponseCodeConstants.FAILURE, "电话不能为空");
+            return new JSONResult(false);
         //判断此电话号码是否注册
         boolean isRegistered=userDetailService.checkAccount(user);
         if (isRegistered==false){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "电话未被注册");
+            return new JSONResult(false);
         }else {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "电话已被注册");
+            return new JSONResult(true);
         }
     }
 
@@ -67,13 +67,13 @@ public class AuthController {
     public  JSONResult sendtVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
         //判断电话号码是否为空
         if(verificationCodeDTO==null||verificationCodeDTO.getUserAccount()==null){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "电话号码不能为空");
+            return new JSONResult(false);
         }
         boolean sendVerificationCode=userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
         if(sendVerificationCode) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "发送成功");
+            return new JSONResult(true);
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "发送失败");
+            return new JSONResult(false);
         }
     }
 
@@ -87,15 +87,15 @@ public class AuthController {
     public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO input){
         //判断验证码是否为空
         if(input==null||input.getUserAccount()==null||input.getUserPsw()==null||input.getContent()==null){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "输入内容有误，请检查！！");
+            return new JSONResult(false);
         }
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
         if(checkVerificationCode) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+            return new JSONResult(true);
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+            return new JSONResult(false);
         }
     }
 
@@ -110,7 +110,7 @@ public class AuthController {
     @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
     public  JSONResult changePWD(@Validated @RequestBody Principal principal,String oldPWD,String newPWD) {
         if(principal==null||oldPWD==""||oldPWD==null||newPWD==""||newPWD==null){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+            return new JSONResult(false);
         }
         User user = (User)redisUtils.get(principal.getName());
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);

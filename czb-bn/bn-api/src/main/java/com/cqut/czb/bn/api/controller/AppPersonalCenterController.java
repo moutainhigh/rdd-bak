@@ -2,10 +2,13 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
+import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,17 +34,6 @@ public class AppPersonalCenterController {
 
     @Autowired
     AppPersonalCenterService appPersonalCenterService;
-
-    /**
-     * app通过userId获取用户信息
-     * @param principal
-     * @return
-     */
-//    @RequestMapping(value = "/selectUser",method = RequestMethod.GET)
-//    public JSONResult selectAnnouncement(Principal principal){
-//        User user = redisUtils.get(principal.getName());
-//        return new JSONResult(appPersonalCenterService.selectUser(user.getUserId()));
-//    }
 
     /**
      * app通过useId获取用户收益信息
@@ -73,5 +65,14 @@ public class AppPersonalCenterController {
         return new JSONResult(appPersonalCenterService.getPhysicalCardRechargeRecords(user.getUserId(),petrolKind));
     }
 
+    /**
+     *  * 获取菜单信息
+     * @return
+     */
+    @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)
+    public JSONResult getPersonalCenterMenu(@Validated @RequestBody AppRouter appRouter){
+
+        return new JSONResult(false);
+    }
 
 }
