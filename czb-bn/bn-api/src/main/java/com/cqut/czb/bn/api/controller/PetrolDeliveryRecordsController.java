@@ -1,14 +1,17 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -123,8 +126,13 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/selectLogistics")
-    public JSONResult selectLogistics(){
-     return new JSONResult(petrolDeliveryRecordsService.selectLogistics());
+    public JSONResult selectLogisticsOnPC(DeliveryInput deliveryInput){
+        String logistics = petrolDeliveryRecordsService.selectLogistics(deliveryInput);
+        if (logistics==null||logistics.equals("")){
+            return new JSONResult(ResponseCodeConstants.FAILURE,"查询失败");}
+     else {
+            return new JSONResult(ResponseCodeConstants.SUCCESS,JSON.parse(logistics));
+        }
     }
 
 }

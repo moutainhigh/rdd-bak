@@ -1,4 +1,4 @@
-﻿package com.cqut.czb.bn.service.impl.petrolDeliveryRecords;
+package com.cqut.czb.bn.service.impl.petrolDeliveryRecords;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,23 +29,25 @@ import java.util.Map;
 public class KdniaoTrackQueryAPI {
 	
 	//DEMO
-	public static void main(String[] args) {
+	public static String getOrderTraces(String Code,String  No) {
 		KdniaoTrackQueryAPI api = new KdniaoTrackQueryAPI();
+		String result = "";
 		try {
-			String result = api.getOrderTracesByJson("ANE", "210001633605");
-			System.out.print(result);
+			 result = api.getOrderTracesByJson(Code, No);
+//			System.out.print(result);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 	
 	//电商ID
-	private String EBusinessID="请到快递鸟官网申请http://www.kdniao.com/ServiceApply.aspx";
+	private String EBusinessID="1473992";
 	//电商加密私钥，快递鸟提供，注意保管，不要泄漏
-	private String AppKey="请到快递鸟官网申请http://www.kdniao.com/ServiceApply.aspx";
+	private String AppKey="971b9723-6c17-4041-8c3c-57605b39894a";
 	//请求url
-	private String ReqURL="http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";	
+	private String ReqURL="http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
  
 	/**
      * Json方式 查询订单物流轨迹
@@ -195,6 +197,7 @@ public class KdniaoTrackQueryAPI {
                 ex.printStackTrace();
             }
         }
+        System.out.println(result);
         return result.toString();
     }
 	

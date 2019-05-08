@@ -18,7 +18,7 @@ public interface PetrolDeliveryRecordsService {
 
     Boolean updatePetrolDelivery(DeliveryInput deliveryInput);
 
-    Object selectLogistics(DeliveryInput deliveryInput);
+    String selectLogistics(DeliveryInput deliveryInput);
 
     Boolean receivePetrolDelivery(String ids);
 

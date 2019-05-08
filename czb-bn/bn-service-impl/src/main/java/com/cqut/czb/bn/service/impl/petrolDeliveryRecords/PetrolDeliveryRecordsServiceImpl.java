@@ -3,11 +3,13 @@ package com.cqut.czb.bn.service.impl.petrolDeliveryRecords;
 import com.cqut.czb.bn.dao.mapper.PetrolDeliveryRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.KdniaoDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
 import com.cqut.czb.bn.service.impl.petrolManagement.ImportPetrol;
 import com.cqut.czb.bn.util.constants.SystemConstants;
+import com.cqut.czb.bn.util.mina.Message;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
@@ -45,8 +47,48 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
     }
 
     @Override
-    public Object selectLogistics(DeliveryInput deliveryInput) {
-        return null;
+    public String selectLogistics(DeliveryInput deliveryInput) {
+        String search = "";
+            if (getLogisticCode(deliveryInput.getDeliveryCompany())==null){
+                System.out.println("公司为空");
+                return "";
+            }
+            if (deliveryInput.getDeliveryNum()==null||deliveryInput.getDeliveryNum().equals("")){
+                return "";
+            }
+           String ShipperCode = getLogisticCode(deliveryInput.getDeliveryCompany());
+        try {
+             search = KdniaoTrackQueryAPI.getOrderTraces(ShipperCode,
+                    deliveryInput.getDeliveryNum());
+        } catch (Exception e) {
+            System.out.println("错误！！！");
+            return null;
+        }
+        System.out.println("ss"+search);
+        return search;
+    }
+
+    //通过快递公司名称获取快递公司编号
+    public String getLogisticCode(String deliveryCompany){
+            if (deliveryCompany.equals("顺丰速运")){
+                return "SF";
+            }else if (deliveryCompany.equals("中通快递")){
+                return "ZTO";
+            }else if (deliveryCompany.equals("圆通快递")){
+                return "YTO";
+            }else if (deliveryCompany.equals("韵达快递")){
+                return "YD";
+            }
+            else if (deliveryCompany.equals("邮政快递包裹")){
+                return "YZPY";
+            }
+            else if(deliveryCompany.equals("EMS")){
+                return "EMS";
+            }else if (deliveryCompany.equals("天天快递")){
+                return "HHTT";
+            } else {
+                return null;
+            }
     }
 
     @Override   //批量确认收货
