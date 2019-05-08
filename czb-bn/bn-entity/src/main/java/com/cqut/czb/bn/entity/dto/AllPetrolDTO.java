@@ -15,10 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AllPetrolDTO {
     //用于储存从数据库中读取的所有油卡(键值存的是卡号)
-    public static Map<String,Petrol> AllpetrolMap=new ConcurrentHashMap<String,Petrol>();
+    private static Map<String,Petrol> AllpetrolMap=new ConcurrentHashMap<String,Petrol>();
 
     //用于第二次读取的油卡
-    public static Map<String,Petrol> currentPetrolMap=new ConcurrentHashMap<String,Petrol>();
+    private static Map<String,Petrol> currentPetrolMap=new ConcurrentHashMap<String,Petrol>();
 
     /**
      * 无参构造
