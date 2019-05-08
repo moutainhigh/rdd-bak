@@ -90,16 +90,17 @@ public class AuthController {
     /**
      * 修改密码——个人中心
      * @param principal
-     * @param pwd
+     * @param oldPWD
+     * @param newPWD
      * @return
      */
     @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
-    public  JSONResult changePWD(@Validated @RequestBody Principal principal,String pwd) {
-        if(principal==null||pwd==""||pwd==null){
+    public  JSONResult changePWD(@Validated @RequestBody Principal principal,String oldPWD,String newPWD) {
+        if(principal==null||oldPWD==""||oldPWD==null||newPWD==""||newPWD==null){
             return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
         }
         User user = (User)redisUtils.get(principal.getName());
-        boolean ischange=userDetailService.changePWD(user,pwd);
+        boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
         } else {

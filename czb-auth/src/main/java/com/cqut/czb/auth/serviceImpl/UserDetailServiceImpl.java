@@ -94,15 +94,15 @@ public class UserDetailServiceImpl  implements UserDetailService {
     }
 
     @Override
-    public boolean changePWD(User user, String pwd) {
+    public boolean changePWD(User user, String oldPWD,String newPWD) {
         //检验密码是否一致。
         User checkUser=userMapperExtra.findUserByAccount(user.getUserAccount());//通过电话号码来查询
-        if(checkUser.getUserPsw()!=pwd)
+        if(checkUser.getUserPsw()!=oldPWD)
             return false;
         else
         {
             //进行修改密码
-            checkUser.setUserPsw(pwd);
+            checkUser.setUserPsw(newPWD);
             boolean ischangePWD=userMapperExtra.changePWD(checkUser)>0;
             return ischangePWD;
         }

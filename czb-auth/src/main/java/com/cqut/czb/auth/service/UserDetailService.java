@@ -25,10 +25,12 @@ public interface UserDetailService {
     /**
      * 修改密码
      * @param user
-     * @param pwd
+     * @param oldPWD
+     * @param newPWD
      * @return
      */
-    boolean changePWD(User user,String pwd);
+
+    boolean changePWD(User user,String oldPWD,String newPWD);
 
 
 }
