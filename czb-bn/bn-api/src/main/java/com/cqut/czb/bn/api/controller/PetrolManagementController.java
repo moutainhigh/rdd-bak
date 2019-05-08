@@ -22,12 +22,13 @@ public class PetrolManagementController {
     @RequestMapping(value="/uploadPetrol",method=RequestMethod.POST)
     public JSONResult uploadPetrol(MultipartFile file){
         System.out.println(file.getOriginalFilename());
+        int successResult = 0;
         try {
-            petrolManagementService.uploadPetrolExcel(file.getInputStream(),file.getOriginalFilename());
+            successResult = petrolManagementService.uploadPetrolExcel(file.getInputStream(),file.getOriginalFilename());
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return new JSONResult("success");
+        return new JSONResult(successResult);
     }
 }

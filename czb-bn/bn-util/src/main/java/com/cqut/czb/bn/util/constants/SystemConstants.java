@@ -62,5 +62,8 @@ public class SystemConstants {
      * 导出油卡寄送记录excel的excel头部
      */
     public static final String[] PETROL_DELIVERY_RECORD_HEAD = { "油卡编号", "油卡类型","寄送状态","收卡人姓名", "购卡时间","收卡人电话", "收卡主地址", "收卡详细地址","快递单号","快递公司" };
-
+    /**
+     * 导出充值记录excel的头部
+     */
+    public static final String[] PETROL_RECHARGE_EXCEL_HEAD={"姓名","油卡号码","油卡类型","充值金额","支付价格","电话号码","购卡时间","购卡方式"};
 }

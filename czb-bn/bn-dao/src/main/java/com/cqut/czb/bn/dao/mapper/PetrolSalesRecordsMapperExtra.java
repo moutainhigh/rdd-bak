@@ -21,4 +21,6 @@ public interface PetrolSalesRecordsMapperExtra {
     int insert(PetrolSalesRecords record);
 
     List<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO);
+
+    int recharge(@Param("recordId") String recordId);
 }
