@@ -21,4 +21,12 @@ public interface UserMapperExtra {
     List<UserDTO> selectUser(UserInputDTO userInputDTO);
 
     int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
+
+    /**
+     * 修改密码——个人中心
+     * @param user
+     * @return
+     */
+    int changePWD(User user);
+
 }

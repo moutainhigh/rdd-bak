@@ -171,7 +171,7 @@ public class AllPetrolDTO {
                 //将其放入当前暂存的一个currentPetrolMap中,同时判断是否已经存在相应的卡
                 if(isContainPetorlMap(currentPetrolMap,petrol.getPetrolNum())==false)
                 {
-                    currentPetrolMap.put(petrol.getPetrolId(),petrol);
+                    currentPetrolMap.put(petrol.getPetrolNum(),petrol);
                     it.remove();
                     break;
                 }
@@ -189,7 +189,7 @@ public class AllPetrolDTO {
     public static void putBackPetrol(Map<String,Petrol> petrolMap,Petrol petrol){
         if(isContainPetorlMap(petrolMap,petrol.getPetrolNum())==false)
         {
-            petrolMap.put(petrol.getPetrolId(),petrol);
+            petrolMap.put(petrol.getPetrolNum(),petrol);
             System.out.println(AllpetrolMap.get(petrol.getPetrolNum()));
             System.out.println(currentPetrolMap.get(petrol.getPetrolNum()));
         }

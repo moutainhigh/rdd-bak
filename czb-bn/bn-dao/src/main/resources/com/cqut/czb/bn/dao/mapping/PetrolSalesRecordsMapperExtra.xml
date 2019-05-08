@@ -139,4 +139,75 @@ INNER JOIN (
         update_at DESC
     </select>
 
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
+    insert into czb_petrol_sales_records (record_id, petrol_num, buyer_id,
+      payment_method, third_order_id, turnover_amount,
+      transaction_time, petrol_id, state,
+      contract_id, create_at, update_at,
+      record_type, is_recharged, petrol_kind
+      )
+    values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR},
+      #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR}, #{turnoverAmount,jdbcType=DOUBLE},
+      now(), #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
+      #{contractId,jdbcType=VARCHAR}, now(), now(),
+      #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER}
+      )
+  </insert>
+    <!--充值管理列表获取-->
+    <resultMap id="getPetrolRechargeMap" type="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO">
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="user_account" property="userPhone" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+        <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+        <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
+        <result column="create_at" property="purchaseTime" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="rechargeTime" jdbcType="TIMESTAMP" />
+        <result column="payment_method" property="buyWay" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="getPetrolRecharge">
+        record_id,petrol_num,user_account,user_name,petrol_denomination,petrol_price,is_recharged,create_at,update_at,payment_method
+    </sql>
+    <select id="getPetrolRechargeList" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultMap="getPetrolRechargeMap">
+        SELECT
+        <include refid="getPetrolRecharge"/>
+        FROM
+        czb_petrol_sales_records
+        INNER JOIN (
+        SELECT
+        cu.user_account,
+        cu.user_name,
+        cu.user_id
+        FROM
+        czb_user AS cu
+        WHERE
+        cu.user_id IN (
+        SELECT
+        buyer_id
+        FROM
+        czb_petrol_sales_records AS cpsr
+        <where>
+
+            <if test="petrolNum != null and petrolNum != ''">
+                and petrol_num LIKE CONCAT(CONCAT('%',#{petrolNum,jdbcType = VARCHAR}),'%')
+            </if>
+            <if test="isRecharged != null and isRecharged != ''">
+                and is_recharged = #{isRecharged,jdbcType = INTEGER}
+            </if>
+            <if test="petrolKind != null and petrolKind != ''">
+                and petrol_kind = #{petrolKind,jdbcType = INTEGER}
+            </if>
+        </where>
+        )
+        ) AS  t_user ON t_user.user_id = czb_petrol_sales_records.buyer_id
+        INNER JOIN (
+        SELECT
+        petrol_id,
+        petrol_denomination,
+        petrol_price
+        FROM
+        czb_petrol
+        ) AS cp ON cp.petrol_id = czb_petrol_sales_records.petrol_id
+    </select>
 </mapper>

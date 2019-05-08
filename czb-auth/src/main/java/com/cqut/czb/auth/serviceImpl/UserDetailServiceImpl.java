@@ -80,7 +80,7 @@ public class UserDetailServiceImpl  implements UserDetailService {
         //判断信息是否为空
         if(verificationCodeDTO==null)
             return false;
-        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)!=0){//如果不为零则验证码未过期
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)!=0){//如果不为零则验证码未过期（返回的是验证码个数）
             //更改用户的密码
             boolean updateUserPSW= userMapperExtra.updateUserPSW(verificationCodeDTO)>0;
             //更改验证码的状态
@@ -91,5 +91,20 @@ public class UserDetailServiceImpl  implements UserDetailService {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public boolean changePWD(User user, String oldPWD,String newPWD) {
+        //检验密码是否一致。
+        User checkUser=userMapperExtra.findUserByAccount(user.getUserAccount());//通过电话号码来查询
+        if(checkUser.getUserPsw()!=oldPWD)
+            return false;
+        else
+        {
+            //进行修改密码
+            checkUser.setUserPsw(newPWD);
+            boolean ischangePWD=userMapperExtra.changePWD(checkUser)>0;
+            return ischangePWD;
+        }
     }
 }

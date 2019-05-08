@@ -19,28 +19,16 @@ import java.util.*;
 public class RefuelingCardService implements IRefuelingCard {
 
 	@Autowired
-	private  AppBuyPetrolService appBuyPetrolService;
-
-	@Resource(name = "paymentRecordService")
-	private PaymentRecordService paymentRecordService;
+	private PetrolMapperExtra petrolMapperExtra;
 
 	@Autowired
-	private PetrolMapper petrolMapper;
-
-	@Autowired
-	private PetrolSalesRecordsMapper petrolSalesRecordsMapper;
-
-	@Autowired
-	private DepositRecordsMapper depositRecordsMapper;
+	private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
 	@Autowired
 	private UserIncomeInfoMapper userIncomeInfoMapper;
 
 	@Autowired
 	private UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
-
-	@Autowired
-	private LoginInfoMapper loginInfoMapper;
 
 	@Autowired
 	private IncomeLogMapper incomeLogMapper;
@@ -87,23 +75,23 @@ public class RefuelingCardService implements IRefuelingCard {
 			}
 			if ("money".equals(temp[0])) {
 				money = Double.valueOf(temp[1]);
-				System.out.println("充值金额： " + money);
+				System.out.println("充值金额:" + money);
 			}
 			if ("count".equals(temp[0])) {
 				count = Integer.parseInt(temp[1]);
-				System.out.println("购买数量 " + count);
+				System.out.println("购买数量:" + count);
 			}
 			if ("petrolKind".equals(temp[0])) {
 				petrolKind = Integer.parseInt(temp[1]);
-				System.out.println("油卡类型 " + petrolKind);
+				System.out.println("油卡类型:" + petrolKind);
 			}
 			if ("petrolNum".equals(temp[0])) {
 				petrolNum = temp[1];
-				System.out.println("油卡号" + petrolNum);
+				System.out.println("油卡号:" + petrolNum);
 			}
 			if ("ownerId".equals(temp[0])) {
 				ownerId = temp[1];
-				System.out.println("用户id" + ownerId);
+				System.out.println("用户id:" + ownerId);
 			}
 		}
 
@@ -150,6 +138,7 @@ public class RefuelingCardService implements IRefuelingCard {
 			return false;
 		}
 		petrol.setOwnerId(ownerId);
+		petrol.setState(2);
 		boolean updatePetrol=updatePetrol(petrol);
 		System.out.println("更改油卡状态完毕"+updatePetrol);
 
@@ -162,31 +151,52 @@ public class RefuelingCardService implements IRefuelingCard {
 		petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
 		petrolSalesRecords.setRecordId(StringUtil.createId());
 		petrolSalesRecords.setState(1);//1为已支付
+		petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+		petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
 		boolean insertPetrolSalesRecords=insertPetrolSalesRecords(petrolSalesRecords);
 		System.out.println("新增购买记录表完毕"+insertPetrolSalesRecords);
 
 		//查找出用户之前的收益信息
+        //查出的数据可能为空
+        //1、为空则插入；2、不为空则修改
+        boolean ischangeUserIncomeInfo;
+        //新生成的id号（可能要用）
+        String uuid=StringUtil.createId();
 		UserIncomeInfoDTO oldUserIncomeInfo=userIncomeInfoMapperExtra.selectOneUserIncomeInfo(petrol.getOwnerId());
-
-		//用户收益信息表——更改
-		UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
-		userIncomeInfo.setUserId(petrol.getOwnerId());
-		userIncomeInfo.setFanyongIncome(oldUserIncomeInfo.getFanyongIncome()+petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-		userIncomeInfo.setInfoId(oldUserIncomeInfo.getInfoId());
-		boolean updateUserIncomeInfo=updateUserIncomeInfo(userIncomeInfo);
-		System.out.println("更改用户收益信息表完毕"+updateUserIncomeInfo);
+        if(oldUserIncomeInfo==null){
+            //用户收益信息表——新增
+            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
+            userIncomeInfo.setUserId(petrol.getOwnerId());
+            userIncomeInfo.setFanyongIncome(petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
+            userIncomeInfo.setInfoId(uuid);
+            ischangeUserIncomeInfo=userIncomeInfoMapper.insert(userIncomeInfo)>0;
+            System.out.println("新增用户收益信息表完毕"+ischangeUserIncomeInfo);
+        }else {
+            //用户收益信息表——更改
+            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
+            userIncomeInfo.setUserId(petrol.getOwnerId());
+            userIncomeInfo.setFanyongIncome(oldUserIncomeInfo.getFanyongIncome()+petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
+            userIncomeInfo.setInfoId(oldUserIncomeInfo.getInfoId());
+            ischangeUserIncomeInfo=updateUserIncomeInfo(userIncomeInfo);
+            System.out.println("更改用户收益信息表完毕"+ischangeUserIncomeInfo);
+        }
 
 		//收益变更记录表——插入
 		IncomeLog incomeLog=new IncomeLog();
 		incomeLog.setRecordId(StringUtil.createId());
 		incomeLog.setAmount(petrol.getPetrolPrice()*0.01);//暂时设定为0.01
 		incomeLog.setType(0);//0为返佣
-		incomeLog.setBeforeChangeIncome(oldUserIncomeInfo.getFanyongIncome());
-		incomeLog.setInfoId(oldUserIncomeInfo.getInfoId());
+		if(oldUserIncomeInfo==null){
+			incomeLog.setBeforeChangeIncome(0.0);
+			incomeLog.setInfoId(uuid);
+		}else {
+			incomeLog.setBeforeChangeIncome(oldUserIncomeInfo.getFanyongIncome());
+			incomeLog.setInfoId(oldUserIncomeInfo.getInfoId());
+		}
 		boolean incomeLogMapper=insertIncomeLog(incomeLog);
 		System.out.println("新增收益变更记录表完毕"+incomeLogMapper);
 
-		if(updatePetrol==false&&incomeLogMapper==false&&updateUserIncomeInfo==false&&insertPetrolSalesRecords==false){
+		if(updatePetrol==false&&incomeLogMapper==false&&ischangeUserIncomeInfo==false&&insertPetrolSalesRecords==false){
 			return false;
 		}
 		return true;
@@ -196,13 +206,13 @@ public class RefuelingCardService implements IRefuelingCard {
 	//油卡表——更改相应油卡的状态（用户的id，卡号）——更改
 	@Override
 	public boolean updatePetrol(Petrol petrol) {
-		return petrolMapper.updateByPrimaryKeySelective(petrol)>0;
+		return petrolMapperExtra.updateByPrimaryKeySelective(petrol)>0;
 	}
 
 	//新增购买记录表——插入
 	@Override
 	public boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords) {
-		return petrolSalesRecordsMapper.insert(petrolSalesRecords)>0;
+		return petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
 	}
 
 	//收益变更记录表——插入
