@@ -115,9 +115,11 @@ public class AuthController {
         User user = (User)redisUtils.get(principal.getName());
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+//            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+            return new JSONResult(true);
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+//            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+            return new JSONResult(false);
         }
     }
 
