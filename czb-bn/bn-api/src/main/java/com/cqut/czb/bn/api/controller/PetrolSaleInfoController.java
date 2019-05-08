@@ -52,7 +52,7 @@ public class PetrolSaleInfoController {
         String message = null;
         Workbook workbook = null;
         try {
-            workbook = petrolRechargeService.exportDeliveryRecords(inputDTO);
+            workbook = petrolRechargeService.exportRechargeRecords(inputDTO);
             if(workbook == null) {
                 workbook = new SXSSFWorkbook();
             }
