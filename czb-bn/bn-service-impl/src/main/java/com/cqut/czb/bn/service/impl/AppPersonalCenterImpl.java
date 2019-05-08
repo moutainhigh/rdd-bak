@@ -24,6 +24,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
+    @Autowired
+    AppRouterMapperExtra appRouterMapperExtra;
+
     @Override
     public User selectUser(String userId) {
         return userMapper.selectByPrimaryKey(userId);
@@ -46,6 +49,6 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Override
     public List<AppRouter> getAppRouters(AppRouter appRouter) {
-        return null;
+        return appRouterMapperExtra.selectAppRouters(appRouter);
     }
 }
