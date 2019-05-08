@@ -4,10 +4,7 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
-import com.cqut.czb.bn.entity.entity.Announcement;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
-import com.cqut.czb.bn.entity.entity.ServicePlan;
+import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.AppHomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +43,9 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     @Autowired
     PetrolMapperExtra petrolMapperExtra;
 
+    @Autowired
+    AppRouterMapperExtra appRouterMapperExtra;
+
     @Override
     public List<appAnnouncementDTO> selectAnnouncement() {
 
@@ -80,5 +80,10 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         //读取所有的油卡存储下来进入map中
 //        AllPetrolDTO allPetrolDTO=new AllPetrolDTO(petrolMapperExtra.selectPetrol());
         return null;
+    }
+
+    @Override
+    public List<AppRouter> selectHomePageRouters(AppRouter appRouter) {
+        return appRouterMapperExtra.selectAppRouters(appRouter);
     }
 }

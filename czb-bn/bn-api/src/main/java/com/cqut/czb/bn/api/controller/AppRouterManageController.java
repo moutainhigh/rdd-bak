@@ -24,28 +24,32 @@ public class AppRouterManageController {
 
     @Autowired
     RedisUtils redisUtils;
-
-    @GetMapping("selectAppRouter")
+    //获取菜单数据&查询
+    @GetMapping("/selectAppRouter")
     public JSONResult selectAppRouterList(AppRouter appRouter, PageDTO pageDTO){
         return new JSONResult(appRouterManageService.getMenuList(appRouter,pageDTO));
     }
-    @PostMapping("updateAppRouter")
-    public JSONResult updateAppRouter(@RequestBody AppRouter appRouter, MultipartFile file, Principal principal) throws  Exception{
+
+    //修改数据+修改图标
+    @PostMapping("/updateAppRouter")
+    public JSONResult updateAppRouter(@RequestBody AppRouter appRouter,@RequestParam("file")MultipartFile file, Principal principal) throws  Exception{
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appRouterManageService.updateMenu(appRouter,file,user));
     }
 
-    @PostMapping("updateAppRouterNoFile")
+    //修改数据
+    @PostMapping("/updateAppRouterNoFile")
     public JSONResult updateAppRouter(@RequestBody AppRouter appRouter){
         return new JSONResult(appRouterManageService.updateMenuNoFile(appRouter));
     }
 
-    @PostMapping("deleteAppRouter")
+    //删除
+    @PostMapping("/deleteAppRouter")
     public JSONResult deleteAppRouter(@RequestBody AppRouter appRouter){
         return new JSONResult(appRouterManageService.deleteMenu(appRouter));
     }
-
-    @PostMapping("insertAppRouter")
+    //新增
+    @PostMapping("/insertAppRouter")
     public JSONResult insertAppRouter(@RequestBody AppRouter appRouter, @RequestParam("file")MultipartFile file,Principal principal) throws Exception{
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appRouterManageService.insertMenu(appRouter,file,user));
