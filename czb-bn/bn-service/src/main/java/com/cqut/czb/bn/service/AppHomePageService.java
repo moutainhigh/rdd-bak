@@ -2,10 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
-import com.cqut.czb.bn.entity.entity.Announcement;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
-import com.cqut.czb.bn.entity.entity.ServicePlan;
+import com.cqut.czb.bn.entity.entity.*;
 
 import java.util.List;
 
@@ -42,7 +39,15 @@ public interface AppHomePageService {
 
     /**
      * 获取未售出的油卡
+     * @return
      */
     List<Petrol> selectAllPetrol();
+
+    /**
+     * 获取首页的所有路由
+     * @param appRouter
+     * @return
+     */
+    List<AppRouter> selectHomePageRouters(AppRouter appRouter);
 
 }
