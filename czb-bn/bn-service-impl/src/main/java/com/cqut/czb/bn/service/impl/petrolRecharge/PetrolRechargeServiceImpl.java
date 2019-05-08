@@ -19,7 +19,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
     @Override
     public PageInfo<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO) {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize(),true);
-        List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeList(inputDTO);
-        return new PageInfo<>(list);
+      List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeList(inputDTO);
+       return new PageInfo<>(list);
     }
 }

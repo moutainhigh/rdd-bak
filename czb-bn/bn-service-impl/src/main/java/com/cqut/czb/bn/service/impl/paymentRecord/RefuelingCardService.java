@@ -107,7 +107,8 @@ public class RefuelingCardService implements IRefuelingCard {
 
 			//若插入失败则放回卡
 			if(ischange!=true){
-				Petrol petrol=AllPetrolDTO.currentPetrolMap.get(petrolNum);
+				AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
+				Petrol petrol= allPetrolDTO.getCurrentPetrolMap().get(petrolNum);
 				AllPetrolDTO.putBackPetrol(AllPetrolDTO.getAllpetrolMap(),petrol);//放回all中
 				AllPetrolDTO.clearPetrol(AllPetrolDTO.getCurrentPetrolMap(),petrolNum);
 				return 2;
@@ -131,7 +132,8 @@ public class RefuelingCardService implements IRefuelingCard {
 	public boolean changeInfo(double money,int count,int petrolKind,String petrolNum,String ownerId){
 		//油卡表——更改相应油卡的状态（用户的id，卡号）——更改
 		//取出油卡
-		Petrol petrol=AllPetrolDTO.currentPetrolMap.get(petrolNum);
+		AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
+		Petrol petrol=allPetrolDTO.getCurrentPetrolMap().get(petrolNum);
 		if(petrol==null)
 		{
 			System.out.println("油卡为空");

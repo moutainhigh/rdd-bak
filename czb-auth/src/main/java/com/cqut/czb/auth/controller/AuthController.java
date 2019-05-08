@@ -37,6 +37,27 @@ public class AuthController {
     }
 
     /**
+     * 检测是否已经注册
+     * author：陈德强
+     * @param user
+     * @return
+     */
+    @PostMapping("/checkIsRegistered")
+    public JSONResult checkIsRegistered(@Validated @RequestBody User user){
+        if(user==null||user.getUserAccount()==null)
+            return new JSONResult(false);
+        //判断此电话号码是否注册
+        boolean isRegistered=userDetailService.checkAccount(user);
+        if (isRegistered==false){
+            return new JSONResult(false);
+        }else {
+            return new JSONResult(true);
+        }
+    }
+
+
+
+    /**
      * 忘记密码第一个接口：发送验证码并存入验证码
      * author：陈德强
      * @param verificationCodeDTO
@@ -46,28 +67,19 @@ public class AuthController {
     public  JSONResult sendtVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
         //判断电话号码是否为空
         if(verificationCodeDTO==null||verificationCodeDTO.getUserAccount()==null){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "电话号码不能为空");
+            return new JSONResult(false);
         }
-
-        //判断此电话号码是否注册
-        User user=new User();
-        user.setUserAccount(verificationCodeDTO.getUserAccount());
-        boolean isRegistered=userDetailService.checkAccount(user);
-        if (isRegistered==false){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "电话为被注册");
-        }
-
         boolean sendVerificationCode=userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
         if(sendVerificationCode) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "发送成功");
+            return new JSONResult(true);
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "发送失败");
+            return new JSONResult(false);
         }
     }
 
     /**
      *忘记密码第二个接口：检查验证码
-     * *author：陈德强
+     * author：陈德强
      * @param input
      * @return
      */
@@ -75,20 +87,21 @@ public class AuthController {
     public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO input){
         //判断验证码是否为空
         if(input==null||input.getUserAccount()==null||input.getUserPsw()==null||input.getContent()==null){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "输入内容有误，请检查！！");
+            return new JSONResult(false);
         }
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
         if(checkVerificationCode) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+            return new JSONResult(true);
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+            return new JSONResult(false);
         }
     }
 
     /**
      * 修改密码——个人中心
+     * author:陈德强
      * @param principal
      * @param oldPWD
      * @param newPWD
@@ -97,14 +110,16 @@ public class AuthController {
     @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
     public  JSONResult changePWD(@Validated @RequestBody Principal principal,String oldPWD,String newPWD) {
         if(principal==null||oldPWD==""||oldPWD==null||newPWD==""||newPWD==null){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+            return new JSONResult(false);
         }
         User user = (User)redisUtils.get(principal.getName());
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+//            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+            return new JSONResult(true);
         } else {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+//            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+            return new JSONResult(false);
         }
     }
 
