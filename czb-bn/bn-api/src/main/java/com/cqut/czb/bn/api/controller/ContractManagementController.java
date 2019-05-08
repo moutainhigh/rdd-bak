@@ -7,10 +7,10 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IContractService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.security.Principal;
  * 设计者:   曹渝
  * 更新日期: 2019/04/29
  */
-@Controller
+@RestController
 @RequestMapping("/api/ContractManagement")
 public class ContractManagementController {
 
