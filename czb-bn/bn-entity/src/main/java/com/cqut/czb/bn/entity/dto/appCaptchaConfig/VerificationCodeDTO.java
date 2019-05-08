@@ -14,6 +14,10 @@ public class VerificationCodeDTO {
 
     private int state;
 
+    private String oldPsw;
+
+    private String newPsw;
+
     public VerificationCodeDTO() {
     }
 
@@ -22,6 +26,22 @@ public class VerificationCodeDTO {
         this.verificationCodeId= StringUtil.createId();
         this.content=content;
         this.state=0;
+    }
+
+    public String getOldPsw() {
+        return oldPsw;
+    }
+
+    public void setOldPsw(String oldPsw) {
+        this.oldPsw = oldPsw;
+    }
+
+    public String getNewPsw() {
+        return newPsw;
+    }
+
+    public void setNewPsw(String newPsw) {
+        this.newPsw = newPsw;
     }
 
     public String getUserPsw() {

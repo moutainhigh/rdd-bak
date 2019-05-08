@@ -100,19 +100,20 @@ public class AuthController {
     }
 
     /**
-     * 修改密码——个人中心
-     * author:陈德强
+     * * 修改密码——个人中心
+     *author:陈德强
      * @param principal
-     * @param oldPWD
-     * @param newPWD
+     * @param verificationCodeDTO
      * @return
      */
     @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
-    public  JSONResult changePWD(@Validated @RequestBody Principal principal,String oldPWD,String newPWD) {
-        if(principal==null||oldPWD==""||oldPWD==null||newPWD==""||newPWD==null){
+    public  JSONResult changePWD(@Validated @RequestBody Principal principal,VerificationCodeDTO verificationCodeDTO) {
+        if(principal==null||verificationCodeDTO==null){
             return new JSONResult(false);
         }
         User user = (User)redisUtils.get(principal.getName());
+        String oldPWD=verificationCodeDTO.getOldPsw();
+        String newPWD=verificationCodeDTO.getNewPsw();
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
 //            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
