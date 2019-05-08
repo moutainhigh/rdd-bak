@@ -46,7 +46,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          * 生成起调参数串——返回给app（支付订单）
          */
          String rs=null;//用于保存起调参数
-         GetAlipayClient getAlipayClient=GetAlipayClient.getInstance();
+         GetAlipayClient getAlipayClient=GetAlipayClient.getInstance("0");//"0"代表的是购油
          AlipayClient alipayClient=getAlipayClient.getAlipayClient();
          AlipayTradeAppPayRequest request=new AlipayTradeAppPayRequest();
 

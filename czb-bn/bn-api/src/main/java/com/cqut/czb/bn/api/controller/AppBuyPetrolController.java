@@ -38,12 +38,13 @@ public class AppBuyPetrolController {
         //暂时先调用
         System.out.println("油卡刷新"+appHomePageService.selectPetrolZone());
         //随机获取一张卡
-        System.out.println("AllpetrolMap.size():"+AllPetrolDTO.AllpetrolMap.size());
-        System.out.println("currentPetrolMap.size():"+AllPetrolDTO.currentPetrolMap.size());
+        AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
+        System.out.println("AllpetrolMap.size():"+allPetrolDTO.getAllpetrolMap().size());
+        System.out.println("currentPetrolMap.size():"+allPetrolDTO.getCurrentPetrolMap().size());
         Petrol petrol=AllPetrolDTO.randomPetrol(petrolInputDTO);
         System.out.println("********************************");
-        System.out.println("2AllpetrolMap.size():"+AllPetrolDTO.AllpetrolMap.size());
-        System.out.println("2currentPetrolMap.size():"+AllPetrolDTO.currentPetrolMap.size());
+        System.out.println("2AllpetrolMap.size():"+allPetrolDTO.getAllpetrolMap().size());
+        System.out.println("2currentPetrolMap.size():"+allPetrolDTO.getCurrentPetrolMap().size());
         if(petrol==null)
             return new JSONResult(ResponseCodeConstants.FAILURE, "油卡申请失败，无此类油卡");
         String BuyPetrol=appBuyPetrolService.BuyPetrol(petrol,petrolInputDTO);

@@ -35,6 +35,27 @@ public class AuthController {
     }
 
     /**
+     * 检测是否已经注册
+     * author：陈德强
+     * @param user
+     * @return
+     */
+    @PostMapping("/checkIsRegistered")
+    public JSONResult checkIsRegistered(@Validated @RequestBody User user){
+        if(user==null||user.getUserAccount()==null)
+            return new JSONResult(ResponseCodeConstants.FAILURE, "电话不能为空");
+        //判断此电话号码是否注册
+        boolean isRegistered=userDetailService.checkAccount(user);
+        if (isRegistered==false){
+            return new JSONResult(ResponseCodeConstants.FAILURE, "电话未被注册");
+        }else {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "电话已被注册");
+        }
+    }
+
+
+
+    /**
      * 忘记密码第一个接口：发送验证码并存入验证码
      * author：陈德强
      * @param verificationCodeDTO
@@ -46,15 +67,6 @@ public class AuthController {
         if(verificationCodeDTO==null||verificationCodeDTO.getUserAccount()==null){
             return new JSONResult(ResponseCodeConstants.FAILURE, "电话号码不能为空");
         }
-
-        //判断此电话号码是否注册
-        User user=new User();
-        user.setUserAccount(verificationCodeDTO.getUserAccount());
-        boolean isRegistered=userDetailService.checkAccount(user);
-        if (isRegistered==false){
-            return new JSONResult(ResponseCodeConstants.FAILURE, "电话为被注册");
-        }
-
         boolean sendVerificationCode=userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
         if(sendVerificationCode) {
             return new JSONResult(ResponseCodeConstants.SUCCESS, "发送成功");
@@ -65,7 +77,7 @@ public class AuthController {
 
     /**
      *忘记密码第二个接口：检查验证码
-     * *author：陈德强
+     * author：陈德强
      * @param input
      * @return
      */
@@ -87,6 +99,7 @@ public class AuthController {
 
     /**
      * 修改密码——个人中心
+     * author:陈德强
      * @param principal
      * @param oldPWD
      * @param newPWD
