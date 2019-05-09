@@ -8,6 +8,7 @@ import com.cqut.czb.bn.service.AppBuyPetrolService;
 import com.cqut.czb.bn.service.IRefuelingCard;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
+import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class RefuelingCardService implements IRefuelingCard {
 
 	@Autowired
 	private IncomeLogMapper incomeLogMapper;
+
+	@Autowired
+	FanYongService fanYongService;
 
 	// 同一时间只允许一个线程访问购买油卡接口
 	public synchronized Map payCallback(int flag, Object[] param) {
@@ -163,50 +167,14 @@ public class RefuelingCardService implements IRefuelingCard {
 		boolean insertPetrolSalesRecords=insertPetrolSalesRecords(petrolSalesRecords);
 		System.out.println("新增购买记录表完毕"+insertPetrolSalesRecords);
 
-		//查找出用户之前的收益信息
-        //查出的数据可能为空
-        //1、为空则插入；2、不为空则修改
-        boolean ischangeUserIncomeInfo;
-        //新生成的id号（可能要用）
-        String uuid=StringUtil.createId();
-		UserIncomeInfoDTO oldUserIncomeInfo=userIncomeInfoMapperExtra.selectOneUserIncomeInfo(petrol.getOwnerId());
-        if(oldUserIncomeInfo==null){
-            //用户收益信息表——新增
-            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
-            userIncomeInfo.setUserId(petrol.getOwnerId());
-            userIncomeInfo.setFanyongIncome(petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-            userIncomeInfo.setInfoId(uuid);
-            ischangeUserIncomeInfo=userIncomeInfoMapper.insert(userIncomeInfo)>0;
-            System.out.println("新增用户收益信息表完毕"+ischangeUserIncomeInfo);
-        }else {
-            //用户收益信息表——更改
-            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
-            userIncomeInfo.setUserId(petrol.getOwnerId());
-            userIncomeInfo.setFanyongIncome(oldUserIncomeInfo.getFanyongIncome()+petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-            userIncomeInfo.setInfoId(oldUserIncomeInfo.getInfoId());
-            ischangeUserIncomeInfo=updateUserIncomeInfo(userIncomeInfo);
-            System.out.println("更改用户收益信息表完毕"+ischangeUserIncomeInfo);
-        }
+		boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment);
 
-		//收益变更记录表——插入
-		IncomeLog incomeLog=new IncomeLog();
-		incomeLog.setRecordId(StringUtil.createId());
-		incomeLog.setAmount(petrol.getPetrolPrice()*0.01);//暂时设定为0.01
-		incomeLog.setType(0);//0为返佣
-		if(oldUserIncomeInfo==null){
-			incomeLog.setBeforeChangeIncome(0.0);
-			incomeLog.setInfoId(uuid);
-		}else {
-			incomeLog.setBeforeChangeIncome(oldUserIncomeInfo.getFanyongIncome());
-			incomeLog.setInfoId(oldUserIncomeInfo.getInfoId());
-		}
-		boolean incomeLogMapper=insertIncomeLog(incomeLog);
-		System.out.println("新增收益变更记录表完毕"+incomeLogMapper);
-
-		if(updatePetrol==false&&incomeLogMapper==false&&ischangeUserIncomeInfo==false&&insertPetrolSalesRecords==false){
+		if(beginFanYong==true&&insertPetrolSalesRecords==true)
+			return true;
+		else {
+			System.out.println("新增购买记录表有问题或beginFanYong");
 			return false;
 		}
-		return true;
 	}
 
 

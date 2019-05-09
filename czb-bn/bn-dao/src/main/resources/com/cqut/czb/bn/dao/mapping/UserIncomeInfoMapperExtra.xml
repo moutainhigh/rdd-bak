@@ -154,7 +154,7 @@
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
 
-  <select id="selectOneUserIncomeInfo" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO" parameterType="java.lang.String" >
+  <select id="selectOneUserIncomeInfo" resultType="com.cqut.czb.bn.entity.entity.UserIncomeInfo" parameterType="java.lang.String" >
     select
       user_id as userId,
       info_id as infoId,

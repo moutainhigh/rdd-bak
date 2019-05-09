@@ -7,6 +7,12 @@ package com.cqut.czb.bn.service.petrolRecharge;
 public interface FanYongService {
 
     /**
-     * 一级返佣
+     * 购买油卡返佣操作
+     * @param userId
+     * @param money
+     * @param actualPayment
+     * @return
      */
+    boolean beginFanYong(String userId, double money, double actualPayment);
+
 }

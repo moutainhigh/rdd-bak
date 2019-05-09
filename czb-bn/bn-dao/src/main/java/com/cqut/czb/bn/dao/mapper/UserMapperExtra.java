@@ -29,4 +29,8 @@ public interface UserMapperExtra {
      */
     int changePWD(User user);
 
+    /**
+     * 通过userId查出上级的用户
+     */
+    String selectUserId(@Param("userId") String userId);
 }
