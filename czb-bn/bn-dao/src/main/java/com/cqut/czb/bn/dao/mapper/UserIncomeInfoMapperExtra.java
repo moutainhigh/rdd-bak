@@ -20,6 +20,6 @@ public interface UserIncomeInfoMapperExtra {
 
     List<UserIncomeInfoDTO> selectUserIncomeInfo(String userId);
 
-    UserIncomeInfoDTO selectOneUserIncomeInfo(String userId);
+    UserIncomeInfo selectOneUserIncomeInfo(String userId);
 
 }

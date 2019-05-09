@@ -4,10 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.cqut.czb.bn.dao.mapper.DepositRecordsMapper;
-import com.cqut.czb.bn.dao.mapper.PetrolMapper;
-import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapper;
-import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapper;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
@@ -23,7 +20,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 @Service
-public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolService {
+public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     @Autowired
     private PetrolMapper petrolMapper;
 
@@ -36,12 +33,16 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
     @Autowired
     private UserIncomeInfoMapper userIncomeInfoMapper;
 
+    @Autowired
+    private IncomeLogMapper incomeLogMapper;
+
     @Override
     public String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO) {
 
         //检验是否都为空
         if(petrol==null&&petrolInputDTO==null)
             return "没有油卡或传入数据有误（为空）";
+
         /**
          * 生成起调参数串——返回给app（支付订单）
          */
@@ -53,7 +54,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          //订单标识
          String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
          //支付类型(没有对应的类型值，默认回调后执行3类型，暂时只是支持支付宝支付)/死数据****************/
-         String payType="1";//3代表爱虎支付宝(后面可能涉及到多种支付方式)
+         String payType="1";//1代表爱虎支付宝(后面可能涉及到多种支付方式)
          //支付的金额
          Double money=petrol.getPetrolPrice();
         System.out.println("money"+money);
@@ -70,13 +71,32 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          String ownerId=petrol.getOwnerId();
         System.out.println("ownerId"+ownerId);
 
+        //获取用户的余额(balance)
+        UserIncomeInfo balance=userIncomeInfoMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
+        //返佣收益
+        Double fanyongIncome;
+        //推荐收益
+        Double shareIncome;
+        if(balance==null){//防止用户没有记录
+            fanyongIncome=0.0;
+            shareIncome=0.0;
+        }else {
+            fanyongIncome=balance.getFanyongIncome();
+            System.out.println("fangyong"+balance.getFanyongIncome());
+            shareIncome=balance.getShareIncome();
+            System.out.println("tuijian"+balance.getShareIncome());
+        }
+        //实际支付
+        Double actualPayment=petrol.getPetrolPrice()-shareIncome-fanyongIncome;
+        System.out.println("actualPayment"+actualPayment);
+
         PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();
 
         //对判断是否能生成订单
         if(orgId==null&&payType==null&&money==null&&count==null&&petrolKind==null&&ownerId==null&&petrolNum==null)
             return "无法生成支付订单";
 
-        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId,payType,money,count,petrolKind,ownerId,petrolNum));//支付订单
+        request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId,payType,money,count,petrolKind,ownerId,petrolNum,actualPayment));//支付订单
 
         request.setNotifyUrl(getAlipayClient.getCallBackUrl());//支付回调接口
 
@@ -87,19 +107,11 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-//        LogUtil.sysPrint(loginInfoDTO.getCurUserid(), "DD猫支付宝订单创建2__" + paymentRecord.getPayType());
-
-        // 构建油卡购买记录表对象
-//        PetrolSalesRecords PetrolSalesRecordsDTO=new PetrolSalesRecords();
-//        PetrolSalesRecordsDTO.setBuyerId(petrolInputDTO.getOwnerId());
-//        PetrolSalesRecordsDTO.setPetrolId(petrol.getPetrolId());
 
         /**
          * 插入计时器进行检测5分钟之内是否支付——暂时关闭便于测试
          */
-//        Timer timer=new Timer();
-//        timer.schedule(this,300000);
-        //计时器——2分钟之后执行
+        //计时器——1分钟之后执行
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
@@ -110,7 +122,7 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
                     System.out.println("已经放回");
                 }
             }
-        }, 300000);
+        }, 600000);
         return rs;
     }
 
@@ -122,8 +134,6 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
         boolean insertPetrolSalesRecords=this.insertPetrolSalesRecords(petrolSalesRecords);
         //新增用户收益信息表——返佣
         boolean insertUserIncomeInfo=this.insertUserIncomeInfo(petrol);
-
-        this.cancel();//关闭计时器线程
 
         if(updatePetrol==true&&insertPetrolSalesRecords==true&&insertUserIncomeInfo==true)
             return true;
@@ -161,19 +171,4 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
         return userIncomeInfoMapper.insert(userIncomeInfo)>0;
     }
 
-    /**
-     * 计时器
-     */
-    @Override
-    public void run() {
-        AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
-//        if (AllPetrolDTO.getCurrentPetrol()!=null){
-//            /***************************************************************/
-//            AllPetrolDTO.getPetrolMap().put(AllPetrolDTO.getCurrentPetrol().get(0).getPetrolId(),AllPetrolDTO.getCurrentPetrol().get(0));
-//            AllPetrolDTO.setCurrentPetrol(null);
-//            this.cancel();
-//        }
-//        AllPetrolDTO.setCurrentPetrol(null);
-        this.cancel();
-    }
 }

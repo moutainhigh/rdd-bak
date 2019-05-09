@@ -8,6 +8,7 @@ import com.cqut.czb.bn.service.AppBuyPetrolService;
 import com.cqut.czb.bn.service.IRefuelingCard;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
+import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class RefuelingCardService implements IRefuelingCard {
 
 	@Autowired
 	private IncomeLogMapper incomeLogMapper;
+
+	@Autowired
+	FanYongService fanYongService;
 
 	// 同一时间只允许一个线程访问购买油卡接口
 	public synchronized Map payCallback(int flag, Object[] param) {
@@ -64,6 +68,7 @@ public class RefuelingCardService implements IRefuelingCard {
 		int petrolKind=0;
 		String petrolNum= "";
 		String ownerId="";
+		double actualPayment=0;
 		for (String data : resDate) {
 			temp = data.split("\'");
 			if ("orgId".equals(temp[0])) {
@@ -75,24 +80,28 @@ public class RefuelingCardService implements IRefuelingCard {
 			}
 			if ("money".equals(temp[0])) {
 				money = Double.valueOf(temp[1]);
-				System.out.println("充值金额:" + money);
+				System.out.println("充值金额:money" + money);
 			}
 			if ("count".equals(temp[0])) {
 				count = Integer.parseInt(temp[1]);
-				System.out.println("购买数量:" + count);
+				System.out.println("购买数量count:" + count);
 			}
 			if ("petrolKind".equals(temp[0])) {
 				petrolKind = Integer.parseInt(temp[1]);
-				System.out.println("油卡类型:" + petrolKind);
+				System.out.println("油卡类型petrolKind:" + petrolKind);
 			}
 			if ("petrolNum".equals(temp[0])) {
 				petrolNum = temp[1];
-				System.out.println("油卡号:" + petrolNum);
+				System.out.println("油卡号petrolNum:" + petrolNum);
 			}
 			if ("ownerId".equals(temp[0])) {
 				ownerId = temp[1];
 				System.out.println("用户id:" + ownerId);
 			}
+            if ("actualPayment".equals(temp[0])) {
+                actualPayment =Double.valueOf(temp[1]);
+                System.out.println("实际支付actualPayment:" + actualPayment);
+            }
 		}
 
 		//payType对应payType支付类型
@@ -103,7 +112,7 @@ public class RefuelingCardService implements IRefuelingCard {
 //			此处插入购油的相关信息，油卡购买记录
 //			修改相应油卡的信息/***************************/死数据只修改了第一张
 //			appBuyPetrolService.updatePetrol(AllPetrolDTO.getCurrentPetrol().get(0));
-			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId);
+			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId,actualPayment);
 
 			//若插入失败则放回卡
 			if(ischange!=true){
@@ -129,7 +138,7 @@ public class RefuelingCardService implements IRefuelingCard {
 	 * 进行所有的操作——相关表的增删改查（油卡表，新增购买记录表，收益变更记录表，用户收益信息表）
 	 * @return
 	 */
-	public boolean changeInfo(double money,int count,int petrolKind,String petrolNum,String ownerId){
+	public boolean changeInfo(double money,int count,int petrolKind,String petrolNum,String ownerId,double actualPayment){
 		//油卡表——更改相应油卡的状态（用户的id，卡号）——更改
 		//取出油卡
 		AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
@@ -158,50 +167,14 @@ public class RefuelingCardService implements IRefuelingCard {
 		boolean insertPetrolSalesRecords=insertPetrolSalesRecords(petrolSalesRecords);
 		System.out.println("新增购买记录表完毕"+insertPetrolSalesRecords);
 
-		//查找出用户之前的收益信息
-        //查出的数据可能为空
-        //1、为空则插入；2、不为空则修改
-        boolean ischangeUserIncomeInfo;
-        //新生成的id号（可能要用）
-        String uuid=StringUtil.createId();
-		UserIncomeInfoDTO oldUserIncomeInfo=userIncomeInfoMapperExtra.selectOneUserIncomeInfo(petrol.getOwnerId());
-        if(oldUserIncomeInfo==null){
-            //用户收益信息表——新增
-            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
-            userIncomeInfo.setUserId(petrol.getOwnerId());
-            userIncomeInfo.setFanyongIncome(petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-            userIncomeInfo.setInfoId(uuid);
-            ischangeUserIncomeInfo=userIncomeInfoMapper.insert(userIncomeInfo)>0;
-            System.out.println("新增用户收益信息表完毕"+ischangeUserIncomeInfo);
-        }else {
-            //用户收益信息表——更改
-            UserIncomeInfo userIncomeInfo=new UserIncomeInfo();
-            userIncomeInfo.setUserId(petrol.getOwnerId());
-            userIncomeInfo.setFanyongIncome(oldUserIncomeInfo.getFanyongIncome()+petrol.getPetrolPrice()*0.01);//暂时设定为0.01****************
-            userIncomeInfo.setInfoId(oldUserIncomeInfo.getInfoId());
-            ischangeUserIncomeInfo=updateUserIncomeInfo(userIncomeInfo);
-            System.out.println("更改用户收益信息表完毕"+ischangeUserIncomeInfo);
-        }
+		boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment);
 
-		//收益变更记录表——插入
-		IncomeLog incomeLog=new IncomeLog();
-		incomeLog.setRecordId(StringUtil.createId());
-		incomeLog.setAmount(petrol.getPetrolPrice()*0.01);//暂时设定为0.01
-		incomeLog.setType(0);//0为返佣
-		if(oldUserIncomeInfo==null){
-			incomeLog.setBeforeChangeIncome(0.0);
-			incomeLog.setInfoId(uuid);
-		}else {
-			incomeLog.setBeforeChangeIncome(oldUserIncomeInfo.getFanyongIncome());
-			incomeLog.setInfoId(oldUserIncomeInfo.getInfoId());
-		}
-		boolean incomeLogMapper=insertIncomeLog(incomeLog);
-		System.out.println("新增收益变更记录表完毕"+incomeLogMapper);
-
-		if(updatePetrol==false&&incomeLogMapper==false&&ischangeUserIncomeInfo==false&&insertPetrolSalesRecords==false){
+		if(beginFanYong==true&&insertPetrolSalesRecords==true)
+			return true;
+		else {
+			System.out.println("新增购买记录表有问题或beginFanYong");
 			return false;
 		}
-		return true;
 	}
 
 

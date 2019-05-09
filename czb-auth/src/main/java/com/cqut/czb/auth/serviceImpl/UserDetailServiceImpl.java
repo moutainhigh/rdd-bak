@@ -1,19 +1,27 @@
 package com.cqut.czb.auth.serviceImpl;
 
+import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.service.UserDetailService;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
+import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
+import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.util.constants.SystemConstants;
+import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Service
+@Transactional
 public class UserDetailServiceImpl implements UserDetailService {
 
     @Autowired
@@ -29,15 +37,55 @@ public class UserDetailServiceImpl implements UserDetailService {
     private VerificationCodeMapperExtra verificationCodeMapperExtra;
 
     @Autowired
-    PetrolMapperExtra petrolMapperExtra;
+    private PetrolMapperExtra petrolMapperExtra;
+
+    @Autowired
+    private EnterpriseInfoMapper enterpriseInfoMapper;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @Override
-    public Boolean register(User user) {
-        if (userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+    public Boolean register(User user, VerificationCodeDTO verificationCodeDTO) {
+        if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+
+        verificationCodeDTO.setUserAccount(user.getUserAccount());
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
+
         user.setUserId(StringUtil.createId());
+        user.setUserType(0);
         user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
+        user.setCreateAt(new Date());
         user.setIsDeleted(0);
+        user.setIsIdentified(0);
+
         return userMapper.insertSelective(user) > 0;
+    }
+
+    @Override
+    public Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo) {
+        if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+
+        verificationCodeDTO.setUserAccount(user.getUserAccount());
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
+
+        user.setUserId(StringUtil.createId());
+        user.setUserType(1);
+        user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
+        user.setCreateAt(new Date());
+        user.setIsDeleted(0);
+        user.setIsIdentified(1);
+
+        boolean isInsertUser = userMapper.insertSelective(user) > 0;
+
+        enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
+        enterpriseInfo.setIsDeleted(0);
+        enterpriseInfo.setCreateAt(new Date());
+        enterpriseInfo.setUserId(user.getUserId());
+
+        boolean isInsertEnterprise = enterpriseInfoMapper.insertSelective(enterpriseInfo) > 0;
+
+        return isInsertUser && isInsertEnterprise;
     }
 
     @Override
@@ -89,6 +137,12 @@ public class UserDetailServiceImpl implements UserDetailService {
             //更改验证码的状态
             boolean updateVerificationCode = verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO) > 0;
             if (updateUserPSW == true && updateVerificationCode == true) {
+                //清除缓存
+                User user=userMapperExtra.findUserByAccount(verificationCodeDTO.getUserAccount());
+                System.out.println("修改成功");
+                redisUtils.remove(user.getUserAccount()+ AuthConfig.TOKEN);
+                redisUtils.remove(user.getUserAccount());
+                System.out.println("缓存以清除");
                 return true;
             }
             return false;
@@ -110,6 +164,34 @@ public class UserDetailServiceImpl implements UserDetailService {
             checkUser.setUserPsw(bCryptPasswordEncoder.encode(newPWD));
             boolean ischangePWD = userMapperExtra.changePWD(checkUser) > 0;
             return ischangePWD;
+        }
+    }
+
+    @Override
+    public boolean enterpriseCertification(EnterpriseInfo enterpriseInfo) {
+        JSONObject requestJson = new JSONObject();
+        requestJson.put("appId", "2019042516271800110");
+        requestJson.put("appKey", "uDCFes85C3OwDQ");
+        requestJson.put("companyName", enterpriseInfo.getEnterpriseName()); // 企业名称
+        requestJson.put("creditCode", enterpriseInfo.getOrgCode()); // 企业证件号
+        requestJson.put("legalPersonName", enterpriseInfo.getLegalPerson()); // 企业法人
+        String id;
+        try{
+            String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/company/authentic", requestJson, 1);
+            Map map = new HashMap();
+            map.put("a", response);
+            JSONObject json = new JSONObject();
+            json.putAll(map);
+            id = json.getJSONObject("a").getJSONObject("data").getString("id");
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        if(id != null) {
+            return id.length() > 0;
+        } else {
+            return false;
         }
     }
 }

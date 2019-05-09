@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.util.method;
 
-import jdk.internal.dynalink.beans.StaticClass;
-
 import java.util.Arrays;
 
 public class GetIdentifyCode {
