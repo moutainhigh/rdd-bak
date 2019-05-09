@@ -7,6 +7,8 @@ import com.cqut.czb.bn.entity.dto.rentCar.AsynchronousInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedTime;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.rentCarImpl.ContractServiceImpl;
@@ -30,15 +32,12 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/signContract")
 public class ContractController {
-    private final ContractService contractService;
+    @Autowired
+    private  ContractService contractService;
 
     @Autowired
     RedisUtils redisUtils;
 
-    @Autowired
-    public ContractController(ContractService contractService) {
-        this.contractService = contractService;
-    }
 
 //    /**
 //     * 获得平台在云合同长效令牌token，客户端需要定时更新，后续操作都需要传入token
@@ -239,10 +238,10 @@ public class ContractController {
      * 个人签约
      */
     @RequestMapping(value = "/personSigned", method = RequestMethod.POST)
-    public JSONResult personSigned( PersonSignedInputInfo inputInfo){
+    public JSONResult personSigned( @RequestBody  PersonSignedInputInfo inputInfo){
 //        User user = (User)redisUtils.get(principal.getName());
         JSONResult json = new JSONResult();
-        String code = contractService.personSigned("11", inputInfo);
+        String code = contractService.personSigned("155730237144941", inputInfo);
         switch(code){
             case ContractServiceImpl.STATE_CONTRACT_NULL:
                 json.setCode(Integer.parseInt(code));
@@ -348,6 +347,24 @@ public class ContractController {
     }
 
     /**
+     * 未提交企业合同个人信息列表获取
+     */
+    @RequestMapping(value = "/getWithoutCommitPersonInfo", method = RequestMethod.POST)
+    public JSONResult getWithoutCommitPersonInfo(ContractIdInfo idInfo){
+        return new JSONResult(contractService.getWithoutCommitPersonInfo(idInfo.getContractId()));
+    }
+
+    /**
+     * 删除企业合同个人信息列表中的某人
+     */
+    @RequestMapping(value = "/removePersonInfo", method = RequestMethod.POST)
+    public JSONResult removePersonInfo(@RequestBody ContractIdListDTO contractIdList){
+        boolean success= contractService.removePersonInfo(contractIdList);
+
+        return new JSONResult(success);
+    }
+
+    /**
      * 云合同异步消息回调地址
      */
     @RequestMapping(value = "/getAsynchronousInfo", method = RequestMethod.POST)
@@ -366,5 +383,15 @@ public class ContractController {
         json.put("contractStatus", contractService.getContractStatus(contractId));
 
         return new JSONResult(json);
+    }
+
+    /**
+     * 企业签订合同
+     */
+    @RequestMapping(value = "/companySigned", method = RequestMethod.POST)
+    public JSONResult personSigned(String userId, String contractId){
+        String code = contractService.companySigned(userId, contractId);
+
+        return null;
     }
 }

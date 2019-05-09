@@ -96,4 +96,62 @@
             record_id = #{contractId}
     </select>
 
+    <!--根据企业合同记录id，查找其时间，和所有的企业合同子合同的服务人员车辆表记录-->
+    <select id="getWithoutCommitPersonInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO">
+        SELECT
+            zi.record_id AS contractId,
+            car.car_license AS carLicense,
+            person_id_card AS personId,
+            petrol_type AS petrolType,
+            car.plan_id AS taoCanId,
+            person_name AS name
+        FROM
+            czb_cars_persons car,
+            (
+                SELECT
+                    record_id
+                FROM
+                    czb_contract_records
+                WHERE
+                    contract_father_id = '12'
+            ) AS zi
+        WHERE
+            car.contract_record_id = zi.record_id
+    </select>
+
+    <!--根据套餐id获得套餐-->
+    <select id="getTaoCan" resultType="java.lang.Double">
+        SELECT
+            plan_amount
+        FROM
+            czb_service_plan
+        WHERE
+            plan_id = #{taoCanId}
+    </select>
+
+    <!--删除个人合同记录-->
+    <delete id="removePersonInfo">
+        DELETE
+        FROM
+        czb_contract_records
+        WHERE
+        record_id
+        IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.contractId}
+        </foreach>
+    </delete>
+
+    <!--删除个人人员车辆服务记录-->
+    <delete id="removeCarsPersonInfo">
+        DELETE
+        FROM
+        czb_cars_persons
+        WHERE
+        contract_record_id
+        IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.contractId}
+        </foreach>
+    </delete>
 </mapper>

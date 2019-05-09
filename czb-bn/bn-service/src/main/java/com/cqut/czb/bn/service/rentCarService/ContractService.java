@@ -5,6 +5,8 @@ import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
+import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,5 +48,14 @@ public interface ContractService {
 
     // 查看合同状态
     int getContractStatus(String contractId);
+
+    // 未提交企业合同个人信息列表获取
+    JSONObject getWithoutCommitPersonInfo(String contractId);
+
+    // 删除企业合同个人信息列表中的某人
+    boolean removePersonInfo(ContractIdListDTO contractiIdList);
+
+    // 企业签订合同
+    String companySigned(String userId, String contractId);
 
 }

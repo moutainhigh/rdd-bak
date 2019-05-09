@@ -4,11 +4,15 @@ import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.ContractLog;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 public interface ContractMapperExtra {
 //    插入yunId
@@ -41,6 +45,18 @@ public interface ContractMapperExtra {
     // 查找套餐id对应的租金
     double findRent(@Param("taoCanId") String taoCanId);
 
-    //
+    // 获得合同的开始时间和结束时间
     ContractLog getContractStartTimeAndEndTime(@Param("contractId") String contractId);
+
+    // 根据企业合同记录id，查找其所有的企业合同子合同的服务人员车辆表记录
+    List<CarsPersonsDTO> getWithoutCommitPersonInfo(@Param("contractId") String contractId);
+
+    // 根据套餐id获得套餐
+    Double getTaoCan(@Param("taoCanId")String taoCanId);
+
+    // 删除企业合同个人信息列表中的某人
+    int removePersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
+
+    // 删除企业合同个人信息列表中的某人
+    int removeCarsPersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
 }
