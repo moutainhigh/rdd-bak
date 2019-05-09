@@ -65,6 +65,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
                 petrolMap.put(p.getPetrolNum(), p);
             }
         }
+        //excel里面没有重复
         List<Petrol> petrolListNoRepeat = new ArrayList<>();
         for(Petrol p:petrolMap.values()){
             petrolListNoRepeat.add(p);
@@ -78,5 +79,14 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     public PageInfo<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO) {
         PageHelper.startPage(infoInputDTO.getCurrentPage(), infoInputDTO.getPageSize(), true);
         return new PageInfo<>(petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(infoInputDTO));
+    }
+
+    /**
+     * 和数据库油卡对比去除重复
+     * @param list
+     * @return
+     */
+    private List<Petrol> removeRepeatPetrolForDB(List<Petrol> list){
+        return null;
     }
 }

@@ -46,14 +46,14 @@ public class AppBuyPetrolServiceImpl extends TimerTask implements AppBuyPetrolSe
          * 生成起调参数串——返回给app（支付订单）
          */
          String rs=null;//用于保存起调参数
-         GetAlipayClient getAlipayClient=GetAlipayClient.getInstance();
+         GetAlipayClient getAlipayClient=GetAlipayClient.getInstance("0");//"0"代表的是购油
          AlipayClient alipayClient=getAlipayClient.getAlipayClient();
          AlipayTradeAppPayRequest request=new AlipayTradeAppPayRequest();
 
          //订单标识
          String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
          //支付类型(没有对应的类型值，默认回调后执行3类型，暂时只是支持支付宝支付)/死数据****************/
-         String payType="2";//3代表爱虎支付宝(后面可能涉及到多种支付方式)
+         String payType="1";//3代表爱虎支付宝(后面可能涉及到多种支付方式)
          //支付的金额
          Double money=petrol.getPetrolPrice();
         System.out.println("money"+money);

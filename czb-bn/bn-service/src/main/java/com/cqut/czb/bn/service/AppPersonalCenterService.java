@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
-import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
+import com.cqut.czb.bn.entity.entity.*;
 
 import java.util.List;
 
@@ -39,4 +36,10 @@ public interface AppPersonalCenterService {
     List<PetrolSalesRecords> getPhysicalCardRechargeRecords(String userId,String petrolKind);
 
 
+    /**
+     * 查出个人中心菜单展示
+     * @param appRouter
+     * @return
+     */
+    List<AppRouter> getAppRouters(AppRouter appRouter);
 }

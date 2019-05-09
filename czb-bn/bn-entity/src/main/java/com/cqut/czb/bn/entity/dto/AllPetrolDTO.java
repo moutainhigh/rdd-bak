@@ -15,10 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AllPetrolDTO {
     //用于储存从数据库中读取的所有油卡(键值存的是卡号)
-    public static Map<String,Petrol> AllpetrolMap=new ConcurrentHashMap<String,Petrol>();
+    private static Map<String,Petrol> AllpetrolMap=new ConcurrentHashMap<String,Petrol>();
 
     //用于第二次读取的油卡
-    public static Map<String,Petrol> currentPetrolMap=new ConcurrentHashMap<String,Petrol>();
+    private static Map<String,Petrol> currentPetrolMap=new ConcurrentHashMap<String,Petrol>();
 
     /**
      * 无参构造
@@ -171,7 +171,7 @@ public class AllPetrolDTO {
                 //将其放入当前暂存的一个currentPetrolMap中,同时判断是否已经存在相应的卡
                 if(isContainPetorlMap(currentPetrolMap,petrol.getPetrolNum())==false)
                 {
-                    currentPetrolMap.put(petrol.getPetrolId(),petrol);
+                    currentPetrolMap.put(petrol.getPetrolNum(),petrol);
                     it.remove();
                     break;
                 }
@@ -189,7 +189,7 @@ public class AllPetrolDTO {
     public static void putBackPetrol(Map<String,Petrol> petrolMap,Petrol petrol){
         if(isContainPetorlMap(petrolMap,petrol.getPetrolNum())==false)
         {
-            petrolMap.put(petrol.getPetrolId(),petrol);
+            petrolMap.put(petrol.getPetrolNum(),petrol);
             System.out.println(AllpetrolMap.get(petrol.getPetrolNum()));
             System.out.println(currentPetrolMap.get(petrol.getPetrolNum()));
         }

@@ -18,11 +18,13 @@ public interface PetrolDeliveryRecordsService {
 
     Boolean updatePetrolDelivery(DeliveryInput deliveryInput);
 
-    Object selectLogistics(DeliveryInput deliveryInput);
+    String selectLogistics(DeliveryInput deliveryInput);
 
     Boolean receivePetrolDelivery(String ids);
 
     Workbook exportDeliveryRecords(DeliveryInput deliveryInput) throws Exception;
 
     int ImportDeliveryRecords(MultipartFile file) throws Exception;
+
+    String selectLogistics();
 }

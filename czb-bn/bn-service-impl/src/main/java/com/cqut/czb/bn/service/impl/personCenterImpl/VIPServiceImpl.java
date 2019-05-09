@@ -46,7 +46,7 @@ public class VIPServiceImpl implements IVIPService {
          * 生成起调参数串
          */
         String rs=null;
-        GetAlipayClient getAlipayClient=GetAlipayClient.getInstance();
+        GetAlipayClient getAlipayClient=GetAlipayClient.getInstance("1");//"1"代表的是充值
         AlipayClient alipayClient=getAlipayClient.getAlipayClient();
         AlipayTradeAppPayRequest request=new AlipayTradeAppPayRequest();
 

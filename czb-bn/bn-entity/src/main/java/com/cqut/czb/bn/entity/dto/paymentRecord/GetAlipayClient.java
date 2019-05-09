@@ -7,7 +7,9 @@ public class GetAlipayClient {
 
 	private  AlipayClient alipayClient;
 
-	private static boolean flag = true;//对于后面的功能拓展（如爱虎支付宝，支付宝，现默认为爱虎）
+//	private static boolean flag = true;//对于后面的功能拓展（如爱虎支付宝，支付宝，现默认为爱虎）
+
+//	private static String operationType=null;//0表示支付宝支付，1表示充值
 
 	private String callBackUrl = "";
 
@@ -21,24 +23,21 @@ public class GetAlipayClient {
 		GetAlipayClient.instance = instance;
 	}
 
-	public synchronized  static GetAlipayClient getInstance() {
+	public synchronized  static GetAlipayClient getInstance(String operationType) {
 //		暂时与flag无关：只是用于后面功能拓展
-		if (flag) {
+		if (operationType=="0") {//"0"为购油
 			instance.setAlipayClient(new DefaultAlipayClient(AiHuAlipayConfig.gatewayUrl, AiHuAlipayConfig.app_id,
 					AiHuAlipayConfig.merchant_private_key, AiHuAlipayConfig.format, AiHuAlipayConfig.charset,
 					AiHuAlipayConfig.alipay_public_key, AiHuAlipayConfig.sign_type));
 			instance.setCallBackUrl(AiHuAlipayConfig.notify_url);
-//			instance.setAlipayClient(new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id,
-//					AlipayConfig.merchant_private_key, AlipayConfig.format, AlipayConfig.charset,
-//					AlipayConfig.alipay_public_key, AlipayConfig.sign_type));
-//			instance.setCallBackUrl(AlipayConfig.notify_url);
-		} else {
+		} else if(operationType=="1"){//"1"代表的是充值vip
 			instance.setAlipayClient(new DefaultAlipayClient(AiHuAlipayConfig.gatewayUrl, AiHuAlipayConfig.app_id,
 					AiHuAlipayConfig.merchant_private_key, AiHuAlipayConfig.format, AiHuAlipayConfig.charset,
 					AiHuAlipayConfig.alipay_public_key, AiHuAlipayConfig.sign_type));
-			instance.setCallBackUrl(AiHuAlipayConfig.notify_url);
+			instance.setCallBackUrl(AiHuAlipayConfig.recharge_url);
+		}else {
+			return null;
 		}
-		flag = !flag;
 		return instance;
 	}
 
@@ -56,14 +55,6 @@ public class GetAlipayClient {
 
 	public void setAlipayClient(AlipayClient alipayClient) {
 		this.alipayClient = alipayClient;
-	}
-
-	public static boolean isFlag() {
-		return flag;
-	}
-
-	public static void setFlag(boolean flag) {
-		GetAlipayClient.flag = flag;
 	}
 
 }

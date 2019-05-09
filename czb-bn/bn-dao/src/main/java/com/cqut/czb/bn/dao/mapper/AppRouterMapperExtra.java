@@ -18,4 +18,6 @@ public interface AppRouterMapperExtra {
 
     int updateByPrimaryKey(AppRouter record);
 
+    List<AppRouter> selectAppRouters(AppRouter appRouter);
+
 }

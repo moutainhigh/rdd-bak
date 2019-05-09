@@ -153,4 +153,18 @@
     from czb_user_income_info
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectOneUserIncomeInfo" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO" parameterType="java.lang.String" >
+    select
+      user_id as userId,
+      info_id as infoId,
+      fanyong_income AS fanyongIncome,
+      share_income as shareIncome,
+      pay_total_rent AS payTotalRent,
+      got_total_rent as gotTotalRent,
+      other_income AS otherIncome
+    from czb_user_income_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

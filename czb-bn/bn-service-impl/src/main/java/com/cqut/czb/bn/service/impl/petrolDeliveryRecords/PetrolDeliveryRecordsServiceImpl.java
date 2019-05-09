@@ -4,9 +4,7 @@ import com.cqut.czb.bn.dao.mapper.PetrolDeliveryRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
-import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
-import com.cqut.czb.bn.service.impl.petrolManagement.ImportPetrol;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -45,8 +43,48 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
     }
 
     @Override
-    public Object selectLogistics(DeliveryInput deliveryInput) {
-        return null;
+    public String selectLogistics(DeliveryInput deliveryInput) {
+        String search = "";
+            if (getLogisticCode(deliveryInput.getDeliveryCompany())==null){
+                System.out.println("公司为空");
+                return "";
+            }
+            if (deliveryInput.getDeliveryNum()==null||deliveryInput.getDeliveryNum().equals("")){
+                return "";
+            }
+           String ShipperCode = getLogisticCode(deliveryInput.getDeliveryCompany());
+        try {
+             search = KdniaoTrackQueryAPI.getOrderTraces(ShipperCode,
+                    deliveryInput.getDeliveryNum());
+        } catch (Exception e) {
+            System.out.println("错误！！！");
+            return null;
+        }
+        System.out.println("ss"+search);
+        return search;
+    }
+
+    //通过快递公司名称获取快递公司编号
+    public String getLogisticCode(String deliveryCompany){
+            if (deliveryCompany.equals("顺丰速运")){
+                return "SF";
+            }else if (deliveryCompany.equals("中通快递")){
+                return "ZTO";
+            }else if (deliveryCompany.equals("圆通快递")){
+                return "YTO";
+            }else if (deliveryCompany.equals("韵达快递")){
+                return "YD";
+            }
+            else if (deliveryCompany.equals("邮政快递包裹")){
+                return "YZPY";
+            }
+            else if(deliveryCompany.equals("EMS")){
+                return "EMS";
+            }else if (deliveryCompany.equals("天天快递")){
+                return "HHTT";
+            } else {
+                return null;
+            }
     }
 
     @Override   //批量确认收货
@@ -86,6 +124,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             for (int i = 0 ; i<petrolDeliveryDTOS.size(); i++){
                 int count = 0;
                 row = sheet.createRow(i+1);
+
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getPetrolNum());
                 if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
                     row.createCell(count++).setCellValue("国通");
@@ -99,12 +138,20 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                     row.createCell(count++).setCellValue("寄送中");
                 else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
                     row.createCell(count++).setCellValue("已收货");
+//                row.createCell(count++).setCellType(CellType.STRING);
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getReceiver());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(petrolDeliveryDTOS.get(i).getCreateAt()));
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getContactNumber());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getProvince()+petrolDeliveryDTOS.get(i).getCity()+petrolDeliveryDTOS.get(i).getArea());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDetail());
-                row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDeliveryNum());
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count++).setCellValue(""+petrolDeliveryDTOS.get(i).getDeliveryNum());
+                row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDeliveryCompany());
             }
             return workbook;
@@ -116,7 +163,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         List<PetrolDeliveryDTO> petrolDeliveryDTOList = null;
         Map<String, PetrolDeliveryDTO> petrolMap = new HashMap<>();
         petrolDeliveryDTOList = ImportPetrolDelivery.readExcel(file.getOriginalFilename(), inputStream);
-        System.out.println("99999999"+petrolDeliveryDTOList.get(0).getDeliveryCompany());
+        System.out.println("99999999"+petrolDeliveryDTOList.get(0).getDeliveryState());
         /**
          * 按petrolNum为key 做到去重复的效果
          */
@@ -132,5 +179,10 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
 //        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
+    }
+
+    @Override
+    public String selectLogistics() {
+        return null;
     }
 }

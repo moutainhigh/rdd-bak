@@ -1,14 +1,17 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,20 +30,44 @@ public class PetrolDeliveryRecordsController {
     @Autowired
     PetrolDeliveryRecordsService petrolDeliveryRecordsService;
 
+    /**
+     * 获取寄送数据&查询
+     * @param deliveryInput
+     * @param pageDTO
+     * @return
+     */
     @GetMapping("/selectRecords")
     public JSONResult selectRecords(DeliveryInput deliveryInput, PageDTO pageDTO){
         return new JSONResult(petrolDeliveryRecordsService.selectPetrolDelivery(deliveryInput,pageDTO));
     }
+
+    /**
+     * 确认收货（批量）
+     * @param deliveryInput
+     * @return
+     */
     @PostMapping("/receivePetrolDelivery")
     public JSONResult receivePetrolDelivery(@RequestBody DeliveryInput deliveryInput){
         return new JSONResult(petrolDeliveryRecordsService.receivePetrolDelivery(deliveryInput.getIds()));
     }
 
+    /**
+     * 修改寄送信息（快递单号/公司）
+     * @param deliveryInput
+     * @return
+     */
     @PostMapping("/updateRecords")
     public JSONResult updateRecords(@RequestBody DeliveryInput deliveryInput){
         return new JSONResult(petrolDeliveryRecordsService.updatePetrolDelivery(deliveryInput));
     }
 
+    /**
+     * 导出excel表（根据时间段筛选）
+     * @param response
+     * @param request
+     * @param deliveryInput
+     * @return
+     */
     @GetMapping("/exportRecords")
     public JSONResult exportPertrolRecord(HttpServletResponse response, HttpServletRequest request,
                                                        DeliveryInput deliveryInput) {
@@ -79,6 +106,11 @@ public class PetrolDeliveryRecordsController {
 
     }
 
+    /**
+     * 导入excel表（更新快递单号/公司 状态）
+     * @param file
+     * @return
+     */
     @PostMapping("importRecords")
     public JSONResult importRecords(MultipartFile file){
         try {
@@ -88,4 +120,19 @@ public class PetrolDeliveryRecordsController {
         }
         return new JSONResult("success");
     }
+
+    /**
+     * 物流查询
+     * @return
+     */
+    @PostMapping("/selectLogistics")
+    public JSONResult selectLogisticsOnPC(DeliveryInput deliveryInput){
+        String logistics = petrolDeliveryRecordsService.selectLogistics(deliveryInput);
+        if (logistics==null||logistics.equals("")){
+            return new JSONResult(ResponseCodeConstants.FAILURE,"查询失败");}
+     else {
+            return new JSONResult(ResponseCodeConstants.SUCCESS,JSON.parse(logistics));
+        }
+    }
+
 }
