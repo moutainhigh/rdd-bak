@@ -1,6 +1,8 @@
 package com.cqut.czb.auth.serviceImpl;
 
+import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.service.UserDetailService;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
@@ -39,6 +41,9 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Autowired
     private EnterpriseInfoMapper enterpriseInfoMapper;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @Override
     public Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo) {
@@ -121,6 +126,12 @@ public class UserDetailServiceImpl implements UserDetailService {
             //更改验证码的状态
             boolean updateVerificationCode = verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO) > 0;
             if (updateUserPSW == true && updateVerificationCode == true) {
+                //清除缓存
+                User user=userMapperExtra.findUserByAccount(verificationCodeDTO.getUserAccount());
+                System.out.println("修改成功");
+                redisUtils.remove(user.getUserAccount()+ AuthConfig.TOKEN);
+                redisUtils.remove(user.getUserAccount());
+                System.out.println("缓存以清除");
                 return true;
             }
             return false;
