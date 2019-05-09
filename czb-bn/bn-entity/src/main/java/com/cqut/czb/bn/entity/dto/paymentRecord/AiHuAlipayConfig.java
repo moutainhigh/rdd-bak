@@ -23,10 +23,10 @@ public class AiHuAlipayConfig {
 //	public static String notify_url = "http://222.178.158.125:9080/TinklingCat/api/verifyAsyn/verifyAsynNoticeInfoAiHu";
 //	public static String notify_url = SystemConstants.IPAPI+"/czb/api/verifyAsyn/verifyAsynNoticeInfoAiHu";
 	//购买油卡的回调的url
-	public static String notify_url ="http://106.91.31.205:8899/verifyAsyn/verifyAsynNoticeInfoAiHu";
+	public static String notify_url ="http://106.91.19.101:8899/verifyAsyn/verifyAsynNoticeInfoAiHu";
 
 	//充值的回调的url
-	public static String recharge_url="http://106.91.31.205:8899/personCenter/VIP/purchaseVIP";
+	public static String recharge_url="http://106.91.19.101:8899/personCenter/VIP/purchaseVIP";
 
 	// 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
 //	public static String return_url = "http://" + StringUtil.getIpAddress() +":9080/NewCar/api/paymentRecord/verifyAsynNoticeInfo";
