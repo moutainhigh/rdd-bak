@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,6 +39,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         user.setUserId(StringUtil.createId());
         user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
+        user.setCreateAt(new Date());
         user.setIsDeleted(0);
         return userMapper.insertSelective(user) > 0;
     }
