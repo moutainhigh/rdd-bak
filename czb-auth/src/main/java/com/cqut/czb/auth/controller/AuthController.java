@@ -4,8 +4,10 @@ import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
+import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +26,27 @@ public class AuthController {
     @Autowired
     RedisUtils redisUtils;
 
+    /**
+     *  个人用户注册
+     * */
     @PostMapping("/register")
     public JSONResult registerUser(@Validated @RequestBody User user, VerificationCodeDTO verificationCodeDTO){
+
         return new JSONResult(userDetailService.register(user, verificationCodeDTO));
+    }
+
+    /**
+     *  企业用户注册
+     * */
+    @PostMapping("/enterpriseRegister")
+    public JSONResult registerEnterpriseUser(@Validated @RequestBody User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo) {
+        enterpriseInfo.setEnterpriseName(user.getUserName());
+        boolean isCertified = userDetailService.enterpriseCertification(enterpriseInfo);
+        if(!isCertified) {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "企业信息认证失败");
+        }
+
+        return new JSONResult(userDetailService.register(user, verificationCodeDTO, enterpriseInfo));
     }
 
     @PostMapping("/checkAccount")

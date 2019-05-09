@@ -66,4 +66,7 @@ public class SystemConstants {
      * 导出充值记录excel的头部
      */
     public static final String[] PETROL_RECHARGE_EXCEL_HEAD={"姓名","油卡号码","油卡类型","充值金额","支付价格","电话号码","购卡时间","购卡方式"};
+
+    public static final int PERSONAL_USER = 0;
+    public static final int ENTERPRISE_USER = 1;
 }
