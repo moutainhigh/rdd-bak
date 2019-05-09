@@ -32,7 +32,7 @@ public class MyWalletController {
     RedisUtils redisUtils;
 
     @RequestMapping(value = "/myWallet/withDraw", method = RequestMethod.POST)
-    public JSONResult withDraw(@RequestBody Principal principal, AlipayRecordDTO alipayRecordDTO){
+    public JSONResult withDraw(Principal principal, @RequestBody AlipayRecordDTO alipayRecordDTO){
         User user = (User)redisUtils.get(principal.getName());
 
         JSONResult json = new JSONResult();
