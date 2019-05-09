@@ -70,7 +70,7 @@ public class AppPersonalCenterController {
      * @return
      */
     @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)
-    public JSONResult getPersonalCenterMenu(@Validated @RequestBody AppRouter appRouter){
+    public JSONResult getPersonalCenterMenu(AppRouter appRouter){
 
         return new JSONResult(appPersonalCenterService.getAppRouters(appRouter));
     }

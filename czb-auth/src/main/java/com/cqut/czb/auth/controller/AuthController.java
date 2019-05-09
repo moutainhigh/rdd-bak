@@ -1,5 +1,6 @@
 package com.cqut.czb.auth.controller;
 
+import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
@@ -84,11 +85,15 @@ public class AuthController {
      * @return
      */
     @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
-    public  JSONResult checkVerificationCode(@Validated @RequestBody VerificationCodeDTO input){
+    public  JSONResult checkVerificationCode(@RequestBody VerificationCodeDTO input){
         //判断验证码是否为空
-        if(input==null||input.getUserAccount()==null||input.getUserPsw()==null||input.getContent()==null){
+        if(input==null){
+            System.out.println("为空");
             return new JSONResult(false);
         }
+        System.out.println(input.getContent());
+        System.out.println(input.getUserAccount());
+        System.out.println(input.getUserPsw());
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
@@ -100,22 +105,28 @@ public class AuthController {
     }
 
     /**
-     * 修改密码——个人中心
-     * author:陈德强
+     * * 修改密码——个人中心
+     *author:陈德强
      * @param principal
-     * @param oldPWD
-     * @param newPWD
+     * @param verificationCodeDTO
      * @return
      */
     @RequestMapping(value = "/changePWD",method = RequestMethod.POST)
-    public  JSONResult changePWD(@Validated @RequestBody Principal principal,String oldPWD,String newPWD) {
-        if(principal==null||oldPWD==""||oldPWD==null||newPWD==""||newPWD==null){
+    public  JSONResult changePWD(Principal principal,@RequestBody VerificationCodeDTO verificationCodeDTO) {
+        if(principal==null||verificationCodeDTO==null){
             return new JSONResult(false);
         }
         User user = (User)redisUtils.get(principal.getName());
+        String oldPWD=verificationCodeDTO.getOldPsw();
+        System.out.println(oldPWD);
+        String newPWD=verificationCodeDTO.getNewPsw();
+        System.out.println(newPWD);
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
 //            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+            System.out.println("修改成功");
+            redisUtils.remove(user.getUserAccount()+ AuthConfig.TOKEN);
+            System.out.println("缓存以清除");
             return new JSONResult(true);
         } else {
 //            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");

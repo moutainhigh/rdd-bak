@@ -78,9 +78,23 @@ public class RentCarController {
     @RequestMapping(value = "/addCompanyContract", method = RequestMethod.POST)
     public JSONResult addCompanyContract(@RequestBody Principal principal, AddCompanyContractList addCompanyContractList){
         User user = (User)redisUtils.get(principal.getName());
-        int success = rentCarService.addCompanyContract(user.getUserId(), addCompanyContractList);
-
-        return new JSONResult(success);
+        JSONResult json = new JSONResult();
+        int code = rentCarService.addCompanyContract(user.getUserId(), addCompanyContractList);
+        switch (code){
+            case 104:
+                json.setMessage("插入个人合同记录出错");
+                json.setCode(code);
+                break;
+            case 105:
+                json.setMessage("插入车辆人员服务出错");
+                json.setCode(code);
+                break;
+            default:
+                json.setMessage("企业合同新增成功，返回合同记录id，code就是");
+                json.setCode(code);
+                break;
+        }
+        return json;
     }
 
     /**
@@ -113,7 +127,7 @@ public class RentCarController {
                 json.setMessage("签订失败");
                 json.setCode(103);
                 break;
-            case 1:
+            default:
                 json.setMessage("签订成功");
                 json.setCode(code);
                 break;

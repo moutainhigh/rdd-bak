@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class rentCarServiceImpl implements RentCarService {
+public class RentCarServiceImpl implements RentCarService {
     @Autowired
     private RentCarMapperExtra rentCarMapper;
 
@@ -23,7 +23,7 @@ public class rentCarServiceImpl implements RentCarService {
      * @return personIncome
      */
     @Override
-    public personIncome getPersonIncome(String userId){
+    public PersonIncome getPersonIncome(String userId){
 
         return rentCarMapper.getPersonIncome(userId);
     }
@@ -104,7 +104,7 @@ public class rentCarServiceImpl implements RentCarService {
             rentCarMapper.insertContractLog(contractLog);
         } catch (Exception e){
             e.printStackTrace();
-            return 0;// 插入合同记录出错
+            return 104;// 插入合同记录出错
         }
 
         try{
@@ -115,16 +115,16 @@ public class rentCarServiceImpl implements RentCarService {
                 personCar.setPersonId(data.getPersonId());
                 personCar.setCarNum(data.getCarNum());
                 personCar.setContractId(contractId);
-                personCar.setServiceId(data.getService());
+//                personCar.setServiceId(data.getService());
                 personCar.setPetrolType(data.getPetrolType());
                 personCar.setIdentityCode(getIdentityCode(data.getPersonId(), data.getCarNum()));
                 rentCarMapper.insertCompanyPerson(personCar);
             }
         } catch (Exception e){
             e.printStackTrace();
-            return 0; // 插入车辆人员服务出错
+            return 105; // 插入车辆人员服务出错
         }
-        return 1;
+        return Integer.parseInt(contractId);
     }
 
     /**
@@ -146,6 +146,7 @@ public class rentCarServiceImpl implements RentCarService {
             return 100;
         }
 
+        String contractId = new String();
         // 出错，更新了多条数据的is_signed
         if(ifUpdate > 1){
             return 101; // 数据库中出现相同identifyCode和personId
@@ -154,11 +155,10 @@ public class rentCarServiceImpl implements RentCarService {
         }else if(ifUpdate ==1){
             ContractLog contractLog = new ContractLog();
 
-            String contractId = StringUtil.createId();
+            contractId = StringUtil.createId();
             contractLog.setRecordId(contractId);
             contractLog.setUserId(userId);
 
-            // TODO 谭深化——此开始和结束时间存在争议,是用企业的，还是个人自己去填，租金也是，是企业和个人约定好的？怎么算的？——参照真实合同最好
             contractLog.setStartTime("2019-04-02 22:22:22");
             contractLog.setEndTime("2020-04-02 22:22:22");
             contractLog.setRent(500);
@@ -171,7 +171,7 @@ public class rentCarServiceImpl implements RentCarService {
             }
         }
 
-        return 1;
+        return Integer.parseInt(contractId);
     }
 
     private String getIdentityCode(String id, String num){

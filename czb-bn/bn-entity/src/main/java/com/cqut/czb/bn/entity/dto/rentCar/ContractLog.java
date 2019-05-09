@@ -9,6 +9,11 @@ public class ContractLog {
      */
     private String recordId;
 
+    // 父级合同记录id
+    private String fatherRecordId;
+
+    // 个人租金
+    private double rent;
 
     /**
      * 用户id
@@ -24,8 +29,6 @@ public class ContractLog {
      * 合同结束时间
      */
     private String endTime;
-
-    private double rent;
 
     public String getRecordId() {
         return recordId;
@@ -65,5 +68,13 @@ public class ContractLog {
 
     public void setRent(double rent) {
         this.rent = rent;
+    }
+
+    public String getFatherRecordId() {
+        return fatherRecordId;
+    }
+
+    public void setFatherRecordId(String fatherRecordId) {
+        this.fatherRecordId = fatherRecordId;
     }
 }

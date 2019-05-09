@@ -8,7 +8,7 @@ import com.cqut.czb.bn.service.AppHomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import com.cqut.czb.bn.entity.entity.AppRouter;
 import java.util.List;
 
 /**
@@ -65,8 +65,8 @@ public class AppHomePageController {
     /**
      * 首页菜单路由获取
      */
-    @RequestMapping(value = "/selectHomePageRouters",method = RequestMethod.GET)
-    public JSONResult selectHomePageRouters(@Validated @RequestBody AppRouter appRouter){
+    @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
+    public JSONResult selectHomePageRouters(AppRouter appRouter){
         return new JSONResult<List<AppRouter>>(appHomePageService.selectHomePageRouters(appRouter));
     }
 }

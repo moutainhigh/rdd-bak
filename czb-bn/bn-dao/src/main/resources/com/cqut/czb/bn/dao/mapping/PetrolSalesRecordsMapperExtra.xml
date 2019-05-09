@@ -51,7 +51,7 @@ FROM
 
         </where>
 	) AS t1
-INNER JOIN (
+    INNER JOIN (
 	SELECT
 		_user.user_id,
 		_user.user_account
@@ -113,19 +113,20 @@ INNER JOIN (
     SELECT
       <include refid="Petrol"/>
     FROM
-        czb_petrol
+    czb_petrol AS cp
+    INNER JOIN (
+    SELECT
+    cpsr.transaction_time temp_time,
+    cpsr.petrol_id,
+    cpsr.buyer_id
+    FROM
+    czb_petrol_sales_records AS cpsr
     WHERE
-        petrol_kind = 0
-    AND petrol_id IN (
-        SELECT
-            petrol_id
-        FROM
-            czb_petrol_sales_records
-        WHERE
-            buyer_id = #{userId,jdbcType = VARCHAR}
-        ORDER BY
-            transaction_time DESC
-    )
+    buyer_id = #{userId,jdbcType = VARCHAR}
+    ) AS t_cpsr ON cp.petrol_id = t_cpsr.petrol_id
+    AND cp.owner_id = t_cpsr.buyer_id
+    ORDER BY
+    temp_time DESC
 </select>
 
     <select id="getPhysicalCardsForUser" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -165,15 +166,41 @@ INNER JOIN (
         <result column="create_at" property="purchaseTime" jdbcType="TIMESTAMP" />
         <result column="update_at" property="rechargeTime" jdbcType="TIMESTAMP" />
         <result column="payment_method" property="buyWay" jdbcType="INTEGER" />
+        <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
     </resultMap>
     <sql id="getPetrolRecharge">
-        record_id,petrol_num,user_account,user_name,petrol_denomination,petrol_price,is_recharged,create_at,update_at,payment_method
+        record_id,petrol_num,user_account,user_name,petrol_denomination,petrol_price,is_recharged,create_at,update_at,payment_method,petrol_kind
     </sql>
+
     <select id="getPetrolRechargeList" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultMap="getPetrolRechargeMap">
         SELECT
         <include refid="getPetrolRecharge"/>
         FROM
+        (
+        SELECT
+        record_id,
+        petrol_num,
+        petrol_id,
+        buyer_id,
+        is_recharged,
+        create_at,
+        update_at,
+        payment_method,
+        petrol_kind
+        FROM
         czb_petrol_sales_records
+        <where>
+            <if test="petrolNum != null and petrolNum != ''">
+                and petrol_num LIKE CONCAT(CONCAT('%',#{petrolNum,jdbcType = VARCHAR}),'%')
+            </if>
+            <if test="isRecharged != null and isRecharged != ''">
+                and is_recharged = #{isRecharged,jdbcType = INTEGER}
+            </if>
+            <if test="petrolKind != null and petrolKind != ''">
+                and petrol_kind = #{petrolKind,jdbcType = INTEGER}
+            </if>
+        </where>
+        ) AS t_cpsr
         INNER JOIN (
         SELECT
         cu.user_account,
@@ -186,21 +213,9 @@ INNER JOIN (
         SELECT
         buyer_id
         FROM
-        czb_petrol_sales_records AS cpsr
-        <where>
-
-            <if test="petrolNum != null and petrolNum != ''">
-                and petrol_num LIKE CONCAT(CONCAT('%',#{petrolNum,jdbcType = VARCHAR}),'%')
-            </if>
-            <if test="isRecharged != null and isRecharged != ''">
-                and is_recharged = #{isRecharged,jdbcType = INTEGER}
-            </if>
-            <if test="petrolKind != null and petrolKind != ''">
-                and petrol_kind = #{petrolKind,jdbcType = INTEGER}
-            </if>
-        </where>
+        czb_petrol_sales_records
         )
-        ) AS  t_user ON t_user.user_id = czb_petrol_sales_records.buyer_id
+        ) AS t_user ON t_user.user_id = t_cpsr.buyer_id
         INNER JOIN (
         SELECT
         petrol_id,
@@ -208,6 +223,17 @@ INNER JOIN (
         petrol_price
         FROM
         czb_petrol
-        ) AS cp ON cp.petrol_id = czb_petrol_sales_records.petrol_id
+        ) AS cp ON cp.petrol_id = t_cpsr.petrol_id
     </select>
+
+    <update id="recharge" parameterType="java.lang.String">
+        update czb_petrol_sales_records
+        set is_recharged = 1
+        where is_recharged = 0
+        and record_id = #{recordId,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <!--个人中心油卡详情获取新版，按日期分组返回数据 级联查询-->
+    <!--<resultMap id="getGTPetrolListGroupByDate" type="com.cqut"-->
 </mapper>

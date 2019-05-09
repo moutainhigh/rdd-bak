@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqut.czb.bn.dao.mapper.ContractMapperExtra">
 
+    <!--插入yunId-->
     <update id="insertUserContractYunId" parameterType="java.lang.String">
         UPDATE czb_user
         SET  user_yun_id = #{userYunId}
@@ -32,18 +33,67 @@
             user_id = #{userId}
     </select>
 
-    <update id="insertEnterpriseContractYunId">
-        UPDATE czb_enterprise_info
-        SET enterprise_yun_id = #{enterpriseYunId}
-        WHERE enterprise_info_id = #{enterpriseId}
-    </update>
+    <!--将提取出的合同id，插入到前端传来的合同记录id中-->
+    <insert id="insertContractId" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET third_contract_num = #{contractId}
+        WHERE record_id = #{contractWriteId}
+    </insert>
 
-    <select id="getEnterpriseId" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT enterprise_info_id
-        FROM czb_enterprise_info
+    <select id="getYunId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT user_yun_id
+        FROM czb_user
         WHERE user_id = #{userId}
     </select>
 
+    <!--查找是否存在相应认证码和身份证的合同-->
+    <select id="getIdentifyCodeAndPersonId" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo" resultType="java.lang.String">
+        SELECT contract_record_id
+        FROM czb_cars_persons
+        WHERE identify_code =#{identifyCode} AND person_id_card =#{personId} AND is_signed = 0
+    </select>
 
+    <update id="updateContractStatus" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET contract_state = #{statusCode}
+        WHERE
+            third_contract_num = #{contractId}
+    </update>
+
+    <select id="getContractStatus">
+        SELECT
+            contract_state
+        FROM
+            czb_contract_records
+        WHERE
+            third_contract_num = #{contractId}
+    </select>
+
+    <update id="setCompanySignedTime" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET contract_start_time = #{startTime},
+         contract_end_time = #{endTime}
+        WHERE
+            third_contract_num = #{contractId}
+    </update>
+
+    <select id="findRent" resultType="java.lang.Double">
+        SELECT
+            rent_back_money
+        FROM
+            czb_service_plan
+        WHERE
+            plan_id = #{taoCanId}
+    </select>
+
+    <select id="getContractStartTimeAndEndTime" resultType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        SELECT
+            contract_start_time AS startTime,
+            contract_end_time AS endTime
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </select>
 
 </mapper>
