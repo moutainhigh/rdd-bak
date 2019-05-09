@@ -117,7 +117,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                     System.out.println("已经放回");
                 }
             }
-        }, 6000);
+        }, 600000);
         return rs;
     }
 

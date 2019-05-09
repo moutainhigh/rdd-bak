@@ -1,6 +1,5 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -33,16 +31,10 @@ public class AppBuyPetrolController {
     @Autowired
     private AppHomePageService appHomePageService;
 
-    @Autowired
-    RedisUtils redisUtils;
-
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
-        if(petrolInputDTO==null||principal==null)
+    public JSONResult buyPetrol(@Validated  PetrolInputDTO petrolInputDTO){
+        if(petrolInputDTO==null)
             new JSONResult(ResponseCodeConstants.FAILURE, "申请数据有误");
-        User user = (User)redisUtils.get(principal.getName());
-        petrolInputDTO.setOwnerId(user.getUserId());
-        petrolInputDTO.setUserAccount(user.getUserAccount());
         //暂时先调用
         System.out.println("油卡刷新"+appHomePageService.selectPetrolZone());
         //随机获取一张卡
