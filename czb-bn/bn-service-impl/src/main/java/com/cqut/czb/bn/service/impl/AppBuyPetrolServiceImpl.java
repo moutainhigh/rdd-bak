@@ -43,8 +43,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         if(petrol==null&&petrolInputDTO==null)
             return "没有油卡或传入数据有误（为空）";
 
-        //获取用户的余额(balance)
-        UserIncomeInfo balance=userIncomeInfoMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         /**
          * 生成起调参数串——返回给app（支付订单）
          */
@@ -73,14 +71,21 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
          String ownerId=petrol.getOwnerId();
         System.out.println("ownerId"+ownerId);
 
+        //获取用户的余额(balance)
+        UserIncomeInfo balance=userIncomeInfoMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         //返佣收益
-        Double fanyongIncome=balance.getFanyongIncome();
-        System.out.println("fangyong"+balance.getFanyongIncome());
-
+        Double fanyongIncome;
         //推荐收益
-        Double shareIncome=balance.getShareIncome();
-        System.out.println("tuijian"+balance.getShareIncome());
-
+        Double shareIncome;
+        if(balance==null){//防止用户没有记录
+            fanyongIncome=0.0;
+            shareIncome=0.0;
+        }else {
+            fanyongIncome=balance.getFanyongIncome();
+            System.out.println("fangyong"+balance.getFanyongIncome());
+            shareIncome=balance.getShareIncome();
+            System.out.println("tuijian"+balance.getShareIncome());
+        }
         //实际支付
         Double actualPayment=petrol.getPetrolPrice()-shareIncome-fanyongIncome;
         System.out.println("actualPayment"+actualPayment);

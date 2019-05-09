@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * 缴费记录
- * 
- * @author yuanding
- * 
+ * 支付账单检测
+ * @author 陈德强
  */
 @Service
 public class PaymentRecordService implements IPaymentRecordService {
