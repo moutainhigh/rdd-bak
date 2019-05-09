@@ -45,11 +45,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
         //获取用户的余额(balance)
         UserIncomeInfo balance=userIncomeInfoMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
-        if(balance!=null){
-            System.out.println(balance.getFanyongIncome()+"fangyong");
-            System.out.println(balance.getShareIncome()+"tuijian");
-        }
-
         /**
          * 生成起调参数串——返回给app（支付订单）
          */
