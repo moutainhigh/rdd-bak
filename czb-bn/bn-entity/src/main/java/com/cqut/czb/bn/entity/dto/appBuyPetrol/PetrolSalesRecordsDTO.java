@@ -156,7 +156,7 @@ public class PetrolSalesRecordsDTO {
     public String getPassbackParams(String orgId, String payType,
                                     Double money, Integer count,
                                     Integer petrolKind ,String ownerId,
-                                    String petrolNum) {
+                                    String petrolNum,Double actualPayment) {
         Map<String, Object> pbp = new HashMap<>();
 
         pbp.put("orgId", orgId);
@@ -166,6 +166,7 @@ public class PetrolSalesRecordsDTO {
         pbp.put("petrolKind", petrolKind);
         pbp.put("ownerId", ownerId);
         pbp.put("petrolNum", petrolNum);
+        pbp.put("actualPayment", actualPayment);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -176,7 +177,7 @@ public class PetrolSalesRecordsDTO {
     public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,
                                                            Double money, Integer count,
                                                            Integer petrolKind ,String ownerId,
-                                                           String petrolNum) {
+                                                           String petrolNum,Double actualPayment) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
         model.setSubject("爱虎购油");
@@ -184,7 +185,7 @@ public class PetrolSalesRecordsDTO {
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
         model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
-        model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum));
+        model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum,actualPayment));
         return model;
     }
 }

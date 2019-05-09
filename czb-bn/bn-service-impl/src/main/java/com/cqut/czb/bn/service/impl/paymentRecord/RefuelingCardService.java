@@ -64,6 +64,7 @@ public class RefuelingCardService implements IRefuelingCard {
 		int petrolKind=0;
 		String petrolNum= "";
 		String ownerId="";
+		double actualPayment=0;
 		for (String data : resDate) {
 			temp = data.split("\'");
 			if ("orgId".equals(temp[0])) {
@@ -93,6 +94,10 @@ public class RefuelingCardService implements IRefuelingCard {
 				ownerId = temp[1];
 				System.out.println("用户id:" + ownerId);
 			}
+            if ("actualPayment".equals(temp[0])) {
+                actualPayment =Double.valueOf(temp[1]);
+                System.out.println("用户id:" + actualPayment);
+            }
 		}
 
 		//payType对应payType支付类型
@@ -103,7 +108,7 @@ public class RefuelingCardService implements IRefuelingCard {
 //			此处插入购油的相关信息，油卡购买记录
 //			修改相应油卡的信息/***************************/死数据只修改了第一张
 //			appBuyPetrolService.updatePetrol(AllPetrolDTO.getCurrentPetrol().get(0));
-			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId);
+			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId,actualPayment);
 
 			//若插入失败则放回卡
 			if(ischange!=true){
@@ -129,7 +134,7 @@ public class RefuelingCardService implements IRefuelingCard {
 	 * 进行所有的操作——相关表的增删改查（油卡表，新增购买记录表，收益变更记录表，用户收益信息表）
 	 * @return
 	 */
-	public boolean changeInfo(double money,int count,int petrolKind,String petrolNum,String ownerId){
+	public boolean changeInfo(double money,int count,int petrolKind,String petrolNum,String ownerId,double actualPayment){
 		//油卡表——更改相应油卡的状态（用户的id，卡号）——更改
 		//取出油卡
 		AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
