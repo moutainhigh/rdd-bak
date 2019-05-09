@@ -32,7 +32,7 @@ public class AppRouterManageController {
 
     //修改数据+修改图标
     @PostMapping("/updateAppRouter")
-    public JSONResult updateAppRouter(@RequestBody AppRouter appRouter,@RequestParam("file")MultipartFile file, Principal principal) throws  Exception{
+    public JSONResult updateAppRouter(AppRouter appRouter, Principal principal,@RequestParam("file")MultipartFile file) throws  Exception{
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appRouterManageService.updateMenu(appRouter,file,user));
     }
@@ -50,8 +50,9 @@ public class AppRouterManageController {
     }
     //新增
     @PostMapping("/insertAppRouter")
-    public JSONResult insertAppRouter(@RequestBody AppRouter appRouter, @RequestParam("file")MultipartFile file,Principal principal) throws Exception{
+    public JSONResult insertAppRouter(AppRouter appRouter,Principal principal,@RequestParam("file")MultipartFile file) throws Exception{
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appRouterManageService.insertMenu(appRouter,file,user));
+
     }
 }

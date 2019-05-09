@@ -52,9 +52,6 @@
             <if test="menuName != null" >
                 menu_name,
             </if>
-            <if test="menuPath != null" >
-                menu_path,
-            </if>
             <if test="isShow != null" >
                 is_show,
             </if>
@@ -70,6 +67,12 @@
             <if test="updateAt != null" >
                 update_at,
             </if>
+            <if test="androidPath != null" >
+                android_path,
+            </if>
+            <if test="iosPath != null" >
+                ios_path,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="routerId != null" >
@@ -80,9 +83,6 @@
             </if>
             <if test="menuName != null" >
                 #{menuName,jdbcType=VARCHAR},
-            </if>
-            <if test="menuPath != null" >
-                #{menuPath,jdbcType=VARCHAR},
             </if>
             <if test="isShow != null" >
                 #{isShow,jdbcType=INTEGER},
@@ -99,6 +99,12 @@
             <if test="updateAt != null" >
                 #{updateAt,jdbcType=TIMESTAMP},
             </if>
+            <if test="androidPath != null" >
+                #{androidPath,jdbcType=VARCHAR},
+            </if>
+            <if test="iosPath != null" >
+                #{iosPath,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
@@ -109,9 +115,6 @@
             </if>
             <if test="menuName != null" >
                 menu_name = #{menuName,jdbcType=VARCHAR},
-            </if>
-            <if test="menuPath != null" >
-                menu_path = #{menuPath,jdbcType=VARCHAR},
             </if>
             <if test="isShow != null" >
                 is_show = #{isShow,jdbcType=INTEGER},
@@ -127,6 +130,12 @@
             </if>
             <if test="updateAt != null" >
                 update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="androidPath != null" >
+                android_path = #{androidPath,jdbcType=VARCHAR},
+            </if>
+            <if test="iosPath != null" >
+                ios_path = #{iosPath,jdbcType=VARCHAR},
             </if>
         </set>
         where router_id = #{routerId,jdbcType=VARCHAR}
