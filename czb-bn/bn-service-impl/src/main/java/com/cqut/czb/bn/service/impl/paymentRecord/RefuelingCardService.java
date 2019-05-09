@@ -76,19 +76,19 @@ public class RefuelingCardService implements IRefuelingCard {
 			}
 			if ("money".equals(temp[0])) {
 				money = Double.valueOf(temp[1]);
-				System.out.println("充值金额:" + money);
+				System.out.println("充值金额:money" + money);
 			}
 			if ("count".equals(temp[0])) {
 				count = Integer.parseInt(temp[1]);
-				System.out.println("购买数量:" + count);
+				System.out.println("购买数量count:" + count);
 			}
 			if ("petrolKind".equals(temp[0])) {
 				petrolKind = Integer.parseInt(temp[1]);
-				System.out.println("油卡类型:" + petrolKind);
+				System.out.println("油卡类型petrolKind:" + petrolKind);
 			}
 			if ("petrolNum".equals(temp[0])) {
 				petrolNum = temp[1];
-				System.out.println("油卡号:" + petrolNum);
+				System.out.println("油卡号petrolNum:" + petrolNum);
 			}
 			if ("ownerId".equals(temp[0])) {
 				ownerId = temp[1];
@@ -96,7 +96,7 @@ public class RefuelingCardService implements IRefuelingCard {
 			}
             if ("actualPayment".equals(temp[0])) {
                 actualPayment =Double.valueOf(temp[1]);
-                System.out.println("用户id:" + actualPayment);
+                System.out.println("实际支付actualPayment:" + actualPayment);
             }
 		}
 

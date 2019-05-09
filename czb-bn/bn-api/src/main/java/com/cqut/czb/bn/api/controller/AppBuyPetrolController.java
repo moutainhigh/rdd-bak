@@ -50,6 +50,8 @@ public class AppBuyPetrolController {
         System.out.println("油卡刷新"+appHomePageService.selectPetrolZone());
         //随机获取一张卡
         AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
+        petrolInputDTO.setUserAccount(user.getUserAccount());
+        petrolInputDTO.setOwnerId(user.getUserId());
         System.out.println("AllpetrolMap.size():"+allPetrolDTO.getAllpetrolMap().size());
         System.out.println("currentPetrolMap.size():"+allPetrolDTO.getCurrentPetrolMap().size());
         Petrol petrol=AllPetrolDTO.randomPetrol(petrolInputDTO);
