@@ -4,7 +4,7 @@ import cn.afterturn.easypoi.entity.vo.BigExcelConstants;
 
 import java.math.BigDecimal;
 
-public class personIncome {
+public class PersonIncome {
     private BigDecimal fanYongIncome;
 
     private BigDecimal shareIncome;

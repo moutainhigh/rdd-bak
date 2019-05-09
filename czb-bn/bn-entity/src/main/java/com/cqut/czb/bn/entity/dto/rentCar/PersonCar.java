@@ -37,7 +37,7 @@ public class PersonCar {
     /**
      * 套餐id
      */
-    private Integer serviceId;
+    private String serviceId;
 
     /**
      * 油卡类型
@@ -97,11 +97,11 @@ public class PersonCar {
         this.contractId = contractId;
     }
 
-    public Integer getServiceId() {
+    public String getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(Integer serviceId) {
+    public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
 
