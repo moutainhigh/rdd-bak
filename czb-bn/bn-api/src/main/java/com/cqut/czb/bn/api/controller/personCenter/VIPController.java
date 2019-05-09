@@ -31,9 +31,7 @@ public class VIPController {
     @RequestMapping(value = "/createVIPOrder",method = RequestMethod.POST)
     public JSONResult createVIPOrder(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
-        redisUtils.remove(principal.getName());
-        System.out.println(user.getUserAccount() + redisUtils.hasKey(principal.getName()));
-        return new JSONResult();
+        return new JSONResult(vipService.createVIPOrder(user.getUserId()));
     }
 
     @RequestMapping(value = "/purchaseVIP",method = RequestMethod.POST)
