@@ -48,6 +48,8 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public Boolean register(User user, VerificationCodeDTO verificationCodeDTO) {
         if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+
+        verificationCodeDTO.setUserAccount(user.getUserAccount());
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
 
         user.setUserId(StringUtil.createId());
@@ -63,6 +65,8 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo) {
         if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+
+        verificationCodeDTO.setUserAccount(user.getUserAccount());
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
 
         user.setUserId(StringUtil.createId());
