@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public interface MyWalletMapperExtra {
     BalanceAndInfoIdDTO getUserAllIncome(@Param("userId") String userId);
 
-    int increaseWithdrawed(@Param("paymentAmount") double paymentAmount);
+    int increaseWithdrawed(@Param("infoId") String infoId,@Param("paymentAmount") String paymentAmount);
 
     int insertIncomeLog(IncomeLogDTO incomeLogDTO);
 

@@ -7,9 +7,10 @@
         where user_id = #{userId}
     </select>
 
-    <update id="increaseWithdrawed" parameterType="java.lang.Double">
+    <update id="increaseWithdrawed" parameterType="java.lang.String">
         UPDATE czb_user_income_info
         SET withdrawed = withdrawed + #{paymentAmount}
+        WHERE info_id = #{infoId}
     </update>
 
     <select id="getPsw" parameterType="java.lang.String" resultType="java.lang.String">
