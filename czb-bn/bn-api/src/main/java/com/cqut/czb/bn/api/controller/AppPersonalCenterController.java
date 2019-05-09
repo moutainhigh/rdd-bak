@@ -75,4 +75,14 @@ public class AppPersonalCenterController {
         return new JSONResult(appPersonalCenterService.getAppRouters(appRouter));
     }
 
+    /**
+     * 获取User信息
+     */
+    @RequestMapping(value = "/appGetUserInfo",method = RequestMethod.GET)
+    public JSONResult appGetUserInfo(Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        user.setUserPsw("");//不返回密码
+        return new JSONResult(user);
+    }
+
 }

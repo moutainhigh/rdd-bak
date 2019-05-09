@@ -74,11 +74,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
 
-        User user=new User();
-        user.setUserAccount(jwtUser.getAccount());
-        user.setUserPsw(jwtUser.getPassword());
-        user.setUserId(jwtUser.getId());
-        user.setUserName(jwtUser.getUsername());
+        User user=jwtUser.getUser();
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
         redisUtils.put(jwtUser.getAccount(), user);
         if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {

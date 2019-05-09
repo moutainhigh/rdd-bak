@@ -18,6 +18,8 @@ public class JwtUser implements UserDetails {
     private String account;
     private String username;
     private String password;
+    private User user;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public JwtUser() {
@@ -25,6 +27,7 @@ public class JwtUser implements UserDetails {
 
     // 写一个能直接使用user创建jwtUser的构造器
     public JwtUser(User user) {
+        this.user = user;
         id = user.getUserId();
         account = user.getUserAccount();
         username = user.getUserName();
@@ -88,6 +91,14 @@ public class JwtUser implements UserDetails {
                 ", password='" + password + '\'' +
                 ", authorities=" + authorities +
                 '}';
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 
