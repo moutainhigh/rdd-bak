@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 
 public interface UserDetailService {
+    Boolean register(User user, VerificationCodeDTO verificationCodeDTO);
     Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo);
     Boolean checkAccount(User user);
 

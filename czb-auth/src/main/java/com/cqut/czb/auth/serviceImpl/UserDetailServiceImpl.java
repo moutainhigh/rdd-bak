@@ -46,35 +46,42 @@ public class UserDetailServiceImpl implements UserDetailService {
     RedisUtils redisUtils;
 
     @Override
+    public Boolean register(User user, VerificationCodeDTO verificationCodeDTO) {
+        if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
+
+        user.setUserId(StringUtil.createId());
+        user.setUserType(0);
+        user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
+        user.setCreateAt(new Date());
+        user.setIsDeleted(0);
+        user.setIsIdentified(0);
+
+        return userMapper.insertSelective(user) > 0;
+    }
+
+    @Override
     public Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo) {
         if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
 
         user.setUserId(StringUtil.createId());
+        user.setUserType(1);
         user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
         user.setCreateAt(new Date());
         user.setIsDeleted(0);
+        user.setIsIdentified(1);
+
         boolean isInsertUser = userMapper.insertSelective(user) > 0;
 
-        if(user.getUserType() == SystemConstants.PERSONAL_USER) {
-            // 个人用户处理
-            user.setIsIdentified(0);
-            return  isInsertUser;
+        enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
+        enterpriseInfo.setIsDeleted(0);
+        enterpriseInfo.setCreateAt(new Date());
+        enterpriseInfo.setUserId(user.getUserId());
 
-        } else if(user.getUserType() == SystemConstants.ENTERPRISE_USER) {
-            // 企业用户处理
-            user.setIsIdentified(1);
+        boolean isInsertEnterprise = enterpriseInfoMapper.insertSelective(enterpriseInfo) > 0;
 
-            enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
-            enterpriseInfo.setIsDeleted(0);
-            enterpriseInfo.setCreateAt(new Date());
-            enterpriseInfo.setUserId(user.getUserId());
-
-            boolean isInsertEnterprise = enterpriseInfoMapper.insertSelective(enterpriseInfo) > 0;
-            return isInsertUser && isInsertEnterprise;
-        }
-
-        return false;
+        return isInsertUser && isInsertEnterprise;
     }
 
     @Override
