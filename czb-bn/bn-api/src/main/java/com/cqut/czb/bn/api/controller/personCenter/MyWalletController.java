@@ -5,15 +5,12 @@ import com.cqut.czb.bn.entity.dto.personCenter.myWallet.AlipayRecordDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
 import java.security.Principal;
 
 /**
@@ -32,7 +29,7 @@ public class MyWalletController {
     RedisUtils redisUtils;
 
     @RequestMapping(value = "/myWallet/withDraw", method = RequestMethod.POST)
-    public JSONResult withDraw(@RequestBody Principal principal, AlipayRecordDTO alipayRecordDTO){
+    public JSONResult withDraw(Principal principal, @RequestBody AlipayRecordDTO alipayRecordDTO){
         User user = (User)redisUtils.get(principal.getName());
 
         JSONResult json = new JSONResult();

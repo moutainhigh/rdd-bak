@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org// DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqut.czb.bn.dao.mapper.RentCarMapperExtra">
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.rentCar.personIncome">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.rentCar.PersonIncome">
         <result column="fanyong_income" jdbcType="DOUBLE" property="fanYongIncome"></result>
         <result column="share_income" jdbcType="DOUBLE" property="shareIncome"></result>
         <result column="got_total_rent" jdbcType="DOUBLE" property="rentIncome"></result>
@@ -153,22 +153,11 @@
     <insert id="insertContractLog" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
         INSERT INTO czb_contract_records (
             record_id,
-            user_id,
-            contract_start_time,
-            contract_end_time,
-            contract_state,
-            contract_type,
-            signed_time
-        )
+            user_id
         VALUES
             (
                 #{recordId},
-                #{userId},
-                #{startTime},
-                #{endTime},
-                '0',
-                '0',
-                CURRENT_TIMESTAMP
+                #{userId}
             )
     </insert>
 
@@ -176,24 +165,22 @@
     <insert id="insertContractLogPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
         INSERT INTO czb_contract_records (
         record_id,
-        user_id,
         contract_start_time,
         contract_end_time,
         contract_state,
         contract_type,
-        signed_time,
-        rent
+        rent,
+        contract_father_id
         )
         VALUES
         (
         #{recordId},
-        #{userId},
         #{startTime},
         #{endTime},
         '0',
         '1',
-        CURRENT_TIMESTAMP,
-        #{rent}
+        #{rent},
+        #{fatherRecordId}
         )
     </insert>
 

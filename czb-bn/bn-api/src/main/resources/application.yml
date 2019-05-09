@@ -4,9 +4,9 @@ spring:
 
   #数据库配置
   datasource:
-    url: jdbc:mysql://${MYSQL_URL:localhost:3306/${MYSQL_DATABASE:test}}?characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:39.98.250.45:3306/${MYSQL_DATABASE:czb}}?characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
     username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASS:19980326}
+    password: ${MYSQL_PASS:G@6tSRWx}
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   cache:

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 public interface RentCarMapperExtra {
-    personIncome getPersonIncome(@Param("userId") String userId);
+    PersonIncome getPersonIncome(@Param("userId") String userId);
 
     List<OneContractInfoDTO> getOneContractInfo(@Param("userId")String userId, @Param("contractId") String contractId);
 

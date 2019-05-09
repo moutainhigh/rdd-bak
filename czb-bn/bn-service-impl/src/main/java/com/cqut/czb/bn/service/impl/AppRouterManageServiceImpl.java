@@ -44,6 +44,13 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         fileMapperExtra.insertSelective(file1);
         appRouter.setIconPathId(file1.getFileId());
         appRouter.setRouterId(StringUtil.createId());
+        appRouter.setCreateAt(new Date());
+        appRouter.setUpdateAt(new Date());
+        if (appRouter.getAppType()==0){
+            appRouter.setIosPath(null);
+        }else if (appRouter.getAppType()==1){
+            appRouter.setAndroidPath(null);
+        }                           //根据app类型确定路径类型
         return (appRouterMapperExtra.insertSelective(appRouter)>0);
     }
 
@@ -55,15 +62,22 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
 
     @Override
     public Boolean updateMenuNoFile(AppRouter appRouter) {
+        appRouter.setUpdateAt(new Date());
         return (appRouterMapperExtra.updateByPrimaryKeySelective(appRouter)>0);
     }
 
     @Override
     public Boolean updateMenu(AppRouter appRouter, MultipartFile file, User user) throws Exception{
+        appRouter.setUpdateAt(new Date());
         File file1 = fileMapperExtra.selectByPrimaryKey(appRouter.getIconPathId());
         file1.setSavePath(FileUploadUtil.putObject(file.getOriginalFilename(),file.getInputStream()));
         file1.setUpdateAt(new Date());
         fileMapperExtra.updateByPrimaryKeySelective(file1);
+        if (appRouter.getAppType()==0){
+            appRouter.setIosPath(null);
+        }else if (appRouter.getAppType()==1){
+            appRouter.setAndroidPath(null);
+        }
         return (appRouterMapperExtra.updateByPrimaryKeySelective(appRouter)>0);
     }
 }

@@ -13,6 +13,15 @@ public class PetrolRechargeOutputDTO {
     private double petrolPrice;
     private String isRecharged;
     private String buyWay;
+    private String petrolKind;
+
+    public String getPetrolKind() {
+        return petrolKind;
+    }
+
+    public void setPetrolKind(String petrolKind) {
+        this.petrolKind = petrolKind;
+    }
 
     public String getRecordId() {
         return recordId;

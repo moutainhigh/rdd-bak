@@ -6,7 +6,7 @@ import net.sf.json.JSONObject;
 import java.util.List;
 
 public interface RentCarService {
-    personIncome getPersonIncome(String userId);
+    PersonIncome getPersonIncome(String userId);
 
     List<OneContractInfoDTO> getOneContractInfo(String userId, String contractId);
 

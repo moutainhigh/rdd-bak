@@ -47,7 +47,7 @@ public class MyWalletImpl implements MyWallet {
             return 103;
         }
 
-        myWalletMapper.increaseWithdrawed(alipayRecordDTO.getPaymentAmount().doubleValue());
+        myWalletMapper.increaseWithdrawed(balanceAndInfoId.getInfoId(), alipayRecordDTO.getPaymentAmount().toString());
         IncomeLogDTO incomeLog = new IncomeLogDTO();
         incomeLog.setInfoId(balanceAndInfoId.getInfoId());
         incomeLog.setAmount(alipayRecordDTO.getPaymentAmount().doubleValue());
@@ -92,6 +92,7 @@ public class MyWalletImpl implements MyWallet {
 //            e.printStackTrace();
 //            return "0";
 //        }
+
         return 1;
     }
 }

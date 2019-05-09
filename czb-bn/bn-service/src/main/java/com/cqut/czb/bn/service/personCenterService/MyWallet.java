@@ -8,4 +8,5 @@ public interface  MyWallet {
     int withDraw(AlipayRecordDTO alipayRecordDTO, String userId);
 
     BalanceAndInfoIdDTO getBalance(String userId);
+
 }

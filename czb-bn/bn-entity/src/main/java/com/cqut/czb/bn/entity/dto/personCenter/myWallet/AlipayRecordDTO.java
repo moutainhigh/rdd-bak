@@ -19,7 +19,13 @@ public class AlipayRecordDTO {
      */
     private BigDecimal paymentAmount;
 
+    /**
+     * 用户密码
+     */
     private String keyWord;
+
+    public AlipayRecordDTO() {
+    }
 
     public String getPaymentAccount() {
         return paymentAccount;
