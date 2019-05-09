@@ -1,5 +1,6 @@
 package com.cqut.czb.auth.controller;
 
+import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.entity.VerificationCode;
@@ -123,6 +124,9 @@ public class AuthController {
         boolean ischange=userDetailService.changePWD(user,oldPWD,newPWD);
         if(ischange) {
 //            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+            System.out.println("修改成功");
+            redisUtils.remove(user.getUserAccount()+ AuthConfig.TOKEN);
+            System.out.println("缓存以清除");
             return new JSONResult(true);
         } else {
 //            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
