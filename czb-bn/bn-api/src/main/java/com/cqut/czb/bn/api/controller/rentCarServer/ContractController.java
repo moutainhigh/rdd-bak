@@ -241,25 +241,31 @@ public class ContractController {
     @RequestMapping(value = "/personSigned", method = RequestMethod.POST)
     public JSONResult personSigned(Principal principal, @RequestBody  PersonSignedInputInfo inputInfo){
         User user = (User)redisUtils.get(principal.getName());
-        JSONObject json = contractService.personSigned("3", inputInfo);
+        JSONObject json = contractService.personSigned(user.getUserId(), inputInfo);
         String code = json.getString("code");
         switch(code){
             case ContractServiceImpl.STATE_CONTRACT_NULL:
+                json.put("code", code);
                 json.put("message", "不存在符合的签约码" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_CREATEYUNID_FAILED:
+                json.put("code", code);
                 json.put("message", "用户没有注册云合同" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_CREATE_CONTRACT_YUN_FAILED:
+                json.put("code", code);
                 json.put("message", "生成合同模板出错" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_INSERT_YUN_CONTRACTID_FAILED:
+                json.put("code", code);
                 json.put("message", "插入云合同id到合同记录表中出错" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_ADD_SIGNER_FAILED:
+                json.put("code", code);
                 json.put("message", "为合同添加签署者失败" + "(" + code + ")");
                 break;
             default:
+                json.put("code", "200");
                 json.put("message", "个人签约初始化成功（签署中状态）");
         }
         return new JSONResult(json);
@@ -268,20 +274,22 @@ public class ContractController {
     /**
      * 企业签订合同正文初始化
      */
-    @RequestMapping(value = "/companySignedInitialize", method = RequestMethod.POST)
-    public JSONResult companySigned(String userId){
-        String code = contractService.companySignedInitialize(userId);
-        JSONResult json = new JSONResult();
+    @RequestMapping(value = "/companySignedInitialize", method = RequestMethod.GET)
+    public JSONResult companySigned(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        String code = contractService.companySignedInitialize(user.getUserId());
+        JSONObject json = new JSONObject();
         switch(code){
             case ContractServiceImpl.STATE_COMPANY_SIGNED_INITIALIZE_FAILED:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("插入合同记录出错" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "插入合同记录出错" + "(" + code + ")");
                 break;
             default:
-                json.setCode(200);
-                json.setMessage("合同插入成功");
+                json.put("code", 200);
+                json.put("message", "合同插入成功");
+                json.put("contractLogId", code);
         }
-        return new JSONResult();
+        return new JSONResult(json);
     }
 
     // TODO 谭深化——这里的合同开始结束时间，以后可能会修改
@@ -289,63 +297,71 @@ public class ContractController {
      * 企业签订正文时间设置
      */
     @RequestMapping(value = "/setCompanySignedTime", method = RequestMethod.POST)
-    public JSONResult setCompanySignedTime(CompanySignedTime startTime){
+    public JSONResult setCompanySignedTime(@RequestBody CompanySignedTime startTime){
         String code = contractService.setCompanySignedTime(startTime.getStartTime(), startTime.getContractId());
-        JSONResult json = new JSONResult();
+        JSONObject json = new JSONObject();
         switch(code){
             case ContractServiceImpl.STATE_TIME_FORMAT:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("时间格式可能出错" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "时间格式可能出错" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_TIME_SET:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("设置时间出错" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "设置时间出错" + "(" + code + ")");
                 break;
             default:
-                json.setCode(200);
-                json.setMessage("设置时间成功");
+                json.put("code", 200);
+                json.put("message", "设置时间成功");
         }
 
-        return json;
+        return new JSONResult(json);
     }
 
     /**
      * 企业签订正文个人信息添加
      */
     @RequestMapping(value = "/addCompanySignedPersonal", method = RequestMethod.POST)
-    public JSONResult addCompanySignedPersonal(CompanySignedPersonal personal){
+    public JSONResult addCompanySignedPersonal(@RequestBody CompanySignedPersonal personal){
         String code = contractService.addCompanySignedPersonal(personal);
-        JSONResult json = new JSONResult();
+        JSONObject json = new JSONObject();
         switch(code){
             case ContractServiceImpl.STATE_ADD_PERSONAL:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("企业签订合同添加个人服务失败" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "企业签订合同添加个人服务失败" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_FIND_TAO_CAN_RENT:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("查找套餐金额失败" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "查找套餐金额失败" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_FIND_TIMES:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("查找父级合同记录的开始和结束时间失败" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "查找父级合同记录的开始和结束时间失败" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_INSERT_PERSONAL_CONTRACT_FAILED:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("插入父级相应的子合同记录失败" + "(" + code + ")");
+                json.put("code", Integer.parseInt(code));
+                json.put("message", "插入父级相应的子合同记录失败" + "(" + code + ")");
                 break;
             default:
-                json.setCode(200);
-                json.setMessage("企业签订正文添加个人信息成功");
+                json.put("code", 200);
+                json.put("message", "企业签订正文添加个人信息成功");
         }
 
-        return new JSONResult();
+        return new JSONResult(json);
+    }
+
+    /**
+     * 获得套餐
+     */
+    @RequestMapping(value = "/getTaoCanId", method = RequestMethod.GET)
+    public JSONResult getTaoCanId(){
+        return new JSONResult(contractService.getTaoCanId());
     }
 
     /**
      * 未提交企业合同个人信息列表获取
      */
     @RequestMapping(value = "/getWithoutCommitPersonInfo", method = RequestMethod.POST)
-    public JSONResult getWithoutCommitPersonInfo(ContractIdInfo idInfo){
+    public JSONResult getWithoutCommitPersonInfo(@RequestBody ContractIdInfo idInfo){
         return new JSONResult(contractService.getWithoutCommitPersonInfo(idInfo.getContractId()));
     }
 
@@ -375,9 +391,9 @@ public class ContractController {
      * 查看合同状态
      */
     @RequestMapping(value = "/getContractStatus", method = RequestMethod.POST)
-    public JSONResult getContractStatus(String contractId){
+    public JSONResult getContractStatus(@RequestBody ContractIdInfo info){
         JSONObject json = new JSONObject();
-        json.put("contractStatus", contractService.getContractStatus(contractId));
+        json.put("contractStatus", contractService.getContractStatus(info.getContractId()));
 
         return new JSONResult(json);
     }

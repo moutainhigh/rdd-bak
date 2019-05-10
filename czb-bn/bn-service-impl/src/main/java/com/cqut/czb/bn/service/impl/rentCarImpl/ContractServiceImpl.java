@@ -6,10 +6,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.ContractLog;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonCar;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsResultDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
@@ -697,6 +694,19 @@ public class ContractServiceImpl implements ContractService{
     }
 
     /**
+     * 获取套餐信息
+     */
+    @Override
+    public List<TaoCanDTO> getTaoCanId(){
+        List<TaoCanDTO> taos = contractMapper.getTaoCanId();
+        for(TaoCanDTO data:taos){
+            data.setTaoText(data.getTaoText() + "元/年");
+        }
+
+        return taos;
+    }
+
+    /**
      * 企业签订正文个人信息添加
      */
     @Override
@@ -705,7 +715,7 @@ public class ContractServiceImpl implements ContractService{
         // 同时，插入个人合同记录
         ContractLog contractLog = new ContractLog();
 
-        // 根据taocCnId，查找套餐金额
+        // 根据taocCnId，查找套餐返租金额
         double rent = 0;
         try{
             rent = contractMapper.findRent(personal.getTaoCanId());

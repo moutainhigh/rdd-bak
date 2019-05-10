@@ -96,6 +96,15 @@
             record_id = #{contractId}
     </select>
 
+    <!--获取套餐信息-->
+    <select id="getTaoCanId" resultType="com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO">
+        SELECT
+            (plan_amount * 12) AS taoText,
+            plan_id AS taoId
+        FROM
+            czb_service_plan
+    </select>
+
     <!--根据企业合同记录id，查找其时间，和所有的企业合同子合同的服务人员车辆表记录-->
     <select id="getWithoutCommitPersonInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO">
         SELECT

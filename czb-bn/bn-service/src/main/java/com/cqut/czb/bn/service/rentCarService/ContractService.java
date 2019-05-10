@@ -6,9 +6,12 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 public interface ContractService {
     String getContractToken();
@@ -51,6 +54,9 @@ public interface ContractService {
 
     // 未提交企业合同个人信息列表获取
     JSONObject getWithoutCommitPersonInfo(String contractId);
+
+    // 获取套餐信息
+    List<TaoCanDTO> getTaoCanId();
 
     // 删除企业合同个人信息列表中的某人
     boolean removePersonInfo(ContractIdListDTO contractiIdList);

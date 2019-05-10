@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -53,6 +54,9 @@ public interface ContractMapperExtra {
 
     // 根据套餐id获得套餐
     Double getTaoCan(@Param("taoCanId")String taoCanId);
+
+    // 获取套餐信息
+    List<TaoCanDTO> getTaoCanId();
 
     // 删除企业合同个人信息列表中的某人
     int removePersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
