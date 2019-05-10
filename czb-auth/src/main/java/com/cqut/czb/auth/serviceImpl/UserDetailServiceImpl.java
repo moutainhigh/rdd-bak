@@ -199,9 +199,4 @@ public class UserDetailServiceImpl implements UserDetailService {
             return false;
         }
     }
-
-    public static void main(String[] args) {
-        UserDetailServiceImpl userDetailService = new UserDetailServiceImpl();
-        userDetailService.enterpriseCertification(new EnterpriseUserDTO());
-    }
 }
