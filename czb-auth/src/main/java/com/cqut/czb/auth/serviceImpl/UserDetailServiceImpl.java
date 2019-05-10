@@ -206,6 +206,9 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     public boolean personalCertification(PersonalUserDTO personalUserDTO) {
+        VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return false;
+
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("appId", "2019042516271800110");
         paramMap.put("appKey", "uDCFes85C3OwDQ");
