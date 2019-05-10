@@ -23,6 +23,13 @@ public class MyWalletImpl implements MyWallet {
 
     @Override
     public BalanceAndInfoIdDTO getBalance(String userId){
+        BalanceAndInfoIdDTO balance = new BalanceAndInfoIdDTO();
+
+        // 如果取出的余额小于0，则把余额设置为0
+        if(balance.getBalance().compareTo(new BigDecimal(0)) < 0){
+            balance.setBalance(new BigDecimal(0));
+        }
+
         return myWalletMapper.getUserAllIncome(userId);
     }
 

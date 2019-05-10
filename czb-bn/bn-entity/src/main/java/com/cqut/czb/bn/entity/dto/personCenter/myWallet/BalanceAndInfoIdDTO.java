@@ -5,14 +5,17 @@ import java.math.BigDecimal;
 public class BalanceAndInfoIdDTO {
 
     /**
-     * 用户id
+     * 余额记录id
      */
     private String infoId;
 
     /**
-     * 角色类型
+     * 余额
      */
     private BigDecimal balance;
+
+    public BalanceAndInfoIdDTO() {
+    }
 
     public String getInfoId() {
         return infoId;
