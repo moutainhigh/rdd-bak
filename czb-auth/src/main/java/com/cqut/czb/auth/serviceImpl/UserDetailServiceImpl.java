@@ -199,4 +199,38 @@ public class UserDetailServiceImpl implements UserDetailService {
             return false;
         }
     }
+
+    @Override
+    public boolean personalCertification(PersonalUserDTO personalUserDTO) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("appId", "2019042516271800110");
+        paramMap.put("appKey", "uDCFes85C3OwDQ");
+        paramMap.put("idName", personalUserDTO.getUserName()); // 企业名称
+        paramMap.put("idNo", personalUserDTO.getUserIdCard()); // 企业统一社会信用代码（组织机构代码）
+        String id;
+        try{
+            String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/personal/simple", paramMap);
+            JSONObject json = new JSONObject();
+            json.put("res", response);
+            id = json.getJSONObject("res").getJSONObject("data").getString("id");
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        if(id != null) {
+            boolean isSuccess =  id.length() > 0;
+            boolean isUpdate = false;
+            if(isSuccess) {
+                User user = userMapperExtra.findUserByAccount(personalUserDTO.getUserAccount());
+                user.setUpdateAt(new Date());
+                user.setIsIdentified(1);
+                isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0
+            }
+
+            return isUpdate;
+        } else {
+            return false;
+        }
+    }
 }

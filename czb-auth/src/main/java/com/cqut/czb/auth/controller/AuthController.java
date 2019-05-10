@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +41,10 @@ public class AuthController {
      * */
     @PostMapping("/enterpriseRegister")
     public JSONResult registerEnterpriseUser(@Validated @RequestBody EnterpriseUserDTO enterpriseUserDTO) {
-//        boolean isCertified = userDetailService.enterpriseCertification(enterpriseUserDTO);
-//        if(!isCertified) {
-//            return new JSONResult(ResponseCodeConstants.FAILURE, "企业信息认证失败");
-//        }
+        boolean isCertified = userDetailService.enterpriseCertification(enterpriseUserDTO);
+        if(!isCertified) {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "企业信息认证失败");
+        }
 
         return new JSONResult(userDetailService.registerEnterpriseUser(enterpriseUserDTO));
     }
@@ -148,6 +149,17 @@ public class AuthController {
         } else {
 //            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
             return new JSONResult(false);
+        }
+    }
+
+    @RequestMapping(value = "/personalCertification",method = RequestMethod.POST)
+    public  JSONResult personalCertification(@Validated @RequestBody PersonalUserDTO personalUserDTO) {
+
+        boolean isCertified = userDetailService.personalCertification(personalUserDTO);
+        if(!isCertified) {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "个人信息认证失败");
+        } else {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "个人信息认证成功");
         }
     }
 
