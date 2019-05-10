@@ -88,6 +88,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         }
         //实际支付
         Double actualPayment=petrol.getPetrolPrice()-shareIncome-fanyongIncome;
+        if(actualPayment<0)
+            actualPayment=0.0;
         System.out.println("actualPayment"+actualPayment);
 
         PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();

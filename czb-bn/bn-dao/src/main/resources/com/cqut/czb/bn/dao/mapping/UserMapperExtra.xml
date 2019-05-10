@@ -97,4 +97,19 @@
         user_id = #{userId,jdbcType=VARCHAR}
         and is_deleted = 0
   </select>
+
+  <select id="GetUserEnterpriseInfo" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO" parameterType="java.lang.String" >
+   SELECT
+    enterprise_name AS enterpriseName,
+    contact_info AS contactInfo,
+    user_account AS userAccount,
+    user_type AS userType,
+    user_rank AS userRank,
+    user_name AS userName
+    FROM czb_user,czb_enterprise_info
+    WHERE
+    czb_user.user_id=#{userId,jdbcType=VARCHAR} AND
+    czb_user.user_id=czb_enterprise_info.user_id
+  </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
@@ -42,4 +43,6 @@ public interface AppPersonalCenterService {
      * @return
      */
     List<AppRouter> getAppRouters(AppRouter appRouter);
+
+    PersonalCenterUserDTO getUserEnterpriseInfo(String userId);
 }

@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/AppPersonalCenter")
+@RequestMapping("/AppPersonalCenter")
 public class AppPersonalCenterController {
 
     @Autowired
@@ -83,6 +83,15 @@ public class AppPersonalCenterController {
         User user = (User) redisUtils.get(principal.getName());
         user.setUserPsw("");//不返回密码
         return new JSONResult(user);
+    }
+
+    /**
+     * 获取User信息及企业信息
+     */
+    @RequestMapping(value = "/appGetUserEnterpriseInfo",method = RequestMethod.GET)
+    public JSONResult appGetUserEnterpriseInfo(Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
     }
 
 }

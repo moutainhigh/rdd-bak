@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
@@ -33,4 +34,11 @@ public interface UserMapperExtra {
      * 通过userId查出上级的用户
      */
     String selectUserId(@Param("userId") String userId);
+
+    /**
+     * 用户个人及企业信息
+     * @param userId
+     * @return
+     */
+    PersonalCenterUserDTO GetUserEnterpriseInfo(@Param("userId") String userId);
 }
