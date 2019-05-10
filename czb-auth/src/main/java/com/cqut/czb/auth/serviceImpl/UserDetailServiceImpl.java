@@ -7,9 +7,12 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
+import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
+import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.util.constants.SystemConstants;
+import com.cqut.czb.bn.util.mapper.BeanMapper;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
@@ -46,12 +49,13 @@ public class UserDetailServiceImpl implements UserDetailService {
     RedisUtils redisUtils;
 
     @Override
-    public Boolean register(User user, VerificationCodeDTO verificationCodeDTO) {
-        if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+    public Boolean registerPersonalUser(PersonalUserDTO personalUserDTO) {
+        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return new Boolean(false);
 
-        verificationCodeDTO.setUserAccount(user.getUserAccount());
+        VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
 
+        User user = BeanMapper.map(personalUserDTO, User.class);
         user.setUserId(StringUtil.createId());
         user.setUserType(0);
         user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
@@ -63,12 +67,13 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
-    public Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo) {
-        if(userMapperExtra.checkAccount(user.getUserAccount())) return new Boolean(false);
+    public Boolean registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
+        if(userMapperExtra.checkAccount(enterpriseUserDTO.getUserAccount())) return new Boolean(false);
 
-        verificationCodeDTO.setUserAccount(user.getUserAccount());
+        VerificationCodeDTO verificationCodeDTO = BeanMapper.map(enterpriseUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
 
+        User user = BeanMapper.map(enterpriseUserDTO, User.class);
         user.setUserId(StringUtil.createId());
         user.setUserType(1);
         user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
@@ -78,7 +83,9 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         boolean isInsertUser = userMapper.insertSelective(user) > 0;
 
+        EnterpriseInfo enterpriseInfo = BeanMapper.map(enterpriseUserDTO, EnterpriseInfo.class);
         enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
+        enterpriseInfo.setEnterpriseName(enterpriseUserDTO.getUserName());
         enterpriseInfo.setIsDeleted(0);
         enterpriseInfo.setCreateAt(new Date());
         enterpriseInfo.setUserId(user.getUserId());
@@ -168,21 +175,19 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
-    public boolean enterpriseCertification(EnterpriseInfo enterpriseInfo) {
-        JSONObject requestJson = new JSONObject();
-        requestJson.put("appId", "2019042516271800110");
-        requestJson.put("appKey", "uDCFes85C3OwDQ");
-        requestJson.put("companyName", enterpriseInfo.getEnterpriseName()); // 企业名称
-        requestJson.put("creditCode", enterpriseInfo.getOrgCode()); // 企业证件号
-        requestJson.put("legalPersonName", enterpriseInfo.getLegalPerson()); // 企业法人
+    public boolean enterpriseCertification(EnterpriseUserDTO enterpriseUserDTO) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("appId", "2019042516271800110");
+        paramMap.put("appKey", "uDCFes85C3OwDQ");
+        paramMap.put("companyName", enterpriseUserDTO.getUserName()); // 企业名称
+        paramMap.put("creditCode", enterpriseUserDTO.getOrgCode()); // 企业统一社会信用代码（组织机构代码）
+        paramMap.put("legalPersonName", enterpriseUserDTO.getLegalPerson()); // 企业法人
         String id;
         try{
-            String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/company/authentic", requestJson, 1);
-            Map map = new HashMap();
-            map.put("a", response);
+            String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/company/authentic", paramMap);
             JSONObject json = new JSONObject();
-            json.putAll(map);
-            id = json.getJSONObject("a").getJSONObject("data").getString("id");
+            json.put("res", response);
+            id = json.getJSONObject("res").getJSONObject("data").getString("id");
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -193,5 +198,10 @@ public class UserDetailServiceImpl implements UserDetailService {
         } else {
             return false;
         }
+    }
+
+    public static void main(String[] args) {
+        UserDetailServiceImpl userDetailService = new UserDetailServiceImpl();
+        userDetailService.enterpriseCertification(new EnterpriseUserDTO());
     }
 }
