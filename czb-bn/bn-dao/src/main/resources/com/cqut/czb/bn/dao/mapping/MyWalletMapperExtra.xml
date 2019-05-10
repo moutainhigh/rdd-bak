@@ -49,7 +49,21 @@
                 CURRENT_TIMESTAMP,
                 CURRENT_TIMESTAMP
             );
-
     </insert>
+
+    <!--获得提现记录-->
+    <select id="getWithdrawLog" resultType="com.cqut.czb.bn.entity.dto.personCenter.myWallet.WithDrawLogDTO">
+        SELECT
+            date_format(l.create_at, '%Y-%m') AS yearMonth,
+            l.create_at createTime,
+            l.withdraw_account money
+        FROM
+            czb_income_log l,
+            czb_user_income_info i
+        WHERE
+            l.info_id = i.info_id
+        AND l.type = 1
+        AND i.user_id = #{userId}
+    </select>
 
 </mapper>

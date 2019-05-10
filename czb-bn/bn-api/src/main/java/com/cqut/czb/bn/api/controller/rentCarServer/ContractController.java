@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.rentCarImpl.ContractServiceImpl;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
+import com.cqut.czb.bn.util.method.HttpClient4;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,14 +40,14 @@ public class ContractController {
     RedisUtils redisUtils;
 
 
-//    /**
-//     * 获得平台在云合同长效令牌token，客户端需要定时更新，后续操作都需要传入token
-//     * @return token字符串
-//     */
-//    @RequestMapping(value = "/getContractToken", method = RequestMethod.POST)
-//    public JSONResult getContractToken(){
-//        return new JSONResult(contractService.getContractToken());
-//    }
+    /**
+     * 获得平台在云合同长效令牌token，客户端需要定时更新，后续操作都需要传入token
+     * @return token字符串
+     */
+    @RequestMapping(value = "/getContractToken", method = RequestMethod.GET)
+    public String getContractToken(){
+        return contractService.getContractToken();
+    }
 
 //    /**
 //     * 给用户（个人）注册云合同唯一id，此id需存入数据库维护
@@ -238,36 +239,30 @@ public class ContractController {
      * 个人签约
      */
     @RequestMapping(value = "/personSigned", method = RequestMethod.POST)
-    public JSONResult personSigned( @RequestBody  PersonSignedInputInfo inputInfo){
-//        User user = (User)redisUtils.get(principal.getName());
-        JSONResult json = new JSONResult();
-        String code = contractService.personSigned("155730237144941", inputInfo);
+    public JSONResult personSigned(Principal principal, @RequestBody  PersonSignedInputInfo inputInfo){
+        User user = (User)redisUtils.get(principal.getName());
+        JSONObject json = contractService.personSigned("3", inputInfo);
+        String code = json.getString("code");
         switch(code){
             case ContractServiceImpl.STATE_CONTRACT_NULL:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("不存在符合的签约码" + "(" + code + ")");
+                json.put("message", "不存在符合的签约码" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_CREATEYUNID_FAILED:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("用户没有注册云合同" + "(" + code + ")");
+                json.put("message", "用户没有注册云合同" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_CREATE_CONTRACT_YUN_FAILED:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("生成合同模板出错" + "(" + code + ")");
+                json.put("message", "生成合同模板出错" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_INSERT_YUN_CONTRACTID_FAILED:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("插入云合同id到合同记录表中出错" + "(" + code + ")");
+                json.put("message", "插入云合同id到合同记录表中出错" + "(" + code + ")");
                 break;
             case ContractServiceImpl.STATE_ADD_SIGNER_FAILED:
-                json.setCode(Integer.parseInt(code));
-                json.setMessage("为合同添加签署者失败" + "(" + code + ")");
+                json.put("message", "为合同添加签署者失败" + "(" + code + ")");
                 break;
             default:
-                json.setCode(200);
-                json.setMessage("个人签约初始化成功（签署中状态）");
+                json.put("message", "个人签约初始化成功（签署中状态）");
         }
-        return json;
+        return new JSONResult(json);
     }
 
     /**
@@ -368,10 +363,12 @@ public class ContractController {
      * 云合同异步消息回调地址
      */
     @RequestMapping(value = "/getAsynchronousInfo", method = RequestMethod.POST)
-    public void getAsynchronousInfo(AsynchronousInfo info){
-        // noticeType为2时，此合同为签署完成状态
+    public void getAsynchronousInfo(@RequestBody AsynchronousInfo info){
+        System.out.println(info.toString());
+//         noticeType为2时，此合同为签署完成状态
         if(info.getNoticeType() == 2)
             contractService.asynchronousInfo(info.getMap());
+
     }
 
     /**

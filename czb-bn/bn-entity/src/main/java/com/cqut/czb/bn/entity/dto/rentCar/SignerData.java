@@ -2,13 +2,13 @@ package com.cqut.czb.bn.entity.dto.rentCar;
 
 public class SignerData {
     // 合同id
-    private Integer id;
+    private Long id;
 
     // 合同状态
     private String status;
 
     // 合同状态码
-    private String statusCode;
+    private Integer statusCode;
 
     // 合同标题
     private String title;
@@ -16,11 +16,11 @@ public class SignerData {
     public SignerData() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -32,11 +32,11 @@ public class SignerData {
         this.status = status;
     }
 
-    public String getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
     }
 

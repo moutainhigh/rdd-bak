@@ -4,13 +4,18 @@ import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.AlipayRecordDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.BalanceAndInfoIdDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
+import com.cqut.czb.bn.entity.dto.personCenter.myWallet.WithDrawLogDTO;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
 import com.cqut.czb.bn.util.string.StringUtil;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MyWalletImpl implements MyWallet {
@@ -22,14 +27,65 @@ public class MyWalletImpl implements MyWallet {
 
     @Override
     public BalanceAndInfoIdDTO getBalance(String userId){
-        BalanceAndInfoIdDTO balance = new BalanceAndInfoIdDTO();
+        BalanceAndInfoIdDTO balance = myWalletMapper.getUserAllIncome(userId);
 
         // 如果取出的余额小于0，则把余额设置为0
         if(balance.getBalance().compareTo(new BigDecimal(0)) < 0){
             balance.setBalance(new BigDecimal(0));
         }
 
-        return myWalletMapper.getUserAllIncome(userId);
+        return balance;
+    }
+
+    @Override
+    public JSONObject getWithdrawLog(String userId) {
+        List<WithDrawLogDTO> withDrawLogs = myWalletMapper.getWithdrawLog(userId);
+        System.out.println("111");
+        System.out.println(withDrawLogs.get(0).getCreateTime());
+        JSONObject jsonAll = new JSONObject();
+        JSONArray jsonAllArray = new JSONArray();
+
+        List<String> yearMonths = new ArrayList<>();
+
+        for(WithDrawLogDTO data:withDrawLogs){
+            System.out.println(data.getCreateTime());
+            if(yearMonths.size() ==  0){
+                yearMonths.add(data.getYearMonth());
+                continue;
+            }
+            boolean ifExsits = false;
+            for(int i = 0; i<yearMonths.size(); i++){
+                if(yearMonths.get(i).equals(data.getYearMonth())){
+                    ifExsits = true;
+                    continue;
+                }
+            }
+            if(!ifExsits)
+                yearMonths.add(data.getYearMonth());
+        }
+
+        for(int i = 0; i<yearMonths.size(); i++){
+            JSONObject json = new JSONObject();
+            json.put("yearMonth", yearMonths.get(i));
+            JSONArray jsonArray = new JSONArray();
+
+            for(WithDrawLogDTO data:withDrawLogs){
+                if(data.getYearMonth().equals(yearMonths.get(i))){
+                    JSONObject jsonOneLog = new JSONObject();
+                    jsonOneLog.put("money", "-" + data.getMoney() );
+                    System.out.println(data.getCreateTime());
+                    jsonOneLog.put("createTime", data.getCreateTime());
+                    System.out.println(data.getCreateTime());
+                    jsonArray.add(jsonOneLog);
+                }
+            }
+            json.put("info", jsonArray);
+            jsonAllArray.add(json);
+        }
+
+        jsonAll.put("allInfo", jsonAllArray);
+
+        return jsonAll;
     }
 
     @Override
