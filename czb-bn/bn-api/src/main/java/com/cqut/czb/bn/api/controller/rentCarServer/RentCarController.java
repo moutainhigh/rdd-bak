@@ -39,7 +39,7 @@ public class RentCarController {
      * @return JSONResult
      */
     @RequestMapping(value = "/getOneContractInfo", method = RequestMethod.POST)
-    public JSONResult getOneContractInfo(@RequestBody @Validated Principal principal, OneContractInfoInputDTO oneContractInfoInputDTO){
+    public JSONResult getOneContractInfo(Principal principal, @RequestBody OneContractInfoInputDTO oneContractInfoInputDTO){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(rentCarService.getOneContractInfo(user.getUserId(), oneContractInfoInputDTO.getContractId()));
     }

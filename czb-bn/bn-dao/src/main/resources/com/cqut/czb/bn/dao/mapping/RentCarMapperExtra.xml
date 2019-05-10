@@ -20,6 +20,7 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!--个人合同概要获取-->
     <select id="getOneContractInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneContractInfoDTO">
         SELECT
         cp.car_license AS carLicense,
@@ -33,8 +34,7 @@
             czb_cars_persons cp,
             (
                 SELECT
-                    record_id,
-                    third_contract_num num,
+                    record_id num,
                     date_format(contract_start_time, '%Y.%m.%d') startTime,
 			        date_format(contract_end_time, '%Y.%m.%d') endTime,
                     contract_state State,
@@ -45,9 +45,10 @@
                     cc.user_id = #{userId}
             ) AS c
         WHERE
-        cp.contract_record_id = #{contractId} and c.record_id = #{contractId}
+        cp.contract_record_id = #{contractId} and c.num = #{contractId}
     </select>
 
+    <!--个人合同列表获取-->
     <select id="getPersonalContractList" resultType="com.cqut.czb.bn.entity.dto.rentCar.PersonalContractDTO">
         SELECT
         cp.car_license AS carLicense,
@@ -58,8 +59,7 @@
             czb_cars_persons cp,
             (
                 SELECT
-                    record_id,
-                    third_contract_num num,
+                    record_id num,
                     date_format(contract_start_time, '%Y.%m.%d') startTime,
 			        date_format(contract_end_time, '%Y.%m.%d') endTime,
                     contract_state State,
@@ -70,7 +70,7 @@
                     cc.user_id = #{userId}
             ) AS c
         WHERE
-        cp.contract_record_id = c.record_id
+        cp.contract_record_id = c.num
     </select>
 
     <!--企业租车服务合同列表获取第一步，少已签约数量-->
