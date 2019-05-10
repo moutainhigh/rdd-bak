@@ -16,6 +16,7 @@ import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.string.StringUtil;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -97,6 +98,11 @@ public class ContractServiceImpl implements ContractService{
         System.out.println(response);
 
         return response;
+    }
+
+    @Override
+    public String getContractToken() {
+        return getToken();
     }
 
     // TODO 谭深化——此接口需要删除（测试接口）
@@ -554,38 +560,54 @@ public class ContractServiceImpl implements ContractService{
      * 个人签约（不含签署）
      */
     @Override
-    public String personSigned(String userId, PersonSignedInputInfo inputInfo){
+    public JSONObject personSigned(String userId, PersonSignedInputInfo inputInfo){
+        JSONObject json = new JSONObject();
         // 查看是否存在未签约的认证码，如果存在，取出其个人合同id记录
         String personContractId = contractMapper.getIdentifyCodeAndPersonId(inputInfo);
 
-        if(personContractId == null)
-            return STATE_CONTRACT_NULL; // 不存在未签约的认证码
+        if(personContractId == null){
+            json.put("code", STATE_CONTRACT_NULL); // 不存在未签约的认证码
+            return json;
+        }
 
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
 
         if(yunId == null || yunId.equals("")){
             int success = registerPersonalContractAccount(userId, getToken());
-            if(success != 1)
-                return STATE_CREATEYUNID_FAILED;
+            if(success != 1){
+                json.put("code", STATE_CREATEYUNID_FAILED); // 不存在未签约的认证码
+                return json;
+            }
         }
 
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
-        if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals(""))
-            return STATE_CREATE_CONTRACT_YUN_FAILED;
+        if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals("")){
+            json.put("code", STATE_CREATE_CONTRACT_YUN_FAILED); // 不存在未签约的认证码
+            return json;
+        }
 
         // 把云合同id插入相应的合同记录表中去
         int insertYunContractId = contractMapper.insertContractId(personContractId, createYunContract);
-        if(insertYunContractId != 1)
-            return STATE_INSERT_YUN_CONTRACTID_FAILED;
+        if(insertYunContractId != 1){
+            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); // 不存在未签约的认证码
+            return json;
+        }
 
         // 个人添加签署者
         int addSigner = addContractOwner(userId, createYunContract, getToken(), 1);
-        if(addSigner != 1)
-            return STATE_ADD_SIGNER_FAILED;
+        if(addSigner != 1){
+            json.put("code", STATE_ADD_SIGNER_FAILED); // 不存在未签约的认证码
+            return json;
+        }
 
-        return createYunContract;
+        json.put("contractId", createYunContract);
+        json.put("signerId", yunId);
+        json.put("token", getToken());
+        json.put("code", "200");
+
+        return json;
     }
 
     /**
@@ -745,7 +767,6 @@ public class ContractServiceImpl implements ContractService{
         // 将签署完成合同的id传入mapper，修改合同记录的状态
         if(contractId != null)
             contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
-
     }
 
     /**

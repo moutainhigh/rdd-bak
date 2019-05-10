@@ -40,41 +40,46 @@ public class MyWalletImpl implements MyWallet {
     @Override
     public JSONObject getWithdrawLog(String userId) {
         List<WithDrawLogDTO> withDrawLogs = myWalletMapper.getWithdrawLog(userId);
+        System.out.println("111");
+        System.out.println(withDrawLogs.get(0).getCreateTime());
         JSONObject jsonAll = new JSONObject();
         JSONArray jsonAllArray = new JSONArray();
 
         List<String> yearMonths = new ArrayList<>();
 
         for(WithDrawLogDTO data:withDrawLogs){
+            System.out.println(data.getCreateTime());
             if(yearMonths.size() ==  0){
                 yearMonths.add(data.getYearMonth());
                 continue;
             }
+            boolean ifExsits = false;
             for(int i = 0; i<yearMonths.size(); i++){
                 if(yearMonths.get(i).equals(data.getYearMonth())){
+                    ifExsits = true;
                     continue;
-                } else{
-                    yearMonths.add(data.getYearMonth());
                 }
             }
-
+            if(!ifExsits)
+                yearMonths.add(data.getYearMonth());
         }
 
         for(int i = 0; i<yearMonths.size(); i++){
             JSONObject json = new JSONObject();
             json.put("yearMonth", yearMonths.get(i));
-            JSONObject jsonLog = new JSONObject();
             JSONArray jsonArray = new JSONArray();
 
             for(WithDrawLogDTO data:withDrawLogs){
                 if(data.getYearMonth().equals(yearMonths.get(i))){
                     JSONObject jsonOneLog = new JSONObject();
                     jsonOneLog.put("money", "-" + data.getMoney() );
+                    System.out.println(data.getCreateTime());
                     jsonOneLog.put("createTime", data.getCreateTime());
+                    System.out.println(data.getCreateTime());
                     jsonArray.add(jsonOneLog);
                 }
             }
-            jsonLog.put("info", jsonArray);
+            json.put("info", jsonArray);
             jsonAllArray.add(json);
         }
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 public interface ContractService {
-//    String getContractToken();
+    String getContractToken();
 
 //    int registerPersonalContractAccount(String userId, String token);
 
@@ -32,7 +32,7 @@ public interface ContractService {
     String get( );
 
     // 个人签约
-    String personSigned(String userId, PersonSignedInputInfo inputInfo);
+    JSONObject personSigned(String userId, PersonSignedInputInfo inputInfo);
 
     // 企业签订合同正文初始化
     String companySignedInitialize(String userId);

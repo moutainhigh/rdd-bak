@@ -68,7 +68,7 @@ public class MyWalletController {
     }
 
     @RequestMapping(value = "/getWithdrawLog", method = RequestMethod.GET)
-    public JSONResult getWithdrawLog(){
+    public JSONResult getWithdrawLog(Principal principal){
         return new JSONResult(myWallet.getWithdrawLog("155680497010838"));
     }
 }
