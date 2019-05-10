@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 
@@ -21,5 +22,6 @@ public interface UserIncomeInfoMapperExtra {
     List<UserIncomeInfoDTO> selectUserIncomeInfo(String userId);
 
     UserIncomeInfo selectOneUserIncomeInfo(String userId);
+
 
 }
