@@ -140,7 +140,7 @@ public class PetrolCache {
      * 放回一张卡
      */
     public static void putBackPetrol(Map<String,Petrol> petrolMap,Petrol petrol){
-        if(isContainPetorlMap(petrolMap,petrol.getPetrolNum())==false)
+        if(isContainPetorlMap(petrolMap,petrol.getPetrolNum())!=false)
         {
             petrolMap.put(petrol.getPetrolNum(),petrol);
             System.out.println(AllpetrolMap.get(petrol.getPetrolNum()));
