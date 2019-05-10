@@ -56,15 +56,15 @@ public class ContractManagementServiceImpl implements IContractService {
         requestJson.put("templateName", templateName);
         requestJson.put("multipartFile ", file);
         requestJson.put("token", token);
-//        String templateId = HttpClient4.doPost("https://api.yunhetong.com/api/user/personMoulage", requestJson, 1);
-//        if(templateId == null || templateId.equals("") || !templateId.startsWith("templateId")) {
-//            return false;
-//        }
-//        templateId = templateId.replace("templateId: ", "");
+        String templateId = HttpClient4.doPost("https://api.yunhetong.com/api/template/upload", requestJson, 1);
+        if(templateId == null || templateId.equals("") || !templateId.startsWith("templateId")) {
+            return false;
+        }
+        templateId = templateId.replace("templateId: ", "");
         ContractModel contractModel = new ContractModel();
         contractModel.setModelId(StringUtil.createId());
         contractModel.setModelName(templateName);
-//        contractModel.setYunModelId(templateId);
+        contractModel.setYunModelId(templateId);
         contractModel.setFileId(file1.getFileId());
 
 

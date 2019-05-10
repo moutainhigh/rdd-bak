@@ -1,12 +1,13 @@
 package com.cqut.czb.auth.service;
 
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
-import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
+import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
+import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.User;
 
 public interface UserDetailService {
-    Boolean register(User user, VerificationCodeDTO verificationCodeDTO);
-    Boolean register(User user, VerificationCodeDTO verificationCodeDTO, EnterpriseInfo enterpriseInfo);
+    Boolean registerPersonalUser(PersonalUserDTO personalUserDTO);
+    Boolean registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO);
     Boolean checkAccount(User user);
 
     /**
@@ -36,7 +37,7 @@ public interface UserDetailService {
     /**
      * 企业认证
      * */
-    boolean enterpriseCertification(EnterpriseInfo enterpriseInfo);
+    boolean enterpriseCertification(EnterpriseUserDTO enterpriseUserDTO);
 
 
 }
