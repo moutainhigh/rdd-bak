@@ -115,7 +115,7 @@ public class PetrolCache {
                 String key = entry.getKey();
                 if (key == petrolNum) {
                     System.out.println("delete this: " + key);
-                    it.remove();
+                    currentPetrolMap.remove(petrolNum);
                 }
             }
         }
