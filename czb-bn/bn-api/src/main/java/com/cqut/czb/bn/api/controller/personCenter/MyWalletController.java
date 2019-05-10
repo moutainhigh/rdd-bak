@@ -61,7 +61,7 @@ public class MyWalletController {
         return new JSONResult(json);
     }
 
-    @RequestMapping(value = "/getBalance", method = RequestMethod.POST)
+    @RequestMapping(value = "/getBalance", method = RequestMethod.GET)
     public JSONResult getBalance(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(myWallet.getBalance(user.getUserId()));
@@ -69,8 +69,6 @@ public class MyWalletController {
 
     @RequestMapping(value = "/getWithdrawLog", method = RequestMethod.GET)
     public JSONResult getWithdrawLog(){
-
-
-        return new JSONResult();
+        return new JSONResult(myWallet.getWithdrawLog("155680497010838"));
     }
 }

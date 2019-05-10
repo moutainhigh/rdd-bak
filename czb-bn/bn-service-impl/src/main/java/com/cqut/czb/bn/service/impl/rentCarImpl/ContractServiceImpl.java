@@ -16,6 +16,7 @@ import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.string.StringUtil;
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,10 +105,45 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public String get( ){
-        Double rent = contractMapper.findRent("1");
-        System.out.println(rent);
+//        JSONObject requestJson = new JSONObject();
+//        String response = HttpClient4.doPost("https://api.yunhetong.com/api/user/signerId/certifyNums", requestJson, 1);
+//        signerContract("czbtest", "1905101513586691", getToken());
+//        Integer code = registerEnterpriseContractAccount("czbtest", getToken());
 
-        return rent.toString();
+
+//        JSONObject json = new JSONObject();
+//        //合同参数类型
+//        json.put("idType", "0");
+//        //合同参数
+//        json.put("idContent", "1905101513586691");
+//
+//        // TODO 谭深化——要添加一个车租宝平台的签署者，外加本用户的签署者。
+//        // 企业签署者
+//        JSONObject ownerCompany = new JSONObject();
+//        ownerCompany.put("signerId", "5272391"); // 云合同id
+//        ownerCompany.put("signPositionType", "1"); // 签名定位类型
+//        ownerCompany.put("positionContent", "04549"); // 签名定位参数
+//        ownerCompany.put("signValidateType", "0"); // 是否短信校验，否
+//        ownerCompany.put("signMode", "0"); // 是否定制印章，否
+//        ownerCompany.put("signForm", "0"); // js，h5签署。 js
+//
+//        JSONArray jsonArray = new JSONArray();
+//        jsonArray.add(ownerCompany);
+//
+//        json.put("signers", jsonArray);
+//
+//        json.put("token", getToken());
+//
+//        String response = new String();
+//        try{
+//            response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/signer", json, 1);
+//        } catch (Exception e){
+//            return "112";
+//        }
+        signerContract("czbtest","1905101513586691",getToken());
+
+
+        return "1";
     }
 
     /**
@@ -152,20 +188,20 @@ public class ContractServiceImpl implements ContractService{
             return 100;
         }
 
-        // 这里注册个人云合同id的同时，进行个人印章注册,要先根据返回
-        if(yunId != null && !yunId.equals("")){
-            JSONObject sealRequestJson = new JSONObject();
-            sealRequestJson.put("signerId", yunId);
-            sealRequestJson.put("zoomCode", "0");
-            sealRequestJson.put("token", token);
-            try{
-                String responseSeal = HttpClient4.doPost("https://api.yunhetong.com/api/user/personMoulage", sealRequestJson, 1);
-            } catch (Exception e){
-                System.out.println("注册个人云合同印章失败");
-                return 101;
-            }
-
-        }
+//        // 这里注册个人云合同id的同时，进行个人印章注册,要先根据返回
+//        if(yunId != null && !yunId.equals("")){
+//            JSONObject sealRequestJson = new JSONObject();
+//            sealRequestJson.put("signerId", yunId);
+//            sealRequestJson.put("zoomCode", "0");
+//            sealRequestJson.put("token", token);
+//            try{
+//                String responseSeal = HttpClient4.doPost("https://api.yunhetong.com/api/user/personMoulage", sealRequestJson, 1);
+//            } catch (Exception e){
+//                System.out.println("注册个人云合同印章失败");
+//                return 101;
+//            }
+//
+//        }
 
         // 向user表里插入云合同注册id
         try{
@@ -185,7 +221,6 @@ public class ContractServiceImpl implements ContractService{
      * @param token
      * @return message
      */
-    @Override
     public int registerEnterpriseContractAccount(String userId, String token){
         // 根据用户id，数据库查找用户已实名认证的信息，为其注册云合同
         EnterpriseRegisterDTO enterpriseRegisterDTO = new EnterpriseRegisterDTO();
@@ -198,7 +233,7 @@ public class ContractServiceImpl implements ContractService{
 
         JSONObject requestJson = new JSONObject();
         requestJson.put("userName", enterpriseRegisterDTO.getUserName()); // 企业名称
-        requestJson.put("certifyType", "3"); // 企业证件类型
+        requestJson.put("certifyType", "1"); // 企业证件类型
         requestJson.put("certifyNum", enterpriseRegisterDTO.getCertifyNum()); // 企业证件号
         requestJson.put("phoneNo", enterpriseRegisterDTO.getPhoneNo()); // 企业用户手机号
         requestJson.put("caType", "B2");
@@ -208,6 +243,7 @@ public class ContractServiceImpl implements ContractService{
         String yunId;
         try{
             response = HttpClient4.doPost("https://api.yunhetong.com/api/user/company", requestJson, 1);
+            System.out.println(response);
             Map map = new HashMap();
             map.put("a", response);
             JSONObject json = new JSONObject();
@@ -390,7 +426,7 @@ public class ContractServiceImpl implements ContractService{
         // TODO 谭深化——要添加一个车租宝平台的签署者，外加本用户的签署者。
         // 企业签署者
         JSONObject ownerCompany = new JSONObject();
-        ownerCompany.put("signerId", "5160494"); // 云合同id
+        ownerCompany.put("signerId", "5272391"); // 云合同id
         ownerCompany.put("signPositionType", "1"); // 签名定位类型
         ownerCompany.put("positionContent", "04549"); // 签名定位参数
         ownerCompany.put("signValidateType", "0"); // 是否短信校验，否
@@ -435,6 +471,10 @@ public class ContractServiceImpl implements ContractService{
             return 112;
         }
 
+        // TODO 测试后删除
+        signerContract("czbtest",contractId, getToken());
+
+
          return 1;
     }
 
@@ -464,6 +504,7 @@ public class ContractServiceImpl implements ContractService{
         String response = new String();
         try{
             response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/sign", json, 1);
+            System.out.println(response);
         } catch(Exception e){
             return 114;
         }
@@ -523,7 +564,7 @@ public class ContractServiceImpl implements ContractService{
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
 
-        if(yunId == null){
+        if(yunId == null || yunId.equals("")){
             int success = registerPersonalContractAccount(userId, getToken());
             if(success != 1)
                 return STATE_CREATEYUNID_FAILED;
@@ -700,10 +741,10 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public void asynchronousInfo(SignerMap signerMap){
-        Integer contractId = signerMap.getData().getId();
+        Long contractId = signerMap.getData().getId();
         // 将签署完成合同的id传入mapper，修改合同记录的状态
         if(contractId != null)
-            contractMapper.updateContractStatus(contractId.toString(), signerMap.getData().getStatusCode());
+            contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
 
     }
 

@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.rentCarImpl.ContractServiceImpl;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
+import com.cqut.czb.bn.util.method.HttpClient4;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -241,7 +242,7 @@ public class ContractController {
     public JSONResult personSigned( @RequestBody  PersonSignedInputInfo inputInfo){
 //        User user = (User)redisUtils.get(principal.getName());
         JSONResult json = new JSONResult();
-        String code = contractService.personSigned("155730237144941", inputInfo);
+        String code = contractService.personSigned("3", inputInfo);
         switch(code){
             case ContractServiceImpl.STATE_CONTRACT_NULL:
                 json.setCode(Integer.parseInt(code));
@@ -265,6 +266,7 @@ public class ContractController {
                 break;
             default:
                 json.setCode(200);
+                json.setData(code);
                 json.setMessage("个人签约初始化成功（签署中状态）");
         }
         return json;
@@ -368,10 +370,12 @@ public class ContractController {
      * 云合同异步消息回调地址
      */
     @RequestMapping(value = "/getAsynchronousInfo", method = RequestMethod.POST)
-    public void getAsynchronousInfo(AsynchronousInfo info){
-        // noticeType为2时，此合同为签署完成状态
+    public void getAsynchronousInfo(@RequestBody AsynchronousInfo info){
+        System.out.println(info.toString());
+//         noticeType为2时，此合同为签署完成状态
         if(info.getNoticeType() == 2)
             contractService.asynchronousInfo(info.getMap());
+
     }
 
     /**
