@@ -73,11 +73,13 @@ public class PaymentRecordService implements IPaymentRecordService {
 					return AlipayConfig.response_fail;
 				}
 			} else {
+				System.out.println("被篡改"+AlipayConfig.response_fail);
 				return AlipayConfig.response_fail;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("被篡改外"+AlipayConfig.response_fail);
 		return AlipayConfig.response_fail;
 	}
 
