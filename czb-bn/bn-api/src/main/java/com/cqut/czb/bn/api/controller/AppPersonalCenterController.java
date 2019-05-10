@@ -91,7 +91,7 @@ public class AppPersonalCenterController {
     @RequestMapping(value = "/appGetUserEnterpriseInfo",method = RequestMethod.GET)
     public JSONResult appGetUserEnterpriseInfo(Principal principal){
         User user = (User) redisUtils.get(principal.getName());
-        return new JSONResult(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
+        return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user.getUserId()));
     }
 
 }
