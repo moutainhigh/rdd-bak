@@ -44,7 +44,7 @@ public class StartInputPetrol  implements CommandLineRunner  {
                     if(petrol.getEndTime()==0||petrol.getEndTime()<=System.currentTimeMillis()){
                         currentPetrol.remove();        //OK
                         petrol.setOwnerId("");//将用户id置为空
-                        PetrolCache.putBackPetrol(PetrolCache.AllpetrolMap,petrol);
+                        PetrolCache.putBackPetrol("AllpetrolMap",petrol);
                     }
                     System.out.println("有油卡"+ PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
                 }

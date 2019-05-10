@@ -42,7 +42,7 @@ public class CancelPayController {
             if(petrol.getOwnerId()==user.getUserId()){
                 currentPetrol.remove();        //OK
                 petrol.setOwnerId("");//将用户id置为空
-                PetrolCache.putBackPetrol(PetrolCache.AllpetrolMap,petrol);
+                PetrolCache.putBackPetrol("AllpetrolMap",petrol);
                 return new JSONResult(ResponseCodeConstants.FAILURE, "订单已取消");
             }
         }

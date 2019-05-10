@@ -115,13 +115,14 @@ public class RefuelingCardService implements IRefuelingCard {
 				Petrol petrol= PetrolCache.currentPetrolMap.get(petrolNum);
 				petrol.setOwnerId("");
 				petrol.setEndTime(0);
-				PetrolCache.putBackPetrol(PetrolCache.AllpetrolMap,petrol);//放回all中
-				PetrolCache.clearPetrol(PetrolCache.currentPetrolMap,petrolNum);
+				PetrolCache.putBackPetrol("AllpetrolMap",petrol);//放回all中
+				PetrolCache.clearPetrol("currentPetrolMap",petrolNum);
 				return 2;
 			}
 
 			//成功后移除对应的卡
-			PetrolCache.clearPetrol(PetrolCache.currentPetrolMap,petrolNum);
+			System.out.println("支付成功——删除油卡"+PetrolCache.currentPetrolMap.size());
+			PetrolCache.clearPetrol("currentPetrolMap",petrolNum);
 			return 1;
 
 		} else if ("2".equals(payType)) {
