@@ -6,8 +6,8 @@ import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.User;
 
 public interface UserDetailService {
-    Boolean registerPersonalUser(PersonalUserDTO personalUserDTO);
-    Boolean registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO);
+    String registerPersonalUser(PersonalUserDTO personalUserDTO);
+    String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO);
     Boolean checkAccount(User user);
 
     /**
