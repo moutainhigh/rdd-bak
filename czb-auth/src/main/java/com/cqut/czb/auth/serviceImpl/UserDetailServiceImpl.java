@@ -225,7 +225,7 @@ public class UserDetailServiceImpl implements UserDetailService {
                 User user = userMapperExtra.findUserByAccount(personalUserDTO.getUserAccount());
                 user.setUpdateAt(new Date());
                 user.setIsIdentified(1);
-                isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0
+                isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
             }
 
             return isUpdate;
