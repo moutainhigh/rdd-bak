@@ -6,6 +6,8 @@ public class PersonalUserDTO {
 
     private String userName;
 
+    private String userIdCard;
+
     private String userPsw;
 
     private String content;
@@ -40,5 +42,13 @@ public class PersonalUserDTO {
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public String getUserIdCard() {
+        return userIdCard;
+    }
+
+    public void setUserIdCard(String userIdCard) {
+        this.userIdCard = userIdCard;
     }
 }
