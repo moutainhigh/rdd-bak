@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -40,15 +41,13 @@ public class MyWalletImpl implements MyWallet {
     @Override
     public JSONObject getWithdrawLog(String userId) {
         List<WithDrawLogDTO> withDrawLogs = myWalletMapper.getWithdrawLog(userId);
-        System.out.println("111");
-        System.out.println(withDrawLogs.get(0).getCreateTime());
         JSONObject jsonAll = new JSONObject();
         JSONArray jsonAllArray = new JSONArray();
 
         List<String> yearMonths = new ArrayList<>();
 
         for(WithDrawLogDTO data:withDrawLogs){
-            System.out.println(data.getCreateTime());
+            data.setCreateTime(data.getCreateTime().replace(".0",""));
             if(yearMonths.size() ==  0){
                 yearMonths.add(data.getYearMonth());
                 continue;
@@ -63,6 +62,16 @@ public class MyWalletImpl implements MyWallet {
             if(!ifExsits)
                 yearMonths.add(data.getYearMonth());
         }
+
+        yearMonths.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                o1 = o1.replace("-","");
+                o2 = o2.replace("-","");
+
+                return o2.compareTo(o1);
+            }
+        });
 
         for(int i = 0; i<yearMonths.size(); i++){
             JSONObject json = new JSONObject();
