@@ -11,6 +11,8 @@ import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.mapper.BeanMapper;
 import com.cqut.czb.bn.util.method.HttpClient4;
@@ -49,11 +51,11 @@ public class UserDetailServiceImpl implements UserDetailService {
     RedisUtils redisUtils;
 
     @Override
-    public Boolean registerPersonalUser(PersonalUserDTO personalUserDTO) {
-        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return new Boolean(false);
+    public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
+        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return "该用户已存在";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
-        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
 
         User user = BeanMapper.map(personalUserDTO, User.class);
         user.setUserId(StringUtil.createId());
@@ -63,15 +65,17 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setIsDeleted(0);
         user.setIsIdentified(0);
 
-        return userMapper.insertSelective(user) > 0;
+        return (userMapper.insertSelective(user) > 0) + "";
     }
 
     @Override
-    public Boolean registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
-        if(userMapperExtra.checkAccount(enterpriseUserDTO.getUserAccount())) return new Boolean(false);
+    public String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
+        if(userMapperExtra.checkAccount(enterpriseUserDTO.getUserAccount())) return "该用户已存在";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(enterpriseUserDTO, VerificationCodeDTO.class);
-        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return new Boolean(false);
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
+
+        if(!this.enterpriseCertification(enterpriseUserDTO)) { return "企业信息校验失败"; }
 
         User user = BeanMapper.map(enterpriseUserDTO, User.class);
         user.setUserId(StringUtil.createId());
@@ -92,7 +96,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         boolean isInsertEnterprise = enterpriseInfoMapper.insertSelective(enterpriseInfo) > 0;
 
-        return isInsertUser && isInsertEnterprise;
+        return (isInsertUser && isInsertEnterprise) + "";
     }
 
     @Override
@@ -202,6 +206,9 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     public boolean personalCertification(PersonalUserDTO personalUserDTO) {
+        VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return false;
+
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("appId", "2019042516271800110");
         paramMap.put("appKey", "uDCFes85C3OwDQ");

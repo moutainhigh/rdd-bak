@@ -16,40 +16,5 @@ public interface AppBuyPetrolService {
      */
     String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO);
 
-    /**
-     * 支付成功后回调
-     */
-    boolean ConfirmBuyPetrol(Petrol petrol,PetrolSalesRecords petrolSalesRecords);
-
-    /**
-     * 更改油卡状态
-     * @param petrol
-     * @return
-     */
-    boolean updatePetrol(Petrol petrol);
-
-    /**
-     * 插入油卡购买记录
-     * @param petrolSalesRecords
-     * @return
-     */
-    boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords);
-
-    /**
-     * 插入收款记录表
-     * @param depositRecords
-     * @return
-     */
-    boolean insertDepositRecords(DepositRecords depositRecords);
-
-    /**
-     * 插入用户收益信息表
-     * @param petrol
-     * @return
-     */
-    boolean insertUserIncomeInfo(Petrol petrol);
-
-
-
 
 }

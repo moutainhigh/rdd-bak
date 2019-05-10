@@ -175,9 +175,9 @@ public class PetrolSalesRecordsDTO {
      * @return
      */
     public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,
-                                                           Double money, Integer count,
+                                                           double money, Integer count,
                                                            Integer petrolKind ,String ownerId,
-                                                           String petrolNum,Double actualPayment) {
+                                                           String petrolNum,double actualPayment) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
         model.setSubject("爱虎购油");

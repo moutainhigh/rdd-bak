@@ -32,8 +32,12 @@ public class AuthController {
      * */
     @PostMapping("/register")
     public JSONResult registerPersonalUser(@Validated @RequestBody PersonalUserDTO personalUserDTO){
-
-        return new JSONResult(userDetailService.registerPersonalUser(personalUserDTO));
+        String result = userDetailService.registerPersonalUser(personalUserDTO);
+        if(!result.equals("true")) {
+            return new JSONResult(ResponseCodeConstants.FAILURE, result);
+        } else {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, result);
+        }
     }
 
     /**
@@ -41,12 +45,12 @@ public class AuthController {
      * */
     @PostMapping("/enterpriseRegister")
     public JSONResult registerEnterpriseUser(@Validated @RequestBody EnterpriseUserDTO enterpriseUserDTO) {
-        boolean isCertified = userDetailService.enterpriseCertification(enterpriseUserDTO);
-        if(!isCertified) {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "企业信息认证失败");
+        String result = userDetailService.registerEnterpriseUser(enterpriseUserDTO);
+        if(!result.equals("true")) {
+            return new JSONResult(ResponseCodeConstants.FAILURE, result);
+        } else {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, result);
         }
-
-        return new JSONResult(userDetailService.registerEnterpriseUser(enterpriseUserDTO));
     }
 
     @PostMapping("/checkAccount")

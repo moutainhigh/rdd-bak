@@ -1,10 +1,9 @@
 package com.cqut.czb.bn.service.impl.paymentRecord;
 
 import com.cqut.czb.bn.dao.mapper.*;
-import com.cqut.czb.bn.entity.dto.AllPetrolDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.entity.*;
-import com.cqut.czb.bn.service.AppBuyPetrolService;
+import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.IRefuelingCard;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
@@ -13,7 +12,6 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 @Service
@@ -110,21 +108,20 @@ public class RefuelingCardService implements IRefuelingCard {
 		} else if ("1".equals(payType)) {
 			System.out.println("this is 1——购买油卡");
 //			此处插入购油的相关信息，油卡购买记录
-//			修改相应油卡的信息/***************************/死数据只修改了第一张
-//			appBuyPetrolService.updatePetrol(AllPetrolDTO.getCurrentPetrol().get(0));
 			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId,actualPayment);
 
 			//若插入失败则放回卡
 			if(ischange!=true){
-				AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
-				Petrol petrol= allPetrolDTO.getCurrentPetrolMap().get(petrolNum);
-				AllPetrolDTO.putBackPetrol(AllPetrolDTO.getAllpetrolMap(),petrol);//放回all中
-				AllPetrolDTO.clearPetrol(AllPetrolDTO.getCurrentPetrolMap(),petrolNum);
+				Petrol petrol= PetrolCache.currentPetrolMap.get(petrolNum);
+				petrol.setOwnerId("");
+				petrol.setEndTime(0);
+				PetrolCache.putBackPetrol(PetrolCache.AllpetrolMap,petrol);//放回all中
+				PetrolCache.clearPetrol(PetrolCache.currentPetrolMap,petrolNum);
 				return 2;
 			}
 
 			//成功后移除对应的卡
-			AllPetrolDTO.clearPetrol(AllPetrolDTO.getCurrentPetrolMap(),petrolNum);
+			PetrolCache.clearPetrol(PetrolCache.currentPetrolMap,petrolNum);
 			return 1;
 
 		} else if ("2".equals(payType)) {
@@ -141,8 +138,7 @@ public class RefuelingCardService implements IRefuelingCard {
 	public boolean changeInfo(double money,int count,int petrolKind,String petrolNum,String ownerId,double actualPayment){
 		//油卡表——更改相应油卡的状态（用户的id，卡号）——更改
 		//取出油卡
-		AllPetrolDTO allPetrolDTO=new AllPetrolDTO();
-		Petrol petrol=allPetrolDTO.getCurrentPetrolMap().get(petrolNum);
+		Petrol petrol=PetrolCache.currentPetrolMap.get(petrolNum);
 		if(petrol==null)
 		{
 			System.out.println("油卡为空");

@@ -41,7 +41,7 @@ public interface AppHomePageService {
      * 获取未售出的油卡
      * @return
      */
-    List<Petrol> selectAllPetrol();
+    boolean selectAllPetrol();
 
     /**
      * 获取首页的所有路由

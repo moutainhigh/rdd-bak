@@ -1,10 +1,5 @@
 package com.cqut.czb.bn.entity.dto.paymentRecord;
 
-import com.cqut.czb.bn.util.constants.SystemConstants;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 public class AiHuAlipayConfig {
 	
 	//APPID
