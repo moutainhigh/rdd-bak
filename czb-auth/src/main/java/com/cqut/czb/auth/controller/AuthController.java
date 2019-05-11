@@ -37,12 +37,12 @@ public class AuthController {
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result);
-            jsonResult.setData(true);
+            jsonResult.setData(false);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
-            jsonResult.setData(false);
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
@@ -57,12 +57,12 @@ public class AuthController {
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result);
-            jsonResult.setData(true);
+            jsonResult.setData(false);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
-            jsonResult.setData(false);
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
@@ -177,11 +177,14 @@ public class AuthController {
         JSONResult jsonResult = new JSONResult();
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
+            jsonResult.setData(false);
             jsonResult.setMessage(result);
             return jsonResult;
         } else {
+            redisUtils.put(user.getUserAccount(), user);
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
