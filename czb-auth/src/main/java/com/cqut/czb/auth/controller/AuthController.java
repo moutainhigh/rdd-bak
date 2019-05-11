@@ -187,7 +187,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/isCertification",method = RequestMethod.POST)
-    public  JSONResult isCertification(@Validated @RequestBody Principal principal) {
+    public  JSONResult isCertification(Principal principal) {
         User user = (User)redisUtils.get(principal.getName());
         boolean result = userDetailService.isCertification(user);
         JSONResult jsonResult = new JSONResult();
