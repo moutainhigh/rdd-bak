@@ -213,8 +213,8 @@ public class UserDetailServiceImpl implements UserDetailService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("appId", "2019042516271800110");
         paramMap.put("appKey", "uDCFes85C3OwDQ");
-        paramMap.put("idName", personalUserDTO.getUserName()); // 企业名称
-        paramMap.put("idNo", personalUserDTO.getUserIdCard()); // 企业统一社会信用代码（组织机构代码）
+        paramMap.put("idName", personalUserDTO.getUserName()); // 个人名称
+        paramMap.put("idNo", personalUserDTO.getUserIdCard()); // 个人证件号
         String id;
         try{
             String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/personal/simple", paramMap);
