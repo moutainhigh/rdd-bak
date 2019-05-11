@@ -181,7 +181,6 @@ public class AuthController {
             jsonResult.setMessage(result);
             return jsonResult;
         } else {
-            redisUtils.put(user.getUserAccount(), user);
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
             jsonResult.setData(true);

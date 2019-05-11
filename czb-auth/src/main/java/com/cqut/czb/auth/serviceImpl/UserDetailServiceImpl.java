@@ -235,6 +235,10 @@ public class UserDetailServiceImpl implements UserDetailService {
             user.setUserIdCard(personalUserDTO.getUserIdCard());
             isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
 
+            if(isUpdate) {
+                redisUtils.remove(user.getUserAccount());
+                redisUtils.put(user.getUserAccount(), user);
+            }
             return isUpdate + "";
         } else {
             return message;
