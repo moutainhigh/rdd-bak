@@ -14,7 +14,6 @@
  Date: 11/05/2019 16:45:48
 */
 
-SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -28,6 +27,6 @@ CREATE TABLE `czb_dict`  (
   `create_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`dict_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
