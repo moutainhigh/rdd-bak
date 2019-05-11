@@ -44,5 +44,5 @@ public interface AppPersonalCenterService {
      */
     List<AppRouter> getAppRouters(AppRouter appRouter);
 
-    PersonalCenterUserDTO getUserEnterpriseInfo(String userId);
+    PersonalCenterUserDTO getUserEnterpriseInfo(User user);
 }
