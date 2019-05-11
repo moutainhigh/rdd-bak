@@ -737,8 +737,9 @@ public class ContractServiceImpl implements ContractService{
      * 企业签订正文个人信息添加
      */
     @Override
-    public String addCompanySignedPersonal(CompanySignedPersonal personal){
+    public JSONObject addCompanySignedPersonal(CompanySignedPersonal personal){
         // TODO 个人签订合同完成后，记得把userId给写入
+        JSONObject json = new JSONObject();
         // 同时，插入个人合同记录
         ContractLog contractLog = new ContractLog();
 
@@ -746,20 +747,22 @@ public class ContractServiceImpl implements ContractService{
         double rent = 0;
         try{
             rent = contractMapper.findRent(personal.getTaoCanId());
-            if(rent == 0)
-                return STATE_FIND_TAO_CAN_RENT;
+            if(rent == 0){
+                json.put("code", STATE_FIND_TAO_CAN_RENT);
+            }
         } catch(Exception e){
-            return  STATE_FIND_TAO_CAN_RENT;
+            json.put("code", STATE_FIND_TAO_CAN_RENT);
         }
 
         // 根据父级合同id，查找父级合同记录的开始和结束时间
         ContractLog times = null;
         try{
             times = contractMapper.getContractStartTimeAndEndTime(personal.getContractId());
-            if(times == null)
-                return STATE_FIND_TIMES;
+            if(times == null){
+                json.put("code", STATE_FIND_TIMES);
+            }
         } catch(Exception e){
-            return  STATE_FIND_TIMES;
+            json.put("code", STATE_FIND_TIMES);
         }
 
         String contractId = StringUtil.createId();
@@ -772,7 +775,7 @@ public class ContractServiceImpl implements ContractService{
         try{
             rentCarMapper.insertContractLogPerson(contractLog);
         } catch(Exception e){
-            return  STATE_INSERT_PERSONAL_CONTRACT_FAILED;
+            json.put("code", STATE_INSERT_PERSONAL_CONTRACT_FAILED);
         }
 
         // 插入车辆服务人员记录
@@ -789,10 +792,15 @@ public class ContractServiceImpl implements ContractService{
         try {
             rentCarMapper.insertCompanyPerson(personCar);
         } catch(Exception e){
-            return STATE_ADD_PERSONAL;
+            json.put("code", STATE_ADD_PERSONAL);
         }
 
-        return "1";
+        // 返回父级合同已生成的子级服务人员车辆列表
+        JSONObject jsons = getWithoutCommitPersonInfo(personal.getContractId());
+         jsons.remove("startTime");
+        json.put("List", jsons.getString("personList"));
+
+        return json;
     }
 
     /**

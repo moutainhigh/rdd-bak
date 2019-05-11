@@ -4,26 +4,26 @@ public class ContractAndSignedNumDTO {
     /**
      * 企业第三方合同编号
      */
-    private String contractId;
+    private String carNum;
 
     /**
      * 个人已签订数
      */
-    private Integer signedCarNum;
+    private String signedCarNum;
 
-    public String getContractId() {
-        return contractId;
+    public String getCarNum() {
+        return carNum;
     }
 
-    public void setContractId(String contractId) {
-        this.contractId = contractId;
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
     }
 
-    public Integer getSignedCarNum() {
+    public String getSignedCarNum() {
         return signedCarNum;
     }
 
-    public void setSignedCarNum(Integer signedCarNum) {
+    public void setSignedCarNum(String signedCarNum) {
         this.signedCarNum = signedCarNum;
     }
 }

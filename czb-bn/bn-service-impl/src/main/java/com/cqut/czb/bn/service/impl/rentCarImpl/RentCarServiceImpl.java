@@ -59,18 +59,14 @@ public class RentCarServiceImpl implements RentCarService {
      */
     @Override
     public List<CompanyContractInfoDTO> getCompanyContractList(String userId){
-        List<CompanyContractInfoDTO> companyContractInfoDTOList = new ArrayList<>();
 
-        companyContractInfoDTOList = rentCarMapper.getCompanyContractList(userId);
-        List<ContractAndSignedNumDTO> signedNumDTOList= rentCarMapper.getSignedNumList(userId);
+        List<CompanyContractInfoDTO>  companyContractInfoDTOList= rentCarMapper.getCompanyContractList(userId);
 
-        for(CompanyContractInfoDTO cdata:companyContractInfoDTOList){
-            for(ContractAndSignedNumDTO sdata:signedNumDTOList){
-                if(cdata.getContractId().equals(sdata.getContractId())){
-                    cdata.setIsSignNum(sdata.getSignedCarNum());
-                    break;
-                }
-            }
+        // 根据每个父级id，找到其子级合同的车辆数量和已签订数量
+        for(CompanyContractInfoDTO data:companyContractInfoDTOList){
+            ContractAndSignedNumDTO signedNum= rentCarMapper.getSignedNumList(data.getContractId());
+            data.setCarNum(signedNum.getCarNum());
+            data.setIsSignNum(signedNum.getSignedCarNum());
         }
 
         return companyContractInfoDTOList;
@@ -80,9 +76,9 @@ public class RentCarServiceImpl implements RentCarService {
      * 企业获取合同概要信息列表
      */
     @Override
-    public List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String userId){
+    public List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String fatherId){
         List<OneCompanyContractsPersonDTO> companyPersonList = new ArrayList<>();
-        companyPersonList = rentCarMapper.getOneCompanyContractInfo(userId);
+        companyPersonList = rentCarMapper.getOneCompanyContractInfo(fatherId);
 
         return companyPersonList;
     }

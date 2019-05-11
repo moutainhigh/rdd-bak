@@ -16,9 +16,9 @@ public interface RentCarMapperExtra {
 
     List<CompanyContractInfoDTO> getCompanyContractList(@Param("userId") String userId);
 
-    List<ContractAndSignedNumDTO> getSignedNumList(@Param("userId") String userId);
+    ContractAndSignedNumDTO getSignedNumList(@Param("fatherId") String fatherId);
 
-    List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(@Param("userId") String userId);
+    List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(@Param("fatherId") String fatherId);
 
     // 插入一条企业合同记录
     int insertContractLog(ContractLog contractLog);

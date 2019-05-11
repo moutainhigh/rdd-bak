@@ -240,31 +240,33 @@ public class ContractController {
      */
     @RequestMapping(value = "/addCompanySignedPersonal", method = RequestMethod.POST)
     public JSONResult addCompanySignedPersonal(@RequestBody CompanySignedPersonal personal){
-        String code = contractService.addCompanySignedPersonal(personal);
-        JSONObject json = new JSONObject();
+        JSONObject json = contractService.addCompanySignedPersonal(personal);
+        String code = json.getString("code");
+        json.remove("code");
+        JSONResult jsonResult = new JSONResult();
         switch(code){
             case ContractServiceImpl.STATE_ADD_PERSONAL:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "企业签订合同添加个人服务失败" + "(" + code + ")");
+                jsonResult.setMessage("企业签订合同添加个人服务失败");
+                jsonResult.setCode(Integer.parseInt(code));
                 break;
             case ContractServiceImpl.STATE_FIND_TAO_CAN_RENT:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "查找套餐金额失败" + "(" + code + ")");
+                jsonResult.setMessage("查找套餐金额失败");
+                jsonResult.setCode(Integer.parseInt(code));
                 break;
             case ContractServiceImpl.STATE_FIND_TIMES:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "查找父级合同记录的开始和结束时间失败" + "(" + code + ")");
+                jsonResult.setMessage("查找父级合同记录的开始和结束时间失败");
+                jsonResult.setCode(Integer.parseInt(code));
                 break;
             case ContractServiceImpl.STATE_INSERT_PERSONAL_CONTRACT_FAILED:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "插入父级相应的子合同记录失败" + "(" + code + ")");
+                jsonResult.setMessage("插入父级相应的子合同记录失败");
+                jsonResult.setCode(Integer.parseInt(code));
                 break;
             default:
-                json.put("code", 200);
-                json.put("message", "企业签订正文添加个人信息成功");
+                jsonResult.setMessage("企业签订正文添加个人信息成功");
+                jsonResult.setCode(200);
         }
 
-        return new JSONResult(json);
+        return jsonResult;
     }
 
     /**

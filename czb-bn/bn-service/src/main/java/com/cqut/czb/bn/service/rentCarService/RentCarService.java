@@ -14,7 +14,7 @@ public interface RentCarService {
 
     List<CompanyContractInfoDTO> getCompanyContractList(String userId);
 
-    List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String userId);
+    List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String fatherId);
 
     int addCompanyContract(String userId, AddCompanyContractList addCompanyContractList);
 

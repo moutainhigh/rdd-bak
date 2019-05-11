@@ -4,6 +4,7 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.rentCar.AddCompanyContractList;
 import com.cqut.czb.bn.entity.dto.rentCar.AddPersonContractInputDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.OneContractInfoInputDTO;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.rentCarService.RentCarService;
@@ -66,10 +67,9 @@ public class RentCarController {
      * 企业合同概要信息列表获取
      */
     // TODO 谭深化——此返回列表中的租借有问题，应该是套餐金额
-    @RequestMapping(value = "/getCompanyPersonList", method = RequestMethod.GET)
-    public JSONResult getCompanyPersonList(Principal principal){
-        User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(rentCarService.getOneCompanyContractInfo(user.getUserId()));
+    @RequestMapping(value = "/getCompanyPersonList", method = RequestMethod.POST)
+    public JSONResult getCompanyPersonList(@RequestBody ContractIdInfo idInfo){
+        return new JSONResult(rentCarService.getOneCompanyContractInfo(idInfo.getContractId()));
     }
 
     /**

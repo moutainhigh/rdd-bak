@@ -76,77 +76,82 @@
     <!--企业租车服务合同列表获取第一步，少已签约数量-->
     <select id="getCompanyContractList" resultType="com.cqut.czb.bn.entity.dto.rentCar.CompanyContractInfoDTO">
         SELECT
-            COUNT(d.dId) as carNum,
-            d.num as contractId,
-            d.state as status
+            c.record_id contractId,
+            c.contract_state STATUS,
+            date_format(
+                c.contract_start_time,
+                '%Y-%m-%d'
+            ) startTime,
+            date_format(
+                c.contract_end_time,
+                '%Y-%m-%d'
+            ) endTime
         FROM
-            (
-                SELECT
-                    cp.person_car_id as dId,
-                    cp.car_license as license,
-                    c.State,
-                    c.num as num
-                FROM
-                    czb_cars_persons cp,
-                    (
-                        SELECT
-                            record_id num,
-                            third_contract_num,
-                            contract_state State
-                        FROM
-                            czb_contract_records cc
-                        WHERE
-                            cc.user_id = #{userId}
-                    ) AS c
-                WHERE
-                    cp.contract_record_id = c.num
-            ) d
-        GROUP BY contractId, status
+            czb_contract_records c
+        WHERE
+            user_id = #{userId}
     </select>
 
     <!--企业租车服务合同列表获取第二步，根据第三方合同id得到已签约数量-->
     <select id="getSignedNumList" resultType="com.cqut.czb.bn.entity.dto.rentCar.ContractAndSignedNumDTO">
         SELECT
-            count(cp.person_car_id) AS signedCarNum,
-            c.cnum as contractId
+            p.isSignNum signedCarNum,
+            c.carNum
         FROM
-            czb_cars_persons cp,
             (
                 SELECT
-                    record_id as cnum,
-                    cc.third_contract_num
+                    count(cc.person_car_Id) AS carNum
                 FROM
-                    czb_contract_records cc
+                    czb_cars_persons cc
                 WHERE
-                    cc.user_id = #{userId}
-            ) AS c
-        WHERE
-            cp.contract_record_id = c.cnum AND cp.is_signed = 1
-        group by contractId
+                    cc.contract_record_id IN (
+                        SELECT
+                            ccc.record_id cid
+                        FROM
+                            czb_contract_records ccc
+                        WHERE
+                            ccc.contract_father_id = #{fatherId}
+                    )
+            ) c,
+            (
+                SELECT
+                    count(pp.person_car_Id) AS isSignNum
+                FROM
+                    czb_cars_persons pp
+                WHERE
+                    pp.contract_record_id IN (
+                        SELECT
+                            ccc.record_id cid
+                        FROM
+                            czb_contract_records ccc
+                        WHERE
+                            ccc.contract_father_id = #{fatherId}
+                    )
+                AND pp.is_signed = 1
+            ) p
     </select>
 
     <!--企业获取合同概要信息列表-->
     <select id="getOneCompanyContractInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneCompanyContractsPersonDTO">
         SELECT
-            cp.person_name AS personName,
-            cp.car_license AS license,
-            cp.person_id_card AS carId,
-            cp.is_signed AS isSign,
-            c.rent AS rent
-
+            p.person_name AS personName,
+            p.car_license AS license,
+            p.person_id_card AS carId,
+            p.is_signed AS isSign,
+            c.rent
         FROM
-            czb_cars_persons cp,
-            (
+            czb_contract_records c,
+            czb_cars_persons p
+        WHERE  c.record_id = p.contract_record_id
+        and
+            p.contract_record_id IN (
                 SELECT
-                    record_id,
-                    rent
+                    record_id
                 FROM
-                    czb_contract_records cc
+                    czb_contract_records p1
                 WHERE
-                    cc.user_id = #{userId}
-            ) AS c
-        WHERE
-            cp.contract_record_id = c.record_id
+                    contract_father_id = #{fatherId}
+            )
         GROUP BY person_name, license, carId, is_signed, rent
     </select>
 

@@ -48,7 +48,7 @@ public interface ContractService {
     String setCompanySignedTime(String startTime, String contractId);
 
     // 企业签订合同正文个人服务添加
-    String addCompanySignedPersonal(CompanySignedPersonal personal);
+    JSONObject addCompanySignedPersonal(CompanySignedPersonal personal);
 
     // 异步回调，存入数据库
     void asynchronousInfo(SignerMap signerMap);
