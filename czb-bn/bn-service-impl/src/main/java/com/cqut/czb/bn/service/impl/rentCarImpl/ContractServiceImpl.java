@@ -109,43 +109,11 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public String get( ){
-//        JSONObject requestJson = new JSONObject();
-//        String response = HttpClient4.doPost("https://api.yunhetong.com/api/user/signerId/certifyNums", requestJson, 1);
-//        signerContract("czbtest", "1905101513586691", getToken());
-//        Integer code = registerEnterpriseContractAccount("czbtest", getToken());
-
-
-//        JSONObject json = new JSONObject();
-//        //合同参数类型
-//        json.put("idType", "0");
-//        //合同参数
-//        json.put("idContent", "1905101513586691");
-//
-//        // TODO 谭深化——要添加一个车租宝平台的签署者，外加本用户的签署者。
-//        // 企业签署者
-//        JSONObject ownerCompany = new JSONObject();
-//        ownerCompany.put("signerId", "5272391"); // 云合同id
-//        ownerCompany.put("signPositionType", "1"); // 签名定位类型
-//        ownerCompany.put("positionContent", "04549"); // 签名定位参数
-//        ownerCompany.put("signValidateType", "0"); // 是否短信校验，否
-//        ownerCompany.put("signMode", "0"); // 是否定制印章，否
-//        ownerCompany.put("signForm", "0"); // js，h5签署。 js
-//
-//        JSONArray jsonArray = new JSONArray();
-//        jsonArray.add(ownerCompany);
-//
-//        json.put("signers", jsonArray);
-//
-//        json.put("token", getToken());
-//
-//        String response = new String();
-//        try{
-//            response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/signer", json, 1);
-//        } catch (Exception e){
-//            return "112";
-//        }
-        signerContract("czbtest","1905101513586691",getToken());
-
+        Integer fatherContractStatus = contractMapper.getFatherContractStatus("1");
+        System.out.println(fatherContractStatus);
+        if (fatherContractStatus == 0 || fatherContractStatus == 2){
+            System.out.println("失败");
+        }
 
         return "1";
     }
@@ -578,6 +546,12 @@ public class ContractServiceImpl implements ContractService{
             return json;
         }
 
+        Integer fatherContractStatus = contractMapper.getFatherContractStatus(personContractId);
+        if (fatherContractStatus == 0 || fatherContractStatus == 2){
+            json.put("code", "112");
+            return json;
+        }
+
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
 
@@ -877,11 +851,4 @@ public class ContractServiceImpl implements ContractService{
 
         return  removeCarsPerson >= 0 && removePersonInfo >= 0;
     }
-
-
-
-
-
-
-
 }

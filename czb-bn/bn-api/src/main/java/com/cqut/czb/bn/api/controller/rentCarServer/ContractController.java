@@ -166,6 +166,10 @@ public class ContractController {
                 json.put("code", code);
                 json.put("message", "不存在符合的签约码" + "(" + code + ")");
                 break;
+            case "112":
+                json.put("code", code);
+                json.put("message", "此个人合同的公司合同还未签订或已失效" + "(" + code + ")");
+                break;
             case ContractServiceImpl.STATE_CREATEYUNID_FAILED:
                 json.put("code", code);
                 json.put("message", "用户没有注册云合同" + "(" + code + ")");

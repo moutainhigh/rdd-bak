@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
+import io.swagger.models.auth.In;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -62,6 +63,9 @@ public interface ContractMapperExtra {
 
     // 个人输入认证码、身份证后，查找车牌号和租金
     CarNumAndRent getCarNumAndPersonId(PersonSignedInputInfo inputInfo);
+
+    // 个人签署时，查看其父级合同是否已经签署
+    Integer getFatherContractStatus(@Param("contractId")String contractId);
 
     // 删除企业合同个人信息列表中的某人
     int removePersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
