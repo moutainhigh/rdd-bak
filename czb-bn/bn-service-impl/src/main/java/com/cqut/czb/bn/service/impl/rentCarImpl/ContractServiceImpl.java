@@ -741,9 +741,11 @@ public class ContractServiceImpl implements ContractService{
 
         String contractId = StringUtil.createId();
         contractLog.setRecordId(contractId);
+        assert times != null;
         contractLog.setStartTime(times.getStartTime());
         contractLog.setEndTime(times.getEndTime());
         contractLog.setRent(rent);
+        contractLog.setFatherRecordId(personal.getContractId());
 
         // 插入父级相应的子合同记录
         try{
@@ -772,7 +774,7 @@ public class ContractServiceImpl implements ContractService{
         // 返回父级合同已生成的子级服务人员车辆列表
         JSONObject jsons = getWithoutCommitPersonInfo(personal.getContractId());
          jsons.remove("startTime");
-        json.put("List", jsons.getString("personList"));
+        json.put("List", jsons.getJSONArray("personList"));
         json.put("code", "200");
 
         return json;
@@ -828,7 +830,7 @@ public class ContractServiceImpl implements ContractService{
                     result.setPetrolType("中石化");
                     break;
             }
-            Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * new Double(12);
+            Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * 12d;
             result.setTaoCan(rent.toString());
             resultList.add(result);
         }
