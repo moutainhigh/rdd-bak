@@ -239,4 +239,10 @@ public class UserDetailServiceImpl implements UserDetailService {
             return message;
         }
     }
+
+    @Override
+    public boolean isCertification(User user) {
+
+        return user.getIsIdentified().equals("1");
+    }
 }

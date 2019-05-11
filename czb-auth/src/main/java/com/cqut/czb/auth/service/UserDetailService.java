@@ -41,4 +41,6 @@ public interface UserDetailService {
 
     String personalCertification(PersonalUserDTO personalUserDTO, User user);
 
+    boolean isCertification(User user);
+
 }

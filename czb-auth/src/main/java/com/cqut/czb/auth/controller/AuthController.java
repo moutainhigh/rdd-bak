@@ -182,5 +182,22 @@ public class AuthController {
         }
     }
 
+    @RequestMapping(value = "/isCertification",method = RequestMethod.POST)
+    public  JSONResult isCertification(@Validated @RequestBody Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        boolean result = userDetailService.isCertification(user);
+        JSONResult jsonResult = new JSONResult();
+        if(!result) {
+            jsonResult.setCode(ResponseCodeConstants.FAILURE);
+            jsonResult.setMessage(result +"");
+            return jsonResult;
+        } else {
+            jsonResult.setCode(ResponseCodeConstants.SUCCESS);
+            jsonResult.setMessage(result + "");
+            return jsonResult;
+        }
+    }
+
+
 }
 
