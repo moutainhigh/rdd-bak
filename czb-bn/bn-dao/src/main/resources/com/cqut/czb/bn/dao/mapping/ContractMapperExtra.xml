@@ -74,7 +74,7 @@
         SET contract_start_time = #{startTime},
          contract_end_time = #{endTime}
         WHERE
-            third_contract_num = #{contractId}
+            record_id = #{contractId}
     </update>
 
     <select id="findRent" resultType="java.lang.Double">

@@ -358,4 +358,9 @@ public class ContractController {
         }
         return new JSONResult(json);
     }
+
+    /**
+     * 查看是否已有签名
+     */
+//    @RequestMapping(value = "/checkMoulage", )
 }
