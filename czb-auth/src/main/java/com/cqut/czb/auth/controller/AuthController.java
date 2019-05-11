@@ -33,10 +33,15 @@ public class AuthController {
     @PostMapping("/register")
     public JSONResult registerPersonalUser(@Validated @RequestBody PersonalUserDTO personalUserDTO){
         String result = userDetailService.registerPersonalUser(personalUserDTO);
+        JSONResult jsonResult = new JSONResult();
         if(!result.equals("true")) {
-            return new JSONResult(ResponseCodeConstants.FAILURE, result);
+            jsonResult.setCode(ResponseCodeConstants.FAILURE);
+            jsonResult.setMessage(result);
+            return jsonResult;
         } else {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, result);
+            jsonResult.setCode(ResponseCodeConstants.SUCCESS);
+            jsonResult.setMessage(result);
+            return jsonResult;
         }
     }
 
@@ -46,10 +51,15 @@ public class AuthController {
     @PostMapping("/enterpriseRegister")
     public JSONResult registerEnterpriseUser(@Validated @RequestBody EnterpriseUserDTO enterpriseUserDTO) {
         String result = userDetailService.registerEnterpriseUser(enterpriseUserDTO);
+        JSONResult jsonResult = new JSONResult();
         if(!result.equals("true")) {
-            return new JSONResult(ResponseCodeConstants.FAILURE, result);
+            jsonResult.setCode(ResponseCodeConstants.FAILURE);
+            jsonResult.setMessage(result);
+            return jsonResult;
         } else {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, result);
+            jsonResult.setCode(ResponseCodeConstants.SUCCESS);
+            jsonResult.setMessage(result);
+            return jsonResult;
         }
     }
 
@@ -157,13 +167,18 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/personalCertification",method = RequestMethod.POST)
-    public  JSONResult personalCertification(@Validated @RequestBody PersonalUserDTO personalUserDTO) {
-
-        boolean isCertified = userDetailService.personalCertification(personalUserDTO);
-        if(!isCertified) {
-            return new JSONResult(ResponseCodeConstants.FAILURE, "个人信息认证失败");
+    public  JSONResult personalCertification(@Validated @RequestBody PersonalUserDTO personalUserDTO, Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        String result = userDetailService.personalCertification(personalUserDTO, user);
+        JSONResult jsonResult = new JSONResult();
+        if(!result.equals("true")) {
+            jsonResult.setCode(ResponseCodeConstants.FAILURE);
+            jsonResult.setMessage(result);
+            return jsonResult;
         } else {
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "个人信息认证成功");
+            jsonResult.setCode(ResponseCodeConstants.SUCCESS);
+            jsonResult.setMessage(result);
+            return jsonResult;
         }
     }
 
