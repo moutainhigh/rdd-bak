@@ -557,6 +557,7 @@ public class ContractServiceImpl implements ContractService{
 
         if(yunId == null || yunId.equals("")){
             int success = registerPersonalContractAccount(userId, getToken());
+            System.out.println(success);
             if(success != 1){
                 json.put("code", STATE_CREATEYUNID_FAILED); // 不存在未签约的认证码
                 return json;
@@ -845,6 +846,11 @@ public class ContractServiceImpl implements ContractService{
         return json;
     }
 
+    /**
+     * 删除企业合同个人信息
+     * @param contractiIdList
+     * @return
+     */
     @Override
     public boolean removePersonInfo(ContractIdListDTO contractiIdList) {
         // 多选删除个人合同记录
@@ -853,5 +859,31 @@ public class ContractServiceImpl implements ContractService{
         int removePersonInfo = contractMapper.removePersonInfo(contractiIdList.getContractIdLists());
 
         return  removeCarsPerson >= 0 && removePersonInfo >= 0;
+    }
+
+    /**
+     * 判断有无印章
+     */
+    @Override
+    public int checkMoulage(String userId) {
+        // 查看用户是否注册云合同
+        String yunId = contractMapper.getYunId(userId);
+
+        String response = new String();
+        try{
+            response = HttpClient4.doGet("https://api.yunhetong.com/api/user/moulageId/"+yunId+"/1/100", getToken());
+            System.out.println(response);
+            Map map = new HashMap();
+            map.put("a", response);
+            JSONObject json1 = new JSONObject();
+            json1.putAll(map);
+            String moulage = json1.getJSONObject("a").getJSONObject("data").getJSONArray("moulages").getJSONObject(0).getString("id");
+            if (moulage == null || moulage.equals(""))
+                return 0;
+        } catch(Exception e){
+            return 2;
+        }
+
+        return 1;
     }
 }
