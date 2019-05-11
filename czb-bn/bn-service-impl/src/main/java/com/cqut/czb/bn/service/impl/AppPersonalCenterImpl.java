@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -34,6 +35,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private IncomeLogMapperExtra incomeLogMapperExtra;
 
     @Override
     public User selectUser(String userId) {
@@ -91,5 +95,10 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
         } else {
             return userMapperExtra.ModifyContactInfo(personalCenterUserDTO)>0;
         }
+    }
+
+    @Override
+    public List<MyIncomeLogDTO> selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO) {
+        return incomeLogMapperExtra.selectIncomeLog(myIncomeLogDTO);
     }
 }
