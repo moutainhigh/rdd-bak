@@ -201,17 +201,18 @@ public class ContractController {
         User user = (User)redisUtils.get(principal.getName());
         String code = contractService.companySignedInitialize(user.getUserId());
         JSONObject json = new JSONObject();
+        JSONResult jsonResult = new JSONResult();
         switch(code){
             case ContractServiceImpl.STATE_COMPANY_SIGNED_INITIALIZE_FAILED:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "插入合同记录出错" + "(" + code + ")");
+                jsonResult.setCode(Integer.parseInt(code));
+                jsonResult.setMessage("插入合同记录出错");
                 break;
             default:
-                json.put("code", 200);
-                json.put("message", "合同插入成功");
-                json.put("contractLogId", code);
+                jsonResult.setCode(200);
+                jsonResult.setMessage("合同插入成功");
+                jsonResult.setData(code);
         }
-        return new JSONResult(json);
+        return jsonResult;
     }
 
     // TODO 谭深化——这里的合同开始结束时间，以后可能会修改
