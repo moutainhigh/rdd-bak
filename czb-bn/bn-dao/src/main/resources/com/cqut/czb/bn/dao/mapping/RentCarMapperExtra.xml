@@ -90,8 +90,8 @@
                     czb_cars_persons cp,
                     (
                         SELECT
-                            record_id,
-                            third_contract_num num,
+                            record_id num,
+                            third_contract_num,
                             contract_state State
                         FROM
                             czb_contract_records cc
@@ -99,9 +99,9 @@
                             cc.user_id = #{userId}
                     ) AS c
                 WHERE
-                    cp.contract_record_id = c.record_id
+                    cp.contract_record_id = c.num
             ) d
-        GROUP BY  contractId, status
+        GROUP BY contractId, status
     </select>
 
     <!--企业租车服务合同列表获取第二步，根据第三方合同id得到已签约数量-->
@@ -113,15 +113,15 @@
             czb_cars_persons cp,
             (
                 SELECT
-                    record_id,
-                    cc.third_contract_num as cnum
+                    record_id as cnum,
+                    cc.third_contract_num
                 FROM
                     czb_contract_records cc
                 WHERE
                     cc.user_id = #{userId}
             ) AS c
         WHERE
-            cp.contract_record_id = c.record_id AND cp.is_signed = 1
+            cp.contract_record_id = c.cnum AND cp.is_signed = 1
         group by contractId
     </select>
 
