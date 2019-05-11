@@ -131,30 +131,24 @@ public class PetrolCache {
         int petrolKind = petrolInputDTO.getPetrolKind();
         double petrolPrice = petrolInputDTO.getPetrolPrice();
         String ownerId = petrolInputDTO.getOwnerId();
-        boolean isHave = false;//是否有油卡
         Petrol petrol = new Petrol(); //当前遍历的油卡值
         Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Petrol> entry = it.next();
             petrol = entry.getValue();//当前遍历的油卡值
             if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice) {
-                isHave = true;
                 petrol.setOwnerId(ownerId);
                 //当前时间加十分钟
                 long currentTime = System.currentTimeMillis() + 60 * 1000;
                 petrol.setEndTime(currentTime);
-                //将其放入当前暂存的一个currentPetrolMap中,同时判断是否已经存在相应的卡
-                if (isContainPetorlMap(currentPetrolMap, petrol.getPetrolNum()) == false) {
-                    currentPetrolMap.put(petrol.getPetrolNum(), petrol);
-                    it.remove();
-                    break;
-                }
+                //将其放入当前暂存的一个currentPetrolMap中(可以覆盖以往的)。
+                currentPetrolMap.put(petrol.getPetrolNum(), petrol);
+                AllpetrolMap.remove(petrol.getPetrolNum());
+                System.out.println("randomPetrol"+AllpetrolMap.size()+":"+currentPetrolMap);
+                return petrol;
             }
         }
-        if (isHave == false)
-            return null;
-        else
-            return petrol;
+        return null;
     }
 
     /**

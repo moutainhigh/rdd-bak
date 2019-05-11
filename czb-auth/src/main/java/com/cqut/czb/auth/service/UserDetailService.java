@@ -39,6 +39,8 @@ public interface UserDetailService {
      * */
     boolean enterpriseCertification(EnterpriseUserDTO enterpriseUserDTO);
 
-    boolean personalCertification(PersonalUserDTO personalUserDTO);
+    String personalCertification(PersonalUserDTO personalUserDTO, User user);
+
+    boolean isCertification(User user);
 
 }

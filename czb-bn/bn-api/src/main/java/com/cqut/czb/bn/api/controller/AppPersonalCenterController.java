@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.User;
@@ -91,7 +92,7 @@ public class AppPersonalCenterController {
     @RequestMapping(value = "/appGetUserEnterpriseInfo",method = RequestMethod.GET)
     public JSONResult appGetUserEnterpriseInfo(Principal principal){
         User user = (User) redisUtils.get(principal.getName());
-        return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user.getUserId()));
+        return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user));
     }
 
 }

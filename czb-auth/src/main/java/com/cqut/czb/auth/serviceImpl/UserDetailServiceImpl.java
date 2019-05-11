@@ -89,6 +89,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         EnterpriseInfo enterpriseInfo = BeanMapper.map(enterpriseUserDTO, EnterpriseInfo.class);
         enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
+        enterpriseInfo.setContactInfo(enterpriseUserDTO.getUserAccount());
         enterpriseInfo.setEnterpriseName(enterpriseUserDTO.getUserName());
         enterpriseInfo.setIsDeleted(0);
         enterpriseInfo.setCreateAt(new Date());
@@ -186,58 +187,62 @@ public class UserDetailServiceImpl implements UserDetailService {
         paramMap.put("companyName", enterpriseUserDTO.getUserName()); // 企业名称
         paramMap.put("creditCode", enterpriseUserDTO.getOrgCode()); // 企业统一社会信用代码（组织机构代码）
         paramMap.put("legalPersonName", enterpriseUserDTO.getLegalPerson()); // 企业法人
-        String id;
+        String code;
         try{
             String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/company/authentic", paramMap);
             JSONObject json = new JSONObject();
             json.put("res", response);
-            id = json.getJSONObject("res").getJSONObject("data").getString("id");
+            code = json.getJSONObject("res").get("code").toString();
         }catch (Exception e){
             e.printStackTrace();
             return false;
         }
 
-        if(id != null) {
-            return id.length() > 0;
+        if(code != null && !code.equals("")) {
+            return code.equals("200");
         } else {
             return false;
         }
     }
 
     @Override
-    public boolean personalCertification(PersonalUserDTO personalUserDTO) {
+    public String personalCertification(PersonalUserDTO personalUserDTO, User user) {
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
-        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return false;
+        if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "手机验证码校验失败";
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("appId", "2019042516271800110");
         paramMap.put("appKey", "uDCFes85C3OwDQ");
-        paramMap.put("idName", personalUserDTO.getUserName()); // 企业名称
-        paramMap.put("idNo", personalUserDTO.getUserIdCard()); // 企业统一社会信用代码（组织机构代码）
-        String id;
+        paramMap.put("idName", personalUserDTO.getUserName()); // 身份证名字
+        paramMap.put("idNo", personalUserDTO.getUserIdCard()); // 身份证号
+        String code;
+        String message;
         try{
             String response = HttpClient4.doPost("https://authentic.yunhetong.com/authentic/personal/simple", paramMap);
             JSONObject json = new JSONObject();
             json.put("res", response);
-            id = json.getJSONObject("res").getJSONObject("data").getString("id");
+            code = json.getJSONObject("res").get("code").toString();
+            message = json.getJSONObject("res").get("msg").toString();
         }catch (Exception e){
             e.printStackTrace();
-            return false;
+            return "参数异常，请重试";
         }
 
-        if(id != null) {
-            boolean isSuccess =  id.length() > 0;
+        if(!code.equals("200")) {
             boolean isUpdate = false;
-            if(isSuccess) {
-                User user = userMapperExtra.findUserByAccount(personalUserDTO.getUserAccount());
-                user.setUpdateAt(new Date());
-                user.setIsIdentified(1);
-                isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
-            }
+            user.setUpdateAt(new Date());
+            user.setIsIdentified(1);
+            isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
 
-            return isUpdate;
+            return isUpdate + "";
         } else {
-            return false;
+            return message;
         }
+    }
+
+    @Override
+    public boolean isCertification(User user) {
+
+        return user.getIsIdentified().equals("1");
     }
 }

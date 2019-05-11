@@ -57,7 +57,17 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     }
 
     @Override
-    public PersonalCenterUserDTO getUserEnterpriseInfo(String userId) {
-        return userMapperExtra.GetUserEnterpriseInfo(userId);
+    public PersonalCenterUserDTO getUserEnterpriseInfo(User user) {
+        if (user==null){
+            return null;
+        }
+        PersonalCenterUserDTO personalCenterUserDTO=userMapperExtra.GetUserEnterpriseInfo(user.getUserId());
+        if(personalCenterUserDTO==null){
+            personalCenterUserDTO.setUserName(user.getUserName());
+            personalCenterUserDTO.setUserAccount(user.getUserAccount());
+            personalCenterUserDTO.setUserType(user.getUserType());
+            personalCenterUserDTO.setUserRank(user.getUserRank());
+        }
+        return personalCenterUserDTO;
     }
 }
