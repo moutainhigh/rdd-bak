@@ -152,14 +152,9 @@
 
     <!--企业合同插入-->
     <insert id="insertContractLog" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
-        INSERT INTO czb_contract_records (
-            record_id,
-            user_id
+        INSERT INTO czb_contract_records (record_id, user_id, contract_state, contract_type, create_at)
         VALUES
-            (
-                #{recordId},
-                #{userId}
-            )
+            (#{recordId}, #{userId},'0','0', CURRENT_TIMESTAMP )
     </insert>
 
     <!--个人合同插入-->
