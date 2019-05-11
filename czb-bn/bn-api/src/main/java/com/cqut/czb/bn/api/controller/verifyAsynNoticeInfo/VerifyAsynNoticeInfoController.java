@@ -18,16 +18,13 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/verifyAsyn")
 public class VerifyAsynNoticeInfoController {
-	
 	@Resource(name="paymentRecordService")
 	private IPaymentRecordService paymentRecordService;
-
 	/**
 	 * 验证异步通知信息(支付宝(爱虎))
 	 */
 	@RequestMapping(value="/verifyAsynNoticeInfoAiHu", method= RequestMethod.POST)
 	public void verifyAsynNoticeInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("支付宝成功回调我的接口");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {

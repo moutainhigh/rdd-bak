@@ -34,19 +34,18 @@ public class CancelPayController {
             return new JSONResult(ResponseCodeConstants.FAILURE, "用户信息有误");
         }
         Iterator<Map.Entry<String,Petrol>> currentPetrol = PetrolCache.currentPetrolMap.entrySet().iterator();
-        System.out.println(PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
         while(currentPetrol.hasNext()){
             Map.Entry<String, Petrol> entry=currentPetrol.next();
             String key=entry.getKey();
             Petrol petrol=PetrolCache.currentPetrolMap.get(key);
-            if(petrol.getOwnerId()==user.getUserId()){
-                currentPetrol.remove();        //OK
+            if((petrol.getOwnerId()).equals(user.getUserId())){
+                PetrolCache.currentPetrolMap.remove(petrol.getPetrolNum());       //OK
                 petrol.setOwnerId("");//将用户id置为空
-                PetrolCache.putBackPetrol(PetrolCache.AllpetrolMap,petrol);
+                petrol.setEndTime(0);
+                PetrolCache.AllpetrolMap.put(petrol.getPetrolNum(),petrol);
                 return new JSONResult(ResponseCodeConstants.FAILURE, "订单已取消");
             }
         }
-        System.out.println(PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
-        return  new JSONResult(ResponseCodeConstants.FAILURE, "订单已取消");
+        return  new JSONResult(ResponseCodeConstants.FAILURE, "2订单已取消");
     }
 }

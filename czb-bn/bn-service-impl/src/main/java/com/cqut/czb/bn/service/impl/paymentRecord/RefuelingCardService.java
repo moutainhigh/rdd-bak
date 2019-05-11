@@ -106,7 +106,6 @@ public class RefuelingCardService implements IRefuelingCard {
 		if ("0".equals(payType)) {
 			System.out.println("this is 0——充值");
 		} else if ("1".equals(payType)) {
-			System.out.println("this is 1——购买油卡");
 //			此处插入购油的相关信息，油卡购买记录
 			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId,actualPayment);
 
@@ -115,13 +114,13 @@ public class RefuelingCardService implements IRefuelingCard {
 				Petrol petrol= PetrolCache.currentPetrolMap.get(petrolNum);
 				petrol.setOwnerId("");
 				petrol.setEndTime(0);
-				PetrolCache.putBackPetrol(PetrolCache.AllpetrolMap,petrol);//放回all中
-				PetrolCache.clearPetrol(PetrolCache.currentPetrolMap,petrolNum);
+				PetrolCache.AllpetrolMap.put(petrolNum,petrol);//放回all中
+				PetrolCache.currentPetrolMap.remove(petrolNum);
 				return 2;
 			}
 
 			//成功后移除对应的卡
-			PetrolCache.clearPetrol(PetrolCache.currentPetrolMap,petrolNum);
+			PetrolCache.currentPetrolMap.remove(petrolNum);
 			return 1;
 
 		} else if ("2".equals(payType)) {
