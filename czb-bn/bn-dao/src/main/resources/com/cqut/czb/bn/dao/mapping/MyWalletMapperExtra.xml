@@ -66,4 +66,32 @@
         AND i.user_id = #{userId}
     </select>
 
+    <insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.personCenter.myWallet.InsertIncomeInfo">
+        INSERT INTO czb_user_income_info (
+            info_id,
+            user_id,
+            fanyong_income,
+            share_income,
+            pay_total_rent,
+            got_total_rent,
+            other_income,
+            withdrawed,
+            create_at,
+            update_at
+        )
+        VALUES
+            (
+                #{infoId},
+                #{userId},
+                '0',
+                '0',
+                '0',
+                '0',
+                '0',
+                '0',
+                CURRENT_TIMESTAMP ,
+                CURRENT_TIMESTAMP
+            )
+    </insert>
+
 </mapper>

@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.service.impl.personCenterImpl;
 
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
-import com.cqut.czb.bn.entity.dto.personCenter.myWallet.AlipayRecordDTO;
-import com.cqut.czb.bn.entity.dto.personCenter.myWallet.BalanceAndInfoIdDTO;
-import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
-import com.cqut.czb.bn.entity.dto.personCenter.myWallet.WithDrawLogDTO;
+import com.cqut.czb.bn.entity.dto.personCenter.myWallet.*;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONArray;
@@ -29,6 +26,16 @@ public class MyWalletImpl implements MyWallet {
     @Override
     public BalanceAndInfoIdDTO getBalance(String userId){
         BalanceAndInfoIdDTO balance = myWalletMapper.getUserAllIncome(userId);
+
+        if(balance.getInfoId() == null ){
+            InsertIncomeInfo info = new InsertIncomeInfo();
+            info.setInfoId(StringUtil.createId());
+            info.setUserId(userId);
+            int success = myWalletMapper.insertIncomeInfo(info);
+            if (success > 0){
+                balance = myWalletMapper.getUserAllIncome(userId);
+            }
+        }
 
         // 如果取出的余额小于0，则把余额设置为0
         if(balance.getBalance().compareTo(new BigDecimal(0)) < 0){
