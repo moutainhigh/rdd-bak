@@ -7,7 +7,20 @@ import java.util.Map;
 
 public interface IRefuelingCard {
 
+	/**
+	 * 购买油卡支付成功后的处理
+	 * @param i
+	 * @param param
+	 * @return
+	 */
 	Map payCallback(int i, Object[] param);
+
+	/**
+	 * 购买油卡支付失败后的处理
+	 * @param param
+	 * @return
+	 */
+	void purchaseFailed(Object[] param);
 
 	/**
 	 * 更改油卡状态
@@ -23,13 +36,4 @@ public interface IRefuelingCard {
 	 */
 	boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords);
 
-	/**
-	 * 插入收益变更表
-	 */
-	boolean insertIncomeLog(IncomeLog incomeLog);
-
-	/**
-	 * 修改收益信息表
-	 */
-	boolean updateUserIncomeInfo(UserIncomeInfo userIncomeInfo);
 }

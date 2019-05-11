@@ -61,7 +61,7 @@ public class FanYongServiceImpl implements FanYongService {
         //对本人的操作
         UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userId);//查出原收益信息
         //更改个人收益信息和新增收益变更记录表
-        boolean changeUserIncomeInfo= changeUserIncomeInfo(oldUserIncomeInfo, money, actualPayment, oldUserIncomeInfo.getUserId(), 0);
+        boolean changeUserIncomeInfo= changeUserIncomeInfo(oldUserIncomeInfo, money, actualPayment, userId, 0);
 
         if(changeUserIncomeInfo)
             return true;
@@ -88,6 +88,8 @@ public class FanYongServiceImpl implements FanYongService {
                     userIncomeInfo.setShareIncome(0.0);
             }
             userIncomeInfo1.setInfoId(uuid);
+            userIncomeInfo1.setFanyongIncome(0.00);
+            userIncomeInfo1.setShareIncome(0.00);
             ischangeUserIncomeInfo = userIncomeInfoMapper.insert(userIncomeInfo1) > 0;//进行新增
             System.out.println("新增用户收益信息表完毕" + k + ischangeUserIncomeInfo);
             boolean insertIncomeLog = insertIncomeLog(uuid, money, 0, oldUserIncomeInfo,userIncomeInfo1);

@@ -59,17 +59,18 @@ public class PaymentRecordService implements IPaymentRecordService {
 		try {
 			if (signVerfied) {
 //				支付账单是否一致
-				if (isCorrectDataAiHu(params)) {
+				if (isCorrectDataAiHu(params)) {//交易成功
 					Object[] param = { params };
-					// 支付宝支付
-					Map result = refuelingCard.payCallback(1, param);//此处进行数据处理
+					Map result = refuelingCard.payCallback(1, param);//1为支付宝支付（用于拓展）
 					if (result.get("success").equals(AlipayConfig.response_success)) {
 						return AlipayConfig.response_success;
 					} else if (result.get("fail").equals(AlipayConfig.response_fail)) {
 						return AlipayConfig.response_fail;
 					} else
 						return null;
-				} else {
+				} else {//交易失败
+					Object[] param = { params };
+					refuelingCard.purchaseFailed(param);//油卡放回
 					return AlipayConfig.response_fail;
 				}
 			} else {

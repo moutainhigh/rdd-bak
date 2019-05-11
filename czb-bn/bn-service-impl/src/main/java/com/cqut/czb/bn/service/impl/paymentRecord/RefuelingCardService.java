@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.paymentRecord;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -24,15 +25,6 @@ public class RefuelingCardService implements IRefuelingCard {
 	private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
 	@Autowired
-	private UserIncomeInfoMapper userIncomeInfoMapper;
-
-	@Autowired
-	private UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
-
-	@Autowired
-	private IncomeLogMapper incomeLogMapper;
-
-	@Autowired
 	FanYongService fanYongService;
 
 	// 同一时间只允许一个线程访问购买油卡接口
@@ -50,6 +42,80 @@ public class RefuelingCardService implements IRefuelingCard {
 				return result;
 			}
 	}
+
+	@Override
+	public void purchaseFailed(Object[] param) {
+		Map<String, String> result = new HashMap<>();
+		Map<String, String> params = (HashMap<String, String>) param[0];
+		PetrolSalesRecordsDTO petrolSalesRecordsDTO=getOrderdata(params);
+		System.out.println("购买失败删除前"+PetrolCache.AllpetrolMap+":"+PetrolCache.currentPetrolMap);
+		Petrol petrol=PetrolCache.currentPetrolMap.get(petrolSalesRecordsDTO.getPetrolNum());
+		petrol.setOwnerId("");
+		petrol.setEndTime(0);
+		PetrolCache.currentPetrolMap.remove(petrolSalesRecordsDTO.getPetrolNum());//移除
+		PetrolCache.AllpetrolMap.put(petrol.getPetrolNum(),petrol);//放入
+		System.out.println("购买失败删除后"+PetrolCache.AllpetrolMap+":"+PetrolCache.currentPetrolMap);
+	}
+
+
+	/**
+	 * 解析订单数据用于处理（成功此块有点冗余）
+	 */
+	public static PetrolSalesRecordsDTO getOrderdata(Map<String, String> params){
+		String[] resDate = params.get("passback_params").split("\\^");
+		String[] temp;
+		// petrol_record主键
+		String id = "";
+		// 0代表充值，1代表购油——对应payType
+		String payType = "";
+		double money = 0;
+		int count = 0;
+		int petrolKind=0;
+		String petrolNum= "";
+		String ownerId="";
+		double actualPayment=0;
+		PetrolSalesRecordsDTO petrolSalesRecordsDTO=new PetrolSalesRecordsDTO();
+		for (String data : resDate) {
+			temp = data.split("\'");
+			if ("payType".equals(temp[0])) {
+				System.out.println(temp[0] + ":" + temp[1]);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setPaymentMethod(Integer.parseInt(temp[1]));
+			}
+			if ("money".equals(temp[0])) {
+				System.out.println("充值金额:money" + money);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setPetrolPrice(Double.valueOf(temp[1]));
+			}
+			if ("count".equals(temp[0])) {
+				System.out.println("购买数量count:" + count);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setCount(Integer.parseInt(temp[1]));
+			}
+			if ("petrolKind".equals(temp[0])) {
+				System.out.println("油卡类型petrolKind:" + petrolKind);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setPetrolKind(Integer.parseInt(temp[1]));
+			}
+			if ("petrolNum".equals(temp[0])) {
+				System.out.println("油卡号petrolNum:" + petrolNum);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setPetrolNum(temp[1]);
+			}
+			if ("ownerId".equals(temp[0])) {
+				System.out.println("用户id:" + ownerId);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setBuyerId(temp[1]);
+			}
+			if ("actualPayment".equals(temp[0])) {
+				System.out.println("实际支付actualPayment:" + actualPayment);
+				if(temp[1]!=null)
+					petrolSalesRecordsDTO.setActualPayment(Double.valueOf(temp[1]));
+			}
+		}
+		return petrolSalesRecordsDTO;
+	}
+
 
 	/**
 	 * 获取订单数据存入数据库(支付宝)
@@ -185,15 +251,4 @@ public class RefuelingCardService implements IRefuelingCard {
 		return petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
 	}
 
-	//收益变更记录表——插入
-	@Override
-	public boolean insertIncomeLog(IncomeLog incomeLog) {
-		return incomeLogMapper.insert(incomeLog)>0;
-	}
-
-	//用户收益信息表——更改
-	@Override
-	public boolean updateUserIncomeInfo(UserIncomeInfo userIncomeInfo) {
-		return userIncomeInfoMapper.updateByPrimaryKeySelective(userIncomeInfo)>0;
-	}
 }

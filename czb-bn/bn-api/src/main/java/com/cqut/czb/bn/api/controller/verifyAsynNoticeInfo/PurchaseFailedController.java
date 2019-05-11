@@ -22,11 +22,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/CancelPay")
-public class CancelPayController {
+public class PurchaseFailedController {
 
     @Autowired
     RedisUtils redisUtils;
 
+    /**
+     * 用户取消支付处理
+     * @param principal
+     * @return
+     */
     @RequestMapping(value = "/CancelPayPetrol",method = RequestMethod.POST)
     public JSONResult CancelPayPetrol(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
