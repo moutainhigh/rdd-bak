@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PetrolSalesRecordsDTO {
-    private Integer petrolKind;
+    private Double actualPayment;//实际支付金额
+
+    private int petrolKind;
 
     private String recordId;
 
@@ -36,14 +38,41 @@ public class PetrolSalesRecordsDTO {
 
     private Date updateAt;
 
-    // 备注
-    private String remark;
+    private String remark; // 备注
 
-    public Integer getPetrolKind() {
+    private double petrolPrice;//油卡价格
+
+    private int count;//油卡
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public double getPetrolPrice() {
+        return petrolPrice;
+    }
+
+    public void setPetrolPrice(double petrolPrice) {
+        this.petrolPrice = petrolPrice;
+    }
+
+    public Double getActualPayment() {
+        return actualPayment;
+    }
+
+    public void setActualPayment(Double actualPayment) {
+        this.actualPayment = actualPayment;
+    }
+
+    public int getPetrolKind() {
         return petrolKind;
     }
 
-    public void setPetrolKind(Integer petrolKind) {
+    public void setPetrolKind(int petrolKind) {
         this.petrolKind = petrolKind;
     }
 

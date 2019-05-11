@@ -81,7 +81,7 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value = "/appGetUserInfo",method = RequestMethod.GET)
     public JSONResult appGetUserInfo(Principal principal){
-        User user = (User) redisUtils.get(principal.getName());
+        User user = (User)redisUtils.get(principal.getName());
         user.setUserPsw("");//不返回密码
         return new JSONResult(user);
     }
@@ -91,7 +91,7 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value = "/appGetUserEnterpriseInfo",method = RequestMethod.GET)
     public JSONResult appGetUserEnterpriseInfo(Principal principal){
-        User user = (User) redisUtils.get(principal.getName());
+        User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user));
     }
 

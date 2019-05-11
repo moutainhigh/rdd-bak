@@ -37,10 +37,12 @@ public class AuthController {
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result);
+            jsonResult.setData(false);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
@@ -55,10 +57,12 @@ public class AuthController {
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result);
+            jsonResult.setData(false);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
@@ -173,27 +177,31 @@ public class AuthController {
         JSONResult jsonResult = new JSONResult();
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
+            jsonResult.setData(false);
             jsonResult.setMessage(result);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
 
     @RequestMapping(value = "/isCertification",method = RequestMethod.POST)
-    public  JSONResult isCertification(@Validated @RequestBody Principal principal) {
+    public  JSONResult isCertification(Principal principal) {
         User user = (User)redisUtils.get(principal.getName());
         boolean result = userDetailService.isCertification(user);
         JSONResult jsonResult = new JSONResult();
         if(!result) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result +"");
+            jsonResult.setData(false);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result + "");
+            jsonResult.setData(true);
             return jsonResult;
         }
     }

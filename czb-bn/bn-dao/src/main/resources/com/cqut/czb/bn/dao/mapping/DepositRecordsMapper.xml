@@ -8,11 +8,14 @@
     <result column="amount" property="amount" jdbcType="DOUBLE" />
     <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
     <result column="payer_id" property="payerId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, payer, pay_time, amount, is_recharged, payer_id, create_at, update_at
+    record_id, payer, pay_time, amount, is_recharged, payer_id, type, user_id_card, create_at, 
+    update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -27,10 +30,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.DepositRecords" >
     insert into czb_deposit_records (record_id, payer, pay_time, 
       amount, is_recharged, payer_id, 
-      create_at, update_at)
+      type, user_id_card, create_at, 
+      update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{payer,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
       #{amount,jdbcType=DOUBLE}, #{isRecharged,jdbcType=INTEGER}, #{payerId,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{type,jdbcType=INTEGER}, #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.DepositRecords" >
     insert into czb_deposit_records
@@ -52,6 +57,12 @@
       </if>
       <if test="payerId != null" >
         payer_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="userIdCard != null" >
+        user_id_card,
       </if>
       <if test="createAt != null" >
         create_at,
@@ -79,6 +90,12 @@
       <if test="payerId != null" >
         #{payerId,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userIdCard != null" >
+        #{userIdCard,jdbcType=VARCHAR},
+      </if>
       <if test="createAt != null" >
         #{createAt,jdbcType=TIMESTAMP},
       </if>
@@ -105,6 +122,12 @@
       <if test="payerId != null" >
         payer_id = #{payerId,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userIdCard != null" >
+        user_id_card = #{userIdCard,jdbcType=VARCHAR},
+      </if>
       <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
@@ -121,6 +144,8 @@
       amount = #{amount,jdbcType=DOUBLE},
       is_recharged = #{isRecharged,jdbcType=INTEGER},
       payer_id = #{payerId,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      user_id_card = #{userIdCard,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}

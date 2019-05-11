@@ -228,12 +228,17 @@ public class UserDetailServiceImpl implements UserDetailService {
             return "参数异常，请重试";
         }
 
-        if(!code.equals("200")) {
-            boolean isUpdate = false;
+        if(code.equals("200")) {
+            boolean isUpdate;
             user.setUpdateAt(new Date());
             user.setIsIdentified(1);
+            user.setUserIdCard(personalUserDTO.getUserIdCard());
             isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
 
+            if(isUpdate) {
+                redisUtils.remove(user.getUserAccount());
+                redisUtils.put(user.getUserAccount(), user);
+            }
             return isUpdate + "";
         } else {
             return message;
@@ -243,6 +248,6 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public boolean isCertification(User user) {
 
-        return user.getIsIdentified().equals("1");
+        return "1".equals(user.getIsIdentified());
     }
 }
