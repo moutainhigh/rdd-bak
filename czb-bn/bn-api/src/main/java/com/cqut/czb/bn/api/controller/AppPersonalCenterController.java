@@ -95,4 +95,18 @@ public class AppPersonalCenterController {
         return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user));
     }
 
+
+    /**
+     * 修改企业联系人
+     */
+    @RequestMapping(value = "/appModifyContactInfo",method = RequestMethod.POST)
+    public JSONResult appModifyContactInfo(Principal principal,@RequestBody PersonalCenterUserDTO personalCenterUserDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null||personalCenterUserDTO==null){
+            return null;
+        }
+        personalCenterUserDTO.setUserId(user.getUserId());
+        return new JSONResult(appPersonalCenterService.ModifyContactInfo(personalCenterUserDTO));
+    }
+
 }

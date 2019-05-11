@@ -44,5 +44,13 @@ public interface AppPersonalCenterService {
      */
     List<AppRouter> getAppRouters(AppRouter appRouter);
 
+    /**
+     * 查出个人中心个人信息（包含企业）
+     * @param user
+     * @return
+     */
     PersonalCenterUserDTO getUserEnterpriseInfo(User user);
+
+
+    boolean ModifyContactInfo(PersonalCenterUserDTO personalCenterUserDTO);
 }
