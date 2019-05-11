@@ -63,11 +63,13 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
         }
         PersonalCenterUserDTO personalCenterUserDTO=userMapperExtra.GetUserEnterpriseInfo(user.getUserId());
         if(personalCenterUserDTO==null){
+            personalCenterUserDTO = new PersonalCenterUserDTO();
             personalCenterUserDTO.setUserName(user.getUserName());
             personalCenterUserDTO.setUserAccount(user.getUserAccount());
             personalCenterUserDTO.setUserType(user.getUserType());
             personalCenterUserDTO.setUserRank(user.getUserRank());
         }
+
         return personalCenterUserDTO;
     }
 }
