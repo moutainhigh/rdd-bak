@@ -89,6 +89,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         EnterpriseInfo enterpriseInfo = BeanMapper.map(enterpriseUserDTO, EnterpriseInfo.class);
         enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
+        enterpriseInfo.setContactInfo(enterpriseUserDTO.getUserAccount());
         enterpriseInfo.setEnterpriseName(enterpriseUserDTO.getUserName());
         enterpriseInfo.setIsDeleted(0);
         enterpriseInfo.setCreateAt(new Date());
