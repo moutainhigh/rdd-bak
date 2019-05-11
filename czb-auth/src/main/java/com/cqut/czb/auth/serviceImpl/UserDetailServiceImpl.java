@@ -228,7 +228,7 @@ public class UserDetailServiceImpl implements UserDetailService {
             return "参数异常，请重试";
         }
 
-        if(!code.equals("200")) {
+        if(code.equals("200")) {
             boolean isUpdate = false;
             user.setUpdateAt(new Date());
             user.setIsIdentified(1);
