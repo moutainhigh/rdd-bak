@@ -269,6 +269,7 @@ public class ContractController {
             case "200":
                 jsonResult.setMessage("企业签订正文添加个人信息成功");
                 jsonResult.setCode(200);
+                jsonResult.setData(json);
         }
 
         return jsonResult;
