@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
@@ -8,7 +9,6 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -95,7 +95,6 @@ public class AppPersonalCenterController {
         return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user));
     }
 
-
     /**
      * 修改企业联系人
      */
@@ -108,5 +107,19 @@ public class AppPersonalCenterController {
         personalCenterUserDTO.setUserId(user.getUserId());
         return new JSONResult(appPersonalCenterService.ModifyContactInfo(personalCenterUserDTO));
     }
+
+    /**
+     * 个人返佣信息记录
+     */
+    @RequestMapping(value = "/getFanYonginfo",method = RequestMethod.GET)
+    public JSONResult getFanYonginfo(Principal principal,@RequestBody MyIncomeLogDTO myIncomeLogDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null||myIncomeLogDTO==null){
+            return null;
+        }
+        myIncomeLogDTO.setUserId(user.getUserId());
+        return new JSONResult<List<MyIncomeLogDTO>>(appPersonalCenterService.selectIncomeLog(myIncomeLogDTO));
+    }
+
 
 }
