@@ -402,9 +402,35 @@ public class ContractController {
      * 企业签订合同
      */
     @RequestMapping(value = "/companySigned", method = RequestMethod.POST)
-    public JSONResult personSigned(String userId, String contractId){
-        String code = contractService.companySigned(userId, contractId);
-
-        return null;
+    public JSONResult personSigned(Principal principal, @RequestBody ContractIdInfo info){
+        User user = (User)redisUtils.get(principal.getName());
+        JSONObject json = contractService.companySigned(user.getUserId(), info.getContractId());
+        String code = json.getString("code");
+        switch(code){
+            case ContractServiceImpl.STATE_CONTRACT_NULL:
+                json.put("code", code);
+                json.put("message", "不存在符合的签约码");
+                break;
+            case ContractServiceImpl.STATE_CREATEYUNID_FAILED:
+                json.put("code", code);
+                json.put("message", "企业用户没有注册云合同");
+                break;
+            case ContractServiceImpl.STATE_CREATE_CONTRACT_YUN_FAILED:
+                json.put("code", code);
+                json.put("message", "生成合同模板出错");
+                break;
+            case ContractServiceImpl.STATE_INSERT_YUN_CONTRACTID_FAILED:
+                json.put("code", code);
+                json.put("message", "插入云合同id到合同记录表中出错");
+                break;
+            case ContractServiceImpl.STATE_ADD_SIGNER_FAILED:
+                json.put("code", code);
+                json.put("message", "为合同添加签署者失败");
+                break;
+            default:
+                json.put("code", "200");
+                json.put("message", "企业合同初始化成功（签署中状态）");
+        }
+        return new JSONResult(json);
     }
 }

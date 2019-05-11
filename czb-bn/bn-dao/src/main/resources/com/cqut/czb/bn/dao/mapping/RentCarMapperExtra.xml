@@ -125,6 +125,7 @@
         group by contractId
     </select>
 
+    <!--企业获取合同概要信息列表-->
     <select id="getOneCompanyContractInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneCompanyContractsPersonDTO">
         SELECT
             cp.person_name AS personName,

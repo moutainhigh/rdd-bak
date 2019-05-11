@@ -611,31 +611,47 @@ public class ContractServiceImpl implements ContractService{
      * 企业签订合同（此步后跳到引入js页面）
      */
     @Override
-    public String companySigned(String userId, String contractId) {
+    public JSONObject companySigned(String userId, String contractId) {
+        JSONObject json = new JSONObject();
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
         if(yunId == null){
             int success = registerEnterpriseContractAccount(userId, getToken());
-            if(success != 1)
-                return STATE_CREATEYUNID_FAILED;
+            if(success != 1){
+                json.put("code", STATE_CREATEYUNID_FAILED); // 不存在未签约的认证码
+                return json;
+            }
         }
 
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContractCompany(userId, getToken());
-        if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals(""))
-            return STATE_CREATE_CONTRACT_YUN_FAILED;
+        if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals("")){
+            json.put("code", STATE_CREATE_CONTRACT_YUN_FAILED); // 不存在未签约的认证码
+            return json;
+        }
+
 
         // 把云合同id插入相应的合同记录表中去
         int insertYunContractId = contractMapper.insertContractId(contractId, createYunContract);
-        if(insertYunContractId != 1)
-            return STATE_INSERT_YUN_CONTRACTID_FAILED;
+        if(insertYunContractId != 1){
+            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); // 不存在未签约的认证码
+            return json;
+        }
+
 
         // 企业添加签署者
         int addSigner = addContractOwner(userId, createYunContract, getToken(), 2);
-        if(addSigner != 1)
-            return STATE_ADD_SIGNER_FAILED;
+        if(addSigner != 1){
+            json.put("code", STATE_ADD_SIGNER_FAILED); // 不存在未签约的认证码
+            return json;
+        }
 
-        return createYunContract;
+        json.put("contractId", createYunContract);
+        json.put("signerId", yunId);
+        json.put("token", getToken());
+        json.put("code", "200");
+
+        return json;
     }
 
     /**

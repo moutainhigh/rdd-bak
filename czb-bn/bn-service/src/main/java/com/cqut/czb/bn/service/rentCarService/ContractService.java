@@ -62,6 +62,6 @@ public interface ContractService {
     boolean removePersonInfo(ContractIdListDTO contractiIdList);
 
     // 企业签订合同
-    String companySigned(String userId, String contractId);
+    JSONObject companySigned(String userId, String contractId);
 
 }
