@@ -232,6 +232,7 @@ public class UserDetailServiceImpl implements UserDetailService {
             boolean isUpdate = false;
             user.setUpdateAt(new Date());
             user.setIsIdentified(1);
+            user.setUserIdCard(personalUserDTO.getUserIdCard());
             isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
 
             return isUpdate + "";
