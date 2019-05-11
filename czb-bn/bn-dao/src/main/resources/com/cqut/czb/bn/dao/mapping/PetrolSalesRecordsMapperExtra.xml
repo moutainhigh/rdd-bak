@@ -117,14 +117,15 @@ INNER JOIN (
     INNER JOIN (
     SELECT
     cpsr.transaction_time temp_time,
-    cpsr.petrol_id,
+    cpsr.petrol_id cpsr_p_id,
     cpsr.buyer_id
     FROM
     czb_petrol_sales_records AS cpsr
     WHERE
     buyer_id = #{userId,jdbcType = VARCHAR}
-    ) AS t_cpsr ON cp.petrol_id = t_cpsr.petrol_id
+    ) AS t_cpsr ON cp.petrol_id = t_cpsr.cpsr_p_id
     AND cp.owner_id = t_cpsr.buyer_id
+    and cp.petrol_kind = 0
     ORDER BY
     temp_time DESC
 </select>
@@ -235,5 +236,11 @@ INNER JOIN (
     
     
     <!--个人中心油卡详情获取新版，按日期分组返回数据 级联查询-->
-    <!--<resultMap id="getGTPetrolListGroupByDate" type="com.cqut"-->
+    <!--<resultMap id="getGTPetrolListGroupByDate" type="com.cqut.czb.bn.entity.dto.appPersonalPetrol.PersonalPetrolGT">-->
+        <!--<result property="date" column="t_date"/>-->
+        <!--<collection property="petrols" column="t_date" select=""/>-->
+    <!--</resultMap>-->
+    <!--<select id="getPetrolsByDateDesc" resultMap="PetrolResultMap">-->
+        <!--select <include refid="petrol"/> from czb_petrol where-->
+    <!--</select>-->
 </mapper>
