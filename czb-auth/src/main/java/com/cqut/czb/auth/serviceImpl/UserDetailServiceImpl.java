@@ -229,7 +229,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         }
 
         if(code.equals("200")) {
-            boolean isUpdate = false;
+            boolean isUpdate;
             user.setUpdateAt(new Date());
             user.setIsIdentified(1);
             user.setUserIdCard(personalUserDTO.getUserIdCard());

@@ -37,10 +37,12 @@ public class AuthController {
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result);
+            jsonResult.setData(true);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
+            jsonResult.setData(false);
             return jsonResult;
         }
     }
@@ -55,10 +57,12 @@ public class AuthController {
         if(!result.equals("true")) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result);
+            jsonResult.setData(true);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
+            jsonResult.setData(false);
             return jsonResult;
         }
     }
@@ -190,10 +194,12 @@ public class AuthController {
         if(!result) {
             jsonResult.setCode(ResponseCodeConstants.FAILURE);
             jsonResult.setMessage(result +"");
+            jsonResult.setData(false);
             return jsonResult;
         } else {
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result + "");
+            jsonResult.setData(true);
             return jsonResult;
         }
     }
