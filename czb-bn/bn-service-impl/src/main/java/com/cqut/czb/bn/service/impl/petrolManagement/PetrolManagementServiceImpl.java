@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -66,11 +67,14 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             }
         }
         //excel里面没有重复
-        List<Petrol> petrolListNoRepeat = new ArrayList<>();
+        List<Petrol> petrolListNoRepeatForExcel = new ArrayList<>();
         for(Petrol p:petrolMap.values()){
-            petrolListNoRepeat.add(p);
+            petrolListNoRepeatForExcel.add(p);
         }
-        int countForInsert = petrolMapperExtra.insertPetrolList(petrolListNoRepeat);
+
+        //油卡缓存里面没有重复
+       List<Petrol> petrolListNoRepeatForDB =  removeRepeatPetrolForDB(petrolListNoRepeatForExcel);
+        int countForInsert = petrolMapperExtra.insertPetrolList(petrolListNoRepeatForDB);
         System.out.println("countForInsert " + countForInsert);
         return countForInsert;
     }
@@ -87,6 +91,12 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
      * @return
      */
     private List<Petrol> removeRepeatPetrolForDB(List<Petrol> list){
-        return null;
+        List<Petrol> petrolListNoRepeatForDB = new ArrayList<>();
+        for(Petrol p:list){
+            if(!PetrolCache.isContainPetorlMap(PetrolCache.AllpetrolMap,p.getPetrolNum())){
+                petrolListNoRepeatForDB.add(p);
+            }
+        }
+        return petrolListNoRepeatForDB;
     }
 }
