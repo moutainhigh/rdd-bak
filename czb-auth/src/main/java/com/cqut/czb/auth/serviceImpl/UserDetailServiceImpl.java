@@ -64,7 +64,8 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setCreateAt(new Date());
         user.setIsDeleted(0);
         user.setIsIdentified(0);
-
+        user.setIsLoginPc(0);
+        user.setUserRank(0);
         return (userMapper.insertSelective(user) > 0) + "";
     }
 
@@ -84,7 +85,8 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setCreateAt(new Date());
         user.setIsDeleted(0);
         user.setIsIdentified(1);
-
+        user.setIsLoginPc(0);
+        user.setUserRank(0);
         boolean isInsertUser = userMapper.insertSelective(user) > 0;
 
         EnterpriseInfo enterpriseInfo = BeanMapper.map(enterpriseUserDTO, EnterpriseInfo.class);
