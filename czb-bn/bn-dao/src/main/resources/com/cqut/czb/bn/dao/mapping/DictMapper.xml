@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.dao.DictMapper" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.DictMapper" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Dict" >
     <id column="dict_id" property="dictId" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -21,13 +21,13 @@
     delete from czb_dict
     where dict_id = #{dictId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.model.Dict" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Dict" >
     insert into czb_dict (dict_id, name, content, 
       create_at, update_at)
     values (#{dictId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.model.Dict" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Dict" >
     insert into czb_dict
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="dictId != null" >
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.model.Dict" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Dict" >
     update czb_dict
     <set >
       <if test="name != null" >
@@ -82,7 +82,7 @@
     </set>
     where dict_id = #{dictId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.model.Dict" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Dict" >
     update czb_dict
     set name = #{name,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
