@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,9 @@ public interface ContractService {
 
     // 测试
     String get( );
+
+    // 个人输入认证码、身份证后，查找车牌号和租金
+    CarNumAndRent getCarNumAndPersonId(PersonSignedInputInfo inputInfo);
 
     // 个人签约
     JSONObject personSigned(String userId, PersonSignedInputInfo inputInfo);

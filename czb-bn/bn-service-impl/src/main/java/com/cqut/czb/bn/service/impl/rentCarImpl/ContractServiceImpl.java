@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonCar;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
@@ -147,6 +148,16 @@ public class ContractServiceImpl implements ContractService{
 
 
         return "1";
+    }
+
+    /**
+     * 个人输入认证码、身份证后，查找车牌号和租金
+     * @param inputInfo
+     * @return
+     */
+    @Override
+    public CarNumAndRent getCarNumAndPersonId(PersonSignedInputInfo inputInfo) {
+        return contractMapper.getCarNumAndPersonId(inputInfo);
     }
 
     /**

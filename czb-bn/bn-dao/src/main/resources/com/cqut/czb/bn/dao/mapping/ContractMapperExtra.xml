@@ -163,4 +163,23 @@
             #{item.contractId}
         </foreach>
     </delete>
+
+    <select id="getCarNumAndPersonId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo">
+        SELECT
+            c.rent rent,
+            p.car_license carNum
+        FROM
+            (
+                SELECT
+                    cc.record_id,
+                    cc.rent
+                FROM
+                    czb_contract_records cc
+            ) c,
+            czb_cars_persons p
+        WHERE
+            p.identify_code = #{identifyCode}
+        AND p.person_car_id = #{personId}
+        AND p.contract_record_id = c.record_id
+    </select>
 </mapper>

@@ -49,42 +49,6 @@ public class ContractController {
         return contractService.getContractToken();
     }
 
-//    /**
-//     * 给用户（个人）注册云合同唯一id，此id需存入数据库维护
-//     * @param principal,token
-//     * @return 云合同返回的用户（个人或企业）id
-//     */
-//    @RequestMapping(value = "/registerPersonalContractAccount", method = RequestMethod.POST)
-//    public JSONResult registerPersonalContractAccount(@RequestBody Principal principal, String yunToken){
-//        User user = (User)redisUtils.get(principal.getName());
-//        JSONResult json =  new JSONResult();
-//        int code = contractService.registerPersonalContractAccount(user.getUserId(), yunToken);
-//        switch(code){
-//            case 100:
-//                json.setMessage("注册个人云合同失败");
-//                json.setCode(code);
-//                break;
-//            case 101:
-//                json.setMessage("注册个人云合同成功，但注册个人印章失败");
-//                json.setCode(code);
-//                break;
-//            case 104:
-//                json.setMessage("注册个人云合同时，查找实名信息失败");
-//                json.setCode(code);
-//                break;
-//            case 106:
-//                json.setMessage("注册个人云合同时，插入yunId出错");
-//                json.setCode(code);
-//                break;
-//            case 1:
-//                json.setCode(200);
-//                json.setMessage("个人注册云合同成功");
-//                break;
-//
-//        }
-//        return json;
-//    }
-
     /**
      * 企业注册云合同
      * 给用户（个人、或企业）注册云合同唯一id，此id需存入数据库维护
@@ -122,61 +86,6 @@ public class ContractController {
         return json;
     }
 
-//    /**
-//     * 根据合同模板生成合同（此时还未签署合同）
-//     */
-//    @RequestMapping(value = "/createContract", method = RequestMethod.POST)
-//    public JSONResult createContract(@RequestBody Principal principal,String contractWriteId, String token){
-//        User user = (User)redisUtils.get(principal.getName());
-//        JSONResult json = new JSONResult();
-//        String code = contractService.createContract(user.getUserId(), contractWriteId, token);
-//        switch(code){
-//            case "108":
-//                json.setMessage("生成合同模板时，获取用户信息失败");
-//                json.setCode(Integer.parseInt(code));
-//                break;
-//            case "109":
-//                json.setMessage("创建合同模板出错");
-//                json.setCode(Integer.parseInt(code));
-//                break;
-//            case "110":
-//                json.setMessage("插入第三方合同id失败");
-//                json.setCode(Integer.parseInt(code));
-//                break;
-//            default:
-//                JSONObject contractIdJson = new JSONObject();
-//                contractIdJson.put("thirdContractId", code);
-//                json.setData(contractIdJson);
-//                json.setMessage("成功，返回第三方合同id，用于接下来的合同操作");
-//                break;
-//        }
-//        return json;
-//    }
-
-//    /**
-//     * 添加合同签署者
-//     */
-//    @RequestMapping(value = "/addContractOwner", method = RequestMethod.POST)
-//    public JSONResult downloadContract(@RequestBody Principal principal,String contractId, String token){
-//        User user = (User)redisUtils.get(principal.getName());
-//        JSONResult json = new JSONResult();
-//        int code = contractService.addContractOwner(user.getUserId(),contractId, token);
-//        switch(code){
-//            case 111:
-//                json.setMessage("查找用户yunId失败");
-//                json.setCode(code);
-//                break;
-//            case 112:
-//                json.setMessage("为指定合同添加签署者失败");
-//                json.setCode(code);
-//                break;
-//            default:
-//                json.setMessage("添加签署者成功");
-//                json.setCode(200);
-//                break;
-//        }
-//        return json;
-//    }
 
     /**
      * 合同签署
@@ -233,6 +142,15 @@ public class ContractController {
     public JSONResult get(){
 
         return new JSONResult(contractService.get());
+    }
+
+    /**
+     * 个人输入认证码、身份证后，查找车牌号和租金
+     */
+    @RequestMapping(value = "/getCarNumAndPersonId", method = RequestMethod.POST)
+    public JSONResult getCarNumAndPersonId(Principal principal, @RequestBody  PersonSignedInputInfo inputInfo){
+
+        return new JSONResult(contractService.getCarNumAndPersonId(inputInfo));
     }
 
     /**
