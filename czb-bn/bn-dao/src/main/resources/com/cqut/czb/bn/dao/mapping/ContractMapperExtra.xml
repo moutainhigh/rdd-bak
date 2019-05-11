@@ -164,6 +164,7 @@
         </foreach>
     </delete>
 
+    <!--查找车牌号、租金-->
     <select id="getCarNumAndPersonId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo">
         SELECT
             c.rent rent,
@@ -181,5 +182,21 @@
             p.identify_code = #{identifyCode}
         AND p.person_car_id = #{personId}
         AND p.contract_record_id = c.record_id
+    </select>
+
+    <select id="getFatherContractStatus" resultType="java.lang.Integer">
+        SELECT
+            contract_state
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = (
+                SELECT
+                    contract_father_id
+                FROM
+                    czb_contract_records
+                WHERE
+                    record_id = #{contractId}
+            )
     </select>
 </mapper>
