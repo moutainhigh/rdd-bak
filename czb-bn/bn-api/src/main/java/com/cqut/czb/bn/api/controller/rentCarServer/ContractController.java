@@ -266,7 +266,7 @@ public class ContractController {
                 jsonResult.setMessage("插入父级相应的子合同记录失败");
                 jsonResult.setCode(Integer.parseInt(code));
                 break;
-            default:
+            case "200":
                 jsonResult.setMessage("企业签订正文添加个人信息成功");
                 jsonResult.setCode(200);
         }

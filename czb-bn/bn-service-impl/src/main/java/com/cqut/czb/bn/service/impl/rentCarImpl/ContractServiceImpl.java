@@ -773,6 +773,7 @@ public class ContractServiceImpl implements ContractService{
         JSONObject jsons = getWithoutCommitPersonInfo(personal.getContractId());
          jsons.remove("startTime");
         json.put("List", jsons.getString("personList"));
+        json.put("code", "200");
 
         return json;
     }
