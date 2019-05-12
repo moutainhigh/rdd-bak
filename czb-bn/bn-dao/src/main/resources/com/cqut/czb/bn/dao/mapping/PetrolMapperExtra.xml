@@ -152,7 +152,7 @@
     czb_petrol.owner_id=#{userId,jdbcType=VARCHAR}
   </select>
 
-  <select id="selectDifferentPetrol" parameterType="com.cqut.czb.bn.entity.entity.Petrol" resultType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
+  <select id="selectDifferentPetrol" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO" resultMap="BaseResultMap">
    SELECT *
     FROM czb_petrol
     WHERE czb_petrol.state=2 AND
