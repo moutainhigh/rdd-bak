@@ -207,4 +207,38 @@
         #{item.petrolNum,jdbcType=VARCHAR}
         </foreach> AND  delivery_state = 0
     </update>
+
+
+
+    <select id="getDeliveryInfo" resultMap="DeliveryResultMap" parameterType="java.lang.String" >
+        SELECT
+        record_id,
+        a.petrol_num,
+        petrol_kind,
+        a.address_id,
+        delivery_state,
+        delivery_num,
+        delivery_company,
+        receiver,
+        contact_number,
+        province,
+        city,
+        c.area,
+        detail,
+        a.create_at,
+        a.update_at
+        FROM
+        czb_petrol_delivery_records as a
+        LEFT JOIN czb_petrol as b ON a.petrol_num = b.petrol_num
+        LEFT JOIN czb_address as c on a.address_id = c.address_id
+        <where>
+            <if test="petrolKind!=null and petrolKind != ''">
+                AND petrol_kind = #{petrolKind, jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId !=''">
+                and owner_id = #{userId,jdbcType = VARCHAR}
+            </if>
+        </where>
+        limit 1
+    </select>
 </mapper>

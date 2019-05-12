@@ -27,4 +27,6 @@ public interface PetrolDeliveryRecordsService {
     int ImportDeliveryRecords(MultipartFile file) throws Exception;
 
     String selectLogistics();
+
+    PetrolDeliveryDTO getDeliveryInfo(String userId,String petrolKind);
 }
