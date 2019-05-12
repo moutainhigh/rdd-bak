@@ -53,11 +53,26 @@
         WHERE identify_code =#{identifyCode} AND person_id_card =#{personId} AND is_signed = 0
     </select>
 
+    <!--根据回调消息改变合同状态-->
     <update id="updateContractStatus" parameterType="java.lang.String">
         UPDATE czb_contract_records
         SET contract_state = #{statusCode}
         WHERE
             third_contract_num = #{contractId}
+    </update>
+
+    <!--根据回调消息改变服务表签约状态-->
+    <update id="updateCarsPersonsStatus" parameterType="java.lang.String">
+        UPDATE czb_cars_persons
+        SET is_signed = 1
+        WHERE
+        contract_record_id = (
+        SELECT
+        record_id
+        from
+        czb_contract_records
+        WHERE third_contract_num = #{contractId}
+        )
     </update>
 
     <select id="getContractStatus">

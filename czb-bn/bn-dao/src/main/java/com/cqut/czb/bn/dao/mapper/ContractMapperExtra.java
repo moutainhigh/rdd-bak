@@ -37,8 +37,11 @@ public interface ContractMapperExtra {
     // 查找是否存在相应认证码和身份证的合同
     String getIdentifyCodeAndPersonId(PersonSignedInputInfo inputInfo);
 
-    // 合同签署完成，修改合同记录状态
+    // 合同签署完成，根据回调消息改变合同状态
     int updateContractStatus(@Param("contractId") String contractId,@Param("statusCode") String statusCode);
+
+    // 根据回调消息改变服务表签约状态
+    int updateCarsPersonsStatus(@Param("contractId") String contractId);
 
     // 查看合同状态
     int getContractStatus(@Param("contractId") String contractId);

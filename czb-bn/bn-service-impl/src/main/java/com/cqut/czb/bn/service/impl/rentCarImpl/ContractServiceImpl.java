@@ -798,8 +798,10 @@ public class ContractServiceImpl implements ContractService{
     public void asynchronousInfo(SignerMap signerMap){
         Long contractId = signerMap.getData().getId();
         // 将签署完成合同的id传入mapper，修改合同记录的状态
-        if(contractId != null)
+        if(contractId != null){
             contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
+            contractMapper.updateCarsPersonsStatus(contractId.toString());
+        }
     }
 
     /**
