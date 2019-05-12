@@ -145,7 +145,6 @@ public class ContractController {
      */
     @RequestMapping(value = "/getCarNumAndPersonId", method = RequestMethod.POST)
     public JSONResult getCarNumAndPersonId(@RequestBody  PersonSignedInputInfo inputInfo){
-
         return new JSONResult(contractService.getCarNumAndPersonId(inputInfo));
     }
 
