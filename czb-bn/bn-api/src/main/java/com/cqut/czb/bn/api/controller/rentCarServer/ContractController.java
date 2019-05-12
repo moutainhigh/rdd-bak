@@ -367,7 +367,7 @@ public class ContractController {
     public JSONResult checkMoulage(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         JSONResult jsonResult = new JSONResult();
-        int success = contractService.checkMoulage(user.getUserId());
+        int success = contractService.checkMoulage("");
         switch (success){
             case 0:
                 jsonResult.setCode(0);
@@ -380,8 +380,9 @@ public class ContractController {
                 jsonResult.setData(true);
                 break;
             case 2:
-                jsonResult.setCode(2);
-                jsonResult.setMessage("查询印章出错");
+                jsonResult.setCode(0);
+                jsonResult.setMessage("此用户没有印章");
+                jsonResult.setData(false);
                 break;
         }
 

@@ -79,6 +79,9 @@ public class RentCarServiceImpl implements RentCarService {
     public List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String fatherId){
         List<OneCompanyContractsPersonDTO> companyPersonList = new ArrayList<>();
         companyPersonList = rentCarMapper.getOneCompanyContractInfo(fatherId);
+        for(OneCompanyContractsPersonDTO data:companyPersonList){
+            data.setRent(rentCarMapper.getTaoCanById(data.getRent()) + "/年");
+        }
 
         return companyPersonList;
     }

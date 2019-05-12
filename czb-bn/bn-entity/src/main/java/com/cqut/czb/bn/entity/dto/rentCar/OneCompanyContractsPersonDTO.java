@@ -17,9 +17,9 @@ public class OneCompanyContractsPersonDTO {
     private String license;
 
     /**
-     * 租金
+     * 套餐
      */
-    private double rent;
+    private String rent;
 
     /**
      * 是否签约
@@ -50,11 +50,11 @@ public class OneCompanyContractsPersonDTO {
         this.carId = carId;
     }
 
-    public double getRent() {
+    public String getRent() {
         return rent;
     }
 
-    public void setRent(double rent) {
+    public void setRent(String rent) {
         this.rent = rent;
     }
 
