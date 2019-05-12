@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned;
 
 public class CarsPersonsResultDTO {
     // 子级合同id
-    private String contractId;
+    private String sonContractId;
 
     // 车牌号
     private String carLicense;
@@ -22,12 +22,12 @@ public class CarsPersonsResultDTO {
     public CarsPersonsResultDTO() {
     }
 
-    public String getContractId() {
-        return contractId;
+    public String getSonContractId() {
+        return sonContractId;
     }
 
-    public void setContractId(String contractId) {
-        this.contractId = contractId;
+    public void setSonContractId(String sonContractId) {
+        this.sonContractId = sonContractId;
     }
 
     public String getCarLicense() {
