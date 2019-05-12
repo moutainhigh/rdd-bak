@@ -73,5 +73,6 @@ public interface ContractMapperExtra {
     // 删除企业合同个人信息列表中的某人
     int removeCarsPersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
 
-
+    // 将个人userId，写入合同记录表
+    int updatePersonalContractUserId(@Param("userId") String userId, @Param("contractId") String contractId);
 }

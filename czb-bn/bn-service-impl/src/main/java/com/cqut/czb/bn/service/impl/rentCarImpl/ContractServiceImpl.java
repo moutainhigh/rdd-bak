@@ -578,6 +578,18 @@ public class ContractServiceImpl implements ContractService{
             return json;
         }
 
+        // 将个人userId，写入合同记录表
+        try{
+            int updateSuccess = contractMapper.updatePersonalContractUserId(userId, personContractId);
+            if (!(updateSuccess > 0)){
+                json.put("code", "113");
+                return json;
+            }
+        } catch (Exception e){
+            json.put("code", "113");
+            return json;
+        }
+
         // 个人添加签署者
         int addSigner = addContractOwner(userId, createYunContract, getToken(), 1);
         if(addSigner != 1){
@@ -742,7 +754,6 @@ public class ContractServiceImpl implements ContractService{
 
         String contractId = StringUtil.createId();
         contractLog.setRecordId(contractId);
-        assert times != null;
         contractLog.setStartTime(times.getStartTime());
         contractLog.setEndTime(times.getEndTime());
         contractLog.setRent(rent);
@@ -854,11 +865,11 @@ public class ContractServiceImpl implements ContractService{
     @Override
     public boolean removePersonInfo(ContractIdListDTO contractiIdList) {
         // 多选删除个人合同记录
-        int removeCarsPerson = contractMapper.removeCarsPersonInfo(contractiIdList.getContractIdLists());
+//        int removeCarsPerson = contractMapper.removeCarsPersonInfo(contractiIdList.getContractIdLists());
         // 多选删除个人人员车辆服务记录
-        int removePersonInfo = contractMapper.removePersonInfo(contractiIdList.getContractIdLists());
+//        int removePersonInfo = contractMapper.removePersonInfo(contractiIdList.getContractIdLists());
 
-        return  removeCarsPerson >= 0 && removePersonInfo >= 0;
+        return true;
     }
 
     /**

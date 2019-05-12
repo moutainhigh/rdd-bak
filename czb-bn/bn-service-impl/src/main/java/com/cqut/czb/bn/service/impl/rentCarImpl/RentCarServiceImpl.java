@@ -60,16 +60,7 @@ public class RentCarServiceImpl implements RentCarService {
     @Override
     public List<CompanyContractInfoDTO> getCompanyContractList(String userId){
 
-        List<CompanyContractInfoDTO>  companyContractInfoDTOList= rentCarMapper.getCompanyContractList(userId);
-
-        // 根据每个父级id，找到其子级合同的车辆数量和已签订数量
-        for(CompanyContractInfoDTO data:companyContractInfoDTOList){
-            ContractAndSignedNumDTO signedNum= rentCarMapper.getSignedNumList(data.getContractId());
-            data.setCarNum(signedNum.getCarNum());
-            data.setIsSignNum(signedNum.getSignedCarNum());
-        }
-
-        return companyContractInfoDTOList;
+        return rentCarMapper.getCompanyContractListAll(userId);
     }
 
     /**

@@ -186,6 +186,10 @@ public class ContractController {
                 json.put("code", code);
                 json.put("message", "为合同添加签署者失败" + "(" + code + ")");
                 break;
+            case "113":
+                json.put("code", code);
+                json.put("message", "将个人userId，插入合同记录表出错" + "(" + code + ")");
+                break;
             default:
                 json.put("code", "200");
                 json.put("message", "个人签约初始化成功（签署中状态）");
@@ -292,13 +296,13 @@ public class ContractController {
     }
 
     /**
-     * 删除企业合同个人信息列表中的某人
+     * 多选或单选删除企业合同个人信息列表中的某人
      */
     @RequestMapping(value = "/removePersonInfo", method = RequestMethod.POST)
     public JSONResult removePersonInfo(@RequestBody ContractIdListDTO contractIdList){
-        boolean success= contractService.removePersonInfo(contractIdList);
+//        boolean success= contractService.removePersonInfo(contractIdList);
 
-        return new JSONResult(success);
+        return new JSONResult();
     }
 
     /**
