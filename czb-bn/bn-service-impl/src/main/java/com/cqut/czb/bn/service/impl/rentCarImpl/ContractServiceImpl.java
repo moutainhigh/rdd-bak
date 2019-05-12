@@ -16,6 +16,7 @@ import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -879,7 +880,8 @@ public class ContractServiceImpl implements ContractService{
      * 判断有无印章
      */
     @Override
-    public int checkMoulage(String userId) {
+    public JSONObject checkMoulage(String userId) {
+        JSONObject json = new JSONObject();
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
 
@@ -892,12 +894,18 @@ public class ContractServiceImpl implements ContractService{
             JSONObject json1 = new JSONObject();
             json1.putAll(map);
             String moulage = json1.getJSONObject("a").getJSONObject("data").getJSONArray("moulages").getJSONObject(0).getString("id");
-            if (moulage == null || moulage.equals(""))
-                return 0;
+            if (moulage == null || moulage.equals("")){
+                json.put("code", 0);
+                json.put("signerId", yunId);
+                return json;
+            }
         } catch(Exception e){
-            return 2;
+            json.put("code", 2);
+            json.put("signerId", yunId);
+            return json;
         }
-
-        return 1;
+        json.put("code", 1);
+        json.put("signerId", yunId);
+        return json;
     }
 }

@@ -69,6 +69,6 @@ public interface ContractService {
     JSONObject companySigned(String userId, String contractId);
 
     // 判断有无印章
-    int checkMoulage(String userId);
+    JSONObject checkMoulage(String userId);
 
 }

@@ -371,22 +371,27 @@ public class ContractController {
     public JSONResult checkMoulage(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         JSONResult jsonResult = new JSONResult();
-        int success = contractService.checkMoulage(user.getUserId());
-        switch (success){
+        JSONObject json = contractService.checkMoulage(user.getUserId());
+        int code = json.getInt("code");
+        json.remove("code");
+        switch (code){
             case 0:
                 jsonResult.setCode(0);
                 jsonResult.setMessage("此用户没有印章");
-                jsonResult.setData(false);
+                json.put("ifExsits", false);
+                jsonResult.setData(json);
                 break;
             case 1:
                 jsonResult.setCode(1);
                 jsonResult.setMessage("此用户存在印章");
-                jsonResult.setData(true);
+                json.put("ifExsits", true);
+                jsonResult.setData(json);
                 break;
             case 2:
                 jsonResult.setCode(0);
                 jsonResult.setMessage("此用户没有印章");
-                jsonResult.setData(false);
+                json.put("ifExsits", false);
+                jsonResult.setData(json);
                 break;
         }
 
