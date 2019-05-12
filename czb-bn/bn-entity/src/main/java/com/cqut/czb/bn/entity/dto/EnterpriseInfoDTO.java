@@ -5,13 +5,15 @@ import java.util.Date;
 public class EnterpriseInfoDTO {
     private String enterpriseInfoId;
     //企业名称
-    private String enterpriseInfoName;
+    private String enterpriseName;
     //企业法人
     private String legalPerson;
     //联系电话
     private String contactInfo;
     //是否删除   0没删   1删除
     private Integer isDeleted;
+    //合同數
+    private Integer totalContract;
 
     private String userId;
     //组织机构代码
@@ -35,12 +37,12 @@ public class EnterpriseInfoDTO {
         this.enterpriseInfoId = enterpriseInfoId == null ? null : enterpriseInfoId.trim();
     }
 
-    public String getEnterpriseInfoName() {
-        return enterpriseInfoName;
+    public String getEnterpriseName() {
+        return enterpriseName;
     }
 
-    public void setEnterpriseInfoName(String enterpriseName) {
-        this.enterpriseInfoName = enterpriseName == null ? null : enterpriseName.trim();
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName == null ? null : enterpriseName.trim();
     }
 
     public String getLegalPerson() {
