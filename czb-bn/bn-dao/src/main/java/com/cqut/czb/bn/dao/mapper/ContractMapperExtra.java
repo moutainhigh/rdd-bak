@@ -72,4 +72,6 @@ public interface ContractMapperExtra {
 
     // 删除企业合同个人信息列表中的某人
     int removeCarsPersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
+
+
 }

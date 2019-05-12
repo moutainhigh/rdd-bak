@@ -112,4 +112,15 @@
     czb_user.user_id=czb_enterprise_info.user_id
   </select>
 
+  <update id="ModifyContactInfo" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+    update czb_enterprise_info
+    <set >
+      <if test="contactInfo!= null" >
+        contact_info= #{contactInfo,jdbcType=VARCHAR},
+        update_at = now()
+      </if>
+    </set>
+    where  user_id= #{userId,jdbcType=VARCHAR}
+  </update>
+
 </mapper>

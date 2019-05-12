@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
+import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,4 +42,11 @@ public interface UserMapperExtra {
      * @return
      */
     PersonalCenterUserDTO GetUserEnterpriseInfo(@Param("userId") String userId);
+
+    /**
+     * 个人中心修改联系人
+     * @param personalCenterUserDTO
+     * @return
+     */
+    int ModifyContactInfo(PersonalCenterUserDTO personalCenterUserDTO);
 }

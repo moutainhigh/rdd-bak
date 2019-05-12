@@ -131,6 +131,16 @@
             ) p
     </select>
 
+    <!--获取某一个套餐信息-->
+    <select id="getTaoCanById" resultType="java.lang.String">
+        SELECT
+        (plan_amount * 12) AS taoText
+        FROM
+        czb_service_plan
+        WHERE
+        plan_id = #{planId}
+    </select>
+
     <!--企业获取合同概要信息列表-->
     <select id="getOneCompanyContractInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneCompanyContractsPersonDTO">
         SELECT
@@ -138,7 +148,7 @@
             p.car_license AS license,
             p.person_id_card AS carId,
             p.is_signed AS isSign,
-            c.rent
+            p.plan_id as rent
         FROM
             czb_contract_records c,
             czb_cars_persons p
@@ -152,7 +162,7 @@
                 WHERE
                     contract_father_id = #{fatherId}
             )
-        GROUP BY person_name, license, carId, is_signed, rent
+        GROUP BY person_name, license, carId, is_signed, plan_id
     </select>
 
     <!--企业合同插入-->

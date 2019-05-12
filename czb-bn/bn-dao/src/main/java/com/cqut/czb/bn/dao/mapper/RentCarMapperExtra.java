@@ -37,4 +37,7 @@ public interface RentCarMapperExtra {
 
     // 获取个人收益信息列表
     List<Income> getPersonalIncome(@Param("userId") String userId);
+
+    // 根据套餐id获得某一个套餐
+    String getTaoCanById(@Param("planId")String planId);
 }

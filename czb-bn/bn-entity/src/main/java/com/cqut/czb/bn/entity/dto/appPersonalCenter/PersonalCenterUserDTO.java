@@ -20,6 +20,16 @@ public class PersonalCenterUserDTO {
 
     private String userName;
 
+    private String userPsw;
+
+    public String getUserPsw() {
+        return userPsw;
+    }
+
+    public void setUserPsw(String userPsw) {
+        this.userPsw = userPsw;
+    }
+
     public String getEnterpriseName() {
         return enterpriseName;
     }
