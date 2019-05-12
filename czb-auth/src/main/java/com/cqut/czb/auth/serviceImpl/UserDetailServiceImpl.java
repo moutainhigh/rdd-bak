@@ -250,6 +250,6 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public boolean isCertification(User user) {
 
-        return "1".equals(user.getIsIdentified());
+        return 1 == user.getIsIdentified();
     }
 }
