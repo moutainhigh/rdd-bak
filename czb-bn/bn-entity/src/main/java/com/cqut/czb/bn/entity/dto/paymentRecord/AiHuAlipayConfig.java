@@ -24,7 +24,7 @@ public class AiHuAlipayConfig {
 	public static String recharge_url="http://39.98.250.45:2050:8899/personCenter/VIP/purchaseVIP";
 
 	//购买油卡充值url
-	public static String PetrolRecharge_url="http://106.91.19.20:8899/verifyAsyn/verifyPetrolRechargeInfoAiHu";
+	public static String PetrolRecharge_url="http://39.98.250.45:2050:8899/verifyAsyn/verifyPetrolRechargeInfoAiHu";
 
 	// 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
 //	public static String return_url = "http://" + StringUtil.getIpAddress() +":9080/NewCar/api/paymentRecord/verifyAsynNoticeInfo";
