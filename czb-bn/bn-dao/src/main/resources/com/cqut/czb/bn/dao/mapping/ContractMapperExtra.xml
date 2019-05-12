@@ -182,21 +182,14 @@
     <!--查找车牌号、租金-->
     <select id="getCarNumAndPersonId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo">
         SELECT
-            c.rent rent,
-            p.car_license carNum
+            p.car_license carNum,
+            c.rent rent
         FROM
-            (
-                SELECT
-                    cc.record_id,
-                    cc.rent
-                FROM
-                    czb_contract_records cc
-            ) c,
-            czb_cars_persons p
+            czb_contract_records c
+        LEFT JOIN czb_cars_persons p ON c.record_id = p.contract_record_id
         WHERE
             p.identify_code = #{identifyCode}
-        AND p.person_car_id = #{personId}
-        AND p.contract_record_id = c.record_id
+        AND p.person_id_card = #{personId}
     </select>
 
     <select id="getFatherContractStatus" resultType="java.lang.Integer">
