@@ -146,8 +146,8 @@
         WHERE
         record_id
         IN
-        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{item.contractId}
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
         </foreach>
     </delete>
 
@@ -159,8 +159,8 @@
         WHERE
         contract_record_id
         IN
-        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{item.contractId}
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
         </foreach>
     </delete>
 

@@ -859,17 +859,20 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 删除企业合同个人信息
-     * @param contractiIdList
+     * @param contractIdList
      * @return
      */
     @Override
-    public boolean removePersonInfo(ContractIdListDTO contractiIdList) {
-        // 多选删除个人合同记录
-//        int removeCarsPerson = contractMapper.removeCarsPersonInfo(contractiIdList.getContractIdLists());
-        // 多选删除个人人员车辆服务记录
-//        int removePersonInfo = contractMapper.removePersonInfo(contractiIdList.getContractIdLists());
+    public boolean removePersonInfo(String contractIdList) {
+        String[] contractIds = contractIdList.split(",");
 
-        return true;
+        // 多选删除个人合同记录
+        int removeCarsPerson = contractMapper.removeCarsPersonInfo(contractIds);
+
+        // 多选删除个人人员车辆服务记录
+        int removePersonInfo = contractMapper.removePersonInfo(contractIds);
+
+        return removeCarsPerson >= 0 && removePersonInfo >= 0;
     }
 
     /**

@@ -300,7 +300,7 @@ public class ContractController {
      */
     @RequestMapping(value = "/removePersonInfo", method = RequestMethod.POST)
     public JSONResult removePersonInfo(@RequestBody ContractIdListDTO contractIdList){
-//        boolean success= contractService.removePersonInfo(contractIdList);
+        boolean success= contractService.removePersonInfo(contractIdList.getContractIdLists());
 
         return new JSONResult();
     }
