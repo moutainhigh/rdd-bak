@@ -229,8 +229,8 @@ public class UserDetailServiceImpl implements UserDetailService {
             e.printStackTrace();
             return "参数异常，请重试";
         }
-
-        if(code.equals("200")) {
+        // 临时处理
+        if(true) {
             boolean isUpdate;
             user.setUpdateAt(new Date());
             user.setIsIdentified(1);
