@@ -1,8 +1,6 @@
 package com.cqut.czb.bn.api.controller.rentCarServer;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.AsynchronousInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
@@ -13,10 +11,8 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.rentCarImpl.ContractServiceImpl;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
-import com.cqut.czb.bn.util.method.HttpClient4;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -148,8 +144,7 @@ public class ContractController {
      * 个人输入认证码、身份证后，查找车牌号和租金
      */
     @RequestMapping(value = "/getCarNumAndPersonId", method = RequestMethod.POST)
-    public JSONResult getCarNumAndPersonId(Principal principal, @RequestBody  PersonSignedInputInfo inputInfo){
-
+    public JSONResult getCarNumAndPersonId(@RequestBody  PersonSignedInputInfo inputInfo){
         return new JSONResult(contractService.getCarNumAndPersonId(inputInfo));
     }
 
@@ -185,6 +180,10 @@ public class ContractController {
             case ContractServiceImpl.STATE_ADD_SIGNER_FAILED:
                 json.put("code", code);
                 json.put("message", "为合同添加签署者失败" + "(" + code + ")");
+                break;
+            case "113":
+                json.put("code", code);
+                json.put("message", "将个人userId，插入合同记录表出错" + "(" + code + ")");
                 break;
             default:
                 json.put("code", "200");
@@ -292,13 +291,13 @@ public class ContractController {
     }
 
     /**
-     * 删除企业合同个人信息列表中的某人
+     * 多选或单选删除企业合同个人信息列表中的某人
      */
     @RequestMapping(value = "/removePersonInfo", method = RequestMethod.POST)
     public JSONResult removePersonInfo(@RequestBody ContractIdListDTO contractIdList){
-        boolean success= contractService.removePersonInfo(contractIdList);
+        boolean success= contractService.removePersonInfo(contractIdList.getContractIdLists());
 
-        return new JSONResult(success);
+        return new JSONResult();
     }
 
     /**
@@ -367,22 +366,27 @@ public class ContractController {
     public JSONResult checkMoulage(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         JSONResult jsonResult = new JSONResult();
-        int success = contractService.checkMoulage("");
-        switch (success){
+        JSONObject json = contractService.checkMoulage(user.getUserId());
+        int code = json.getInt("code");
+        json.remove("code");
+        switch (code){
             case 0:
-                jsonResult.setCode(0);
+                jsonResult.setCode(200);
                 jsonResult.setMessage("此用户没有印章");
-                jsonResult.setData(false);
+                json.put("ifExsits", false);
+                jsonResult.setData(json);
                 break;
             case 1:
-                jsonResult.setCode(1);
+                jsonResult.setCode(200);
                 jsonResult.setMessage("此用户存在印章");
-                jsonResult.setData(true);
+                json.put("ifExsits", true);
+                jsonResult.setData(json);
                 break;
             case 2:
-                jsonResult.setCode(0);
+                jsonResult.setCode(200);
                 jsonResult.setMessage("此用户没有印章");
-                jsonResult.setData(false);
+                json.put("ifExsits", false);
+                jsonResult.setData(json);
                 break;
         }
 

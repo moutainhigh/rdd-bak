@@ -14,7 +14,7 @@ public class CompanySignedPersonal {
     private String personId;
 
     // 油卡类型
-    private  int petrolType;
+    private  Integer petrolType;
 
     // 合同记录id
     private String contractId;
@@ -51,11 +51,11 @@ public class CompanySignedPersonal {
         this.personId = personId;
     }
 
-    public int getPetrolType() {
+    public Integer getPetrolType() {
         return petrolType;
     }
 
-    public void setPetrolType(int petrolType) {
+    public void setPetrolType(Integer petrolType) {
         this.petrolType = petrolType;
     }
 

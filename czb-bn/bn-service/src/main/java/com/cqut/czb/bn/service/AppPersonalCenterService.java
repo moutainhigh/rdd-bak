@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface AppPersonalCenterService {
      */
     List<Petrol> getGTSoldPetrolForUser(String userId);
 
-    List<PetrolSalesRecords> getPhysicalCardRechargeRecords(String userId,String petrolKind);
+    List<AppPetrolSaleInfoOutputDTO> getPhysicalCardRechargeRecords(String userId, String petrolKind);
 
 
     /**

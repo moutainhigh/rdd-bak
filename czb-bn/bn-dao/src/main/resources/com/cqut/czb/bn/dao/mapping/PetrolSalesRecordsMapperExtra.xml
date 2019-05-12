@@ -130,15 +130,60 @@ INNER JOIN (
     temp_time DESC
 </select>
 
-    <select id="getPhysicalCardsForUser" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
+    <!--实体卡油码信息返回-->
+    <resultMap id="physicalMap" type="com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO" >
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
+        <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
+        <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
+        <result column="turnover_amount" property="turnoverAmount" jdbcType="DOUBLE" />
+        <result column="transaction_time" property="transactionTime" jdbcType="TIMESTAMP" />
+        <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="record_type" property="recordType" jdbcType="INTEGER" />
+        <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
+        <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+        <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+        <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+
+    </resultMap>
+    <sql id="physicalCardRecord" >
+    record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount,
+    transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type,
+    is_recharged, petrol_kind,petrol_price,petrol_denomination
+  </sql>
+
+    <select id="getPhysicalCardsForUser" parameterType="java.lang.String" resultMap="physicalMap">
+        SELECT
+        record_id,
+        cpsr.petrol_num,
+        buyer_id,
+        payment_method,
+        third_order_id,
+        turnover_amount,
+        transaction_time,
+        petrol_id,
+        cpsr.state,
+        contract_id,
+        cpsr.create_at,
+        cpsr.update_at,
+        record_type,
+        is_recharged,
+        cpsr.petrol_kind,
+        petrol_price,
+        petrol_denomination
         FROM
-        czb_petrol_sales_records
+        czb_petrol_sales_records AS cpsr
+        INNER JOIN czb_petrol AS cp USING (petrol_id)
         WHERE
         buyer_id = #{userId,jdbcType=VARCHAR}
-        AND petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+        AND cpsr.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
         ORDER BY
-        update_at DESC
+        cpsr.update_at DESC
     </select>
 
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >

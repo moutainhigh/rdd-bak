@@ -16,6 +16,7 @@ import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -578,6 +579,18 @@ public class ContractServiceImpl implements ContractService{
             return json;
         }
 
+        // 将个人userId，写入合同记录表
+        try{
+            int updateSuccess = contractMapper.updatePersonalContractUserId(userId, personContractId);
+            if (!(updateSuccess > 0)){
+                json.put("code", "113");
+                return json;
+            }
+        } catch (Exception e){
+            json.put("code", "113");
+            return json;
+        }
+
         // 个人添加签署者
         int addSigner = addContractOwner(userId, createYunContract, getToken(), 1);
         if(addSigner != 1){
@@ -742,7 +755,6 @@ public class ContractServiceImpl implements ContractService{
 
         String contractId = StringUtil.createId();
         contractLog.setRecordId(contractId);
-        assert times != null;
         contractLog.setStartTime(times.getStartTime());
         contractLog.setEndTime(times.getEndTime());
         contractLog.setRent(rent);
@@ -772,10 +784,8 @@ public class ContractServiceImpl implements ContractService{
             json.put("code", STATE_ADD_PERSONAL);
         }
 
-        // 返回父级合同已生成的子级服务人员车辆列表
-        JSONObject jsons = getWithoutCommitPersonInfo(personal.getContractId());
-         jsons.remove("startTime");
-        json.put("List", jsons.getJSONArray("personList"));
+        // 返回生成的子级合同id
+        json.put("sonContractId", contractId);
         json.put("code", "200");
 
         return json;
@@ -788,8 +798,10 @@ public class ContractServiceImpl implements ContractService{
     public void asynchronousInfo(SignerMap signerMap){
         Long contractId = signerMap.getData().getId();
         // 将签署完成合同的id传入mapper，修改合同记录的状态
-        if(contractId != null)
+        if(contractId != null){
             contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
+            contractMapper.updateCarsPersonsStatus(contractId.toString());
+        }
     }
 
     /**
@@ -815,7 +827,7 @@ public class ContractServiceImpl implements ContractService{
         // 根据套餐id和油卡类型设置文字
         for(CarsPersonsDTO data: carsPersonsList){
             CarsPersonsResultDTO result = new CarsPersonsResultDTO();
-            result.setContractId(data.getContractId());
+            result.setSonContractId(data.getContractId());
             result.setName(data.getName());
             result.setCarLicense(data.getCarLicense());
             result.setPersonId(data.getPersonId());
@@ -832,7 +844,7 @@ public class ContractServiceImpl implements ContractService{
                     break;
             }
             Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * 12d;
-            result.setTaoCan(rent.toString());
+            result.setTaoCan(rent.toString() + "/年");
             resultList.add(result);
         }
 
@@ -848,24 +860,28 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 删除企业合同个人信息
-     * @param contractiIdList
+     * @param contractIdList
      * @return
      */
     @Override
-    public boolean removePersonInfo(ContractIdListDTO contractiIdList) {
-        // 多选删除个人合同记录
-        int removeCarsPerson = contractMapper.removeCarsPersonInfo(contractiIdList.getContractIdLists());
-        // 多选删除个人人员车辆服务记录
-        int removePersonInfo = contractMapper.removePersonInfo(contractiIdList.getContractIdLists());
+    public boolean removePersonInfo(String contractIdList) {
+        String[] contractIds = contractIdList.split(",");
 
-        return  removeCarsPerson >= 0 && removePersonInfo >= 0;
+        // 多选删除个人合同记录
+        int removeCarsPerson = contractMapper.removeCarsPersonInfo(contractIds);
+
+        // 多选删除个人人员车辆服务记录
+        int removePersonInfo = contractMapper.removePersonInfo(contractIds);
+
+        return removeCarsPerson >= 0 && removePersonInfo >= 0;
     }
 
     /**
      * 判断有无印章
      */
     @Override
-    public int checkMoulage(String userId) {
+    public JSONObject checkMoulage(String userId) {
+        JSONObject json = new JSONObject();
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
 
@@ -878,12 +894,18 @@ public class ContractServiceImpl implements ContractService{
             JSONObject json1 = new JSONObject();
             json1.putAll(map);
             String moulage = json1.getJSONObject("a").getJSONObject("data").getJSONArray("moulages").getJSONObject(0).getString("id");
-            if (moulage == null || moulage.equals(""))
-                return 0;
+            if (moulage == null || moulage.equals("")){
+                json.put("code", 0);
+                json.put("signerId", yunId);
+                return json;
+            }
         } catch(Exception e){
-            return 2;
+            json.put("code", 2);
+            json.put("signerId", yunId);
+            return json;
         }
-
-        return 1;
+        json.put("code", 1);
+        json.put("signerId", yunId);
+        return json;
     }
 }

@@ -17,14 +17,25 @@ public class OneCompanyContractsPersonDTO {
     private String license;
 
     /**
-     * 套餐
+     * 这是套餐
      */
     private String rent;
+
+    // 真实租金
+    private String realRent;
 
     /**
      * 是否签约
      */
     private Integer isSign;
+
+    public String getRealRent() {
+        return realRent;
+    }
+
+    public void setRealRent(String realRent) {
+        this.realRent = realRent;
+    }
 
     public String getPersonName() {
         return personName;

@@ -73,6 +73,37 @@
         cp.contract_record_id = c.num
     </select>
 
+    <!--优化后的查找企业合同列表-->
+    <select id="getCompanyContractListAll" resultType="com.cqut.czb.bn.entity.dto.rentCar.CompanyContractInfoDTO">
+        SELECT
+            ccr.record_id contractId,
+            count(ccr2.record_id) carNum,
+            count(ccp.person_car_id) isSignNum,
+            date_format(
+                ccr.contract_start_time,
+                '%Y-%m-%d'
+            ) startTime,
+            date_format(
+                ccr.contract_end_time,
+                '%Y-%m-%d'
+            ) endTime,
+            ccr.contract_state status
+        FROM
+            czb_contract_records ccr
+        LEFT JOIN czb_contract_records ccr2 ON ccr2.contract_father_id = ccr.record_id
+        LEFT JOIN czb_cars_persons ccp ON ccr2.record_id = ccp.contract_record_id
+        AND ccp.is_signed = 1
+        WHERE
+            ccr.user_id = #{userId}
+        AND ccr.contract_type = 0
+        GROUP BY
+            contractId,
+            startTime,
+            endTime,
+            status
+    </select>
+
+    <!--弃用-->
     <!--企业租车服务合同列表获取第一步，少已签约数量-->
     <select id="getCompanyContractList" resultType="com.cqut.czb.bn.entity.dto.rentCar.CompanyContractInfoDTO">
         SELECT
@@ -92,6 +123,7 @@
             user_id = #{userId}
     </select>
 
+    <!--弃用-->
     <!--企业租车服务合同列表获取第二步，根据第三方合同id得到已签约数量-->
     <select id="getSignedNumList" resultType="com.cqut.czb.bn.entity.dto.rentCar.ContractAndSignedNumDTO">
         SELECT
@@ -148,7 +180,8 @@
             p.car_license AS license,
             p.person_id_card AS carId,
             p.is_signed AS isSign,
-            p.plan_id as rent
+            p.plan_id as rent,
+            c.rent realRent
         FROM
             czb_contract_records c,
             czb_cars_persons p
@@ -162,7 +195,7 @@
                 WHERE
                     contract_father_id = #{fatherId}
             )
-        GROUP BY person_name, license, carId, is_signed, plan_id
+        GROUP BY person_name, license, carId, is_signed, plan_id, c.rent
     </select>
 
     <!--企业合同插入-->

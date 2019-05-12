@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     }
 
     @Override
-    public List<PetrolSalesRecords> getPhysicalCardRechargeRecords(String userId, String petrolKind) {
+    public List<AppPetrolSaleInfoOutputDTO> getPhysicalCardRechargeRecords(String userId, String petrolKind) {
         return petrolSalesRecordsMapperExtra.getPhysicalCardsForUser(userId,petrolKind);
     }
 
