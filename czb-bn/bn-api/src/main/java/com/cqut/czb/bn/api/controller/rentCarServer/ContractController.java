@@ -376,19 +376,19 @@ public class ContractController {
         json.remove("code");
         switch (code){
             case 0:
-                jsonResult.setCode(0);
+                jsonResult.setCode(200);
                 jsonResult.setMessage("此用户没有印章");
                 json.put("ifExsits", false);
                 jsonResult.setData(json);
                 break;
             case 1:
-                jsonResult.setCode(1);
+                jsonResult.setCode(200);
                 jsonResult.setMessage("此用户存在印章");
                 json.put("ifExsits", true);
                 jsonResult.setData(json);
                 break;
             case 2:
-                jsonResult.setCode(0);
+                jsonResult.setCode(200);
                 jsonResult.setMessage("此用户没有印章");
                 json.put("ifExsits", false);
                 jsonResult.setData(json);
