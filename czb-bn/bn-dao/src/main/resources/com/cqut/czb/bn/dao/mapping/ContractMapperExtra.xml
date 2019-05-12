@@ -207,4 +207,10 @@
                     record_id = #{contractId}
             )
     </select>
+
+    <update id="updatePersonalContractUserId">
+        update czb_contract_records
+        set user_id = #{userId}
+        where record_id = #{contractId}
+    </update>
 </mapper>
