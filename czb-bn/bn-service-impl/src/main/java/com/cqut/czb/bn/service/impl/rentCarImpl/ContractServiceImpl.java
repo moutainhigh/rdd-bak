@@ -844,7 +844,7 @@ public class ContractServiceImpl implements ContractService{
                     break;
             }
             Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * 12d;
-            result.setTaoCan(rent.toString());
+            result.setTaoCan(rent.toString() + "/年");
             resultList.add(result);
         }
 
