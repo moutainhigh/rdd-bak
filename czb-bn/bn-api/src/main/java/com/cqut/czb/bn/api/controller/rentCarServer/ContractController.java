@@ -367,7 +367,7 @@ public class ContractController {
     public JSONResult checkMoulage(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         JSONResult jsonResult = new JSONResult();
-        int success = contractService.checkMoulage("");
+        int success = contractService.checkMoulage(user.getUserId());
         switch (success){
             case 0:
                 jsonResult.setCode(0);
