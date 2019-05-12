@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +32,9 @@ import java.util.Map;
 public class PetrolDeliveryRecordsController {
     @Autowired
     PetrolDeliveryRecordsService petrolDeliveryRecordsService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * 获取寄送数据&查询
@@ -133,6 +139,13 @@ public class PetrolDeliveryRecordsController {
      else {
             return new JSONResult(ResponseCodeConstants.SUCCESS,JSON.parse(logistics));
         }
+    }
+
+    @RequestMapping(value = "/getDeliveryInfo" ,method = RequestMethod.GET)
+    public JSONResult getDeliveryInfo(Principal principal,DeliveryInput deliveryInput ){
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(petrolDeliveryRecordsService.getDeliveryInfo(user.getUserId(),deliveryInput.getPetrolKind()+""));
+
     }
 
 }
