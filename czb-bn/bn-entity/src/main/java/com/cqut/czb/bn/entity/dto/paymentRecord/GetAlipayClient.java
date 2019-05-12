@@ -35,8 +35,11 @@ public class GetAlipayClient {
 					AiHuAlipayConfig.merchant_private_key, AiHuAlipayConfig.format, AiHuAlipayConfig.charset,
 					AiHuAlipayConfig.alipay_public_key, AiHuAlipayConfig.sign_type));
 			instance.setCallBackUrl(AiHuAlipayConfig.recharge_url);
-		}else {
-			return null;
+		}else if(operationType=="2"){//"2"代表的是充值
+			instance.setAlipayClient(new DefaultAlipayClient(AiHuAlipayConfig.gatewayUrl, AiHuAlipayConfig.app_id,
+					AiHuAlipayConfig.merchant_private_key, AiHuAlipayConfig.format, AiHuAlipayConfig.charset,
+					AiHuAlipayConfig.alipay_public_key, AiHuAlipayConfig.sign_type));
+			instance.setCallBackUrl(AiHuAlipayConfig.PetrolRecharge_url);
 		}
 		return instance;
 	}

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
@@ -32,4 +33,17 @@ public interface PetrolMapperExtra {
     List<Petrol> selectPetrol();
 
     List<PetrolInfoDTO> selectPetrolInfoDTO();
+
+    /**
+     * 通过用户id获取油卡
+     */
+    Petrol selectMyPetrol(String userId);
+
+    /**
+     *查出不同类型的油卡
+     * @param petrolInputDTO
+     * @return
+     */
+    Petrol selectDifferentPetrol(PetrolInputDTO petrolInputDTO);
+
 }

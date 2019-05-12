@@ -145,5 +145,19 @@
     ORDER BY petrolKind asc
   </select>
 
+  <select id="selectMyPetrol" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.Petrol">
+    SELECT *
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectDifferentPetrol" parameterType="com.cqut.czb.bn.entity.entity.Petrol" resultType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
+   SELECT *
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR} AND
+    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+  </select>
 
 </mapper>

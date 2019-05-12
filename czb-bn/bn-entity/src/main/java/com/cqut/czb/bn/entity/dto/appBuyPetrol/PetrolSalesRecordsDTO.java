@@ -20,7 +20,9 @@ public class PetrolSalesRecordsDTO {
 
     private String buyerId;
 
-    private Integer paymentMethod;
+    private Integer paymentMethod;//支付方式
+
+    private Integer payType;//支付种类（0代表充值，1代表购油）
 
     private String thirdOrderId;
 
@@ -42,7 +44,15 @@ public class PetrolSalesRecordsDTO {
 
     private double petrolPrice;//油卡价格
 
-    private int count;//油卡
+    private int count;//油卡数量
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
 
     public int getCount() {
         return count;
@@ -185,7 +195,7 @@ public class PetrolSalesRecordsDTO {
     public String getPassbackParams(String orgId, String payType,
                                     Double money, Integer count,
                                     Integer petrolKind ,String ownerId,
-                                    String petrolNum,Double actualPayment) {
+                                    String petrolNum,Double actualPayment,String addressId) {
         Map<String, Object> pbp = new HashMap<>();
 
         pbp.put("orgId", orgId);
@@ -196,6 +206,7 @@ public class PetrolSalesRecordsDTO {
         pbp.put("ownerId", ownerId);
         pbp.put("petrolNum", petrolNum);
         pbp.put("actualPayment", actualPayment);
+        pbp.put("addressId", addressId);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -206,7 +217,7 @@ public class PetrolSalesRecordsDTO {
     public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,
                                                            double money, Integer count,
                                                            Integer petrolKind ,String ownerId,
-                                                           String petrolNum,double actualPayment) {
+                                                           String petrolNum,double actualPayment,String addressId) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
         model.setSubject("爱虎购油");
@@ -214,7 +225,7 @@ public class PetrolSalesRecordsDTO {
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
         model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
-        model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum,actualPayment));
+        model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum,actualPayment,addressId));
         return model;
     }
 }

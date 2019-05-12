@@ -16,5 +16,29 @@ public interface AppBuyPetrolService {
      */
     String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO);
 
+    /**
+     * 判断今日是否购买了油卡
+     * @param user
+     * @return
+     */
+    boolean isTodayHadBuy(User user);
+
+    /**
+     * 判断是否购买了相应类型的油卡
+     * @param petrolInputDTO
+     * @return
+     */
+    boolean isBuyRepeat(PetrolInputDTO petrolInputDTO);
+
+
+    /**
+     * 油卡购买和充值分流处理
+     * @param petrolInputDTO
+     * @return
+     */
+    String PurchaseControl(PetrolInputDTO petrolInputDTO);
+
+
+
 
 }
