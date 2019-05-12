@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 
@@ -29,4 +30,6 @@ public interface PetrolMapperExtra {
     List<PetrolZoneDTO> selectPetrolZone();
 
     List<Petrol> selectPetrol();
+
+    List<PetrolInfoDTO> selectPetrolInfoDTO();
 }

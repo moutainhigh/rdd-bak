@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
@@ -68,5 +69,13 @@ public class AppHomePageController {
     @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
     public JSONResult selectHomePageRouters(AppRouter appRouter){
         return new JSONResult<List<AppRouter>>(appHomePageService.selectHomePageRouters(appRouter));
+    }
+
+    /**
+     * 油卡信息获取
+     */
+    @RequestMapping(value ="/selectPetrolInfoDTO",method = RequestMethod.GET)
+    public JSONResult selectPetrolInfoDTO(){
+        return new JSONResult<List<PetrolInfoDTO>>(appHomePageService.selectPetrolInfoDTO());
     }
 }
