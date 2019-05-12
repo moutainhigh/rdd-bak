@@ -278,7 +278,7 @@ INNER JOIN (
         where is_recharged = 0
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
-    <select id="selectPetrolSalesRecords" resultType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" parameterType="java.lang.String">
+    <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT *
         FROM czb_petrol_sales_records
         WHERE buyer_id=#{useId,jdbcType=VARCHAR}
