@@ -784,10 +784,8 @@ public class ContractServiceImpl implements ContractService{
             json.put("code", STATE_ADD_PERSONAL);
         }
 
-        // 返回父级合同已生成的子级服务人员车辆列表
-        JSONObject jsons = getWithoutCommitPersonInfo(personal.getContractId());
-         jsons.remove("startTime");
-        json.put("List", jsons.getJSONArray("personList"));
+        // 返回生成的子级合同id
+        json.put("sonContractId", contractId);
         json.put("code", "200");
 
         return json;

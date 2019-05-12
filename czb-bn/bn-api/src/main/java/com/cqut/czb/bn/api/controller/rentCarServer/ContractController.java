@@ -1,8 +1,6 @@
 package com.cqut.czb.bn.api.controller.rentCarServer;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.AsynchronousInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
@@ -13,10 +11,8 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.rentCarImpl.ContractServiceImpl;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
-import com.cqut.czb.bn.util.method.HttpClient4;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
