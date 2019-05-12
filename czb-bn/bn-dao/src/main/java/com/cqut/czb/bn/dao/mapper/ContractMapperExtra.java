@@ -68,10 +68,11 @@ public interface ContractMapperExtra {
     Integer getFatherContractStatus(@Param("contractId")String contractId);
 
     // 删除企业合同个人信息列表中的某人
-    int removePersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
+    int removePersonInfo(@Param("array") String[] contractIds);
 
     // 删除企业合同个人信息列表中的某人
-    int removeCarsPersonInfo(@Param("list") List<ContractIdInfo> contractIdList);
+    int removeCarsPersonInfo(@Param("array") String[] contractIds);
 
-
+    // 将个人userId，写入合同记录表
+    int updatePersonalContractUserId(@Param("userId") String userId, @Param("contractId") String contractId);
 }

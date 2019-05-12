@@ -137,4 +137,13 @@
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>
 
+  <select id="selectPetrolInfoDTO" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO" >
+    SELECT petrol_kind as petrolKind
+    FROM czb_petrol
+    WHERE state=1
+    GROUP BY petrolKind
+    ORDER BY petrolKind asc
+  </select>
+
+
 </mapper>

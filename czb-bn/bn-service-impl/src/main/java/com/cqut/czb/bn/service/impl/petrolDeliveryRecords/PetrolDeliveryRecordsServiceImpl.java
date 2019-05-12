@@ -185,4 +185,10 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
     public String selectLogistics() {
         return null;
     }
+
+    @Override
+    public PetrolDeliveryDTO getDeliveryInfo(String userId, String petrolKind) {
+
+        return  petrolDeliveryRecordsMapperExtra.getDeliveryInfo(userId,petrolKind);
+    }
 }

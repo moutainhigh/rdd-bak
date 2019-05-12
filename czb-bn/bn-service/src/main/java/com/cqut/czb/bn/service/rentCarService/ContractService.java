@@ -63,12 +63,12 @@ public interface ContractService {
     List<TaoCanDTO> getTaoCanId();
 
     // 删除企业合同个人信息列表中的某人
-    boolean removePersonInfo(ContractIdListDTO contractiIdList);
+    boolean removePersonInfo(String contractIdList);
 
     // 企业签订合同
     JSONObject companySigned(String userId, String contractId);
 
     // 判断有无印章
-    int checkMoulage(String userId);
+    JSONObject checkMoulage(String userId);
 
 }
