@@ -144,7 +144,7 @@ public class ContractController {
      * 个人输入认证码、身份证后，查找车牌号和租金
      */
     @RequestMapping(value = "/getCarNumAndPersonId", method = RequestMethod.POST)
-    public JSONResult getCarNumAndPersonId(Principal principal, @RequestBody  PersonSignedInputInfo inputInfo){
+    public JSONResult getCarNumAndPersonId(@RequestBody  PersonSignedInputInfo inputInfo){
 
         return new JSONResult(contractService.getCarNumAndPersonId(inputInfo));
     }
