@@ -73,11 +73,12 @@
         cp.contract_record_id = c.num
     </select>
 
+    <!--优化后的查找企业合同列表-->
     <select id="getCompanyContractListAll" resultType="com.cqut.czb.bn.entity.dto.rentCar.CompanyContractInfoDTO">
         SELECT
             ccr.record_id contractId,
             count(ccr2.record_id) carNum,
-            count(ccp.person_car_id) signedCarNum,
+            count(ccp.person_car_id) isSignNum,
             date_format(
                 ccr.contract_start_time,
                 '%Y-%m-%d'
