@@ -11,10 +11,10 @@
   <sql id="Base_Column_List" >
     dict_id, name, content, create_at, update_at
   </sql>
-  <select id="selectCustomerServiceStaff" resultMap="BaseResultMap" >
+  <select id="selectDict" resultMap="BaseResultMap" parameterType="java.lang.String">
     select 
     <include refid="Base_Column_List" />
     from czb_dict
-    where name like concat('', 'kf', '%')
+    where name like concat('', #{name,jdbcType=VARCHAR}, '%')
   </select>
 </mapper>
