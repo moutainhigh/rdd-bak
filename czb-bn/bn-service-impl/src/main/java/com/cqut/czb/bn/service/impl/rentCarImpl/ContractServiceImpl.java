@@ -602,8 +602,6 @@ public class ContractServiceImpl implements ContractService{
             json.put("code", "200");
         }
 
-
-
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
         if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals("")){
@@ -614,7 +612,7 @@ public class ContractServiceImpl implements ContractService{
         // 把云合同id插入相应的合同记录表中去
         int insertYunContractId = contractMapper.insertContractId(personContractId, createYunContract);
         if(insertYunContractId != 1){
-            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); // 不存在未签约的认证码
+            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); //
             return json;
         }
 
@@ -661,6 +659,15 @@ public class ContractServiceImpl implements ContractService{
             }
         }
 
+        // 如果此合同是未提交合同，并已签已经生成第三方云合同id，这里直接取出返回就行
+        String yunContractId = rentCarMapper.getYunContractId(contractId);
+        if (yunContractId != null){
+            json.put("contractId", yunContractId);
+            json.put("signerId", yunId);
+            json.put("token", getToken());
+            json.put("code", "200");
+        }
+
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContractCompany(userId, getToken());
         if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals("")){
@@ -672,7 +679,7 @@ public class ContractServiceImpl implements ContractService{
         // 把云合同id插入相应的合同记录表中去
         int insertYunContractId = contractMapper.insertContractId(contractId, createYunContract);
         if(insertYunContractId != 1){
-            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); // 不存在未签约的认证码
+            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); //
             return json;
         }
 
@@ -873,17 +880,19 @@ public class ContractServiceImpl implements ContractService{
             // 根据油卡类型int设置油卡类型
             switch (data.getPetrolType()){
                 case 0:
-                    result.setPetrolType("国通");
+                    result.setPetrolType("大重庆油卡");
                     break;
                 case 1:
-                    result.setPetrolType("中石油");
+                    result.setPetrolType("全国中石油");
                     break;
                 case 2:
-                    result.setPetrolType("中石化");
+                    result.setPetrolType("全国中石化");
                     break;
             }
             Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * 12d;
-            result.setTaoCan(rent.toString() + "/年");
+            String rentToString = rent.toString();
+            rentToString = rentToString.replace(".0", "/年");
+            result.setTaoCan(rentToString);
             resultList.add(result);
         }
 
