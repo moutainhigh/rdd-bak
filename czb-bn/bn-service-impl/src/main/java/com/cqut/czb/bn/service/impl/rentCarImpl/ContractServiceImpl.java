@@ -62,12 +62,11 @@ public class ContractServiceImpl implements ContractService{
      * 获取云合同token
      * @return token
      */
-    public  String getToken(){
+    private String getToken(){
         // 如果token与isFailure为空，则为其初始化，
         if(token == null && isFailure == null){
             token = checkToken();
             isFailure = new Date();
-            System.out.println("11111111111111111token");
             System.out.println(token);
             System.out.println("初始化");
         }
@@ -86,9 +85,9 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 更新token的方法
-     * @return
+     * @return String
      */
-    public static String checkToken(){
+    private static String checkToken(){
         JSONObject request = new JSONObject();
         request.put("appId", "2019042516271800110");
         request.put("appKey", "uDCFes85C3OwDQ");
@@ -123,8 +122,8 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 个人输入认证码、身份证后，查找车牌号和租金
-     * @param inputInfo
-     * @return
+     * @param userId, inputInfo
+     * @return JSONResult
      */
     @Override
     public JSONResult getCarNumAndPersonId(String userId, PersonSignedInputInfo inputInfo) {
@@ -151,11 +150,10 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 为个人创建云合同
-     * @param userId
-     * @param token
+     * @param userId, token
      * @return message
      */
-    public int registerPersonalContractAccount(String userId, String token){
+    private int registerPersonalContractAccount(String userId, String token){
         // 根据用户id，数据库查找用户已实名认证的信息，为其注册云合同
         PersonalRegisterDTO personalRegisterDTO = new PersonalRegisterDTO();
         try{
@@ -186,8 +184,6 @@ public class ContractServiceImpl implements ContractService{
             json.putAll(map);
             yunId = json.getJSONObject("a").getJSONObject("data").getString("signerId");
         }catch (Exception e){
-            System.out.println(response);
-            System.out.println("注册个人云合同id失败");
             return 100;
         }
 
@@ -210,7 +206,6 @@ public class ContractServiceImpl implements ContractService{
         try{
             contractMapper.insertUserContractYunId(userId, yunId);
         } catch(Exception e){
-            System.out.println("插入云合同注册id失败");
             e.printStackTrace();
             return 106;
         }
@@ -220,9 +215,8 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 为企业用户创建云合同
-     * @param userId
-     * @param token
-     * @return message
+     * @param userId token
+     * @return int
      */
     public int registerEnterpriseContractAccount(String userId, String token){
         // 根据用户id，数据库查找用户已实名认证的信息，为其注册云合同
@@ -252,8 +246,6 @@ public class ContractServiceImpl implements ContractService{
             JSONObject json = new JSONObject();
             json.putAll(map);
             yunId = json.getJSONObject("a").getJSONObject("data").getString("signerId");
-            System.out.println("yunId11111111111111111");
-            System.out.println(yunId);
         }catch (Exception e){
             return 102;
         }
@@ -266,8 +258,6 @@ public class ContractServiceImpl implements ContractService{
             sealRequestJson.put("token", token);
             try{
                 String responseSeal = HttpClient4.doPost("https://api.yunhetong.com/api/user/companyMoulage", sealRequestJson, 1);
-                System.out.println("responseSeal");
-                System.out.println(responseSeal);
             } catch (Exception e){
                 return 103;
             }
@@ -287,10 +277,10 @@ public class ContractServiceImpl implements ContractService{
     // TODO 谭深化——现在公司那边没有定制合同，所以这边合同是一个测试用的，需一份专门的合同
     /**
      * 个人合成合同模板
-     * @param token
+     * @param token userId contractWriteId
      * @return message
      */
-    public String createContract(String userId, String contractWriteId, String token){
+    private String createContract(String userId, String contractWriteId, String token){
         // 设置请求json数据
         JSONObject json = new JSONObject();
         json.put("contractTitle", "测试合同");
@@ -356,10 +346,10 @@ public class ContractServiceImpl implements ContractService{
 
     /**
      * 企业合成合同模板
-     * @param token
+     * @param token userId
      * @return message
      */
-    public String createContractCompany(String userId,  String token){
+    private String createContractCompany(String userId, String token){
         // 设置请求json数据
         JSONObject json = new JSONObject();
         json.put("contractTitle", "测试合同");
@@ -666,6 +656,7 @@ public class ContractServiceImpl implements ContractService{
             json.put("signerId", yunId);
             json.put("token", getToken());
             json.put("code", "200");
+            return json;
         }
 
         // 生成合同模板,并返回一个云合同id
