@@ -111,7 +111,8 @@ INNER JOIN (
 
 <select id="getGTSoldPetrolForUser" resultMap="PetrolResultMap" parameterType="java.lang.String">
     SELECT
-      <include refid="Petrol"/>
+      cp.petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
+    state, discount, area, owner_id, petrol_type, create_at, update_at
     FROM
     czb_petrol AS cp
     INNER JOIN (
@@ -279,9 +280,10 @@ INNER JOIN (
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
     <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT *
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM czb_petrol_sales_records
-        WHERE buyer_id=#{useId,jdbcType=VARCHAR}
+        WHERE buyer_id=#{userId,jdbcType=VARCHAR}
         ORDER BY transaction_time DESC
         LIMIT 1
     </select>
