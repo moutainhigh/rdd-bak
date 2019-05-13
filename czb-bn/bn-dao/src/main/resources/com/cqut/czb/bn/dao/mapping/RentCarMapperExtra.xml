@@ -290,4 +290,13 @@
             payer_id = #{userId}
     </select>
 
+    <!--个人签约时，获得用户身份证-->
+    <select id="getPersonId" resultType="java.lang.String">
+        SELECT
+            user_id_card AS personId
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
 </mapper>
