@@ -42,4 +42,7 @@ public interface RentCarMapperExtra {
 
     // 根据套餐id获得某一个套餐
     String getTaoCanById(@Param("planId")String planId);
+
+    // 个人签约时，获得用户身份证
+    String getPersonId(@Param("userId") String userId);
 }

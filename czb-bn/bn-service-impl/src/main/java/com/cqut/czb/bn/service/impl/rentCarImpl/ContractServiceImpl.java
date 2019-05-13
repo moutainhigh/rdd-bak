@@ -8,6 +8,8 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
@@ -125,8 +127,26 @@ public class ContractServiceImpl implements ContractService{
      * @return
      */
     @Override
-    public CarNumAndRent getCarNumAndPersonId(PersonSignedInputInfo inputInfo) {
-        return contractMapper.getCarNumAndPersonId(inputInfo);
+    public JSONResult getCarNumAndPersonId(String userId, PersonSignedInputInfo inputInfo) {
+        // 数据校验
+        if (inputInfo.getIdentifyCode() == null)
+            return new JSONResult("认证码不能为空", ResponseCodeConstants.FAILURE);
+
+        // 先取身份证号码
+        String personId = rentCarMapper.getPersonId(userId);
+        if (personId == null)
+            return new JSONResult("找不到用户身份证号码", ResponseCodeConstants.FAILURE);
+
+        // 设置身份证号码，再去寻找车牌号和租金
+        inputInfo.setPersonId(personId);
+        CarNumAndRent info = contractMapper.getCarNumAndPersonId(inputInfo);
+        if (info == null)
+            return new JSONResult("找不到车牌号和认证码", ResponseCodeConstants.FAILURE);
+
+        // 将身份证号码设置到返回信息里
+        info.setPersonId(personId);
+
+        return new JSONResult("获取数据成功",ResponseCodeConstants.SUCCESS, info);
     }
 
     /**
