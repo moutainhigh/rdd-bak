@@ -195,7 +195,7 @@ public class RefuelingCardService implements IRefuelingCard {
 		}
 
 		//payType对应payType支付类型——0为充值，1为购买油卡
-		if ("0".equals(payType)) {
+		if ("2".equals(payType)) {
 			System.out.println("开始充值0");
 			boolean beginPetrolRecharge= petrolRecharge.beginPetrolRecharge( money, count,
 					petrolKind, petrolNum, ownerId,actualPayment,orgId);
@@ -204,7 +204,7 @@ public class RefuelingCardService implements IRefuelingCard {
 			else
 				return 2;
 
-		} else if ("1".equals(payType)) {
+		} else if ("0".equals(payType)) {
 //			此处插入购油的相关信息，油卡购买记录
 			boolean ischange=changeInfo( money, count, petrolKind, petrolNum, ownerId,actualPayment,addressId, orgId);
 
@@ -222,7 +222,7 @@ public class RefuelingCardService implements IRefuelingCard {
 			PetrolCache.currentPetrolMap.remove(petrolNum);
 			return 1;
 
-		} else if ("2".equals(payType)) {
+		} else if ("1".equals(payType)) {
 			System.out.println("优惠卷");
 //			modifyAndInsertCoupons(count, id, money);
 		}
