@@ -100,7 +100,11 @@ public class ImportPetrol {
         }
         Petrol petrol = new Petrol();
         petrol.setPetrolId(StringUtil.createId());
-
+        try{
+            Thread.sleep(1L);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         petrol.setPetrolNum(getStringValue(xssfRow.getCell(0)));
         if (xssfRow.getCell(1) == null || xssfRow.getCell(1).toString() == "") {
             petrol.setPetrolPsw(null);
@@ -160,6 +164,11 @@ public class ImportPetrol {
             return null;
         }
         petrol.setPetrolId(StringUtil.createId());
+        try{
+            Thread.sleep(1L);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         petrol.setPetrolNum(getStringValue(hssfRow.getCell(0)));
         if (hssfRow.getCell(1) == null || hssfRow.getCell(1).toString() == "") {
             petrol.setPetrolPsw(null);
