@@ -128,14 +128,22 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public JSONResult getCarNumAndPersonId(String userId, PersonSignedInputInfo inputInfo) {
+        // 数据校验
+        if (inputInfo.getIdentifyCode() == null)
+            return new JSONResult("认证码不能为空", ResponseCodeConstants.FAILURE);
+
+        // 先取身份证号码
+        String personId = rentCarMapper.getPersonId(userId);
+        if (personId == null)
+            return new JSONResult("找不到用户身份证号码", ResponseCodeConstants.FAILURE);
+
+        // 设置身份证号码，再去寻找车牌号和租金
+        inputInfo.setPersonId(personId);
         CarNumAndRent info = contractMapper.getCarNumAndPersonId(inputInfo);
         if (info == null)
             return new JSONResult("找不到车牌号和认证码", ResponseCodeConstants.FAILURE);
 
-        String personId = rentCarMapper.getPersonId(userId);
-        if (personId == null) {
-            return new JSONResult("找不到用户身份证号码", ResponseCodeConstants.FAILURE);
-        }
+        // 将身份证号码设置到返回信息里
         info.setPersonId(personId);
 
         return new JSONResult("获取数据成功",ResponseCodeConstants.SUCCESS, info);
