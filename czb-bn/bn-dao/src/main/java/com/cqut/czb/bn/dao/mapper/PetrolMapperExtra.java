@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public interface PetrolMapperExtra {
     /**
      * 通过用户id获取油卡
      */
-    Petrol selectMyPetrol(String userId);
+    Petrol selectMyPetrol(Petrol petrol);
 
     /**
      *查出不同类型的油卡

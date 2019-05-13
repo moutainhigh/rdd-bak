@@ -57,6 +57,9 @@ public class AppBuyPetrolController {
 
         //处理购油或充值
         String BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
+        if(BuyPetrol==null){
+            new JSONResult(ResponseCodeConstants.FAILURE, "无法生成订单");
+        }
         return new JSONResult(BuyPetrol);
     }
 

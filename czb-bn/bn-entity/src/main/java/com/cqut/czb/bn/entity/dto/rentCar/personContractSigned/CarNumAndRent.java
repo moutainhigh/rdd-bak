@@ -7,6 +7,17 @@ public class CarNumAndRent {
     // 租金
     private String rent;
 
+    // 身份证号
+    private String personId;
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
+    }
+
     public String getCarNum() {
         return carNum;
     }

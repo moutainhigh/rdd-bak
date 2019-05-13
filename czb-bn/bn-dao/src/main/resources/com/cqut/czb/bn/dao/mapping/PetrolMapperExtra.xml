@@ -145,12 +145,16 @@
     ORDER BY petrolKind asc
   </select>
 
-  <select id="selectMyPetrol" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectMyPetrol" parameterType="com.cqut.czb.bn.entity.entity.Petrol" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     FROM czb_petrol
     WHERE czb_petrol.state=2 AND
-    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR}
+    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR}AND
+    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    order by
+    create_at desc
+    limit 1
   </select>
 
   <select id="selectDifferentPetrol" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO" resultMap="BaseResultMap">
@@ -158,8 +162,11 @@
     <include refid="Base_Column_List" />
     FROM czb_petrol
     WHERE czb_petrol.state=2 AND
-    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR} AND
+    czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR} AND
     petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    order by
+    create_at desc
+    limit 1
   </select>
 
 </mapper>
