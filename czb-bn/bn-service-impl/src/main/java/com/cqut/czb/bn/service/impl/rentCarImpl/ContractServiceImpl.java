@@ -558,7 +558,15 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public JSONObject personSigned(String userId, PersonSignedInputInfo inputInfo){
-        JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject(); // 此函数返回数据
+
+        // 这里进行数据校验
+        String identifyCode = inputInfo.getIdentifyCode();
+        if ( identifyCode.length() != 8 || inputInfo.getIdentifyCode() == null){
+            json.put("code", "114");
+            return json;
+        }
+
         // 查看是否存在未签约的认证码，如果存在，取出其个人合同id记录
         String personContractId = contractMapper.getIdentifyCodeAndPersonId(inputInfo);
 
@@ -584,6 +592,17 @@ public class ContractServiceImpl implements ContractService{
                 return json;
             }
         }
+
+        // 如果此用户已经点过个人签约，并生成第三方云合同id，这里直接取出返回就行
+        String yunContractId = rentCarMapper.getYunContractId(personContractId);
+        if (yunContractId != null){
+            json.put("contractId", yunContractId);
+            json.put("signerId", yunId);
+            json.put("token", getToken());
+            json.put("code", "200");
+        }
+
+
 
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
@@ -869,10 +888,10 @@ public class ContractServiceImpl implements ContractService{
         }
 
         // 查找合同时间
-        ContractLog times = contractMapper.getContractStartTimeAndEndTime(contractId);
+//        ContractLog times = contractMapper.getContractStartTimeAndEndTime(contractId);
 
         JSONObject json = new JSONObject();
-        json.put("startTime", times.getStartTime());
+//        json.put("startTime", times.getStartTime());
         json.put("personList", resultList);
 
         return json;

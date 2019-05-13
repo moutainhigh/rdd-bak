@@ -16,7 +16,7 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public List<Dict> selectCustomerServiceStaff() {
-
-        return dictMapperExtra.selectCustomerServiceStaff();
+        String name = "kf";
+        return dictMapperExtra.selectDict(name);
     }
 }

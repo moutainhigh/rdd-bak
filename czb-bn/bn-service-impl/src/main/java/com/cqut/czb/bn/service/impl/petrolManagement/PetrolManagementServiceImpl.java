@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.global.PetrolCache;
+import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -28,6 +29,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     PetrolMapperExtra petrolMapperExtra;
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+    @Autowired
+    AppHomePageService appHomePageService;
 
     /**
      * 获取油卡列表
@@ -83,6 +86,34 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     public PageInfo<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO) {
         PageHelper.startPage(infoInputDTO.getCurrentPage(), infoInputDTO.getPageSize(), true);
         return new PageInfo<>(petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(infoInputDTO));
+    }
+
+    @Override
+    public int salePetrol(String petrolIds) {
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.saleAllPetrol();
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"1");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    @Override
+    public int notSalePetrol(String petrolIds) {
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.notSaleAllPetrol();
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"-1");
+        }
+
+//        appHomePageService.selectAllPetrol();
+        return result;
     }
 
     /**

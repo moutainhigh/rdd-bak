@@ -183,7 +183,8 @@
     <select id="getCarNumAndPersonId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo">
         SELECT
             p.car_license carNum,
-            c.rent rent
+            c.rent rent,
+            p.is_signed ifUsed
         FROM
             czb_contract_records c
         LEFT JOIN czb_cars_persons p ON c.record_id = p.contract_record_id

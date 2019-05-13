@@ -3,10 +3,7 @@ package com.cqut.czb.bn.api.controller.rentCarServer;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.rentCar.AsynchronousInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedTime;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.rentCarImpl.ContractServiceImpl;
@@ -19,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：谭深哈
@@ -186,6 +185,10 @@ public class ContractController {
                 json.put("code", code);
                 json.put("message", "将个人userId，插入合同记录表出错" + "(" + code + ")");
                 break;
+            case "114":
+                json.put("code", code);
+                json.put("message", "认证码校验出错,不为八位，或为空");
+                break;
             default:
                 json.put("code", "200");
                 json.put("message", "个人签约初始化成功（签署中状态）");
@@ -288,7 +291,10 @@ public class ContractController {
      */
     @RequestMapping(value = "/getWithoutCommitPersonInfo", method = RequestMethod.POST)
     public JSONResult getWithoutCommitPersonInfo(@RequestBody ContractIdInfo idInfo){
-        return new JSONResult(contractService.getWithoutCommitPersonInfo(idInfo.getContractId()));
+        JSONObject json = contractService.getWithoutCommitPersonInfo(idInfo.getContractId());
+        List<CarsPersonsResultDTO> resultDTOList = json.getJSONArray("personList");
+
+        return new JSONResult("成功", 200, resultDTOList);
     }
 
     /**

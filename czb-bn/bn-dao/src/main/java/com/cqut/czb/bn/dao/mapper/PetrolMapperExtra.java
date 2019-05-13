@@ -47,4 +47,10 @@ public interface PetrolMapperExtra {
      */
     Petrol selectDifferentPetrol(PetrolInputDTO petrolInputDTO);
 
+    int changePetrolState(@Param("ids")String[] id,@Param("state")String state);
+
+    int saleAllPetrol();
+
+    int notSaleAllPetrol();
+
 }
