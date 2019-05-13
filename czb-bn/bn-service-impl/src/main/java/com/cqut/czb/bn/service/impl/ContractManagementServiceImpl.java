@@ -13,13 +13,16 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import net.sf.json.JSONObject;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ContractManagementServiceImpl implements IContractService {
@@ -30,11 +33,17 @@ public class ContractManagementServiceImpl implements IContractService {
     @Autowired
     private FileMapper fileMapper;
 
-    public String getContractToken(){
+    /**
+     * 更新token的方法
+     * @return
+     */
+    public static String checkToken(){
         JSONObject request = new JSONObject();
         request.put("appId", "2019042516271800110");
         request.put("appKey", "uDCFes85C3OwDQ");
         String response = HttpClient4.doPost("https://api.yunhetong.com/api/auth/login", request, 0);
+        int indexMax = response.length();
+        response = response.substring(7, indexMax); // 删除token前的一些无关字符
 
         return response;
     }
@@ -48,19 +57,39 @@ public class ContractManagementServiceImpl implements IContractService {
         if (file != null || !file.isEmpty()) {
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());
         }
-        File file1 = setFile(file.getOriginalFilename(), address, user.getUserId(), new Date());
-        fileMapper.insertSelective(file1);
+        System.out.println(file.getOriginalFilename());
+        String token = checkToken();
+        OkHttpClient client = new OkHttpClient();
 
-        String token = getContractToken();
-        JSONObject requestJson = new JSONObject();
-        requestJson.put("templateName", templateName);
-        requestJson.put("multipartFile ", file);
-        requestJson.put("token", token);
-        String templateId = HttpClient4.doPost("https://api.yunhetong.com/api/template/upload", requestJson, 1);
-        if(templateId == null || templateId.equals("") || !templateId.startsWith("templateId")) {
+        RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file.getBytes());//将file转换成RequestBody文件
+        RequestBody body=new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("multipartFile",file.getOriginalFilename(), fileBody)
+                .addFormDataPart("templateName",templateName)
+                .build();
+        Request request = new Request.Builder()
+                .url("https://api.yunhetong.com/api/template/upload")
+                .post(body)
+                .addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
+                .addHeader("charset", "UTF-8")
+                .addHeader("token", token)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        JSONObject json = new JSONObject();
+        json.put("res", response.body().string());
+        String code = json.getJSONObject("res").get("code").toString();
+        String templateId = "";
+        if("200".equals(code)) {
+            templateId = json.getJSONObject("res").getJSONObject("data").get("templateId").toString();
+        }
+        if(templateId.equals("")) {
             return false;
         }
-        templateId = templateId.replace("templateId: ", "");
+        File file1 = setFile(file.getOriginalFilename(), address, user.getUserId(), new Date());
+        fileMapper.insertSelective(file1);
         ContractModel contractModel = new ContractModel();
         contractModel.setModelId(StringUtil.createId());
         contractModel.setModelName(templateName);
@@ -89,11 +118,11 @@ public class ContractManagementServiceImpl implements IContractService {
         file.setUploader(user);
         if (create == null) {
             file.setCreateAt(new Date());
-        }
-        else {
+        } else {
             file.setCreateAt(create);
         }
         file.setUpdateAt(new Date());
         return file;
     }
+
 }
