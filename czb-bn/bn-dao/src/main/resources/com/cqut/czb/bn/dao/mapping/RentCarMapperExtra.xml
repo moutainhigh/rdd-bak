@@ -300,12 +300,12 @@
             user_id = #{userId}
     </select>
 
-    <select id="getYunContractId">
+    <select id="getYunContractId" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT
             third_contract_num
         FROM
             czb_contract_records
         WHERE
-            record_id = #{personContractId}
+            record_id = #{contractId}
     </select>
 </mapper>
