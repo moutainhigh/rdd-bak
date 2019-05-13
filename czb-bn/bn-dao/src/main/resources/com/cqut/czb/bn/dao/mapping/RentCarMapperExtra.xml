@@ -299,4 +299,13 @@
         WHERE
             user_id = #{userId}
     </select>
+
+    <select id="getYunContractId">
+        SELECT
+            third_contract_num
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{personContractId}
+    </select>
 </mapper>

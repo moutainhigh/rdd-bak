@@ -186,6 +186,10 @@ public class ContractController {
                 json.put("code", code);
                 json.put("message", "将个人userId，插入合同记录表出错" + "(" + code + ")");
                 break;
+            case "114":
+                json.put("code", code);
+                json.put("message", "认证码校验出错,不为八位，或为空");
+                break;
             default:
                 json.put("code", "200");
                 json.put("message", "个人签约初始化成功（签署中状态）");
