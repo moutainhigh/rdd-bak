@@ -169,8 +169,8 @@ public class UserDetailServiceImpl implements UserDetailService {
         //检验密码是否一致。
         User checkUser = userMapperExtra.findUserByAccount(user.getUserAccount());//通过电话号码来查询
         System.out.println(checkUser.getUserPsw());
-        boolean isLike=bCryptPasswordEncoder.matches(checkUser.getUserPsw(),oldPWD);
-        if (isLike) {
+        boolean isLike=bCryptPasswordEncoder.matches(oldPWD, checkUser.getUserPsw());
+        if (!isLike) {
             System.out.println("错误");
             return false;
         } else {

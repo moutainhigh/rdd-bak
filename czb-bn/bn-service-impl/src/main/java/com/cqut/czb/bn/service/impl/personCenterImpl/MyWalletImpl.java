@@ -27,18 +27,20 @@ public class MyWalletImpl implements MyWallet {
     public BalanceAndInfoIdDTO getBalance(String userId){
         BalanceAndInfoIdDTO balance = myWalletMapper.getUserAllIncome(userId);
 
-        if(balance.getInfoId() == null ){
+        if(balance == null){
             InsertIncomeInfo info = new InsertIncomeInfo();
             info.setInfoId(StringUtil.createId());
             info.setUserId(userId);
             int success = myWalletMapper.insertIncomeInfo(info);
             if (success > 0){
-                balance = myWalletMapper.getUserAllIncome(userId);
+                balance = new BalanceAndInfoIdDTO();
+                balance.setBalance(new BigDecimal(0));
+                return balance;
             }
         }
 
         // 如果取出的余额小于0，则把余额设置为0
-        if(balance.getBalance().compareTo(new BigDecimal(0)) < 0){
+        if(new BigDecimal(0).compareTo(balance.getBalance()) < 0){
             balance.setBalance(new BigDecimal(0));
         }
 

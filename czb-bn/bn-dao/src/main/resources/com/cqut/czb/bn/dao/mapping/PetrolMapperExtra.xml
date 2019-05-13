@@ -145,5 +145,64 @@
     ORDER BY petrolKind asc
   </select>
 
+  <select id="selectMyPetrol" parameterType="com.cqut.czb.bn.entity.entity.Petrol" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR}AND
+    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    order by
+    create_at desc
+    limit 1
+  </select>
+
+  <select id="selectDifferentPetrol" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR} AND
+    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    order by
+    create_at desc
+    limit 1
+  </select>
+
+  <!--油卡开售禁售-->
+  <!--改变油卡状态-->
+  <update id="changePetrolState" parameterType="java.lang.String">
+    update czb_petrol <set>
+    petrol_state = #{state,jdbcType = INTEGER}
+  </set>
+    <where>
+      petrol_id in
+      <foreach collection="ids" item="item" index="index" separator=",">
+        (
+        item
+        )
+      </foreach>
+    </where>
+  </update>
+  <!--开售所有油卡-->
+  <update id="saleAllPetrol" parameterType="java.lang.String">
+    update czb_petrol
+    <set>
+      petrol_state = 1
+    </set>
+    <where>
+      and petrol_state in (-1,0)
+    </where>
+  </update>
+
+  <update id="notSaleAllPetrol" parameterType="java.lang.String">
+    update czb_petrol
+    <set>
+      petrol_state = -1
+    </set>
+    <where>
+      and petrol_state = 1
+    </where>
+  </update>
 
 </mapper>

@@ -94,7 +94,7 @@
         LEFT JOIN czb_cars_persons ccp ON ccr2.record_id = ccp.contract_record_id
         AND ccp.is_signed = 1
         WHERE
-            ccr.user_id = "155754952686931"
+            ccr.user_id = #{userId}
         AND ccr.contract_type = 0
         GROUP BY
             contractId,
@@ -180,7 +180,8 @@
             p.car_license AS license,
             p.person_id_card AS carId,
             p.is_signed AS isSign,
-            p.plan_id as rent
+            p.plan_id as rent,
+            c.rent realRent
         FROM
             czb_contract_records c,
             czb_cars_persons p
@@ -194,7 +195,7 @@
                 WHERE
                     contract_father_id = #{fatherId}
             )
-        GROUP BY person_name, license, carId, is_signed, plan_id
+        GROUP BY person_name, license, carId, is_signed, plan_id, c.rent
     </select>
 
     <!--企业合同插入-->
@@ -289,4 +290,22 @@
             payer_id = #{userId}
     </select>
 
+    <!--个人签约时，获得用户身份证-->
+    <select id="getPersonId" resultType="java.lang.String">
+        SELECT
+            user_id_card AS personId
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="getYunContractId">
+        SELECT
+            third_contract_num
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{personContractId}
+    </select>
 </mapper>

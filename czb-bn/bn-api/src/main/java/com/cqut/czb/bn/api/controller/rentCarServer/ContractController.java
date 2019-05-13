@@ -145,8 +145,8 @@ public class ContractController {
      */
     @RequestMapping(value = "/getCarNumAndPersonId", method = RequestMethod.POST)
     public JSONResult getCarNumAndPersonId(Principal principal, @RequestBody  PersonSignedInputInfo inputInfo){
-
-        return new JSONResult(contractService.getCarNumAndPersonId(inputInfo));
+        User user = (User)redisUtils.get(principal.getName());
+        return contractService.getCarNumAndPersonId(user.getUserId(), inputInfo);
     }
 
     /**
@@ -185,6 +185,10 @@ public class ContractController {
             case "113":
                 json.put("code", code);
                 json.put("message", "将个人userId，插入合同记录表出错" + "(" + code + ")");
+                break;
+            case "114":
+                json.put("code", code);
+                json.put("message", "认证码校验出错,不为八位，或为空");
                 break;
             default:
                 json.put("code", "200");
@@ -393,5 +397,7 @@ public class ContractController {
 
         return  jsonResult;
     }
+
+
 
 }

@@ -10,7 +10,27 @@ public class PetrolInputDTO {
 
     private String userAccount;
 
+    private String addressId;
+
+    private String payType;//执行的操作0为购油。1为充值
+
     public PetrolInputDTO() {
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
     public Integer getPetrolKind() {

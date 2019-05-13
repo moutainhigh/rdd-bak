@@ -42,4 +42,10 @@ public interface RentCarMapperExtra {
 
     // 根据套餐id获得某一个套餐
     String getTaoCanById(@Param("planId")String planId);
+
+    // 个人签约时，获得用户身份证
+    String getPersonId(@Param("userId") String userId);
+
+    // 如果此用户已经点过个人签约，并生成第三方云合同id，这里直接取出返回就行
+    String getYunContractId(@Param("personContracId")String personContracId);
 }

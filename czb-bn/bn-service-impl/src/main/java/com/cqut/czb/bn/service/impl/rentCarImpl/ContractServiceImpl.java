@@ -8,6 +8,8 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
@@ -125,8 +127,26 @@ public class ContractServiceImpl implements ContractService{
      * @return
      */
     @Override
-    public CarNumAndRent getCarNumAndPersonId(PersonSignedInputInfo inputInfo) {
-        return contractMapper.getCarNumAndPersonId(inputInfo);
+    public JSONResult getCarNumAndPersonId(String userId, PersonSignedInputInfo inputInfo) {
+        // 数据校验
+        if (inputInfo.getIdentifyCode() == null)
+            return new JSONResult("认证码不能为空", ResponseCodeConstants.FAILURE);
+
+        // 先取身份证号码
+        String personId = rentCarMapper.getPersonId(userId);
+        if (personId == null)
+            return new JSONResult("找不到用户身份证号码", ResponseCodeConstants.FAILURE);
+
+        // 设置身份证号码，再去寻找车牌号和租金
+        inputInfo.setPersonId(personId);
+        CarNumAndRent info = contractMapper.getCarNumAndPersonId(inputInfo);
+        if (info == null)
+            return new JSONResult("找不到车牌号和认证码", ResponseCodeConstants.FAILURE);
+
+        // 将身份证号码设置到返回信息里
+        info.setPersonId(personId);
+
+        return new JSONResult("获取数据成功",ResponseCodeConstants.SUCCESS, info);
     }
 
     /**
@@ -538,7 +558,15 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public JSONObject personSigned(String userId, PersonSignedInputInfo inputInfo){
-        JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject(); // 此函数返回数据
+
+        // 这里进行数据校验
+        String identifyCode = inputInfo.getIdentifyCode();
+        if ( identifyCode.length() != 8 || inputInfo.getIdentifyCode() == null){
+            json.put("code", "114");
+            return json;
+        }
+
         // 查看是否存在未签约的认证码，如果存在，取出其个人合同id记录
         String personContractId = contractMapper.getIdentifyCodeAndPersonId(inputInfo);
 
@@ -564,6 +592,17 @@ public class ContractServiceImpl implements ContractService{
                 return json;
             }
         }
+
+        // 如果此用户已经点过个人签约，并生成第三方云合同id，这里直接取出返回就行
+        String yunContractId = rentCarMapper.getYunContractId(personContractId);
+        if (yunContractId != null){
+            json.put("contractId", yunContractId);
+            json.put("signerId", yunId);
+            json.put("token", getToken());
+            json.put("code", "200");
+        }
+
+
 
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
@@ -798,8 +837,10 @@ public class ContractServiceImpl implements ContractService{
     public void asynchronousInfo(SignerMap signerMap){
         Long contractId = signerMap.getData().getId();
         // 将签署完成合同的id传入mapper，修改合同记录的状态
-        if(contractId != null)
+        if(contractId != null){
             contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
+            contractMapper.updateCarsPersonsStatus(contractId.toString());
+        }
     }
 
     /**
@@ -825,7 +866,7 @@ public class ContractServiceImpl implements ContractService{
         // 根据套餐id和油卡类型设置文字
         for(CarsPersonsDTO data: carsPersonsList){
             CarsPersonsResultDTO result = new CarsPersonsResultDTO();
-            result.setContractId(data.getContractId());
+            result.setSonContractId(data.getContractId());
             result.setName(data.getName());
             result.setCarLicense(data.getCarLicense());
             result.setPersonId(data.getPersonId());
@@ -842,7 +883,7 @@ public class ContractServiceImpl implements ContractService{
                     break;
             }
             Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * 12d;
-            result.setTaoCan(rent.toString());
+            result.setTaoCan(rent.toString() + "/年");
             resultList.add(result);
         }
 

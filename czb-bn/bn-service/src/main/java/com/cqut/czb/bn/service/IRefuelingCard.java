@@ -13,7 +13,7 @@ public interface IRefuelingCard {
 	 * @param param
 	 * @return
 	 */
-	Map payCallback(int i, Object[] param);
+	Map payCallback(Object[] param);
 
 	/**
 	 * 购买油卡支付失败后的处理
