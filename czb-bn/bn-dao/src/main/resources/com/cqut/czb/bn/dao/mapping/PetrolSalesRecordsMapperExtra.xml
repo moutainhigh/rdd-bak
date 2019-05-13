@@ -279,9 +279,10 @@ INNER JOIN (
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
     <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT *
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM czb_petrol_sales_records
-        WHERE buyer_id=#{useId,jdbcType=VARCHAR}
+        WHERE buyer_id=#{userId,jdbcType=VARCHAR}
         ORDER BY transaction_time DESC
         LIMIT 1
     </select>
