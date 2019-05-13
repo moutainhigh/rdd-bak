@@ -150,7 +150,7 @@
     <include refid="Base_Column_List" />
     FROM czb_petrol
     WHERE czb_petrol.state=2 AND
-    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR}AND
+    czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR}AND
     petrol_kind=#{petrolKind,jdbcType=INTEGER}
     order by
     create_at desc

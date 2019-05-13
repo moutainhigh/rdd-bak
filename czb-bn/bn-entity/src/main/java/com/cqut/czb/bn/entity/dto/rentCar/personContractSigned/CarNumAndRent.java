@@ -10,6 +10,17 @@ public class CarNumAndRent {
     // 身份证号
     private String personId;
 
+    // 是否使用
+    private int ifUsed;
+
+    public int getIfUsed() {
+        return ifUsed;
+    }
+
+    public void setIfUsed(int ifUsed) {
+        this.ifUsed = ifUsed;
+    }
+
     public String getPersonId() {
         return personId;
     }

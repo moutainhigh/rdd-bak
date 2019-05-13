@@ -128,14 +128,22 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public JSONResult getCarNumAndPersonId(String userId, PersonSignedInputInfo inputInfo) {
+        // 数据校验
+        if (inputInfo.getIdentifyCode() == null)
+            return new JSONResult("认证码不能为空", ResponseCodeConstants.FAILURE);
+
+        // 先取身份证号码
+        String personId = rentCarMapper.getPersonId(userId);
+        if (personId == null)
+            return new JSONResult("找不到用户身份证号码", ResponseCodeConstants.FAILURE);
+
+        // 设置身份证号码，再去寻找车牌号和租金
+        inputInfo.setPersonId(personId);
         CarNumAndRent info = contractMapper.getCarNumAndPersonId(inputInfo);
         if (info == null)
             return new JSONResult("找不到车牌号和认证码", ResponseCodeConstants.FAILURE);
 
-        String personId = rentCarMapper.getPersonId(userId);
-        if (personId == null) {
-            return new JSONResult("找不到用户身份证号码", ResponseCodeConstants.FAILURE);
-        }
+        // 将身份证号码设置到返回信息里
         info.setPersonId(personId);
 
         return new JSONResult("获取数据成功",ResponseCodeConstants.SUCCESS, info);
@@ -550,7 +558,15 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public JSONObject personSigned(String userId, PersonSignedInputInfo inputInfo){
-        JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject(); // 此函数返回数据
+
+        // 这里进行数据校验
+        String identifyCode = inputInfo.getIdentifyCode();
+        if ( identifyCode.length() != 8 || inputInfo.getIdentifyCode() == null){
+            json.put("code", "114");
+            return json;
+        }
+
         // 查看是否存在未签约的认证码，如果存在，取出其个人合同id记录
         String personContractId = contractMapper.getIdentifyCodeAndPersonId(inputInfo);
 
@@ -576,6 +592,17 @@ public class ContractServiceImpl implements ContractService{
                 return json;
             }
         }
+
+        // 如果此用户已经点过个人签约，并生成第三方云合同id，这里直接取出返回就行
+        String yunContractId = rentCarMapper.getYunContractId(personContractId);
+        if (yunContractId != null){
+            json.put("contractId", yunContractId);
+            json.put("signerId", yunId);
+            json.put("token", getToken());
+            json.put("code", "200");
+        }
+
+
 
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
