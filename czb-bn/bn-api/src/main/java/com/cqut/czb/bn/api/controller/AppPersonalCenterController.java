@@ -100,10 +100,13 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value = "/appModifyContactInfo",method = RequestMethod.POST)
     public JSONResult appModifyContactInfo(Principal principal,@RequestBody PersonalCenterUserDTO personalCenterUserDTO){
+        System.out.println("dsfsdf");
         User user = (User)redisUtils.get(principal.getName());
         if(user==null||personalCenterUserDTO==null){
+            System.out.println(personalCenterUserDTO==null);
             return null;
         }
+        personalCenterUserDTO.setUserAccount(user.getUserAccount());
         personalCenterUserDTO.setUserId(user.getUserId());
         return new JSONResult(appPersonalCenterService.ModifyContactInfo(personalCenterUserDTO));
     }

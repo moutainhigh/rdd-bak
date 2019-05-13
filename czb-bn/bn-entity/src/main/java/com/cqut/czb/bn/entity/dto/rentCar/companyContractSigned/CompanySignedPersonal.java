@@ -19,6 +19,18 @@ public class CompanySignedPersonal {
     // 合同记录id
     private String contractId;
 
+    public CompanySignedPersonal() {
+    }
+
+    public CompanySignedPersonal(String name, String carNum, String taoCanId, String personId, int petrolType, String contractId) {
+        this.name = name;
+        this.carNum = carNum;
+        this.taoCanId = taoCanId;
+        this.personId = personId;
+        this.petrolType = petrolType;
+        this.contractId = contractId;
+    }
+
     public String getCarNum() {
         return carNum;
     }
