@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.EnterpriseInfoMapperExtra" >
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.EnterpriseInfoDTO" >
         <id column="enterprise_info_id" property="enterpriseInfoId" jdbcType="VARCHAR" />
         <result column="enterprise_name" property="enterpriseName" jdbcType="VARCHAR" />
         <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
@@ -11,7 +11,7 @@
         <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-        <result column="enterprise_yun_id" property="enterpriseYunId" jdbcType="VARCHAR" />
+        <result column="counts" property="totalContract" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
     enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_id,
@@ -19,16 +19,17 @@
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
-        enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_account,
-        org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at
+        enterprise_info_id, enterprise_name, legal_person, contact_info,czb_enterprise_info.is_deleted, user_account,
+        org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at,COUNT(enterprise_info_id) as counts
         from czb_enterprise_info
         LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
+        LEFT JOIN czb_contract_records on czb_enterprise_info.user_id = czb_contract_records.user_id GROUP BY enterprise_info_id
         <where>
             <if test="enterpriseInfo.enterpriseInfoId!=null">
                 enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
             </if>
-            <if test="enterpriseInfo.enterpriseInfoName!=null">
-                AND enterprise_name= #{enterpriseInfo.enterpriseInfoName,jdbcType=VARCHAR}
+            <if test="enterpriseInfo.enterpriseName!=null">
+                AND enterprise_name= #{enterpriseInfo.enterpriseName,jdbcType=VARCHAR}
             </if>
             <if test="enterpriseInfo.userAccount!=null">
                 AND  user_account= #{enterpriseInfo.userAccount,jdbcType=VARCHAR}

@@ -87,6 +87,9 @@ public class RefuelingCardService implements IRefuelingCard {
 		petrolSalesRecordsDTO.setPaymentMethod(0);
 		for (String data : resDate) {
 			temp = data.split("\'");
+			if(temp.length < 2){
+				continue;
+			}
 			if ("orgId".equals(temp[0])) {
 				if(temp[1]!=null)
 					petrolSalesRecordsDTO.setThirdOrderId(temp[1]);
@@ -150,6 +153,10 @@ public class RefuelingCardService implements IRefuelingCard {
 		double actualPayment=0;
 		for (String data : resDate) {
 			temp = data.split("\'");
+			if(temp.length < 2){
+				continue;
+			}
+
 			if ("orgId".equals(temp[0])) {
 				orgId = temp[1];
 			}

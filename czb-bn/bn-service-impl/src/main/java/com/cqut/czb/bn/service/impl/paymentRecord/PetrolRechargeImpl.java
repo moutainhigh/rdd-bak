@@ -28,7 +28,11 @@ public class PetrolRechargeImpl implements PetrolRecharge {
                                        String ownerId, double actualPayment,String orgId)
     {
         //通过油卡号查出用户买的油卡信息
-        Petrol petrol= petrolMapperExtra.selectMyPetrol(ownerId);
+
+        Petrol petrol= new Petrol();
+        petrol.setOwnerId(ownerId);
+        petrol.setPetrolKind(petrolKind);
+        petrol=petrolMapperExtra.selectMyPetrol(petrol);
         if(petrol==null){
             System.out.println("没有买过油卡");
             return false;
