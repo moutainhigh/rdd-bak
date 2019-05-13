@@ -651,12 +651,13 @@ public class ContractServiceImpl implements ContractService{
 
         // 如果此合同是未提交合同，并已签已经生成第三方云合同id，这里直接取出返回就行
         String yunContractId = rentCarMapper.getYunContractId(contractId);
-        if (yunContractId != null){
+        if (yunContractId != null && !"".equals(yunContractId)){
             json.put("contractId", yunContractId);
             json.put("signerId", yunId);
             json.put("token", getToken());
             json.put("code", "200");
             return json;
+
         }
 
         // 生成合同模板,并返回一个云合同id
