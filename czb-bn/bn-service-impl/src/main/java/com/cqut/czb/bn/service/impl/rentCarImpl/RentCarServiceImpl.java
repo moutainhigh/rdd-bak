@@ -34,11 +34,8 @@ public class RentCarServiceImpl implements RentCarService {
      * @return List<OneContractInfoDTO>
      */
     @Override
-    public List<OneContractInfoDTO> getOneContractInfo(String userId, String contractId){
-        List<OneContractInfoDTO> oneContractInfoDTOList = new ArrayList<>();
-
-        oneContractInfoDTOList =rentCarMapper.getOneContractInfo(userId,contractId);
-        return oneContractInfoDTOList;
+    public OneContractInfoDTO getOneContractInfo(String userId, String contractId){
+        return rentCarMapper.getOneContractInfo(userId,contractId);
     }
 
     /**

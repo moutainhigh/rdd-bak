@@ -10,7 +10,7 @@ import java.util.List;
 public interface RentCarMapperExtra {
     PersonIncome getPersonIncome(@Param("userId") String userId);
 
-    List<OneContractInfoDTO> getOneContractInfo(@Param("userId")String userId, @Param("contractId") String contractId);
+    OneContractInfoDTO getOneContractInfo(@Param("userId")String userId, @Param("contractId") String contractId);
 
     List<PersonalContractDTO> getPersonalContractList(@Param("userId") String userId);
 

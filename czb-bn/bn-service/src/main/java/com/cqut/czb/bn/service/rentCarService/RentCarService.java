@@ -8,7 +8,7 @@ import java.util.List;
 public interface RentCarService {
     PersonIncome getPersonIncome(String userId);
 
-    List<OneContractInfoDTO> getOneContractInfo(String userId, String contractId);
+    OneContractInfoDTO getOneContractInfo(String userId, String contractId);
 
     List<PersonalContractDTO> getPersonalContractList(String userId);
 
