@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.cqut.czb.bn.entity.entity.AppRouter;
+
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,6 +79,9 @@ public class AppHomePageController {
      */
     @RequestMapping(value ="/selectPetrolInfoDTO",method = RequestMethod.GET)
     public JSONResult selectPetrolInfoDTO(){
+        Date date = new Date();
+        DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
+        System.out.println(df1.format(date));
         return new JSONResult<List<PetrolInfoDTO>>(appHomePageService.selectPetrolInfoDTO());
     }
 }

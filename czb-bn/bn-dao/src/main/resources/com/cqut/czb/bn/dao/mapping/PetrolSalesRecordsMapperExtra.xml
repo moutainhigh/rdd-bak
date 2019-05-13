@@ -278,7 +278,13 @@ INNER JOIN (
         where is_recharged = 0
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
-    
+    <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *
+        FROM czb_petrol_sales_records
+        WHERE buyer_id=#{useId,jdbcType=VARCHAR}
+        ORDER BY transaction_time DESC
+        LIMIT 1
+    </select>
     
     <!--个人中心油卡详情获取新版，按日期分组返回数据 级联查询-->
     <!--<resultMap id="getGTPetrolListGroupByDate" type="com.cqut.czb.bn.entity.dto.appPersonalPetrol.PersonalPetrolGT">-->

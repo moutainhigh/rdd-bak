@@ -21,10 +21,25 @@ public class VerifyAsynNoticeInfoController {
 	@Resource(name="paymentRecordService")
 	private IPaymentRecordService paymentRecordService;
 	/**
-	 * 验证异步通知信息(支付宝(爱虎))
+	 * 油卡购买：验证异步通知信息(支付宝(爱虎))
 	 */
-	@RequestMapping(value="/verifyAsynNoticeInfoAiHu", method= RequestMethod.POST)
-	public void verifyAsynNoticeInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value="/verifyBuyPetrolInfoAiHu", method= RequestMethod.POST)
+	public void verifyBuyPetrolInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		try {
+			response.getWriter().print(paymentRecordService.verifyAsynNoticeInfoAiHu(request));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 油卡充值：验证异步通知信息(支付宝(爱虎))recharge
+	 */
+	@RequestMapping(value="/verifyPetrolRechargeInfoAiHu", method= RequestMethod.POST)
+	public void verifyPetrolRechargeInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("支付宝回调——充值接口");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {

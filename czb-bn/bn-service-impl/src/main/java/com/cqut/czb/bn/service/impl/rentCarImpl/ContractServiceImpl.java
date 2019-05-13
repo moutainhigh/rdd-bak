@@ -827,7 +827,7 @@ public class ContractServiceImpl implements ContractService{
         // 根据套餐id和油卡类型设置文字
         for(CarsPersonsDTO data: carsPersonsList){
             CarsPersonsResultDTO result = new CarsPersonsResultDTO();
-            result.setContractId(data.getContractId());
+            result.setSonContractId(data.getContractId());
             result.setName(data.getName());
             result.setCarLicense(data.getCarLicense());
             result.setPersonId(data.getPersonId());
@@ -844,7 +844,7 @@ public class ContractServiceImpl implements ContractService{
                     break;
             }
             Double rent = contractMapper.getTaoCan(data.getTaoCanId()) * 12d;
-            result.setTaoCan(rent.toString());
+            result.setTaoCan(rent.toString() + "/年");
             resultList.add(result);
         }
 

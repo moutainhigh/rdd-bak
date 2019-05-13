@@ -24,4 +24,6 @@ public interface PetrolSalesRecordsMapperExtra {
     List<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO);
 
     int recharge(@Param("recordId") String recordId);
+
+    PetrolSalesRecords selectPetrolSalesRecords(@Param("userId") String userId );
 }

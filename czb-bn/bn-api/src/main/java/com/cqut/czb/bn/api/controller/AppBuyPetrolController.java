@@ -37,11 +37,10 @@ public class AppBuyPetrolController {
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
     public JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
+        petrolInputDTO.setUserAccount(user.getUserAccount());
+        petrolInputDTO.setOwnerId(user.getUserId());
+        //防止数据为空
         if(petrolInputDTO==null||user==null){
-            System.out.println("user"+user.getUserAccount());
-            System.out.println("user"+user.getUserId());
-            System.out.println("getPetrolKind"+petrolInputDTO.getPetrolKind());
-            System.out.println("getPetrolPrice"+petrolInputDTO.getPetrolPrice());
             new JSONResult(ResponseCodeConstants.FAILURE, "申请数据有误");
         }
         //检测是否有未完成的订单
@@ -49,18 +48,15 @@ public class AppBuyPetrolController {
         if(!isHave){
             new JSONResult(ResponseCodeConstants.FAILURE, "存在未完成的订单");
         }
-        //随机获取一张卡
-        petrolInputDTO.setUserAccount(user.getUserAccount());
-        petrolInputDTO.setOwnerId(user.getUserId());
-                System.out.println("AllpetrolMap.size():"+ PetrolCache.AllpetrolMap.size());
-                System.out.println("currentPetrolMap.size():"+PetrolCache.currentPetrolMap.size());
-        Petrol petrol=PetrolCache.randomPetrol(petrolInputDTO);
-                System.out.println("********************************");
-                System.out.println("2AllpetrolMap.size():"+PetrolCache.AllpetrolMap.size());
-                System.out.println("2currentPetrolMap.size():"+PetrolCache.currentPetrolMap.size());
-        if(petrol==null)
-            return new JSONResult(ResponseCodeConstants.FAILURE, "油卡申请失败，无此类油卡");
-        String BuyPetrol=appBuyPetrolService.BuyPetrol(petrol,petrolInputDTO);
+
+        //检测今日是否已经购买了油卡或充值
+        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(user);
+        if(isTodayHadBuy){//true
+            new JSONResult(ResponseCodeConstants.FAILURE, "今日已经购买了油卡");
+        }
+
+        //处理购油或充值
+        String BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
         return new JSONResult(BuyPetrol);
     }
 
