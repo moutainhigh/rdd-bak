@@ -888,10 +888,10 @@ public class ContractServiceImpl implements ContractService{
         }
 
         // 查找合同时间
-        ContractLog times = contractMapper.getContractStartTimeAndEndTime(contractId);
+//        ContractLog times = contractMapper.getContractStartTimeAndEndTime(contractId);
 
         JSONObject json = new JSONObject();
-        json.put("startTime", times.getStartTime());
+//        json.put("startTime", times.getStartTime());
         json.put("personList", resultList);
 
         return json;
