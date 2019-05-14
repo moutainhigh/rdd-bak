@@ -25,26 +25,28 @@ import java.util.*;
 @Transactional
 public class UserDetailServiceImpl implements UserDetailService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    private final UserMapperExtra userMapperExtra;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final VerificationCodeMapperExtra verificationCodeMapperExtra;
+
+    private final EnterpriseInfoMapper enterpriseInfoMapper;
+
+    private final RedisUtils redisUtils;
 
     @Autowired
-    private UserMapperExtra userMapperExtra;
+    public UserDetailServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationCodeMapperExtra verificationCodeMapperExtra, EnterpriseInfoMapper enterpriseInfoMapper, RedisUtils redisUtils) {
+        this.userMapper = userMapper;
+        this.userMapperExtra = userMapperExtra;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.verificationCodeMapperExtra = verificationCodeMapperExtra;
+        this.enterpriseInfoMapper = enterpriseInfoMapper;
+        this.redisUtils = redisUtils;
+    }
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private VerificationCodeMapperExtra verificationCodeMapperExtra;
-
-    @Autowired
-    private PetrolMapperExtra petrolMapperExtra;
-
-    @Autowired
-    private EnterpriseInfoMapper enterpriseInfoMapper;
-
-    @Autowired
-    RedisUtils redisUtils;
 
     @Override
     public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
@@ -212,7 +214,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "手机验证码校验失败";
 
-        if(0 == user.getUserType()) {
+        if(0 != user.getUserType()) {
             return "非法操作，禁止使用企业账号进行个人认证";
         }
 
