@@ -214,4 +214,29 @@
         set user_id = #{userId}
         where record_id = #{contractId}
     </update>
+
+    <delete id="deleteContract" parameterType="java.lang.String">
+        DELETE
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </delete>
+
+    <update id="insertCZId" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET witness_id = #{czId}
+        WHERE
+            record_id = #{contractId}
+    </update>
+
+    <!--根据第三方合同id找到userId，再根据userId找到yunId-->
+    <select id="getUserId" parameterType="java.lang.String">
+        SELECT
+            user_id
+        FROM
+            czb_contract_records
+        WHERE
+            third_contract_num = #{thirdContractId}
+    </select>
 </mapper>

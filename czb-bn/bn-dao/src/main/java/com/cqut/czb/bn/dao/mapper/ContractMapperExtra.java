@@ -78,4 +78,12 @@ public interface ContractMapperExtra {
 
     // 将个人userId，写入合同记录表
     int updatePersonalContractUserId(@Param("userId") String userId, @Param("contractId") String contractId);
+
+    // 企业合同为添加个人信息，删除初始化的合同记录
+    int deleteContract(@Param("contractId") String contractId);
+
+    // 回调合同签署完成后，进行存证，保存存证id
+    int insertCZId(@Param("czId") String czId, @Param("contractId") String contractId);
+
+    String getUserId(@Param("thirdContractId") String thirdContractId);
 }

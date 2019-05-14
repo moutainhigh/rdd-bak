@@ -6,14 +6,10 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.global.JSONResult;
-import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
-import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.mapper.BeanMapper;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -66,6 +62,10 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setIsIdentified(0);
         user.setIsLoginPc(0);
         user.setUserRank(0);
+        if(null == personalUserDTO.getSuperiorUser() && "".equals(user.getSuperiorUser())) {
+            user.setSuperiorUser("18008354161");
+        }
+
         return (userMapper.insertSelective(user) > 0) + "";
     }
 

@@ -12,6 +12,8 @@ public class PersonalUserDTO {
 
     private String content;
 
+    private String superiorUser;
+
     public String getContent() {
         return content;
     }
@@ -50,5 +52,13 @@ public class PersonalUserDTO {
 
     public void setUserIdCard(String userIdCard) {
         this.userIdCard = userIdCard;
+    }
+
+    public String getSuperiorUser() {
+        return superiorUser;
+    }
+
+    public void setSuperiorUser(String superiorUser) {
+        this.superiorUser = superiorUser;
     }
 }

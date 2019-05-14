@@ -16,9 +16,6 @@ import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.string.StringUtil;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +46,7 @@ public class ContractServiceImpl implements ContractService{
     public static final String STATE_FIND_TAO_CAN_RENT = "109"; // 根据taocCnId，查找套餐金额出错
     public static final String STATE_FIND_TIMES = "110"; // 查找父级合同开始和结束时间出错
     public static final String STATE_INSERT_PERSONAL_CONTRACT_FAILED = "111"; // 插入父级相应的子合同记录出错
+    public static final short STATE_INSERT_CZID_FAILED = 118; // 合同存证失败
 
     @Autowired
     public ContractServiceImpl(ContractMapperExtra contractMapper, RentCarMapperExtra rentCarMapper) {
@@ -416,10 +414,10 @@ public class ContractServiceImpl implements ContractService{
         //合同参数
         json.put("idContent", contractId);
 
-        // TODO 谭深化——要添加一个车租宝平台的签署者，外加本用户的签署者。
+        // TODO 添加一个车租宝平台的签署者
         // 企业签署者
         JSONObject ownerCompany = new JSONObject();
-        ownerCompany.put("signerId", "5272391"); // 云合同id
+        ownerCompany.put("signerId", "5293709"); // 云合同id
         ownerCompany.put("signPositionType", "1"); // 签名定位类型
         ownerCompany.put("positionContent", "04549"); // 签名定位参数
         ownerCompany.put("signValidateType", "0"); // 是否短信校验，否
@@ -464,8 +462,8 @@ public class ContractServiceImpl implements ContractService{
             return 112;
         }
 
-        // TODO 测试后删除
-        signerContract("czbtest",contractId, getToken());
+        // TODO 车租宝自动签署
+        signerContract("155780028358627",contractId, getToken());
 
 
          return 1;
@@ -515,7 +513,6 @@ public class ContractServiceImpl implements ContractService{
 //        } catch(Exception e){
 //            e.printStackTrace();
 //        }
-        // TODO 这里应写个判断云合同是否签订的网络请求，如完成，则进行存证，存证后改变合同记录状态
 
         return 1;
     }
@@ -523,23 +520,31 @@ public class ContractServiceImpl implements ContractService{
     /**
      * 为已签署合同进行存证
      * @param token
-     * @return message
      */
-    @Override
-    public int czContract(String contractId, String token){
+    private void czContract(String contractId, String token){
         JSONObject json = new JSONObject();
         json.put("idType", "0"); // 合同id类型
         json.put("idContent", contractId); // 合同id参数
         json.put("token", token);
 
         String response = new String();
+        String czId = new String();
         try{
             response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/cz", json, 1);
+            Map map = new HashMap();
+            map.put("a", response);
+            JSONObject json1 = new JSONObject();
+            json1.putAll(map);
+            czId = json1.getJSONObject("a").getJSONObject("data").getString("czId");
         } catch(Exception e){
-            return 115;
+            System.out.println("存证信息：");
+            System.out.println(response);
         }
-        // TODO 谭深化——存证成功后，存证id需插入数据库，便于维护
-        return 1;
+
+        int czSuccess = contractMapper.insertCZId(czId, contractId);
+        if (czSuccess != 1)
+            System.out.println("未插入合同存证id");
+
     }
 
 
@@ -839,8 +844,14 @@ public class ContractServiceImpl implements ContractService{
         Long contractId = signerMap.getData().getId();
         // 将签署完成合同的id传入mapper，修改合同记录的状态
         if(contractId != null){
+            // 改变合同状态
             contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
+            // 改变车辆服务表中的签约状态
             contractMapper.updateCarsPersonsStatus(contractId.toString());
+            // 进行合同存证,并插入存证id
+            czContract(contractId.toString(), getToken());
+            // 查看印章个数，进行印章清除，只保留用户一个印章
+            checkMoulages(contractId.toString());
         }
     }
 
@@ -949,5 +960,66 @@ public class ContractServiceImpl implements ContractService{
         json.put("code", 1);
         json.put("signerId", yunId);
         return json;
+    }
+
+    /**
+     * 查看印章个数，并进行印章清除,只保留用户一个印章
+     */
+    private void checkMoulages(String thirdContractId){
+        // 根据第三方合同id找到userId，再根据userId找到yunId
+        String userId = contractMapper.getUserId(thirdContractId);
+        if (userId == null || userId.equals(""))
+            System.out.println("删除印章出错,找不到userId");
+        String yunId = contractMapper.getYunId(userId);
+        if (yunId == null || "".equals(userId))
+            System.out.println("删除印章出错，找不到yunId");
+
+        String response = new String();
+        try{
+            response = HttpClient4.doGet("https://api.yunhetong.com/api/user/moulageId/"+yunId+"/1/100", getToken());
+            System.out.println(response);
+            Map map = new HashMap();
+            map.put("a", response);
+            JSONObject json1 = new JSONObject();
+            json1.putAll(map);
+            // 获得第一个印章的id
+            String moulage = json1.getJSONObject("a").getJSONObject("data").getJSONArray("moulages").getJSONObject(0).getString("id");
+            if (moulage == null || moulage.equals("")){
+                System.out.println("删除印章出错,没有印章");
+            }
+            // 获得用户的印章的个数
+            int moulageLenth = json1.getJSONObject("a").getJSONObject("data").getJSONArray("moulages").size();
+            if(moulageLenth > 1){
+                System.out.println(response);
+                System.out.println(moulageLenth);
+                System.out.println(moulage);
+                String responseDelete = new String();
+                try{
+                    responseDelete = HttpClient4.doGet("https://api.yunhetong.com/api/user/moulage/" + moulage, getToken());
+                } catch (Exception e){
+                    System.out.println("删除印章请求失败");
+                    System.out.println(responseDelete);
+                    e.printStackTrace();
+                }
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     *
+     * @param contractId
+     * @return
+     */
+    @Override
+    public JSONResult deleteContract(String contractId) {
+        int success = contractMapper.deleteContract(contractId);
+        if (success != 1)
+            return new JSONResult("删除合同记录失败", 500);
+
+        return new JSONResult("删除合同记录成功", 200);
     }
 }

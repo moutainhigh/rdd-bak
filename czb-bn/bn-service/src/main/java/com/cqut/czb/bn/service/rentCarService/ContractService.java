@@ -30,8 +30,8 @@ public interface ContractService {
     // 签署合同
     int signerContract(String userId, String contractId, String token);
 
-    // 合同存证
-    int czContract(String contractId, String token );
+//    // 合同存证
+//    JSONResult czContract(String contractId, String token );
 
     // 测试
     String get( );
@@ -71,5 +71,8 @@ public interface ContractService {
 
     // 判断有无印章
     JSONObject checkMoulage(String userId);
+
+    // 企业合同为添加个人信息，删除初始化的合同记录
+    JSONResult deleteContract(String contractId);
 
 }
