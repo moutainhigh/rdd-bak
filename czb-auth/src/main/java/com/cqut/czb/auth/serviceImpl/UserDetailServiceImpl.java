@@ -212,6 +212,10 @@ public class UserDetailServiceImpl implements UserDetailService {
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "手机验证码校验失败";
 
+        if(0 == user.getUserType()) {
+            return "非法操作，禁止使用企业账号进行个人认证";
+        }
+
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("appId", "2019042516271800110");
         paramMap.put("appKey", "uDCFes85C3OwDQ");
@@ -229,11 +233,12 @@ public class UserDetailServiceImpl implements UserDetailService {
             e.printStackTrace();
             return "参数异常，请重试";
         }
-        // 临时处理
-        if(true) {
+
+        if("200".equals(code)) {
             boolean isUpdate;
             user.setUpdateAt(new Date());
             user.setIsIdentified(1);
+            user.setUserName(personalUserDTO.getUserName());
             user.setUserIdCard(personalUserDTO.getUserIdCard());
             isUpdate = userMapper.updateByPrimaryKeySelective(user) > 0;
 
