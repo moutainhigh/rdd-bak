@@ -64,8 +64,14 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setIsIdentified(0);
         user.setIsLoginPc(0);
         user.setUserRank(0);
-        if(null == personalUserDTO.getSuperiorUser() && "".equals(user.getSuperiorUser())) {
-            user.setSuperiorUser("18008354161");
+        if(null == personalUserDTO.getSuperiorUser() && "".equals(personalUserDTO.getSuperiorUser())) {
+            user.setSuperiorUser(userMapperExtra.findUserByAccount("18008354161").getUserId());
+        } else {
+            if(userMapperExtra.checkAccount(personalUserDTO.getSuperiorUser())) {
+                user.setSuperiorUser(userMapperExtra.findUserByAccount(personalUserDTO.getSuperiorUser()).getUserId());
+            } else {
+                user.setSuperiorUser(null);
+            }
         }
 
         return (userMapper.insertSelective(user) > 0) + "";
