@@ -5,6 +5,7 @@
         select info_id as infoId, (fanyong_income + share_income + other_income - withdrawed) AS balance
         from czb_user_income_info
         where user_id = #{userId}
+        limit 1
     </select>
 
     <update id="increaseWithdrawed" parameterType="java.lang.String">

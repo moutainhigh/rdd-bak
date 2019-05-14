@@ -211,6 +211,9 @@ public class RefuelingCardService implements IRefuelingCard {
 			//若插入失败则放回卡
 			if(ischange!=true){
 				Petrol petrol= PetrolCache.currentPetrolMap.get(petrolNum);
+				if(petrol == null){
+					return 2;
+				}
 				petrol.setOwnerId("");
 				petrol.setEndTime(0);
 				PetrolCache.AllpetrolMap.put(petrolNum,petrol);//放回all中
@@ -269,7 +272,7 @@ public class RefuelingCardService implements IRefuelingCard {
 		petrolDeliveryRecords.setAddressId(addressId);
 		petrolDeliveryRecords.setPetrolNum(petrolNum);
 		petrolDeliveryRecords.setDeliveryState(0);
-		petrolDeliveryRecords.setAddressId(StringUtil.createId());
+		petrolDeliveryRecords.setRecordId(StringUtil.createId());
 		boolean isInsert=petrolDeliveryRecordsMapper.insert(petrolDeliveryRecords)>0;
 		System.out.println("新增油卡邮寄记录"+isInsert);
 

@@ -84,8 +84,7 @@ public class FanYongServiceImpl implements FanYongService {
             userIncomeInfo1.setUserId(userId);
             if (k == 1 || k == 2) {//本人不返佣
                 userIncomeInfo1.setFanyongIncome(money * 0.01);//暂时设定为0.01****************
-                if(userIncomeInfo.getShareIncome()==null)
-                    userIncomeInfo.setShareIncome(0.0);
+                userIncomeInfo1.setShareIncome(0.0);
             }
             userIncomeInfo1.setInfoId(uuid);
             userIncomeInfo1.setFanyongIncome(0.00);
