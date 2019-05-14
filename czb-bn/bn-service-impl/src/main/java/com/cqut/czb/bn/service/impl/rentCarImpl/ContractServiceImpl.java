@@ -299,7 +299,7 @@ public class ContractServiceImpl implements ContractService{
         // 设置请求json数据
         JSONObject json = new JSONObject();
         json.put("contractTitle", "测试合同");
-        json.put("templateId", "TEM1009746");
+        json.put("templateId", "TEM1009230");
 
         // TODO 谭深化—— 因为还未做实名功能，这里以后需要根据是个人用户，还是企业用户，去获取相应的信息，还有选择相应的合同模板去生成
         // 根据用户id，数据库查找用户已实名认证的个人信息
@@ -321,7 +321,7 @@ public class ContractServiceImpl implements ContractService{
 //        }
 
         JSONObject dataJson = new JSONObject();
-        dataJson.put("${personName}", personalRegisterDTO.getUserName());
+        dataJson.put("${name}", personalRegisterDTO.getUserName());
         dataJson.put("${mobile}", personalRegisterDTO.getPhoneNo());
         dataJson.put("${id_no}", personalRegisterDTO.getCertifyNum());
         dataJson.put("${corporate_name}", "艾欧里亚");
@@ -625,7 +625,7 @@ public class ContractServiceImpl implements ContractService{
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
         if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals("")){
-            json.put("code", STATE_CREATE_CONTRACT_YUN_FAILED); // 不存在未签约的认证码
+            json.put("code", STATE_CREATE_CONTRACT_YUN_FAILED);
             return json;
         }
 

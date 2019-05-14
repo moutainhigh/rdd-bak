@@ -147,7 +147,8 @@ public class RentCarServiceImpl implements RentCarService {
     public JSONObject getPersonalIncome(String userId){
         List<Income> incomeList = new ArrayList<>();
         incomeList = rentCarMapper.getPersonalIncome(userId);
-
+        if (incomeList.size() == 0 || incomeList.get(0).getTime() == null)
+            return new JSONObject();
         JSONObject json = new JSONObject();
         double allIncome = 0;
         for(Income data:incomeList){
