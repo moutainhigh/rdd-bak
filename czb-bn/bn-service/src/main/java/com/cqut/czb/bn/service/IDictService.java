@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IDictService {
 
-    PageInfo<Dict> selectDictList(PageDTO pageDTO);
+    PageInfo<Dict> selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO);
 
     List<Dict> selectCustomerServiceStaff();
 

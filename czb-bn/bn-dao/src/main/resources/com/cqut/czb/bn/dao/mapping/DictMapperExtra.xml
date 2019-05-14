@@ -15,7 +15,7 @@
     select 
     <include refid="Base_Column_List" />
     from czb_dict
-    where name like concat('', #{name,jdbcType=VARCHAR}, '%')
+    where name like concat('%', #{name,jdbcType=VARCHAR}, '%')
   </select>
   <select id="selectDictByName" resultMap="BaseResultMap" parameterType="java.lang.String">
     select

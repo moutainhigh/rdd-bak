@@ -35,9 +35,9 @@ public class DictController {
     }
 
     @RequestMapping(value = "/selectDictList",method = RequestMethod.GET)
-    public JSONResult selectDictList(PageDTO pageDTO){
+    public JSONResult selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO){
 
-        return new JSONResult(dictService.selectDictList(pageDTO));
+        return new JSONResult(dictService.selectDictList(dictInputDTO, pageDTO));
     }
 
     @RequestMapping(value = "/updateDict",method = RequestMethod.POST)

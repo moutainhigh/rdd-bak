@@ -20,9 +20,9 @@ public class DictServiceImpl implements IDictService {
     DictMapperExtra dictMapperExtra;
 
     @Override
-    public PageInfo<Dict> selectDictList(PageDTO pageDTO) {
+    public PageInfo<Dict> selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        List<Dict> dictList = dictMapperExtra.selectDict("");
+        List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO.getName());
         return new PageInfo<>(dictList);
     }
 
