@@ -52,7 +52,7 @@ public class AppBuyPetrolController {
         //检测今日是否已经购买了油卡或充值
         boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(user);
         if(isTodayHadBuy){//true
-            new JSONResult(ResponseCodeConstants.FAILURE, "今日已经购买了油卡");
+            new JSONResult(ResponseCodeConstants.FAILURE, "今日已经购买了油卡或充值，请明日再来");
         }
 
         //处理购油或充值

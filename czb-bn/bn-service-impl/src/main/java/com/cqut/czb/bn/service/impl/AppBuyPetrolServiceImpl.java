@@ -117,19 +117,22 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     @Override
     public boolean isTodayHadBuy(User user) {
         PetrolSalesRecords petrolSalesRecords=petrolSalesRecordsMapperExtra.selectPetrolSalesRecords(user.getUserId());
-        if(petrolSalesRecords==null)
+        if(petrolSalesRecords==null||petrolSalesRecords.getTransactionTime()==null)
+        {
+            System.out.println("今日是否买过油卡"+petrolSalesRecords==null);
             return false;
+        }
         else
         {
             Date date = new Date();
             DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
             System.out.println(df1.format(date));
-            if(df1.format(petrolSalesRecords.getTransactionTime())==df1.format(date)){
-                System.out.println("今日已经购买了油卡");
+            if(df1.format(petrolSalesRecords.getTransactionTime()).equals(df1.format(date))){
+                System.out.println("今日已经购买了油卡,或充值了一次，请明天再来");
                 return true;
             }
             else {
-                System.out.println("今日没有购买了油卡");
+                System.out.println("今日没有购买油卡");
                 return true;
             }
         }
@@ -147,7 +150,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     public String PurchaseControl(PetrolInputDTO petrolInputDTO) {
         //判断是哪种油卡
         if(petrolInputDTO.getPetrolKind()==0){//0代表国通卡
-            System.out.println("购买国通卡");
+            System.out.println("购买国通卡：0");
             Petrol petrol=PetrolCache.randomPetrol(petrolInputDTO); //随机获取一张卡
             if(petrol==null)
                 return "油卡申请失败，无此类油卡";
@@ -155,7 +158,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
             String buyPetrol=BuyPetrol(petrol,petrolInputDTO);//返回生成的支付单串
             return buyPetrol;
         }else if(petrolInputDTO.getPetrolKind()==1||petrolInputDTO.getPetrolKind()==2){
-            System.out.println("购买中石油1或中石化2"+petrolInputDTO.getPetrolKind());
+            System.out.println("购买中石油1或中石化2："+petrolInputDTO.getPetrolKind());
             //判断是否已经买了相应的卡
             Petrol petrol1= petrolMapperExtra.selectDifferentPetrol(petrolInputDTO);
             if(petrol1==null){//为空则没有购买过相应的卡————执行购买油卡
