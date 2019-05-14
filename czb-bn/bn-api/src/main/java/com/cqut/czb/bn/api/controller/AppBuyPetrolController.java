@@ -41,24 +41,24 @@ public class AppBuyPetrolController {
         petrolInputDTO.setOwnerId(user.getUserId());
         //防止数据为空
         if(petrolInputDTO==null||user==null){
-            new JSONResult(ResponseCodeConstants.FAILURE, "申请数据有误");
+            return new JSONResult(ResponseCodeConstants.FAILURE, "申请数据有误");
         }
         //检测是否有未完成的订单
         boolean isHave=  PetrolCache.isContainsNotPay(user.getUserId());
         if(!isHave){
-            new JSONResult(ResponseCodeConstants.FAILURE, "存在未完成的订单");
+            return new JSONResult(ResponseCodeConstants.FAILURE, "存在未完成的订单");
         }
 
         //检测今日是否已经购买了油卡或充值
         boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(user);
         if(isTodayHadBuy){//true
-            new JSONResult(ResponseCodeConstants.FAILURE, "今日已经购买了油卡或充值，请明日再来");
+            return new JSONResult(ResponseCodeConstants.FAILURE, "今日已经购买了油卡或充值，请明日再来");
         }
 
         //处理购油或充值
         String BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
         if(BuyPetrol==null){
-            new JSONResult(ResponseCodeConstants.FAILURE, "无法生成订单");
+            return new JSONResult(ResponseCodeConstants.FAILURE, "无法生成订单");
         }
         return new JSONResult(BuyPetrol);
     }
