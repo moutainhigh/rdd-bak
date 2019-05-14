@@ -9,6 +9,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -55,7 +56,7 @@ public class FanYongServiceImpl implements FanYongService {
         if (userIdUp1 != null) {//可能存在没有上级用户
             //对上级用户的操作
             oldUserIncomeInfoUp1 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp1);//查出原收益信息
-            //对用户收益信息表，对收益变更记录表进行操作
+            //对上级用户的收益信息表，收益变更记录表进行操作
             changeUserIncomeInfo(oldUserIncomeInfoUp1, money, actualPayment, userIdUp1, 1, fangyong1,orgId);
 
             userIdUp2 = userMapperExtra.selectUserId(userIdUp1);
@@ -63,7 +64,7 @@ public class FanYongServiceImpl implements FanYongService {
             {
                 //对上上级用户的操作
                 oldUserIncomeInfoUp2 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp2);//查出原收益信息
-                //对用户收益信息表，对收益变更记录表进行操作
+                //对上上级用户的收益信息表，收益变更记录表进行操作
                 changeUserIncomeInfo(oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2,orgId);
             }
         }
@@ -108,21 +109,21 @@ public class FanYongServiceImpl implements FanYongService {
             if (k == 1 || k == 2) {//本人不返佣
                 userIncomeInfo.setFanyongIncome(userIncomeInfo.getFanyongIncome() + money * FYrate);
                 if (userIncomeInfo.getShareIncome() == null)
-                    userIncomeInfo.setShareIncome(0.0);
+                    userIncomeInfo.setShareIncome(0.00);
             }
             if (k == 0) {
                 if (actualPayment > 0) {
-                    userIncomeInfo.setFanyongIncome(0.0);
-                    userIncomeInfo.setShareIncome(0.0);
+                    userIncomeInfo.setFanyongIncome(0.00);
+                    userIncomeInfo.setShareIncome(0.00);
                 } else if (actualPayment == 0) {
                     if (userIncomeInfo.getShareIncome() == null)
-                        userIncomeInfo.setShareIncome(0.0);
+                        userIncomeInfo.setShareIncome(0.00);
                     double fanyong = userIncomeInfo.getFanyongIncome();
                     if (fanyong - money >= 0)
                         userIncomeInfo.setFanyongIncome(fanyong - money);
                     else if (fanyong - money < 0) {
                         double shareIncome = userIncomeInfo.getShareIncome();
-                        userIncomeInfo.setFanyongIncome(0.0);
+                        userIncomeInfo.setFanyongIncome(0.00);
                         userIncomeInfo.setShareIncome(shareIncome - (money - fanyong));
                     }
                 }
@@ -150,12 +151,12 @@ public class FanYongServiceImpl implements FanYongService {
         incomeLog.setRecordId(StringUtil.createId());
         incomeLog.setType(type);//0为返佣
         if (olduserIncomeInfo == null) {
-            incomeLog.setBeforeChangeIncome(0.0);
+            incomeLog.setBeforeChangeIncome(0.00);
             incomeLog.setAmount(newuserIncomeInfo.getFanyongIncome() + newuserIncomeInfo.getShareIncome());
         } else {
             //处理可能没有数据的地方
             if (olduserIncomeInfo.getFanyongIncome() == null && olduserIncomeInfo.getShareIncome() == null)
-                incomeLog.setBeforeChangeIncome(0.0);
+                incomeLog.setBeforeChangeIncome(0.00);
             else if (olduserIncomeInfo.getFanyongIncome() == null && olduserIncomeInfo.getShareIncome() != null)
                 incomeLog.setBeforeChangeIncome(olduserIncomeInfo.getShareIncome());
             else if (olduserIncomeInfo.getFanyongIncome() != null && olduserIncomeInfo.getShareIncome() == null)
@@ -163,9 +164,14 @@ public class FanYongServiceImpl implements FanYongService {
             else
                 incomeLog.setBeforeChangeIncome(olduserIncomeInfo.getFanyongIncome() + olduserIncomeInfo.getShareIncome());
 
-            double i = newuserIncomeInfo.getFanyongIncome() + newuserIncomeInfo.getShareIncome() -
-                    (olduserIncomeInfo.getFanyongIncome() + olduserIncomeInfo.getShareIncome());
-            incomeLog.setAmount(i);
+            Double newIncome= newuserIncomeInfo.getFanyongIncome() + newuserIncomeInfo.getShareIncome();
+            Double oldIncome=olduserIncomeInfo.getFanyongIncome() + olduserIncomeInfo.getShareIncome();
+            BigDecimal bnewIncome = new BigDecimal(newIncome);
+            BigDecimal boldIncome = new BigDecimal(oldIncome);
+
+            double i = bnewIncome.subtract(boldIncome).doubleValue();
+
+            incomeLog.setAmount(Double.parseDouble(String.format("%.2f", i)));
             incomeLog.setCreateAt(new Date());
             incomeLog.setUpdateAt(new Date());
         }
