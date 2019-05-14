@@ -6,19 +6,21 @@ import net.sf.json.JSONObject;
 import java.util.List;
 
 public interface RentCarService {
+    // 获取个人收益记录
     PersonIncome getPersonIncome(String userId);
 
+    // 获取合同概要信息
     OneContractInfoDTO getOneContractInfo(String userId, String contractId);
 
+    // 个人租车服务，合同列表获取
     List<PersonalContractDTO> getPersonalContractList(String userId);
 
+    // 企业合同服务，合同列表获取
     List<CompanyContractInfoDTO> getCompanyContractList(String userId);
 
+    // 企业合同概要信息列表获取
     List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String fatherId);
 
-    int addCompanyContract(String userId, AddCompanyContractList addCompanyContractList);
-
-    int addPersonContract(String userId, String personId, String identifyCode);
-
+    // 获取个人收益
     JSONObject getPersonalIncome(String userId);
 }

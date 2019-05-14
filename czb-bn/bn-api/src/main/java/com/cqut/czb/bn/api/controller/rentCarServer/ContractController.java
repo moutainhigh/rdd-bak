@@ -115,19 +115,8 @@ public class ContractController {
     @RequestMapping(value = "/czContract", method= RequestMethod.POST)
     public JSONResult czContract(@RequestBody Principal principal, String contractId, String token){
         User user = (User)redisUtils.get(principal.getName());
-        JSONResult json = new JSONResult();
-        int code = contractService.czContract(contractId, token);
-        switch(code){
-            case 115:
-                json.setMessage("合同存证失败");
-                json.setCode(code);
-                break;
-            case 1:
-                json.setMessage("存证成功");
-                json.setCode(200);
-                break;
-        }
-        return json;
+//        return contractService.czContract(contractId, token);
+        return null;
     }
 
     /**
@@ -316,7 +305,6 @@ public class ContractController {
 //         noticeType为2时，此合同为签署完成状态
         if(info.getNoticeType() == 2)
             contractService.asynchronousInfo(info.getMap());
-
     }
 
     /**
@@ -400,6 +388,11 @@ public class ContractController {
         return  jsonResult;
     }
 
-
-
+    /**
+     * 企业合同为添加个人信息，删除初始化的合同记录
+     */
+    @RequestMapping(value = "/deleteContract", method = RequestMethod.POST)
+    public JSONResult deleteContract(@RequestBody ContractIdInfo contractId){
+        return  contractService.deleteContract(contractId.getContractId());
+    }
 }
