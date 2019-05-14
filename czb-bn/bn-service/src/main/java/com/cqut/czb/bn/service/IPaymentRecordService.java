@@ -6,10 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * 缴费记录
- * 
- * @author yuanding
- *
+ * 支付验证
+ * @author 陈德强
  */
 public interface IPaymentRecordService {
 

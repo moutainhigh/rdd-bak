@@ -115,7 +115,7 @@ public class AppPersonalCenterController {
      * 个人返佣信息记录
      */
     @RequestMapping(value = "/getFanYonginfo",method = RequestMethod.GET)
-    public JSONResult getFanYonginfo(Principal principal,@RequestBody MyIncomeLogDTO myIncomeLogDTO){
+    public JSONResult getFanYonginfo(Principal principal, MyIncomeLogDTO myIncomeLogDTO){
         User user = (User)redisUtils.get(principal.getName());
         if(user==null||myIncomeLogDTO==null){
             return null;

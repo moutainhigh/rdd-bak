@@ -42,10 +42,13 @@ public class StartInputPetrol  implements CommandLineRunner  {
                     String key=entry.getKey();
                     Petrol petrol=PetrolCache.currentPetrolMap.get(key);
                     if(petrol.getEndTime()==0||petrol.getEndTime()<=System.currentTimeMillis()){
+                        System.out.println("有油卡"+ PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
                         currentPetrol.remove();        //OK
                         petrol.setOwnerId("");//将用户id置为空
                         petrol.setEndTime(0);
                         PetrolCache.AllpetrolMap.put(petrol.getPetrolNum(),petrol);
+                        System.out.println("放回油卡，卡号："+petrol.getPetrolNum());
+                        System.out.println("有油卡"+ PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
                     }
                 }
             }
