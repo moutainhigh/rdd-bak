@@ -130,12 +130,12 @@ public class UserDetailServiceImpl implements UserDetailService {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                System.out.println("计时器起吊");
+                System.out.println("改变验证码状态计时器");
                 System.out.println(isSend);
                 //将所有的验证码的都改状态为失效
                 verificationCodeMapperExtra.updateVerificationCode(verificationCodeDTO);
             }
-        }, 300000);
+        }, 120000);
         return true;
     }
 

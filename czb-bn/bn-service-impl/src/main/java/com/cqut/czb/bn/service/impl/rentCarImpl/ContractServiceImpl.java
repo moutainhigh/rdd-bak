@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.rentCarImpl;
 
+import com.alibaba.fastjson.JSON;
 import com.cqut.czb.bn.dao.mapper.RentCarMapperExtra;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.ContractLog;
@@ -528,22 +529,28 @@ public class ContractServiceImpl implements ContractService{
         json.put("token", token);
 
         String response = new String();
-        String czId = new String();
+        String czId = null;
+        String msg = null;
         try{
             response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/cz", json, 1);
-            Map map = new HashMap();
-            map.put("a", response);
-            JSONObject json1 = new JSONObject();
-            json1.putAll(map);
-            czId = json1.getJSONObject("a").getJSONObject("data").getString("czId");
+
+            com.alibaba.fastjson.JSONObject json1 = JSON.parseObject(response);
+            com.alibaba.fastjson.JSONObject dataJo = json1.getJSONObject("data");
+            czId = dataJo.getString("czId");
+            msg = dataJo.getString("msg");
         } catch(Exception e){
-            System.out.println("存证信息：");
+            System.out.println("存证信息：" + msg);
             System.out.println(response);
         }
 
-        int czSuccess = contractMapper.insertCZId(czId, contractId);
-        if (czSuccess != 1)
-            System.out.println("未插入合同存证id");
+        if(!StringUtil.isNullOrEmpty(czId)){
+            int czSuccess = contractMapper.insertCZId(czId, contractId);
+            if (czSuccess != 1) {
+                System.out.println("插入合同存证id失败，云合同返回信息：" + msg + "czId: " + czId + "contractId: " + contractId);
+            }
+        }else {
+            System.out.println("msg: " + msg);
+        }
 
     }
 
@@ -841,18 +848,21 @@ public class ContractServiceImpl implements ContractService{
      */
     @Override
     public void asynchronousInfo(SignerMap signerMap){
-        Long contractId = signerMap.getData().getId();
-        // 将签署完成合同的id传入mapper，修改合同记录的状态
-        if(contractId != null){
-            // 改变合同状态
-            contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
-            // 改变车辆服务表中的签约状态
-            contractMapper.updateCarsPersonsStatus(contractId.toString());
-            // 进行合同存证,并插入存证id
-            czContract(contractId.toString(), getToken());
-            // 查看印章个数，进行印章清除，只保留用户一个印章
-            checkMoulages(contractId.toString());
+        if(signerMap != null && signerMap.getData() !=null){
+            Long contractId = signerMap.getData().getId();
+            // 将签署完成合同的id传入mapper，修改合同记录的状态
+            if(contractId != null){
+                // 改变合同状态
+                contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
+                // 改变车辆服务表中的签约状态
+                contractMapper.updateCarsPersonsStatus(contractId.toString());
+                // 进行合同存证,并插入存证id
+                czContract(contractId.toString(), getToken());
+                // 查看印章个数，进行印章清除，只保留用户一个印章
+                checkMoulages(contractId.toString());
+            }
         }
+
     }
 
     /**

@@ -302,8 +302,7 @@ public class ContractController {
     @RequestMapping(value = "/getAsynchronousInfo", method = RequestMethod.POST)
     public void getAsynchronousInfo(@RequestBody AsynchronousInfo info){
         System.out.println(info.toString());
-//         noticeType为2时，此合同为签署完成状态
-        if(info.getNoticeType() == 2)
+        if(info != null && info.getNoticeType() == 2)
             contractService.asynchronousInfo(info.getMap());
     }
 
