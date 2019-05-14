@@ -18,10 +18,10 @@ public interface AppBuyPetrolService {
 
     /**
      * 判断今日是否购买了油卡
-     * @param user
+     * @param petrolInputDTO
      * @return
      */
-    boolean isTodayHadBuy(User user);
+    boolean isTodayHadBuy(PetrolInputDTO petrolInputDTO);
 
     /**
      * 判断是否购买了相应类型的油卡

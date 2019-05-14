@@ -279,11 +279,12 @@ INNER JOIN (
         where is_recharged = 0
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
-    <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM czb_petrol_sales_records
-        WHERE buyer_id=#{userId,jdbcType=VARCHAR}
+        WHERE buyer_id=#{ownerId,jdbcType=VARCHAR}
+        AND petrol_kind=#{petrolKind,jdbcType = INTEGER}
         ORDER BY transaction_time DESC
         LIMIT 1
     </select>

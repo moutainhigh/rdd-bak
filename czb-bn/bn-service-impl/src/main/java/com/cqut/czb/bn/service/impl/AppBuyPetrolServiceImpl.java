@@ -115,8 +115,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     }
 
     @Override
-    public boolean isTodayHadBuy(User user) {
-        PetrolSalesRecords petrolSalesRecords=petrolSalesRecordsMapperExtra.selectPetrolSalesRecords(user.getUserId());
+    public boolean isTodayHadBuy(PetrolInputDTO petrolInputDTO) {
+        PetrolSalesRecords petrolSalesRecords=petrolSalesRecordsMapperExtra.selectPetrolSalesRecords(petrolInputDTO);
         if(petrolSalesRecords==null||petrolSalesRecords.getTransactionTime()==null)
         {
             System.out.println("今日是否买过油卡"+petrolSalesRecords==null);

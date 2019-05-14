@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
@@ -25,5 +26,5 @@ public interface PetrolSalesRecordsMapperExtra {
 
     int recharge(@Param("recordId") String recordId);
 
-    PetrolSalesRecords selectPetrolSalesRecords(@Param("userId") String userId );
+    PetrolSalesRecords selectPetrolSalesRecords(PetrolInputDTO petrolInputDTO);
 }

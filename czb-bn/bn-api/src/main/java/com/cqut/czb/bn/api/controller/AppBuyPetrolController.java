@@ -50,7 +50,7 @@ public class AppBuyPetrolController {
         }
 
         //检测今日是否已经购买了油卡或充值
-        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(user);
+        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
         if(isTodayHadBuy){//true
             return new JSONResult(ResponseCodeConstants.FAILURE, "今日已经购买了油卡或充值，请明日再来");
         }
