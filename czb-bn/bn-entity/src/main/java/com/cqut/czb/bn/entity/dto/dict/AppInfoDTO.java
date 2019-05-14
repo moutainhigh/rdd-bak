@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto;
+package com.cqut.czb.bn.entity.dto.dict;
 
 public class AppInfoDTO {
 

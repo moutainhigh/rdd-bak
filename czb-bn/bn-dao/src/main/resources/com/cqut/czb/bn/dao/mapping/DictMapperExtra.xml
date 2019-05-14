@@ -23,4 +23,47 @@
     from czb_dict
     where name like concat('', #{name,jdbcType=VARCHAR}, '%')
   </select>
+  <insert id="insertDict" parameterType="com.cqut.czb.bn.entity.dto.dict.DictInputDTO" >
+    insert into czb_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dictId != null and dictId != ''" >
+        dict_id,
+      </if>
+      <if test="name != null and name != ''" >
+        name,
+      </if>
+      <if test="content != null and content != ''" >
+        content,
+      </if>
+        create_at,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dictId != null and dictId != ''" >
+        #{dictId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null and name != ''" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null and content != ''" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      now(),
+    </trim>
+  </insert>
+  <update id="updateDict" parameterType="com.cqut.czb.bn.entity.dto.dict.DictInputDTO" >
+    update czb_dict
+    <set >
+      <if test="name != null and name != ''" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null and content != ''" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dict_id = #{dictId,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteDict" parameterType="java.lang.String" >
+    delete from czb_dict
+    where dict_id = #{dictId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

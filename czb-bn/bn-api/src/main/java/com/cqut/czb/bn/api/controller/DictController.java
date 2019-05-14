@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,26 +35,26 @@ public class DictController {
     }
 
     @RequestMapping(value = "/selectDictList",method = RequestMethod.GET)
-    public JSONResult selectDictList(){
+    public JSONResult selectDictList(PageDTO pageDTO){
 
-        return new JSONResult(dictService.selectDictList());
+        return new JSONResult(dictService.selectDictList(pageDTO));
     }
 
     @RequestMapping(value = "/updateDict",method = RequestMethod.POST)
-    public JSONResult updateDict(){
+    public JSONResult updateDict(DictInputDTO dictInputDTO){
 
-        return new JSONResult(dictService.selectCustomerServiceStaff());
+        return new JSONResult(dictService.updateDict(dictInputDTO));
     }
 
     @RequestMapping(value = "/deleteDict",method = RequestMethod.POST)
-    public JSONResult deleteDict(){
+    public JSONResult deleteDict(DictInputDTO dictInputDTO){
 
-        return new JSONResult(dictService.selectCustomerServiceStaff());
+        return new JSONResult(dictService.deleteDict(dictInputDTO));
     }
 
     @RequestMapping(value = "/insertDict",method = RequestMethod.POST)
-    public JSONResult insertDict(){
+    public JSONResult insertDict(DictInputDTO dictInputDTO){
 
-        return new JSONResult(dictService.selectCustomerServiceStaff());
+        return new JSONResult(dictService.insertDict(dictInputDTO));
     }
 }

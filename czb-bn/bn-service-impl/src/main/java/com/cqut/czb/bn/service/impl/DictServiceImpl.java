@@ -1,9 +1,13 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
-import com.cqut.czb.bn.entity.dto.AppInfoDTO;
+import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.dict.AppInfoDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.service.IDictService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +20,10 @@ public class DictServiceImpl implements IDictService {
     DictMapperExtra dictMapperExtra;
 
     @Override
-    public List<Dict> selectDictList() {
-
-        return dictMapperExtra.selectDict("");
+    public PageInfo<Dict> selectDictList(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        List<Dict> dictList = dictMapperExtra.selectDict("");
+        return new PageInfo<>(dictList);
     }
 
     @Override
@@ -37,10 +42,10 @@ public class DictServiceImpl implements IDictService {
                 appInfoDTO.setVersion(dict.getContent());
             }
             if("android_description".equals(dict.getName())) {
-                appInfoDTO.setVersion(dict.getContent());
+                appInfoDTO.setDescription(dict.getContent());
             }
             if("android_url".equals(dict.getName())) {
-                appInfoDTO.setVersion(dict.getContent());
+                appInfoDTO.setUrl(dict.getContent());
             }
         }
         return appInfoDTO;
@@ -56,12 +61,27 @@ public class DictServiceImpl implements IDictService {
                 appInfoDTO.setVersion(dict.getContent());
             }
             if("ios_description".equals(dict.getName())) {
-                appInfoDTO.setVersion(dict.getContent());
+                appInfoDTO.setDescription(dict.getContent());
             }
             if("ios_url".equals(dict.getName())) {
-                appInfoDTO.setVersion(dict.getContent());
+                appInfoDTO.setUrl(dict.getContent());
             }
         }
         return appInfoDTO;
+    }
+
+    @Override
+    public boolean updateDict(DictInputDTO dictInputDTO) {
+        return dictMapperExtra.updateDict(dictInputDTO) > 0;
+    }
+
+    @Override
+    public boolean deleteDict(DictInputDTO dictInputDTO) {
+        return dictMapperExtra.deleteDict(dictInputDTO.getDictId()) > 0;
+    }
+
+    @Override
+    public boolean insertDict(DictInputDTO dictInputDTO) {
+        return dictMapperExtra.insertDict(dictInputDTO) > 0;
     }
 }
