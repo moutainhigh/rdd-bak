@@ -167,6 +167,7 @@
       other_income AS otherIncome
     from czb_user_income_info
     where user_id = #{userId,jdbcType=VARCHAR}
+    LIMIT 1;
   </select>
 
 

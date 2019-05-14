@@ -66,7 +66,6 @@ public class RentCarController {
     /**
      * 企业合同概要信息列表获取
      */
-    // TODO 谭深化——此返回列表中的租借有问题，应该是套餐金额
     @RequestMapping(value = "/getCompanyPersonList", method = RequestMethod.POST)
     public JSONResult getCompanyPersonList(@RequestBody ContractIdInfo idInfo){
         return new JSONResult(rentCarService.getOneCompanyContractInfo(idInfo.getContractId()));
