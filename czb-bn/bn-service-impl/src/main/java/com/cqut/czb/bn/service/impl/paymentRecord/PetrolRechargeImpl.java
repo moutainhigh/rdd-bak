@@ -28,7 +28,6 @@ public class PetrolRechargeImpl implements PetrolRecharge {
                                        String ownerId, double actualPayment,String orgId)
     {
         //通过油卡号查出用户买的油卡信息
-
         Petrol petrol= new Petrol();
         petrol.setOwnerId(ownerId);
         petrol.setPetrolKind(petrolKind);
@@ -49,14 +48,14 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
         petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
         petrolSalesRecords.setThirdOrderId(orgId);
-        petrolSalesRecords.setRecordType(1);
+        petrolSalesRecords.setRecordType(petrol.getPetrolType());
         petrolSalesRecords.setIsRecharged(1);
         boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
         System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
 
         //开始返佣
         System.out.println("油卡充值开始返佣");
-        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment);
+        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment,orgId);
 
         if(beginFanYong==true&&insertPetrolSalesRecords==true)
             return true;

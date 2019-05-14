@@ -1,11 +1,15 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
+import com.cqut.czb.bn.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,11 @@ public class AppHomePageController {
 
     @Autowired
     AppHomePageService appHomePageService;
+
+    //测试
+    @Autowired
+    IDictService dictService;
+
 
     /**
      * app广告展示
@@ -79,9 +88,12 @@ public class AppHomePageController {
      */
     @RequestMapping(value ="/selectPetrolInfoDTO",method = RequestMethod.GET)
     public JSONResult selectPetrolInfoDTO(){
-        Date date = new Date();
+        Date date1 = new Date();
         DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
-        System.out.println(df1.format(date));
+        System.out.println(df1.format(date1));
+        Date date2=new Date();
+        DateFormat dfe2 = DateFormat.getDateInstance();//日期格式，精确到日
+        System.out.println(dfe2.format(date2).equals(df1.format(date1)));
         return new JSONResult<List<PetrolInfoDTO>>(appHomePageService.selectPetrolInfoDTO());
     }
 }
