@@ -181,7 +181,8 @@
             p.person_id_card AS carId,
             p.is_signed AS isSign,
             p.plan_id as rent,
-            c.rent realRent
+            c.rent realRent,
+            p.identify_code identifyCode
         FROM
             czb_contract_records c,
             czb_cars_persons p

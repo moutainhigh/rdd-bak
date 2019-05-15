@@ -29,12 +29,12 @@ public class OneContractInfoDTO {
     private BigDecimal rentMoney;
 
     /**
-     * 状态 0
+     * 状态 0 在租 1失效 2未提交
      */
     private Integer status;
 
     /**
-     * 认证码 0 在租 1失效 2未提交
+     * 认证码
      */
     private String identifyCode;
 

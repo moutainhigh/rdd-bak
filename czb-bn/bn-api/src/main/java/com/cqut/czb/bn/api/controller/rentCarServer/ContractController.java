@@ -394,4 +394,12 @@ public class ContractController {
     public JSONResult deleteContract(@RequestBody ContractIdInfo contractId){
         return  contractService.deleteContract(contractId.getContractId());
     }
+
+    /**
+     * 根据合同id，查找signerId和thirdContractId。
+     */
+    @RequestMapping(value = "/getSignerIdAndYunContractId", method = RequestMethod.POST)
+    public JSONResult getSignerIdAndYunContractId(@RequestBody ContractIdInfo info){
+        return contractService.getSignerIdAndYunContractId(info.getContractId());
+    }
 }

@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
@@ -550,9 +551,11 @@ public class ContractServiceImpl implements ContractService{
         try{
             response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/cz", json, 1);
 
-            com.alibaba.fastjson.JSONObject json1 = JSON.parseObject(response);
-            com.alibaba.fastjson.JSONObject dataJo = json1.getJSONObject("data");
-            czId = dataJo.getString("czId");
+            com.alibaba.fastjson.JSONObject jsonData = JSON.parseObject(response);
+            com.alibaba.fastjson.JSONObject dataJo = jsonData.getJSONObject("data");
+            if (jsonData.getInteger("code") == 200){
+                czId = dataJo.getString("czId");
+            }
             msg = dataJo.getString("msg");
         } catch(Exception e){
             System.out.println("存证信息：" + msg);
@@ -871,10 +874,10 @@ public class ContractServiceImpl implements ContractService{
                 contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
                 // 改变车辆服务表中的签约状态
                 contractMapper.updateCarsPersonsStatus(contractId.toString());
-//                // 进行合同存证,并插入存证id
-//                czContract(contractId.toString(), getToken());
-//                // 查看印章个数，进行印章清除，只保留用户一个印章
-//                checkMoulages(contractId.toString());
+                // 进行合同存证,并插入存证id
+                czContract(contractId.toString(), getToken());
+                // 查看印章个数，进行印章清除，只保留用户一个印章
+                checkMoulages(contractId.toString());
             }
         }
 
@@ -1046,5 +1049,19 @@ public class ContractServiceImpl implements ContractService{
             return new JSONResult("删除合同记录失败", 500);
 
         return new JSONResult("删除合同记录成功", 200);
+    }
+
+    /**
+     * 根据合同id，查找signerId和thirdContractId
+     */
+    @Override
+    public JSONResult getSignerIdAndYunContractId(String contractId) {
+        SignerIdAndContractId info = contractMapper.getSignerIdAndYunContractId(contractId);
+        if (info == null || StringUtil.isNullOrEmpty(info.getContractId()) || StringUtil.isNullOrEmpty(info.getSignerId()))
+            return new JSONResult("获取失败", 500);
+
+        info.setToken(getToken());
+
+        return new JSONResult("获取成功", 200, info);
     }
 }

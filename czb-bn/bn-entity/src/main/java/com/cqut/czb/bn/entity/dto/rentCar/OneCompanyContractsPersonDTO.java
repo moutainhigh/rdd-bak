@@ -29,6 +29,17 @@ public class OneCompanyContractsPersonDTO {
      */
     private Integer isSign;
 
+    // 员工认证码
+    private String identifyCode;
+
+    public String getIdentifyCode() {
+        return identifyCode;
+    }
+
+    public void setIdentifyCode(String identifyCode) {
+        this.identifyCode = identifyCode;
+    }
+
     public String getRealRent() {
         return realRent;
     }
