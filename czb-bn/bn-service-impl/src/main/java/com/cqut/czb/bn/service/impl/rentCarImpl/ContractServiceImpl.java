@@ -550,9 +550,11 @@ public class ContractServiceImpl implements ContractService{
         try{
             response = HttpClient4.doPost("https://api.yunhetong.com/api/contract/cz", json, 1);
 
-            com.alibaba.fastjson.JSONObject json1 = JSON.parseObject(response);
-            com.alibaba.fastjson.JSONObject dataJo = json1.getJSONObject("data");
-            czId = dataJo.getString("czId");
+            com.alibaba.fastjson.JSONObject jsonData = JSON.parseObject(response);
+            com.alibaba.fastjson.JSONObject dataJo = jsonData.getJSONObject("data");
+            if (jsonData.getInteger("code") == 200){
+                czId = dataJo.getString("czId");
+            }
             msg = dataJo.getString("msg");
         } catch(Exception e){
             System.out.println("存证信息：" + msg);
@@ -871,10 +873,10 @@ public class ContractServiceImpl implements ContractService{
                 contractMapper.updateContractStatus(contractId.toString(), ((Integer)(signerMap.getData().getStatusCode() - 1)).toString() );
                 // 改变车辆服务表中的签约状态
                 contractMapper.updateCarsPersonsStatus(contractId.toString());
-//                // 进行合同存证,并插入存证id
-//                czContract(contractId.toString(), getToken());
-//                // 查看印章个数，进行印章清除，只保留用户一个印章
-//                checkMoulages(contractId.toString());
+                // 进行合同存证,并插入存证id
+                czContract(contractId.toString(), getToken());
+                // 查看印章个数，进行印章清除，只保留用户一个印章
+                checkMoulages(contractId.toString());
             }
         }
 
