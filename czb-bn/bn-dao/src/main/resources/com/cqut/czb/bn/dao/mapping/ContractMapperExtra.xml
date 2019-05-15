@@ -239,4 +239,16 @@
         WHERE
             third_contract_num = #{thirdContractId}
     </select>
+
+    <!--根据合同id，查找signerId和thirdContractId-->
+    <select id="getSignerIdAndYunContractId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId" parameterType="java.lang.String">
+        SELECT
+            usr.user_yun_id signerId,
+            ccr.third_contract_num contractId
+        FROM
+            czb_user usr
+        LEFT JOIN czb_contract_records ccr ON ccr.user_id = usr.user_id
+        WHERE
+            ccr.record_id = #{contractId}
+    </select>
 </mapper>

@@ -75,4 +75,7 @@ public interface ContractService {
     // 企业合同为添加个人信息，删除初始化的合同记录
     JSONResult deleteContract(String contractId);
 
+    // 根据合同id，查找signerId和thirdContractId
+    JSONResult getSignerIdAndYunContractId(String contractId);
+
 }

@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
@@ -1048,5 +1049,19 @@ public class ContractServiceImpl implements ContractService{
             return new JSONResult("删除合同记录失败", 500);
 
         return new JSONResult("删除合同记录成功", 200);
+    }
+
+    /**
+     * 根据合同id，查找signerId和thirdContractId
+     */
+    @Override
+    public JSONResult getSignerIdAndYunContractId(String contractId) {
+        SignerIdAndContractId info = contractMapper.getSignerIdAndYunContractId(contractId);
+        if (info == null || StringUtil.isNullOrEmpty(info.getContractId()) || StringUtil.isNullOrEmpty(info.getSignerId()))
+            return new JSONResult("获取失败", 500);
+
+        info.setToken(getToken());
+
+        return new JSONResult("获取成功", 200, info);
     }
 }

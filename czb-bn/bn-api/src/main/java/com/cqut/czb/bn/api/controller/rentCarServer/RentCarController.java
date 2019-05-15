@@ -35,7 +35,7 @@ public class RentCarController {
     }
 
     /**
-     * 获取合同概要信息
+     * 获取个人合同概要信息
      * @param oneContractInfoInputDTO
      * @return JSONResult
      */

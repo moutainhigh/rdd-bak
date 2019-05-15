@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPer
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import io.swagger.models.auth.In;
 import net.sf.json.JSONObject;
@@ -86,4 +87,7 @@ public interface ContractMapperExtra {
     int insertCZId(@Param("czId") String czId, @Param("contractId") String contractId);
 
     String getUserId(@Param("thirdContractId") String thirdContractId);
+
+    // 根据合同id，查找signerId和thirdContractId
+    SignerIdAndContractId getSignerIdAndYunContractId(@Param("contractId") String contractId);
 }
