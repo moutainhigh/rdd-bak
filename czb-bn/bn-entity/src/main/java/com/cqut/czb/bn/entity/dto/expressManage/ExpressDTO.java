@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto;
+package com.cqut.czb.bn.entity.dto.expressManage;
 
 import java.util.Date;
 
