@@ -13,7 +13,7 @@
     <result column="is_signed" property="isSigned" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="identify_code" property="identifyCode" jdbcType="TIMESTAMP" />
+    <result column="identify_code" property="identifyCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     person_car_id, person_name, person_id_card, car_model, car_license, contract_record_id, 
@@ -38,7 +38,7 @@
     values (#{personCarId,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, #{personIdCard,jdbcType=VARCHAR}, 
       #{carModel,jdbcType=VARCHAR}, #{carLicense,jdbcType=VARCHAR}, #{contractRecordId,jdbcType=VARCHAR}, 
       #{planId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{isSigned,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{identifyCode,jdbcType=TIMESTAMP}
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{identifyCode,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.CarsPersons" >
@@ -116,7 +116,7 @@
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
       <if test="identifyCode != null" >
-        #{identifyCode,jdbcType=TIMESTAMP},
+        #{identifyCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -154,7 +154,7 @@
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
       <if test="identifyCode != null" >
-        identify_code = #{identifyCode,jdbcType=TIMESTAMP},
+        identify_code = #{identifyCode,jdbcType=VARCHAR},
       </if>
     </set>
     where person_car_id = #{personCarId,jdbcType=VARCHAR}
@@ -171,7 +171,7 @@
       is_signed = #{isSigned,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      identify_code = #{identifyCode,jdbcType=TIMESTAMP}
+      identify_code = #{identifyCode,jdbcType=VARCHAR}
     where person_car_id = #{personCarId,jdbcType=VARCHAR}
   </update>
 </mapper>

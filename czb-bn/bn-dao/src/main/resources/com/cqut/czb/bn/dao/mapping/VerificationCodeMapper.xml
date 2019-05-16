@@ -1,100 +1,100 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.VerificationCodeMapper" >
-   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.VerificationCode" >
-      <id column="verification_code_id" property="verificationCodeId" jdbcType="CHAR" />
-      <result column="user_account" property="userAccount" jdbcType="CHAR" />
-      <result column="content" property="content" jdbcType="CHAR" />
-      <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-      <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-      <result column="state" property="state" jdbcType="TINYINT" />
-   </resultMap>
-   <sql id="Base_Column_List" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.VerificationCode" >
+    <id column="verification_code_id" property="verificationCodeId" jdbcType="CHAR" />
+    <result column="user_account" property="userAccount" jdbcType="CHAR" />
+    <result column="content" property="content" jdbcType="CHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
     verification_code_id, user_account, content, create_at, update_at, state
   </sql>
-   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-      select
-      <include refid="Base_Column_List" />
-      from czb_verification_code
-      where verification_code_id = #{verificationCodeId,jdbcType=CHAR}
-   </select>
-   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_verification_code
+    where verification_code_id = #{verificationCodeId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_verification_code
     where verification_code_id = #{verificationCodeId,jdbcType=CHAR}
   </delete>
-   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
-    insert into czb_verification_code (verification_code_id, user_account, content,
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
+    insert into czb_verification_code (verification_code_id, user_account, content, 
       create_at, update_at, state
       )
-    values (#{verificationCodeId,jdbcType=CHAR}, #{userAccount,jdbcType=CHAR}, #{content,jdbcType=CHAR},
+    values (#{verificationCodeId,jdbcType=CHAR}, #{userAccount,jdbcType=CHAR}, #{content,jdbcType=CHAR}, 
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{state,jdbcType=TINYINT}
       )
   </insert>
-   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
-      insert into czb_verification_code
-      <trim prefix="(" suffix=")" suffixOverrides="," >
-         <if test="verificationCodeId != null" >
-            verification_code_id,
-         </if>
-         <if test="userAccount != null" >
-            user_account,
-         </if>
-         <if test="content != null" >
-            content,
-         </if>
-         <if test="createAt != null" >
-            create_at,
-         </if>
-         <if test="updateAt != null" >
-            update_at,
-         </if>
-         <if test="state != null" >
-            state,
-         </if>
-      </trim>
-      <trim prefix="values (" suffix=")" suffixOverrides="," >
-         <if test="verificationCodeId != null" >
-            #{verificationCodeId,jdbcType=CHAR},
-         </if>
-         <if test="userAccount != null" >
-            #{userAccount,jdbcType=CHAR},
-         </if>
-         <if test="content != null" >
-            #{content,jdbcType=CHAR},
-         </if>
-         <if test="createAt != null" >
-            #{createAt,jdbcType=TIMESTAMP},
-         </if>
-         <if test="updateAt != null" >
-            #{updateAt,jdbcType=TIMESTAMP},
-         </if>
-         <if test="state != null" >
-            #{state,jdbcType=TINYINT},
-         </if>
-      </trim>
-   </insert>
-   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
-      update czb_verification_code
-      <set >
-         <if test="userAccount != null" >
-            user_account = #{userAccount,jdbcType=CHAR},
-         </if>
-         <if test="content != null" >
-            content = #{content,jdbcType=CHAR},
-         </if>
-         <if test="createAt != null" >
-            create_at = #{createAt,jdbcType=TIMESTAMP},
-         </if>
-         <if test="updateAt != null" >
-            update_at = #{updateAt,jdbcType=TIMESTAMP},
-         </if>
-         <if test="state != null" >
-            state = #{state,jdbcType=TINYINT},
-         </if>
-      </set>
-      where verification_code_id = #{verificationCodeId,jdbcType=CHAR}
-   </update>
-   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
+    insert into czb_verification_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="verificationCodeId != null" >
+        verification_code_id,
+      </if>
+      <if test="userAccount != null" >
+        user_account,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="verificationCodeId != null" >
+        #{verificationCodeId,jdbcType=CHAR},
+      </if>
+      <if test="userAccount != null" >
+        #{userAccount,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=CHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
+    update czb_verification_code
+    <set >
+      <if test="userAccount != null" >
+        user_account = #{userAccount,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=CHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=TINYINT},
+      </if>
+    </set>
+    where verification_code_id = #{verificationCodeId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.VerificationCode" >
     update czb_verification_code
     set user_account = #{userAccount,jdbcType=CHAR},
       content = #{content,jdbcType=CHAR},

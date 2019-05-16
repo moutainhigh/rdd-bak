@@ -17,6 +17,11 @@
     <result column="pay_total_money" property="payTotalMoney" jdbcType="DOUBLE" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="contract_father_id" property="contractFatherId" jdbcType="VARCHAR" />
+    <result column="witness_id" property="witnessId" jdbcType="VARCHAR" />
+    <result column="bank_of_deposit" property="bankOfDeposit" jdbcType="VARCHAR" />
+    <result column="bank_account_num" property="bankAccountNum" jdbcType="VARCHAR" />
+    <result column="bank_user_name" property="bankUserName" jdbcType="VARCHAR" />
   </resultMap>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
     insert into czb_contract_records (record_id, signed_time, user_id, 
@@ -24,13 +29,17 @@
       contract_state, contract_type, rent, 
       third_contract_num, got_total_money, judge_user_id, 
       judge_time, pay_total_money, create_at, 
-      update_at)
+      update_at, contract_father_id, witness_id, 
+      bank_of_deposit, bank_account_num, bank_user_name
+      )
     values (#{recordId,jdbcType=VARCHAR}, #{signedTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, 
       #{contractStartTime,jdbcType=TIMESTAMP}, #{contractEndTime,jdbcType=TIMESTAMP}, 
       #{contractState,jdbcType=INTEGER}, #{contractType,jdbcType=INTEGER}, #{rent,jdbcType=DOUBLE}, 
       #{thirdContractNum,jdbcType=VARCHAR}, #{gotTotalMoney,jdbcType=DOUBLE}, #{judgeUserId,jdbcType=VARCHAR}, 
       #{judgeTime,jdbcType=TIMESTAMP}, #{payTotalMoney,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{updateAt,jdbcType=TIMESTAMP}, #{contractFatherId,jdbcType=VARCHAR}, #{witnessId,jdbcType=VARCHAR}, 
+      #{bankOfDeposit,jdbcType=VARCHAR}, #{bankAccountNum,jdbcType=VARCHAR}, #{bankUserName,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
     insert into czb_contract_records
@@ -80,6 +89,21 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="contractFatherId != null" >
+        contract_father_id,
+      </if>
+      <if test="witnessId != null" >
+        witness_id,
+      </if>
+      <if test="bankOfDeposit != null" >
+        bank_of_deposit,
+      </if>
+      <if test="bankAccountNum != null" >
+        bank_account_num,
+      </if>
+      <if test="bankUserName != null" >
+        bank_user_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -126,6 +150,21 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractFatherId != null" >
+        #{contractFatherId,jdbcType=VARCHAR},
+      </if>
+      <if test="witnessId != null" >
+        #{witnessId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankOfDeposit != null" >
+        #{bankOfDeposit,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNum != null" >
+        #{bankAccountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankUserName != null" >
+        #{bankUserName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

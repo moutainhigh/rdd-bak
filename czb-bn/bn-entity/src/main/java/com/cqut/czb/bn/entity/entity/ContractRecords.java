@@ -33,6 +33,16 @@ public class ContractRecords {
 
     private Date updateAt;
 
+    private String contractFatherId;
+
+    private String witnessId;
+
+    private String bankOfDeposit;
+
+    private String bankAccountNum;
+
+    private String bankUserName;
+
     public String getRecordId() {
         return recordId;
     }
@@ -151,5 +161,45 @@ public class ContractRecords {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getContractFatherId() {
+        return contractFatherId;
+    }
+
+    public void setContractFatherId(String contractFatherId) {
+        this.contractFatherId = contractFatherId == null ? null : contractFatherId.trim();
+    }
+
+    public String getWitnessId() {
+        return witnessId;
+    }
+
+    public void setWitnessId(String witnessId) {
+        this.witnessId = witnessId == null ? null : witnessId.trim();
+    }
+
+    public String getBankOfDeposit() {
+        return bankOfDeposit;
+    }
+
+    public void setBankOfDeposit(String bankOfDeposit) {
+        this.bankOfDeposit = bankOfDeposit == null ? null : bankOfDeposit.trim();
+    }
+
+    public String getBankAccountNum() {
+        return bankAccountNum;
+    }
+
+    public void setBankAccountNum(String bankAccountNum) {
+        this.bankAccountNum = bankAccountNum == null ? null : bankAccountNum.trim();
+    }
+
+    public String getBankUserName() {
+        return bankUserName;
+    }
+
+    public void setBankUserName(String bankUserName) {
+        this.bankUserName = bankUserName == null ? null : bankUserName.trim();
     }
 }

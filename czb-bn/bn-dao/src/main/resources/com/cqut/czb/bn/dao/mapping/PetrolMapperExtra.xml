@@ -173,7 +173,7 @@
   <!--改变油卡状态-->
   <update id="changePetrolState" parameterType="java.lang.String">
     update czb_petrol <set>
-    petrol_state = #{state,jdbcType = INTEGER}
+    state = #{state,jdbcType = INTEGER}
   </set>
     <where>
       petrol_id in
@@ -188,20 +188,20 @@
   <update id="saleAllPetrol" parameterType="java.lang.String">
     update czb_petrol
     <set>
-      petrol_state = 1
+      state = 1
     </set>
     <where>
-      and petrol_state in (-1,0)
+      and state in (-1,0)
     </where>
   </update>
 
   <update id="notSaleAllPetrol" parameterType="java.lang.String">
     update czb_petrol
     <set>
-      petrol_state = -1
+      state = -1
     </set>
     <where>
-      and petrol_state = 1
+      and state = 1
     </where>
   </update>
 

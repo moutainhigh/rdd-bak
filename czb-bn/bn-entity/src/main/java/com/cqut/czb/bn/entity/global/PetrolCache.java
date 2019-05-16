@@ -71,6 +71,7 @@ public class PetrolCache {
         }
         System.out.println("卡号为： " + petrolNum + "不存在");
         return false;
+
     }
 
 
