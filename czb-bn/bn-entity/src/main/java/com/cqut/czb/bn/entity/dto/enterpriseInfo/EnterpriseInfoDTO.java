@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto;
+package com.cqut.czb.bn.entity.dto.enterpriseInfo;
 
 import java.util.Date;
 
@@ -91,6 +91,14 @@ public class EnterpriseInfoDTO {
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public Integer getTotalContract() {
+        return totalContract;
+    }
+
+    public void setTotalContract(Integer totalContract) {
+        this.totalContract = totalContract;
     }
 
     public Date getCreateAt() {

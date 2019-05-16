@@ -15,6 +15,8 @@ public class DeliveryInput {
     private String deliveryNum;
 
     private String deliveryCompany;
+//    //京东物流查询专用
+//    private String customerName;
 
     private String ids;
 
@@ -78,6 +80,14 @@ public class DeliveryInput {
         this.ids = ids;
     }
 
+//    public String getCustomerName() {
+//        return customerName;
+//    }
+
+//    public void setCustomerName(String customerName) {
+//        this.customerName = customerName;
+//    }
+//
     public String getStartTime() {
         return startTime;
     }

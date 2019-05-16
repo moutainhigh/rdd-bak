@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.cqut.czb.bn.entity.dto.ExpressDTO;
+import com.cqut.czb.bn.entity.dto.expressManage.ExpressDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.ExpressService;
 import org.springframework.beans.factory.annotation.Autowired;

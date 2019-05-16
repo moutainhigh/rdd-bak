@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
-import com.cqut.czb.bn.entity.dto.ExpressDTO;
-import com.github.pagehelper.PageInfo;
+import com.cqut.czb.bn.entity.dto.expressManage.ExpressDTO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

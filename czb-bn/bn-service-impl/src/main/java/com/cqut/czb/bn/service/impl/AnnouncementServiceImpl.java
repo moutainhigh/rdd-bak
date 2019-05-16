@@ -1,29 +1,20 @@
 package com.cqut.czb.bn.service.impl;
 
-import com.cqut.czb.bn.dao.mapper.AnnouncementMapper;
 import com.cqut.czb.bn.dao.mapper.AnnouncementMapperExtra;
-import com.cqut.czb.bn.dao.mapper.FileMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
-import com.cqut.czb.bn.entity.dto.AnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.announcement.AnnouncementDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.AnnouncementService;
 import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +45,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             String id = StringUtil.createId();
             announcement.setAnnouncementId(id);
             announcement.setIsShow(0);   //添加时默认不展示
+//            announcement.setUpdateAt(new Date());
             File file1 = setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
             fileMapperExtra.insertSelective(file1);
             announcement.setImgFileId(file1.getFileId()); //更新文件存储后的id
