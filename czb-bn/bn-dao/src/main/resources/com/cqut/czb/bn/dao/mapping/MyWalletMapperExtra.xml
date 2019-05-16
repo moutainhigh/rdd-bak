@@ -21,7 +21,7 @@
     </select>
 
     <insert id="insertIncomeLog" parameterType="com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO">
-        INSERT INTO czb_db.czb_income_log (
+        INSERT INTO czb.czb_income_log (
             record_id,
             amount,
             type,

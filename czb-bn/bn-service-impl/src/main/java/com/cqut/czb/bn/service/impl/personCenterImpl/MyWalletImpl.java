@@ -1,7 +1,13 @@
 package com.cqut.czb.bn.service.impl.personCenterImpl;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
+import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.*;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONArray;
@@ -107,72 +113,95 @@ public class MyWalletImpl implements MyWallet {
     }
 
     @Override
-    public synchronized int withDraw(AlipayRecordDTO alipayRecordDTO, String userId) {
-        BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(userId);
+    public synchronized JSONResult withDraw(AlipayRecordDTO alipayRecordDTO, String userId) {
+        // userId判空
+        if (userId == null)
+            return new JSONResult("没有权限", 500);
 
+        // 账号密码比对
+        if ( alipayRecordDTO.getKeyWord() == null)
+            return new JSONResult("账号密码不能为空", 500);
         if(!bCryptPasswordEncoder.matches(alipayRecordDTO.getKeyWord(), myWalletMapper.getPsw(userId))){
-            return 100;
+            return new JSONResult("账户密码错误", 500);
         }
+
+        // 提现金额判断
+        if ( alipayRecordDTO.getPaymentAmount() == null)
+            return new JSONResult("提现金额不能为空", 500);
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal(0)) < 0){
-            return 101;
-        }
-
-        if(alipayRecordDTO.getPaymentAmount().compareTo(balanceAndInfoId.getBalance()) > 0){
-            return 102;
+            return new JSONResult("提现金额不能是负数", 500);
         }
 
         int compareValue = alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal("0.1"));
-        if(!(compareValue == 0 || compareValue > 0)){
-            return 103;
+        if(compareValue < 0){
+            return new JSONResult("提现金额不能低于0.1元", 500);
         }
 
-        myWalletMapper.increaseWithdrawed(balanceAndInfoId.getInfoId(), alipayRecordDTO.getPaymentAmount().toString());
+        // 取出余额，进行对比
+        BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(userId);
+
+        if(alipayRecordDTO.getPaymentAmount().compareTo(balanceAndInfoId.getBalance()) > 0){
+            return new JSONResult("提现金额超出余额", 500);
+        }
+
+        // 设置提现记录基本信息
         IncomeLogDTO incomeLog = new IncomeLogDTO();
         incomeLog.setInfoId(balanceAndInfoId.getInfoId());
-        incomeLog.setAmount(alipayRecordDTO.getPaymentAmount().doubleValue());
+        incomeLog.setAmount((alipayRecordDTO.getPaymentAmount().doubleValue()));
         incomeLog.setBeforeChangeIncome(balanceAndInfoId.getBalance().doubleValue());
         incomeLog.setRecordId(StringUtil.createId());
-        System.out.println(incomeLog.getRecordId());
         incomeLog.setRemark("支付宝提现");
-        // TODO 谭深化——支付宝提现订单号先写死
-        incomeLog.setSourceId("111111");
         incomeLog.setType(1);
         incomeLog.setWithdrawAmount(alipayRecordDTO.getPaymentAmount().doubleValue());
         incomeLog.setWithdrawTo(alipayRecordDTO.getPaymentAccount());
         incomeLog.setWithdrawName(alipayRecordDTO.getPaymentName());
-        myWalletMapper.insertIncomeLog(incomeLog);
-//        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id,
-//                AlipayConfig.merchant_private_key, "json", "utf-8", AlipayConfig.alipay_public_key, "RSA2");
-//        AlipayFundTransToaccountTransferRequest request1 = new AlipayFundTransToaccountTransferRequest();
-//
-//        request1.setBizContent("{" + "\"out_biz_no\":\"" + System.currentTimeMillis() + "\","
-//                + "\"payee_type\":\"ALIPAY_LOGONID\"," + "\"payee_account\":\"" + alipayRecordDTO.getPaymentAccount()
-//                + "\"," + "\"amount\":\"" + alipayRecordDTO.getPaymentAmount() + "\","
-//                + "\"payer_show_name\":\"重庆叮铛猫网络科技有限公司\"," + "\"payee_real_name\":\"" + alipayRecordDTO.getPaymentName()
-//                + "\"," + "\"remark\":\"" + "提现收入" + "\"," + "}");
-//
-//        AlipayFundTransToaccountTransferResponse response;
-//
-//        try {
-//            response = alipayClient.execute(request1);
-//            String string = response.getBody().toString();
-//            if (response.isSuccess()) {
-//                JSONObject jso = JSONObject.parseObject(response.getBody());
-//                String orderId = jso.getJSONObject("alipay_fund_trans_toaccount_transfer_response")
-//                        .getString("order_id");
-//                // 更新用户可提现金额并插入提现记录
-//
-//
-//                return string;
-//            } else {
-//                return string;
-//            }
-//        } catch (AlipayApiException e) {
-//            e.printStackTrace();
-//            return "0";
-//        }
 
-        return 1;
+        // 支付宝参数设置
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id,
+                AlipayConfig.merchant_private_key, "json", "utf-8", AlipayConfig.alipay_public_key, "RSA2");
+        AlipayFundTransToaccountTransferRequest request1 = new AlipayFundTransToaccountTransferRequest();
+
+        request1.setBizContent("{" + "\"out_biz_no\":\"" + System.currentTimeMillis() + "\","
+                + "\"payee_type\":\"ALIPAY_LOGONID\"," + "\"payee_account\":\"" + alipayRecordDTO.getPaymentAccount()
+                + "\"," + "\"amount\":\"" + alipayRecordDTO.getPaymentAmount() + "\","
+                + "\"payer_show_name\":\"重庆叮铛猫网络科技有限公司\"," + "\"payee_real_name\":\"" + alipayRecordDTO.getPaymentName()
+                + "\"," + "\"remark\":\"" + "提现收入" + "\"," + "}");
+
+        AlipayFundTransToaccountTransferResponse response;
+
+        try {
+            // 进行请求
+            response = alipayClient.execute(request1);
+            String string = response.getBody().toString();
+
+            // 是否成功的后续操作
+            if (response.isSuccess()) {
+                com.alibaba.fastjson.JSONObject jso = com.alibaba.fastjson.JSONObject.parseObject(response.getBody());
+                String orderId = jso.getJSONObject("alipay_fund_trans_toaccount_transfer_response")
+                        .getString("order_id");
+                // 更新用户可提现金额
+                int updateBalance = myWalletMapper.increaseWithdrawed(balanceAndInfoId.getInfoId(), alipayRecordDTO.getPaymentAmount().toString());
+                if (updateBalance != 1)
+                    return new JSONResult("提现成功，但更新用户余额失败", 500);
+                System.out.println(updateBalance);
+
+                // 设置提现记录的sourceId为支付宝返回的单号
+                incomeLog.setSourceId(StringUtil.createId());
+                // 插入提现记录
+                int insertSuccess = myWalletMapper.insertIncomeLog(incomeLog);
+                System.out.println(insertSuccess);
+                if (insertSuccess != 1)
+                    return new JSONResult("提现成功，但插入提现记录出错", 500);
+                return new JSONResult("提现成功", 500);
+            } else {
+                return new JSONResult("提现请求失败", 500);
+            }
+
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+            return new JSONResult("提现过程中出错", 500);
+        }
+
     }
 }

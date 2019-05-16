@@ -7,21 +7,25 @@ public class AlipayRecordDTO {
     /**
      * 支付宝账号
      */
+    @NotNull(message = "支付宝账号不能为空")
     private String paymentAccount;
 
     /**
      * 支付宝用户真实姓名
      */
+    @NotNull(message = "支付宝真实姓名不能为空")
     private String paymentName;
 
     /**
      * 提现金额
      */
+    @NotNull(message = "提现金额不能为空")
     private BigDecimal paymentAmount;
 
     /**
      * 用户密码
      */
+    @NotNull(message = "用户密码不能为空")
     private String keyWord;
 
     public AlipayRecordDTO() {

@@ -31,34 +31,12 @@ public class MyWalletController {
 
     @RequestMapping(value = "/myWallet/withDraw", method = RequestMethod.POST)
     public JSONResult withDraw(Principal principal, @RequestBody AlipayRecordDTO alipayRecordDTO){
+
+        if (principal.getName() == null)
+            return new JSONResult("没有权限", 500);
         User user = (User)redisUtils.get(principal.getName());
 
-        JSONObject json = new JSONObject();
-        int code = myWallet.withDraw(alipayRecordDTO, user.getUserId());
-
-        switch (code){
-            case 100:
-                json.put("message","账户密码错误");
-                json.put(code, code);
-                break;
-            case 101:
-                json.put("message","提现金额不能是负数");
-                json.put(code, code);
-                break;
-            case 102:
-                json.put("message","提现金额超出余额");
-                json.put(code, code);
-                break;
-            case 103:
-                json.put("message","提现金额不能低于0.1元");
-                json.put(code, code);
-                break;
-            case 1:
-                json.put("message","提现成功");
-                json.put(code, code);
-                break;
-        }
-        return new JSONResult(json);
+        return myWallet.withDraw(alipayRecordDTO, user.getUserId());
     }
 
     @RequestMapping(value = "/getBalance", method = RequestMethod.GET)
