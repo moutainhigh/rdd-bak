@@ -14,7 +14,6 @@
  Date: 16/05/2019 23:37:43
 */
 
-SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -1517,38 +1516,5 @@ CREATE TABLE `czb_vip_recharge_records`  (
   `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`record_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for schema_version
--- ----------------------------
-DROP TABLE IF EXISTS `schema_version`;
-CREATE TABLE `schema_version`  (
-  `version_rank` int(11) NOT NULL,
-  `installed_rank` int(11) NOT NULL,
-  `version` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `script` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `checksum` int(11) NULL DEFAULT NULL,
-  `installed_by` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `installed_on` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-  `execution_time` int(11) NOT NULL,
-  `success` tinyint(1) NOT NULL,
-  PRIMARY KEY (`version`) USING BTREE,
-  INDEX `schema_version_vr_idx`(`version_rank`) USING BTREE,
-  INDEX `schema_version_ir_idx`(`installed_rank`) USING BTREE,
-  INDEX `schema_version_s_idx`(`success`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of schema_version
--- ----------------------------
-INSERT INTO `schema_version` VALUES (1, 1, '1', '<< Flyway Baseline >>', 'BASELINE', '<< Flyway Baseline >>', NULL, 'root', '2019-04-21 09:50:00', 0, 1);
-INSERT INTO `schema_version` VALUES (2, 2, '1.1', 'init', 'SQL', 'V1.1__init.sql', 1564218184, 'root', '2019-04-21 09:50:00', 139, 1);
-INSERT INTO `schema_version` VALUES (3, 3, '1.2', 'init2', 'SQL', 'V1.2__init2.sql', -2043651957, 'root', '2019-04-21 09:50:07', 6389, 1);
-INSERT INTO `schema_version` VALUES (4, 4, '1.3', 'modify', 'SQL', 'V1.3__modify.sql', 804185081, 'root', '2019-04-21 09:50:16', 8973, 1);
-INSERT INTO `schema_version` VALUES (5, 5, '1.4', 'modify', 'SQL', 'V1.4__modify.sql', -1321066036, 'root', '2019-04-21 09:50:24', 7612, 1);
-INSERT INTO `schema_version` VALUES (6, 6, '1.5', 'dict', 'SQL', 'V1.5__dict.sql', -1097413875, 'root', '2019-05-12 01:33:48', 1015, 1);
-INSERT INTO `schema_version` VALUES (7, 7, '1.6', 'depositRecordsModify', 'SQL', 'V1.6__depositRecordsModify.sql', -402332003, 'root', '2019-05-12 01:33:50', 991, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
