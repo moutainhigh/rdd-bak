@@ -43,19 +43,18 @@ public class FanYongServiceImpl implements FanYongService {
         double fangyong2 = 0;//二级返佣
         Dict dict1 = dictMapperExtra.selectDictByName("fangyong1");
         Dict dict2 = dictMapperExtra.selectDictByName("fangyong2");
-        if (dict1 != null || dict1.getContent() != null) {
+        if (dict1 != null && dict1.getContent() != null) {
             fangyong1 = Double.valueOf(dict1.getContent());
             System.out.println("fangyong1：" + fangyong1);
         }
-        if (dict2 != null || dict2.getContent() != null) {
+        if (dict2 != null && dict2.getContent() != null) {
             fangyong2 = Double.valueOf(dict2.getContent());
             System.out.println("fangyong2：" + fangyong2);
         }
-        UserIncomeInfo oldUserIncomeInfoUp1;//上级用户的用户收益信息表
-        UserIncomeInfo oldUserIncomeInfoUp2;//上上级用户的用户收益信息表
+
         if (userIdUp1 != null) {//可能存在没有上级用户
             //对上级用户的操作
-            oldUserIncomeInfoUp1 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp1);//查出原收益信息
+            UserIncomeInfo oldUserIncomeInfoUp1 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp1);//查出原收益信息
             //对上级用户的收益信息表，收益变更记录表进行操作
             changeUserIncomeInfo(oldUserIncomeInfoUp1, money, actualPayment, userIdUp1, 1, fangyong1,orgId);
 
@@ -63,7 +62,7 @@ public class FanYongServiceImpl implements FanYongService {
             if (userIdUp2 != null)//可能存在没有上上级用户
             {
                 //对上上级用户的操作
-                oldUserIncomeInfoUp2 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp2);//查出原收益信息
+                UserIncomeInfo oldUserIncomeInfoUp2 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp2);//查出原收益信息
                 //对上上级用户的收益信息表，收益变更记录表进行操作
                 changeUserIncomeInfo(oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2,orgId);
             }
