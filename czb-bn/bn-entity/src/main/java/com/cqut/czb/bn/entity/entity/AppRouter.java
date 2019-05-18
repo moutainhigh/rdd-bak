@@ -25,6 +25,8 @@ public class AppRouter {
 
     private Integer order;
 
+    private Integer userType;
+
     public String getRouterId() {
         return routerId;
     }
@@ -111,5 +113,13 @@ public class AppRouter {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }
