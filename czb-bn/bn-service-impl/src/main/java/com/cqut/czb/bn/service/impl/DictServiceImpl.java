@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.dict.AppInfoDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.service.IDictService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,7 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public boolean insertDict(DictInputDTO dictInputDTO) {
+        dictInputDTO.setDictId(StringUtil.createId());
         return dictMapperExtra.insertDict(dictInputDTO) > 0;
     }
 }
