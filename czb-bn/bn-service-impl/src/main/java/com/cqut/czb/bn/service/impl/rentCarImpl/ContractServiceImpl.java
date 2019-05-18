@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.*;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.PersonBankInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
@@ -639,6 +640,19 @@ public class ContractServiceImpl implements ContractService{
             return json;
         }
 
+        // 插入银行卡三要素
+        PersonBankInfo bankInfo = new PersonBankInfo();
+        bankInfo.setContractId(personContractId);
+        bankInfo.setBankName(inputInfo.getBankName());
+        bankInfo.setBankDeposit(inputInfo.getBankDeposit());
+        bankInfo.setBankAccount(inputInfo.getBankAccount());
+        int insertBank = contractMapper.insertBankInfo(bankInfo);
+        if(insertBank != 1){
+            json.put("code", STATE_INSERT_YUN_CONTRACTID_FAILED); //
+            return json;
+        }
+
+
         // 将个人userId，写入合同记录表
         try{
             int updateSuccess = contractMapper.updatePersonalContractUserId(userId, personContractId);
@@ -749,7 +763,7 @@ public class ContractServiceImpl implements ContractService{
      * 企业签订正文时间设置
      */
     @Override
-    public String setCompanySignedTime(String startTime, String contractId){
+    public String setCompanySignedTime(String startTime, String contractId, String bankDeposit, String bankAccount, String bankName){
         SimpleDateFormat startTimeDate = new SimpleDateFormat(startTime);
 
         // 将符合格式的字符串时间转换为date类型，并以此设置结束时间
@@ -771,7 +785,7 @@ public class ContractServiceImpl implements ContractService{
 
         // 设置合同记录时间
         try{
-            contractMapper.setCompanySignedTime(startTime, simpleDateFormat.format(endTime), contractId);
+            contractMapper.setCompanySignedTime(startTime, simpleDateFormat.format(endTime), contractId, bankDeposit, bankAccount, bankName);
         } catch(Exception e){
             return STATE_TIME_SET;
         }

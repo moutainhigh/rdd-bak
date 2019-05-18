@@ -46,7 +46,7 @@ public interface ContractService {
     String companySignedInitialize(String userId);
 
     // 企业签订合同正文时间确认
-    String setCompanySignedTime(String startTime, String contractId);
+    String setCompanySignedTime(String startTime, String contractId, String bankDeposit, String bankAccount, String bankName);
 
     // 企业签订合同正文个人服务添加
     JSONObject addCompanySignedPersonal(CompanySignedPersonal personal);

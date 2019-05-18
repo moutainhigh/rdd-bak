@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPer
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
+import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.PersonBankInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import io.swagger.models.auth.In;
@@ -32,6 +33,9 @@ public interface ContractMapperExtra {
 //    将提取出的合同id，插入到前端传来的合同记录id中
     int insertContractId(@Param("contractWriteId") String contractWriteId, @Param("contractId") String contractId);
 
+    // 插入银行卡三要素
+    int insertBankInfo( PersonBankInfo inputInfo);
+
     // 获得用户云合同id
     String getYunId(@Param("userId") String userId);
 
@@ -48,7 +52,12 @@ public interface ContractMapperExtra {
     int getContractStatus(@Param("contractId") String contractId);
 
     // 设置企业合同开始和结束时间
-    int setCompanySignedTime(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("contractId") String contractId);
+    int setCompanySignedTime(@Param("startTime") String startTime,
+                             @Param("endTime") String endTime,
+                             @Param("contractId") String contractId,
+                             @Param("bankDeposit")String bankDeposit,
+                             @Param("bankAccount")String bankAccount,
+                             @Param("bankName")String bankName);
 
     // 查找套餐id对应的租金
     double findRent(@Param("taoCanId") String taoCanId);

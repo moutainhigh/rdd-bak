@@ -84,12 +84,27 @@
             third_contract_num = #{contractId}
     </select>
 
+    <!--企业设置时间也银行卡三要素-->
     <update id="setCompanySignedTime" parameterType="java.lang.String">
         UPDATE czb_contract_records
         SET contract_start_time = #{startTime},
-         contract_end_time = #{endTime}
+         contract_end_time = #{endTime},
+         bank_of_deposit = #{bankDeposit},
+         bank_account_num = #{bankAccount},
+         bank_user_name = #{bankName}
         WHERE
             record_id = #{contractId}
+    </update>
+
+    <!--个人设置银行卡三要素-->
+    <update id="insertBankInfo" parameterType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.PersonBankInfo">
+        UPDATE czb_contract_records
+        SET
+        bank_of_deposit = #{bankDeposit},
+        bank_account_num = #{bankAccount},
+        bank_user_name = #{bankName}
+        WHERE
+        record_id = #{contractId}
     </update>
 
     <select id="findRent" resultType="java.lang.Double">

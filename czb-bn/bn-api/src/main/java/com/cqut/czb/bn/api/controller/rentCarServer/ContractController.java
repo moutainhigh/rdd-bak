@@ -213,7 +213,7 @@ public class ContractController {
      */
     @RequestMapping(value = "/setCompanySignedTime", method = RequestMethod.POST)
     public JSONResult setCompanySignedTime(@RequestBody CompanySignedTime startTime){
-        String code = contractService.setCompanySignedTime(startTime.getStartTime(), startTime.getContractId());
+        String code = contractService.setCompanySignedTime(startTime.getStartTime(), startTime.getContractId(),startTime.getBankDeposit(), startTime.getBankAccount(), startTime.getBankName());
         JSONObject json = new JSONObject();
         switch(code){
             case ContractServiceImpl.STATE_TIME_FORMAT:
