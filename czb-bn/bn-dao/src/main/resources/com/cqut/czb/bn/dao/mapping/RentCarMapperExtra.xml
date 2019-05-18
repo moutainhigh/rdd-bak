@@ -29,7 +29,10 @@
         c.endTime AS endTime,
         c.State AS status,
         c.num AS contractId,
-        c.rent AS rentMoney
+        c.rent AS rentMoney,
+        c.bank_of_deposit bankDeposit,
+        c.bank_user_name bankName,
+        c.bank_account_num bankAccount
         FROM
             czb_cars_persons cp,
             (
@@ -38,7 +41,10 @@
                     date_format(contract_start_time, '%Y.%m.%d') startTime,
 			        date_format(contract_end_time, '%Y.%m.%d') endTime,
                     contract_state State,
-                    rent
+                    rent,
+                    cc.bank_of_deposit,
+                    cc.bank_account_num,
+                    cc.bank_user_name
                 FROM
                     czb_contract_records cc
                 WHERE
@@ -182,7 +188,10 @@
             p.is_signed AS isSign,
             p.plan_id as rent,
             c.rent realRent,
-            p.identify_code identifyCode
+            p.identify_code identifyCode,
+            c.bank_account_num bankAccount,
+            c.bank_of_deposit bankDeposit,
+            c.bank_user_name bankName
         FROM
             czb_contract_records c,
             czb_cars_persons p
@@ -196,7 +205,7 @@
                 WHERE
                     contract_father_id = #{fatherId}
             )
-        GROUP BY person_name, license, carId, is_signed, plan_id, c.rent
+        GROUP BY person_name, license, carId, is_signed, plan_id, c.rent, p.identify_code, c.bank_account_num,c.bank_of_deposit,c.bank_user_name
     </select>
 
     <!--企业合同插入-->
