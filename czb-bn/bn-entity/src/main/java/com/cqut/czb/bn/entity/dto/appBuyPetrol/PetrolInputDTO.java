@@ -12,7 +12,7 @@ public class PetrolInputDTO {
 
     private String addressId;
 
-    private String payType;//执行的操作0为购油。1为充值
+    private String payType;//执行的操作0为购油。2为充值
 
     public PetrolInputDTO() {
     }
