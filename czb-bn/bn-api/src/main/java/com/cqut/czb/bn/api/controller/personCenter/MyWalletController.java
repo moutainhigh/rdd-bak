@@ -32,17 +32,20 @@ public class MyWalletController {
     @RequestMapping(value = "/myWallet/withDraw", method = RequestMethod.POST)
     public JSONResult withDraw(Principal principal, @RequestBody AlipayRecordDTO alipayRecordDTO){
 
-        if (principal.getName() == null)
-            return new JSONResult("没有权限", 500);
+        if (principal == null || principal.getName() == null)
+            return new JSONResult("没有权限", 400, "没有权限");
         User user = (User)redisUtils.get(principal.getName());
-
+        // null
+        if(user == null || user.getUserId()==null){
+            return new JSONResult("没有权限", 400, "没有权限");
+        }
         return myWallet.withDraw(alipayRecordDTO, user.getUserId());
     }
 
     @RequestMapping(value = "/getBalance", method = RequestMethod.GET)
     public JSONResult getBalance(Principal principal){
-        User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(myWallet.getBalance(user.getUserId()));
+//        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(myWallet.getBalance("155779902355425"));
     }
 
     @RequestMapping(value = "/getWithdrawLog", method = RequestMethod.GET)
