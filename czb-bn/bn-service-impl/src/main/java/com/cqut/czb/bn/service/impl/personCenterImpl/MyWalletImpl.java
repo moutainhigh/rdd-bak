@@ -45,11 +45,6 @@ public class MyWalletImpl implements MyWallet {
             }
         }
 
-        // 如果取出的余额小于0，则把余额设置为0
-        if(new BigDecimal(0).compareTo(balance.getBalance()) < 0){
-            balance.setBalance(new BigDecimal(0));
-        }
-
         return balance;
     }
 
@@ -114,35 +109,24 @@ public class MyWalletImpl implements MyWallet {
 
     @Override
     public synchronized JSONResult withDraw(AlipayRecordDTO alipayRecordDTO, String userId) {
-        // userId判空
-        if (userId == null)
-            return new JSONResult("没有权限", 500);
 
-        // 账号密码比对
-        if ( alipayRecordDTO.getKeyWord() == null)
-            return new JSONResult("账号密码不能为空", 500);
         if(!bCryptPasswordEncoder.matches(alipayRecordDTO.getKeyWord(), myWalletMapper.getPsw(userId))){
-            return new JSONResult("账户密码错误", 500);
+            return new JSONResult("账户密码错误", 200, "账户密码错误");
         }
-
-        // 提现金额判断
-        if ( alipayRecordDTO.getPaymentAmount() == null)
-            return new JSONResult("提现金额不能为空", 500);
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal(0)) < 0){
-            return new JSONResult("提现金额不能是负数", 500);
+            return new JSONResult("提现金额不能是负数", 200, "提现金额不能是负数");
         }
 
-        int compareValue = alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal("0.1"));
-        if(compareValue < 0){
-            return new JSONResult("提现金额不能低于0.1元", 500);
+        if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal("0.1")) < 0){
+            return new JSONResult("提现金额不能低于0.1元", 200, "提现金额不能低于0.1元");
         }
 
         // 取出余额，进行对比
         BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(userId);
 
         if(alipayRecordDTO.getPaymentAmount().compareTo(balanceAndInfoId.getBalance()) > 0){
-            return new JSONResult("提现金额超出余额", 500);
+            return new JSONResult("提现金额超出余额", 200, "提现金额超出余额");
         }
 
         // 设置提现记录基本信息
@@ -180,8 +164,9 @@ public class MyWalletImpl implements MyWallet {
                 com.alibaba.fastjson.JSONObject jso = com.alibaba.fastjson.JSONObject.parseObject(response.getBody());
                 String orderId = jso.getJSONObject("alipay_fund_trans_toaccount_transfer_response")
                         .getString("order_id");
-                // 更新用户可提现金额
+                // 更新用户已提现金额
                 int updateBalance = myWalletMapper.increaseWithdrawed(balanceAndInfoId.getInfoId(), alipayRecordDTO.getPaymentAmount().toString());
+
                 if (updateBalance != 1)
                     return new JSONResult("提现成功，但更新用户余额失败", 500);
                 System.out.println(updateBalance);
@@ -193,14 +178,14 @@ public class MyWalletImpl implements MyWallet {
                 System.out.println(insertSuccess);
                 if (insertSuccess != 1)
                     return new JSONResult("提现成功，但插入提现记录出错", 500);
-                return new JSONResult("提现成功", 500);
+                return new JSONResult("提现成功", 200);
             } else {
-                return new JSONResult("提现请求失败", 500);
+                return new JSONResult("支付宝提现请求失败", 200);
             }
 
         } catch (AlipayApiException e) {
             e.printStackTrace();
-            return new JSONResult("提现过程中出错", 500);
+            return new JSONResult("提现过程中出错", 200);
         }
 
     }
