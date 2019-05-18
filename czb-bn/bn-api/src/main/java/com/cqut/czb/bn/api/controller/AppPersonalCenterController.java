@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -72,7 +73,6 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)
     public JSONResult getPersonalCenterMenu(AppRouter appRouter){
-
         return new JSONResult(appPersonalCenterService.getAppRouters(appRouter));
     }
 
@@ -100,7 +100,6 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value = "/appModifyContactInfo",method = RequestMethod.POST)
     public JSONResult appModifyContactInfo(Principal principal,@RequestBody PersonalCenterUserDTO personalCenterUserDTO){
-        System.out.println("dsfsdf");
         User user = (User)redisUtils.get(principal.getName());
         if(user==null||personalCenterUserDTO==null){
             System.out.println(personalCenterUserDTO==null);

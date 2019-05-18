@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -79,7 +80,7 @@ public class AppHomePageController {
      * 首页菜单路由获取
      */
     @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
-    public JSONResult selectHomePageRouters(AppRouter appRouter){
+    public JSONResult selectHomePageRouters( AppRouter appRouter){
         return new JSONResult<List<AppRouter>>(appHomePageService.selectHomePageRouters(appRouter));
     }
 
@@ -94,6 +95,16 @@ public class AppHomePageController {
         Date date2=new Date();
         DateFormat dfe2 = DateFormat.getDateInstance();//日期格式，精确到日
         System.out.println(dfe2.format(date2).equals(df1.format(date1)));
+        Double newIncome= 125.11;
+        Double oldIncome=100.10;
+        BigDecimal bnewIncome = new BigDecimal(newIncome);
+        BigDecimal boldIncome = new BigDecimal(oldIncome);
+
+        double i = bnewIncome.subtract(boldIncome).doubleValue();
+        System.out.println(Double.parseDouble(String.format("%.2f", i)));
+        IncomeLog incomeLog=new IncomeLog();
+        incomeLog.setAmount(Double.parseDouble(String.format("%.2f", i)));
+        System.out.println(incomeLog.getAmount());
         return new JSONResult<List<PetrolInfoDTO>>(appHomePageService.selectPetrolInfoDTO());
     }
 }

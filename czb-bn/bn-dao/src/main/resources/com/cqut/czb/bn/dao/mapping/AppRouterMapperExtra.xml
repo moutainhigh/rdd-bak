@@ -157,6 +157,9 @@
         <include refid="Base_Column_List" />
         from czb_app_router
         where
-        menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR}
+        user_type=#{userType,jdbcType=INTEGER} and
+        menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR} and
+        is_show=0
+        ORDER BY `order` ASC
     </select>
 </mapper>
