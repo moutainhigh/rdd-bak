@@ -25,7 +25,7 @@ public class CarsPersons {
 
     private Date updateAt;
 
-    private Date identifyCode;
+    private String identifyCode;
 
     public String getPersonCarId() {
         return personCarId;
@@ -115,11 +115,11 @@ public class CarsPersons {
         this.updateAt = updateAt;
     }
 
-    public Date getIdentifyCode() {
+    public String getIdentifyCode() {
         return identifyCode;
     }
 
-    public void setIdentifyCode(Date identifyCode) {
-        this.identifyCode = identifyCode;
+    public void setIdentifyCode(String identifyCode) {
+        this.identifyCode = identifyCode == null ? null : identifyCode.trim();
     }
 }

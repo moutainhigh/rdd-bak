@@ -52,8 +52,6 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<appAnnouncementDTO> selectAnnouncement() {
-
-
         return announcementMapperExtra.selectAnnouncement();
     }
 

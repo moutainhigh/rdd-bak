@@ -1,8 +1,12 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.ContractModelMapperExtra;
+import com.cqut.czb.bn.dao.mapper.ContractRecordsMapperExtra;
 import com.cqut.czb.bn.dao.mapper.FileMapper;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.contractManagement.ContractDTO;
+import com.cqut.czb.bn.entity.dto.contractManagement.ContractInputDTO;
+import com.cqut.czb.bn.entity.dto.contractManagement.PersonalContractDetailDTO;
 import com.cqut.czb.bn.entity.entity.ContractModel;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.User;
@@ -25,11 +29,18 @@ import java.util.List;
 @Service
 public class ContractManagementServiceImpl implements IContractService {
 
-    @Autowired
     private ContractModelMapperExtra contractModelMapperExtra;
 
-    @Autowired
     private FileMapper fileMapper;
+
+    private ContractRecordsMapperExtra contractRecordsMapperExtra;
+
+    @Autowired
+    public ContractManagementServiceImpl(ContractModelMapperExtra contractModelMapperExtra, FileMapper fileMapper, ContractRecordsMapperExtra contractRecordsMapperExtra) {
+        this.contractModelMapperExtra = contractModelMapperExtra;
+        this.fileMapper = fileMapper;
+        this.contractRecordsMapperExtra = contractRecordsMapperExtra;
+    }
 
     /**
      * 更新token的方法
@@ -94,7 +105,6 @@ public class ContractManagementServiceImpl implements IContractService {
         contractModel.setYunModelId(templateId);
         contractModel.setFileId(file1.getFileId());
 
-
         return contractModelMapperExtra.insertContractModel(contractModel) > 0;
     }
 
@@ -103,6 +113,47 @@ public class ContractManagementServiceImpl implements IContractService {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         List<ContractModel> contractModelList = contractModelMapperExtra.selectContractModelList();
         return new PageInfo<>(contractModelList);
+    }
+
+    @Override
+    public PageInfo<ContractDTO> selectEnterpriseContractList(ContractInputDTO contractInputDTO, PageDTO pageDTO) {
+        contractInputDTO.setContractType(0);
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        List<ContractDTO> contractDTOList = contractRecordsMapperExtra.selectContractList(contractInputDTO);
+        return new PageInfo<>(contractDTOList);
+    }
+
+    @Override
+    public PageInfo<ContractDTO> selectPersonalContractList(ContractInputDTO contractInputDTO, PageDTO pageDTO) {
+        contractInputDTO.setContractType(1);
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        List<ContractDTO> contractDTOList = contractRecordsMapperExtra.selectContractList(contractInputDTO);
+        return new PageInfo<>(contractDTOList);
+    }
+
+    @Override
+    public PageInfo<ContractDTO> selectEnterpriseContract(String contractId, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        List<ContractDTO> contractDTOList = contractRecordsMapperExtra.selectEnterpriseContract(contractId);
+        return new PageInfo<>(contractDTOList);
+    }
+
+    @Override
+    public PageInfo<ContractDTO> selectPersonalContract(String contractId, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        List<ContractDTO> contractDTOList = contractRecordsMapperExtra.selectPersonalContract(contractId);
+        return new PageInfo<>(contractDTOList);
+    }
+
+    @Override
+    public PersonalContractDetailDTO selectPersonalContractDetail(String contractId) {
+        return contractRecordsMapperExtra.selectPersonalContractDetail(contractId);
+    }
+
+    @Override
+    public boolean changeContractState(ContractInputDTO contractInputDTO) {
+
+        return contractRecordsMapperExtra.changeContractState(contractInputDTO) > 0;
     }
 
     /**
