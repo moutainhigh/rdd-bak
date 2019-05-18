@@ -5,7 +5,7 @@ import java.util.Date;
 public class AppRouter {
     private String routerId;
 
-    private Integer appType;
+    private Integer pathType;
 
     private String menuName;
 
@@ -35,12 +35,12 @@ public class AppRouter {
         this.routerId = routerId == null ? null : routerId.trim();
     }
 
-    public Integer getAppType() {
-        return appType;
+    public Integer getPathType() {
+        return pathType;
     }
 
-    public void setAppType(Integer appType) {
-        this.appType = appType;
+    public void setPathType(Integer pathType) {
+        this.pathType = pathType;
     }
 
     public String getMenuName() {

@@ -33,7 +33,7 @@
         where router_id = #{routerId,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
-        insert into czb_app_router (router_id, app_type, menu_name,
+        insert into czb_app_router (router_id, path_type, menu_name,
         menu_path, is_show, icon_path_id,
         menu_identity_code, create_at, update_at
         )
@@ -47,6 +47,9 @@
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="routerId != null" >
                 router_id,
+            </if>
+            <if test="pathType!=null">
+                path_type,
             </if>
             <if test="menuName != null" >
                 menu_name,
@@ -76,6 +79,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="routerId != null" >
                 #{routerId,jdbcType=VARCHAR},
+            </if>
+            <if test="pathType!=null">
+                #{pathType,jdbcType=INTEGER},
             </if>
             <if test="menuName != null" >
                 #{menuName,jdbcType=VARCHAR},
