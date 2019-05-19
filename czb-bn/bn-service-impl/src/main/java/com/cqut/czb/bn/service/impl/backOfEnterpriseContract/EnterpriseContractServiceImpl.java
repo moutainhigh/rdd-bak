@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.backOfEnterpriseContract;
 import com.cqut.czb.bn.dao.mapper.EnterpriseContractMapperExtra;
 import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.BasisContractInfo;
 import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PayInfoDTO;
+import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolInfoDTO;
 import com.cqut.czb.bn.service.backOfEnterpriseContract.EnterpriseContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,10 @@ public class EnterpriseContractServiceImpl implements EnterpriseContractService{
     @Override
     public List<PayInfoDTO> getPayInfoList(String contractId) {
         return contractMapperExtra.getPayInfoList(contractId);
+    }
+
+    @Override
+    public List<PetrolInfoDTO> getPetrolInfoList(String contractId) {
+        return contractMapperExtra.getPetrolInfoList(contractId);
     }
 }

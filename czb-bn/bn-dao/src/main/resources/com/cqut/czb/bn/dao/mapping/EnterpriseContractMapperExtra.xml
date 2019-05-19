@@ -2,11 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.EnterpriseContractMapperExtra" >
 
+    <!--合同基本信息-->
     <select id="getBasisInfo" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.BasisContractInfo">
         SELECT
             record_id contractId,
             signed_time signedAt,
             create_at createAt,
+            contract_start_time startTime,
+            contract_end_time endTime,
             contract_state STATUS,
             third_contract_num thirdContractId,
             pay_total_money payTotal,
@@ -36,5 +39,26 @@
         WHERE
             contract_record_id = #{contractId}
         AND is_deleted = 0
+    </select>
+
+    <select id="getPetrolInfoList" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolInfoDTO">
+        SELECT
+            record_id petrolRecordId,
+            petrol_num petrolNum,
+            buyer_id buyerId,
+            payment_method payMethod,
+            third_order_id thirdNum,
+            turnover_amount amount,
+            transaction_time makeTime,
+            petrol_id petrolId,
+            state STATUS,
+            contract_id contractId,
+            record_type buyType,
+            is_recharged isCharge,
+            petrol_kind isCharge
+        FROM
+            czb_petrol_sales_records
+        WHERE
+            contract_id = 1
     </select>
 </mapper>

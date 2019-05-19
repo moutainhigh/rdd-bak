@@ -24,4 +24,9 @@ public class EnterpriseContractController {
     public JSONResult getPayInfoList(@RequestBody ContractIdInfo info){
         return new JSONResult(contractService.getPayInfoList(info.getContractId()));
     }
+
+    @RequestMapping(value = "/getPetrolInfoList", method =  RequestMethod.POST)
+    public JSONResult getPetrolInfoList(@RequestBody ContractIdInfo info){
+        return new JSONResult(contractService.getPetrolInfoList(info.getContractId()));
+    }
 }
