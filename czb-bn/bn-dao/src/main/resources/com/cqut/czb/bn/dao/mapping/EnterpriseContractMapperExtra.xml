@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.EnterpriseContractMapperExtra" >
+
+    <select id="getBasisInfo" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.BasisContractInfo">
+        SELECT
+            record_id contractId,
+            signed_time signedAt,
+            create_at createAt,
+            contract_state STATUS,
+            third_contract_num thirdContractId,
+            pay_total_money payTotal,
+            witness_id czId,
+            bank_of_deposit bankDeposit,
+            bank_account_num bankNum,
+            bank_user_name bankName
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </select>
+
+    <select id="getPayInfoList" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PayInfoDTO">
+        SELECT
+            record_id payId,
+            payee_name payToName,
+            payee_id_card PersonCarId,
+            contract_record_id contractId,
+            payable_money shouldPay,
+            actual_pay_money realPay,
+            target_year_month yearMonth,
+            platform_pay_time payTime,
+            state status
+        FROM
+            czb_pay_to_person
+        WHERE
+            contract_record_id = #{contractId}
+        AND is_deleted = 0
+    </select>
+</mapper>
