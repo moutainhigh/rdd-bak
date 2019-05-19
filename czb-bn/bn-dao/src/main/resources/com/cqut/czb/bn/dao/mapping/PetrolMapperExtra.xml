@@ -39,7 +39,7 @@
         AND state = #{state,jdbcType=INTEGER}
       </if>
       <if test="area != null and area != ''" >
-        AND area like concat {'%',#{area,jdbcType=VARCHAR},'%'}
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
       </if>
       <if test="petrolType != null and petrolType != ''" >
       AND petrol_type = #{petrolType,jdbcType=INTEGER}
