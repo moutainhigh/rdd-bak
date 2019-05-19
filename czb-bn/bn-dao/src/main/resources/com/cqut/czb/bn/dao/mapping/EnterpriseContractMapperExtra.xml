@@ -55,7 +55,7 @@
             petrol_id petrolId,
             state STATUS,
             contract_id contractId,
-            petrol_kind isCharge
+            petrol_kind petrolType
         FROM
             czb_petrol_sales_records
         WHERE
