@@ -172,7 +172,7 @@ public class MyWalletImpl implements MyWallet {
                 System.out.println(updateBalance);
 
                 // 设置提现记录的sourceId为支付宝返回的单号
-                incomeLog.setSourceId(StringUtil.createId());
+                incomeLog.setSourceId(orderId);
                 // 插入提现记录
                 int insertSuccess = myWalletMapper.insertIncomeLog(incomeLog);
                 System.out.println(insertSuccess);
