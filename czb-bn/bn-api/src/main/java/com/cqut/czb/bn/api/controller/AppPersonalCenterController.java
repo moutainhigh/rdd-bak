@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
@@ -72,8 +73,8 @@ public class AppPersonalCenterController {
      * @return
      */
     @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)
-    public JSONResult getPersonalCenterMenu(AppRouter appRouter){
-        return new JSONResult(appPersonalCenterService.getAppRouters(appRouter));
+    public JSONResult getPersonalCenterMenu(AppRouterDTO appRouterDTO){
+        return new JSONResult<List<AppRouterDTO>>(appPersonalCenterService.getAppRouters(appRouterDTO));
     }
 
     /**

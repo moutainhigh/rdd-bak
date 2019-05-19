@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
@@ -61,8 +62,8 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     }
 
     @Override
-    public List<AppRouter> getAppRouters(AppRouter appRouter) {
-        return appRouterMapperExtra.selectAppRouters(appRouter);
+    public List<AppRouterDTO> getAppRouters(AppRouterDTO appRouterDTO) {
+        return appRouterMapperExtra.selectAppRouters(appRouterDTO);
     }
 
     @Override

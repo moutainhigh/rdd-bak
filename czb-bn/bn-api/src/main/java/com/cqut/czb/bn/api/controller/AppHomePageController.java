@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -80,8 +81,8 @@ public class AppHomePageController {
      * 首页菜单路由获取
      */
     @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
-    public JSONResult selectHomePageRouters( AppRouter appRouter){
-        return new JSONResult<List<AppRouter>>(appHomePageService.selectHomePageRouters(appRouter));
+    public JSONResult selectHomePageRouters( AppRouterDTO appRouterDTO){
+        return new JSONResult<List<AppRouterDTO>>(appHomePageService.selectHomePageRouters(appRouterDTO));
     }
 
     /**

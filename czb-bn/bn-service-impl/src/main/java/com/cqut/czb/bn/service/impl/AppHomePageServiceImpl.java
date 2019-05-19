@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -91,8 +92,8 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     }
 
     @Override
-    public List<AppRouter> selectHomePageRouters(AppRouter appRouter) {
-        return appRouterMapperExtra.selectAppRouters(appRouter);
+    public List<AppRouterDTO> selectHomePageRouters(AppRouterDTO appRouterDTO) {
+        return appRouterMapperExtra.selectAppRouters(appRouterDTO);
     }
 
     @Override
