@@ -152,13 +152,15 @@
         where router_id = #{routerId,jdbcType=VARCHAR}
     </update>
 
-    <select id="selectAppRouters" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+    <select id="selectAppRouters" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" >
         select
-        <include refid="Base_Column_List" />
-        from czb_app_router
+         path_type as pathType , menu_name as menuName,
+        android_path as androidPath, ios_path as iosPath, `order`, user_type as userType,file_name as fileName,save_path as savePath,remark
+        from czb_app_router,czb_file
         where
         user_type=#{userType,jdbcType=INTEGER} and
         menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR} and
+        czb_file.file_id=czb_app_router.icon_path_id and
         is_show=0
         ORDER BY `order` ASC
     </select>

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
@@ -41,10 +42,10 @@ public interface AppPersonalCenterService {
 
     /**
      * 查出个人中心菜单展示
-     * @param appRouter
+     * @param appRouterDTO
      * @return
      */
-    List<AppRouter> getAppRouters(AppRouter appRouter);
+    List<AppRouterDTO> getAppRouters(AppRouterDTO appRouterDTO);
 
     /**
      * 查出个人中心个人信息（包含企业）

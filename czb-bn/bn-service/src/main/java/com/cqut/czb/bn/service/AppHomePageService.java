@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
@@ -46,10 +47,10 @@ public interface AppHomePageService {
 
     /**
      * 获取首页的所有路由
-     * @param appRouter
+     * @param appRouterDTO
      * @return
      */
-    List<AppRouter> selectHomePageRouters(AppRouter appRouter);
+    List<AppRouterDTO> selectHomePageRouters(AppRouterDTO appRouterDTO);
 
     List<PetrolInfoDTO> selectPetrolInfoDTO();
 
