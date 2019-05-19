@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.ContractRecordsMapper" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ContractRecords" >
-    <result column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="signed_time" property="signedTime" jdbcType="TIMESTAMP" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="contract_start_time" property="contractStartTime" jdbcType="TIMESTAMP" />
@@ -23,6 +23,22 @@
     <result column="bank_account_num" property="bankAccountNum" jdbcType="VARCHAR" />
     <result column="bank_user_name" property="bankUserName" jdbcType="VARCHAR" />
   </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, signed_time, user_id, contract_start_time, contract_end_time, contract_state, 
+    contract_type, rent, third_contract_num, got_total_money, judge_user_id, judge_time, 
+    pay_total_money, create_at, update_at, contract_father_id, witness_id, bank_of_deposit, 
+    bank_account_num, bank_user_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_contract_records
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_contract_records
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
     insert into czb_contract_records (record_id, signed_time, user_id, 
       contract_start_time, contract_end_time, 
@@ -168,4 +184,90 @@
       </if>
     </trim>
   </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
+    update czb_contract_records
+    <set >
+      <if test="signedTime != null" >
+        signed_time = #{signedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStartTime != null" >
+        contract_start_time = #{contractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndTime != null" >
+        contract_end_time = #{contractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractState != null" >
+        contract_state = #{contractState,jdbcType=INTEGER},
+      </if>
+      <if test="contractType != null" >
+        contract_type = #{contractType,jdbcType=INTEGER},
+      </if>
+      <if test="rent != null" >
+        rent = #{rent,jdbcType=DOUBLE},
+      </if>
+      <if test="thirdContractNum != null" >
+        third_contract_num = #{thirdContractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="gotTotalMoney != null" >
+        got_total_money = #{gotTotalMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="judgeUserId != null" >
+        judge_user_id = #{judgeUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="judgeTime != null" >
+        judge_time = #{judgeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTotalMoney != null" >
+        pay_total_money = #{payTotalMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractFatherId != null" >
+        contract_father_id = #{contractFatherId,jdbcType=VARCHAR},
+      </if>
+      <if test="witnessId != null" >
+        witness_id = #{witnessId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankOfDeposit != null" >
+        bank_of_deposit = #{bankOfDeposit,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNum != null" >
+        bank_account_num = #{bankAccountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankUserName != null" >
+        bank_user_name = #{bankUserName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.ContractRecords" >
+    update czb_contract_records
+    set signed_time = #{signedTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=VARCHAR},
+      contract_start_time = #{contractStartTime,jdbcType=TIMESTAMP},
+      contract_end_time = #{contractEndTime,jdbcType=TIMESTAMP},
+      contract_state = #{contractState,jdbcType=INTEGER},
+      contract_type = #{contractType,jdbcType=INTEGER},
+      rent = #{rent,jdbcType=DOUBLE},
+      third_contract_num = #{thirdContractNum,jdbcType=VARCHAR},
+      got_total_money = #{gotTotalMoney,jdbcType=DOUBLE},
+      judge_user_id = #{judgeUserId,jdbcType=VARCHAR},
+      judge_time = #{judgeTime,jdbcType=TIMESTAMP},
+      pay_total_money = #{payTotalMoney,jdbcType=DOUBLE},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      contract_father_id = #{contractFatherId,jdbcType=VARCHAR},
+      witness_id = #{witnessId,jdbcType=VARCHAR},
+      bank_of_deposit = #{bankOfDeposit,jdbcType=VARCHAR},
+      bank_account_num = #{bankAccountNum,jdbcType=VARCHAR},
+      bank_user_name = #{bankUserName,jdbcType=VARCHAR}
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
 </mapper>
