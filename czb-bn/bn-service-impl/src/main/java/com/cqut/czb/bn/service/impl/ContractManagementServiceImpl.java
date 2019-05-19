@@ -1,16 +1,13 @@
 package com.cqut.czb.bn.service.impl;
 
-import com.cqut.czb.bn.dao.mapper.ContractModelMapperExtra;
-import com.cqut.czb.bn.dao.mapper.ContractRecordsMapperExtra;
-import com.cqut.czb.bn.dao.mapper.FileMapper;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractInputDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.PersonalContractDetailDTO;
-import com.cqut.czb.bn.entity.entity.ContractModel;
-import com.cqut.czb.bn.entity.entity.File;
-import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.IContractService;
+import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -18,11 +15,27 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import net.sf.json.JSONObject;
 import okhttp3.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -35,11 +48,14 @@ public class ContractManagementServiceImpl implements IContractService {
 
     private ContractRecordsMapperExtra contractRecordsMapperExtra;
 
+    private ContractRecordsMapper contractRecordsMapper;
+
     @Autowired
-    public ContractManagementServiceImpl(ContractModelMapperExtra contractModelMapperExtra, FileMapper fileMapper, ContractRecordsMapperExtra contractRecordsMapperExtra) {
+    public ContractManagementServiceImpl(ContractModelMapperExtra contractModelMapperExtra, FileMapper fileMapper, ContractRecordsMapperExtra contractRecordsMapperExtra, ContractRecordsMapper contractRecordsMapper) {
         this.contractModelMapperExtra = contractModelMapperExtra;
         this.fileMapper = fileMapper;
         this.contractRecordsMapperExtra = contractRecordsMapperExtra;
+        this.contractRecordsMapper = contractRecordsMapper;
     }
 
     /**
@@ -118,6 +134,12 @@ public class ContractManagementServiceImpl implements IContractService {
     @Override
     public PageInfo<ContractDTO> selectEnterpriseContractList(ContractInputDTO contractInputDTO, PageDTO pageDTO) {
         contractInputDTO.setContractType(0);
+        if(contractInputDTO.getSignBeginTime() != null) {
+            contractInputDTO.setSignBeginTime(DateUtil.getDateStart(contractInputDTO.getSignBeginTime()));
+        }
+        if(contractInputDTO.getSignEndTime() != null) {
+            contractInputDTO.setSignEndTime(DateUtil.getDateEnd(contractInputDTO.getSignEndTime()));
+        }
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         List<ContractDTO> contractDTOList = contractRecordsMapperExtra.selectContractList(contractInputDTO);
         return new PageInfo<>(contractDTOList);
@@ -126,6 +148,12 @@ public class ContractManagementServiceImpl implements IContractService {
     @Override
     public PageInfo<ContractDTO> selectPersonalContractList(ContractInputDTO contractInputDTO, PageDTO pageDTO) {
         contractInputDTO.setContractType(1);
+        if(contractInputDTO.getSignBeginTime() != null) {
+            contractInputDTO.setSignBeginTime(DateUtil.getDateStart(contractInputDTO.getSignBeginTime()));
+        }
+        if(contractInputDTO.getSignEndTime() != null) {
+            contractInputDTO.setSignEndTime(DateUtil.getDateEnd(contractInputDTO.getSignEndTime()));
+        }
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         List<ContractDTO> contractDTOList = contractRecordsMapperExtra.selectContractList(contractInputDTO);
         return new PageInfo<>(contractDTOList);
@@ -154,6 +182,76 @@ public class ContractManagementServiceImpl implements IContractService {
     public boolean changeContractState(ContractInputDTO contractInputDTO) {
 
         return contractRecordsMapperExtra.changeContractState(contractInputDTO) > 0;
+    }
+
+    @Override
+    public boolean downloadContract(String contractId, HttpServletResponse response) {
+        ContractRecords contractRecords = contractRecordsMapper.selectByPrimaryKey(contractId);
+        String token = checkToken();
+        JSONObject paramMap = new JSONObject();
+        paramMap.put("idType", "0"); // id类型：0合同ID，1合同自定义编号
+        paramMap.put("idContent", contractRecords.getThirdContractNum()); // ID内容
+
+        CloseableHttpClient httpClient = null;
+        CloseableHttpResponse httpResponse = null;
+        // 创建httpClient实例
+        httpClient = HttpClients.createDefault();
+        // 创建httpPost远程连接实例
+        HttpPost httpPost = new HttpPost("https://api.yunhetong.com/api/download/contract");
+        // 配置请求参数实例
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(35000)// 设置连接主机服务超时时间
+                .setConnectionRequestTimeout(35000)// 设置连接请求超时时间
+                .setSocketTimeout(60000)// 设置读取数据连接超时时间
+                .build();
+        /**
+         *
+         * 为httpPost实例设置配置
+         */
+        httpPost.setConfig(requestConfig);
+        httpPost.addHeader("Content-Type", "application/json");
+        httpPost.addHeader("charset", "UTF-8");
+        httpPost.addHeader("token", token);
+
+        /**
+         * 文件下载请求头
+         * */
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/x-download");
+
+        StringEntity requestEntity = new StringEntity(paramMap.toString(), ContentType.APPLICATION_JSON);
+        httpPost.setEntity(requestEntity);
+        HttpEntity entity;
+        try {
+            // httpClient对象执行post请求,并返回响应参数对象
+            httpResponse = httpClient.execute(httpPost);
+            // 从响应对象中获取响应内容(调用相应的响应信息处理方法)
+            entity = httpResponse.getEntity();
+            entity.writeTo(response.getOutputStream());
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // 关闭资源
+            if (null != httpResponse) {
+                try {
+                    httpResponse.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (null != httpClient) {
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

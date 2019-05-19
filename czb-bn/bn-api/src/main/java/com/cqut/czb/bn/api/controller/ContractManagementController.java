@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 
@@ -97,11 +98,23 @@ public class ContractManagementController {
     /**
      *  修改合同状态
      * */
-    @RequestMapping(value = "/changeContractState",method = RequestMethod.GET)
+    @RequestMapping(value = "/changeContractState",method = RequestMethod.POST)
     public JSONResult changeContractState(ContractInputDTO contractInputDTO){
 
         return new JSONResult(contractService.changeContractState(contractInputDTO));
     }
 
+    /**
+     *  下载合同
+     * */
+    @RequestMapping(value = "/downloadContract",method = RequestMethod.POST)
+    public JSONResult downloadContract(String contractId, HttpServletResponse response){
 
+        boolean isSuccess = contractService.downloadContract(contractId, response);
+        if(isSuccess) {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "创建文件流成功");
+        } else {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "创建文件流失败");
+        }
+    }
 }

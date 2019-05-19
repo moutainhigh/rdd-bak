@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface IContractService {
@@ -28,4 +29,6 @@ public interface IContractService {
     PersonalContractDetailDTO selectPersonalContractDetail(String contractId);
 
     boolean changeContractState(ContractInputDTO contractInputDTO);
+
+    boolean downloadContract(String contractId, HttpServletResponse response);
 }
