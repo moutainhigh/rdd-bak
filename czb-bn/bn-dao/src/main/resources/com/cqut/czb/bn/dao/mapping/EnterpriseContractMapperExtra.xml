@@ -6,10 +6,10 @@
     <select id="getBasisInfo" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.BasisContractInfo">
         SELECT
             record_id contractId,
-            signed_time signedAt,
-            create_at createAt,
-            contract_start_time startTime,
-            contract_end_time endTime,
+            DATE_FORMAT(signed_time,'%Y-%m-%d %H:%m:%s') signedAt,
+            DATE_FORMAT(create_at,'%Y-%m-%d %H:%m:%s') createAt,
+            DATE_FORMAT(contract_start_time,'%Y-%m-%d %H:%m:%s') startTime,
+            DATE_FORMAT(contract_end_time,'%Y-%m-%d %H:%m:%s') endTime,
             contract_state STATUS,
             third_contract_num thirdContractId,
             pay_total_money payTotal,
@@ -33,7 +33,7 @@
             payable_money shouldPay,
             actual_pay_money realPay,
             target_year_month yearMonth,
-            platform_pay_time payTime,
+            DATE_FORMAT(platform_pay_time,'%Y-%m-%d %H:%m:%s') payTime,
             state status
         FROM
             czb_pay_to_person
@@ -51,9 +51,9 @@
             payment_method payMethod,
             third_order_id thirdNum,
             turnover_amount amount,
-            transaction_time makeTime,
+            DATE_FORMAT(transaction_time,'%Y-%m-%d %H:%m:%s') makeTime,
             petrol_id petrolId,
-            state STATUS,
+            state status,
             contract_id contractId,
             petrol_kind petrolType
         FROM
@@ -61,5 +61,22 @@
         WHERE
             contract_id = #{contractId}
             AND record_type = 0
+    </select>
+
+    <!--获得油卡充值信息-->
+    <select id="getPetrolPayInfoList" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolPayInfo">
+        SELECT
+            record_id recordId,
+            payment_method payMethod,
+            turnover_amount amount,
+            DATE_FORMAT(transaction_time,'%Y-%m-%d %H:%m:%s') makeTime,
+            state status,
+            petrol_kind petrolType,
+          is_recharged isCharged
+        FROM
+            czb_petrol_sales_records
+        WHERE
+            petrol_id = #{petrolId}
+        AND record_type = 1
     </select>
 </mapper>
