@@ -178,7 +178,7 @@ public class MyWalletImpl implements MyWallet {
                 System.out.println(insertSuccess);
                 if (insertSuccess != 1)
                     return new JSONResult("提现成功，但插入提现记录出错", 500, "提现成功");
-                return new JSONResult("提现成功", 200);
+                return new JSONResult("提现成功", 200, "提现成功");
             } else {
                 return new JSONResult("支付宝提现请求失败", 200, "支付宝提现请求失败");
             }
