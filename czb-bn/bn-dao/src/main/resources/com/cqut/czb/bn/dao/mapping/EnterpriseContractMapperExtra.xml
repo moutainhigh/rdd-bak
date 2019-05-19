@@ -23,6 +23,7 @@
             record_id = #{contractId}
     </select>
 
+    <!--合同打款信息-->
     <select id="getPayInfoList" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PayInfoDTO">
         SELECT
             record_id payId,
@@ -41,6 +42,7 @@
         AND is_deleted = 0
     </select>
 
+    <!--合同油卡号-->
     <select id="getPetrolInfoList" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolInfoDTO">
         SELECT
             record_id petrolRecordId,
@@ -53,12 +55,11 @@
             petrol_id petrolId,
             state STATUS,
             contract_id contractId,
-            record_type buyType,
-            is_recharged isCharge,
             petrol_kind isCharge
         FROM
             czb_petrol_sales_records
         WHERE
-            contract_id = 1
+            contract_id = #{contractId}
+            AND record_type = 0
     </select>
 </mapper>

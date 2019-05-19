@@ -31,12 +31,6 @@ public class PetrolInfoDTO {
     // 来源合同id
     private String contractId;
 
-    // 购买类型
-    private Integer buyType;
-
-    // 是否充值到卡
-    private Integer isCharge;
-
     // 油卡种类
     private Integer petrolType;
 
@@ -120,21 +114,6 @@ public class PetrolInfoDTO {
         this.contractId = contractId;
     }
 
-    public Integer getBuyType() {
-        return buyType;
-    }
-
-    public void setBuyType(Integer buyType) {
-        this.buyType = buyType;
-    }
-
-    public Integer getIsCharge() {
-        return isCharge;
-    }
-
-    public void setIsCharge(Integer isCharge) {
-        this.isCharge = isCharge;
-    }
 
     public Integer getPetrolType() {
         return petrolType;
