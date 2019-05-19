@@ -120,15 +120,6 @@ public class ContractController {
     }
 
     /**
-     * 测试接口
-     */
-    @RequestMapping(value = "/get", method= RequestMethod.POST)
-    public JSONResult get(){
-
-        return new JSONResult(contractService.get());
-    }
-
-    /**
      * 个人输入认证码、身份证后，查找车牌号和租金
      */
     @RequestMapping(value = "/getCarNumAndPersonId", method = RequestMethod.POST)

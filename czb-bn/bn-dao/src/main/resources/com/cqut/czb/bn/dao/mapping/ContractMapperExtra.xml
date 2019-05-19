@@ -56,7 +56,8 @@
     <!--根据回调消息改变合同状态-->
     <update id="updateContractStatus" parameterType="java.lang.String">
         UPDATE czb_contract_records
-        SET contract_state = #{statusCode}
+        SET contract_state = #{statusCode},
+        signed_time = CURRENT_TIMESTAMP
         WHERE
             third_contract_num = #{contractId}
     </update>

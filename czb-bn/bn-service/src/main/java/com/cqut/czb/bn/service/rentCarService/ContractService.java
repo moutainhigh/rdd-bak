@@ -33,9 +33,6 @@ public interface ContractService {
 //    // 合同存证
 //    JSONResult czContract(String contractId, String token );
 
-    // 测试
-    String get( );
-
     // 个人输入认证码、身份证后，查找车牌号和租金
     JSONResult getCarNumAndPersonId(String userId, PersonSignedInputInfo inputInfo);
 

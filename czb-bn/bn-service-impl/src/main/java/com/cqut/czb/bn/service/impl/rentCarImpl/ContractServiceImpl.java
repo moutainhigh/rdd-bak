@@ -109,21 +109,6 @@ public class ContractServiceImpl implements ContractService{
         return getToken();
     }
 
-    // TODO 谭深化——此接口需要删除（测试接口）
-    /**
-     *
-     */
-    @Override
-    public String get( ){
-        Integer fatherContractStatus = contractMapper.getFatherContractStatus("1");
-        System.out.println(fatherContractStatus);
-        if (fatherContractStatus == 0 || fatherContractStatus == 2){
-            System.out.println("失败");
-        }
-
-        return "1";
-    }
-
     /**
      * 个人输入认证码、身份证后，查找车牌号和租金
      * @param userId, inputInfo
