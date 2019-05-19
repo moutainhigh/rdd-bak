@@ -10,6 +10,12 @@ public class BasisContractInfo {
     // 合同创建时间
     private String createAt;
 
+    // 合同开始时间
+    private String startTime;
+
+    // 合同结束时间
+    private String endTime;
+
     // 合同签署状态
     private Integer status;
 
@@ -37,6 +43,22 @@ public class BasisContractInfo {
 
     public void setContractId(String contractId) {
         this.contractId = contractId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getSignedAt() {
