@@ -168,7 +168,7 @@ public class MyWalletImpl implements MyWallet {
                 int updateBalance = myWalletMapper.increaseWithdrawed(balanceAndInfoId.getInfoId(), alipayRecordDTO.getPaymentAmount().toString());
 
                 if (updateBalance != 1)
-                    return new JSONResult("提现成功，但更新用户余额失败", 500);
+                    return new JSONResult("提现成功，但更新用户余额失败", 500, "提现成功");
                 System.out.println(updateBalance);
 
                 // 设置提现记录的sourceId为支付宝返回的单号
@@ -177,15 +177,15 @@ public class MyWalletImpl implements MyWallet {
                 int insertSuccess = myWalletMapper.insertIncomeLog(incomeLog);
                 System.out.println(insertSuccess);
                 if (insertSuccess != 1)
-                    return new JSONResult("提现成功，但插入提现记录出错", 500);
+                    return new JSONResult("提现成功，但插入提现记录出错", 500, "提现成功");
                 return new JSONResult("提现成功", 200);
             } else {
-                return new JSONResult("支付宝提现请求失败", 200);
+                return new JSONResult("支付宝提现请求失败", 200, "支付宝提现请求失败");
             }
 
         } catch (AlipayApiException e) {
             e.printStackTrace();
-            return new JSONResult("提现过程中出错", 200);
+            return new JSONResult("提现过程中出先未知错误", 200, "提现过程中出先未知错误");
         }
 
     }
