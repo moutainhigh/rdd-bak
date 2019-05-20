@@ -32,7 +32,8 @@
         c.rent AS rentMoney,
         c.bank_of_deposit bankDeposit,
         c.bank_user_name bankName,
-        c.bank_account_num bankAccount
+        c.bank_account_num bankAccount,
+        c.signedTime
         FROM
             czb_cars_persons cp,
             (
@@ -44,7 +45,8 @@
                     rent,
                     cc.bank_of_deposit,
                     cc.bank_account_num,
-                    cc.bank_user_name
+                    cc.bank_user_name,
+                    date_format(cc.signed_time , '%Y.%m.%d') signedTime
                 FROM
                     czb_contract_records cc
                 WHERE
