@@ -145,22 +145,29 @@
             petrol_type AS petrolType,
             car.plan_id AS taoCanId,
             person_name AS name,
-            zi.bank_account_num bankAccount,
-            zi.bank_of_deposit bankDeposit,
-            zi.bank_user_name bankName
+            zz.bank_account_num bankAccount,
+            zz.bank_of_deposit bankDeposit,
+            zz.bank_user_name bankName
         FROM
             czb_cars_persons car,
             (
                 SELECT
-                    record_id,
-                    bank_account_num,
-                    bank_of_deposit,
-                    bank_user_name
+                    record_id
                 FROM
                     czb_contract_records
                 WHERE
                     contract_father_id = #{contractId}
-            ) AS zi
+            ) AS zi,
+            (
+            select
+             bank_account_num,
+             bank_of_deposit,
+             bank_user_name
+            FROM
+            czb_contract_records z
+            WHERE
+            z.record_id = #{contractId}
+            ) zz
         WHERE
             car.contract_record_id = zi.record_id
     </select>
@@ -272,5 +279,14 @@
         LEFT JOIN czb_contract_records ccr ON ccr.user_id = usr.user_id
         WHERE
             ccr.record_id = #{contractId}
+    </select>
+
+    <select id="getContractFatherId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            contract_father_id
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
     </select>
 </mapper>

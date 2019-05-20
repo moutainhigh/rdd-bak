@@ -37,6 +37,9 @@ public interface RentCarMapperExtra {
     // 插入一条个人合同记录
     int insertContractLogPerson(ContractLog contractLog);
 
+    // 根据父级合同时间修改自己合同时间
+    int updateChildContractTimes(ContractLog contractLog);
+
     // 获取个人收益信息列表
     List<Income> getPersonalIncome(@Param("userId") String userId);
 

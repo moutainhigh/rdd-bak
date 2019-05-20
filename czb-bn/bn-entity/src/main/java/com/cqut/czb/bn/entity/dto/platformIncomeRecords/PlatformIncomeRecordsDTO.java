@@ -25,9 +25,7 @@ public class PlatformIncomeRecordsDTO {
 
     private Integer isDistributed;
 
-    private Date startTime;
-
-    private Date endTime;
+    private Date exportTime;
 
     private String remark;
 
@@ -119,20 +117,12 @@ public class PlatformIncomeRecordsDTO {
         this.isDistributed = isDistributed;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getExportTime() {
+        return exportTime;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setExportTime(Date exportTime) {
+        this.exportTime = exportTime;
     }
 
     public String getRemark() {

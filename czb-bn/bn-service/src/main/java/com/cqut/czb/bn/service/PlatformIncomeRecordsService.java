@@ -11,5 +11,5 @@ import org.springframework.stereotype.Service;
 public interface PlatformIncomeRecordsService {
     PageInfo<PlatformIncomeRecordsDTO> getReceiveRecords(PlatformIncomeRecordsDTO platformIncomeRecords, PageDTO pageDTO);
 
-    Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
+    Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) throws Exception;
 }

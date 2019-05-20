@@ -32,9 +32,6 @@ import java.util.List;
 public class AppHomePageController {
 
     @Autowired
-    AppHomePageController appHomePageController;
-
-    @Autowired
     AppHomePageService appHomePageService;
 
     //测试

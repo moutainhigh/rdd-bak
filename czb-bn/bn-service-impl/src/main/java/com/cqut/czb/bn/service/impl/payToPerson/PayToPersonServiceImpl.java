@@ -1,0 +1,103 @@
+package com.cqut.czb.bn.service.impl.payToPerson;
+
+import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
+import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
+import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.entity.PayToPerson;
+import com.cqut.czb.bn.service.PayToPersonService;
+import com.cqut.czb.bn.service.impl.petrolDeliveryRecords.ImportPetrolDelivery;
+import com.cqut.czb.bn.util.constants.SystemConstants;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class PayToPersonServiceImpl implements PayToPersonService{
+
+    @Autowired
+    PayToPersonMapperExtra payToPersonMapperExtra;
+    //列表查询
+    @Override
+    public PageInfo<PayToPersonDTO> getPayList(PayToPersonDTO payToPersonDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        return new PageInfo<>(payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO));
+    }
+
+    //导出execl表
+    @Override
+    public Workbook exportPayList(PayToPersonDTO payToPersonDTO) throws Exception {
+        List<PayToPersonDTO> payToPersonDTOS = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO);
+        Workbook workbook = getWorkBook(payToPersonDTOS);
+        return workbook;
+    }
+
+    @Override
+    public int importPayList(MultipartFile file) throws Exception{
+        InputStream inputStream = file.getInputStream();
+        List<PayToPersonDTO> payToPersonDTOS = null;
+        Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();
+        payToPersonDTOS = ImportPayToPerson.readExcel(file.getOriginalFilename(), inputStream);
+        System.out.println("99999999"+payToPersonDTOS.get(0).getContractRecordId());
+        int countForInsert = payToPersonMapperExtra.updateImportData(payToPersonDTOS);
+//        System.out.println("countForInsert " + countForInsert);
+        return countForInsert;
+    }
+
+    //生成execl表
+    public Workbook getWorkBook(List<PayToPersonDTO> payToPersonDTOS)throws Exception{
+        String[] payToPersonHeader = SystemConstants.PAY_TO_PERSON_RECORDS;
+        Workbook workbook = null;
+        try{
+            workbook = new SXSSFWorkbook(payToPersonDTOS.size());
+        } catch (Exception e) {
+            throw new Exception("Excel导出不了啦，请换个时间段试试");
+        }
+        Sheet sheet = workbook.createSheet("导出企业打款记录");//创建工作表
+        Row row =sheet.createRow(0);//创建行从第0行开始
+        CellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        for (int i = 0; i < payToPersonHeader.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(payToPersonHeader[i]);
+            cell.setCellStyle(style);
+            sheet.setColumnWidth(i, (short) 6000); // 设置列宽
+        }
+        for (int i = 0 ; i<payToPersonDTOS.size(); i++){
+            int count = 0;
+            row = sheet.createRow(i+1);
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getContractRecordId());
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayeeName());
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayeeIdCard());
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getBankOfDeposit());
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getBankAccountNum());
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayableMoney());
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue("");
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue("未打款");
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue("");
+        }
+        return workbook;
+    }
+
+}

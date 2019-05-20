@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl;
+package com.cqut.czb.bn.service.impl.platformIncomeRecord;
 
 import com.cqut.czb.bn.dao.mapper.PlatformIncomeRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
@@ -29,62 +29,47 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     }
 
     @Override
-    public Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
+    public Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) throws Exception {
         List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS = platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTO);
-
-        return null;
+        Workbook workbook = getWorkBook(platformIncomeRecordsDTOS);
+        return workbook;
     }
         //导出生成execl表
-    public Workbook getWorkBook(List<PetrolDeliveryDTO> petrolDeliveryDTOS)throws Exception{
-        String[] petrolDeliveryRecordHeader = SystemConstants.PETROL_DELIVERY_RECORD_HEAD;
+    public Workbook getWorkBook(List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS)throws Exception{
+        String[] platformIncomeRecordsHeader = SystemConstants.PLATFORM_INCOME_RECORDS;
         Workbook workbook = null;
         try{
-            workbook = new SXSSFWorkbook(petrolDeliveryDTOS.size());
+            workbook = new SXSSFWorkbook(platformIncomeRecordsDTOS.size());
         } catch (Exception e) {
             throw new Exception("Excel数据量过大，请缩短时间间隔");
         }
-        Sheet sheet = workbook.createSheet("导出寄送记录");//创建工作表
+        Sheet sheet = workbook.createSheet("导出企业打款记录");//创建工作表
         Row row =sheet.createRow(0);//创建行从第0行开始
         CellStyle style = workbook.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
-        for (int i = 0; i < petrolDeliveryRecordHeader.length; i++) {
+        for (int i = 0; i < platformIncomeRecordsHeader.length; i++) {
             Cell cell = row.createCell(i);
-            cell.setCellValue(petrolDeliveryRecordHeader[i]);
+            cell.setCellValue(platformIncomeRecordsHeader[i]);
             cell.setCellStyle(style);
             sheet.setColumnWidth(i, (short) 6000); // 设置列宽
         }
-        for (int i = 0 ; i<petrolDeliveryDTOS.size(); i++){
+        for (int i = 0 ; i<platformIncomeRecordsDTOS.size(); i++){
             int count = 0;
             row = sheet.createRow(i+1);
-
-            row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getPetrolNum());
-            if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
-                row.createCell(count++).setCellValue("国通");
-            else if(petrolDeliveryDTOS.get(i).getDeliveryState()==1)
-                row.createCell(count++).setCellValue("中石油");
-            else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
-                row.createCell(count++).setCellValue("中石化");
-            if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
-                row.createCell(count++).setCellValue("未寄送");
-            else if(petrolDeliveryDTOS.get(i).getDeliveryState()==1)
-                row.createCell(count++).setCellValue("寄送中");
-            else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
-                row.createCell(count++).setCellValue("已收货");
-//                row.createCell(count++).setCellType(CellType.STRING);
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getReceiver());
+            row.createCell(count++).setCellValue(platformIncomeRecordsDTOS.get(i).getContractRecordId());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(petrolDeliveryDTOS.get(i).getCreateAt()));
+            row.createCell(count++).setCellValue(platformIncomeRecordsDTOS.get(i).getUserName());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getContactNumber());
+            row.createCell(count++).setCellValue(platformIncomeRecordsDTOS.get(i).getReceivableMoney());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getProvince()+petrolDeliveryDTOS.get(i).getCity()+petrolDeliveryDTOS.get(i).getArea());
+            row.createCell(count++).setCellValue("");
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDetail());
+            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM").format(platformIncomeRecordsDTOS.get(i).getTargetYearMonth()));
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(""+petrolDeliveryDTOS.get(i).getDeliveryNum());
+            row.createCell(count++).setCellValue("");
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDeliveryCompany());
+            row.createCell(count++).setCellValue("未打款");
         }
         return workbook;
     }

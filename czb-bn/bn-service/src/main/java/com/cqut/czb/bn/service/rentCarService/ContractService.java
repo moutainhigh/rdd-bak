@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedInfoDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
@@ -42,8 +43,8 @@ public interface ContractService {
     // 企业签订合同正文初始化
     String companySignedInitialize(String userId);
 
-    // 企业签订合同正文时间确认
-    String setCompanySignedTime(String startTime, String contractId, String bankDeposit, String bankAccount, String bankName);
+//    // 企业签订合同正文时间确认
+//    String setCompanySignedTime(String startTime, String contractId, String bankDeposit, String bankAccount, String bankName);
 
     // 企业签订合同正文个人服务添加
     JSONObject addCompanySignedPersonal(CompanySignedPersonal personal);
@@ -64,7 +65,7 @@ public interface ContractService {
     boolean removePersonInfo(String contractIdList);
 
     // 企业签订合同
-    JSONObject companySigned(String userId, String contractId);
+    JSONObject companySigned(String userId, CompanySignedInfoDTO info);
 
     // 判断有无印章
     JSONObject checkMoulage(String userId);

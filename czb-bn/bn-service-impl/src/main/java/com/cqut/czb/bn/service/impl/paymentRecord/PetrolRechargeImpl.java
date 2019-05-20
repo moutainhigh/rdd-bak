@@ -23,8 +23,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
     FanYongService fanYongService;
 
     @Override
-    public boolean beginPetrolRecharge(double money, int count,
-                                       int petrolKind, String petrolNum,
+    public boolean beginPetrolRecharge(String contractId, double money,int petrolKind, String petrolNum,
                                        String ownerId, double actualPayment,String orgId)
     {
         //通过油卡号查出用户买的油卡信息
@@ -50,11 +49,12 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         petrolSalesRecords.setThirdOrderId(orgId);
         petrolSalesRecords.setRecordType(petrol.getPetrolType());
         petrolSalesRecords.setIsRecharged(1);
+        petrolSalesRecords.setContractId(contractId);
         boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
         System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
 
         //开始返佣
-        System.out.println("油卡充值开始返佣");
+        System.out.println("****油卡充值开始返佣****");
         boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment,orgId);
 
         if(beginFanYong==true&&insertPetrolSalesRecords==true)

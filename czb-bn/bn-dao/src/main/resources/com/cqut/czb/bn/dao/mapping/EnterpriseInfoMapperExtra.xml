@@ -25,8 +25,9 @@
         LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
         LEFT JOIN czb_contract_records on czb_enterprise_info.user_id = czb_contract_records.user_id GROUP BY enterprise_info_id
         <where>
+            czb_enterprise_info.is_deleted = 0
             <if test="enterpriseInfo.enterpriseInfoId!=null and enterpriseInfo.enterpriseInfoId!=''">
-                enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
+               AND enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
             </if>
             <if test="enterpriseInfo.enterpriseName!=null and enterpriseInfo.enterpriseName!=''">
                 AND enterprise_name= #{enterpriseInfo.enterpriseName,jdbcType=VARCHAR}
