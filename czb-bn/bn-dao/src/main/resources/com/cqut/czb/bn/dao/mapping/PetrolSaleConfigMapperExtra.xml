@@ -118,8 +118,12 @@
     <collection property="areaConfigs" column="area" javaType="list" select="getAreaConfig"/>
   </resultMap>
 
-  <select id="getPetrolSaleConfigs" resultMap="saleConfigResult">
-    select area  from czb_petrol_sale_config group by area
+  <select id="getPetrolSaleConfigs" resultMap="saleConfigResult" parameterType="java.lang.String">
+    select area  from czb_petrol_sale_config <where>
+    <if test="area != null and area !=''">
+      area like concat('%',#{area,jdbcType = VARCHAR},'%')
+    </if>
+  </where>group by area
   </select>
 
   <select id="getAreaConfig" resultMap="BaseResultMap">

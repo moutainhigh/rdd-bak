@@ -21,7 +21,7 @@ public interface PetrolSaleConfigMapperExtra {
 
     List<PetrolSaleConfig> selectPetrolSaleConfig();
 
-    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
+    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs(@Param("area") String area);
 
     List<PetrolSaleConfig>  getAreaConfigByArea(@Param("area") String area);
 
