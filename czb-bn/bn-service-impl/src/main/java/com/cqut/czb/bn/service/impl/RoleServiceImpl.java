@@ -83,15 +83,16 @@ public class RoleServiceImpl implements IRoleService {
         boolean isInsert = true;
         if(roleInputDTO.getAuthorities() != null) {
             List<RoleMenuDTO> insertList = initRoleMenuList(roleInputDTO);
-            for(RoleMenuDTO insert : insertList) {
-                for (RoleMenuDTO delete : deleteList) {
+            for (RoleMenuDTO delete : deleteList) {
+                for(RoleMenuDTO insert : insertList) {
                     if (delete.getMenuId().equals(insert.getMenuId())) {
                         tempList.add(delete);
+                        insertList.remove(insert);
+                        break;
                     }
                 }
             }
             for(RoleMenuDTO temp: tempList) {
-                insertList.remove(temp);
                 deleteList.remove(temp);
             }
             if(insertList.size() > 0) {
@@ -113,17 +114,7 @@ public class RoleServiceImpl implements IRoleService {
     public PageInfo<RoleDTO> selectRole(RoleInputDTO roleInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
         List<RoleDTO> roleList = roleMapperExtra.selectRole(roleInputDTO);
-        for(RoleDTO roleDTO: roleList) {
-            RoleInputDTO roleInput = new RoleInputDTO();
-            roleInput.setRoleId(roleDTO.getRoleId());
-            List<RoleMenuDTO> roleMenuDTOList = roleMenuMapperExtra.selectRoleMenuList(roleInput);
-            MenuInputDTO menuInputDTO = new MenuInputDTO();
-            menuInputDTO.setMenuIds(new ArrayList<>());
-            for(RoleMenuDTO roleMenuDTO: roleMenuDTOList)  {
-                menuInputDTO.getMenuIds().add(roleMenuDTO.getMenuId());
-            }
-            roleDTO.setMenuList(menuMapperExtra.selectRolesMenu(menuInputDTO));
-        }
+
         return new PageInfo<>(roleList);
     }
 
