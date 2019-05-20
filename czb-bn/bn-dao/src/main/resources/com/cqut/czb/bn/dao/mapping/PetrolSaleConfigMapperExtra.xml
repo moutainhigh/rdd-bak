@@ -125,5 +125,27 @@
   <select id="getAreaConfig" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/> from czb_petrol_sale_config where area = #{area}
   </select>
+<!--2019年5月19日 22:55:52-->
+  <select id="getAreaConfigByArea" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select <include refid="Base_Column_List"/> from czb_petrol_sale_config where area = #{area}
+  </select>
+
+  <update id="updateAreaConfig" parameterType="java.util.List">
+    update czb_petrol_sale_config
+    <set>
+      <trim prefix="sale_state =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+            when petrol_config_id=#{item.petrolConfigId} then  #{item.saleState}
+        </foreach>
+      </trim>
+
+  </set>
+    <where>
+      petrol_config_id in
+      <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+        #{item.petrolConfigId,jdbcType=VARCHAR}
+      </foreach>
+    </where>
+  </update>
 
 </mapper>

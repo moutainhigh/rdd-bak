@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.bn.entity.dto.petrolSaleConfig.SetAreaConfigInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -32,5 +33,10 @@ public class PetrolSaleConfigController {
         return new JSONResult(petrolSaleConfigService.updatePetrolSaleConfig(petrolSaleConfig) );
     }
 
+
+    @RequestMapping(value = "/setAreaConfig",method = RequestMethod.POST)
+    public JSONResult setAreaConfig(@RequestBody SetAreaConfigInputDTO inputDTO){
+        return new JSONResult(petrolSaleConfigService.setAreaConfig(inputDTO) );
+    }
 
 }
