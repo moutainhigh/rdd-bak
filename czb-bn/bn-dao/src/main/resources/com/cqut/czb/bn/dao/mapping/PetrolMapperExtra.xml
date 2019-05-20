@@ -93,6 +93,8 @@
      from czb_petrol
      WHERE petrol_kind=#{petrolType} and  state=1 and area=#{area,jdbcType = VARCHAR}
      GROUP BY  petrol_price
+     order by
+     petrol_price desc
   </select>
 
   <select id="selectPetrol" resultMap="BaseResultMap" >
