@@ -51,14 +51,8 @@
             <if test="isDistributed!=null">
                 and is_distributed=#{isDistributed,jdbcType=INTEGER}
             </if>
-            <if test="startTime!=null">
-                and b.contract_start_time >=#{startTime,jdbcType=TIMESTAMP}
-            </if>
-            <if test="endTime!=null">
-                and #{startTime,jdbcType=TIMESTAMP}>=b.contract_start_time
-            </if>
-            <if test="startTime!=null and endTime!=null">
-                AND #{startTime,jdbcType=TIMESTAMP} &lt;=b.contract_start_time AND #{startTime,jdbcType=TIMESTAMP}>=b.contract_start_time
+            <if test="exportTime!=null">
+                and date_format(b.contract_start_time, '%Y-%m')=date_format(#{exportTime,jdbcType=TIMESTAMP}, '%Y-%m')
             </if>
         </where>
     </select>

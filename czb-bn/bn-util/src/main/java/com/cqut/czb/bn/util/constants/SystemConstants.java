@@ -59,6 +59,10 @@ public class SystemConstants {
     public static  String HOLD_TYPE_USE="2";
 
     /**
+     * 导出个人收款记录excel的头部
+     */
+    public static final String[] PAY_TO_PERSON_RECORDS = {"合同号","收款人姓名","收款人身份证号","开户行","银行卡账号","应打款金额","实打款金额","打款状态","打款时间"};
+    /**
      * 导出平台收款记录excel的头部
      */
     public static final String[] PLATFORM_INCOME_RECORDS = {"合同号","企业名字","应收款金额","实收款金额","目标月","企业打款时间","收款状态"};

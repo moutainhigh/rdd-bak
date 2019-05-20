@@ -46,6 +46,9 @@
             <if test="state!=null">
                 AND state = #{state,jdbcType=INTEGER}
             </if>
+               <if test="exportTime!=null">
+                   and date_format(b.contract_start_time, '%Y-%m')=date_format(#{exportTime,jdbcType=TIMESTAMP}, '%Y-%m')
+               </if>
         </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
@@ -171,6 +174,21 @@
         actual_pay_money = #{actualPayMoney,jdbcType=DOUBLE},
         target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP},
         platform_pay_time = #{platformPayTime,jdbcType=TIMESTAMP},
+        state = #{state,jdbcType=INTEGER},
+        is_deleted = #{isDeleted,jdbcType=INTEGER}
+        where record_id = #{recordId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateImportData" parameterType="com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO" >
+        update czb_pay_to_person
+        set
+        actual_pay_money = <foreach collection="list" item="item" index="index"
+                                    separator="" open="" close=",">
+        #{item.actualPayMoney,jdbcType=VARCHAR}
+    </foreach>
+        platform_pay_time = <foreach collection="list" item="item" index="index"
+                                     separator="" open="" close=",">
+        #{item.platformPayTime,jdbcType=TIMESTAMP}
+    </foreach>
         state = #{state,jdbcType=INTEGER},
         is_deleted = #{isDeleted,jdbcType=INTEGER}
         where record_id = #{recordId,jdbcType=VARCHAR}

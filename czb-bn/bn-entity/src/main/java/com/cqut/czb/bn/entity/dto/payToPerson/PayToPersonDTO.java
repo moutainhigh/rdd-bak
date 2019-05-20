@@ -29,6 +29,8 @@ public class PayToPersonDTO {
 
     private String remark;
 
+    private String exportTime;
+
     public String getRecordId() {
         return recordId;
     }
@@ -131,5 +133,13 @@ public class PayToPersonDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getExportTime() {
+        return exportTime;
+    }
+
+    public void setExportTime(String exportTime) {
+        this.exportTime = exportTime;
     }
 }

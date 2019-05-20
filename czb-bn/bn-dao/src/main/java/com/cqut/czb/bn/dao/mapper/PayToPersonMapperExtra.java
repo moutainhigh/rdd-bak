@@ -12,9 +12,11 @@ public interface PayToPersonMapperExtra {
 
     int insertSelective(PayToPerson record);
 
-    List<PayToPerson> selectByPrimaryKey(PayToPersonDTO payToPersonDTO);
+    List<PayToPersonDTO> selectByPrimaryKey(PayToPersonDTO payToPersonDTO);
 
     int updateByPrimaryKeySelective(PayToPerson record);
 
     int updateByPrimaryKey(PayToPerson record);
+
+    int updateImportData (List<PayToPersonDTO> list);
 }
