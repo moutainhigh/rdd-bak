@@ -209,11 +209,11 @@ public class ContractController {
         switch(code){
             case ContractServiceImpl.STATE_TIME_FORMAT:
                 json.put("code", Integer.parseInt(code));
-                json.put("message", "时间格式可能出错" + "(" + code + ")");
+                json.put("message", "时间格式出错");
                 break;
             case ContractServiceImpl.STATE_TIME_SET:
                 json.put("code", Integer.parseInt(code));
-                json.put("message", "设置时间出错" + "(" + code + ")");
+                json.put("message", "设置时间出错");
                 break;
             default:
                 json.put("code", 200);
