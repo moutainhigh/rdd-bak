@@ -4,8 +4,7 @@ public interface PetrolRecharge {
     /**
      * 油卡充值
      */
-    boolean beginPetrolRecharge(double money,int count,
-                                int petrolKind,String petrolNum,
+    boolean beginPetrolRecharge(String contractId, double money,int petrolKind,String petrolNum,
                                 String ownerId,double actualPayment,
                                 String orgId);
 }

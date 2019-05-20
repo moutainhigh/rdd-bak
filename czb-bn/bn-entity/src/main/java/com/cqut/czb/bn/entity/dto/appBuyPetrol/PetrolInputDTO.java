@@ -12,9 +12,29 @@ public class PetrolInputDTO {
 
     private String addressId;
 
+    private String PaymentOrder;
+
+    private String contractId;//合同订单
+
     private String payType;//执行的操作0为购油。2为充值
 
     public PetrolInputDTO() {
+    }
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
+    }
+
+    public String getPaymentOrder() {
+        return PaymentOrder;
+    }
+
+    public void setPaymentOrder(String paymentOrder) {
+        PaymentOrder = paymentOrder;
     }
 
     public String getPayType() {
