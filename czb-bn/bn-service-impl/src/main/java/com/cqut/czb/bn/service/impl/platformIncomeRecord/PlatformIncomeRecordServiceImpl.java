@@ -12,10 +12,11 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-
+@Service
 public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsService{
 
     @Autowired
