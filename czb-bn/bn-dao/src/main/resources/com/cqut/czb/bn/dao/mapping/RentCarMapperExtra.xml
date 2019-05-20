@@ -182,30 +182,39 @@
     <!--企业获取合同概要信息列表-->
     <select id="getOneCompanyContractInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneCompanyContractsPersonDTO">
         SELECT
-            p.person_name AS personName,
-            p.car_license AS license,
-            p.person_id_card AS carId,
-            p.is_signed AS isSign,
-            p.plan_id as rent,
-            c.rent realRent,
-            p.identify_code identifyCode,
-            c.bank_account_num bankAccount,
-            c.bank_of_deposit bankDeposit,
-            c.bank_user_name bankName
+            car.person_name personName,
+            car.car_license license,
+            car.person_id_card carId,
+            car.is_signed isSign,
+            car.plan_id rent,
+            zi.rent realRent,
+            car.identify_code identifyCode,
+            zz.bank_account_num bankAccount,
+            zz.bank_of_deposit bankDeposit,
+            zz.bank_user_name bankName
         FROM
-            czb_contract_records c,
-            czb_cars_persons p
-        WHERE  c.record_id = p.contract_record_id
-        and
-            p.contract_record_id IN (
+            czb_cars_persons car,
+            (
                 SELECT
-                    record_id
+                    record_id,
+                    rent
                 FROM
-                    czb_contract_records p1
+                    czb_contract_records
                 WHERE
                     contract_father_id = #{fatherId}
-            )
-        GROUP BY person_name, license, carId, is_signed, plan_id, c.rent, p.identify_code, c.bank_account_num,c.bank_of_deposit,c.bank_user_name
+            ) AS zi,
+            (
+                SELECT
+                    bank_account_num,
+                    bank_of_deposit,
+                    bank_user_name
+                FROM
+                    czb_contract_records z
+                WHERE
+                    z.record_id = #{fatherId}
+            ) zz
+        WHERE
+            car.contract_record_id = zi.record_id
     </select>
 
     <!--企业合同插入-->
