@@ -19,8 +19,8 @@ public class EnterpriseManagementContrller {
     EnterpriseInfoService enterpriseInfoService;
 
     @GetMapping("/getEnterprise")
-    public JSONResult getEnterprise(EnterpriseInfoDTO enterpriseInfoDTO){
-        return new JSONResult(enterpriseInfoService.getEnterpriseInfo(enterpriseInfoDTO));
+    public JSONResult getEnterprise(EnterpriseInfoDTO enterpriseInfoDTO,PageDTO pageDTO){
+        return new JSONResult(enterpriseInfoService.getEnterpriseInfo(enterpriseInfoDTO,pageDTO));
     }
     @GetMapping("/deleteEnterprise")
     public Boolean deleteEnterprise(String id){

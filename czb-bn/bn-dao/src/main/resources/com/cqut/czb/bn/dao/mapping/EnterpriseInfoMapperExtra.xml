@@ -17,7 +17,7 @@
     enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_id,
     org_code, create_at, update_at, enterprise_yun_id
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.enterpriseInfo.EnterpriseInfoDTO" >
         select
         enterprise_info_id, enterprise_name, legal_person, contact_info,czb_enterprise_info.is_deleted, user_account,
         org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at,COUNT(enterprise_info_id) as counts
@@ -25,22 +25,22 @@
         LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
         LEFT JOIN czb_contract_records on czb_enterprise_info.user_id = czb_contract_records.user_id GROUP BY enterprise_info_id
         <where>
-            <if test="enterpriseInfo.enterpriseInfoId!=null">
+            <if test="enterpriseInfo.enterpriseInfoId!=null and enterpriseInfo.enterpriseInfoId!=''">
                 enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
             </if>
-            <if test="enterpriseInfo.enterpriseName!=null">
+            <if test="enterpriseInfo.enterpriseName!=null and enterpriseInfo.enterpriseName!=''">
                 AND enterprise_name= #{enterpriseInfo.enterpriseName,jdbcType=VARCHAR}
             </if>
-            <if test="enterpriseInfo.userAccount!=null">
+            <if test="enterpriseInfo.userAccount!=null and enterpriseInfo.userAccount!=''">
                 AND  user_account= #{enterpriseInfo.userAccount,jdbcType=VARCHAR}
             </if>
-            <if test="enterpriseInfo.contactInfo!=null">
+            <if test="enterpriseInfo.contactInfo!=null and enterpriseInfo.contactInfo!=''">
                 AND contact_info=#{enterpriseInfo.contactInfo,jdbcType=VARCHAR}
             </if>
-            <if test="enterpriseInfo.startTime!=null and enterpriseInfo.endTime ==null">
+            <if test="enterpriseInfo.startTime!=null">
                 AND create_at >= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime == null">
+            <if test="enterpriseInfo.endTime!=null">
                 AND  #{enterpriseInfo.endTime,jdbcType=TIMESTAMP} >=create_at
             </if>
             <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime != null">
@@ -164,6 +164,11 @@
         org_code = #{orgCode,jdbcType=VARCHAR},
         create_at = #{createAt,jdbcType=TIMESTAMP},
         update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
+    </update>
+    <update id="deleteById" parameterType="java.lang.String">
+        update czb_enterprise_info
+        set is_deleted = 1
         where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
     </update>
     <select id="selectEnterpriseContract" parameterType="com.cqut.czb.bn.entity.dto.enterpriseInfo.EnterpriseInfoDTO" resultType="com.cqut.czb.bn.entity.entity.ContractRecords">
