@@ -37,10 +37,10 @@
             <if test="enterpriseInfo.contactInfo!=null and enterpriseInfo.contactInfo!=''">
                 AND contact_info=#{enterpriseInfo.contactInfo,jdbcType=VARCHAR}
             </if>
-            <if test="enterpriseInfo.startTime!=null">
+            <if test="enterpriseInfo.startTime!=null and enterpriseInfo.endTime==null">
                 AND create_at >= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="enterpriseInfo.endTime!=null">
+            <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime==null">
                 AND  #{enterpriseInfo.endTime,jdbcType=TIMESTAMP} >=create_at
             </if>
             <if test="enterpriseInfo.endTime!=null and enterpriseInfo.startTime != null">
