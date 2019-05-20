@@ -611,6 +611,39 @@ public class ContractServiceImpl implements ContractService{
             return json;
         }
 
+        // 根据子级合同id，查找父级合同id
+        String fatherContractId = contractMapper.getContractFatherId(personContractId);
+        if(StringUtil.isNullOrEmpty(fatherContractId)){
+            json.put("code", STATE_FIND_TIMES);
+            return json;
+        }
+
+        // 根据父级合同id，查找父级合同记录的开始和结束时间
+        ContractLog times = null;
+        try{
+            times = contractMapper.getContractStartTimeAndEndTime(fatherContractId);
+            if(times == null){
+                json.put("code", STATE_FIND_TIMES);
+                return json;
+            }
+        } catch(Exception e){
+            json.put("code", STATE_FIND_TIMES);
+            return json;
+        }
+
+        ContractLog contractLog = new ContractLog();
+        contractLog.setRecordId(personContractId);
+        contractLog.setStartTime(times.getStartTime());
+        contractLog.setEndTime(times.getEndTime());
+
+        // 设置子级合同的时间
+        try{
+            rentCarMapper.updateChildContractTimes(contractLog);
+        } catch(Exception e){
+            json.put("code", STATE_INSERT_PERSONAL_CONTRACT_FAILED);
+            return json;
+        }
+
         // 生成合同模板,并返回一个云合同id
         String createYunContract = createContract(userId, personContractId, getToken());
         if(createYunContract.equals("108") || createYunContract.equals("109") || createYunContract.equals("")){
@@ -669,7 +702,14 @@ public class ContractServiceImpl implements ContractService{
      * 企业签订合同（此步后跳到引入js页面）
      */
     @Override
-    public JSONObject companySigned(String userId, String contractId) {
+    public JSONObject companySigned(String userId,CompanySignedInfoDTO info) {
+        String contractId = info.getContractId();
+        try{
+            setCompanySignedTime(info.getStartTime(), contractId, info.getBankDeposit(), info.getBankAccount(), info.getBankName());
+        } catch (Exception e){
+
+        }
+
         JSONObject json = new JSONObject();
         // 查看用户是否注册云合同
         String yunId = contractMapper.getYunId(userId);
@@ -744,11 +784,11 @@ public class ContractServiceImpl implements ContractService{
         return contractId;
     }
 
+    // TODO 谭深化——这里的合同开始结束时间，以后可能会修改
     /**
      * 企业签订正文时间设置
      */
-    @Override
-    public String setCompanySignedTime(String startTime, String contractId, String bankDeposit, String bankAccount, String bankName){
+    private String setCompanySignedTime(String startTime, String contractId, String bankDeposit, String bankAccount, String bankName){
         SimpleDateFormat startTimeDate = new SimpleDateFormat(startTime);
 
         // 将符合格式的字符串时间转换为date类型，并以此设置结束时间
@@ -811,21 +851,8 @@ public class ContractServiceImpl implements ContractService{
             json.put("code", STATE_FIND_TAO_CAN_RENT);
         }
 
-        // 根据父级合同id，查找父级合同记录的开始和结束时间
-        ContractLog times = null;
-        try{
-            times = contractMapper.getContractStartTimeAndEndTime(personal.getContractId());
-            if(times == null){
-                json.put("code", STATE_FIND_TIMES);
-            }
-        } catch(Exception e){
-            json.put("code", STATE_FIND_TIMES);
-        }
-
         String contractId = StringUtil.createId();
         contractLog.setRecordId(contractId);
-        contractLog.setStartTime(times.getStartTime());
-        contractLog.setEndTime(times.getEndTime());
         contractLog.setRent(rent);
         contractLog.setFatherRecordId(personal.getContractId());
 
@@ -1037,7 +1064,7 @@ public class ContractServiceImpl implements ContractService{
 
 
     /**
-     *
+     * 删除合同记录
      * @param contractId
      * @return
      */

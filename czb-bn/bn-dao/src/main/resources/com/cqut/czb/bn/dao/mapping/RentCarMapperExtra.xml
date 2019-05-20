@@ -230,8 +230,6 @@
     <insert id="insertContractLogPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
         INSERT INTO czb_contract_records (
         record_id,
-        contract_start_time,
-        contract_end_time,
         contract_state,
         contract_type,
         rent,
@@ -240,8 +238,6 @@
         VALUES
         (
         #{recordId},
-        #{startTime},
-        #{endTime},
         '0',
         '1',
         #{rent},
@@ -249,6 +245,14 @@
         )
     </insert>
 
+    <update id="updateChildContractTimes" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        UPDATE czb_contract_records
+        SET contract_start_time = #{startTime},
+         contract_end_time = #{endTime}
+        WHERE
+            record_id = #{recordId};
+    </update>
+    
     <!--企业插入添加的人员信息-->
     <insert id="insertCompanyPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonCar">
         INSERT INTO czb_cars_persons (

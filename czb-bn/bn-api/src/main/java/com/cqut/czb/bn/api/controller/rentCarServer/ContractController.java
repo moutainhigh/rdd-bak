@@ -198,30 +198,29 @@ public class ContractController {
         return jsonResult;
     }
 
-    // TODO 谭深化——这里的合同开始结束时间，以后可能会修改
-    /**
-     * 企业签订正文时间设置
-     */
-    @RequestMapping(value = "/setCompanySignedTime", method = RequestMethod.POST)
-    public JSONResult setCompanySignedTime(@RequestBody CompanySignedTime startTime){
-        String code = contractService.setCompanySignedTime(startTime.getStartTime(), startTime.getContractId(),startTime.getBankDeposit(), startTime.getBankAccount(), startTime.getBankName());
-        JSONObject json = new JSONObject();
-        switch(code){
-            case ContractServiceImpl.STATE_TIME_FORMAT:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "时间格式出错");
-                break;
-            case ContractServiceImpl.STATE_TIME_SET:
-                json.put("code", Integer.parseInt(code));
-                json.put("message", "设置时间出错");
-                break;
-            default:
-                json.put("code", 200);
-                json.put("message", "设置时间成功");
-        }
-
-        return new JSONResult(json);
-    }
+//    /**
+//     * 企业签订正文时间设置
+//     */
+//    @RequestMapping(value = "/setCompanySignedTime", method = RequestMethod.POST)
+//    public JSONResult setCompanySignedTime(@RequestBody CompanySignedTime startTime){
+//        String code = contractService.setCompanySignedTime(startTime.getStartTime(), startTime.getContractId(),startTime.getBankDeposit(), startTime.getBankAccount(), startTime.getBankName());
+//        JSONObject json = new JSONObject();
+//        switch(code){
+//            case ContractServiceImpl.STATE_TIME_FORMAT:
+//                json.put("code", Integer.parseInt(code));
+//                json.put("message", "时间格式出错");
+//                break;
+//            case ContractServiceImpl.STATE_TIME_SET:
+//                json.put("code", Integer.parseInt(code));
+//                json.put("message", "设置时间出错");
+//                break;
+//            default:
+//                json.put("code", 200);
+//                json.put("message", "设置时间成功");
+//        }
+//
+//        return new JSONResult(json);
+//    }
 
     /**
      * 企业签订正文个人信息添加
@@ -312,9 +311,9 @@ public class ContractController {
      * 企业签订合同
      */
     @RequestMapping(value = "/companySigned", method = RequestMethod.POST)
-    public JSONResult personSigned(Principal principal, @RequestBody ContractIdInfo info){
+    public JSONResult personSigned(Principal principal, @RequestBody CompanySignedInfoDTO info){
         User user = (User)redisUtils.get(principal.getName());
-        JSONObject json = contractService.companySigned(user.getUserId(), info.getContractId());
+        JSONObject json = contractService.companySigned(user.getUserId(), info);
         String code = json.getString("code");
         switch(code){
             case ContractServiceImpl.STATE_CONTRACT_NULL:

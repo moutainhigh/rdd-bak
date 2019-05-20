@@ -99,4 +99,7 @@ public interface ContractMapperExtra {
 
     // 根据合同id，查找signerId和thirdContractId
     SignerIdAndContractId getSignerIdAndYunContractId(@Param("contractId") String contractId);
+
+    // 根据子级合同id，查找父级合同id
+    String getContractFatherId(@Param("contractId") String contractId);
 }

@@ -280,4 +280,13 @@
         WHERE
             ccr.record_id = #{contractId}
     </select>
+
+    <select id="getContractFatherId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            contract_father_id
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </select>
 </mapper>
