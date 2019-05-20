@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.petrolSaleConfig.PetrolSaleConfigOutputDTO;
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,8 @@ public interface PetrolSaleConfigMapperExtra {
     List<PetrolSaleConfig> selectPetrolSaleConfig();
 
     List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
+
+    List<PetrolSaleConfig>  getAreaConfigByArea(@Param("area") String area);
+
+    int updateAreaConfig(@Param("list") List<PetrolSaleConfig>  list);
 }
