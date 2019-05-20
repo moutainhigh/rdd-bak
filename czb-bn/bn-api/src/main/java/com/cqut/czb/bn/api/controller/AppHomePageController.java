@@ -48,7 +48,7 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectAnnouncement",method = RequestMethod.GET)
     public JSONResult selectAnnouncement(){
-        return new JSONResult<List<appAnnouncementDTO>>(appHomePageService.selectAnnouncement());
+        return new JSONResult(appHomePageService.selectAnnouncement());
     }
 
     /**
@@ -57,7 +57,7 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectPetrolSaleConfig",method = RequestMethod.GET)
     public JSONResult selectPetrolSaleConfig(){
-        return new JSONResult<List<PetrolSaleConfig>>(appHomePageService.selectPetrolSaleConfig());
+        return new JSONResult(appHomePageService.selectPetrolSaleConfig());
     }
 
     /**
@@ -66,7 +66,7 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectServicePlan",method = RequestMethod.GET)
     public JSONResult selectServicePlan(){
-        return new JSONResult<List<ServicePlan>>(appHomePageService.selectServicePlan());
+        return new JSONResult(appHomePageService.selectServicePlan());
     }
 
     /**
@@ -74,18 +74,19 @@ public class AppHomePageController {
      * @return
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
-    public JSONResult selectPetrol(String area){
+    public JSONResult selectPetrol(@RequestParam(name="area") String area){
+        System.out.println(area);
         if(area==null)
             return new JSONResult("无法获取当前位置", ResponseCodeConstants.FAILURE);
-        return new JSONResult<List<PetrolZoneDTO>>(appHomePageService.selectPetrolZone(area));
+        return new JSONResult(appHomePageService.selectPetrolZone(area));
     }
 
     /**
-     * 首页菜单路由获取
+     * 首页菜单路由获取  0国通，1中石油，2中石化
      */
     @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
     public JSONResult selectHomePageRouters( AppRouterDTO appRouterDTO){
-        return new JSONResult<List<AppRouterDTO>>(appHomePageService.selectHomePageRouters(appRouterDTO));
+        return new JSONResult(appHomePageService.selectHomePageRouters(appRouterDTO));
     }
 
     /**
@@ -93,6 +94,6 @@ public class AppHomePageController {
      */
     @RequestMapping(value ="/selectPetrolInfoDTO",method = RequestMethod.GET)
     public JSONResult selectPetrolInfoDTO(){
-        return new JSONResult<List<PetrolInfoDTO>>(appHomePageService.selectPetrolInfoDTO());
+        return new JSONResult(appHomePageService.selectPetrolInfoDTO());
     }
 }

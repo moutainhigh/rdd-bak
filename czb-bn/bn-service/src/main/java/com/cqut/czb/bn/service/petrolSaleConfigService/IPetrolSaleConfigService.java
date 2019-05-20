@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface IPetrolSaleConfigService {
-    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs();
+    List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs(String area);
 
     boolean updatePetrolSaleConfig(PetrolSaleConfig petrolSaleConfig);
 
