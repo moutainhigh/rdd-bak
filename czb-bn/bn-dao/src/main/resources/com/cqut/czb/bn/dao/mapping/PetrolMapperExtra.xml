@@ -73,18 +73,26 @@
 
   </insert>
 
-  <select id="selectPetrolZone" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO" >
-    select
-	DISTINCT
-    petrol_kind AS petrolKind,
-    petrol_denomination AS petrolDenomination,
-    petrol_price AS petrolPrice,
-    discount AS discount
-    from czb_petrol
-    where
-    state=1
-    GROUP BY petrolKind , petrolPrice,petrolDenomination,discount
-    ORDER BY petrolPrice  DESC
+
+  <!--油卡专区级联查询-->
+  <resultMap type="com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO" id="petrolZoneResult">
+    <result property="petrolKind" column="petrol_type"/>
+    <collection property="petrolPrice" column="petrol_type" javaType="list" select="getPetrolPrice"/>
+  </resultMap>
+
+  <select id="selectPetrolZone" resultMap="petrolZoneResult">
+     select petrol_type
+     from czb_petrol_sale_config
+     WHERE area=#{area,jdbcType = VARCHAR}
+     GROUP BY petrol_type
+  </select>
+
+  <select id="getPetrolPrice" resultType="java.lang.Double">
+     select
+     petrol_price as 'petrolPrice'
+     from czb_petrol
+     WHERE petrol_kind=#{petrolType} and  state=1 and area=#{area,jdbcType = VARCHAR}
+     GROUP BY  petrol_price
   </select>
 
   <select id="selectPetrol" resultMap="BaseResultMap" >

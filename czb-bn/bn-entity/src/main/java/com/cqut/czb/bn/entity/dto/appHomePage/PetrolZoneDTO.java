@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.entity.dto.appHomePage;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * 创建人：陈德强
@@ -11,11 +11,7 @@ public class PetrolZoneDTO {
 
     private Integer petrolKind;
 
-    private Double petrolDenomination;
-
-    private Double petrolPrice;
-
-    private Double discount;
+    private List<Double> petrolPrice;
 
     public Integer getPetrolKind() {
         return petrolKind;
@@ -25,28 +21,11 @@ public class PetrolZoneDTO {
         this.petrolKind = petrolKind;
     }
 
-    public Double getPetrolDenomination() {
-        return petrolDenomination;
-    }
-
-    public void setPetrolDenomination(Double petrolDenomination) {
-        this.petrolDenomination = petrolDenomination;
-    }
-
-    public Double getPetrolPrice() {
+    public List<Double> getPetrolPrice() {
         return petrolPrice;
     }
 
-    public void setPetrolPrice(Double petrolPrice) {
+    public void setPetrolPrice(List<Double> petrolPrice) {
         this.petrolPrice = petrolPrice;
     }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
-
 }
