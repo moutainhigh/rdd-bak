@@ -26,6 +26,11 @@ public class ServicePlanServiceImpl implements IServicePlanService {
     }
 
     @Override
+    public boolean updateServicePlan(ServicePlanInputDTO servicePlanInputDTO) {
+        return servicePlanMapperExtra.updateServicePlan(servicePlanInputDTO) > 0;
+    }
+
+    @Override
     public PageInfo<ServicePlan> selectServicePlan(PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         List<ServicePlan> servicePlanList = servicePlanMapperExtra.selectServicePlan();

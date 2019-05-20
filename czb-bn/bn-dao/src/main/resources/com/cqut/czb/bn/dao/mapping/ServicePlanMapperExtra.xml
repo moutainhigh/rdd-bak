@@ -67,4 +67,26 @@
       now(),
     </trim>
   </insert>
+  <update id="updateServicePlan" parameterType="com.cqut.czb.bn.entity.dto.servicePlan.ServicePlanInputDTO" >
+    update czb_service_plan
+    <set >
+      <if test="planName != null" >
+        plan_name = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planAmount != null" >
+        plan_amount = #{planAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="planTime != null" >
+        plan_time = #{planTime,jdbcType=INTEGER},
+      </if>
+      <if test="rentBackMoney != null" >
+        rent_back_money = #{rentBackMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+      </if>
+        update_at = now(),
+    </set>
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </update>
 </mapper>

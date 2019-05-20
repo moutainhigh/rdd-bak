@@ -11,4 +11,5 @@ public interface ServicePlanMapperExtra {
 
     int insertServicePlan(ServicePlanInputDTO servicePlanInputDTO);
 
+    int updateServicePlan(ServicePlanInputDTO servicePlanInputDTO);
 }
