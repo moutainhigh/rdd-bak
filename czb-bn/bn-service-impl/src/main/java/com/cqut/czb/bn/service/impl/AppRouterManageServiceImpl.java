@@ -46,7 +46,7 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         appRouter.setRouterId(StringUtil.createId());
         appRouter.setCreateAt(new Date());
         appRouter.setUpdateAt(new Date());
-        return (appRouterMapperExtra.insert(appRouter)>0);
+        return (appRouterMapperExtra.insertSelective(appRouter)>0);
     }
 
     @Override

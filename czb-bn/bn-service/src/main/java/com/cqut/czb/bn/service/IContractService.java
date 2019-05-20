@@ -16,6 +16,8 @@ public interface IContractService {
 
     boolean uploadContractTemplate(String templateName, MultipartFile multipartFile, User user) throws IOException;
 
+    boolean viewContractTemplate(String templateId, HttpServletResponse response);
+
     PageInfo<ContractModel> selectContractModelList(PageDTO pageDTO);
 
     PageInfo<ContractDTO> selectEnterpriseContractList(ContractInputDTO contractInputDTO, PageDTO pageDTO);

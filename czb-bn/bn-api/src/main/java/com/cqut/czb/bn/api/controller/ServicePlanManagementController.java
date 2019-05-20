@@ -35,6 +35,16 @@ public class ServicePlanManagementController {
         }
     }
 
+    @RequestMapping(value = "/updateServicePlan",method = RequestMethod.POST)
+    public JSONResult updateServicePlan(@Validated @RequestBody ServicePlanInputDTO servicePlanInputDTO){
+        boolean isUpdate = servicePlanService.updateServicePlan(servicePlanInputDTO);
+        if(isUpdate) {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "修改成功");
+        } else {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "修改失败");
+        }
+    }
+
     @RequestMapping(value = "/selectServicePlan",method = RequestMethod.GET)
     public JSONResult ServicePlan(PageDTO pageDTO){
 
