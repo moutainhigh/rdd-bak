@@ -34,10 +34,11 @@ public interface AppHomePageService {
     List<ServicePlan> selectServicePlan();
 
     /**
-     * 获取油卡专区的信息
+     * 获取油卡专区
+     * @param area
      * @return
      */
-    List<PetrolZoneDTO> selectPetrolZone();
+    List<PetrolZoneDTO> selectPetrolZone(String area);
 
     /**
      * 获取未售出的油卡

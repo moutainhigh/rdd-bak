@@ -11,6 +11,7 @@ import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -73,8 +74,10 @@ public class AppHomePageController {
      * @return
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
-    public JSONResult selectPetrol(){
-        return new JSONResult<List<PetrolZoneDTO>>(appHomePageService.selectPetrolZone());
+    public JSONResult selectPetrol(String area){
+        if(area==null)
+            return new JSONResult("无法获取当前位置", ResponseCodeConstants.FAILURE);
+        return new JSONResult<List<PetrolZoneDTO>>(appHomePageService.selectPetrolZone(area));
     }
 
     /**
@@ -90,22 +93,6 @@ public class AppHomePageController {
      */
     @RequestMapping(value ="/selectPetrolInfoDTO",method = RequestMethod.GET)
     public JSONResult selectPetrolInfoDTO(){
-        Date date1 = new Date();
-        DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
-        System.out.println(df1.format(date1));
-        Date date2=new Date();
-        DateFormat dfe2 = DateFormat.getDateInstance();//日期格式，精确到日
-        System.out.println(dfe2.format(date2).equals(df1.format(date1)));
-        Double newIncome= 125.11;
-        Double oldIncome=100.10;
-        BigDecimal bnewIncome = new BigDecimal(newIncome);
-        BigDecimal boldIncome = new BigDecimal(oldIncome);
-
-        double i = bnewIncome.subtract(boldIncome).doubleValue();
-        System.out.println(Double.parseDouble(String.format("%.2f", i)));
-        IncomeLog incomeLog=new IncomeLog();
-        incomeLog.setAmount(Double.parseDouble(String.format("%.2f", i)));
-        System.out.println(incomeLog.getAmount());
         return new JSONResult<List<PetrolInfoDTO>>(appHomePageService.selectPetrolInfoDTO());
     }
 }

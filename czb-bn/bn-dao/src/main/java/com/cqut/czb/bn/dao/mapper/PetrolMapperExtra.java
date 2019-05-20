@@ -29,7 +29,9 @@ public interface PetrolMapperExtra {
      * 获取未售出的油卡信息
      * @return
      */
-    List<PetrolZoneDTO> selectPetrolZone();
+    List<PetrolZoneDTO> selectPetrolZone(@Param(value = "area") String area);
+
+    List<Double> getPetrolPrice(int petrolKind);
 
     List<Petrol> selectPetrol();
 
