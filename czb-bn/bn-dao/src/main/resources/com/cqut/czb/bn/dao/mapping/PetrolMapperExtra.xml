@@ -24,7 +24,7 @@
     select <include refid="Base_Column_List"/> from czb_petrol
     <where>
       <if test="petrolNum != null and petrolNum !=''" >
-        AND petrol_num = #{petrolNum,jdbcType=VARCHAR}
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
       </if>
       <if test="petrolKind != null and petrolKind !=''" >
         AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
@@ -39,7 +39,7 @@
         AND state = #{state,jdbcType=INTEGER}
       </if>
       <if test="area != null and area != ''" >
-        AND area = #{area,jdbcType=VARCHAR}
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
       </if>
       <if test="petrolType != null and petrolType != ''" >
       AND petrol_type = #{petrolType,jdbcType=INTEGER}
