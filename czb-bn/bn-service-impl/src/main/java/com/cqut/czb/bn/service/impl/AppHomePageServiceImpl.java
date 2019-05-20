@@ -67,8 +67,8 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     }
 
     @Override
-    public List<PetrolZoneDTO> selectPetrolZone() {
-        return petrolMapperExtra.selectPetrolZone();
+    public List<PetrolZoneDTO> selectPetrolZone(String area) {
+        return petrolMapperExtra.selectPetrolZone(area);
     }
 
     @Override
