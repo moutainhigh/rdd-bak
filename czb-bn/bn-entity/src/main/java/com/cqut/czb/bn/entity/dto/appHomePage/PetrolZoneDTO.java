@@ -9,9 +9,19 @@ import java.util.List;
  */
 public class PetrolZoneDTO {
 
+    private String petrolName;
+
     private Integer petrolKind;
 
     private List<Double> petrolPrice;
+
+    public String getPetrolName() {
+        return petrolName;
+    }
+
+    public void setPetrolName(String petrolName) {
+        this.petrolName = petrolName;
+    }
 
     public Integer getPetrolKind() {
         return petrolKind;
