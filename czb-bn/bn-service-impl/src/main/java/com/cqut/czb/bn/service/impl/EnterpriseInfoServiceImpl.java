@@ -27,7 +27,7 @@ public class EnterpriseInfoServiceImpl  implements EnterpriseInfoService {
 
     @Override
     public Boolean deleteEnterpriseInfo(String id) {
-        return (enterpriseInfoMapperExtra.deleteByPrimaryKey(id)>0);
+        return (enterpriseInfoMapperExtra.deleteById(id)>0);
     }
 
     @Override

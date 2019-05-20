@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public interface EnterpriseInfoMapperExtra {
 
-    int deleteByPrimaryKey(String enterpriseInfoId);
+    int deleteById(String enterpriseInfoId);
 
     int insert(EnterpriseInfo record);
 

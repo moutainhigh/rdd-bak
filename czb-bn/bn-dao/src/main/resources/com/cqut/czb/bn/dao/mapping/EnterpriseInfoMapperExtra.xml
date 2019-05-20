@@ -166,6 +166,11 @@
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
     </update>
+    <update id="deleteById" parameterType="java.lang.String">
+        update czb_enterprise_info
+        set is_deleted = 1
+        where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
+    </update>
     <select id="selectEnterpriseContract" parameterType="com.cqut.czb.bn.entity.dto.enterpriseInfo.EnterpriseInfoDTO" resultType="com.cqut.czb.bn.entity.entity.ContractRecords">
         SELECT
             *
