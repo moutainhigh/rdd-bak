@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface EnterpriseInfoService {
-    PageInfo<EnterpriseInfoDTO> getEnterpriseInfo(EnterpriseInfoDTO enterpriseInfoDTO);
+    PageInfo<EnterpriseInfoDTO> getEnterpriseInfo(EnterpriseInfoDTO enterpriseInfoDTO,PageDTO pageDTO);
 
     Boolean deleteEnterpriseInfo(String id);
 

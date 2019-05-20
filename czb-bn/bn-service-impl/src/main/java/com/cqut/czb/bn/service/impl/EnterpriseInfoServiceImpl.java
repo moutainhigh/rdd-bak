@@ -21,7 +21,8 @@ public class EnterpriseInfoServiceImpl  implements EnterpriseInfoService {
     EnterpriseInfoMapperExtra enterpriseInfoMapperExtra;
 
     @Override
-    public PageInfo<EnterpriseInfoDTO> getEnterpriseInfo(EnterpriseInfoDTO enterpriseInfoDTO) {
+    public PageInfo<EnterpriseInfoDTO> getEnterpriseInfo(EnterpriseInfoDTO enterpriseInfoDTO,PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         return new PageInfo<>( enterpriseInfoMapperExtra.selectByPrimaryKey(enterpriseInfoDTO));
     }
 
