@@ -932,6 +932,9 @@ public class ContractServiceImpl implements ContractService{
         // 根据套餐id和油卡类型设置文字
         for(CarsPersonsDTO data: carsPersonsList){
             CarsPersonsResultDTO result = new CarsPersonsResultDTO();
+            result.setBankAccount(data.getBankAccount());
+            result.setBankDeposit(data.getBankDeposit());
+            result.setBankName(data.getName());
             result.setSonContractId(data.getContractId());
             result.setName(data.getName());
             result.setCarLicense(data.getCarLicense());
