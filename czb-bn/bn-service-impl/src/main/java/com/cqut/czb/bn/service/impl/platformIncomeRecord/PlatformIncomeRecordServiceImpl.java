@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl.platformIncomeRecord;
 
+import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PlatformIncomeRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.entity.PayToPerson;
 import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import com.cqut.czb.bn.service.PlatformIncomeRecordsService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -22,6 +24,9 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     @Autowired
     private PlatformIncomeRecordsMapperExtra platformIncomeRecordsMapperExtra;
 
+    @Autowired
+    private PayToPersonMapperExtra payToPersonMapperExtra;
+
     @Override
     public PageInfo<PlatformIncomeRecordsDTO> getReceiveRecords(PlatformIncomeRecordsDTO records, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
@@ -35,7 +40,17 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         Workbook workbook = getWorkBook(platformIncomeRecordsDTOS);
         return workbook;
     }
-        //导出生成execl表
+
+    @Override
+    public boolean ConfirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
+        PayToPerson payToPerson=new PayToPerson();
+        payToPerson.setState(1);//已打款
+        if(platformIncomeRecordsDTO.getRemark()!=null)
+        payToPerson.setRemark(platformIncomeRecordsDTO.getRemark());
+        return payToPersonMapperExtra.updateByPrimaryKey(payToPerson)>0;
+    }
+
+    //导出生成execl表
     public Workbook getWorkBook(List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS)throws Exception{
         String[] platformIncomeRecordsHeader = SystemConstants.PLATFORM_INCOME_RECORDS;
         Workbook workbook = null;

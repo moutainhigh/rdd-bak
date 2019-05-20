@@ -75,4 +75,16 @@ public class PlatformIncomeRecordsController {
         result.put("message", message);
         return new JSONResult(result);
     }
+
+    /**
+     * 确认已打款
+     * @param platformIncomeRecordsDTO
+     * @return
+     */
+    @GetMapping("/getPlatformRecordList")
+    public JSONResult getPlatformRecordList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
+        return new JSONResult(platformIncomeRecordsService.ConfirmReceipt(platformIncomeRecordsDTO));
+    }
+
+
 }

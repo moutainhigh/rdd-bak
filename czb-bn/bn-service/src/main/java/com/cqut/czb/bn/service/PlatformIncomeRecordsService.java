@@ -12,4 +12,10 @@ public interface PlatformIncomeRecordsService {
     PageInfo<PlatformIncomeRecordsDTO> getReceiveRecords(PlatformIncomeRecordsDTO platformIncomeRecords, PageDTO pageDTO);
 
     Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) throws Exception;
+
+    /**
+     * 确认打款
+     */
+    boolean ConfirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
+
 }
