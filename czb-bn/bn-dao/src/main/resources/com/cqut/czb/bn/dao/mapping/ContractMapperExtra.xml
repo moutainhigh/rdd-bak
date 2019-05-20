@@ -144,12 +144,18 @@
             person_id_card AS personId,
             petrol_type AS petrolType,
             car.plan_id AS taoCanId,
-            person_name AS name
+            person_name AS name,
+            zi.bank_account_num bankAccount,
+            zi.bank_of_deposit bankDeposit,
+            zi.bank_user_name bankName
         FROM
             czb_cars_persons car,
             (
                 SELECT
-                    record_id
+                    record_id,
+                    bank_account_num,
+                    bank_of_deposit,
+                    bank_user_name
                 FROM
                     czb_contract_records
                 WHERE
