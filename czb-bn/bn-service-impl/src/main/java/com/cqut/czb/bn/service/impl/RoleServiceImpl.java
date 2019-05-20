@@ -83,15 +83,16 @@ public class RoleServiceImpl implements IRoleService {
         boolean isInsert = true;
         if(roleInputDTO.getAuthorities() != null) {
             List<RoleMenuDTO> insertList = initRoleMenuList(roleInputDTO);
-            for(RoleMenuDTO insert : insertList) {
-                for (RoleMenuDTO delete : deleteList) {
+            for (RoleMenuDTO delete : deleteList) {
+                for(RoleMenuDTO insert : insertList) {
                     if (delete.getMenuId().equals(insert.getMenuId())) {
                         tempList.add(delete);
+                        insertList.remove(insert);
+                        break;
                     }
                 }
             }
             for(RoleMenuDTO temp: tempList) {
-                insertList.remove(temp);
                 deleteList.remove(temp);
             }
             if(insertList.size() > 0) {
