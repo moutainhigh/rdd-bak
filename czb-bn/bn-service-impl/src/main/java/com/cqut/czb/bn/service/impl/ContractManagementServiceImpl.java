@@ -25,17 +25,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -50,12 +44,15 @@ public class ContractManagementServiceImpl implements IContractService {
 
     private ContractRecordsMapper contractRecordsMapper;
 
+    private ContractModelMapper contractModelMapper;
+
     @Autowired
-    public ContractManagementServiceImpl(ContractModelMapperExtra contractModelMapperExtra, FileMapper fileMapper, ContractRecordsMapperExtra contractRecordsMapperExtra, ContractRecordsMapper contractRecordsMapper) {
+    public ContractManagementServiceImpl(ContractModelMapperExtra contractModelMapperExtra, FileMapper fileMapper, ContractRecordsMapperExtra contractRecordsMapperExtra, ContractRecordsMapper contractRecordsMapper, ContractModelMapper contractModelMapper) {
         this.contractModelMapperExtra = contractModelMapperExtra;
         this.fileMapper = fileMapper;
         this.contractRecordsMapperExtra = contractRecordsMapperExtra;
         this.contractRecordsMapper = contractRecordsMapper;
+        this.contractModelMapper = contractModelMapper;
     }
 
     /**
@@ -122,6 +119,74 @@ public class ContractManagementServiceImpl implements IContractService {
         contractModel.setFileId(file1.getFileId());
 
         return contractModelMapperExtra.insertContractModel(contractModel) > 0;
+    }
+
+    @Override
+    public boolean viewContractTemplate(String templateId, HttpServletResponse response) {
+        String token = checkToken();
+        JSONObject paramMap = new JSONObject();
+        paramMap.put("templateId", templateId); // 合同模板id
+
+        CloseableHttpClient httpClient = null;
+        CloseableHttpResponse httpResponse = null;
+        // 创建httpClient实例
+        httpClient = HttpClients.createDefault();
+        // 创建httpPost远程连接实例
+        HttpPost httpPost = new HttpPost("https://api.yunhetong.com/api/download/template");
+        // 配置请求参数实例
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(35000)// 设置连接主机服务超时时间
+                .setConnectionRequestTimeout(35000)// 设置连接请求超时时间
+                .setSocketTimeout(60000)// 设置读取数据连接超时时间
+                .build();
+        /**
+         *
+         * 为httpPost实例设置配置
+         */
+        httpPost.setConfig(requestConfig);
+        httpPost.addHeader("Content-Type", "application/json");
+        httpPost.addHeader("charset", "UTF-8");
+        httpPost.addHeader("token", token);
+
+        /**
+         * 文件流请求头
+         * */
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "multipart/form-data;");
+
+        StringEntity requestEntity = new StringEntity(paramMap.toString(), ContentType.APPLICATION_JSON);
+        httpPost.setEntity(requestEntity);
+        HttpEntity entity;
+        try {
+            // httpClient对象执行post请求,并返回响应参数对象
+            httpResponse = httpClient.execute(httpPost);
+            // 从响应对象中获取响应内容(调用相应的响应信息处理方法)
+            entity = httpResponse.getEntity();
+            entity.writeTo(response.getOutputStream());
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // 关闭资源
+            if (null != httpResponse) {
+                try {
+                    httpResponse.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (null != httpClient) {
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override

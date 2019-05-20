@@ -9,5 +9,7 @@ public interface IServicePlanService {
 
     boolean insertServicePlan(ServicePlanInputDTO servicePlanInputDTO);
 
+    boolean updateServicePlan(ServicePlanInputDTO servicePlanInputDTO);
+
     PageInfo<ServicePlan> selectServicePlan(PageDTO pageDTO);
 }

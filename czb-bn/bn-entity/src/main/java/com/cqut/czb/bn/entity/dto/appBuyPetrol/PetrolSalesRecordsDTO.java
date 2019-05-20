@@ -192,21 +192,19 @@ public class PetrolSalesRecordsDTO {
 
 
 
-    public String getPassbackParams(String orgId, String payType,
-                                    Double money, Integer count,
-                                    Integer petrolKind ,String ownerId,
+    public String getPassbackParams(String orgId, String payType,String contractId,
+                                    Double money, Integer petrolKind ,String ownerId,
                                     String petrolNum,Double actualPayment,String addressId) {
         Map<String, Object> pbp = new HashMap<>();
-
         pbp.put("orgId", orgId);
         pbp.put("payType", payType);
         pbp.put("money", money);
-        pbp.put("count", count);
         pbp.put("petrolKind", petrolKind);
         pbp.put("ownerId", ownerId);
         pbp.put("petrolNum", petrolNum);
         pbp.put("actualPayment", actualPayment);
         pbp.put("addressId", addressId);
+        pbp.put("contractId",contractId);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -214,9 +212,8 @@ public class PetrolSalesRecordsDTO {
      * 转换为支付宝支付实体
      * @return
      */
-    public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,
-                                                           double money, Integer count,
-                                                           Integer petrolKind ,String ownerId,
+    public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,String contractId,
+                                                           double money, Integer petrolKind ,String ownerId,
                                                            String petrolNum,double actualPayment,String addressId) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
@@ -225,7 +222,7 @@ public class PetrolSalesRecordsDTO {
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
         model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
-        model.setPassbackParams(getPassbackParams(orgId, payType, money, count,petrolKind,ownerId,petrolNum,actualPayment,addressId));
+        model.setPassbackParams(getPassbackParams(orgId, payType,contractId, money,petrolKind,ownerId,petrolNum,actualPayment,addressId));
         return model;
     }
 }

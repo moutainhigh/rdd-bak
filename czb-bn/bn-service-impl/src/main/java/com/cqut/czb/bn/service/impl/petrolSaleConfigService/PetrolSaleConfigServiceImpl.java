@@ -29,8 +29,8 @@ public class PetrolSaleConfigServiceImpl implements IPetrolSaleConfigService {
     }
 
     @Override
-    public List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs() {
-        List<PetrolSaleConfigOutputDTO> list = petrolSaleConfigMapperExtra.getPetrolSaleConfigs();
+    public List<PetrolSaleConfigOutputDTO> getPetrolSaleConfigs(String area) {
+        List<PetrolSaleConfigOutputDTO> list = petrolSaleConfigMapperExtra.getPetrolSaleConfigs(area);
         return list;
     }
 

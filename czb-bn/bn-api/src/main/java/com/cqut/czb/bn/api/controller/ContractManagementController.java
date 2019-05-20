@@ -44,6 +44,19 @@ public class ContractManagementController {
         }
     }
 
+    /**
+     *  查看合同模板
+     * */
+    @RequestMapping(value = "/viewContractTemplate",method = RequestMethod.GET)
+    public JSONResult viewContractTemplate(String templateId, HttpServletResponse response) throws IOException {
+        boolean isSuccess = contractService.viewContractTemplate(templateId, response);
+        if(isSuccess) {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "文件流创建成功");
+        } else {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "文件流创建失败");
+        }
+    }
+
     @RequestMapping(value = "/selectContractModelList",method = RequestMethod.GET)
     public JSONResult selectContractModelList(PageDTO pageDTO){
 

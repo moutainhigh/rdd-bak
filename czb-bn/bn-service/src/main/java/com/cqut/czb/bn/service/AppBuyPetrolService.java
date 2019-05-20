@@ -3,6 +3,8 @@ package com.cqut.czb.bn.service;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
+import java.util.Map;
+
 /**
  * 创建人：陈德强
  * 创建时间：2019/4/23
@@ -36,7 +38,7 @@ public interface AppBuyPetrolService {
      * @param petrolInputDTO
      * @return
      */
-    String PurchaseControl(PetrolInputDTO petrolInputDTO);
+    Map<String,String> PurchaseControl(PetrolInputDTO petrolInputDTO);
 
 
 

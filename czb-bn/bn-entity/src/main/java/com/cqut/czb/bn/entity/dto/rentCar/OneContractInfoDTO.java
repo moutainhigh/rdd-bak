@@ -47,6 +47,17 @@ public class OneContractInfoDTO {
     // 账户姓名
     private String bankName;
 
+    // 合同签署时间
+    private  String signedTime;
+
+    public String getSignedTime() {
+        return signedTime;
+    }
+
+    public void setSignedTime(String signedTime) {
+        this.signedTime = signedTime;
+    }
+
     public String getBankDeposit() {
         return bankDeposit;
     }
