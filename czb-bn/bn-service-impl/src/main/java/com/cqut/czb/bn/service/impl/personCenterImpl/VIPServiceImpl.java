@@ -70,8 +70,8 @@ public class VIPServiceImpl implements IVIPService {
         boolean signVerified = false;
         try {
             // 调用SDK验证签名
-            signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key,
-                    AlipayConfig.charset, AlipayConfig.sign_type);
+            signVerified = AlipaySignature.rsaCheckV1(params, AiHuAlipayConfig.alipay_public_key,
+                    AiHuAlipayConfig.charset, AiHuAlipayConfig.sign_type);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class VIPServiceImpl implements IVIPService {
     private boolean isCorrectData(Map<String, String> params) {
 
         // 验证app_id是否一致
-        if (!params.get("app_id").equals(AlipayConfig.app_id)) {
+        if (!params.get("app_id").equals(AiHuAlipayConfig.app_id)) {
             return false;
         }
 
