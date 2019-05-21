@@ -29,7 +29,7 @@ public class PayToPersonDTO {
 
     private String remark;
 
-    private String exportTime;
+    private Date exportTime;
 
     public String getRecordId() {
         return recordId;
@@ -135,11 +135,11 @@ public class PayToPersonDTO {
         this.remark = remark;
     }
 
-    public String getExportTime() {
+    public Date getExportTime() {
         return exportTime;
     }
 
-    public void setExportTime(String exportTime) {
+    public void setExportTime(Date exportTime) {
         this.exportTime = exportTime;
     }
 }

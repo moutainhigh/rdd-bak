@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,10 +26,18 @@ public class PayToPersonController {
 
     @Autowired
     PayToPersonService payToPersonService;
+
+    /**
+     * 记录列表、查询
+     * @param payToPersonDTO
+     * @param pageDTO
+     * @return
+     */
     @GetMapping("/selectPayPersonList")
     public JSONResult selectPayPersonList(PayToPersonDTO payToPersonDTO, PageDTO pageDTO){
         return new JSONResult(payToPersonService.getPayList(payToPersonDTO,pageDTO));
     }
+
     @GetMapping("/exportPayList")
     public JSONResult exportPayList(HttpServletRequest request, HttpServletResponse response,PayToPersonDTO payToPersonDTO){
         Map<String, Object> result = new HashMap<>();
@@ -37,7 +46,10 @@ public class PayToPersonController {
         try {
             workbook = payToPersonService.exportPayList(payToPersonDTO);
             if(workbook == null) {
-                workbook = new SXSSFWorkbook();
+      //          workbook = new SXSSFWorkbook();
+                message = "当前月没有未导出的数据啦";
+                result.put("message", message);
+                return new JSONResult(result);
             }
             //设置对客户端请求的编码格式
             request.setCharacterEncoding("utf-8");

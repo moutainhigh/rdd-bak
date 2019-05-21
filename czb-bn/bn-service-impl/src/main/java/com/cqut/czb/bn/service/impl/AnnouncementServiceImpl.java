@@ -49,6 +49,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             File file1 = setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
             fileMapperExtra.insertSelective(file1);
             announcement.setImgFileId(file1.getFileId()); //更新文件存储后的id
+            if (announcement.getUpdateAt()==null)
+            announcement.setUpdateAt(announcement.getCreateAt());
             return (announcementMapperExtra.insertSelective(announcement)>0);
     }
 

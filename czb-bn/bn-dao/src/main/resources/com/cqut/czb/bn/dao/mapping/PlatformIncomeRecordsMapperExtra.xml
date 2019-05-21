@@ -36,8 +36,9 @@
         LEFT JOIN czb_contract_records b ON a.contract_record_id = b.record_id
         LEFT JOIN czb_user ON b.user_id = czb_user.user_id
         <where>
+            a.is_deleted = 0
             <if test="userName!=null and userName!=''">
-                user_name=#{userName,jdbcType=VARCHAR}
+               AND user_name=#{userName,jdbcType=VARCHAR}
             </if>
             <if test="state!=null">
               AND  state=#{state,jdbcType=INTEGER}
@@ -51,91 +52,72 @@
             <if test="isDistributed!=null">
                 and is_distributed=#{isDistributed,jdbcType=INTEGER}
             </if>
-            <if test="exportTime!=null">
-                and date_format(b.contract_start_time, '%Y-%m')=date_format(#{exportTime,jdbcType=TIMESTAMP}, '%Y-%m')
-            </if>
         </where>
+    </select>
+
+
+    <resultMap id="IncomeListResultMap" type="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" >
+        <result column="record_id" property="contractRecordId" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectIncomeList" parameterType="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" resultMap="IncomeListResultMap">
+           SELECT record_id,user_name from czb_contract_records a
+          LEFT JOIN czb_user b ON a.user_id = b.user_id
+          <where>
+              <if test="exportTime!=null">
+                  MONTH(a.contract_end_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is not null
+                  AND  b.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP}
+              </if>
+          </where>
+    </select>
+
+
+
+    <resultMap id="IncomeResultMap" type="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" >
+        <result column="contract_father_id" property="contractRecordId" jdbcType="VARCHAR" />
+        <result column="money" property="receivable_money" jdbcType="DOUBLE" />
+    </resultMap>
+    <select id="selectIncome" parameterType="java.util.List" resultMap="IncomeResultMap">
+            SELECT
+                contract_father_id,SUM(plan_amount) AS money
+            FROM
+                czb_contract_records a
+            LEFT JOIN czb_cars_persons b ON a.record_id=b.contract_record_id
+            LEFT JOIN czb_service_plan c ON b.plan_id = c.plan_id
+            WHERE
+                contract_father_id in  <foreach collection="list" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{contractRecordId,jdbcType=VARCHAR}
+        </foreach>
+            GROUP BY contract_father_id
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_platform_income_records
         where record_id = #{recordId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PlatformIncomeRecords" >
+    <insert id="insert" parameterType="java.util.List" >
         insert into czb_platform_income_records (record_id, contract_record_id, receivable_money,
         actual_receipts_money, target_year_month,
         enterprise_pay_time, state, is_deleted,
-        is_need_recharge, is_distributed)
-        values (#{recordId,jdbcType=VARCHAR}, #{contractRecordId,jdbcType=VARCHAR}, #{receivableMoney,jdbcType=DOUBLE},
+        is_need_recharge, is_distributed,remark)
+        values  values <foreach collection="list" item="item" index="index" separator=",">
+        (
+        #{item.recordId,jdbcType = VARCHAR},
+        #{item.contractRecordId,jdbcType = VARCHAR},
+        #{item.receivableMoney,jdbcType = DOUBLE},
+        #{item.actualReceiptsMoney,jdbcType = DOUBLE},
+        #{item.targetYearMonth,jdbcType = TIMESTAMP},
+        #{item.enterprisePayTime,jdbcType = TIMESTAMP},
+        #{item.state,jdbcType = INTEGER},
+        #{item.isDeleted,jdbcType = INTEGER},
+        #{item.isNeedRecharge,jdbcType = INTEGER},
+        #{item.isDistributed,jdbcType = INTEGER},
+        #{item.remark,jdbcType = VARCHAR}
+        )
+    </foreach>(#{recordId,jdbcType=VARCHAR}, #{contractRecordId,jdbcType=VARCHAR}, #{receivableMoney,jdbcType=DOUBLE},
         #{actualReceiptsMoney,jdbcType=DOUBLE}, #{targetYearMonth,jdbcType=TIMESTAMP},
         #{enterprisePayTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER},
         #{isNeedRecharge,jdbcType=INTEGER}, #{isDistributed,jdbcType=INTEGER})
-    </insert>
-    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PlatformIncomeRecords" >
-        insert into czb_platform_income_records
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="recordId != null" >
-                record_id,
-            </if>
-            <if test="contractRecordId != null" >
-                contract_record_id,
-            </if>
-            <if test="receivableMoney != null" >
-                receivable_money,
-            </if>
-            <if test="actualReceiptsMoney != null" >
-                actual_receipts_money,
-            </if>
-            <if test="targetYearMonth != null" >
-                target_year_month,
-            </if>
-            <if test="enterprisePayTime != null" >
-                enterprise_pay_time,
-            </if>
-            <if test="state != null" >
-                state,
-            </if>
-            <if test="isDeleted != null" >
-                is_deleted,
-            </if>
-            <if test="isNeedRecharge != null" >
-                is_need_recharge,
-            </if>
-            <if test="isDistributed != null" >
-                is_distributed,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="recordId != null" >
-                #{recordId,jdbcType=VARCHAR},
-            </if>
-            <if test="contractRecordId != null" >
-                #{contractRecordId,jdbcType=VARCHAR},
-            </if>
-            <if test="receivableMoney != null" >
-                #{receivableMoney,jdbcType=DOUBLE},
-            </if>
-            <if test="actualReceiptsMoney != null" >
-                #{actualReceiptsMoney,jdbcType=DOUBLE},
-            </if>
-            <if test="targetYearMonth != null" >
-                #{targetYearMonth,jdbcType=TIMESTAMP},
-            </if>
-            <if test="enterprisePayTime != null" >
-                #{enterprisePayTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="state != null" >
-                #{state,jdbcType=INTEGER},
-            </if>
-            <if test="isDeleted != null" >
-                #{isDeleted,jdbcType=INTEGER},
-            </if>
-            <if test="isNeedRecharge != null" >
-                #{isNeedRecharge,jdbcType=INTEGER},
-            </if>
-            <if test="isDistributed != null" >
-                #{isDistributed,jdbcType=INTEGER},
-            </if>
-        </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PlatformIncomeRecords" >
         update czb_platform_income_records
