@@ -63,10 +63,9 @@
            <if test="deliveryState!=null">
                AND delivery_state = #{deliveryState, jdbcType=INTEGER}
            </if>
-           <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+           <if test="startTime!=null  and endTime!=null ">
                AND a.create_at >=#{startTime,jdbcType=VARCHAR}
                and #{endTime,jdbcType=VARCHAR}>=a.create_at
---
            </if>
        </where>
     </select>

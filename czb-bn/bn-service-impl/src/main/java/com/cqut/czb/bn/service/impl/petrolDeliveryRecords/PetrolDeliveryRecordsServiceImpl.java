@@ -133,9 +133,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                 else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
                     row.createCell(count++).setCellValue("中石化");
                 if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
-                row.createCell(count++).setCellValue("未寄送");
+                row.createCell(count++).setCellValue("未邮寄");
                 else if(petrolDeliveryDTOS.get(i).getDeliveryState()==1)
-                    row.createCell(count++).setCellValue("寄送中");
+                    row.createCell(count++).setCellValue("邮寄中");
                 else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
                     row.createCell(count++).setCellValue("已收货");
 //                row.createCell(count++).setCellType(CellType.STRING);

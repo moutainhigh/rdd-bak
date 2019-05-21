@@ -176,7 +176,7 @@ public class ImportPetrolDelivery {
 //            petrolDeliveryDTO.setPetrolKind(Integer.parseInt(getStringValue(hssfRow.getCell(1))));
 //        }
         petrolDeliveryDTO.setReceiver(getStringValue(hssfRow.getCell(3)));
-        if (getStringValue(hssfRow.getCell(2)).equals("未寄送")) {
+        if (getStringValue(hssfRow.getCell(2)).equals("邮寄中")) {
             petrolDeliveryDTO.setDeliveryState(1);
         }
 //        petrolDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(hssfRow.getCell(4))));
