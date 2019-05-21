@@ -7,11 +7,12 @@
   </sql>
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.role.RoleDTO" >
     <id column="role_id" property="roleId" jdbcType="VARCHAR" />
-    <collection property="menuList" column="roleId" javaType="list" select="selectRoleMenuList"/>
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <collection property="menuList" column="role_id" javaType="list" select="selectRoleMenuList"/>
   </resultMap>
   <select id="selectRole" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
     select
-    role_id as 'roleId', role_name as 'roleName'
+    role_id, role_name
     from czb_role
     <where>
       <if test="roleName != null and roleName != ''">
