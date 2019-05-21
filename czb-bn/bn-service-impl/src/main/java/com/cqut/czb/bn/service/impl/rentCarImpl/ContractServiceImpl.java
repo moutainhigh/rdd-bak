@@ -631,6 +631,9 @@ public class ContractServiceImpl implements ContractService{
             return json;
         }
 
+        times.setStartTime(times.getStartTime().replace(".0",""));
+        times.setEndTime(times.getEndTime().replace(".0",""));
+
         ContractLog contractLog = new ContractLog();
         contractLog.setRecordId(personContractId);
         contractLog.setStartTime(times.getStartTime());
@@ -846,9 +849,11 @@ public class ContractServiceImpl implements ContractService{
             rent = contractMapper.findRent(personal.getTaoCanId());
             if(rent == 0){
                 json.put("code", STATE_FIND_TAO_CAN_RENT);
+                return json;
             }
         } catch(Exception e){
             json.put("code", STATE_FIND_TAO_CAN_RENT);
+            return json;
         }
 
         String contractId = StringUtil.createId();
@@ -861,6 +866,7 @@ public class ContractServiceImpl implements ContractService{
             rentCarMapper.insertContractLogPerson(contractLog);
         } catch(Exception e){
             json.put("code", STATE_INSERT_PERSONAL_CONTRACT_FAILED);
+            return json;
         }
 
         // 插入车辆服务人员记录
@@ -878,6 +884,7 @@ public class ContractServiceImpl implements ContractService{
             rentCarMapper.insertCompanyPerson(personCar);
         } catch(Exception e){
             json.put("code", STATE_ADD_PERSONAL);
+            return json;
         }
 
         // 返回生成的子级合同id
