@@ -161,7 +161,7 @@
         user_type=#{userType,jdbcType=INTEGER} and
         menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR} and
         czb_file.file_id=czb_app_router.icon_path_id and
-        is_show=0
+        is_show=1
         ORDER BY `order` ASC
     </select>
 </mapper>
