@@ -8,7 +8,7 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.role.RoleDTO" >
     <id column="role_id" property="roleId" jdbcType="VARCHAR" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
-    <collection property="menuList" column="role_id" javaType="list" select="selectRoleMenuList"/>
+    <collection property="menuList" column="role_id" javaType="list" select="selectMenuList"/>
   </resultMap>
   <select id="selectRole" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
     select
@@ -23,10 +23,11 @@
       </if>
     </where>
   </select>
-  <select id="selectRoleMenuList" resultType="com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO" >
+  <select id="selectMenuList" resultType="com.cqut.czb.bn.entity.entity.Menu" >
     select
-    id, role_id as 'roleId', menu_id as 'menuId'
-    from czb_role_menu
+    id, role_id as 'roleId', cm.menu_id as 'menuId', menu_name as 'menuName', menu_path as 'menuPath', menu_level as 'menuLevel',  parent
+    from czb_menu cm
+    left join czb_role_menu crm on cm.menu_id = crm.menu_id
     where role_id = #{roleId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteRole" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
