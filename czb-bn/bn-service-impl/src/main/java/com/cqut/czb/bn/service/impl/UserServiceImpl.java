@@ -90,15 +90,16 @@ public class UserServiceImpl implements IUserService {
         if(userInputDTO.getRoleId() != null) {
             List<UserRole> tempList = new ArrayList<>();
             List<UserRole> insertList = initUserRoleList(userInputDTO);
-            for(UserRole insert: insertList) {
-                for(UserRole delete: deleteList) {
+            for(UserRole delete: deleteList) {
+                for(UserRole insert: insertList) {
                     if(delete.getRoleId().equals(insert.getRoleId())) {
                         tempList.add(delete);
+                        insertList.remove(insert);
+                        break;
                     }
                 }
             }
             for(UserRole temp: tempList) {
-                insertList.remove(temp);
                 deleteList.remove(temp);
             }
             if(insertList.size() > 0) {
