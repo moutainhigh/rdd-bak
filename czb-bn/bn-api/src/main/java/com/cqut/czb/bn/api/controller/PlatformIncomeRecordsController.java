@@ -78,13 +78,10 @@ public class PlatformIncomeRecordsController {
 
     /**
      * 确认已打款
-     * @param platformIncomeRecordsDTO
-     * @return
      */
-    @GetMapping("/getPlatformRecordList")
-    public JSONResult getPlatformRecordList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
+    @GetMapping("/confirmReceipt")
+    public JSONResult confirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
         return new JSONResult(platformIncomeRecordsService.ConfirmReceipt(platformIncomeRecordsDTO));
     }
-
 
 }
