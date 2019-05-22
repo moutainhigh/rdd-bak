@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,11 +40,22 @@ public class PayToPersonServiceImpl implements PayToPersonService{
     //导出execl表
     @Override
     public Workbook exportPayList(PayToPersonDTO payToPersonDTO) throws Exception {
-        List<PayToPersonDTO> payToPersonDTOS = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO);
-        Workbook workbook = getWorkBook(payToPersonDTOS);
+        List<PayToPersonDTO> payToPersonDTOS = payToPersonMapperExtra.selectPayInfo(payToPersonDTO); //查询选择月中是否有合同打款信息
+        if(payToPersonDTOS==null||payToPersonDTOS.size()==0){
+                return null;
+        }
+        payToPersonDTOS.get(0).setTargetYearMonth(payToPersonDTOS.get(0).getExportTime()); //取一条数据查看当前月是否已经导出过
+        List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTOS.get(0));
+        if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
+            return null;
+        }
+        int isAdd = payToPersonMapperExtra.updateImportData(payToPersonDTOS);   //将数据插入数据库后开始导出
+        Workbook workbook =null;
+        if (isAdd>0){
+         workbook = getWorkBook(payToPersonDTOS);}
         return workbook;
     }
-
+    @Async  //异步
     @Override
     public int importPayList(MultipartFile file) throws Exception{
         InputStream inputStream = file.getInputStream();
@@ -52,9 +64,27 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         payToPersonDTOS = ImportPayToPerson.readExcel(file.getOriginalFilename(), inputStream);
         System.out.println("99999999"+payToPersonDTOS.get(0).getContractRecordId());
         int countForInsert = payToPersonMapperExtra.updateImportData(payToPersonDTOS);
-//        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
     }
+
+
+//    //生成只有表头的空表
+//    public Workbook getNullWorkBook(){
+//        String[] payToPersonHeader = SystemConstants.PAY_TO_PERSON_RECORDS;
+//        Workbook workbook = null;
+//        workbook = new SXSSFWorkbook();
+//        Sheet sheet = workbook.createSheet("导出企业打款记录");//创建工作表
+//        Row row =sheet.createRow(0);//创建行从第0行开始
+//        CellStyle style = workbook.createCellStyle();
+//        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+//        for (int i = 0; i < payToPersonHeader.length; i++) {
+//            Cell cell = row.createCell(i);
+//            cell.setCellValue(payToPersonHeader[i]);
+//            cell.setCellStyle(style);
+//            sheet.setColumnWidth(i, (short) 6000); // 设置列宽
+//        }
+//        return workbook;
+//    }
 
     //生成execl表
     public Workbook getWorkBook(List<PayToPersonDTO> payToPersonDTOS)throws Exception{
@@ -91,9 +121,10 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayableMoney());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue("");
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayableMoney());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue("未打款");
+            if (payToPersonDTOS.get(i).getState()==0){
+            row.createCell(count++).setCellValue("未打款");}
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue("");
         }

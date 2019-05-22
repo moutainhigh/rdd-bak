@@ -6,14 +6,18 @@ import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PlatformIncomeRecordsService;
 import org.apache.http.HttpResponse;
+import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +31,7 @@ import java.util.jar.JarEntry;
 /**
  * 收款记录
  */
+@EnableAsync
 @RestController
 @RequestMapping("/api/platform")
 public class PlatformIncomeRecordsController {
@@ -40,7 +45,15 @@ public class PlatformIncomeRecordsController {
     public JSONResult getPlatformRecordList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO){
         return new JSONResult(platformIncomeRecordsService.getReceiveRecords(platformIncomeRecordsDTO,pageDTO));
     }
-    @GetMapping("/exportPlatformRecords")
+
+    /**
+     * 导出excel表
+     * @param request
+     * @param response
+     * @param platformIncomeRecordsDTO
+     * @return
+     */
+    @PostMapping("/exportPlatformRecords")
     public JSONResult exportPlatformRecords(HttpServletRequest request, HttpServletResponse response, PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
         Map<String, Object> result = new HashMap<>();
         String message = null;
@@ -48,7 +61,10 @@ public class PlatformIncomeRecordsController {
         try {
             workbook = platformIncomeRecordsService.exportRecords(platformIncomeRecordsDTO);
             if(workbook == null) {
-                workbook = new SXSSFWorkbook();
+       //         workbook = new SXSSFWorkbook();
+                message = "当前月没有未导出的数据啦";
+                result.put("message", message);
+                return new JSONResult(result);
             }
             //设置对客户端请求的编码格式
             request.setCharacterEncoding("utf-8");
@@ -84,4 +100,9 @@ public class PlatformIncomeRecordsController {
         return new JSONResult(platformIncomeRecordsService.ConfirmReceipt(platformIncomeRecordsDTO));
     }
 
+
+    @PostMapping("/impoertIncomeRecords")
+    public JSONResult impoertIncomeRecords(@Param("file")MultipartFile file) throws Exception{
+        return new JSONResult(platformIncomeRecordsService.importRecords(file));
+    }
 }

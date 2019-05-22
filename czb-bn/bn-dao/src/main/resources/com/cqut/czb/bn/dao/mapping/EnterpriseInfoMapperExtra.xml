@@ -23,20 +23,20 @@
         org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at,COUNT(enterprise_info_id) as counts
         from czb_enterprise_info
         LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
-        LEFT JOIN czb_contract_records on czb_enterprise_info.user_id = czb_contract_records.user_id GROUP BY enterprise_info_id
+        LEFT JOIN czb_contract_records on czb_enterprise_info.user_id = czb_contract_records.user_id
         <where>
             czb_enterprise_info.is_deleted = 0
             <if test="enterpriseInfo.enterpriseInfoId!=null and enterpriseInfo.enterpriseInfoId!=''">
-               AND enterprise_info_id = #{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR}
+               AND enterprise_info_id like concat('%',#{enterpriseInfo.enterpriseInfoId,jdbcType=VARCHAR},'%')
             </if>
             <if test="enterpriseInfo.enterpriseName!=null and enterpriseInfo.enterpriseName!=''">
-                AND enterprise_name= #{enterpriseInfo.enterpriseName,jdbcType=VARCHAR}
+                AND enterprise_name like concat('%',#{enterpriseInfo.enterpriseName,jdbcType=VARCHAR},'%')
             </if>
             <if test="enterpriseInfo.userAccount!=null and enterpriseInfo.userAccount!=''">
-                AND  user_account= #{enterpriseInfo.userAccount,jdbcType=VARCHAR}
+                AND  user_account like concat('%',#{enterpriseInfo.userAccount,jdbcType=VARCHAR},'%')
             </if>
             <if test="enterpriseInfo.contactInfo!=null and enterpriseInfo.contactInfo!=''">
-                AND contact_info=#{enterpriseInfo.contactInfo,jdbcType=VARCHAR}
+                AND contact_info like concat('%',#{enterpriseInfo.contactInfo,jdbcType=VARCHAR},'%')
             </if>
             <if test="enterpriseInfo.startTime!=null and enterpriseInfo.endTime==null">
                 AND create_at >= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
@@ -49,6 +49,7 @@
                 AND create_at>= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
             </if>
         </where>
+        GROUP BY enterprise_info_id
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_enterprise_info

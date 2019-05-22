@@ -4,12 +4,17 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PayToPersonService;
+import com.cqut.czb.bn.service.impl.payToPerson.ImportPayToPerson;
+import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,18 +23,33 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
+@EnableAsync
 @RestController
 @RequestMapping("payToPerson")
 public class PayToPersonController {
 
     @Autowired
     PayToPersonService payToPersonService;
+
+    /**
+     * 记录列表、查询
+     * @param payToPersonDTO
+     * @param pageDTO
+     * @return
+     */
     @GetMapping("/selectPayPersonList")
     public JSONResult selectPayPersonList(PayToPersonDTO payToPersonDTO, PageDTO pageDTO){
         return new JSONResult(payToPersonService.getPayList(payToPersonDTO,pageDTO));
     }
-    @GetMapping("/exportPayList")
+
+    /**
+     * 导出excel表
+     * @param request
+     * @param response
+     * @param payToPersonDTO
+     * @return
+     */
+    @PostMapping("/exportPayList")
     public JSONResult exportPayList(HttpServletRequest request, HttpServletResponse response,PayToPersonDTO payToPersonDTO){
         Map<String, Object> result = new HashMap<>();
         String message = null;
@@ -37,7 +57,10 @@ public class PayToPersonController {
         try {
             workbook = payToPersonService.exportPayList(payToPersonDTO);
             if(workbook == null) {
-                workbook = new SXSSFWorkbook();
+      //          workbook = new SXSSFWorkbook();
+                message = "当前月没有未导出的数据啦";
+                result.put("message", message);
+                return new JSONResult(result);
             }
             //设置对客户端请求的编码格式
             request.setCharacterEncoding("utf-8");
@@ -63,6 +86,21 @@ public class PayToPersonController {
         }
         result.put("message", message);
         return new JSONResult(result);
+    }
+
+    /**
+     * 导入excel表（返回成功插入条数）
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/importPayRecords")
+    public JSONResult importPayRecords(@Param("file")MultipartFile file) throws Exception{
+        return new JSONResult(payToPersonService.importPayList(file));
+    }
+    @GetMapping("/searchProcess")
+    public JSONResult searchProcess(){
+        return new JSONResult(ImportPayToPerson.processing);
     }
 
 }

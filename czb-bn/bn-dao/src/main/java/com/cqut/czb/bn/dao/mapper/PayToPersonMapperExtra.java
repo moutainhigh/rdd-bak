@@ -8,9 +8,11 @@ import java.util.List;
 public interface PayToPersonMapperExtra {
     int deleteByPrimaryKey(String recordId);
 
-    int insert(PayToPerson record);
+    int insert(List<PayToPersonDTO> list);
 
     int insertSelective(PayToPerson record);
+
+    List<PayToPersonDTO> selectPayInfo(PayToPersonDTO payToPersonDTO);
 
     List<PayToPersonDTO> selectByPrimaryKey(PayToPersonDTO payToPersonDTO);
 

@@ -115,13 +115,13 @@ public class FanYongServiceImpl implements FanYongService {
             ischangeUserIncomeInfo = userIncomeInfoMapperExtra.insert(userIncomeInfo1) > 0;//进行新增
             System.out.println("新增用户收益信息表完毕" + k + ischangeUserIncomeInfo);
 
-            boolean insertIncomeLog = insertIncomeLog(uuid, money,type, oldUserIncomeInfo, userIncomeInfo1, orgId);
+            boolean insertIncomeLog = insertIncomeLog(uuid, fangyongMoney*FYrate,type, oldUserIncomeInfo, userIncomeInfo1, orgId);
             return insertIncomeLog;
         } else {
             //用户收益信息表——更改
                 int type=2;
                 if (k == 1 || k == 2) {//本人不返佣
-                    double getMoney=(BigDecimal.valueOf(userIncomeInfo.getFanyongIncome()).multiply(BigDecimal.valueOf(FYrate))).doubleValue();
+                    double getMoney=(BigDecimal.valueOf(fangyongMoney).multiply(BigDecimal.valueOf(FYrate))).doubleValue();
                     double fangyongIncome=(BigDecimal.valueOf(userIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(getMoney))).doubleValue();
                     userIncomeInfo.setFanyongIncome(fangyongIncome);
                     if (userIncomeInfo.getShareIncome() == null)
@@ -141,7 +141,7 @@ public class FanYongServiceImpl implements FanYongService {
                 }
                 ischangeUserIncomeInfo = userIncomeInfoMapperExtra.updateByPrimaryKeySelective(userIncomeInfo) > 0;//进行修改
                 System.out.println("更改用户收益信息表完毕" + ischangeUserIncomeInfo);
-                boolean insertIncomeLog = insertIncomeLog(userIncomeInfo.getInfoId(), money,type, oldUserIncomeInfo, userIncomeInfo, orgId);
+                boolean insertIncomeLog = insertIncomeLog(userIncomeInfo.getInfoId(), fangyongMoney*FYrate,type, oldUserIncomeInfo, userIncomeInfo, orgId);
                 if (ischangeUserIncomeInfo == true && insertIncomeLog == true)
                     return true;
                 else {
@@ -165,8 +165,8 @@ public class FanYongServiceImpl implements FanYongService {
             incomeLog.setBeforeChangeIncome(0.00);
             incomeLog.setAmount(newuserIncomeInfo.getFanyongIncome());//只会有返佣收益
         } else {
-            //处理可能没有数据的地方
-            double beforeIncome=0.00;
+            //处理可能没有数据的地方——变更前的收益
+            double beforeIncome=0.00;//定义之前的余额
             if(olduserIncomeInfo.getFanyongIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()))).doubleValue();
             }else  if(olduserIncomeInfo.getShareIncome()!=null){
@@ -176,14 +176,11 @@ public class FanYongServiceImpl implements FanYongService {
             }else if(olduserIncomeInfo.getWithdrawed()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(olduserIncomeInfo.getWithdrawed()))).doubleValue();
             }
+            beforeIncome=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(money))).doubleValue();//减掉变更金额
             incomeLog.setBeforeChangeIncome(beforeIncome);
             System.out.println("变更前金额为："+beforeIncome);
-            BigDecimal bnewIncome=BigDecimal.valueOf(newuserIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(newuserIncomeInfo.getShareIncome()));
-            BigDecimal boldIncome=BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(olduserIncomeInfo.getShareIncome()));
-
-            double i = bnewIncome.subtract(boldIncome).doubleValue();
-            System.out.println("变更金额为："+i);
-            incomeLog.setAmount(Double.parseDouble(String.format("%.2f", i)));
+            System.out.println("变更金额为："+money);
+            incomeLog.setAmount(money);
         }
         incomeLog.setInfoId(uuid);
         incomeLog.setSouseId(orgId);//变更来源

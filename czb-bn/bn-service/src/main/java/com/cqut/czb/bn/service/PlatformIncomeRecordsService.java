@@ -6,12 +6,15 @@ import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface PlatformIncomeRecordsService {
     PageInfo<PlatformIncomeRecordsDTO> getReceiveRecords(PlatformIncomeRecordsDTO platformIncomeRecords, PageDTO pageDTO);
 
     Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) throws Exception;
+
+    int importRecords(MultipartFile file) throws Exception;
 
     /**
      * 确认打款

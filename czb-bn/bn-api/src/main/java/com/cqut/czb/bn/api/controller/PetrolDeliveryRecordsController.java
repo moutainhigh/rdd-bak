@@ -74,16 +74,20 @@ public class PetrolDeliveryRecordsController {
      * @param deliveryInput
      * @return
      */
-    @GetMapping("/exportRecords")
+    @PostMapping("/exportRecords")
     public JSONResult exportPertrolRecord(HttpServletResponse response, HttpServletRequest request,
-                                                       DeliveryInput deliveryInput) {
+                                                        DeliveryInput deliveryInput) {
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
         try {
             workbook = petrolDeliveryRecordsService.exportDeliveryRecords(deliveryInput);
+            System.out.println("wwww"+workbook);
             if(workbook == null) {
-                workbook = new SXSSFWorkbook();
+     //           workbook = new SXSSFWorkbook();
+                message = "当前月没有未导出的数据啦";
+                result.put("message", message);
+                return new JSONResult(result);
             }
             //设置对客户端请求的编码格式
             request.setCharacterEncoding("utf-8");

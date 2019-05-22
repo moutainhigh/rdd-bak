@@ -4,32 +4,33 @@ import java.util.Date;
 
 public class PayToPersonDTO {
     private String recordId;
-
+    //收款人
     private String payeeName;
-
+    //开户行
     private String bankOfDeposit;
-
+    //银行账号
     private String bankAccountNum;
-
+    //身份证号
     private String payeeIdCard;
-
+    //合同id
     private String contractRecordId;
-
+    //应打款
     private Double payableMoney;
-
+    //实打款
     private Double actualPayMoney;
-
+    //目标月
     private Date targetYearMonth;
-
+    //实际打款时间
     private Date platformPayTime;
-
+    //状态 0 未打款 1 已打款 2 打款异常
     private Integer state;
-
+     //是否删除 0 未删除 1 已删除
     private Integer isDeleted;
-
+    //备注
     private String remark;
 
-    private String exportTime;
+    //导出时的选择时间（年+月）
+    private Date exportTime;
 
     public String getRecordId() {
         return recordId;
@@ -135,11 +136,11 @@ public class PayToPersonDTO {
         this.remark = remark;
     }
 
-    public String getExportTime() {
+    public Date getExportTime() {
         return exportTime;
     }
 
-    public void setExportTime(String exportTime) {
+    public void setExportTime(Date exportTime) {
         this.exportTime = exportTime;
     }
 }

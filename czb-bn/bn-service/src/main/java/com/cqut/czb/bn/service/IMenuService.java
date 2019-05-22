@@ -1,10 +1,12 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuIdDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
-import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.Menu;
 import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 /**
  * 创建人：曹渝
@@ -20,4 +22,6 @@ public interface IMenuService {
     boolean updateMenu(MenuInputDTO menuInputDTO);
 
     PageInfo<Menu> selectMenu(MenuInputDTO menuInputDTO, PageDTO pageDTO);
+
+    List<Menu> selectParentMenu();
 }

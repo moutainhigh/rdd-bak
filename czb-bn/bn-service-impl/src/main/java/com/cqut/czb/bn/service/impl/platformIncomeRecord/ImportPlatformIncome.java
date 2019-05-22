@@ -1,8 +1,8 @@
-package com.cqut.czb.bn.service.impl.payToPerson;
+package com.cqut.czb.bn.service.impl.platformIncomeRecord;
 
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
+import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
 import com.cqut.czb.bn.util.string.StringUtil;
-import io.swagger.models.auth.In;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -12,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -20,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImportPayToPerson {
+public class ImportPlatformIncome {
     public static final String OFFICE_EXCEL_2003_POSTFIX = "xls";
     public static final String OFFICE_EXCEL_2010_POSTFIX = "xlsx";
     public static final String EMPTY = "";
@@ -28,7 +27,6 @@ public class ImportPayToPerson {
     public static final String LIB_PATH = "lib";
     public static final String NOT_EXCEL_FILE = " : Not the Excel file!";
     public static final String PROCESSING = "Processing...";
-    public static Integer processing = 0;
 
     /**
      * read the Excel file
@@ -38,9 +36,9 @@ public class ImportPayToPerson {
      * @return
      * @throws Exception
      */
-    public static List<PayToPersonDTO> readExcel(String filename,
-                                                 InputStream inputStream) throws Exception {
-        List<PayToPersonDTO> list = null;// 存入解析的DTO
+    public static List<PlatformIncomeRecordsDTO> readExcel(String filename,
+                                                           InputStream inputStream) throws Exception {
+        List<PlatformIncomeRecordsDTO> list = null;// 存入解析的DTO
         if (filename == null || EMPTY.equals(filename)) {
             return null;
         } else {
@@ -63,9 +61,9 @@ public class ImportPayToPerson {
      * @return
      * @throws Exception
      */
-    public static List<PayToPersonDTO> readXlsx(InputStream is) throws Exception {
-        List<PayToPersonDTO> list = new ArrayList<PayToPersonDTO>();
-        PayToPersonDTO PayToPersonDTO = null;
+    public static List<PlatformIncomeRecordsDTO> readXlsx(InputStream is) throws Exception {
+        List<PlatformIncomeRecordsDTO> list = new ArrayList<PlatformIncomeRecordsDTO>();
+        PlatformIncomeRecordsDTO platformIncomeRecordsDTO = null;
 
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook(is);
         // Read the Sheet
@@ -79,9 +77,9 @@ public class ImportPayToPerson {
                 XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                 // 解析文档
                 if (xssfRow != null && xssfRow.getLastCellNum() >= 7 && xssfRow.getCell(0) != null) {
-                    PayToPersonDTO = resolveXlsx(xssfRow);
-                    if (PayToPersonDTO != null) {
-                        list.add(PayToPersonDTO);
+                    platformIncomeRecordsDTO = resolveXlsx(xssfRow);
+                    if (platformIncomeRecordsDTO != null) {
+                        list.add(platformIncomeRecordsDTO);
                     }
 
                 }
@@ -95,31 +93,25 @@ public class ImportPayToPerson {
      * @param xssfRow
      * @return
      */
-    private static PayToPersonDTO resolveXlsx(XSSFRow xssfRow) throws Exception {
+    private static PlatformIncomeRecordsDTO resolveXlsx(XSSFRow xssfRow) throws Exception {
         if (xssfRow.getCell(0) == null || xssfRow.getCell(0).toString() == "") {
             return null;
         }
-        PayToPersonDTO payToPersonDTO = new PayToPersonDTO();
-        payToPersonDTO.setRecordId(StringUtil.createId());
-        payToPersonDTO.setContractRecordId(getStringValue(xssfRow.getCell(0)));
-        payToPersonDTO.setPayeeName((getStringValue(xssfRow.getCell(1))));
+        PlatformIncomeRecordsDTO platformIncomeRecordsDTO = new PlatformIncomeRecordsDTO();
+        platformIncomeRecordsDTO.setRecordId(StringUtil.createId());
+        platformIncomeRecordsDTO.setContractRecordId(getStringValue(xssfRow.getCell(0)));
+        platformIncomeRecordsDTO.setUserName((getStringValue(xssfRow.getCell(1))));
         System.out.println(getStringValue(xssfRow.getCell(2)));
-        payToPersonDTO.setPayeeIdCard(getStringValue(xssfRow.getCell(2)));
-        payToPersonDTO.setBankOfDeposit((getStringValue(xssfRow.getCell(3))));
-        payToPersonDTO.setBankAccountNum((getStringValue(xssfRow.getCell(4))));
-        payToPersonDTO.setPayableMoney(Double.parseDouble(getStringValue(xssfRow.getCell(5))));
-        payToPersonDTO.setActualPayMoney(Double.parseDouble(getStringValue(xssfRow.getCell(6))));
-        if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
-            payToPersonDTO.setState(2);
-        }else if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
-            payToPersonDTO.setState(1);
+        platformIncomeRecordsDTO.setReceivableMoney(Double.parseDouble(getStringValue(xssfRow.getCell(2))));
+        platformIncomeRecordsDTO.setActualReceiptsMoney(Double.parseDouble(getStringValue(xssfRow.getCell(3))));
+        platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(getStringValue(xssfRow.getCell(4))));
+        platformIncomeRecordsDTO.setEnterprisePayTime(new SimpleDateFormat("yyyy-MM-dd").parse(getStringValue(xssfRow.getCell(5))));
+        if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
+            platformIncomeRecordsDTO.setState(2);
+        }else if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
+            platformIncomeRecordsDTO.setState(1);
         }
-        try {
-            payToPersonDTO.setPlatformPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(7))));
-        }catch (Exception e){
-            throw new Exception("时间为空");
-        }
-        return payToPersonDTO;
+        return platformIncomeRecordsDTO;
     }
 
     /**
@@ -128,9 +120,9 @@ public class ImportPayToPerson {
      * @return
      * @throws Exception
      */
-    public static List<PayToPersonDTO> readXls(InputStream is)
+    public static List<PlatformIncomeRecordsDTO> readXls(InputStream is)
             throws Exception{
-        List<PayToPersonDTO> list = new ArrayList<PayToPersonDTO>();
+        List<PlatformIncomeRecordsDTO> list = new ArrayList<PlatformIncomeRecordsDTO>();
 //        Petrol petrol = null;
 
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(is);
@@ -142,14 +134,13 @@ public class ImportPayToPerson {
             }
             // Read the Row
             HSSFRow hssfRow = null;
-            PayToPersonDTO obj = null;
+            PlatformIncomeRecordsDTO obj = null;
             for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
                 hssfRow = hssfSheet.getRow(rowNum);
                 // 解析文档
                 // System.out.println(rowNum);
                 if (hssfRow != null && hssfRow.getLastCellNum() >= 7 && hssfRow.getCell(0) != null) {
                     obj = resolveXls(hssfRow);
-                    processing++;
                     if (obj != null) {
                         list.add(obj);
                     }
@@ -160,31 +151,25 @@ public class ImportPayToPerson {
         return list;
     }
 
-    private static PayToPersonDTO resolveXls(HSSFRow hssfRow) throws Exception{
-        PayToPersonDTO payToPersonDTO = new PayToPersonDTO();
+    private static PlatformIncomeRecordsDTO resolveXls(HSSFRow hssfRow) throws Exception{
+        PlatformIncomeRecordsDTO platformIncomeRecordsDTO = new PlatformIncomeRecordsDTO();
         if (hssfRow.getCell(0) == null || hssfRow.getCell(0).toString() == "") {
             return null;
         }
-        payToPersonDTO.setRecordId(StringUtil.createId());
-        payToPersonDTO.setContractRecordId(getStringValue(hssfRow.getCell(0)));
-        payToPersonDTO.setPayeeName((getStringValue(hssfRow.getCell(1))));
+        platformIncomeRecordsDTO.setRecordId(StringUtil.createId());
+        platformIncomeRecordsDTO.setContractRecordId(getStringValue(hssfRow.getCell(0)));
+        platformIncomeRecordsDTO.setUserName((getStringValue(hssfRow.getCell(1))));
         System.out.println(getStringValue(hssfRow.getCell(2)));
-        payToPersonDTO.setPayeeIdCard(getStringValue(hssfRow.getCell(2)));
-        payToPersonDTO.setBankOfDeposit((getStringValue(hssfRow.getCell(3))));
-        payToPersonDTO.setBankAccountNum((getStringValue(hssfRow.getCell(4))));
-        payToPersonDTO.setPayableMoney(Double.parseDouble(getStringValue(hssfRow.getCell(5))));
-        payToPersonDTO.setActualPayMoney(Double.parseDouble(getStringValue(hssfRow.getCell(6))));
-        if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
-            payToPersonDTO.setState(2);
-        }else if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
-            payToPersonDTO.setState(1);
+        platformIncomeRecordsDTO.setReceivableMoney(Double.parseDouble(getStringValue(hssfRow.getCell(2))));
+        platformIncomeRecordsDTO.setActualReceiptsMoney(Double.parseDouble(getStringValue(hssfRow.getCell(3))));
+        platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(getStringValue(hssfRow.getCell(4))));
+        platformIncomeRecordsDTO.setEnterprisePayTime(new SimpleDateFormat("yyyy-MM-dd").parse(getStringValue(hssfRow.getCell(5))));
+        if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
+            platformIncomeRecordsDTO.setState(2);
+        }else if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
+            platformIncomeRecordsDTO.setState(1);
         }
-        try {
-            payToPersonDTO.setPlatformPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(hssfRow.getCell(7))));
-        }catch (Exception e){
-            throw new Exception("时间为空");
-        }
-        return payToPersonDTO;
+        return platformIncomeRecordsDTO;
     }
 
     // 表格数据转字符串

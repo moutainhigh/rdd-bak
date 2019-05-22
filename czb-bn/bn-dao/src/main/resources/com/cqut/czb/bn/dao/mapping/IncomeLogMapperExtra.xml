@@ -14,10 +14,13 @@
     <result column="withdraw_to" property="withdrawTo" jdbcType="VARCHAR" />
     <result column="withdraw_name" property="withdrawName" jdbcType="VARCHAR" />
     <result column="withdraw_account" property="withdrawAccount" jdbcType="DOUBLE" />
+    <result column="commission_source_user" property="commissionSourceUser" jdbcType="VARCHAR" />
+    <result column="commission_got_user" property="commissionGotUser" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, amount, type, info_id, before_change_income, remark, souse_id, create_at, 
-    update_at, withdraw_to, withdraw_name, withdraw_account
+    record_id, amount, type, info_id, before_change_income, remark, souse_id, create_at,
+    update_at, withdraw_to, withdraw_name, withdraw_account, commission_source_user,
+    commission_got_user
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

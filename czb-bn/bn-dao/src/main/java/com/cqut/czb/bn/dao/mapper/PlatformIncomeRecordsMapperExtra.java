@@ -9,11 +9,17 @@ public interface PlatformIncomeRecordsMapperExtra {
 
     int deleteByPrimaryKey(String recordId);
 
-    int insert(PlatformIncomeRecords record);
+    int insert(List<PlatformIncomeRecordsDTO> list);
 
     int insertSelective(PlatformIncomeRecords record);
 
     List<PlatformIncomeRecordsDTO> selectByPrimaryKey(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
+
+    List<PlatformIncomeRecordsDTO> selectIncome(List<PlatformIncomeRecordsDTO> list);
+
+    List<PlatformIncomeRecordsDTO> selectIncomeList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
+
+    int updateImportData(List<PlatformIncomeRecordsDTO> list);
 
     int updateByPrimaryKeySelective(PlatformIncomeRecords record);
 
