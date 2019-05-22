@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ import java.util.jar.JarEntry;
 /**
  * 收款记录
  */
+@EnableAsync
 @RestController
 @RequestMapping("/api/platform")
 public class PlatformIncomeRecordsController {
@@ -51,7 +53,7 @@ public class PlatformIncomeRecordsController {
      * @param platformIncomeRecordsDTO
      * @return
      */
-    @GetMapping("/exportPlatformRecords")
+    @PostMapping("/exportPlatformRecords")
     public JSONResult exportPlatformRecords(HttpServletRequest request, HttpServletResponse response, PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
         Map<String, Object> result = new HashMap<>();
         String message = null;
@@ -99,7 +101,7 @@ public class PlatformIncomeRecordsController {
     }
 
 
-    @PostMapping("impoertIncomeRecords")
+    @PostMapping("/impoertIncomeRecords")
     public JSONResult impoertIncomeRecords(@Param("file")MultipartFile file) throws Exception{
         return new JSONResult(platformIncomeRecordsService.importRecords(file));
     }

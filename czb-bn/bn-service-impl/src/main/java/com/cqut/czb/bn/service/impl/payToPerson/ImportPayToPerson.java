@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.payToPerson;
 
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
 import com.cqut.czb.bn.util.string.StringUtil;
+import io.swagger.models.auth.In;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -27,6 +28,7 @@ public class ImportPayToPerson {
     public static final String LIB_PATH = "lib";
     public static final String NOT_EXCEL_FILE = " : Not the Excel file!";
     public static final String PROCESSING = "Processing...";
+    public static Integer processing = 0;
 
     /**
      * read the Excel file
@@ -147,6 +149,7 @@ public class ImportPayToPerson {
                 // System.out.println(rowNum);
                 if (hssfRow != null && hssfRow.getLastCellNum() >= 7 && hssfRow.getCell(0) != null) {
                     obj = resolveXls(hssfRow);
+                    processing++;
                     if (obj != null) {
                         list.add(obj);
                     }
