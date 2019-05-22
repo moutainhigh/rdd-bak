@@ -31,6 +31,16 @@ public class Petrol {
 
     private Double commission;
 
+    private long endTime;
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
     public String getPetrolId() {
         return petrolId;
     }
