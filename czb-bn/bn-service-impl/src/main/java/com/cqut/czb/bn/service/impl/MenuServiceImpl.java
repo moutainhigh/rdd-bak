@@ -60,4 +60,9 @@ public class MenuServiceImpl implements IMenuService {
         List<Menu> menuList = menuMapperExtra.selectMenu(menuInputDTO);
         return new PageInfo<>(menuList);
     }
+
+    @Override
+    public List<Menu> selectParentMenu() {
+        return menuMapperExtra.selectParentMenu();
+    }
 }
