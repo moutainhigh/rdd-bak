@@ -26,6 +26,6 @@ public class EnterpriseConsultingManagementController {
 
     @RequestMapping(value ="/insertConsultation",method = RequestMethod.POST)
     public JSONResult insertConsultation(@RequestBody ConsultingInputDTO inputDTO){
-        return new JSONResult(consultingManagementService.insertConsultation(inputDTO));
+        return new JSONResult(consultingManagementService.insertConsultation(inputDTO)>0);
     }
 }
