@@ -23,4 +23,9 @@ public class EnterpriseConsultingManagementController {
     public JSONResult handleConsultation(@RequestBody HandleConsultationInputDTO inputDTO){
         return new JSONResult(consultingManagementService.handleConsultation(inputDTO));
     }
+
+    @RequestMapping(value ="/insertConsultation",method = RequestMethod.POST)
+    public JSONResult insertConsultation(@RequestBody ConsultingInputDTO inputDTO){
+        return new JSONResult(consultingManagementService.insertConsultation(inputDTO)>0);
+    }
 }

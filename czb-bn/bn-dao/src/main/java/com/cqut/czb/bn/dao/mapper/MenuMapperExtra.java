@@ -16,4 +16,6 @@ public interface MenuMapperExtra {
     List<Menu> selectMenu(MenuInputDTO menuInputDTO);
 
     List<Menu> selectRolesMenu(MenuInputDTO menuInputDTO);
+
+    List<Menu> selectParentMenu();
 }

@@ -31,6 +31,10 @@ public class User {
 
     private Integer isDeleted;
 
+    private String commissionLevelOne;
+
+    private String commissionLevelTwo;
+
     public String getUserId() {
         return userId;
     }
@@ -141,5 +145,21 @@ public class User {
 
     public void setIsDeleted(Integer isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getCommissionLevelOne() {
+        return commissionLevelOne;
+    }
+
+    public void setCommissionLevelOne(String commissionLevelOne) {
+        this.commissionLevelOne = commissionLevelOne == null ? null : commissionLevelOne.trim();
+    }
+
+    public String getCommissionLevelTwo() {
+        return commissionLevelTwo;
+    }
+
+    public void setCommissionLevelTwo(String commissionLevelTwo) {
+        this.commissionLevelTwo = commissionLevelTwo == null ? null : commissionLevelTwo.trim();
     }
 }

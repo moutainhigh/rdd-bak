@@ -2,10 +2,10 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
+import com.cqut.czb.bn.entity.dto.recommenderInvitee.InviteeDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
-import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,6 +23,8 @@ public interface UserMapperExtra {
     List<UserDTO> selectUser(UserInputDTO userInputDTO);
 
     int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
+
+    List<InviteeDTO> selectRecommenderInvitee(String userId);
 
     /**
      * 修改密码——个人中心

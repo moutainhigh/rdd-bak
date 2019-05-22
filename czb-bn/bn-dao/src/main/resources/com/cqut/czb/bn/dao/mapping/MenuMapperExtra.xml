@@ -42,6 +42,14 @@
     </if>
     </where>
   </select>
+  <select id="selectParentMenu" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_menu
+    <where>
+      parent is null or parent = ''
+    </where>
+  </select>
   <delete id="deleteMenu" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
     delete from czb_menu
     where menu_id = #{menuId,jdbcType=VARCHAR}

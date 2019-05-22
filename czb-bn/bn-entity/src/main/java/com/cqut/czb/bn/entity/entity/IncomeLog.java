@@ -27,6 +27,10 @@ public class IncomeLog {
 
     private Double withdrawAccount;
 
+    private String commissionSourceUser;
+
+    private String commissionGotUser;
+
     public String getRecordId() {
         return recordId;
     }
@@ -121,5 +125,21 @@ public class IncomeLog {
 
     public void setWithdrawAccount(Double withdrawAccount) {
         this.withdrawAccount = withdrawAccount;
+    }
+
+    public String getCommissionSourceUser() {
+        return commissionSourceUser;
+    }
+
+    public void setCommissionSourceUser(String commissionSourceUser) {
+        this.commissionSourceUser = commissionSourceUser == null ? null : commissionSourceUser.trim();
+    }
+
+    public String getCommissionGotUser() {
+        return commissionGotUser;
+    }
+
+    public void setCommissionGotUser(String commissionGotUser) {
+        this.commissionGotUser = commissionGotUser == null ? null : commissionGotUser.trim();
     }
 }
