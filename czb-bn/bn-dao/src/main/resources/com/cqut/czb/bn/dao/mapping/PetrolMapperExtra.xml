@@ -91,8 +91,9 @@
   <select id="getPetrolPrice" resultType="java.lang.Double">
      select
      petrol_price as 'petrolPrice'
-     from czb_petrol
-     WHERE petrol_kind=#{petrolType} and  state=1 and area=#{area,jdbcType = VARCHAR}
+     from czb_petrol cp
+     left join czb_petrol_sale_config cpsc on cp.area = cpsc.area
+     WHERE petrol_kind=#{petrolType} and  state=1
      GROUP BY  petrol_price
      order by
      petrol_price desc
