@@ -61,4 +61,10 @@ public class MenuManagementController {
 
         return new JSONResult(menuService.selectMenu(menuInputDTO, pageDTO));
     }
+
+    @RequestMapping(value = "/selectParentMenu",method = RequestMethod.GET)
+    public JSONResult selectParentMenu(){
+
+        return new JSONResult(menuService.selectParentMenu());
+    }
 }
