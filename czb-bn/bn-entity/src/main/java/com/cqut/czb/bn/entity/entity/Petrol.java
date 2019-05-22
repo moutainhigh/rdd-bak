@@ -29,15 +29,7 @@ public class Petrol {
 
     private Date updateAt;
 
-    private long endTime;
-
-    public long getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
+    private Double commission;
 
     public String getPetrolId() {
         return petrolId;
@@ -141,5 +133,13 @@ public class Petrol {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getCommission() {
+        return commission;
+    }
+
+    public void setCommission(Double commission) {
+        this.commission = commission;
     }
 }

@@ -11,4 +11,6 @@ public interface IConsultingManagementService {
     PageInfo<EnterpriseConsultingInfo> getConsultingList(ConsultingInputDTO inputDTO);
 
     int handleConsultation(HandleConsultationInputDTO inputDTO);
+
+    int insertConsultation(ConsultingInputDTO inputDTO);
 }
