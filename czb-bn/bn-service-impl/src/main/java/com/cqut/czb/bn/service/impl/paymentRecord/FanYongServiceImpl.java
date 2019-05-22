@@ -165,8 +165,8 @@ public class FanYongServiceImpl implements FanYongService {
             incomeLog.setBeforeChangeIncome(0.00);
             incomeLog.setAmount(newuserIncomeInfo.getFanyongIncome());//只会有返佣收益
         } else {
-            //处理可能没有数据的地方
-            double beforeIncome=0.00;
+            //处理可能没有数据的地方——变更前的收益
+            double beforeIncome=0.00;//定义之前的余额
             if(olduserIncomeInfo.getFanyongIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()))).doubleValue();
             }else  if(olduserIncomeInfo.getShareIncome()!=null){
@@ -178,12 +178,27 @@ public class FanYongServiceImpl implements FanYongService {
             }
             incomeLog.setBeforeChangeIncome(beforeIncome);
             System.out.println("变更前金额为："+beforeIncome);
-            BigDecimal bnewIncome=BigDecimal.valueOf(newuserIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(newuserIncomeInfo.getShareIncome()));
-            BigDecimal boldIncome=BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(olduserIncomeInfo.getShareIncome()));
 
-            double i = bnewIncome.subtract(boldIncome).doubleValue();
-            System.out.println("变更金额为："+i);
-            incomeLog.setAmount(Double.parseDouble(String.format("%.2f", i)));
+            //处理可能没有数据的地方——变更后的收益
+            double afterIncome=0.00;//定义当前的余额
+            if(newuserIncomeInfo.getFanyongIncome()!=null){
+                afterIncome=(BigDecimal.valueOf(afterIncome).add(BigDecimal.valueOf(newuserIncomeInfo.getFanyongIncome()))).doubleValue();
+            }else  if(newuserIncomeInfo.getShareIncome()!=null){
+                afterIncome=(BigDecimal.valueOf(afterIncome).add(BigDecimal.valueOf(newuserIncomeInfo.getShareIncome()))).doubleValue();
+            }else if(newuserIncomeInfo.getOtherIncome()!=null){
+                afterIncome=(BigDecimal.valueOf(afterIncome).add(BigDecimal.valueOf(newuserIncomeInfo.getOtherIncome()))).doubleValue();
+            }else if(newuserIncomeInfo.getWithdrawed()!=null){
+                afterIncome=(BigDecimal.valueOf(afterIncome).subtract(BigDecimal.valueOf(newuserIncomeInfo.getWithdrawed()))).doubleValue();
+            }
+
+            double changeAmount=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(afterIncome))).doubleValue();
+
+//            BigDecimal bnewIncome=BigDecimal.valueOf(newuserIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(newuserIncomeInfo.getShareIncome()));
+//            BigDecimal boldIncome=BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(olduserIncomeInfo.getShareIncome()));
+
+//            double i = bnewIncome.subtract(boldIncome).doubleValue();
+            System.out.println("变更金额为："+changeAmount);
+            incomeLog.setAmount(Double.parseDouble(String.format("%.2f", changeAmount)));
         }
         incomeLog.setInfoId(uuid);
         incomeLog.setSouseId(orgId);//变更来源
