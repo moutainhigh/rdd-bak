@@ -4,29 +4,29 @@ import java.util.Date;
 
 public class PlatformIncomeRecordsDTO {
     private String recordId;
-
+    //合同id
     private String contractRecordId;
-
+    //企业名
     private String userName;
-
+    //应收款
     private Double receivableMoney;
-
+    //实收款
     private Double actualReceiptsMoney;
-
+    //目标月
     private Date targetYearMonth;
-
+    //企业实际打款时间
     private Date enterprisePayTime;
-
+    //状态 0 未打款 1 已打款 2 打款异常
     private Integer state;
-
+    //是否删除 0 未删除 1 已删除
     private Integer isDeleted;
-
+    //是否需要生成充值记录
     private Integer isNeedRecharge;
-
+    //是否分配油卡
     private Integer isDistributed;
-
+    //导出时所选时间
     private Date exportTime;
-
+    //备注
     private String remark;
 
     public String getRecordId() {

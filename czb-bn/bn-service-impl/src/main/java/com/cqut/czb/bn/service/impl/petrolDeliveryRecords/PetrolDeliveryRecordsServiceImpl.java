@@ -70,9 +70,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                 return "SF";
             }else if (deliveryCompany.equals("中通快递")){
                 return "ZTO";
-            }else if (deliveryCompany.equals("圆通快递")){
+            }else if (deliveryCompany.equals("圆通速递")){
                 return "YTO";
-            }else if (deliveryCompany.equals("韵达快递")){
+            }else if (deliveryCompany.equals("韵达速递")){
                 return "YD";
             }
             else if (deliveryCompany.equals("邮政快递包裹")){
