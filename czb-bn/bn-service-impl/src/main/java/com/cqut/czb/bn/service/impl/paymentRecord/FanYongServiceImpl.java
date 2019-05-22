@@ -198,7 +198,7 @@ public class FanYongServiceImpl implements FanYongService {
 
 //            double i = bnewIncome.subtract(boldIncome).doubleValue();
             System.out.println("变更金额为："+changeAmount);
-            incomeLog.setAmount(Double.parseDouble(String.format("%.2f", changeAmount)));
+            incomeLog.setAmount(changeAmount);
         }
         incomeLog.setInfoId(uuid);
         incomeLog.setSouseId(orgId);//变更来源
