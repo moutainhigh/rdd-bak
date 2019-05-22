@@ -43,12 +43,12 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         petrolSalesRecords.setPetrolKind(petrolKind);//油卡种类
         petrolSalesRecords.setPetrolNum(petrolNum);//卡号
         petrolSalesRecords.setRecordId(StringUtil.createId());
-        petrolSalesRecords.setState(0);//1为已支付
+        petrolSalesRecords.setState(1);//1为已支付
         petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
         petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
         petrolSalesRecords.setThirdOrderId(orgId);
         petrolSalesRecords.setRecordType(petrol.getPetrolType());
-        petrolSalesRecords.setIsRecharged(1);
+        petrolSalesRecords.setIsRecharged(0);
         petrolSalesRecords.setContractId(contractId);
         boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
         System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
