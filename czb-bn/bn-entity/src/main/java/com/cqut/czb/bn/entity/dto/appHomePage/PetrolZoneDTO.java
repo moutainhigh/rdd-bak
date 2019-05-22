@@ -15,6 +15,16 @@ public class PetrolZoneDTO {
 
     private List<Double> petrolPrice;
 
+    private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     public String getPetrolName() {
         return petrolName;
     }
