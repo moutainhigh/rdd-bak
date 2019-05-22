@@ -123,4 +123,35 @@
     where  user_id= #{userId,jdbcType=VARCHAR}
   </update>
 
+  <resultMap id="RecommenderInviteeResultMap" type="com.cqut.czb.bn.entity.dto.recommenderInvitee.InviteeDTO" >
+      <id column="user_id" property="userId" jdbcType="VARCHAR" />
+      <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+      <result column="user_name" property="userName" jdbcType="VARCHAR" />
+      <result column="amount" property="amount" jdbcType="DOUBLE" />
+      <collection property="inviteeDTOList" column="user_id" javaType="list" select="selectInvitee" />
+  </resultMap>
+  <select id="selectRecommenderInvitee" resultMap="RecommenderInviteeResultMap">
+    select cu.user_id, user_account, user_name, count(amount) as 'amount'
+    from czb_user cu
+    left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
+    left join czb_income_log cil on cuii.info_id = cil.info_id
+    <where>
+      cu.superior_user = #{userId, jdbcType=VARCHAR}
+      and type = 0
+    </where>
+    group by cu.user_id
+    order by amount desc
+  </select>
+  <select id="selectInvitee" resultType="com.cqut.czb.bn.entity.dto.recommenderInvitee.InviteeDTO">
+    select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', count(amount) as 'amount'
+    from czb_user cu
+    left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
+    left join czb_income_log cil on cuii.info_id = cil.info_id
+    <where>
+      cu.superior_user = #{userId, jdbcType=VARCHAR}
+      and type = 0
+    </where>
+    group by cu.user_id
+    order by amount desc
+  </select>
 </mapper>
