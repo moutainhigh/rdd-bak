@@ -121,7 +121,7 @@ public class FanYongServiceImpl implements FanYongService {
             //用户收益信息表——更改
                 int type=2;
                 if (k == 1 || k == 2) {//本人不返佣
-                    double getMoney=(BigDecimal.valueOf(userIncomeInfo.getFanyongIncome()).multiply(BigDecimal.valueOf(FYrate))).doubleValue();
+                    double getMoney=(BigDecimal.valueOf(fangyongMoney).multiply(BigDecimal.valueOf(FYrate))).doubleValue();
                     double fangyongIncome=(BigDecimal.valueOf(userIncomeInfo.getFanyongIncome()).add(BigDecimal.valueOf(getMoney))).doubleValue();
                     userIncomeInfo.setFanyongIncome(fangyongIncome);
                     if (userIncomeInfo.getShareIncome() == null)
