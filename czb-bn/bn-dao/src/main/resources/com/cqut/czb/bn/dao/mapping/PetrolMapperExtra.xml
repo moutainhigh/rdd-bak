@@ -15,10 +15,11 @@
     <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="commission" property="commission" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area, owner_id, petrol_type, create_at, update_at
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission
   </sql>
   <select id="getPetrolList" resultMap="BaseResultMap" resultType="com.cqut.czb.bn.entity.entity.Petrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
     select <include refid="Base_Column_List"/> from czb_petrol
