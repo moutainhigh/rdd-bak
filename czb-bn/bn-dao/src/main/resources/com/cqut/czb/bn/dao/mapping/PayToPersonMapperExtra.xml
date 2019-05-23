@@ -75,7 +75,7 @@
                 czb_cars_persons a
             LEFT JOIN czb_contract_records b ON a.contract_record_id = b.record_id
             LEFT JOIN czb_service_plan c ON a.plan_id = c.plan_id
-            WHERE MONTH(b.contract_end_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is not null
+            WHERE MONTH(b.contract_start_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is not null
             AND  b.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP}
     </select>
 
