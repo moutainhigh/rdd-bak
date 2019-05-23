@@ -23,21 +23,25 @@ public class DictServiceImpl implements IDictService {
     @Override
     public PageInfo<Dict> selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO.getName());
+        List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
         return new PageInfo<>(dictList);
     }
 
     @Override
     public List<Dict> selectCustomerServiceStaff() {
+        DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "kf";
-        return dictMapperExtra.selectDict(name);
+        dictInputDTO.setName(name);
+        return dictMapperExtra.selectDict(dictInputDTO);
     }
 
     @Override
     public AppInfoDTO selectAndroidInfo() {
         AppInfoDTO appInfoDTO = new AppInfoDTO();
+        DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
-        List<Dict> dictList = dictMapperExtra.selectDict(name);
+        dictInputDTO.setName(name);
+        List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
         for(Dict dict: dictList) {
             if("android_version".equals(dict.getName())) {
                 appInfoDTO.setVersion(dict.getContent());
@@ -55,8 +59,10 @@ public class DictServiceImpl implements IDictService {
     @Override
     public AppInfoDTO selectIOSInfo() {
         AppInfoDTO appInfoDTO = new AppInfoDTO();
+        DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "ios";
-        List<Dict> dictList = dictMapperExtra.selectDict(name);
+        dictInputDTO.setName(name);
+        List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
         for(Dict dict: dictList) {
             if("ios_version".equals(dict.getName())) {
                 appInfoDTO.setVersion(dict.getContent());
