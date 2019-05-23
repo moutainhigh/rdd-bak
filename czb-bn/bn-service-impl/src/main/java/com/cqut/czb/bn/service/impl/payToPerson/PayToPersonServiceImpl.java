@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.payToPerson;
 
+import com.cqut.czb.bn.dao.mapper.PayToPersonMapper;
 import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
@@ -31,6 +32,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
 
     @Autowired
     PayToPersonMapperExtra payToPersonMapperExtra;
+
     //列表查询
     @Override
     public PageInfo<PayToPersonDTO> getPayList(PayToPersonDTO payToPersonDTO, PageDTO pageDTO) {
@@ -100,7 +102,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             payToPerson.setRemark(platformIncomeRecordsDTO.getRemark());
         if(platformIncomeRecordsDTO.getRecordId()!=null)
             payToPerson.setRecordId(platformIncomeRecordsDTO.getRecordId());
-        return payToPersonMapperExtra.updateByPrimaryKey(payToPerson)>0;
+        return payToPersonMapperExtra.updateByPrimaryKeySelective(payToPerson)>0;
     }
 
     //生成execl表
