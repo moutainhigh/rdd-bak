@@ -421,7 +421,7 @@ public class ContractServiceImpl implements ContractService{
         // TODO 添加一个车租宝平台的签署者
         // 企业签署者
         JSONObject ownerCompany = new JSONObject();
-        ownerCompany.put("signerId", "5293709"); // 云合同id
+        ownerCompany.put("signerId", "5357154"); // 云合同id
         ownerCompany.put("signPositionType", "1"); // 签名定位类型
         ownerCompany.put("positionContent", "04549"); // 签名定位参数
         ownerCompany.put("signValidateType", "0"); // 是否短信校验，否
@@ -467,7 +467,7 @@ public class ContractServiceImpl implements ContractService{
         }
 
         // TODO 车租宝自动签署
-        signerContract("155780028358627",contractId, getToken());
+        signerContract("155851849877254",contractId, getToken());
 
 
          return 1;
