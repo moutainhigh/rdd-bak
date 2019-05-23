@@ -46,7 +46,7 @@ public class AppPersonalCenterController {
     @RequestMapping(value = "/selectWallet",method = RequestMethod.GET)
     public JSONResult selectWallet(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult<List<UserIncomeInfoDTO>>(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
+        return new JSONResult(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
     }
 
     @RequestMapping(value = "/getShareInfo",method = RequestMethod.GET)
@@ -69,7 +69,7 @@ public class AppPersonalCenterController {
     }
 
     /**
-     *  * 获取菜单信息
+     *  * 获取菜单信息（路由）
      * @return
      */
     @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)

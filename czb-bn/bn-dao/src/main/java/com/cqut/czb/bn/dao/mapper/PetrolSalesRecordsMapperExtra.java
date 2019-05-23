@@ -30,8 +30,8 @@ public interface PetrolSalesRecordsMapperExtra {
 
     /**
      * 通过合同id查出相应的卡
-     * @param petrolInputDTO
+     * @param contractId
      * @return
      */
-    PetrolSalesRecords selectPetrolByContractId(PetrolInputDTO petrolInputDTO);
+    PetrolSalesRecords selectPetrolByContractId(@Param("contractId") String contractId);
 }

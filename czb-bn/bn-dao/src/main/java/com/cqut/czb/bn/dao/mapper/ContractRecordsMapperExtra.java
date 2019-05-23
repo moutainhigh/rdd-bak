@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractInputDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.PersonalContractDetailDTO;
@@ -19,5 +20,5 @@ public interface ContractRecordsMapperExtra {
 
     int changeContractState(ContractInputDTO contractInputDTO);
 
-    String selectOwnerId(@Param("contractRecordId") String contractRecordId);
+    PetrolInputDTO selectOwnerId(@Param("contractRecordId") String contractRecordId);
 }

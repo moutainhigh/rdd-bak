@@ -98,7 +98,7 @@
         where record_id = #{contractId,jdbcType=VARCHAR}
     </update>
 
-    <select id="selectOwnerId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="selectOwnerId" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
         SELECT user_id as owerId
         FROM czb_contract_records
         WHERE record_id=#{contractRecordId,jdbcType=VARCHAR}

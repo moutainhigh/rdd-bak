@@ -289,12 +289,12 @@ INNER JOIN (
         LIMIT 1
     </select>
     
-    <select id="selectPetrolByContractId" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
+    <select id="selectPetrolByContractId" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM czb_petrol_sales_records
         WHERE
-        AND petrol_kind=#{contractId,jdbcType = INTEGER}
+        contract_id=#{contractId,jdbcType = VARCHAR}
         ORDER BY transaction_time DESC
         LIMIT 1
     </select>
