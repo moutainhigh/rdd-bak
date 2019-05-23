@@ -50,9 +50,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
                 loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
             }
+            if("" == loginUser.getPassword()) {
+                loginUser.setPassword(null);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUser.getAccount(), loginUser.getPassword(), new ArrayList<>())
         );

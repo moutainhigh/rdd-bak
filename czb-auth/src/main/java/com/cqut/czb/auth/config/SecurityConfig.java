@@ -2,9 +2,12 @@ package com.cqut.czb.auth.config;
 
 import com.cqut.czb.auth.filter.JWTAuthenticationFilter;
 import com.cqut.czb.auth.filter.JWTAuthorizationFilter;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,10 +39,47 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider bean = new DaoAuthenticationProvider();
+        bean.setHideUserNotFoundExceptions(false);
+        bean.setUserDetailsService(this.userDetailsService);
+        bean.setPasswordEncoder(new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                try {
+                    return bCryptPasswordEncoder().encode(rawPassword.toString());
+                } catch (Exception e) {
+                    throw new BadCredentialsException("调用加密算法对密码进行加密时异常", e);
+                }
+            }
+
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                if (StringUtil.isBlank(rawPassword)) {
+                    throw new BadCredentialsException("密码为空，请重新输入密码");
+                } else if (StringUtil.isBlank(encodedPassword)) {
+                    throw new BadCredentialsException("系统中密码密文是空白字符串，请联系客服");
+                } else {
+                    boolean isMatches = this.encode(rawPassword).equals(encodedPassword);
+                    if(isMatches) {
+                        return isMatches;
+                    } else {
+                        throw new BadCredentialsException("密码不匹配，请重新输入密码");
+                    }
+                }
+            }
+        });
+
+
+        return bean;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //设置使用获取用户实体信息的服务类，和使用的加密方式
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.authenticationProvider(daoAuthenticationProvider());
+
     }
 
     @Override

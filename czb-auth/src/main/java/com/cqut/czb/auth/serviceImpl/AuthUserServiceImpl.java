@@ -24,7 +24,12 @@ public class AuthUserServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
         if(!redisUtils.hasKey(account)) {
-            return new JwtUser(userMapperExtra.findUserByAccount(account));
+            User user = userMapperExtra.findUserByAccount(account);
+            if(user != null) {
+                return new JwtUser();
+            } else {
+                throw new UsernameNotFoundException("该用户名不存在");
+            }
         } else {
             return new JwtUser((User)redisUtils.get(account));
         }
