@@ -109,11 +109,14 @@ public class ImportPlatformIncome {
         platformIncomeRecordsDTO.setActualReceiptsMoney(Double.parseDouble(getStringValue(xssfRow.getCell(3))));
         platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(getStringValue(xssfRow.getCell(4))));
         platformIncomeRecordsDTO.setEnterprisePayTime(new SimpleDateFormat("yyyy-MM-dd").parse(getStringValue(xssfRow.getCell(5))));
-        if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
+        if (!platformIncomeRecordsDTO.getReceivableMoney().equals(platformIncomeRecordsDTO.getActualReceiptsMoney())){
             platformIncomeRecordsDTO.setState(2);
-        }else if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
+            platformIncomeRecordsDTO.setIsDistributed(0);
+        }else {
             platformIncomeRecordsDTO.setState(1);
+            platformIncomeRecordsDTO.setIsDistributed(1);
         }
+        platformIncomeRecordsDTO.setIsDeleted(0);
         return platformIncomeRecordsDTO;
     }
 
@@ -173,6 +176,7 @@ public class ImportPlatformIncome {
         }else if (platformIncomeRecordsDTO.getReceivableMoney()==platformIncomeRecordsDTO.getActualReceiptsMoney()){
             platformIncomeRecordsDTO.setState(1);
         }
+        platformIncomeRecordsDTO.setIsDeleted(0);
         return platformIncomeRecordsDTO;
     }
 
