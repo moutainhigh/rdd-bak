@@ -84,7 +84,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(enterpriseUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
 
-        if(!this.enterpriseCertification(enterpriseUserDTO)) { return "企业信息校验失败"; }
+//        if(!this.enterpriseCertification(enterpriseUserDTO)) { return "企业信息校验失败"; }
 
         User user = BeanMapper.map(enterpriseUserDTO, User.class);
         user.setUserId(StringUtil.createId());
