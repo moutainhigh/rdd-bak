@@ -1,13 +1,13 @@
 package com.cqut.czb.bn.service.impl.platformIncomeRecord;
 
-import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
-import com.cqut.czb.bn.dao.mapper.PlatformIncomeRecordsMapperExtra;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
-import com.cqut.czb.bn.entity.entity.PayToPerson;
-import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
+import com.cqut.czb.bn.entity.entity.*;
+import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PlatformIncomeRecordsService;
 import com.cqut.czb.bn.service.impl.payToPerson.ImportPayToPerson;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -34,8 +34,19 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     private PlatformIncomeRecordsMapperExtra platformIncomeRecordsMapperExtra;
 
     @Autowired
-    private PayToPersonMapperExtra payToPersonMapperExtra;
+    private PetrolMapperExtra petrolMapperExtra;
 
+    @Autowired
+    private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+
+    @Autowired
+    private ContractRecordsMapperExtra contractRecordsMapperExtra;
+
+    @Autowired
+    private PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
+
+    @Autowired
+    private AddressMapperExtra addressMapperExtra;
     @Override
     public PageInfo<PlatformIncomeRecordsDTO> getReceiveRecords(PlatformIncomeRecordsDTO records, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
@@ -69,12 +80,111 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     }
 
     @Override
-    public boolean ConfirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
-        PayToPerson payToPerson=new PayToPerson();
-        payToPerson.setState(1);//已打款
-        if(platformIncomeRecordsDTO.getRemark()!=null)
-        payToPerson.setRemark(platformIncomeRecordsDTO.getRemark());
-        return payToPersonMapperExtra.updateByPrimaryKey(payToPerson)>0;
+    public boolean handleManyPlatFormIncomeRecords(String contractRecordIds) {
+        String[] contractRecordId=contractRecordIds.split(",");
+        for(int i=0;i<contractRecordId.length;i++){
+            handleOnePlatFormIncomeRecord(contractRecordId[i]);
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean handleOnePlatFormIncomeRecord(String contractRecordId) {
+        if(contractRecordId==null)//数据为空
+            return false;
+        PetrolSalesRecords petrolSalesRecords=isHaveDistributionPetrol(contractRecordId);//查出购买记录
+        int petrolKind=1;
+        double petrolPrice=100;
+
+        if(petrolSalesRecords==null){//为空则分配油卡
+            System.out.println("以前没有分配过油卡，合同id为："+contractRecordId);
+
+            //开始查询相关信息（petrolKind,petrolPrice,owerId）
+            String ownerId=contractRecordsMapperExtra.selectOwnerId(contractRecordId);
+            System.out.println("ownerId:"+ownerId);
+            PetrolInputDTO petrolInputDTO=new PetrolInputDTO();
+            petrolInputDTO.setPetrolKind(petrolKind);
+            petrolInputDTO.setPetrolPrice(petrolPrice);
+            petrolInputDTO.setOwnerId(ownerId);
+            Petrol petrol= PetrolCache.randomPetrol(petrolInputDTO); //随机获取一张卡
+            if(petrol==null)
+                return false;
+            else {//有相应的油卡
+                //更改卡的状态
+                petrol.setState(2);
+                boolean statePetrol= petrolMapperExtra.updateByPrimaryKeySelective(petrol) > 0;
+                System.out.println("油卡状态更改"+statePetrol+":"+petrol.getPetrolNum());
+                //新增油卡的购买销售信息
+                petrolSalesRecords=new PetrolSalesRecords();
+                petrolSalesRecords.setPetrolId(petrol.getPetrolId());
+                petrolSalesRecords.setBuyerId(ownerId);
+                petrolSalesRecords.setPaymentMethod(4);//4为合同打款
+                petrolSalesRecords.setPetrolKind(petrolKind);//油卡种类
+                petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
+                petrolSalesRecords.setRecordId(StringUtil.createId());
+                petrolSalesRecords.setState(1);//1为已支付
+                petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+                petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
+                petrolSalesRecords.setRecordType(0);
+                petrolSalesRecords.setIsRecharged(1);
+                petrolSalesRecords.setContractId(contractRecordId);
+                boolean insertPetrolSalesRecords = petrolSalesRecordsMapperExtra.insert(petrolSalesRecords) > 0;
+                System.out.println("新增购买记录表完毕" + insertPetrolSalesRecords);
+
+                //新增油卡邮寄记录——插入
+                PetrolDeliveryRecords petrolDeliveryRecords = new PetrolDeliveryRecords();
+                String addressId=addressMapperExtra.selectAddressId(contractRecordId);
+                petrolDeliveryRecords.setAddressId(addressId);
+                petrolDeliveryRecords.setPetrolNum(petrol.getPetrolNum());
+                petrolDeliveryRecords.setDeliveryState(0);
+                petrolDeliveryRecords.setRecordId(StringUtil.createId());
+                boolean isInsert = petrolDeliveryRecordsMapperExtra.insert(petrolDeliveryRecords) > 0;
+                System.out.println("新增油卡邮寄记录" + isInsert);
+                //成功后移除对应的卡
+                PetrolCache.currentPetrolMap.remove(petrol.getPetrolNum());
+                return true;
+            }
+        }else {//不为空充值
+            System.out.println("以前分配过油卡，将充值，合同id为："+contractRecordId);
+            Petrol petrol= new Petrol();
+            String ownerId=petrolSalesRecords.getBuyerId();
+            petrol.setOwnerId(ownerId);
+            petrol.setPetrolKind(petrolKind);
+            petrol=petrolMapperExtra.selectMyPetrol(petrol);
+            //新增购买记录表——插入（充值）
+            petrolSalesRecords=new PetrolSalesRecords();
+            petrolSalesRecords.setPetrolId(petrol.getPetrolId());
+            petrolSalesRecords.setBuyerId(ownerId);
+            petrolSalesRecords.setPaymentMethod(4);//1为支付宝支付
+            petrolSalesRecords.setPetrolKind(petrolKind);//油卡种类
+            petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
+            petrolSalesRecords.setRecordId(StringUtil.createId());
+            petrolSalesRecords.setState(1);//1为已支付
+            petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+            petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
+            petrolSalesRecords.setRecordType(petrol.getPetrolType());
+            petrolSalesRecords.setIsRecharged(1);
+            petrolSalesRecords.setContractId(contractRecordId);
+            boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
+            System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
+            return true;
+        }
+    }
+
+    @Override
+    public PetrolSalesRecords isHaveDistributionPetrol(String contractRecordId ) {
+        PetrolInputDTO petrolInputDTO=new PetrolInputDTO();
+        /**
+         * 通过个人合同id查到相应的油卡（油卡购买记录表）
+         */
+        if(contractRecordId==null)
+            return null;
+        else{
+            petrolInputDTO.setContractId(contractRecordId);
+        }
+        PetrolSalesRecords petrolSalesRecords=petrolSalesRecordsMapperExtra.selectPetrolByContractId(petrolInputDTO);
+        return petrolSalesRecords;
     }
 
     //导出生成execl表

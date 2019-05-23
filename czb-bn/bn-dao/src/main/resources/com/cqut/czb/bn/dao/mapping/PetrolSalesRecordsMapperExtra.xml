@@ -289,6 +289,16 @@ INNER JOIN (
         LIMIT 1
     </select>
     
+    <select id="selectPetrolByContractId" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM czb_petrol_sales_records
+        WHERE
+        AND petrol_kind=#{contractId,jdbcType = INTEGER}
+        ORDER BY transaction_time DESC
+        LIMIT 1
+    </select>
+    
     <!--个人中心油卡详情获取新版，按日期分组返回数据 级联查询-->
     <!--<resultMap id="getGTPetrolListGroupByDate" type="com.cqut.czb.bn.entity.dto.appPersonalPetrol.PersonalPetrolGT">-->
         <!--<result property="date" column="t_date"/>-->

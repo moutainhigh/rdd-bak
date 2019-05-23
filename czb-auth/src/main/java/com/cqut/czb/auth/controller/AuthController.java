@@ -100,7 +100,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("/sendVerificationCode")
-    public  JSONResult sendtVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
+    public  JSONResult sendtVerificationCode(@Validated  VerificationCodeDTO verificationCodeDTO){
         //判断电话号码是否为空
         if(verificationCodeDTO==null||verificationCodeDTO.getUserAccount()==null){
             return new JSONResult(false);

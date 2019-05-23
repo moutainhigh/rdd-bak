@@ -2,6 +2,8 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,8 +19,18 @@ public interface PlatformIncomeRecordsService {
     int importRecords(MultipartFile file) throws Exception;
 
     /**
-     * 确认打款
+     * 对多条记录进行操作
      */
-    boolean ConfirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
+    boolean handleManyPlatFormIncomeRecords(String contractRecordIds);
 
+    /**
+     * 处理单条记录油卡或充值
+     * @return
+     */
+    boolean handleOnePlatFormIncomeRecord(String contractRecordId);
+
+    /**
+     * 检测是否分配了油卡
+     */
+    PetrolSalesRecords isHaveDistributionPetrol(String contractRecordId);
 }

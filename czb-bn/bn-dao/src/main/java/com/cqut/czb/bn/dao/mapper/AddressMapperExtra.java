@@ -16,4 +16,6 @@ public interface AddressMapperExtra {
     int setDefault(@Param("addressId") String addressId,@Param("userId") String userId);
 
     int updateByPrimaryKeySelective(Address record);
+
+    String selectAddressId(@Param("contractRecordId") String contractRecordId);
 }

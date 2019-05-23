@@ -25,9 +25,6 @@ import java.util.*;
 public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Autowired
-    private UserIncomeInfoMapper userIncomeInfoMapper;
-
-    @Autowired
     private UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
 
     @Autowired
@@ -246,6 +243,11 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords) {
+        return false;
     }
 
 }

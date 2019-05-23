@@ -27,4 +27,11 @@ public interface PetrolSalesRecordsMapperExtra {
     int recharge(@Param("recordId") String recordId);
 
     PetrolSalesRecords selectPetrolSalesRecords(PetrolInputDTO petrolInputDTO);
+
+    /**
+     * 通过合同id查出相应的卡
+     * @param petrolInputDTO
+     * @return
+     */
+    PetrolSalesRecords selectPetrolByContractId(PetrolInputDTO petrolInputDTO);
 }

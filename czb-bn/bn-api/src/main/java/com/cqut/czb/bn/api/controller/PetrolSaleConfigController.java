@@ -27,7 +27,7 @@ public class PetrolSaleConfigController {
 
     @RequestMapping(value = "/updateSaleConfig",method = RequestMethod.POST)
     public JSONResult updateSaleConfig(@RequestBody PetrolSaleConfig petrolSaleConfig){
-        return new JSONResult(petrolSaleConfigService.updatePetrolSaleConfig(petrolSaleConfig) );
+        return new JSONResult(petrolSaleConfigService.updatePetrolSaleConfig(petrolSaleConfig));
     }
 
 
