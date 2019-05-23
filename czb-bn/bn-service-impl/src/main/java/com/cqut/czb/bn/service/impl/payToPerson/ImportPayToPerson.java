@@ -111,7 +111,7 @@ public class ImportPayToPerson {
         payToPersonDTO.setActualPayMoney(Double.parseDouble(getStringValue(xssfRow.getCell(6))));
         if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
             payToPersonDTO.setState(2);
-        }else if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
+        }else if (!payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
             payToPersonDTO.setState(1);
         }
         try {
@@ -119,6 +119,8 @@ public class ImportPayToPerson {
         }catch (Exception e){
             throw new Exception("时间为空");
         }
+        payToPersonDTO.setIsDeleted(0);
+
         return payToPersonDTO;
     }
 

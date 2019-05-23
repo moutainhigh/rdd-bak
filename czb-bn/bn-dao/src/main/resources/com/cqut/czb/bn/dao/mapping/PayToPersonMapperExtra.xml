@@ -89,12 +89,12 @@
         #{item.recordId,jdbcType = VARCHAR},
         #{item.payeeName,jdbcType = VARCHAR},
         #{item.payeeIdCard,jdbcType = VARCHAR},
-        #{item.contractRecordId,jdbcType = INTEGER},
+        #{item.contractRecordId,jdbcType = VARCHAR},
         #{item.payableMoney,jdbcType = DOUBLE},
         #{item.actualPayMoney,jdbcType = DOUBLE},
-        #{item.targetYearMonth,jdbcType = INTEGER},
-        #{item.platformPayTime,jdbcType = DOUBLE},
-        #{item.state,jdbcType = VARCHAR},
+        #{item.targetYearMonth,jdbcType = TIMESTAMP},
+        #{item.platformPayTime,jdbcType = TIMESTAMP},
+        #{item.state,jdbcType = INTEGER},
         #{item.isDeleted,jdbcType = INTEGER},
         )
     </foreach>
