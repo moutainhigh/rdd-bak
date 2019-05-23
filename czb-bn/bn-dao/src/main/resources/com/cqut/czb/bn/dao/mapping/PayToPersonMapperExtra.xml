@@ -114,19 +114,19 @@
     <update id="updateImportData" parameterType="java.util.List" >
         update czb_pay_to_person
         set
-        actual_pay_money = CASE contrac_record_id <foreach collection="list" item="item" index="index"
+        actual_pay_money = CASE contract_record_id <foreach collection="list" item="item" index="index"
                                     separator="" open="" close="end,">
         when   #{item.contractRecordId,jdbcType=VARCHAR} THEN  #{item.actualPayMoney,jdbcType=VARCHAR}
     </foreach>
-        platform_pay_time = CASE contrac_record_id <foreach collection="list" item="item" index="index"
+        platform_pay_time = CASE contract_record_id <foreach collection="list" item="item" index="index"
                                      separator="" open="" close="end,">
         when   #{item.contractRecordId,jdbcType=VARCHAR} THEN #{item.platformPayTime,jdbcType=TIMESTAMP}
     </foreach>
-        state = CASE contrac_record_id <foreach collection="list" item="item" index="index"
+        state = CASE contract_record_id <foreach collection="list" item="item" index="index"
                                                 separator="" open="" close="end">
         when   #{item.contractRecordId,jdbcType=VARCHAR} THEN #{item.state,jdbcType=TIMESTAMP}
     </foreach>
-        where contractRecordId in <foreach collection="list" item="item" index="index"
+        where contract_record_id in <foreach collection="list" item="item" index="index"
         separator="," open="(" close=")">
           #{item.contractRecordId,jdbcType=VARCHAR}
     </foreach>

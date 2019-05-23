@@ -120,4 +120,14 @@ public class PlatformIncomeRecordsController {
     public JSONResult searchProcess(){
         return new JSONResult(ImportPlatformIncome.processNum);
     }
+
+    /**
+     * 查看油卡
+     * @param platformIncomeRecordsDTO
+     * @return
+     */
+    @PostMapping("/selectPetrol")
+    public JSONResult selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO,PageDTO pageDTO){
+        return new JSONResult(platformIncomeRecordsService.selectPetrol(platformIncomeRecordsDTO,pageDTO));
+    }
 }

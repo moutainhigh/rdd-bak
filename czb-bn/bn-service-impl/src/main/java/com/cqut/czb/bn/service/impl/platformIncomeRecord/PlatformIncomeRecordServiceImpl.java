@@ -190,6 +190,12 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         return countForInsert;
     }
 
+    @Override
+    public PageInfo<Petrol> selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        return new PageInfo<>(platformIncomeRecordsMapperExtra.selectPetrolList(platformIncomeRecordsDTO));
+    }
+
     //导出生成execl表
     public Workbook getWorkBook(List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS)throws Exception{
         String[] platformIncomeRecordsHeader = SystemConstants.PLATFORM_INCOME_RECORDS;
