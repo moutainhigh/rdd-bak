@@ -17,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,7 +78,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     }
 
     //导出生成execl表
-
+    @Async
     @Override
     public int importRecords(MultipartFile file) throws Exception {
         InputStream inputStream = file.getInputStream();

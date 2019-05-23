@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO
 import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PlatformIncomeRecordsService;
+import com.cqut.czb.bn.service.impl.platformIncomeRecord.ImportPlatformIncome;
 import org.apache.http.HttpResponse;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -104,5 +105,10 @@ public class PlatformIncomeRecordsController {
     @PostMapping("/impoertIncomeRecords")
     public JSONResult impoertIncomeRecords(@Param("file")MultipartFile file) throws Exception{
         return new JSONResult(platformIncomeRecordsService.importRecords(file));
+    }
+
+    @GetMapping("/searchProcess")
+    public JSONResult searchProcess(){
+        return new JSONResult(ImportPlatformIncome.processNum);
     }
 }

@@ -30,7 +30,7 @@ public class PayToPersonDTO {
     private String remark;
 
     //导出时的选择时间（年+月）
-    private Date exportTime;
+    private String exportTime;
 
     public String getRecordId() {
         return recordId;
@@ -136,11 +136,11 @@ public class PayToPersonDTO {
         this.remark = remark;
     }
 
-    public Date getExportTime() {
+    public String getExportTime() {
         return exportTime;
     }
 
-    public void setExportTime(Date exportTime) {
+    public void setExportTime(String exportTime) {
         this.exportTime = exportTime;
     }
 }
