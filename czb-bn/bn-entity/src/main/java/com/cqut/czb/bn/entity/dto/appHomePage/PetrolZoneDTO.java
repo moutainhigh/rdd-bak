@@ -13,9 +13,19 @@ public class PetrolZoneDTO {
 
     private Integer petrolKind;
 
+    private String petrolRemark;//油卡备注（字典）
+
     private List<Double> petrolPrice;
 
     private String area;
+
+    public String getPetrolRemark() {
+        return petrolRemark;
+    }
+
+    public void setPetrolRemark(String petrolRemark) {
+        this.petrolRemark = petrolRemark;
+    }
 
     public String getArea() {
         return area;
