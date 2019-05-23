@@ -97,8 +97,8 @@ public class PlatformIncomeRecordsController {
      * 分配油卡（多张）
      */
     @GetMapping("/distributionManyPetrols")
-    public JSONResult distributionManyPetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
-        return  new JSONResult( platformIncomeRecordsService.handleManyPlatFormIncomeRecords(platformIncomeRecordsDTO.getContractRecordId()));
+    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds){
+        return  new JSONResult( platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds));
     }
 
     /**
