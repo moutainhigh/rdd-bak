@@ -100,12 +100,12 @@ public class AuthController {
      * @return
      */
     @PostMapping("/sendVerificationCode")
-    public  JSONResult sendtVerificationCode(@Validated  VerificationCodeDTO verificationCodeDTO){
+    public  JSONResult sendtVerificationCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
         //判断电话号码是否为空
         if(verificationCodeDTO==null||verificationCodeDTO.getUserAccount()==null){
             return new JSONResult(false);
         }
-        boolean sendVerificationCode=userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
+        boolean sendVerificationCode = userDetailService.insertVerificationCode(verificationCodeDTO.getUserAccount());
         if(sendVerificationCode) {
             return new JSONResult(true);
         } else {
