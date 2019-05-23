@@ -79,7 +79,7 @@
         create_at, update_at)
         values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{addressId,jdbcType=VARCHAR},
         #{deliveryState,jdbcType=INTEGER}, #{deliveryNum,jdbcType=VARCHAR}, #{deliveryCompany,jdbcType=VARCHAR},
-        #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+        now(), now())
     </insert>
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
         insert into czb_petrol_delivery_records

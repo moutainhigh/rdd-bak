@@ -86,6 +86,17 @@ public class PayToPersonServiceImpl implements PayToPersonService{
 //        return workbook;
 //    }
 
+    @Override
+    public boolean ConfirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
+        PayToPerson payToPerson=new PayToPerson();
+        payToPerson.setState(1);//已打款
+        if(platformIncomeRecordsDTO.getRemark()!=null)
+            payToPerson.setRemark(platformIncomeRecordsDTO.getRemark());
+        if(platformIncomeRecordsDTO.getRecordId()!=null)
+            payToPerson.setRecordId(platformIncomeRecordsDTO.getRecordId());
+        return payToPersonMapperExtra.updateByPrimaryKey(payToPerson)>0;
+    }
+
     //生成execl表
     public Workbook getWorkBook(List<PayToPersonDTO> payToPersonDTOS)throws Exception{
         String[] payToPersonHeader = SystemConstants.PAY_TO_PERSON_RECORDS;

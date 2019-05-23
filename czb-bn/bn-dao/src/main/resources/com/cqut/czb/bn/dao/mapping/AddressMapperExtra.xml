@@ -110,4 +110,13 @@
         </set>
         where address_id = #{addressId,jdbcType=VARCHAR}
     </update>
+
+    <select id="selectAddressId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT address_id
+        FROM czb_address,czb_contract_records
+        WHERE
+        record_id=#{contractRecordId,jdbcType = VARCHAR} AND
+        czb_address.user_id=czb_contract_records.user_id AND
+        czb_address.is_default=1
+    </select>
 </mapper>

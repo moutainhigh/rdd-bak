@@ -94,11 +94,20 @@ public class PlatformIncomeRecordsController {
     }
 
     /**
-     * 确认已打款
+     * 分配油卡（多张）
      */
-    @GetMapping("/confirmReceipt")
-    public JSONResult confirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
-        return new JSONResult(platformIncomeRecordsService.ConfirmReceipt(platformIncomeRecordsDTO));
+    @GetMapping("/distributionManyPetrols")
+    public JSONResult distributionManyPetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
+        return  new JSONResult( platformIncomeRecordsService.handleManyPlatFormIncomeRecords(platformIncomeRecordsDTO.getContractRecordId()));
+    }
+
+    /**
+     * 分配油卡（一张）
+     * @return
+     */
+    @GetMapping("/distributionOnePetrols")
+    public JSONResult distributionOnePetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
+        return new JSONResult( platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO.getContractRecordId()));
     }
 
 

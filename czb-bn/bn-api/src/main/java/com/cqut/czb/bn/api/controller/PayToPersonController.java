@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
+import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PayToPersonService;
 import com.cqut.czb.bn.service.impl.payToPerson.ImportPayToPerson;
@@ -86,6 +87,14 @@ public class PayToPersonController {
         }
         result.put("message", message);
         return new JSONResult(result);
+    }
+
+    /**
+     * 确认已打款
+     */
+    @GetMapping("/confirmReceipt")
+    public JSONResult confirmReceipt(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
+        return new JSONResult(payToPersonService.ConfirmReceipt(platformIncomeRecordsDTO));
     }
 
     /**
