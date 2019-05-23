@@ -184,7 +184,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();
         platformIncomeRecordsDTOS = ImportPlatformIncome.readExcel(file.getOriginalFilename(), inputStream);
         System.out.println("99999999"+platformIncomeRecordsDTOS.get(0).getContractRecordId());
-        int countForInsert = platformIncomeRecordsMapperExtra.updateImportData(platformIncomeRecordsDTOS);
+        int countForInsert = platformIncomeRecordsMapperExtra.insert(platformIncomeRecordsDTOS);
 //        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
     }
