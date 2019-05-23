@@ -87,15 +87,15 @@
         values <foreach collection="list" item="item" index="index" separator=",">
         (
         #{item.recordId,jdbcType = VARCHAR},
-        #{item.payee_name,jdbcType = VARCHAR},
-        #{item.payee_id_card,jdbcType = VARCHAR},
-        #{item.contract_record_id,jdbcType = INTEGER},
-        #{item.payable_money,jdbcType = DOUBLE},
-        #{item.actual_pay_money,jdbcType = DOUBLE},
-        #{item.target_year_month,jdbcType = INTEGER},
-        #{item.platform_pay_time,jdbcType = DOUBLE},
+        #{item.payeeName,jdbcType = VARCHAR},
+        #{item.payeeIdCard,jdbcType = VARCHAR},
+        #{item.contractRecordId,jdbcType = INTEGER},
+        #{item.payableMoney,jdbcType = DOUBLE},
+        #{item.actualPayMoney,jdbcType = DOUBLE},
+        #{item.targetYearMonth,jdbcType = INTEGER},
+        #{item.platformPayTime,jdbcType = DOUBLE},
         #{item.state,jdbcType = VARCHAR},
-        #{item.is_deleted,jdbcType = INTEGER},
+        #{item.isDeleted,jdbcType = INTEGER},
         )
     </foreach>
     </insert>
