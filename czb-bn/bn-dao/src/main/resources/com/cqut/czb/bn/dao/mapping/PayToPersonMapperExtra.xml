@@ -139,6 +139,9 @@
             <if test="payeeName != null" >
                 payee_name = #{payeeName,jdbcType=VARCHAR},
             </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
             <if test="payeeIdCard != null" >
                 payee_id_card = #{payeeIdCard,jdbcType=VARCHAR},
             </if>
