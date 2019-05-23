@@ -55,7 +55,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
                 if(platformIncomeRecordsDTOS.get(i).getContractRecordId().equals(incomeMoney.get(i).getContractRecordId())){
                     platformIncomeRecordsDTOS.get(i).setRecordId(StringUtil.createId());
                     platformIncomeRecordsDTOS.get(i).setReceivableMoney(incomeMoney.get(i).getReceivableMoney());
-                    platformIncomeRecordsDTOS.get(i).setTargetYearMonth(platformIncomeRecordsDTO.getExportTime());  //将有合同数据的目标年月数写为选择的年月数
+                    platformIncomeRecordsDTOS.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));  //将有合同数据的目标年月数写为选择的年月数
                     platformIncomeRecordsDTOS.get(i).setState(0); //将平台对该合同的收款状态设为未收款
                     platformIncomeRecordsDTOS.get(i).setIsDeleted(0);
                 }

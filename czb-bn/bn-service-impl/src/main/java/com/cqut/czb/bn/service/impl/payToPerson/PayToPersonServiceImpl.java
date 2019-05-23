@@ -44,7 +44,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         if(payToPersonDTOS==null||payToPersonDTOS.size()==0){
                 return null;
         }
-        payToPersonDTOS.get(0).setTargetYearMonth(payToPersonDTOS.get(0).getExportTime()); //取一条数据查看当前月是否已经导出过
+        payToPersonDTOS.get(0).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTOS.get(0).getExportTime())); //取一条数据查看当前月是否已经导出过
         List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTOS.get(0));
         if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
             return null;

@@ -25,7 +25,7 @@ public class PlatformIncomeRecordsDTO {
     //是否分配油卡
     private Integer isDistributed;
     //导出时所选时间
-    private Date exportTime;
+    private String exportTime;
     //备注
     private String remark;
 
@@ -117,11 +117,11 @@ public class PlatformIncomeRecordsDTO {
         this.isDistributed = isDistributed;
     }
 
-    public Date getExportTime() {
+    public String getExportTime() {
         return exportTime;
     }
 
-    public void setExportTime(Date exportTime) {
+    public void setExportTime(String exportTime) {
         this.exportTime = exportTime;
     }
 
