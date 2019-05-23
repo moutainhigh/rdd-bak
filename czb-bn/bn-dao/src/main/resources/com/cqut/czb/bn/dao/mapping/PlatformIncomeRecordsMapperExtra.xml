@@ -65,7 +65,7 @@
           LEFT JOIN czb_user b ON a.user_id = b.user_id
           <where>
               <if test="exportTime!=null">
-                  MONTH(a.contract_end_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND a.contract_father_id is not null
+                  MONTH(a.contract_start_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND a.contract_father_id is not null
                   AND  a.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP}
               </if>
           </where>
