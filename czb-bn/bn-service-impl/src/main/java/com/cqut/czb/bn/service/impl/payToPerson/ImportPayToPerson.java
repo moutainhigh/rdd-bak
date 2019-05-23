@@ -115,7 +115,7 @@ public class ImportPayToPerson {
             payToPersonDTO.setState(1);
         }
         try {
-            payToPersonDTO.setPlatformPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(7))));
+            payToPersonDTO.setPlatformPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(8))));
         }catch (Exception e){
             throw new Exception("时间为空");
         }

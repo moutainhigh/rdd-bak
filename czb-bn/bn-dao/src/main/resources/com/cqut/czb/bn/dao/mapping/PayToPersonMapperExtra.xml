@@ -32,7 +32,8 @@
             target_year_month,
             platform_pay_time,
             state,
-            is_deleted
+            is_deleted,
+            remark
         FROM
             czb_pay_to_person a
         LEFT JOIN czb_contract_records b ON a.contract_record_id = b.record_id
@@ -42,7 +43,7 @@
               AND  payee_name like concat('%',#{payeeName,jdbcType=VARCHAR},'%')
             </if>
             <if test="payeeIdCard!=null and payeeIdCard!='' ">
-                AND payee_id_card like concat ('%',#{payeeName,jdbcType=VARCHAR},'%')
+                AND payee_id_card like concat ('%',#{payeeIdCard,jdbcType=VARCHAR},'%')
             </if>
             <if test="targetYearMonth!=null">
                 AND date_format(target_year_month, '%Y-%m')=date_format(#{targetYearMonth,jdbcType=TIMESTAMP}, '%Y-%m')
@@ -50,9 +51,7 @@
             <if test="state!=null">
                 AND state = #{state,jdbcType=INTEGER}
             </if>
-               <if test="exportTime!=null">
-                   and b.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP}
-               </if>
+
         </where>
     </select>
     <resultMap id="selectResultMap" type="com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO" >
@@ -95,7 +94,7 @@
         #{item.targetYearMonth,jdbcType = TIMESTAMP},
         #{item.platformPayTime,jdbcType = TIMESTAMP},
         #{item.state,jdbcType = INTEGER},
-        #{item.isDeleted,jdbcType = INTEGER},
+        #{item.isDeleted,jdbcType = INTEGER}
         )
     </foreach>
     </insert>
@@ -132,4 +131,42 @@
           #{item.contractRecordId,jdbcType=VARCHAR}
     </foreach>
     </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PayToPerson" >
+        update czb_pay_to_person
+        <set >
+            <if test="payeeName != null" >
+                payee_name = #{payeeName,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="payeeIdCard != null" >
+                payee_id_card = #{payeeIdCard,jdbcType=VARCHAR},
+            </if>
+            <if test="contractRecordId != null" >
+                contract_record_id = #{contractRecordId,jdbcType=VARCHAR},
+            </if>
+            <if test="payableMoney != null" >
+                payable_money = #{payableMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="actualPayMoney != null" >
+                actual_pay_money = #{actualPayMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="targetYearMonth != null" >
+                target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP},
+            </if>
+            <if test="platformPayTime != null" >
+                platform_pay_time = #{platformPayTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted = #{isDeleted,jdbcType=INTEGER},
+            </if>
+        </set>
+        where record_id = #{recordId,jdbcType=VARCHAR}
+    </update>
+
 </mapper>

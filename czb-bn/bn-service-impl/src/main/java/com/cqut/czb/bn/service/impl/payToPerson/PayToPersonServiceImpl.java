@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.payToPerson;
 
+import com.cqut.czb.bn.dao.mapper.PayToPersonMapper;
 import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
@@ -31,6 +32,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
 
     @Autowired
     PayToPersonMapperExtra payToPersonMapperExtra;
+
     //列表查询
     @Override
     public PageInfo<PayToPersonDTO> getPayList(PayToPersonDTO payToPersonDTO, PageDTO pageDTO) {
@@ -45,7 +47,8 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         if(payToPersonDTOS==null||payToPersonDTOS.size()==0){
                 return null;
         }
-        payToPersonDTOS.get(0).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime())); //取一条数据查看当前月是否已经导出过
+        payToPersonDTOS.get(0).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+        payToPersonDTOS.get(0).setExportTime(payToPersonDTO.getExportTime());//取一条数据查看当前月是否已经导出过
         List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTOS.get(0));
         if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
             return null;
@@ -54,6 +57,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             payToPersonDTOS.get(i).setRecordId(StringUtil.createId());
             payToPersonDTOS.get(i).setState(0);
             payToPersonDTOS.get(i).setIsDeleted(0);
+            payToPersonDTOS.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
         }
         int isAdd = payToPersonMapperExtra.insert(payToPersonDTOS);   //将数据插入数据库后开始导出
         Workbook workbook =null;
@@ -100,7 +104,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             payToPerson.setRemark(platformIncomeRecordsDTO.getRemark());
         if(platformIncomeRecordsDTO.getRecordId()!=null)
             payToPerson.setRecordId(platformIncomeRecordsDTO.getRecordId());
-        return payToPersonMapperExtra.updateByPrimaryKey(payToPerson)>0;
+        return payToPersonMapperExtra.updateByPrimaryKeySelective(payToPerson)>0;
     }
 
     //生成execl表
