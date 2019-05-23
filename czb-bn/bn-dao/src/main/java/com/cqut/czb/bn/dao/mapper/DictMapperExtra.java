@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DictMapperExtra {
 
-    List<Dict> selectDict(String name);
+    List<Dict> selectDict(DictInputDTO dictInputDTO);
 
     Dict selectDictByName(@Param("name") String name);
 

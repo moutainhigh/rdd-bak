@@ -21,4 +21,5 @@ public interface PayToPersonMapperExtra {
     int updateByPrimaryKey(PayToPerson record);
 
     int updateImportData (List<PayToPersonDTO> list);
+
 }
