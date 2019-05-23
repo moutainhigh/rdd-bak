@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 } else if (StringUtil.isBlank(encodedPassword)) {
                     throw new BadCredentialsException("系统中密码密文是空白字符串，请联系客服");
                 } else {
-                    boolean isMatches = this.encode(rawPassword).equals(encodedPassword);
+                    boolean isMatches = bCryptPasswordEncoder().matches(rawPassword, encodedPassword);
                     if(isMatches) {
                         return isMatches;
                     } else {
@@ -70,7 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 }
             }
         });
-
 
         return bean;
     }
