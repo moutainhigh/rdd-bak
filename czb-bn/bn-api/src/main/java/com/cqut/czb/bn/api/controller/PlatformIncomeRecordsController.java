@@ -111,8 +111,8 @@ public class PlatformIncomeRecordsController {
     }
 
 
-    @PostMapping("/impoertIncomeRecords")
-    public JSONResult impoertIncomeRecords(@Param("file")MultipartFile file) throws Exception{
+    @PostMapping("/importIncomeRecords")
+    public JSONResult impoertIncomeRecords(MultipartFile file) throws Exception{
         return new JSONResult(platformIncomeRecordsService.importRecords(file));
     }
 

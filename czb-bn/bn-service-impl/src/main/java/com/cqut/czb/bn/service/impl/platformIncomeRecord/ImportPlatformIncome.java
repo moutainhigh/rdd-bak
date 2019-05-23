@@ -104,7 +104,7 @@ public class ImportPlatformIncome {
         platformIncomeRecordsDTO.setRecordId(StringUtil.createId());
         platformIncomeRecordsDTO.setContractRecordId(getStringValue(xssfRow.getCell(0)));
         platformIncomeRecordsDTO.setUserName((getStringValue(xssfRow.getCell(1))));
-        System.out.println(getStringValue(xssfRow.getCell(2)));
+        System.out.println(Double.parseDouble(getStringValue(xssfRow.getCell(2))));
         platformIncomeRecordsDTO.setReceivableMoney(Double.parseDouble(getStringValue(xssfRow.getCell(2))));
         platformIncomeRecordsDTO.setActualReceiptsMoney(Double.parseDouble(getStringValue(xssfRow.getCell(3))));
         platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(getStringValue(xssfRow.getCell(4))));

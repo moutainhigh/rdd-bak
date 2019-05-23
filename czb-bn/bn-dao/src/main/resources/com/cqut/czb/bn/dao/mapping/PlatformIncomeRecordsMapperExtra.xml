@@ -75,7 +75,7 @@
 
     <resultMap id="IncomeResultMap" type="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" >
         <result column="contract_father_id" property="contractRecordId" jdbcType="VARCHAR" />
-        <result column="money" property="receivable_money" jdbcType="DOUBLE" />
+        <result column="money" property="receivableMoney" jdbcType="DOUBLE" />
     </resultMap>
     <select id="selectIncome" parameterType="java.util.List" resultMap="IncomeResultMap">
             SELECT
@@ -87,7 +87,7 @@
             WHERE
                 contract_father_id in  <foreach collection="list" item="item" index="index"
                  separator="," open="(" close=")">
-            #{contractRecordId,jdbcType=VARCHAR}
+            #{item.contractRecordId,jdbcType=VARCHAR}
         </foreach>
             GROUP BY contract_father_id
     </select>
@@ -100,7 +100,7 @@
         actual_receipts_money, target_year_month,
         enterprise_pay_time, state, is_deleted,
         is_need_recharge, is_distributed,remark)
-        values  values <foreach collection="list" item="item" index="index" separator=",">
+        values <foreach collection="list" item="item" index="index" separator=",">
         (
         #{item.recordId,jdbcType = VARCHAR},
         #{item.contractRecordId,jdbcType = VARCHAR},
@@ -114,10 +114,7 @@
         #{item.isDistributed,jdbcType = INTEGER},
         #{item.remark,jdbcType = VARCHAR}
         )
-    </foreach>(#{recordId,jdbcType=VARCHAR}, #{contractRecordId,jdbcType=VARCHAR}, #{receivableMoney,jdbcType=DOUBLE},
-        #{actualReceiptsMoney,jdbcType=DOUBLE}, #{targetYearMonth,jdbcType=TIMESTAMP},
-        #{enterprisePayTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER},
-        #{isNeedRecharge,jdbcType=INTEGER}, #{isDistributed,jdbcType=INTEGER})
+    </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PlatformIncomeRecords" >
         update czb_platform_income_records

@@ -62,7 +62,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         }
         List<PlatformIncomeRecordsDTO> incomeMoney = platformIncomeRecordsMapperExtra.selectIncome(platformIncomeRecordsDTOS);//查询这些合同企业的打款总数
         for(int i=0;i<platformIncomeRecordsDTOS.size();i++){ //将合同与应打款合并
-            for (int j=0;j<incomeMoney.size();i++){
+            for (int j=0;j<incomeMoney.size();j++){
                 if(platformIncomeRecordsDTOS.get(i).getContractRecordId().equals(incomeMoney.get(i).getContractRecordId())){
                     platformIncomeRecordsDTOS.get(i).setRecordId(StringUtil.createId());
                     platformIncomeRecordsDTOS.get(i).setReceivableMoney(incomeMoney.get(i).getReceivableMoney());
@@ -187,8 +187,8 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         return petrolSalesRecords;
     }
 
-    //导出生成execl表
-    @Async
+    //导入生成execl表
+  //  @Async
     @Override
     public int importRecords(MultipartFile file) throws Exception {
         InputStream inputStream = file.getInputStream();
