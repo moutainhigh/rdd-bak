@@ -18,6 +18,8 @@ public interface PlatformIncomeRecordsService {
 
     int importRecords(MultipartFile file) throws Exception;
 
+    PageInfo<Petrol> selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO,PageDTO pageDTO);
+
     /**
      * 对多条记录进行操作
      */

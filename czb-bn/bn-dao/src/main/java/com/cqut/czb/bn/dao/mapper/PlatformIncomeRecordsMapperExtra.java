@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 
 import java.util.List;
@@ -24,5 +25,7 @@ public interface PlatformIncomeRecordsMapperExtra {
     int updateByPrimaryKeySelective(PlatformIncomeRecords record);
 
     int updateByPrimaryKey(PlatformIncomeRecords record);
+
+    List<Petrol> selectPetrolList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
 
 }
