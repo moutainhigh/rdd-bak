@@ -203,14 +203,14 @@
       state = 1
     </set>
     <where>
-      and state in (-1,0)
+      and state in (3,0)
     </where>
   </update>
 
   <update id="notSaleAllPetrol" parameterType="java.lang.String">
     update czb_petrol
     <set>
-      state = -1
+      state = 3
     </set>
     <where>
       and state = 1
