@@ -17,18 +17,11 @@ import java.util.List;
 public interface AppPersonalCenterService {
 
     /**
-     *app查找用户相关信息
-     * @param userId
-     * @return
-     */
-    User selectUser(String userId);
-
-    /**
      * app查找用户收益信息
      * @param userId
      * @return
      */
-    List<UserIncomeInfoDTO> selectUserIncomeInfo(String userId);
+    UserIncomeInfoDTO selectUserIncomeInfo(String userId);
 
     /**
      * 获取用户购买的国通卡

@@ -23,6 +23,36 @@ public class UserIncomeInfoDTO {
 
     private Double otherIncome;
 
+    private Double totalIncome;//总收益
+
+    private Double blance;//余额
+
+    private Double withdrawed;
+
+    public Double getWithdrawed() {
+        return withdrawed;
+    }
+
+    public void setWithdrawed(Double withdrawed) {
+        this.withdrawed = withdrawed;
+    }
+
+    public Double getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(Double totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public Double getBlance() {
+        return blance;
+    }
+
+    public void setBlance(Double blance) {
+        this.blance = blance;
+    }
+
     public String getInfoId() {
         return infoId;
     }

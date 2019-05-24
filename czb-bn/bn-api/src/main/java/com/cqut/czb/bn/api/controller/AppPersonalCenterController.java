@@ -74,7 +74,7 @@ public class AppPersonalCenterController {
      */
     @RequestMapping(value= "/getPersonalCenterMenu",method = RequestMethod.GET)
     public JSONResult getPersonalCenterMenu(AppRouterDTO appRouterDTO){
-        return new JSONResult<List<AppRouterDTO>>(appPersonalCenterService.getAppRouters(appRouterDTO));
+        return new JSONResult(appPersonalCenterService.getAppRouters(appRouterDTO));
     }
 
     /**
@@ -121,8 +121,16 @@ public class AppPersonalCenterController {
             return null;
         }
         myIncomeLogDTO.setUserId(user.getUserId());
-        return new JSONResult<List<MyIncomeLogDTO>>(appPersonalCenterService.selectIncomeLog(myIncomeLogDTO));
+        return new JSONResult(appPersonalCenterService.selectIncomeLog(myIncomeLogDTO));
     }
 
+    @RequestMapping(value = "/getUserIncomeInfo",method = RequestMethod.GET)
+    public JSONResult getUserIncomeInfo(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null){
+            return null;
+        }
+        return new JSONResult(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
+    }
 
 }

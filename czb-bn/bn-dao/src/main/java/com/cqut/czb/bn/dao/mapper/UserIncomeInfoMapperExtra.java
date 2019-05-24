@@ -19,7 +19,7 @@ public interface UserIncomeInfoMapperExtra {
 
     int updateByPrimaryKey(UserIncomeInfo record);
 
-    List<UserIncomeInfoDTO> selectUserIncomeInfo(String userId);
+    UserIncomeInfoDTO selectUserIncomeInfo(String userId);
 
     UserIncomeInfo selectOneUserIncomeInfo(String userId);
 
