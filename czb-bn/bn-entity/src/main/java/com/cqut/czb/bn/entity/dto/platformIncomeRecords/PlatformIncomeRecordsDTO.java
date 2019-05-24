@@ -1,5 +1,8 @@
 package com.cqut.czb.bn.entity.dto.platformIncomeRecords;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class PlatformIncomeRecordsDTO {
@@ -13,8 +16,10 @@ public class PlatformIncomeRecordsDTO {
     //实收款
     private Double actualReceiptsMoney;
     //目标月
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date targetYearMonth;
     //企业实际打款时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date enterprisePayTime;
     //状态 0 未打款 1 已打款 2 打款异常
     private Integer state;
