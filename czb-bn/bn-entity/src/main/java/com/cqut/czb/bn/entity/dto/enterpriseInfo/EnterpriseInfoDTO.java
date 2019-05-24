@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.enterpriseInfo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class EnterpriseInfoDTO {
@@ -25,8 +27,10 @@ public class EnterpriseInfoDTO {
     //更新时间
     private Date updateAt;
     //开始时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     //结束时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     public String getEnterpriseInfoId() {
