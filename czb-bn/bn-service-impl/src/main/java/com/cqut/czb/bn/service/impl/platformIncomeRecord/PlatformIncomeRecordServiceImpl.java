@@ -101,8 +101,8 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             System.out.println("以前没有分配过油卡，合同id为："+contractRecordId);
             //开始查询相关信息（petrolKind,petrolPrice,ownerId）
             PetrolInputDTO petrolInputDTO=contractRecordsMapperExtra.selectOwnerId(contractRecordId);
-            if(petrolInputDTO.getOwnerId()==null){
-                System.out.println("getOwnerId数据为空");
+            if(petrolInputDTO==null){
+                System.out.println("无法申请油卡，对应的信息关系不全，公司那边");
                 return false;
             }
             petrolInputDTO.setPetrolPrice(petrolPrice);
@@ -153,7 +153,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             petrolSalesRecords.setRecordId(StringUtil.createId());
             petrolSalesRecords.setState(1);//1为已支付
             petrolSalesRecords.setTurnoverAmount(petrolSalesRecords.getTurnoverAmount());///价格有问题**********
-            petrolSalesRecords.setIsRecharged(0);
+            petrolSalesRecords.setIsRecharged(1);
             petrolSalesRecords.setRecordType(1);
             petrolSalesRecords.setContractId(contractRecordId);
             boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
