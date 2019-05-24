@@ -82,6 +82,10 @@ public class ImportPayToPerson {
                     PayToPersonDTO = resolveXlsx(xssfRow);
                     if (PayToPersonDTO != null) {
                         list.add(PayToPersonDTO);
+                        processing=(Integer) (processing++/(xssfSheet.getLastRowNum()+1)*100);
+                        if (processing==100){
+                            processing=0;
+                        }
                     }
 
                 }
