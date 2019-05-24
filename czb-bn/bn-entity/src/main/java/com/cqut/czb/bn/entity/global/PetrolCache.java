@@ -145,7 +145,7 @@ public class PetrolCache {
                 //将其放入当前暂存的一个currentPetrolMap中(可以覆盖以往的)。
                 currentPetrolMap.put(petrol.getPetrolNum(), petrol);
                 AllpetrolMap.remove(petrol.getPetrolNum());
-                System.out.println("randomPetrol"+AllpetrolMap.size()+":"+currentPetrolMap);
+                System.out.println("randomPetrol"+AllpetrolMap.size()+":"+currentPetrolMap.size());
                 return petrol;
             }
         }
