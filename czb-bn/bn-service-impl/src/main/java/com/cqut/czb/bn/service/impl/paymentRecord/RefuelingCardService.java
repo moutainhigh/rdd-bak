@@ -257,7 +257,7 @@ public class RefuelingCardService implements IRefuelingCard {
         petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
         petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
         petrolSalesRecords.setThirdOrderId(orgId);
-        petrolSalesRecords.setRecordType(1);
+        petrolSalesRecords.setRecordType(0);
         petrolSalesRecords.setIsRecharged(0);
         boolean insertPetrolSalesRecords = insertPetrolSalesRecords(petrolSalesRecords);
         System.out.println("新增购买记录表完毕" + insertPetrolSalesRecords);
