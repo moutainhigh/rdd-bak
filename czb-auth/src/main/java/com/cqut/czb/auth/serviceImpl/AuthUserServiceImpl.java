@@ -26,7 +26,7 @@ public class AuthUserServiceImpl implements UserDetailsService {
         if(!redisUtils.hasKey(account)) {
             User user = userMapperExtra.findUserByAccount(account);
             if(user != null) {
-                return new JwtUser();
+                return new JwtUser(user);
             } else {
                 throw new UsernameNotFoundException("该用户名不存在");
             }
