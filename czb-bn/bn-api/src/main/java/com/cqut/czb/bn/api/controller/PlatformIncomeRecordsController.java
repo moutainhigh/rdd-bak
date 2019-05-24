@@ -2,18 +2,13 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
-import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PlatformIncomeRecordsService;
 import com.cqut.czb.bn.service.impl.platformIncomeRecord.ImportPlatformIncome;
-import org.apache.http.HttpResponse;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +22,6 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.JarEntry;
 
 /**
  * 收款记录
@@ -39,12 +33,13 @@ public class PlatformIncomeRecordsController {
 
     @Autowired
     PlatformIncomeRecordsService platformIncomeRecordsService;
+
     /**
      * 获取列表/查询
      */
     @GetMapping("/getPlatformRecordList")
-    public JSONResult getPlatformRecordList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO){
-        return new JSONResult(platformIncomeRecordsService.getReceiveRecords(platformIncomeRecordsDTO,pageDTO));
+    public JSONResult getPlatformRecordList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO) {
+        return new JSONResult(platformIncomeRecordsService.getReceiveRecords(platformIncomeRecordsDTO, pageDTO));
     }
 
     /**
@@ -55,14 +50,14 @@ public class PlatformIncomeRecordsController {
      * @return
      */
     @PostMapping("/exportPlatformRecords")
-    public JSONResult exportPlatformRecords(HttpServletRequest request, HttpServletResponse response, PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
+    public JSONResult exportPlatformRecords(HttpServletRequest request, HttpServletResponse response, PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
         try {
             workbook = platformIncomeRecordsService.exportRecords(platformIncomeRecordsDTO);
-            if(workbook == null) {
-       //         workbook = new SXSSFWorkbook();
+            if (workbook == null) {
+                //         workbook = new SXSSFWorkbook();
                 message = "当前月没有未导出的数据啦";
                 result.put("message", message);
                 return new JSONResult(result);
@@ -77,7 +72,7 @@ public class PlatformIncomeRecordsController {
             fileName = "企业打款记录.xlsx";
             //System.out.println(fileName);
             //将中文转换为16进制
-            fileName = URLEncoder.encode(fileName,"utf-8");
+            fileName = URLEncoder.encode(fileName, "utf-8");
             //确保浏览器弹出对应文件的对话框
             response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
             OutputStream out = response.getOutputStream();
@@ -97,8 +92,8 @@ public class PlatformIncomeRecordsController {
      * 分配油卡（多张）
      */
     @GetMapping("/distributionManyPetrols")
-    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds){
-        return  new JSONResult( platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds));
+    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds) {
+        return new JSONResult(platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds));
     }
 
     /**
@@ -106,18 +101,18 @@ public class PlatformIncomeRecordsController {
      * @return
      */
     @GetMapping("/distributionOnePetrols")
-    public JSONResult distributionOnePetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO){
-        return new JSONResult( platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO.getContractRecordId()));
+    public JSONResult distributionOnePetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
+        return new JSONResult(platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO.getContractRecordId()));
     }
 
 
     @PostMapping("/importIncomeRecords")
-    public JSONResult impoertIncomeRecords(MultipartFile file) throws Exception{
+    public JSONResult impoertIncomeRecords(MultipartFile file) throws Exception {
         return new JSONResult(platformIncomeRecordsService.importRecords(file));
     }
 
     @GetMapping("/searchProcess")
-    public JSONResult searchProcess(){
+    public JSONResult searchProcess() {
         return new JSONResult(ImportPlatformIncome.processNum);
     }
 
@@ -127,7 +122,7 @@ public class PlatformIncomeRecordsController {
      * @return
      */
     @PostMapping("/selectPetrol")
-    public JSONResult selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO,PageDTO pageDTO){
-        return new JSONResult(platformIncomeRecordsService.selectPetrol(platformIncomeRecordsDTO,pageDTO));
+    public JSONResult selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO) {
+        return new JSONResult(platformIncomeRecordsService.selectPetrol(platformIncomeRecordsDTO, pageDTO));
     }
 }

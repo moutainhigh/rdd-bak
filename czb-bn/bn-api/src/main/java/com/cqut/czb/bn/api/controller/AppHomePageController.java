@@ -34,11 +34,8 @@ public class AppHomePageController {
     @Autowired
     AppHomePageService appHomePageService;
 
-    //测试
     @Autowired
-    IDictService dictService;
-
-
+    IDictService iDictService;
     /**
      * app广告展示
      * @return

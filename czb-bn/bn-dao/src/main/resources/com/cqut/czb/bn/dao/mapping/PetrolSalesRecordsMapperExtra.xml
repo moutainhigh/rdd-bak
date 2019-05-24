@@ -294,7 +294,7 @@ INNER JOIN (
         <include refid="Base_Column_List"/>
         FROM czb_petrol_sales_records
         WHERE
-        contract_id=#{contractId,jdbcType = VARCHAR}
+        contract_id=#{contractId,jdbcType = VARCHAR} and record_type=0
         ORDER BY transaction_time DESC
         LIMIT 1
     </select>

@@ -150,7 +150,8 @@
       share_income as shareIncome,
       pay_total_rent AS payTotalRent,
       got_total_rent as gotTotalRent,
-      other_income AS otherIncome
+      other_income AS otherIncome,
+      withdrawed AS withdrawed
     from czb_user_income_info
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
