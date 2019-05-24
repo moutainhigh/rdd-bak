@@ -99,15 +99,13 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
 
         if(petrolSalesRecords==null){//为空则————分配油卡
             System.out.println("以前没有分配过油卡，合同id为："+contractRecordId);
-            //开始查询相关信息（petrolKind,petrolPrice,owerId）
+            //开始查询相关信息（petrolKind,petrolPrice,ownerId）
             PetrolInputDTO petrolInputDTO=contractRecordsMapperExtra.selectOwnerId(contractRecordId);
-            if(petrolInputDTO==null){
-                System.out.println("数据为空");
+            if(petrolInputDTO.getOwnerId()==null){
+                System.out.println("getOwnerId数据为空");
                 return false;
             }
-            petrolInputDTO.setPetrolKind(petrolInputDTO.getPetrolKind());
-            petrolInputDTO.setPetrolPrice(petrolInputDTO.getPetrolPrice());
-            petrolInputDTO.setOwnerId(petrolInputDTO.getOwnerId());
+            petrolInputDTO.setPetrolPrice(petrolPrice);
             Petrol petrol= PetrolCache.randomPetrol(petrolInputDTO); //随机获取一张卡
             if(petrol==null) {
                 System.out.println("无对应的油卡");
@@ -155,7 +153,8 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             petrolSalesRecords.setRecordId(StringUtil.createId());
             petrolSalesRecords.setState(1);//1为已支付
             petrolSalesRecords.setTurnoverAmount(petrolSalesRecords.getTurnoverAmount());///价格有问题**********
-            petrolSalesRecords.setIsRecharged(1);
+            petrolSalesRecords.setIsRecharged(0);
+            petrolSalesRecords.setRecordType(1);
             petrolSalesRecords.setContractId(contractRecordId);
             boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
             System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
@@ -188,6 +187,12 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         int countForInsert = platformIncomeRecordsMapperExtra.insert(platformIncomeRecordsDTOS);
 //        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
+    }
+
+    @Override
+    public PageInfo<Petrol> selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        return new PageInfo<>(platformIncomeRecordsMapperExtra.selectPetrolList(platformIncomeRecordsDTO));
     }
 
     //导出生成execl表

@@ -79,6 +79,7 @@
             ) AS c
         WHERE
         cp.contract_record_id = c.num
+        ORDER BY c.startTime DESC
     </select>
 
     <!--优化后的查找企业合同列表-->
@@ -109,6 +110,7 @@
             startTime,
             endTime,
             status
+        ORDER BY startTime desc
     </select>
 
     <!--弃用-->

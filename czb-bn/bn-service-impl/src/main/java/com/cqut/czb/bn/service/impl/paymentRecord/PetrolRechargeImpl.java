@@ -47,7 +47,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
         petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
         petrolSalesRecords.setThirdOrderId(orgId);
-        petrolSalesRecords.setRecordType(petrol.getPetrolType());
+        petrolSalesRecords.setRecordType(1);
         petrolSalesRecords.setIsRecharged(0);
         petrolSalesRecords.setContractId(contractId);
         boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;

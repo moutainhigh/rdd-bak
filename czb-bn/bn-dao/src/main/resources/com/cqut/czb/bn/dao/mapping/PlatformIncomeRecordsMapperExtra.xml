@@ -162,4 +162,27 @@
         is_distributed = #{isDistributed,jdbcType=INTEGER}
         where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
+
+    <select id="selectPetrolList" parameterType="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" resultType="com.cqut.czb.bn.entity.entity.Petrol">
+            SELECT
+            c.petrol_num,
+            c.petrol_kind,
+            c.petrol_price,
+            c.petrol_psw,
+            c.petrol_type
+        FROM
+            czb_platform_income_records a
+        LEFT JOIN czb_petrol_sales_records b ON a.contract_record_id = b.contract_id
+        LEFT JOIN czb_petrol c ON b.petrol_id = c.petrol_id
+        <where>
+            a.is_deleted = 0
+            <if test="contractRecordId!=null and contractRecordId!=''">
+                AND a.contract_record_id=#{contractRecordId,jdbcType=VAECHAR}
+            </if>
+        </where>
+
+
+
+    </select>
+
 </mapper>

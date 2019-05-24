@@ -109,13 +109,13 @@ public class ImportPayToPerson {
         payToPersonDTO.setBankAccountNum((getStringValue(xssfRow.getCell(4))));
         payToPersonDTO.setPayableMoney(Double.parseDouble(getStringValue(xssfRow.getCell(5))));
         payToPersonDTO.setActualPayMoney(Double.parseDouble(getStringValue(xssfRow.getCell(6))));
-        if (payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
+        if (!payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
             payToPersonDTO.setState(2);
-        }else if (!payToPersonDTO.getPayableMoney().equals(payToPersonDTO.getActualPayMoney())){
+        }else {
             payToPersonDTO.setState(1);
         }
         try {
-            payToPersonDTO.setPlatformPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(8))));
+            payToPersonDTO.setPlatformPayTime(new SimpleDateFormat("yyyy-MM-dd").parse(getStringValue(xssfRow.getCell(8))));
         }catch (Exception e){
             throw new Exception("时间为空");
         }
