@@ -9,6 +9,7 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
 import com.cqut.czb.bn.entity.entity.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,12 +52,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LoginUser loginUser = new LoginUser();
         loginUser.setAccount(request.getParameter("account"));
         loginUser.setPassword(request.getParameter("password"));
-//            if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
-//                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
-//            }
-        if("" == loginUser.getPassword()) {
-            loginUser.setPassword(null);
-        }
         String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
         if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && !"".equals(tokenHeader))) {
             if(userDetailsService == null){
@@ -66,6 +61,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             loginUser.setAccount(JwtTool.getUsername(token));
             UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
             loginUser.setPassword(userDetails.getPassword());
+        }
+        if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+            try {
+                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if("" == loginUser.getPassword()) {
+            loginUser.setPassword(null);
         }
 
         return authenticationManager.authenticate(
