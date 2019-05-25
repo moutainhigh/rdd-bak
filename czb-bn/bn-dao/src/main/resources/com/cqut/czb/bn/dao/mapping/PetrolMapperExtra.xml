@@ -189,11 +189,12 @@
   </set>
     <where>
       petrol_id in
-      <foreach collection="ids" item="item" index="index" separator=",">
-        (
-        item
-        )
+      <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+
+        #{item,jdbcType = VARCHAR }
+
       </foreach>
+      and state in (0,1,3)
     </where>
   </update>
   <!--开售所有油卡-->

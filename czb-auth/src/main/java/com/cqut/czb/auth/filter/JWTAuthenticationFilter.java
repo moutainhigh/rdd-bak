@@ -4,16 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
+import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
 import com.cqut.czb.bn.entity.entity.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -33,6 +35,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     private RedisUtils redisUtils;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         //设置登录接口的api
@@ -44,17 +49,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         LoginUser loginUser = new LoginUser();
-        try {
-            loginUser.setAccount(request.getParameter("account"));
-            loginUser.setPassword(request.getParameter("password"));
-            if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
-                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+        loginUser.setAccount(request.getParameter("account"));
+        loginUser.setPassword(request.getParameter("password"));
+//            if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+//                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+//            }
+        if("" == loginUser.getPassword()) {
+            loginUser.setPassword(null);
+        }
+        String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
+        if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && !"".equals(tokenHeader))) {
+            if(userDetailsService == null){
+                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
             }
-            if("" == loginUser.getPassword()) {
-                loginUser.setPassword(null);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
+            loginUser.setAccount(JwtTool.getUsername(token));
+            UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
+            loginUser.setPassword(userDetails.getPassword());
         }
 
         return authenticationManager.authenticate(
