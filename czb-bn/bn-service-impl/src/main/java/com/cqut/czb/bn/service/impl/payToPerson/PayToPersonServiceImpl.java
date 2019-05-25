@@ -1,15 +1,11 @@
 package com.cqut.czb.bn.service.impl.payToPerson;
 
-import com.alipay.api.domain.Building;
-import com.cqut.czb.bn.dao.mapper.PayToPersonMapper;
 import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
-import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
 import com.cqut.czb.bn.entity.entity.PayToPerson;
 import com.cqut.czb.bn.service.PayToPersonService;
-import com.cqut.czb.bn.service.impl.petrolDeliveryRecords.ImportPetrolDelivery;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -17,13 +13,11 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
