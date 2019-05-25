@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
+import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -33,6 +36,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     private RedisUtils redisUtils;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         //设置登录接口的api
@@ -44,17 +50,27 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         LoginUser loginUser = new LoginUser();
-        try {
-            loginUser.setAccount(request.getParameter("account"));
-            loginUser.setPassword(request.getParameter("password"));
-            if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+        loginUser.setAccount(request.getParameter("account"));
+        loginUser.setPassword(request.getParameter("password"));
+        String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
+        if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && !tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX))) {
+            if(userDetailsService == null){
+                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
+            }
+            String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
+            loginUser.setAccount(JwtTool.getUsername(token));
+            UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
+            loginUser.setPassword(userDetails.getPassword());
+        }
+        if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+            try {
                 loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            if("" == loginUser.getPassword()) {
-                loginUser.setPassword(null);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        if("" == loginUser.getPassword()) {
+            loginUser.setPassword(null);
         }
 
         return authenticationManager.authenticate(

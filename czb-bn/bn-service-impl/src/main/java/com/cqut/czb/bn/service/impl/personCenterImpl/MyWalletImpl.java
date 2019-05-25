@@ -143,14 +143,14 @@ public class MyWalletImpl implements MyWallet {
         incomeLog.setWithdrawName(alipayRecordDTO.getPaymentName());
 
         // 支付宝参数设置
-        AlipayClient alipayClient = new DefaultAlipayClient(AiHuAlipayConfig.gatewayUrl, AlipayConfig.app_id,
+        AlipayClient alipayClient = new DefaultAlipayClient(AiHuAlipayConfig.gatewayUrl, AiHuAlipayConfig.app_id,
                 AiHuAlipayConfig.merchant_private_key, "json", "utf-8", AiHuAlipayConfig.alipay_public_key, "RSA2");
         AlipayFundTransToaccountTransferRequest request1 = new AlipayFundTransToaccountTransferRequest();
 
         request1.setBizContent("{" + "\"out_biz_no\":\"" + System.currentTimeMillis() + "\","
                 + "\"payee_type\":\"ALIPAY_LOGONID\"," + "\"payee_account\":\"" + alipayRecordDTO.getPaymentAccount()
                 + "\"," + "\"amount\":\"" + alipayRecordDTO.getPaymentAmount() + "\","
-                + "\"payer_show_name\":\"重庆叮铛猫网络科技有限公司\"," + "\"payee_real_name\":\"" + alipayRecordDTO.getPaymentName()
+                + "\"payer_show_name\":\"重庆爱动体育文化传播有限公司\"," + "\"payee_real_name\":\"" + alipayRecordDTO.getPaymentName()
                 + "\"," + "\"remark\":\"" + "提现收入" + "\"," + "}");
 
         AlipayFundTransToaccountTransferResponse response;

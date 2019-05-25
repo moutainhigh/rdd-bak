@@ -41,7 +41,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     @Override
     public PageInfo<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO) {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize(), true);
-        return new PageInfo<>(petrolMapperExtra.getPetrolList(inputDTO));
+        List<Petrol> list = petrolMapperExtra.getPetrolList(inputDTO);
+        return new PageInfo<>(list);
     }
 
     /**
