@@ -107,8 +107,17 @@ public class PayToPersonController {
     public JSONResult importPayRecords(@Param("file")MultipartFile file) throws Exception{
         return new JSONResult(payToPersonService.importPayList(file));
     }
+
+    /**
+     * 导入进度查询
+     * @return
+     */
     @GetMapping("/searchProcess")
     public JSONResult searchProcess(){
+        if( ImportPayToPerson.processing.intValue() ==100){  //如果进度为100则当前台调用时归零
+            ImportPayToPerson.processing=0.0;
+            return new JSONResult(100);
+        }
         return new JSONResult(ImportPayToPerson.processing);
     }
 

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.payToPerson;
 
+import com.alipay.api.domain.Building;
 import com.cqut.czb.bn.dao.mapper.PayToPersonMapper;
 import com.cqut.czb.bn.dao.mapper.PayToPersonMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
@@ -51,7 +52,8 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         payToPersonDTOS.get(0).setExportTime(payToPersonDTO.getExportTime());//取一条数据查看当前月是否已经导出过
         List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTOS.get(0));
         if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
-            return null;
+            payToPersonDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+            return getWorkBook(payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO));
         }
         for (int i =0;i<payToPersonDTOS.size();i++){
             payToPersonDTOS.get(i).setRecordId(StringUtil.createId());
@@ -59,22 +61,21 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             payToPersonDTOS.get(i).setIsDeleted(0);
             payToPersonDTOS.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
         }
+
         int isAdd = payToPersonMapperExtra.insert(payToPersonDTOS);   //将数据插入数据库后开始导出
         Workbook workbook =null;
         if (isAdd>0){
          workbook = getWorkBook(payToPersonDTOS);}
         return workbook;
     }
- //   @Async  //异步
     @Override
     public int importPayList(MultipartFile file) throws Exception{
-        InputStream inputStream = file.getInputStream();
-        List<PayToPersonDTO> payToPersonDTOS = null;
-        Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();
-        payToPersonDTOS = ImportPayToPerson.readExcel(file.getOriginalFilename(), inputStream);
-        System.out.println("99999999"+payToPersonDTOS.get(0).getContractRecordId());
-        int countForInsert = payToPersonMapperExtra.updateImportData(payToPersonDTOS);
-        return countForInsert;
+            InputStream inputStream = file.getInputStream();
+            List<PayToPersonDTO> payToPersonDTOS = null;
+            Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();
+            payToPersonDTOS = ImportPayToPerson.readExcel(file.getOriginalFilename(), inputStream);
+            int countForInsert = payToPersonMapperExtra.updateImportData(payToPersonDTOS);
+                return countForInsert;
     }
 
 

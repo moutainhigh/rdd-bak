@@ -28,4 +28,8 @@ public interface PlatformIncomeRecordsMapperExtra {
 
     List<Petrol> selectPetrolList(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
 
+    int selectIncomeState(String id);
+
+    int selectContractMonth(String id);
+
 }

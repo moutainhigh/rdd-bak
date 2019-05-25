@@ -28,7 +28,8 @@ public class ImportPayToPerson {
     public static final String LIB_PATH = "lib";
     public static final String NOT_EXCEL_FILE = " : Not the Excel file!";
     public static final String PROCESSING = "Processing...";
-    public static Integer processing = 0;
+    private static Double processNum=0.0;
+    public static Double processing = 0.0;
 
     /**
      * read the Excel file
@@ -82,11 +83,8 @@ public class ImportPayToPerson {
                     PayToPersonDTO = resolveXlsx(xssfRow);
                     if (PayToPersonDTO != null) {
                         list.add(PayToPersonDTO);
-                        processing=(Integer) (processing++/(xssfSheet.getLastRowNum()+1)*100);
-                        if (processing==100){
-                            processing=0;
-                        }
-                    }
+                        processing= ++processNum/(xssfSheet.getLastRowNum())*100;
+                }
 
                 }
             }
@@ -158,6 +156,7 @@ public class ImportPayToPerson {
                     processing++;
                     if (obj != null) {
                         list.add(obj);
+                        processing= ++processNum/(hssfSheet.getLastRowNum())*100;
                     }
                 }
             }

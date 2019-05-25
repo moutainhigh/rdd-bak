@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PlatformIncomeRecordsService;
 import com.cqut.czb.bn.service.impl.platformIncomeRecord.ImportPlatformIncome;
@@ -9,10 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +33,9 @@ public class PlatformIncomeRecordsController {
 
     @Autowired
     PlatformIncomeRecordsService platformIncomeRecordsService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * 获取列表/查询
@@ -111,8 +114,16 @@ public class PlatformIncomeRecordsController {
         return new JSONResult(platformIncomeRecordsService.importRecords(file));
     }
 
+    /**
+     *查看平台收款记录导入进度
+     * @return
+     */
     @GetMapping("/searchProcess")
     public JSONResult searchProcess() {
+        if( ImportPlatformIncome.processing.intValue() ==100){  //如果进度为100则当前台调用时归零
+            ImportPlatformIncome.processing=0.0;
+            return new JSONResult(100);
+        }
         return new JSONResult(ImportPlatformIncome.processNum);
     }
 
@@ -124,5 +135,11 @@ public class PlatformIncomeRecordsController {
     @PostMapping("/selectPetrol")
     public JSONResult selectPetrol(PlatformIncomeRecordsDTO platformIncomeRecordsDTO, PageDTO pageDTO) {
         return new JSONResult(platformIncomeRecordsService.selectPetrol(platformIncomeRecordsDTO, pageDTO));
+    }
+
+    @PostMapping("/selectState")
+    public JSONResult selectState(Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(platformIncomeRecordsService.selectPayState(user));
     }
 }

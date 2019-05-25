@@ -60,6 +60,13 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         if (platformIncomeRecordsDTOS==null||platformIncomeRecordsDTOS.size()==0){
             return null;
         }
+        platformIncomeRecordsDTOS.get(0).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));
+        platformIncomeRecordsDTOS.get(0).setExportTime(platformIncomeRecordsDTO.getExportTime());//取一条数据查看当前月是否已经导出过
+        List<PlatformIncomeRecordsDTO> selectPayRecord = platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTOS.get(0));
+        if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
+            platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));
+            return getWorkBook(platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTO));
+        }
         List<PlatformIncomeRecordsDTO> incomeMoney = platformIncomeRecordsMapperExtra.selectIncome(platformIncomeRecordsDTOS);//查询这些合同企业的打款总数
         for(int i=0;i<platformIncomeRecordsDTOS.size();i++){ //将合同与应打款合并
             for (int j=0;j<incomeMoney.size();j++){
@@ -175,6 +182,11 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         }
     }
 
+    @Override
+    public Boolean selectPayState(User user) {  //当月应付款合同数与已付款合同数比较
+        return (platformIncomeRecordsMapperExtra.selectIncomeState(user.getUserId())==platformIncomeRecordsMapperExtra.selectContractMonth(user.getUserId()));
+    }
+
     //导入生成execl表
   //  @Async
     @Override
@@ -184,7 +196,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();
         platformIncomeRecordsDTOS = ImportPlatformIncome.readExcel(file.getOriginalFilename(), inputStream);
         System.out.println("99999999"+platformIncomeRecordsDTOS.get(0).getContractRecordId());
-        int countForInsert = platformIncomeRecordsMapperExtra.insert(platformIncomeRecordsDTOS);
+        int countForInsert = platformIncomeRecordsMapperExtra.updateImportData(platformIncomeRecordsDTOS);
 //        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
     }
@@ -224,11 +236,19 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue(platformIncomeRecordsDTOS.get(i).getReceivableMoney());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue("");
+            if (platformIncomeRecordsDTOS.get(i).getActualReceiptsMoney()!=null){
+            row.createCell(count++).setCellValue(platformIncomeRecordsDTOS.get(i).getActualReceiptsMoney());}
+            else {
+                row.createCell(count++).setCellValue("");
+            }
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM").format(platformIncomeRecordsDTOS.get(i).getTargetYearMonth()));
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue("");
+            if (platformIncomeRecordsDTOS.get(i).getEnterprisePayTime()!=null){
+                row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM").format(platformIncomeRecordsDTOS.get(i).getTargetYearMonth()));
+            }else {
+                row.createCell(count++).setCellValue("");
+            }
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue("未打款");
         }

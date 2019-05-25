@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
+import com.cqut.czb.bn.entity.entity.User;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,6 @@ public interface PlatformIncomeRecordsService {
      * 检测是否分配了油卡
      */
     PetrolSalesRecords isHaveDistributionPetrol(String contractRecordId);
+
+    Boolean selectPayState(User user);
 }

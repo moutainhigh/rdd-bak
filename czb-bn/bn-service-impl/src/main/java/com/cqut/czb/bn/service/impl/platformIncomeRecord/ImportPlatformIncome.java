@@ -27,7 +27,8 @@ public class ImportPlatformIncome {
     public static final String LIB_PATH = "lib";
     public static final String NOT_EXCEL_FILE = " : Not the Excel file!";
     public static final String PROCESSING = "Processing...";
-    public static Integer processNum=0;
+    public static Double processNum=0.0;
+    public static Double processing=0.0;
 
     /**
      * read the Excel file
@@ -83,6 +84,7 @@ public class ImportPlatformIncome {
                     System.out.println("异步调用"+processNum);
                     if (platformIncomeRecordsDTO != null) {
                         list.add(platformIncomeRecordsDTO);
+                        processing= ++processNum/(xssfSheet.getLastRowNum())*100;
                     }
 
                 }
@@ -150,6 +152,7 @@ public class ImportPlatformIncome {
                     processNum++;
                     if (obj != null) {
                         list.add(obj);
+                        processing= ++processNum/(hssfSheet.getLastRowNum())*100;
                     }
                 }
             }
