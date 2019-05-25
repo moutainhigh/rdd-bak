@@ -1,20 +1,24 @@
 package com.cqut.czb.bn.api.controller.backOfEnterpriseContract;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolIdInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.backOfEnterpriseContract.EnterpriseContractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/enterpriseContract")
 public class EnterpriseContractController {
     @Autowired
     private EnterpriseContractService contractService;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 获得合同基本信息
@@ -34,6 +38,18 @@ public class EnterpriseContractController {
     @RequestMapping(value = "/getPayInfoList", method =  RequestMethod.POST)
     public JSONResult getPayInfoList(@RequestBody ContractIdInfo info){
         return new JSONResult(contractService.getPayInfoList(info.getContractId()));
+    }
+
+
+    /**
+     * 获得平台收款信息
+     * @param info
+     * @return
+     */
+    @GetMapping("/getIncomeList")
+    public JSONResult getIncomeList(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(contractService.getIncomeList(user));
     }
 
     /**

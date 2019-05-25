@@ -41,7 +41,34 @@
             contract_record_id = #{contractId}
         AND is_deleted = 0
     </select>
-
+    <!--平台收款信息-->
+    <select id="getIncomeList" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.EnterprisePayDTO">
+        SELECT
+            person_name,
+            a.contract_record_id,
+            receivable_money,
+            actual_receipts_money,
+            target_year_month,
+            enterprise_pay_time,
+            state,
+            remark
+        FROM
+            czb_platform_income_records a
+        LEFT JOIN czb_contract_records b ON a.contract_record_id = b.contract_father_id
+        LEFT JOIN czb_cars_persons c ON b.record_id = c.contract_record_id
+        WHERE  b.user_id = #{id,jdbcType=VARCHAR}
+        AND is_deleted = 0
+    </select>
+    <!--平台收款总额-->
+    <select id="getIncomeTotalMoney" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT
+        SUM(a.actual_receipts_money) AS
+        FROM
+            czb_platform_income_records a
+        LEFT JOIN czb_contract_records b ON a.contract_record_id = b.contract_father_id
+        WHERE  b.user_id = #{id,jdbcType=VARCHAR}
+        AND is_deleted = 0
+    </select>
     <!--合同油卡号-->
     <select id="getPetrolInfoList" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolInfoDTO">
         SELECT

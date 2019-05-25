@@ -3,6 +3,7 @@ package com.cqut.czb.bn.dao.mapper;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -31,5 +32,7 @@ public interface PlatformIncomeRecordsMapperExtra {
     int selectIncomeState(String id);
 
     int selectContractMonth(String id);
+
+    List<PlatformIncomeRecordsDTO> selectNewContract(@Param("list") List<PlatformIncomeRecordsDTO> list, @Param("platform") PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
 
 }

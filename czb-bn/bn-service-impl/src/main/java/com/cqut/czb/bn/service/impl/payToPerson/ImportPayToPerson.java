@@ -28,7 +28,7 @@ public class ImportPayToPerson {
     public static final String LIB_PATH = "lib";
     public static final String NOT_EXCEL_FILE = " : Not the Excel file!";
     public static final String PROCESSING = "Processing...";
-    private static Double processNum=0.0;
+    public static Double processNum=0.0;
     public static Double processing = 0.0;
 
     /**

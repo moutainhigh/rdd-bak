@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
 import com.cqut.czb.bn.entity.entity.PayToPerson;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +23,5 @@ public interface PayToPersonMapperExtra {
 
     int updateImportData (List<PayToPersonDTO> list);
 
+    List<PayToPersonDTO> selectNewContract(@Param("list")List<PayToPersonDTO> list,@Param("pay")PayToPersonDTO payToPersonDTO );
 }
