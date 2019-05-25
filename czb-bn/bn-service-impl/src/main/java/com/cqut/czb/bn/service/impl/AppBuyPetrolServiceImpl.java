@@ -25,9 +25,6 @@ import java.util.*;
 public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Autowired
-    private UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
-
-    @Autowired
     private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
     @Autowired
@@ -67,62 +64,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         //购买人的id
         String ownerId = petrol.getOwnerId();
         System.out.println("ownerId" + ownerId);
-        //获取用户收益信息
-        UserIncomeInfo userIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(petrolInputDTO.getOwnerId());
-        //用户实际支付的钱
-        BigDecimal actualPayment = null;
-        if (userIncomeInfo != null) {
-            System.out.println("收益记录不为空");
-            //返佣收益
-            double fanyongIncome=0.00;
-            if(userIncomeInfo.getFanyongIncome()!=null)
-            {
-                fanyongIncome = userIncomeInfo.getFanyongIncome();
-                System.out.println("返佣" + userIncomeInfo.getFanyongIncome());
-            }
-            //推荐收益
-            double shareIncome =0.00;
-            if(userIncomeInfo.getShareIncome()!=null)
-            {
-                shareIncome = userIncomeInfo.getShareIncome();
-                System.out.println("推荐" + userIncomeInfo.getShareIncome());
-            }
-            //其他收益
-            double otherIncome=0.00;
-            if(userIncomeInfo.getOtherIncome()!=null)
-            {
-                otherIncome=userIncomeInfo.getOtherIncome();
-                System.out.println("其他收益" + otherIncome);
-            }
-            //提现
-            double withdrawed=0.00;
-            if(userIncomeInfo.getWithdrawed()!=null)
-            {
-                withdrawed=userIncomeInfo.getWithdrawed();
-                System.out.println("提现" + withdrawed);
-            }
-            //余额
-            BigDecimal balance=BigDecimal.valueOf(fanyongIncome).add(BigDecimal.valueOf(otherIncome)).add(BigDecimal.valueOf(shareIncome)).subtract(BigDecimal.valueOf(withdrawed));
-                if(balance.compareTo(new BigDecimal(0.00))==-1||balance.compareTo(new BigDecimal(0.00))==0)
-                {//没有余额
-                    actualPayment= BigDecimal.valueOf(money);
-                    System.out.println("余额为0，实际应支付:"+actualPayment);
-                }
-                else {//有余额
-                    double payMoney=( BigDecimal.valueOf(money).subtract(balance)).doubleValue();
-                    if(payMoney==0||payMoney<0){
-                        actualPayment = BigDecimal.valueOf(0.00);
-                    }
-                    else {
-                        actualPayment=BigDecimal.valueOf(payMoney);
-                    }
-                    System.out.println("实际应支付:"+actualPayment);
-                }
-        } else {
-            System.out.println("收益记录为空");
-            actualPayment = BigDecimal.valueOf(money);
-            System.out.println("余额为0，实际应支付:"+actualPayment);
-        }
 
         //对判断是否能生成订单
         if (orgId == null || payType == null || money == null || petrolKind == null || ownerId == null || petrolNum == null) {
@@ -131,7 +72,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         PetrolSalesRecordsDTO petrolSalesRecordsDTO = new PetrolSalesRecordsDTO();
         request.setBizModel(petrolSalesRecordsDTO.toAlipayTradeAppPayModel(orgId, payType,contractId ,money,
                                                                              petrolKind, ownerId, petrolNum,
-                                                                            actualPayment.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue(),
                                                                             petrolInputDTO.getAddressId()));//支付订单
 
         request.setNotifyUrl(getAlipayClient.getCallBackUrl());//支付回调接口
@@ -143,6 +83,26 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
             e.printStackTrace();
         }
 
+        //插入购买信息
+        PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
+        petrolSalesRecords.setPetrolId(petrol.getPetrolId());
+        petrolSalesRecords.setBuyerId(ownerId);
+        petrolSalesRecords.setPaymentMethod(1);//1为支付宝支付
+        petrolSalesRecords.setPetrolKind(petrolKind);//油卡种类
+        petrolSalesRecords.setPetrolNum(petrolNum);//卡号
+        petrolSalesRecords.setRecordId(orgId);
+        petrolSalesRecords.setState(0);//1为已支付
+        petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+        petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
+        if(petrolInputDTO.getPayType()=="0"){
+            petrolSalesRecords.setRecordType(0);
+        }else {
+            petrolSalesRecords.setRecordType(1);
+        }
+        petrolSalesRecords.setIsRecharged(0);
+        petrolSalesRecords.setContractId(contractId);
+        boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
+        System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
         return rs;
     }
 

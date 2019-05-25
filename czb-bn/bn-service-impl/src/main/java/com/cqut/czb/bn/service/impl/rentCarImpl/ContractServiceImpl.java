@@ -941,7 +941,7 @@ public class ContractServiceImpl implements ContractService{
             CarsPersonsResultDTO result = new CarsPersonsResultDTO();
             result.setBankAccount(data.getBankAccount());
             result.setBankDeposit(data.getBankDeposit());
-            result.setBankName(data.getName());
+            result.setBankName(data.getBankName());
             result.setSonContractId(data.getContractId());
             result.setName(data.getName());
             result.setCarLicense(data.getCarLicense());

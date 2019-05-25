@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
+import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -34,4 +35,18 @@ public interface PetrolSalesRecordsMapperExtra {
      * @return
      */
     PetrolSalesRecords selectPetrolByContractId(@Param("contractId") String contractId);
+
+    /**
+     * 通过订单号查询购买信息
+     * @param orgId
+     * @return
+     */
+    PetrolSalesRecords selectInfoByOrgId(@Param("orgId") String orgId);
+
+    /**
+     * 更改购买信息
+     * @param record
+     * @return
+     */
+    int updateByPrimaryKeySelective(PetrolSalesRecords record);
 }
