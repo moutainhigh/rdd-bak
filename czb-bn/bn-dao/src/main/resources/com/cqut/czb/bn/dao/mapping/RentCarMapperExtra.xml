@@ -335,4 +335,14 @@
         WHERE
             record_id = #{contractId}
     </select>
+
+    <!--合同获取电话号码-->
+    <select id="getContact" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            user_account
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
 </mapper>
