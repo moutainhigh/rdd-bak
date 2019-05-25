@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -22,10 +23,11 @@ public interface AppHomePageService {
     List<appAnnouncementDTO> selectAnnouncement();
 
     /**
-     * 获取油卡销售地域配置表
+     * 油价播报
+     * @param area
      * @return
      */
-    List<PetrolSaleConfig> selectPetrolSaleConfig();
+    List<petrolPriceReportDTO> selectPetrolPriceReport(String area);
 
     /**
      * 获取服务套餐表

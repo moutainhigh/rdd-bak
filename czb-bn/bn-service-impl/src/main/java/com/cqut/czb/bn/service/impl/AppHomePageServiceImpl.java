@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -57,14 +58,17 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     @Autowired
     DictMapperExtra dictMapperExtra;
 
+    @Autowired
+    PetrolPriceReportMapperExtra petrolPriceReportMapperExtra;
+
     @Override
     public List<appAnnouncementDTO> selectAnnouncement() {
         return announcementMapperExtra.selectAnnouncement();
     }
 
     @Override
-    public List<PetrolSaleConfig> selectPetrolSaleConfig() {
-        return petrolSaleConfigMapperExtra.selectPetrolSaleConfig();
+    public List<petrolPriceReportDTO> selectPetrolPriceReport(String area) {
+        return petrolPriceReportMapperExtra.selectAll(area);
     }
 
     @Override

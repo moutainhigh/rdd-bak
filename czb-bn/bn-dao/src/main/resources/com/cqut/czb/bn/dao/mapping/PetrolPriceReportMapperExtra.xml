@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolPriceReportMapperExtra" >
+  <select id="selectAll" resultType="com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO" parameterType="java.lang.String">
+    SELECT petrol_name as petrolName,petrol_price AS petrolPrice
+    from czb_petrol_price_report
+    WHERE area= #{area,jdbcType=VARCHAR}
+  </select>
+</mapper>
