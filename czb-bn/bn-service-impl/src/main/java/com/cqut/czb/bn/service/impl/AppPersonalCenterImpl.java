@@ -47,11 +47,14 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             double balance=0;//总余额
             if(userIncomeInfoDTO.getFanyongIncome()!=null){
                 totalIncome= (BigDecimal.valueOf(userIncomeInfoDTO.getFanyongIncome()).add(BigDecimal.valueOf(totalIncome))).doubleValue();
-            }else if(userIncomeInfoDTO.getShareIncome()!=null){
+            }
+            if(userIncomeInfoDTO.getShareIncome()!=null){
                 totalIncome= (BigDecimal.valueOf(userIncomeInfoDTO.getShareIncome()).add(BigDecimal.valueOf(totalIncome))).doubleValue();
-            }else if(userIncomeInfoDTO.getOtherIncome()!=null){
+            }
+            if(userIncomeInfoDTO.getOtherIncome()!=null){
                 totalIncome = (BigDecimal.valueOf(userIncomeInfoDTO.getOtherIncome()).add(BigDecimal.valueOf(totalIncome))).doubleValue();
-            }else if(userIncomeInfoDTO.getWithdrawed()!=null){
+            }
+            if(userIncomeInfoDTO.getWithdrawed()!=null){
                 balance=(BigDecimal.valueOf(totalIncome).subtract(BigDecimal.valueOf(userIncomeInfoDTO.getWithdrawed()))).doubleValue();
             }
             userIncomeInfoDTO.setBlance(balance);
