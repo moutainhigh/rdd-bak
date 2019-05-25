@@ -23,7 +23,7 @@ public interface RentCarService {
     List<OneCompanyContractsPersonDTO> getOneCompanyContractInfo(String fatherId);
 
     // 获取个人收益
-    JSONObject getPersonalIncome(String userId);
+    JSONObject getCompanyContractListAllgetPersonalIncome(String userId);
 
     // 合同获取电话号码
     JSONResult getContact(String userId);
