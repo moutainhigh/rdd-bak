@@ -154,11 +154,12 @@ public class MyWalletImpl implements MyWallet {
                 + "\"," + "\"remark\":\"" + "提现收入" + "\"," + "}");
 
         AlipayFundTransToaccountTransferResponse response;
+        String string = null;
 
         try {
             // 进行请求
             response = alipayClient.execute(request1);
-            String string = response.getBody().toString();
+            string = response.getBody().toString();
 
             // 是否成功的后续操作
             if (response.isSuccess()) {
@@ -186,7 +187,7 @@ public class MyWalletImpl implements MyWallet {
 
         } catch (AlipayApiException e) {
             e.printStackTrace();
-            return new JSONResult("提现过程中出先未知错误", 200, "提现过程中出先未知错误");
+            return new JSONResult("提现过程中出先未知错误", 200, string);
         }
 
     }
