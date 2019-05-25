@@ -52,4 +52,6 @@ public interface RentCarMapperExtra {
     // 如果此用户已经点过个人签约，并生成第三方云合同id，这里直接取出返回就行
     String getYunContractId(@Param("contractId")String contractId);
 
+    String getContact(@Param("userId")String userId);
+
 }
