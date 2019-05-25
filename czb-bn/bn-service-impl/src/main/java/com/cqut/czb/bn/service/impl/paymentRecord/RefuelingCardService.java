@@ -80,7 +80,6 @@ public class RefuelingCardService implements IRefuelingCard {
         String petrolNum = "";
         String ownerId = "";
         double actualPayment = 0;
-        String contractId = "";
         PetrolSalesRecordsDTO petrolSalesRecordsDTO = new PetrolSalesRecordsDTO();
         petrolSalesRecordsDTO.setPaymentMethod(0);
         for (String data : resDate) {
@@ -91,10 +90,6 @@ public class RefuelingCardService implements IRefuelingCard {
             if ("orgId".equals(temp[0])) {
                 if (temp[1] != null)
                     petrolSalesRecordsDTO.setThirdOrderId(temp[1]);
-            }
-            if ("contractId".equals(temp[0])) {
-                contractId = temp[1];
-                System.out.println("contractId:" + contractId);
             }
             if ("payType".equals(temp[0])) {
                 System.out.println(temp[0] + ":" + temp[1]);
@@ -135,10 +130,12 @@ public class RefuelingCardService implements IRefuelingCard {
      * 获取订单数据存入数据库(支付宝)
      */
     public synchronized int getAddPaymentRecordData(Map<String, String> params) {
+
         String[] resDate = params.get("passback_params").split("\\^");
         String[] temp;
-        // petrol_record主键
-        String orgId = "";//第三方订单
+        String thirdOrderId=params.get("trade_no");
+        System.out.println("第三方订单"+params.get("trade_no"));
+        String orgId = "";//商家订单
         // payType"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         String payType = "";
         double money = 0;
@@ -147,19 +144,20 @@ public class RefuelingCardService implements IRefuelingCard {
         String ownerId = "";
         String addressId = "";
         double actualPayment = 0;
-        String contractId = "";
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
                 continue;
             }
-            if ("contractId".equals(temp[0])) {
-                contractId = temp[1];
-                System.out.println("contractId:" + contractId);
+            if ("trade_no".equals(temp[0])) {
+                System.out.println("该交易在支付宝系统中的交易流水号:" + temp[1]);
+            }
+            if ("out_trade_no".equals(temp[0])) {
+                System.out.println("商户网站唯一订单号:" + temp[1]);
             }
             if ("orgId".equals(temp[0])) {
                 orgId = temp[1];
-                System.out.println("orgId:" + orgId);
+                System.out.println("商家订单orgId:" + orgId);
             }
             if ("payType".equals(temp[0])) {
                 System.out.println(temp[0] + ":" + temp[1]);
@@ -195,14 +193,14 @@ public class RefuelingCardService implements IRefuelingCard {
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
             System.out.println("开始充值0");
-            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(contractId,money, petrolKind, petrolNum, ownerId, actualPayment, orgId);
+            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId,money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
             else
                 return 2;
         } else if ("0".equals(payType)) {
 //			此处插入购油的相关信息，油卡购买记录
-            boolean ischange = changeInfo(money, petrolKind, petrolNum, ownerId, actualPayment, addressId, orgId);
+            boolean ischange = changeInfo(thirdOrderId,money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
             //若插入失败则放回卡
             if (ischange != true) {
@@ -232,7 +230,7 @@ public class RefuelingCardService implements IRefuelingCard {
      *
      * @return
      */
-    public boolean changeInfo(double money, int petrolKind, String petrolNum, String ownerId, double actualPayment, String addressId, String orgId) {
+    public boolean changeInfo(String thirdOrderId, double money,String petrolNum, String ownerId, double actualPayment, String addressId, String orgId) {
         //油卡表——更改相应油卡的状态（用户的id，卡号）——更改
         //取出油卡
         Petrol petrol = PetrolCache.currentPetrolMap.get(petrolNum);
@@ -245,22 +243,17 @@ public class RefuelingCardService implements IRefuelingCard {
         boolean updatePetrol = updatePetrol(petrol);
         System.out.println("更改油卡状态完毕" + updatePetrol);
 
-        //新增购买记录表——插入
-        PetrolSalesRecords petrolSalesRecords = new PetrolSalesRecords();
-        petrolSalesRecords.setPetrolId(petrol.getPetrolId());
-        petrolSalesRecords.setBuyerId(ownerId);
-        petrolSalesRecords.setPaymentMethod(1);//1为支付宝支付
-        petrolSalesRecords.setPetrolKind(petrolKind);//油卡种类
-        petrolSalesRecords.setPetrolNum(petrolNum);//卡号
-        petrolSalesRecords.setRecordId(StringUtil.createId());
-        petrolSalesRecords.setState(1);//1为已支付
-        petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
-        petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
-        petrolSalesRecords.setThirdOrderId(orgId);
-        petrolSalesRecords.setRecordType(0);
-        petrolSalesRecords.setIsRecharged(0);
-        boolean insertPetrolSalesRecords = insertPetrolSalesRecords(petrolSalesRecords);
-        System.out.println("新增购买记录表完毕" + insertPetrolSalesRecords);
+        //通过商家订单号查询充值信息
+        PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
+        petrolSalesRecords=petrolSalesRecordsMapperExtra.selectInfoByOrgId(orgId);
+        if(petrolSalesRecords==null){
+            System.out.println("无充值信息");
+            return false;
+        }
+        //更改油卡购买信息的状态
+        petrolSalesRecords.setThirdOrderId(thirdOrderId);
+        boolean update=petrolSalesRecordsMapperExtra.updateByPrimaryKeySelective(petrolSalesRecords)>0;
+        System.out.println("更改购买信息:"+update);
 
         //新增油卡邮寄记录——插入
         PetrolDeliveryRecords petrolDeliveryRecords = new PetrolDeliveryRecords();
@@ -273,7 +266,7 @@ public class RefuelingCardService implements IRefuelingCard {
 
         boolean beginFanYong = fanYongService.beginFanYong(ownerId, money, actualPayment, orgId);
 
-        if (beginFanYong == true && insertPetrolSalesRecords == true)
+        if (beginFanYong == true)
             return true;
         else {
             System.out.println("新增购买记录表有问题或beginFanYong");

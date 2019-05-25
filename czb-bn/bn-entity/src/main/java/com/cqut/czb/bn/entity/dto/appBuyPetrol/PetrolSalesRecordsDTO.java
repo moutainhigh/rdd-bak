@@ -194,7 +194,7 @@ public class PetrolSalesRecordsDTO {
 
     public String getPassbackParams(String orgId, String payType,String contractId,
                                     Double money, Integer petrolKind ,String ownerId,
-                                    String petrolNum,Double actualPayment,String addressId) {
+                                    String petrolNum,String addressId) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
         pbp.put("payType", payType);
@@ -202,7 +202,6 @@ public class PetrolSalesRecordsDTO {
         pbp.put("petrolKind", petrolKind);
         pbp.put("ownerId", ownerId);
         pbp.put("petrolNum", petrolNum);
-        pbp.put("actualPayment", actualPayment);
         pbp.put("addressId", addressId);
         pbp.put("contractId",contractId);
         return StringUtil.transMapToStringOther(pbp);
@@ -214,15 +213,15 @@ public class PetrolSalesRecordsDTO {
      */
     public AlipayTradeAppPayModel toAlipayTradeAppPayModel(String orgId, String payType,String contractId,
                                                            double money, Integer petrolKind ,String ownerId,
-                                                           String petrolNum,double actualPayment,String addressId) {
+                                                           String petrolNum,String addressId) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(remark);
         model.setSubject("爱虎购油");
         model.setOutTradeNo(orgId);
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
-        model.setTotalAmount("0.01");
+        model.setTotalAmount(String.valueOf(money));
         model.setProductCode(AiHuAlipayConfig.product_code);
-        model.setPassbackParams(getPassbackParams(orgId, payType,contractId, money,petrolKind,ownerId,petrolNum,actualPayment,addressId));
+        model.setPassbackParams(getPassbackParams(orgId, payType,contractId, money,petrolKind,ownerId,petrolNum,addressId));
         return model;
     }
 }

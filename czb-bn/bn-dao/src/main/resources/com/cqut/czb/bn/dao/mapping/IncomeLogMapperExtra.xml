@@ -36,13 +36,14 @@
     insert into czb_income_log (record_id, amount, type, 
       info_id, before_change_income, remark, 
       souse_id, create_at, update_at, 
-      withdraw_to, withdraw_name, withdraw_account
+      withdraw_to, withdraw_name, withdraw_account,
+        commission_source_user, commission_got_user
       )
     values (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
       #{infoId,jdbcType=VARCHAR}, #{beforeChangeIncome,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
       #{souseId,jdbcType=VARCHAR}, now(), now(),
-      #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE}
-      )
+      #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE},
+      #{commissionSourceUser,jdbcType=VARCHAR}, #{commissionGotUser,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
     insert into czb_income_log
