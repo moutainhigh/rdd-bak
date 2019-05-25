@@ -1,10 +1,10 @@
 package com.cqut.czb.bn.service.impl.backOfEnterpriseContract;
 
 import com.cqut.czb.bn.dao.mapper.EnterpriseContractMapperExtra;
-import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.BasisContractInfo;
-import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PayInfoDTO;
-import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolInfoDTO;
-import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.PetrolPayInfo;
+import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.*;
+import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.backOfEnterpriseContract.EnterpriseContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,5 +35,19 @@ public class EnterpriseContractServiceImpl implements EnterpriseContractService{
     @Override
     public List<PetrolPayInfo> getPetrolPayInfoList(String petrolId) {
         return contractMapperExtra.getPetrolPayInfoList(petrolId);
+    }
+
+    @Override
+    public List<EnterprisePayDTO> getIncomeList(User user) {
+        List<EnterprisePayDTO> enterprisePayDTOS = contractMapperExtra.getIncomeList(user.getUserId());
+        if (enterprisePayDTOS!=null&&enterprisePayDTOS.size()!=0) {
+            Double money = contractMapperExtra.getIncomeTotalMoney(user.getUserId());
+            if (money!=null) {
+                enterprisePayDTOS.get(0).setTotalMoney(money);
+            }else {
+                enterprisePayDTOS.get(0).setTotalMoney(0.0);
+            }
+        }
+        return enterprisePayDTOS;
     }
 }
