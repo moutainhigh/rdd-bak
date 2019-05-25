@@ -46,12 +46,12 @@ public class AppHomePageController {
     }
 
     /**
-     * app油价播报，对应油卡销售地域配置表
+     * app油价播报
      * @return
      */
-    @RequestMapping(value = "/selectPetrolSaleConfig",method = RequestMethod.GET)
-    public JSONResult selectPetrolSaleConfig(){
-        return new JSONResult(appHomePageService.selectPetrolSaleConfig());
+    @RequestMapping(value = "/selectPetrolPriceReport",method = RequestMethod.GET)
+    public JSONResult selectPetrolPriceReport(@RequestParam(name="area") String area){
+        return new JSONResult(appHomePageService.selectPetrolPriceReport(area));
     }
 
     /**
