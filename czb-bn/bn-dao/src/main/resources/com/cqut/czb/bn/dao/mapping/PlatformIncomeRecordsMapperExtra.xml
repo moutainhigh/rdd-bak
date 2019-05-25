@@ -226,4 +226,26 @@
         AND a.contract_father_id IS NULL
         AND a.user_id=#{id,jdbcType=VARCHAR}
     </select>
+
+    <resultMap id="NewContractResultMap" type="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" >
+        <result column="record_id" property="contractRecordId" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectNewContract" parameterType="java.util.List" resultMap="NewContractResultMap">
+        SELECT
+        b.record_id,
+        user_name
+        FROM
+        czb_contract_records b
+        LEFT JOIN   czb_platform_income_records a ON b.record_id=a.contract_record_id
+        LEFT JOIN czb_user ON b.user_id = czb_user.user_id
+       WHERE
+        MONTH(b.contract_start_time)=MONTH(#{platform.exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is null
+        AND  b.contract_end_time>=#{platform.exportTime,jdbcType=TIMESTAMP}
+        AND    b.record_id  not IN <foreach collection="list" item="item" index="index"
+                                separator="," open="(" close=")">
+        #{item.contractRecordId,jdbcType=VARCHAR}
+    </foreach>
+    </select>
+
 </mapper>

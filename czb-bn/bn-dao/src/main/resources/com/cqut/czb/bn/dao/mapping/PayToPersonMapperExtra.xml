@@ -59,23 +59,29 @@
         <result column="person_car_id" property="payeeIdCard" jdbcType="VARCHAR" />
         <result column="bank_of_deposit" property="bankOfDeposit" jdbcType="VARCHAR" />
         <result column="bank_account_num" property="bankAccountNum" jdbcType="VARCHAR" />
-        <result column="contract_record_id" property="contractRecordId" jdbcType="VARCHAR" />
+        <result column="record_id" property="contractRecordId" jdbcType="VARCHAR" />
         <result column="plan_amount" property="payableMoney" jdbcType="DOUBLE" />
     </resultMap>
     <select id="selectPayInfo" resultMap="selectResultMap" parameterType="com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO" >
             SELECT
-                a.contract_record_id,
+                a.record_id,
                 person_name,
-                person_car_id,
+                person_id_card,
                 bank_of_deposit,
                 bank_account_num,
                 plan_amount
             FROM
-                czb_cars_persons a
-            LEFT JOIN czb_contract_records b ON a.contract_record_id = b.record_id
-            LEFT JOIN czb_service_plan c ON a.plan_id = c.plan_id
-            WHERE MONTH(b.contract_start_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is not null
-            AND  b.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP}
+                czb_contract_records a
+            LEFT JOIN czb_pay_to_person b ON a.record_id = b.contract_record_id
+            LEFT JOIN czb_cars_persons c ON a.record_id = c.contract_record_id
+            LEFT JOIN czb_service_plan d ON c.plan_id = d.plan_id
+             WHERE
+               MONTH(a.contract_start_time)=MONTH(#{pay.exportTime,jdbcType=TIMESTAMP}) AND a.contract_father_id is NOT null
+               AND  a.contract_end_time>=#{pay.exportTime,jdbcType=TIMESTAMP}
+               AND  a.record_id  not IN <foreach collection="list" item="item" index="index"
+                                            separator="," open="(" close=")">
+                     #{item.contractRecordId,jdbcType=VARCHAR}
+    </foreach>
     </select>
 
     <insert id="insert" parameterType="java.util.List" >
@@ -168,5 +174,27 @@
         </set>
         where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
+
+
+    <resultMap id="NewContractResultMap" type="com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO" >
+        <result column="record_id" property="contractRecordId" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectNewContract" parameterType="java.util.List" resultMap="NewContractResultMap">
+        SELECT
+        b.record_id,
+        user_name
+        FROM
+        czb_contract_records b
+        LEFT JOIN   czb_platform_income_records a ON b.record_id=a.contract_record_id
+        LEFT JOIN czb_user ON b.user_id = czb_user.user_id
+        WHERE
+        MONTH(b.contract_start_time)=MONTH(#{platform.exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is null
+        AND  b.contract_end_time>=#{platform.exportTime,jdbcType=TIMESTAMP}
+        AND    b.record_id  not IN <foreach collection="list" item="item" index="index"
+                                            separator="," open="(" close=")">
+        #{item.contractRecordId,jdbcType=VARCHAR}
+    </foreach>
+    </select>
 
 </mapper>

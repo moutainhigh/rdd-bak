@@ -42,14 +42,26 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         if(payToPersonDTOS==null||payToPersonDTOS.size()==0){
                 return null;
         }
-        payToPersonDTOS.get(0).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
-        payToPersonDTOS.get(0).setExportTime(payToPersonDTO.getExportTime());//取一条数据查看当前月是否已经导出过
-        List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTOS.get(0));
+        payToPersonDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+        List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO);//查看当月是否导出过
         if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
-            payToPersonDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
-            return getWorkBook(payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO));
-        }
-        for (int i =0;i<payToPersonDTOS.size();i++){
+            if (payToPersonDTOS.size()==selectPayRecord.size()){//如果合同数与打款记录数相等则无新合同
+                payToPersonDTO.setState(0); //导出当月为企业未打款的记录
+                return getWorkBook(payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO));
+            }else {
+                List<PayToPersonDTO> newContract = payToPersonMapperExtra.selectNewContract(selectPayRecord,payToPersonDTO);
+                for (int i =0;i<newContract.size();i++){
+                    newContract.get(i).setRecordId(StringUtil.createId());
+                    newContract.get(i).setState(0);
+                    newContract.get(i).setIsDeleted(0);
+                    newContract.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+                }
+                int isAdd = payToPersonMapperExtra.insert(newContract);   //将新数据插入数据库后开始导出
+                    payToPersonDTO.setState(0);
+                    return getWorkBook(payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO)); //导出当月未导出的数据
+                }
+            }
+            for (int i =0;i<payToPersonDTOS.size();i++){
             payToPersonDTOS.get(i).setRecordId(StringUtil.createId());
             payToPersonDTOS.get(i).setState(0);
             payToPersonDTOS.get(i).setIsDeleted(0);
