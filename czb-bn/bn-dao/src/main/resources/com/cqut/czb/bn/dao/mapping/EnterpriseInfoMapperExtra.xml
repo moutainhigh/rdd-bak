@@ -20,7 +20,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.enterpriseInfo.EnterpriseInfoDTO" >
         select
         enterprise_info_id, enterprise_name, legal_person, contact_info,czb_enterprise_info.is_deleted, user_account,
-        org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at,COUNT(enterprise_info_id) as counts
+        org_code, czb_enterprise_info.create_at, czb_enterprise_info.update_at,COUNT(czb_contract_records.record_id) as counts
         from czb_enterprise_info
         LEFT JOIN czb_user ON czb_enterprise_info.user_id = czb_user.user_id
         LEFT JOIN czb_contract_records on czb_enterprise_info.user_id = czb_contract_records.user_id
