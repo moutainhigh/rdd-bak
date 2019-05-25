@@ -79,4 +79,13 @@ public class RentCarController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(rentCarService.getPersonalIncome(user.getUserId()));
     }
+
+    /**
+     * 合同获取电话号码
+     */
+    @RequestMapping(value = "/getContact", method = RequestMethod.GET)
+    public JSONResult getContact(Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(rentCarService.getContact(user.getUserId()));
+    }
 }

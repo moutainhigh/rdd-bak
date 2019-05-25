@@ -28,6 +28,17 @@ public class CompanyContractInfoDTO {
      */
     private String isSignNum;
 
+    // 签署时间
+    private String signedTime;
+
+    public String getSignedTime() {
+        return signedTime;
+    }
+
+    public void setSignedTime(String signedTime) {
+        this.signedTime = signedTime;
+    }
+
     public String getStartTime() {
         return startTime;
     }

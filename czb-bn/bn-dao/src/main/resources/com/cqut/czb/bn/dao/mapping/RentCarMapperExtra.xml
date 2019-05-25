@@ -59,27 +59,37 @@
     <!--个人合同列表获取-->
     <select id="getPersonalContractList" resultType="com.cqut.czb.bn.entity.dto.rentCar.PersonalContractDTO">
         SELECT
-        cp.car_license AS carLicense,
-        c.endTime AS endTime,
-        c.State AS status,
-        c.num AS contractId
+            cp.car_license AS carLicense,
+            c.endTime AS endTime,
+            c.State AS STATUS,
+            c.num AS contractId,
+            c.signed_time signedTime
         FROM
             czb_cars_persons cp,
             (
                 SELECT
                     record_id num,
-                    date_format(contract_start_time, '%Y.%m.%d') startTime,
-			        date_format(contract_end_time, '%Y.%m.%d') endTime,
+                    date_format(
+                        contract_start_time,
+                        '%Y.%m.%d'
+                    ) startTime,
+                    date_format(
+                        contract_end_time,
+                        '%Y.%m.%d'
+                    ) endTime,
                     contract_state State,
-                    rent
+                    rent,
+                    cc.create_at,
+                    cc.signed_time
                 FROM
                     czb_contract_records cc
                 WHERE
                     cc.user_id = #{userId}
             ) AS c
         WHERE
-        cp.contract_record_id = c.num
-        ORDER BY c.startTime DESC
+            cp.contract_record_id = c.num
+        ORDER BY
+            c.create_at DESC
     </select>
 
     <!--优化后的查找企业合同列表-->
@@ -96,7 +106,8 @@
                 ccr.contract_end_time,
                 '%Y-%m-%d'
             ) endTime,
-            ccr.contract_state status
+            ccr.contract_state status,
+            ccr.signed_time signedTime
         FROM
             czb_contract_records ccr
         LEFT JOIN czb_contract_records ccr2 ON ccr2.contract_father_id = ccr.record_id
@@ -110,7 +121,7 @@
             startTime,
             endTime,
             status
-        ORDER BY startTime desc
+        ORDER BY ccr.create_at desc
     </select>
 
     <!--弃用-->
@@ -334,5 +345,15 @@
             czb_contract_records
         WHERE
             record_id = #{contractId}
+    </select>
+
+    <!--合同获取电话号码-->
+    <select id="getContact" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            user_account
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
     </select>
 </mapper>

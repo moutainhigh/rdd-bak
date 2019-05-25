@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.rentCarImpl;
 
 import com.cqut.czb.bn.dao.mapper.RentCarMapperExtra;
 import com.cqut.czb.bn.entity.dto.rentCar.*;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.rentCarService.RentCarService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
@@ -159,5 +160,17 @@ public class RentCarServiceImpl implements RentCarService {
 
 
         return json;
+    }
+
+    /**
+     * 合同获取电话号码
+     * @param userId
+     * @return
+     */
+    @Override
+    public JSONResult getContact(String userId) {
+
+
+        return new JSONResult("获取成功",200,rentCarMapper.getContact(userId));
     }
 }

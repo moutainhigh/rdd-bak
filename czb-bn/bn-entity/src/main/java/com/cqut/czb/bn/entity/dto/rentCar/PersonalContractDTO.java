@@ -23,6 +23,17 @@ public class PersonalContractDTO {
      */
     private Integer status;
 
+    // 签署时间
+    private String signedTime;
+
+    public String getSignedTime() {
+        return signedTime;
+    }
+
+    public void setSignedTime(String signedTime) {
+        this.signedTime = signedTime;
+    }
+
     public String getContractId() {
         return contractId;
     }

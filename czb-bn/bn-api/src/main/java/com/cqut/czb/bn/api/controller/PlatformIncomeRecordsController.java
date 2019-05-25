@@ -122,6 +122,7 @@ public class PlatformIncomeRecordsController {
     public JSONResult searchProcess() {
         if( ImportPlatformIncome.processing.intValue() ==100){  //如果进度为100则当前台调用时归零
             ImportPlatformIncome.processing=0.0;
+            ImportPlatformIncome.processNum=0.0;
             return new JSONResult(100);
         }
         return new JSONResult(ImportPlatformIncome.processNum);
