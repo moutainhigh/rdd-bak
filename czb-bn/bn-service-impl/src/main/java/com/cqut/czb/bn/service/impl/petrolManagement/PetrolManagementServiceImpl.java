@@ -113,7 +113,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             result = petrolMapperExtra.changePetrolState(ids,"-1");
         }
 
-//        appHomePageService.selectAllPetrol();
+        appHomePageService.selectAllPetrol();
         return result;
     }
 

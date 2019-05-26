@@ -57,4 +57,9 @@ public class DictController {
 
         return new JSONResult(dictService.insertDict(dictInputDTO));
     }
+
+    @RequestMapping(value = "/getDicByName",method = RequestMethod.GET)
+    public JSONResult getDicByName(DictInputDTO dictInputDTO){
+        return new JSONResult(dictService.getDicByName(dictInputDTO));
+    }
 }

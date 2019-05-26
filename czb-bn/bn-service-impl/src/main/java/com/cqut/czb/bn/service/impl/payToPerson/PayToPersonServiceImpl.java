@@ -18,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PayToPersonServiceImpl implements PayToPersonService{
@@ -38,6 +36,25 @@ public class PayToPersonServiceImpl implements PayToPersonService{
     //导出execl表
     @Override
     public Workbook exportPayList(PayToPersonDTO payToPersonDTO) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //精确到日
+        SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");//精确到月
+        Calendar c = Calendar.getInstance();
+        try {
+            Date exportTime = monthFormat.parse(payToPersonDTO.getExportTime());
+            int compareTo = exportTime.compareTo(format.parse(format.format(new Date()))); //是否导出当前月
+            if(compareTo==0){
+                payToPersonDTO.setExportTime(format.format(new Date())); //导出当前月则根据现在时间筛选是否开始与结束
+            }else{
+                c.setTime(exportTime);
+                c.add(Calendar.MONTH,1);
+                exportTime = c.getTime();
+                payToPersonDTO.setExportTime(format.format(exportTime));   //不是则导出那个月全部
+            }
+            System.out.println(compareTo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         List<PayToPersonDTO> payToPersonDTOS = payToPersonMapperExtra.selectPayInfo(payToPersonDTO); //查询选择月中是否有合同打款信息
         if(payToPersonDTOS==null||payToPersonDTOS.size()==0){
                 return null;

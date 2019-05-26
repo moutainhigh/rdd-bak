@@ -92,4 +92,9 @@ public class DictServiceImpl implements IDictService {
         dictInputDTO.setDictId(StringUtil.createId());
         return dictMapperExtra.insertDict(dictInputDTO) > 0;
     }
+
+    @Override
+    public Dict getDicByName(DictInputDTO dictInputDTO) {
+        return dictMapperExtra.selectDictByName(dictInputDTO.getName()) ;
+    }
 }

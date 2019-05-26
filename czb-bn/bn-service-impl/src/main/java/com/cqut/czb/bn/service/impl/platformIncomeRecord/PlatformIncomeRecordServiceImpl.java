@@ -23,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsService{
@@ -57,16 +54,24 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
 
     @Override
     public Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) throws Exception {
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
-//        try {
-//            Date exportTime = format.parse(platformIncomeRecordsDTO.getExportTime());
-//            int compareTo = date1.compareTo(date2);
-//
-//            System.out.println(compareTo);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //精确到日
+        SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");//精确到月
+        Calendar c = Calendar.getInstance();
+        try {
+            Date exportTime = monthFormat.parse(platformIncomeRecordsDTO.getExportTime());
+            int compareTo = exportTime.compareTo(format.parse(format.format(new Date()))); //是否导出当前月
+            if(compareTo==0){
+                    platformIncomeRecordsDTO.setExportTime(format.format(new Date())); //导出当前月则根据现在时间筛选是否开始与结束
+            }else{
+                c.setTime(exportTime);
+                c.add(Calendar.MONTH,1);
+                exportTime = c.getTime();
+                platformIncomeRecordsDTO.setExportTime(format.format(exportTime));   //不是则导出那个月全部
+            }
+            System.out.println(compareTo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS = platformIncomeRecordsMapperExtra.selectIncomeList(platformIncomeRecordsDTO); //查询选择月份中有哪些合同
         if (platformIncomeRecordsDTOS==null||platformIncomeRecordsDTOS.size()==0){
             return null;
