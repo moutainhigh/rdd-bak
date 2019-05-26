@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.appPersonalCenter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class MyIncomeLogDTO {
@@ -29,6 +31,26 @@ public class MyIncomeLogDTO {
     private String incomeClass;
 
     private Integer commissionLevel;
+
+    private String commissionSourceUser;
+
+    private String commissionGotUser;
+
+    public String getCommissionGotUser() {
+        return commissionGotUser;
+    }
+
+    public void setCommissionGotUser(String commissionGotUser) {
+        this.commissionGotUser = commissionGotUser;
+    }
+
+    public String getCommissionSourceUser() {
+        return commissionSourceUser;
+    }
+
+    public void setCommissionSourceUser(String commissionSourceUser) {
+        this.commissionSourceUser = commissionSourceUser;
+    }
 
     public Integer getCommissionLevel() {
         return commissionLevel;

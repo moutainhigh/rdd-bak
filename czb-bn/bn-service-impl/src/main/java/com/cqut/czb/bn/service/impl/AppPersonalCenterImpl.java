@@ -123,6 +123,8 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             return null;
         }
         for(int i=0;i<myIncomeLogDTOS.size();i++){
+
+            //添加几级收益
             if(myIncomeLogDTOS.get(i).getCommissionLevel()==null){
                 myIncomeLogDTOS.get(i).setIncomeClass("一级收益");
             }else{
@@ -134,8 +136,20 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
                     System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
                 }
             }
-            System.out.println(user.getUserName());
-            myIncomeLogDTOS.get(i).setUserName(user.getUserName());
+
+            //添加来源姓名
+            if(myIncomeLogDTOS.get(i).getCommissionSourceUser()==null){
+                myIncomeLogDTOS.get(i).setUserName("无");
+            }
+            else
+            {
+                User user1=userMapper.selectByPrimaryKey(myIncomeLogDTOS.get(i).getCommissionSourceUser());
+                if(user1==null){
+                    myIncomeLogDTOS.get(i).setUserName("无");
+                }else {
+                    myIncomeLogDTOS.get(i).setUserName(user1.getUserName());
+                }
+            }
         }
         return myIncomeLogDTOS;
     }

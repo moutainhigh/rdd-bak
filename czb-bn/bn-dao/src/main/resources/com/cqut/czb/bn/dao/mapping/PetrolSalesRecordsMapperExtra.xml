@@ -285,7 +285,8 @@ INNER JOIN (
         <include refid="Base_Column_List"/>
         FROM czb_petrol_sales_records
         WHERE buyer_id=#{ownerId,jdbcType=VARCHAR}
-        AND petrol_kind=#{petrolKind,jdbcType = INTEGER}
+        AND petrol_kind=#{petrolKind,jdbcType = INTEGER} and
+        state=1
         ORDER BY transaction_time DESC
         LIMIT 1
     </select>
