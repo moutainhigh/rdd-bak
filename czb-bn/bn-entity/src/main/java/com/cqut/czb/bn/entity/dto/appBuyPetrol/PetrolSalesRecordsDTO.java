@@ -219,8 +219,8 @@ public class PetrolSalesRecordsDTO {
         model.setSubject("爱虎购油");
         model.setOutTradeNo(orgId);
         model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
-//        model.setTotalAmount(String.valueOf(money));
-        model.setTotalAmount("0.01");
+        model.setTotalAmount(String.valueOf(money));
+//        model.setTotalAmount("0.01");
         model.setProductCode(AiHuAlipayConfig.product_code);
         model.setPassbackParams(getPassbackParams(orgId, payType,contractId, money,petrolKind,ownerId,petrolNum,addressId));
         return model;
