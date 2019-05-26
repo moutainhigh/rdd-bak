@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.appPersonalCenter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class MyIncomeLogDTO {
@@ -12,8 +14,10 @@ public class MyIncomeLogDTO {
 
     private String remark;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createAt;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateAt;
 
     private String withdrawTo;
