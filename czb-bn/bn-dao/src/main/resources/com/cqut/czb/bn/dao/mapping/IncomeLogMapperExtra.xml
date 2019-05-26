@@ -191,7 +191,9 @@
     withdraw_to as withdrawTo,
     withdraw_account as withdrawAccount,
     withdraw_name as withdrawName,
-	commission_level as commissionLevel
+	commission_level as commissionLevel,
+	commission_got_user as commissionGotUser,
+	commission_level as commissionSourceUser
     from
     czb_income_log as i,
     czb_user_income_info as u
