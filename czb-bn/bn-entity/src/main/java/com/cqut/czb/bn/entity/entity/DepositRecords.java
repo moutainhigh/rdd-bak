@@ -15,6 +15,10 @@ public class DepositRecords {
 
     private String payerId;
 
+    private Integer type;
+
+    private String userIdCard;
+
     private Date createAt;
 
     private Date updateAt;
@@ -65,6 +69,22 @@ public class DepositRecords {
 
     public void setPayerId(String payerId) {
         this.payerId = payerId == null ? null : payerId.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getUserIdCard() {
+        return userIdCard;
+    }
+
+    public void setUserIdCard(String userIdCard) {
+        this.userIdCard = userIdCard == null ? null : userIdCard.trim();
     }
 
     public Date getCreateAt() {

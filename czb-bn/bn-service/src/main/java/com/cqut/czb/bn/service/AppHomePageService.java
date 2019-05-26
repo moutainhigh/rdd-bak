@@ -1,10 +1,11 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
-import com.cqut.czb.bn.entity.entity.Announcement;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
-import com.cqut.czb.bn.entity.entity.ServicePlan;
+import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
+import com.cqut.czb.bn.entity.entity.*;
 
 import java.util.List;
 
@@ -19,13 +20,14 @@ public interface AppHomePageService {
      * 获取广告内容表
      * @return
      */
-    List<Announcement> selectAnnouncement();
+    List<appAnnouncementDTO> selectAnnouncement();
 
     /**
-     * 获取油卡销售地域配置表
+     * 油价播报
+     * @param area
      * @return
      */
-    List<PetrolSaleConfig> selectPetrolSaleConfig();
+    List<petrolPriceReportDTO> selectPetrolPriceReport(String area);
 
     /**
      * 获取服务套餐表
@@ -34,9 +36,25 @@ public interface AppHomePageService {
     List<ServicePlan> selectServicePlan();
 
     /**
+     * 获取油卡专区
+     * @param area
+     * @return
+     */
+    List<PetrolZoneDTO> selectPetrolZone(String area);
+
+    /**
      * 获取未售出的油卡
      * @return
      */
-    List<PetrolZoneDTO> selectPetrolZone();
+    boolean selectAllPetrol();
+
+    /**
+     * 获取首页的所有路由
+     * @param appRouterDTO
+     * @return
+     */
+    List<AppRouterDTO> selectHomePageRouters(AppRouterDTO appRouterDTO);
+
+    List<PetrolInfoDTO> selectPetrolInfoDTO();
 
 }

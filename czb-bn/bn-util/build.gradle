@@ -33,6 +33,6 @@ dependencies {
     compile group: 'cn.afterturn', name: 'easypoi-annotation', version: '3.1.0'
 // https://mvnrepository.com/artifact/org.jeecg/easypoi-web
     compile group: 'cn.afterturn', name: 'easypoi-web', version: '3.1.0'
-
+    compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.7.26.ALL'
 }

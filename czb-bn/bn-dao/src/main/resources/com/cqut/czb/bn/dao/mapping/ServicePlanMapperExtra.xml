@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ServicePlanMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ServicePlan" >
+    <id column="plan_id" property="planId" jdbcType="VARCHAR" />
+    <result column="plan_name" property="planName" jdbcType="VARCHAR" />
+    <result column="plan_amount" property="planAmount" jdbcType="DOUBLE" />
+    <result column="plan_time" property="planTime" jdbcType="INTEGER" />
+    <result column="rent_back_money" property="rentBackMoney" jdbcType="DOUBLE" />
+    <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    plan_id, plan_name, plan_amount, plan_time, rent_back_money, pay_money, create_at,
+    update_at
+  </sql>
+
+  <select id="selectServicePlan" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_service_plan
+  </select>
+
+  <insert id="insertServicePlan" parameterType="com.cqut.czb.bn.entity.dto.servicePlan.ServicePlanInputDTO" >
+    insert into czb_service_plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="planName != null" >
+        plan_name,
+      </if>
+      <if test="planAmount != null" >
+        plan_amount,
+      </if>
+      <if test="planTime != null" >
+        plan_time,
+      </if>
+      <if test="rentBackMoney != null" >
+        rent_back_money,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+        create_at,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        #{planId,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null" >
+        #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planAmount != null" >
+        #{planAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="planTime != null" >
+        #{planTime,jdbcType=INTEGER},
+      </if>
+      <if test="rentBackMoney != null" >
+        #{rentBackMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DOUBLE},
+      </if>
+      now(),
+    </trim>
+  </insert>
+  <update id="updateServicePlan" parameterType="com.cqut.czb.bn.entity.dto.servicePlan.ServicePlanInputDTO" >
+    update czb_service_plan
+    <set >
+      <if test="planName != null" >
+        plan_name = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planAmount != null" >
+        plan_amount = #{planAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="planTime != null" >
+        plan_time = #{planTime,jdbcType=INTEGER},
+      </if>
+      <if test="rentBackMoney != null" >
+        rent_back_money = #{rentBackMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+      </if>
+        update_at = now(),
+    </set>
+    where plan_id = #{planId,jdbcType=VARCHAR}
+  </update>
+</mapper>

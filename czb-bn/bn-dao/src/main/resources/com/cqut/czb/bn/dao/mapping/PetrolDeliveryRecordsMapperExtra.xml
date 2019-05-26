@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolDeliveryRecordsMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="address_id" property="addressId" jdbcType="VARCHAR" />
+        <result column="delivery_state" property="deliveryState" jdbcType="INTEGER" />
+        <result column="delivery_num" property="deliveryNum" jdbcType="VARCHAR" />
+        <result column="delivery_company" property="deliveryCompany" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="DeliveryResultMap" type="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO" >
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+        <result column="address_id" property="addressId" jdbcType="VARCHAR" />
+        <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+        <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="detail" property="detail" jdbcType="VARCHAR" />
+        <result column="delivery_state" property="deliveryState" jdbcType="INTEGER" />
+        <result column="delivery_num" property="deliveryNum" jdbcType="VARCHAR" />
+        <result column="delivery_company" property="deliveryCompany" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        record_id, petrol_num, address_id, delivery_state, delivery_num, delivery_company,
+        create_at, update_at
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="DeliveryResultMap" parameterType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput" >
+       SELECT
+            record_id,
+            a.petrol_num,
+            petrol_kind,
+            a.address_id,
+            delivery_state,
+            delivery_num,
+            delivery_company,
+            receiver,
+            contact_number,
+            province,
+            city,
+            c.area,
+            detail,
+            a.create_at,
+            a.update_at
+        FROM
+            czb_petrol_delivery_records as a
+        LEFT JOIN czb_petrol as b ON a.petrol_num = b.petrol_num
+        LEFT JOIN czb_address as c on a.address_id = c.address_id
+       <where>
+           <if test="petrolNum!=null and petrolNum!=''">
+               a.petrol_num  like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+           </if>
+           <if test="petrolKind!=null">
+               AND petrol_kind = #{petrolKind, jdbcType=INTEGER}
+           </if>
+           <if test="deliveryState!=null">
+               AND delivery_state = #{deliveryState, jdbcType=INTEGER}
+           </if>
+           <if test="startTime!=null  and endTime!=null ">
+               AND a.create_at >=#{startTime,jdbcType=VARCHAR}
+               and #{endTime,jdbcType=VARCHAR}>=a.create_at
+           </if>
+       </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_petrol_delivery_records
+        where record_id = #{recordId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
+        insert into czb_petrol_delivery_records (record_id, petrol_num, address_id,
+        delivery_state, delivery_num, delivery_company,
+        create_at, update_at)
+        values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{addressId,jdbcType=VARCHAR},
+        #{deliveryState,jdbcType=INTEGER}, #{deliveryNum,jdbcType=VARCHAR}, #{deliveryCompany,jdbcType=VARCHAR},
+        now(), now())
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
+        insert into czb_petrol_delivery_records
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="recordId != null" >
+                record_id,
+            </if>
+            <if test="petrolNum != null" >
+                petrol_num,
+            </if>
+            <if test="addressId != null" >
+                address_id,
+            </if>
+            <if test="deliveryState != null" >
+                delivery_state,
+            </if>
+            <if test="deliveryNum != null" >
+                delivery_num,
+            </if>
+            <if test="deliveryCompany != null" >
+                delivery_company,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="recordId != null" >
+                #{recordId,jdbcType=VARCHAR},
+            </if>
+            <if test="petrolNum != null" >
+                #{petrolNum,jdbcType=VARCHAR},
+            </if>
+            <if test="addressId != null" >
+                #{addressId,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryState != null" >
+                #{deliveryState,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryNum != null" >
+                #{deliveryNum,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryCompany != null" >
+                #{deliveryCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords" >
+        update czb_petrol_delivery_records
+        <set >
+            <if test="petrolNum != null" >
+                petrol_num = #{petrolNum,jdbcType=VARCHAR},
+            </if>
+            <if test="addressId != null" >
+                address_id = #{addressId,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryState != null" >
+                delivery_state = #{deliveryState,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryNum != null" >
+                delivery_num = #{deliveryNum,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryCompany != null" >
+                delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where record_id = #{recordId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput" >
+        update czb_petrol_delivery_records
+        <set>
+        <if test="deliveryNum!=null and deliveryNum!=''">
+        delivery_num = #{deliveryNum,jdbcType=VARCHAR},</if>
+        <if test="deliveryCompany!=null and deliveryCompany!=''">
+        delivery_company = #{deliveryCompany,jdbcType=VARCHAR},</if>
+        </set>
+        where record_id = #{recordId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateReceivePetrolDeliveryState" parameterType="java.lang.String">
+        UPDATE  czb_petrol_delivery_records
+        SET
+        delivery_state = 2
+        WHERE record_id in
+        <foreach collection="array" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateImportRecords" parameterType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput" >
+        update czb_petrol_delivery_records
+        <set>
+            delivery_state = 1,
+          delivery_num = CASE
+        <foreach collection="list" item="item" index="index"
+                                    separator="" open="" close="end,">
+          when   petrol_num =#{item.petrolNum,jdbcType=VARCHAR} THEN #{item.deliveryNum,jdbcType=VARCHAR}
+        </foreach>
+          delivery_company = CASE
+            <foreach collection="list" item="item" index="index"
+                     separator="" open="" close="end">
+                when  petrol_num= #{item.petrolNum,jdbcType=VARCHAR} THEN #{item.deliveryCompany,jdbcType=VARCHAR}
+            </foreach>
+
+        </set>
+        where petrol_num in
+        <foreach collection="list" item="item" index="index"
+                                   separator="," open="(" close=")">
+        #{item.petrolNum,jdbcType=VARCHAR}
+        </foreach> AND  delivery_state = 0
+    </update>
+
+
+
+    <select id="getDeliveryInfo" resultMap="DeliveryResultMap" parameterType="java.lang.String" >
+        SELECT
+        record_id,
+        a.petrol_num,
+        petrol_kind,
+        a.address_id,
+        delivery_state,
+        delivery_num,
+        delivery_company,
+        receiver,
+        contact_number,
+        province,
+        city,
+        c.area,
+        detail,
+        a.create_at,
+        a.update_at
+        FROM
+        czb_petrol_delivery_records as a
+        LEFT JOIN czb_petrol as b ON a.petrol_num = b.petrol_num
+        LEFT JOIN czb_address as c on a.address_id = c.address_id
+        <where>
+            <if test="petrolKind!=null and petrolKind != ''">
+                AND petrol_kind = #{petrolKind, jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId !=''">
+                and owner_id = #{userId,jdbcType = VARCHAR}
+            </if>
+        </where>
+        limit 1
+    </select>
+</mapper>

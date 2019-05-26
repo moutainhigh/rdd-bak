@@ -15,16 +15,17 @@
     <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="commission" property="commission" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area, owner_id, petrol_type, create_at, update_at
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission
   </sql>
   <select id="getPetrolList" resultMap="BaseResultMap" resultType="com.cqut.czb.bn.entity.entity.Petrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
     select <include refid="Base_Column_List"/> from czb_petrol
     <where>
       <if test="petrolNum != null and petrolNum !=''" >
-        AND petrol_num = #{petrolNum,jdbcType=VARCHAR}
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
       </if>
       <if test="petrolKind != null and petrolKind !=''" >
         AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
@@ -39,7 +40,7 @@
         AND state = #{state,jdbcType=INTEGER}
       </if>
       <if test="area != null and area != ''" >
-        AND area = #{area,jdbcType=VARCHAR}
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
       </if>
       <if test="petrolType != null and petrolType != ''" >
       AND petrol_type = #{petrolType,jdbcType=INTEGER}
@@ -72,4 +73,149 @@
     </foreach>
 
   </insert>
+
+
+  <!--油卡专区级联查询-->
+  <resultMap type="com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO" id="petrolZoneResult">
+    <result property="petrolKind" column="petrol_type"/>
+    <result property="area" column="area"/>
+    <collection property="petrolPrice" column="{petrolKind=petrol_type, area=area}" javaType="list" select="getPetrolPrice"/>
+  </resultMap>
+
+  <select id="selectPetrolZone" resultMap="petrolZoneResult">
+     select petrol_type,`area`
+     from czb_petrol_sale_config
+     WHERE area=#{area,jdbcType = VARCHAR} and sale_state=1
+     GROUP BY petrol_type
+  </select>
+
+  <select id="getPetrolPrice" resultType="java.lang.Double">
+     select
+     petrol_price as 'petrolPrice'
+     from czb_petrol
+     WHERE petrol_kind=#{petrolKind} and  `state`=1 and area=#{area}
+     GROUP BY  petrol_price
+     order by
+     petrol_price desc
+  </select>
+
+  <select id="selectPetrol" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_petrol
+    where state=1
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
+    update czb_petrol
+    <set >
+      <if test="petrolNum != null" >
+        petrol_num = #{petrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolPsw != null" >
+        petrol_psw = #{petrolPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolKind != null" >
+        petrol_kind = #{petrolKind,jdbcType=INTEGER},
+      </if>
+      <if test="petrolDenomination != null" >
+        petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="petrolPrice != null" >
+        petrol_price = #{petrolPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        petrol_type = #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = now(),
+      </if>
+    </set>
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectPetrolInfoDTO" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO" >
+    SELECT petrol_kind as petrolKind
+    FROM czb_petrol
+    WHERE state=1
+    GROUP BY petrolKind
+    ORDER BY petrolKind asc
+  </select>
+
+  <select id="selectMyPetrol" parameterType="com.cqut.czb.bn.entity.entity.Petrol" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR}AND
+    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    order by
+    create_at desc
+    limit 1
+  </select>
+
+  <select id="selectDifferentPetrol" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR} AND
+    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    order by
+    create_at desc
+    limit 1
+  </select>
+
+  <!--油卡开售禁售-->
+  <!--改变油卡状态-->
+  <update id="changePetrolState" parameterType="java.lang.String">
+    update czb_petrol <set>
+    state = #{state,jdbcType = INTEGER}
+  </set>
+    <where>
+      petrol_id in
+      <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+
+        #{item,jdbcType = VARCHAR }
+
+      </foreach>
+      and state in (0,1,3)
+    </where>
+  </update>
+  <!--开售所有油卡-->
+  <update id="saleAllPetrol" parameterType="java.lang.String">
+    update czb_petrol
+    <set>
+      state = 1
+    </set>
+    <where>
+      and state in (3,0)
+    </where>
+  </update>
+
+  <update id="notSaleAllPetrol" parameterType="java.lang.String">
+    update czb_petrol
+    <set>
+      state = 3
+    </set>
+    <where>
+      and state = 1
+    </where>
+  </update>
+
 </mapper>

@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class UserIncomeInfoDTO {
 
+    private String infoId;
+
+    private String userId;
+
     private Double fanyongIncome;
 
     private Double shareIncome;
@@ -18,6 +22,52 @@ public class UserIncomeInfoDTO {
     private Double gotTotalRent;
 
     private Double otherIncome;
+
+    private Double totalIncome;//总收益
+
+    private Double blance;//余额
+
+    private Double withdrawed;
+
+    public Double getWithdrawed() {
+        return withdrawed;
+    }
+
+    public void setWithdrawed(Double withdrawed) {
+        this.withdrawed = withdrawed;
+    }
+
+    public Double getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(Double totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public Double getBlance() {
+        return blance;
+    }
+
+    public void setBlance(Double blance) {
+        this.blance = blance;
+    }
+
+    public String getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public Double getFanyongIncome() {
         return fanyongIncome;

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.MenuMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Menu" >
+    <id column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="menu_path" property="menuPath" jdbcType="VARCHAR" />
+    <result column="menu_level" property="menuLevel" jdbcType="INTEGER" />
+    <result column="parent" property="parent" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    menu_id, menu_name, menu_path, menu_level, parent, create_at, update_at
+  </sql>
+  <select id="selectMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_menu
+    <where>
+      <if test="menuName != null and menuName != ''">
+        menu_name like concat('%',#{menuName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="menuId != null and menuName != ''">
+        menu_id = #{menuId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectRolesMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO">
+    select
+    <include refid="Base_Column_List" />
+    from czb_menu
+    <where>
+    <if test="menuIds != null and menuIds.size() > 0">
+      menu_id in
+      <foreach collection="menuIds" item="item" index="index" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+    <if test="menuIds == null or menuIds.size() == 0">
+      menu_id = ''
+    </if>
+    </where>
+  </select>
+  <select id="selectParentMenu" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_menu
+    <where>
+      parent is null or parent = ''
+    </where>
+  </select>
+  <delete id="deleteMenu" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
+    delete from czb_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertMenu" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
+    insert into czb_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="menuPath != null" >
+        menu_path,
+      </if>
+      <if test="menuLevel != null" >
+        menu_level,
+      </if>
+      <if test="parent != null">
+        parent,
+      </if>
+        create_at,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuPath != null" >
+        #{menuPath,jdbcType=VARCHAR},
+      </if>
+      <if test="menuLevel != null" >
+        #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null">
+        #{parent,jdbcType=VARCHAR},
+      </if>
+        now(),
+    </trim>
+  </insert>
+  <update id="updateMenu" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO" >
+    update czb_menu
+    <set >
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuPath != null" >
+        menu_path = #{menuPath,jdbcType=VARCHAR},
+      </if>
+      <if test="menuLevel != null and menuLevel > 0" >
+        menu_level = #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null">
+        parent = #{parent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </update>
+</mapper>

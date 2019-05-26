@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.AnnouncementMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Announcement" >
+        <id column="announcement_id" property="announcementId" jdbcType="VARCHAR" />
+        <result column="announcement_title" property="announcementTitle" jdbcType="VARCHAR" />
+        <result column="announcement_content" property="announcementContent" jdbcType="VARCHAR" />
+        <result column="announcement_type" property="announcementType" jdbcType="INTEGER" />
+        <result column="img_file_id" property="imgFileId" jdbcType="VARCHAR" />
+        <result column="is_show" property="isShow" jdbcType="INTEGER" />
+        <result column="announcement_order" property="announcementOrder" jdbcType="INTEGER" />
+        <result column="location_code" property="locationCode" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        announcement_id, announcement_title, announcement_content, announcement_type, img_file_id,
+        is_show,announcement_order, location_code, create_at, update_at
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_announcement
+        <where>
+           <if test="announcementType!=null">
+            announcement_type = #{announcementType,jdbcType=INTEGER}</if>
+        <if test="announcementId!=null and announcementId!=''">
+        AND announcement_id = #{announcementId,jdbcType=VARCHAR}</if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_announcement
+        where announcement_id = #{announcementId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
+        insert into czb_announcement (announcement_id, announcement_title,
+        announcement_content, announcement_type,
+        img_file_id, is_show, announcement_order,
+        location_code, create_at, update_at
+        )
+        values (#{announcementId,jdbcType=VARCHAR}, #{announcementTitle,jdbcType=VARCHAR},
+        #{announcementContent,jdbcType=VARCHAR}, #{announcementType,jdbcType=INTEGER},
+        #{imgFileId,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{announcementOrder,jdbcType=INTEGER},
+        #{locationCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
+        insert into czb_announcement
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="announcementId != null" >
+                announcement_id,
+            </if>
+            <if test="announcementTitle != null" >
+                announcement_title,
+            </if>
+            <if test="announcementContent != null" >
+                announcement_content,
+            </if>
+            <if test="announcementType != null" >
+                announcement_type,
+            </if>
+            <if test="imgFileId != null" >
+                img_file_id,
+            </if>
+            <if test="isShow != null" >
+                is_show,
+            </if>
+            <if test="announcementOrder != null" >
+                announcement_order,
+            </if>
+            <if test="locationCode != null" >
+                location_code,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="announcementId != null" >
+                #{announcementId,jdbcType=VARCHAR},
+            </if>
+            <if test="announcementTitle != null" >
+                #{announcementTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="announcementContent != null" >
+                #{announcementContent,jdbcType=VARCHAR},
+            </if>
+            <if test="announcementType != null" >
+                #{announcementType,jdbcType=INTEGER},
+            </if>
+            <if test="imgFileId != null" >
+                #{imgFileId,jdbcType=VARCHAR},
+            </if>
+            <if test="isShow != null" >
+                #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="announcementOrder != null" >
+                #{announcementOrder,jdbcType=INTEGER},
+            </if>
+            <if test="locationCode != null" >
+                #{locationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
+        update czb_announcement
+        <set >
+            <if test="announcementTitle != null" >
+                announcement_title = #{announcementTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="announcementContent != null" >
+                announcement_content = #{announcementContent,jdbcType=VARCHAR},
+            </if>
+            <if test="announcementType != null" >
+                announcement_type = #{announcementType,jdbcType=INTEGER},
+            </if>
+            <if test="imgFileId != null" >
+                img_file_id = #{imgFileId,jdbcType=VARCHAR},
+            </if>
+            <if test="isShow != null" >
+                is_show = #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="announcementOrder != null" >
+                announcement_order = #{announcementOrder,jdbcType=INTEGER},
+            </if>
+            <if test="locationCode != null" >
+                location_code = #{locationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where announcement_id = #{announcementId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Announcement" >
+    update czb_announcement
+    set announcement_title = #{announcementTitle,jdbcType=VARCHAR},
+      announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      announcement_type = #{announcementType,jdbcType=INTEGER},
+      img_file_id = #{imgFileId,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=INTEGER},
+      announcement_order = #{announcementOrder,jdbcType=INTEGER},
+      location_code = #{locationCode,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where announcement_id = #{announcementId,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectAnnouncement" resultType="com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO">
+   select
+    announcement_title AS announcementTitle,
+    announcement_content AS announcementContent,
+    announcement_type AS announcementType,
+    announcement_order AS announcementOrder,
+    location_code as locationCode,
+    file_name AS fileName,
+    uploader AS uploader,
+    save_path AS savePath,
+    remark
+    from czb_announcement as a,czb_file as c
+    where is_show=1 AND a.img_file_id=c.file_id
+  </select>
+</mapper>

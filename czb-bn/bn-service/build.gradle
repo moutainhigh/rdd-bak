@@ -10,4 +10,5 @@ repositories {
 dependencies {
     compile group: 'com.github.pagehelper', name: 'pagehelper-spring-boot-starter', version: '1.2.3'
     compile project(":czb-bn:bn-entity")
+    compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.3.49.ALL'
 }

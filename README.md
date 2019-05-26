@@ -7,7 +7,7 @@
 <br>使用示例<br>
     @RequestMapping(value = "/test",method = RequestMethod.GET)<br>
     public JSONResult getNotificationList(Principal principal) throws InterruptedException {<br>
-         &emsp;&emsp;User user = redisUtils.get(principal.getName());<br>
+         &emsp;&emsp;User user = (User)redisUtils.get(principal.getName());<br>
          &emsp;&emsp;Thread.sleep(1000);<br>
          &emsp;&emsp;return new JSONResult(user.getUserAccount());<br>
     }

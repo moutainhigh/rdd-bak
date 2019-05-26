@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.VerificationCodeMapperExtra" >
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
+       insert into czb_verification_code (
+       verification_code_id,
+       user_account,
+       content,
+       state,
+       create_at,
+       update_at
+       ) value
+       (
+       #{verificationCodeId,jdbcType=VARCHAR},
+       #{userAccount,jdbcType=VARCHAR},
+       #{content,jdbcType=VARCHAR},
+       #{state,jdbcType=INTEGER},
+       now(),
+       now()
+       )
+   </insert>
+   <select id="selectVerificationCode" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
+      select
+      count(*)
+      from czb_verification_code
+      where
+      state = 0 and
+      content=#{content,jdbcType=VARCHAR} and
+      user_account=#{userAccount,jdbcType=VARCHAR}
+   </select>
+
+   <select id="selectContractVcode" resultType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
+      select
+      content,verification_code_id,user_account
+      from czb_verification_code
+      where
+      state = 0 and
+      content=#{content,jdbcType=VARCHAR} and
+      user_account=#{userAccount,jdbcType=VARCHAR}
+   </select>
+
+
+
+   <update id="updateVerificationCode" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO" >
+      update czb_verification_code
+      <set >
+         state=1
+      </set>
+      where
+      user_account = #{userAccount,jdbcType=VARCHAR} AND
+      content=#{content,jdbcType=VARCHAR} AND
+      state=0
+   </update>
+
+</mapper>

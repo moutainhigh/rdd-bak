@@ -7,6 +7,8 @@ import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.global.PetrolCache;
+import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -27,6 +29,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     PetrolMapperExtra petrolMapperExtra;
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+    @Autowired
+    AppHomePageService appHomePageService;
 
     /**
      * 获取油卡列表
@@ -37,7 +41,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     @Override
     public PageInfo<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO) {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize(), true);
-        return new PageInfo<>(petrolMapperExtra.getPetrolList(inputDTO));
+        List<Petrol> list = petrolMapperExtra.getPetrolList(inputDTO);
+        return new PageInfo<>(list);
     }
 
     /**
@@ -65,11 +70,15 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
                 petrolMap.put(p.getPetrolNum(), p);
             }
         }
-        List<Petrol> petrolListNoRepeat = new ArrayList<>();
+        //excel里面没有重复
+        List<Petrol> petrolListNoRepeatForExcel = new ArrayList<>();
         for(Petrol p:petrolMap.values()){
-            petrolListNoRepeat.add(p);
+            petrolListNoRepeatForExcel.add(p);
         }
-        int countForInsert = petrolMapperExtra.insertPetrolList(petrolListNoRepeat);
+
+        //油卡缓存里面没有重复
+       List<Petrol> petrolListNoRepeatForDB =  removeRepeatPetrolForDB(petrolListNoRepeatForExcel);
+        int countForInsert = petrolMapperExtra.insertPetrolList(petrolListNoRepeatForDB);
         System.out.println("countForInsert " + countForInsert);
         return countForInsert;
     }
@@ -78,5 +87,48 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     public PageInfo<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO) {
         PageHelper.startPage(infoInputDTO.getCurrentPage(), infoInputDTO.getPageSize(), true);
         return new PageInfo<>(petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(infoInputDTO));
+    }
+
+    @Override
+    public int salePetrol(String petrolIds) {
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.saleAllPetrol();
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"1");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    @Override
+    public int notSalePetrol(String petrolIds) {
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.notSaleAllPetrol();
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"-1");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    /**
+     * 和数据库油卡对比去除重复
+     * @param list
+     * @return
+     */
+    private List<Petrol> removeRepeatPetrolForDB(List<Petrol> list){
+        List<Petrol> petrolListNoRepeatForDB = new ArrayList<>();
+        for(Petrol p:list){
+            if(!PetrolCache.isContainPetorlMap(PetrolCache.AllpetrolMap,p.getPetrolNum())){
+                petrolListNoRepeatForDB.add(p);
+            }
+        }
+        return petrolListNoRepeatForDB;
     }
 }

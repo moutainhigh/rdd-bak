@@ -529,7 +529,7 @@ public class DateUtil {
     }
 
     /**
-     * @param args
+     *
      */
     public static boolean RightDate(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -547,5 +547,29 @@ public class DateUtil {
             return false;
         }
         return true;
+    }
+
+    public static Date getDateStart(Date currentDate) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(currentDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+
+        c.set(Calendar.MINUTE, 0);
+
+        c.set(Calendar.SECOND, 0);
+
+        return c.getTime();
+    }
+
+    public static Date getDateEnd(Date currentDate) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(currentDate);
+        c.set(Calendar.HOUR_OF_DAY, 23);
+
+        c.set(Calendar.MINUTE, 59);
+
+        c.set(Calendar.SECOND, 59);
+
+        return c.getTime();
     }
 }

@@ -4,6 +4,7 @@ import com.cqut.czb.auth.jwt.JwtUser;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.entity.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,9 +24,14 @@ public class AuthUserServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
         if(!redisUtils.hasKey(account)) {
-            return new JwtUser(userMapperExtra.findUserByAccount(account));
+            User user = userMapperExtra.findUserByAccount(account);
+            if(user != null) {
+                return new JwtUser(user);
+            } else {
+                throw new UsernameNotFoundException("该用户名不存在");
+            }
         } else {
-            return new JwtUser(redisUtils.get(account));
+            return new JwtUser((User)redisUtils.get(account));
         }
     }
 }

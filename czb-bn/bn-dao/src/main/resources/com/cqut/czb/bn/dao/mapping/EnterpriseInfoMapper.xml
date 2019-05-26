@@ -11,25 +11,17 @@
     <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="enterprise_yun_id" property="enterpriseYunId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     enterprise_info_id, enterprise_name, legal_person, contact_info, is_deleted, user_id, 
-    org_code, create_at, update_at
+    org_code, create_at, update_at, enterprise_yun_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from czb_enterprise_info
-    where
-    <if test="enterprise_info_id!=null">
-    enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
-    </if>
-    <!--<if test="">-->
-      <!--enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}-->
-    <!--</if>-->
-    <!--<if test="">-->
-      <!--enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}-->
-    <!--</if>-->
+    where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_enterprise_info
@@ -39,11 +31,11 @@
     insert into czb_enterprise_info (enterprise_info_id, enterprise_name, 
       legal_person, contact_info, is_deleted, 
       user_id, org_code, create_at, 
-      update_at)
+      update_at, enterprise_yun_id)
     values (#{enterpriseInfoId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{contactInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, 
       #{userId,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{updateAt,jdbcType=TIMESTAMP}, #{enterpriseYunId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
     insert into czb_enterprise_info
@@ -75,6 +67,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="enterpriseYunId != null" >
+        enterprise_yun_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="enterpriseInfoId != null" >
@@ -103,6 +98,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enterpriseYunId != null" >
+        #{enterpriseYunId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -133,6 +131,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="enterpriseYunId != null" >
+        enterprise_yun_id = #{enterpriseYunId,jdbcType=VARCHAR},
+      </if>
     </set>
     where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
   </update>
@@ -145,7 +146,8 @@
       user_id = #{userId,jdbcType=VARCHAR},
       org_code = #{orgCode,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      enterprise_yun_id = #{enterpriseYunId,jdbcType=VARCHAR}
     where enterprise_info_id = #{enterpriseInfoId,jdbcType=VARCHAR}
   </update>
 </mapper>

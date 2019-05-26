@@ -10,7 +10,7 @@ public class AuthConfig {
     public static final String ISS = "echisan";
 
     // 过期时间是3600秒，既是1个小时
-    public static final long EXPIRATION = 3600L;
+    public static final long EXPIRATION = 604800L;
 
     // 选择了记住我之后的过期时间为7天
     public static final long EXPIRATION_REMEMBER = 604800L;

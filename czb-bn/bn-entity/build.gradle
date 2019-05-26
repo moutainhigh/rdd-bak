@@ -23,5 +23,7 @@ dependencies {
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.5'
     compile project(':czb-bn:bn-util')
-
+    compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.3.49.ALL'
+    compile group: 'com.aliyun', name: 'aliyun-java-sdk-dysmsapi', version: '1.1.0'
+    compile group: 'com.aliyun', name: 'aliyun-java-sdk-core', version: '3.2.8'
 }

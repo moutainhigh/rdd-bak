@@ -21,6 +21,18 @@ public class IncomeLog {
 
     private Date updateAt;
 
+    private String withdrawTo;
+
+    private String withdrawName;
+
+    private Double withdrawAccount;
+
+    private String commissionSourceUser;
+
+    private String commissionGotUser;
+
+    private Integer commissionLevel;
+
     public String getRecordId() {
         return recordId;
     }
@@ -91,5 +103,53 @@ public class IncomeLog {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getWithdrawTo() {
+        return withdrawTo;
+    }
+
+    public void setWithdrawTo(String withdrawTo) {
+        this.withdrawTo = withdrawTo == null ? null : withdrawTo.trim();
+    }
+
+    public String getWithdrawName() {
+        return withdrawName;
+    }
+
+    public void setWithdrawName(String withdrawName) {
+        this.withdrawName = withdrawName == null ? null : withdrawName.trim();
+    }
+
+    public Double getWithdrawAccount() {
+        return withdrawAccount;
+    }
+
+    public void setWithdrawAccount(Double withdrawAccount) {
+        this.withdrawAccount = withdrawAccount;
+    }
+
+    public String getCommissionSourceUser() {
+        return commissionSourceUser;
+    }
+
+    public void setCommissionSourceUser(String commissionSourceUser) {
+        this.commissionSourceUser = commissionSourceUser == null ? null : commissionSourceUser.trim();
+    }
+
+    public String getCommissionGotUser() {
+        return commissionGotUser;
+    }
+
+    public void setCommissionGotUser(String commissionGotUser) {
+        this.commissionGotUser = commissionGotUser == null ? null : commissionGotUser.trim();
+    }
+
+    public Integer getCommissionLevel() {
+        return commissionLevel;
+    }
+
+    public void setCommissionLevel(Integer commissionLevel) {
+        this.commissionLevel = commissionLevel;
     }
 }

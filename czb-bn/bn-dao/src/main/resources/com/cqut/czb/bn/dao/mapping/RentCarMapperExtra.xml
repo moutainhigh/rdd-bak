@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org// DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RentCarMapperExtra">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.rentCar.PersonIncome">
+        <result column="fanyong_income" jdbcType="DOUBLE" property="fanYongIncome"></result>
+        <result column="share_income" jdbcType="DOUBLE" property="shareIncome"></result>
+        <result column="got_total_rent" jdbcType="DOUBLE" property="rentIncome"></result>
+        <result column="other_income" jdbcType="DOUBLE" property="otherIncome"></result>
+        <result column="withdrawed" jdbcType="DOUBLE" property="withDrawed"></result>
+    </resultMap>
+
+    <select id="getPersonIncome" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        fanyong_income,
+        share_income,
+        got_total_rent,
+        other_income,
+        withdrawed
+        FROM czb_user_income_info
+        WHERE user_id = #{userId}
+    </select>
+
+    <!--个人合同概要获取-->
+    <select id="getOneContractInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneContractInfoDTO">
+        SELECT
+        cp.car_license AS carLicense,
+        cp.identify_code AS identifyCode,
+        c.startTime AS startTime,
+        c.endTime AS endTime,
+        c.State AS status,
+        c.num AS contractId,
+        c.rent AS rentMoney,
+        c.bank_of_deposit bankDeposit,
+        c.bank_user_name bankName,
+        c.bank_account_num bankAccount,
+        c.signedTime
+        FROM
+            czb_cars_persons cp,
+            (
+                SELECT
+                    record_id num,
+                    date_format(contract_start_time, '%Y.%m.%d') startTime,
+			        date_format(contract_end_time, '%Y.%m.%d') endTime,
+                    contract_state State,
+                    rent,
+                    cc.bank_of_deposit,
+                    cc.bank_account_num,
+                    cc.bank_user_name,
+                    date_format(cc.signed_time , '%Y.%m.%d') signedTime
+                FROM
+                    czb_contract_records cc
+                WHERE
+                    cc.user_id = #{userId}
+            ) AS c
+        WHERE
+        cp.contract_record_id = #{contractId} and c.num = #{contractId}
+    </select>
+
+    <!--个人合同列表获取-->
+    <select id="getPersonalContractList" resultType="com.cqut.czb.bn.entity.dto.rentCar.PersonalContractDTO">
+        SELECT
+            cp.car_license AS carLicense,
+            c.endTime AS endTime,
+            c.State AS STATUS,
+            c.num AS contractId,
+            c.signed_time signedTime
+        FROM
+            czb_cars_persons cp,
+            (
+                SELECT
+                    record_id num,
+                    date_format(
+                        contract_start_time,
+                        '%Y.%m.%d'
+                    ) startTime,
+                    date_format(
+                        contract_end_time,
+                        '%Y.%m.%d'
+                    ) endTime,
+                    contract_state State,
+                    rent,
+                    cc.create_at,
+                    cc.signed_time
+                FROM
+                    czb_contract_records cc
+                WHERE
+                    cc.user_id = #{userId}
+            ) AS c
+        WHERE
+            cp.contract_record_id = c.num
+        ORDER BY
+            c.create_at DESC
+    </select>
+
+    <!--优化后的查找企业合同列表-->
+    <select id="getCompanyContractListAll" resultType="com.cqut.czb.bn.entity.dto.rentCar.CompanyContractInfoDTO">
+        SELECT
+            ccr.record_id contractId,
+            count(ccr2.record_id) carNum,
+            count(ccp.person_car_id) isSignNum,
+            date_format(
+                ccr.contract_start_time,
+                '%Y-%m-%d'
+            ) startTime,
+            date_format(
+                ccr.contract_end_time,
+                '%Y-%m-%d'
+            ) endTime,
+            ccr.contract_state status,
+            ccr.signed_time signedTime
+        FROM
+            czb_contract_records ccr
+        LEFT JOIN czb_contract_records ccr2 ON ccr2.contract_father_id = ccr.record_id
+        LEFT JOIN czb_cars_persons ccp ON ccr2.record_id = ccp.contract_record_id
+        AND ccp.is_signed = 1
+        WHERE
+            ccr.user_id = #{userId}
+        AND ccr.contract_type = 0
+        GROUP BY
+            contractId,
+            startTime,
+            endTime,
+            status
+        ORDER BY ccr.create_at desc
+    </select>
+
+    <!--弃用-->
+    <!--企业租车服务合同列表获取第一步，少已签约数量-->
+    <select id="getCompanyContractList" resultType="com.cqut.czb.bn.entity.dto.rentCar.CompanyContractInfoDTO">
+        SELECT
+            c.record_id contractId,
+            c.contract_state STATUS,
+            date_format(
+                c.contract_start_time,
+                '%Y-%m-%d'
+            ) startTime,
+            date_format(
+                c.contract_end_time,
+                '%Y-%m-%d'
+            ) endTime
+        FROM
+            czb_contract_records c
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!--弃用-->
+    <!--企业租车服务合同列表获取第二步，根据第三方合同id得到已签约数量-->
+    <select id="getSignedNumList" resultType="com.cqut.czb.bn.entity.dto.rentCar.ContractAndSignedNumDTO">
+        SELECT
+            p.isSignNum signedCarNum,
+            c.carNum
+        FROM
+            (
+                SELECT
+                    count(cc.person_car_Id) AS carNum
+                FROM
+                    czb_cars_persons cc
+                WHERE
+                    cc.contract_record_id IN (
+                        SELECT
+                            ccc.record_id cid
+                        FROM
+                            czb_contract_records ccc
+                        WHERE
+                            ccc.contract_father_id = #{fatherId}
+                    )
+            ) c,
+            (
+                SELECT
+                    count(pp.person_car_Id) AS isSignNum
+                FROM
+                    czb_cars_persons pp
+                WHERE
+                    pp.contract_record_id IN (
+                        SELECT
+                            ccc.record_id cid
+                        FROM
+                            czb_contract_records ccc
+                        WHERE
+                            ccc.contract_father_id = #{fatherId}
+                    )
+                AND pp.is_signed = 1
+            ) p
+    </select>
+
+    <!--获取某一个套餐信息-->
+    <select id="getTaoCanById" resultType="java.lang.String">
+        SELECT
+        (plan_amount * 12) AS taoText
+        FROM
+        czb_service_plan
+        WHERE
+        plan_id = #{planId}
+    </select>
+
+    <!--企业获取合同概要信息列表-->
+    <select id="getOneCompanyContractInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.OneCompanyContractsPersonDTO">
+        SELECT
+            car.person_name personName,
+            car.car_license license,
+            car.person_id_card carId,
+            car.is_signed isSign,
+            car.plan_id rent,
+            zi.rent realRent,
+            car.identify_code identifyCode,
+            zz.bank_account_num bankAccount,
+            zz.bank_of_deposit bankDeposit,
+            zz.bank_user_name bankName
+        FROM
+            czb_cars_persons car,
+            (
+                SELECT
+                    record_id,
+                    rent
+                FROM
+                    czb_contract_records
+                WHERE
+                    contract_father_id = #{fatherId}
+            ) AS zi,
+            (
+                SELECT
+                    bank_account_num,
+                    bank_of_deposit,
+                    bank_user_name
+                FROM
+                    czb_contract_records z
+                WHERE
+                    z.record_id = #{fatherId}
+            ) zz
+        WHERE
+            car.contract_record_id = zi.record_id
+    </select>
+
+    <!--企业合同插入-->
+    <insert id="insertContractLog" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        INSERT INTO czb_contract_records (record_id, user_id, contract_state, contract_type, create_at)
+        VALUES
+            (#{recordId}, #{userId},'0','0', CURRENT_TIMESTAMP )
+    </insert>
+
+    <!--个人合同插入-->
+    <insert id="insertContractLogPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        INSERT INTO czb_contract_records (
+        record_id,
+        contract_state,
+        contract_type,
+        rent,
+        contract_father_id
+        )
+        VALUES
+        (
+        #{recordId},
+        '0',
+        '1',
+        #{rent},
+        #{fatherRecordId}
+        )
+    </insert>
+
+    <update id="updateChildContractTimes" parameterType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        UPDATE czb_contract_records
+        SET contract_start_time = #{startTime},
+         contract_end_time = #{endTime}
+        WHERE
+            record_id = #{recordId};
+    </update>
+    
+    <!--企业插入添加的人员信息-->
+    <insert id="insertCompanyPerson" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonCar">
+        INSERT INTO czb_cars_persons (
+            person_car_id,
+            person_name,
+            person_id_card,
+            car_license,
+            contract_record_id,
+            plan_id,
+            petrol_type,
+            is_signed,
+            identify_code,
+            create_at,
+            update_at
+        )
+        VALUES
+            (
+                #{personCarId},
+                #{name},
+                #{personId},
+                #{carNum},
+                #{contractId},
+                #{serviceId},
+                #{petrolType},
+                '0',
+                #{identityCode},
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP
+            )
+    </insert>
+
+    <!--个人签订租赁前确认是否已签订-->
+    <select id="getIsSigned" resultType="java.lang.Integer">
+        SELECT is_signed
+        FROM
+        czb_cars_persons
+        WHERE
+        person_id_card = #{personId}
+        AND
+        identify_code = #{identifyCode}
+    </select>
+
+    <!--个人签订租赁-->
+    <update id="updateCarPerson" parameterType="java.lang.String">
+        UPDATE czb_cars_persons pc
+        SET pc.is_signed = 1
+        WHERE
+            pc.person_id_card = #{personId}
+        AND pc.identify_code = #{identifyCode}
+    </update>
+
+    <!--查看个人收益-->
+    <select id="getPersonalIncome" resultType="com.cqut.czb.bn.entity.dto.rentCar.Income">
+        SELECT
+            amount,
+            date_format(pay_time, '%Y.%m.%d') time
+        FROM
+            czb_deposit_records
+        WHERE
+            payer_id = #{userId}
+    </select>
+
+    <!--个人签约时，获得用户身份证-->
+    <select id="getPersonId" resultType="java.lang.String">
+        SELECT
+            user_id_card AS personId
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="getYunContractId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            third_contract_num
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </select>
+
+    <!--合同获取电话号码-->
+    <select id="getContact" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            user_account
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
+</mapper>

@@ -6,15 +6,15 @@
     <result column="file_name" property="fileName" jdbcType="VARCHAR" />
     <result column="uploader" property="uploader" jdbcType="VARCHAR" />
     <result column="save_path" property="savePath" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    file_id, file_name, uploader, save_path, create_at, update_at, remark
+    file_id, file_name, uploader, save_path, remark, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from czb_file
     where file_id = #{fileId,jdbcType=VARCHAR}
@@ -24,12 +24,12 @@
     where file_id = #{fileId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.File" >
-    insert into czb_file (file_id, file_name, uploader,
-      save_path, create_at, update_at,
-      remark)
-    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR},
-      #{savePath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
-      #{remark,jdbcType=VARCHAR})
+    insert into czb_file (file_id, file_name, uploader, 
+      save_path, remark, create_at, 
+      update_at)
+    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR}, 
+      #{savePath,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.File" >
     insert into czb_file
@@ -46,14 +46,14 @@
       <if test="savePath != null" >
         save_path,
       </if>
+      <if test="remark != null" >
+        remark,
+      </if>
       <if test="createAt != null" >
         create_at,
       </if>
       <if test="updateAt != null" >
         update_at,
-      </if>
-      <if test="remark != null" >
-        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -69,14 +69,14 @@
       <if test="savePath != null" >
         #{savePath,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="createAt != null" >
         #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -92,14 +92,14 @@
       <if test="savePath != null" >
         save_path = #{savePath,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     where file_id = #{fileId,jdbcType=VARCHAR}
@@ -109,9 +109,9 @@
     set file_name = #{fileName,jdbcType=VARCHAR},
       uploader = #{uploader,jdbcType=VARCHAR},
       save_path = #{savePath,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR}
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
     where file_id = #{fileId,jdbcType=VARCHAR}
   </update>
 </mapper>

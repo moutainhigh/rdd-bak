@@ -13,4 +13,8 @@ public interface IPetrolManagementService {
     PageInfo<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO);
     int uploadPetrolExcel(InputStream inputStream,String originalFileName);
     PageInfo<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO);
+
+    int salePetrol(String petrolIds);
+
+    int notSalePetrol(String petrolIds);
 }

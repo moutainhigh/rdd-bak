@@ -1,0 +1,292 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ContractMapperExtra">
+
+    <!--插入yunId-->
+    <update id="insertUserContractYunId" parameterType="java.lang.String">
+        UPDATE czb_user
+        SET  user_yun_id = #{userYunId}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!--根据userId获得个人信息-->
+    <select id="getPersonInfo" resultType="com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO">
+        SELECT
+            user_account AS phoneNo,
+            user_name AS userName,
+            user_id_card AS certifyNum
+        FROM
+            czb_user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!--根据userId获得企业信息-->
+    <select id="getEnterpriseInfo" resultType="com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO">
+       SELECT
+            enterprise_name AS userName,
+            org_code AS certifyNum,
+            contact_info AS phoneNo
+        FROM
+            czb_enterprise_info
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!--将提取出的合同id，插入到前端传来的合同记录id中-->
+    <insert id="insertContractId" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET third_contract_num = #{contractId}
+        WHERE record_id = #{contractWriteId}
+    </insert>
+
+    <select id="getYunId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT user_yun_id
+        FROM czb_user
+        WHERE user_id = #{userId}
+    </select>
+
+    <!--查找是否存在相应认证码和身份证的合同-->
+    <select id="getIdentifyCodeAndPersonId" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo" resultType="java.lang.String">
+        SELECT contract_record_id
+        FROM czb_cars_persons
+        WHERE identify_code =#{identifyCode} AND person_id_card =#{personId} AND is_signed = 0
+    </select>
+
+    <!--根据回调消息改变合同状态-->
+    <update id="updateContractStatus" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET contract_state = #{statusCode},
+        signed_time = CURRENT_TIMESTAMP
+        WHERE
+            third_contract_num = #{contractId}
+    </update>
+
+    <!--根据回调消息改变服务表签约状态-->
+    <update id="updateCarsPersonsStatus" parameterType="java.lang.String">
+        UPDATE czb_cars_persons
+        SET is_signed = 1
+        WHERE
+        contract_record_id = (
+        SELECT
+        record_id
+        from
+        czb_contract_records
+        WHERE third_contract_num = #{contractId}
+        )
+    </update>
+
+    <select id="getContractStatus" resultType="java.lang.Integer">
+        SELECT
+            contract_state
+        FROM
+            czb_contract_records
+        WHERE
+            third_contract_num = #{contractId}
+    </select>
+
+    <!--企业设置时间也银行卡三要素-->
+    <update id="setCompanySignedTime" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET contract_start_time = #{startTime},
+         contract_end_time = #{endTime},
+         bank_of_deposit = #{bankDeposit},
+         bank_account_num = #{bankAccount},
+         bank_user_name = #{bankName}
+        WHERE
+            record_id = #{contractId}
+    </update>
+
+    <!--个人设置银行卡三要素-->
+    <update id="insertBankInfo" parameterType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.PersonBankInfo">
+        UPDATE czb_contract_records
+        SET
+        bank_of_deposit = #{bankDeposit},
+        bank_account_num = #{bankAccount},
+        bank_user_name = #{bankName}
+        WHERE
+        record_id = #{contractId}
+    </update>
+
+    <select id="findRent" resultType="java.lang.Double">
+        SELECT
+            rent_back_money
+        FROM
+            czb_service_plan
+        WHERE
+            plan_id = #{taoCanId}
+    </select>
+
+    <select id="getContractStartTimeAndEndTime" resultType="com.cqut.czb.bn.entity.dto.rentCar.ContractLog">
+        SELECT
+            contract_start_time AS startTime,
+            contract_end_time AS endTime
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </select>
+
+    <!--获取套餐信息-->
+    <select id="getTaoCanId" resultType="com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO">
+        SELECT
+            (plan_amount * 12) AS taoText,
+            plan_id AS taoId
+        FROM
+            czb_service_plan
+    </select>
+
+    <!--根据企业合同记录id，查找其时间，和所有的企业合同子合同的服务人员车辆表记录-->
+    <select id="getWithoutCommitPersonInfo" resultType="com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO">
+        SELECT
+            zi.record_id AS contractId,
+            car.car_license AS carLicense,
+            person_id_card AS personId,
+            petrol_type AS petrolType,
+            car.plan_id AS taoCanId,
+            person_name AS name,
+            zz.bank_account_num bankAccount,
+            zz.bank_of_deposit bankDeposit,
+            zz.bank_user_name bankName
+        FROM
+            czb_cars_persons car,
+            (
+                SELECT
+                    record_id
+                FROM
+                    czb_contract_records
+                WHERE
+                    contract_father_id = #{contractId}
+            ) AS zi,
+            (
+            select
+             bank_account_num,
+             bank_of_deposit,
+             bank_user_name
+            FROM
+            czb_contract_records z
+            WHERE
+            z.record_id = #{contractId}
+            ) zz
+        WHERE
+            car.contract_record_id = zi.record_id
+    </select>
+
+    <!--根据套餐id获得套餐-->
+    <select id="getTaoCan" resultType="java.lang.Double">
+        SELECT
+            plan_amount
+        FROM
+            czb_service_plan
+        WHERE
+            plan_id = #{taoCanId}
+    </select>
+
+    <!--删除个人合同记录-->
+    <delete id="removePersonInfo">
+        DELETE
+        FROM
+        czb_contract_records
+        WHERE
+        record_id
+        IN
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--删除个人人员车辆服务记录-->
+    <delete id="removeCarsPersonInfo">
+        DELETE
+        FROM
+        czb_cars_persons
+        WHERE
+        contract_record_id
+        IN
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--查找车牌号、租金-->
+    <select id="getCarNumAndPersonId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent" parameterType="com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo">
+        SELECT
+            p.car_license carNum,
+            c.rent rent,
+            p.is_signed ifUsed
+        FROM
+            czb_contract_records c
+        LEFT JOIN czb_cars_persons p ON c.record_id = p.contract_record_id
+        WHERE
+            p.identify_code = #{identifyCode}
+        AND p.person_id_card = #{personId}
+    </select>
+
+    <select id="getFatherContractStatus" resultType="java.lang.Integer">
+        SELECT
+            contract_state
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = (
+                SELECT
+                    contract_father_id
+                FROM
+                    czb_contract_records
+                WHERE
+                    record_id = #{contractId}
+            )
+    </select>
+
+    <update id="updatePersonalContractUserId">
+        update czb_contract_records
+        set user_id = #{userId}
+        where record_id = #{contractId}
+    </update>
+
+    <delete id="deleteContract" parameterType="java.lang.String">
+        DELETE
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </delete>
+
+    <update id="insertCZId" parameterType="java.lang.String">
+        UPDATE czb_contract_records
+        SET witness_id = #{czId}
+        WHERE
+            third_contract_num = #{contractId}
+    </update>
+
+    <!--根据第三方合同id找到userId，再根据userId找到yunId-->
+    <select id="getUserId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            user_id
+        FROM
+            czb_contract_records
+        WHERE
+            third_contract_num = #{thirdContractId}
+    </select>
+
+    <!--根据合同id，查找signerId和thirdContractId-->
+    <select id="getSignerIdAndYunContractId" resultType="com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId" parameterType="java.lang.String">
+        SELECT
+            usr.user_yun_id signerId,
+            ccr.third_contract_num contractId
+        FROM
+            czb_user usr
+        LEFT JOIN czb_contract_records ccr ON ccr.user_id = usr.user_id
+        WHERE
+            ccr.record_id = #{contractId}
+    </select>
+
+    <select id="getContractFatherId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            contract_father_id
+        FROM
+            czb_contract_records
+        WHERE
+            record_id = #{contractId}
+    </select>
+</mapper>

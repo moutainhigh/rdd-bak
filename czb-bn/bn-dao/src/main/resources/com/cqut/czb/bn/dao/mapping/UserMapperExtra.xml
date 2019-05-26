@@ -14,16 +14,22 @@
     <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="user_yun_id" property="userYunId" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="commission_level_one" property="commissionLevelOne" jdbcType="VARCHAR" />
+    <result column="commission_level_two" property="commissionLevelTwo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
-    is_login_pc, user_name, user_id_card, create_at, update_at
+    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
+    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
+    commission_level_one, commission_level_two
   </sql>
   <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     *
     from czb_user
     where user_account = #{account,jdbcType=VARCHAR}
+    and is_deleted = 0
   </select>
 
   <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
@@ -33,5 +39,122 @@
         czb_user
     WHERE
         user_account = #{account,jdbcType=VARCHAR}
+        and is_deleted = 0
+  </select>
+
+  <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+    select
+    cu.user_id as 'userId', user_account as 'userAccount', user_name as 'userName', enterprise_name as 'enterpriseName', user_rank as 'userRank', cu.create_at as 'createAt'
+    from czb_user cu
+    left join czb_enterprise_info cei on cu.user_id = cei.user_id
+    <where>
+      <if test="userAccount != null and userAccount != ''">
+        and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userName != null and userName != ''">
+        and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createAt != null">
+        and cu.create_at between #{createStartTime} and #{createEndTime}
+      </if>
+      and cu.is_deleted = 0
+    </where>
+  </select>
+
+  <delete id="deleteUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+    update czb_user
+    <set >
+        is_deleted = 1
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="updateUserPSW" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO" >
+    update czb_user
+    <set >
+      <if test="userPsw != null" >
+        user_psw = #{userPsw,jdbcType=VARCHAR},
+        update_at = now()
+      </if>
+    </set>
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </update>
+
+  <update id="changePWD" parameterType="com.cqut.czb.bn.entity.entity.User" >
+    update czb_user
+    <set >
+      <if test="userPsw != null" >
+        user_psw = #{userPsw,jdbcType=VARCHAR},
+        update_at = now()
+      </if>
+    </set>
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectUserId" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT
+       superior_user as superiorUser
+    FROM
+        czb_user
+    WHERE
+        user_id = #{userId,jdbcType=VARCHAR}
+        and is_deleted = 0
+  </select>
+
+  <select id="GetUserEnterpriseInfo" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO" parameterType="java.lang.String" >
+   SELECT
+    enterprise_name AS enterpriseName,
+    contact_info AS contactInfo,
+    user_account AS userAccount,
+    user_type AS userType,
+    user_rank AS userRank,
+    user_name AS userName
+    FROM czb_user,czb_enterprise_info
+    WHERE
+    czb_user.user_id=#{userId,jdbcType=VARCHAR} AND
+    czb_user.user_id=czb_enterprise_info.user_id
+  </select>
+
+  <update id="ModifyContactInfo" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseInfo" >
+    update czb_enterprise_info
+    <set >
+      <if test="contactInfo!= null" >
+        contact_info= #{contactInfo,jdbcType=VARCHAR},
+        update_at = now()
+      </if>
+    </set>
+    where  user_id= #{userId,jdbcType=VARCHAR}
+  </update>
+
+  <resultMap id="RecommenderInviteeResultMap" type="com.cqut.czb.bn.entity.dto.recommenderInvitee.InviteeDTO" >
+      <id column="user_id" property="userId" jdbcType="VARCHAR" />
+      <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+      <result column="user_name" property="userName" jdbcType="VARCHAR" />
+      <result column="amount" property="amount" jdbcType="DOUBLE" />
+      <collection property="inviteeDTOList" column="user_id" javaType="list" select="selectInvitee" />
+  </resultMap>
+  <select id="selectRecommenderInvitee" resultMap="RecommenderInviteeResultMap">
+    select cu.user_id, user_account, user_name, count(amount) as 'amount'
+    from czb_user cu
+    left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
+    left join czb_income_log cil on cuii.info_id = cil.info_id
+    <where>
+      cu.superior_user = #{userId, jdbcType=VARCHAR}
+      and type = 0
+    </where>
+    group by cu.user_id
+    order by amount desc
+  </select>
+  <select id="selectInvitee" resultType="com.cqut.czb.bn.entity.dto.recommenderInvitee.InviteeDTO">
+    select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', count(amount) as 'amount'
+    from czb_user cu
+    left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
+    left join czb_income_log cil on cuii.info_id = cil.info_id
+    <where>
+      cu.superior_user = #{userId, jdbcType=VARCHAR}
+      and type = 0
+    </where>
+    group by cu.user_id
+    order by amount desc
   </select>
 </mapper>

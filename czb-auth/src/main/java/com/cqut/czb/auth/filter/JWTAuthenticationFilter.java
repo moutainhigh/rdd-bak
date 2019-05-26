@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
+import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -33,6 +36,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     private RedisUtils redisUtils;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         //设置登录接口的api
@@ -44,11 +50,29 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         LoginUser loginUser = new LoginUser();
-        try {
-            loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        loginUser.setAccount(request.getParameter("account"));
+        loginUser.setPassword(request.getParameter("password"));
+        String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
+        if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX))) {
+            if(userDetailsService == null){
+                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
+            }
+            String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
+            loginUser.setAccount(JwtTool.getUsername(token));
+            UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
+            loginUser.setPassword(userDetails.getPassword());
         }
+        if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
+            try {
+                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if("" == loginUser.getPassword()) {
+            loginUser.setPassword(null);
+        }
+
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUser.getAccount(), loginUser.getPassword(), new ArrayList<>())
         );
@@ -70,15 +94,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
 
-        User user=new User();
-        user.setUserAccount(jwtUser.getAccount());
-        user.setUserPsw(jwtUser.getPassword());
-        user.setUserId(jwtUser.getId());
-        user.setUserName(jwtUser.getUsername());
+        User user=jwtUser.getUser();
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
         redisUtils.put(jwtUser.getAccount(), user);
+        if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {
+            redisUtils.remove(jwtUser.getAccount()+AuthConfig.TOKEN);
+        }
+        redisUtils.put(jwtUser.getAccount()+AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
 
         // 返回创建成功的token
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json;charset=utf-8");
         JSONObject result = new JSONObject();
         result.put(AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
         result.put(AuthConfig.STATUS, true);
@@ -88,6 +114,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // 这是验证失败时候调用的方法
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json;charset=utf-8");
         JSONObject result = new JSONObject();
         result.put(AuthConfig.FAILED_REASON, failed.getMessage());
         result.put(AuthConfig.STATUS, false);

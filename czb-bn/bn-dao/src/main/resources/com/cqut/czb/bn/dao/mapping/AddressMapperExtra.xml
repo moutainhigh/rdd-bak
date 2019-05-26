@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.AddressMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Address" >
+      <id column="address_id" property="addressId" jdbcType="VARCHAR" />
+      <result column="province" property="province" jdbcType="VARCHAR" />
+      <result column="city" property="city" jdbcType="VARCHAR" />
+      <result column="area" property="area" jdbcType="VARCHAR" />
+      <result column="detail" property="detail" jdbcType="VARCHAR" />
+      <result column="user_id" property="userId" jdbcType="VARCHAR" />
+      <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+      <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+      <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
+      <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+      <result column="is_default" property="isDefault" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    address_id, province, city, area, detail, user_id, create_at, update_at, contact_number,
+    receiver, is_default
+  </sql>
+ <select id="getUserAddressList" resultMap="BaseResultMap" parameterType="java.lang.String">
+   select <include refid="Base_Column_List"/>
+   from czb_address
+   <where>
+     and user_id = #{userId,jdbcType=VARCHAR}
+   </where>
+ </select>
+
+    <select id="getDefaultAddress" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select <include refid="Base_Column_List"/>
+        from czb_address
+        <where>
+            and user_id = #{userId,jdbcType=VARCHAR}
+            and is_default = 1
+        </where>
+    </select>
+
+    <update id="cancelDefault" parameterType="java.lang.String">
+        update czb_address
+        <set>
+            is_default = 0,
+        </set>
+        <where>
+            and is_default = 1
+            and user_id = #{userId,jdbcType=VARCHAR}
+        </where>
+    </update>
+    <update id="setDefault" parameterType="java.lang.String">
+        update czb_address
+        <set>
+            is_default = 1,
+        </set>
+        <where>
+            and user_id = #{userId,jdbcType=VARCHAR}
+            and address_id = #{addressId,jdbcType = VARCHAR}
+        </where>
+    </update>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_address
+        where address_id = #{addressId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Address" >
+    insert into czb_address (address_id, province, city,
+      area, detail, user_id,
+      create_at, update_at, contact_number,
+      receiver, is_default)
+    values (#{addressId,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+      #{area,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{contactNumber,jdbcType=VARCHAR},
+      #{receiver,jdbcType=VARCHAR}, #{isDefault,jdbcType=INTEGER})
+  </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Address" >
+        update czb_address
+        <set >
+            <if test="province != null and province != ''" >
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null and city != ''" >
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null and area != ''" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null and detail != ''" >
+                detail = #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null and userId != ''" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="contactNumber != null and contactNumber != ''" >
+                contact_number = #{contactNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="receiver != null and receiver != ''" >
+                receiver = #{receiver,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null " >
+                is_default = #{isDefault,jdbcType=INTEGER},
+            </if>
+        </set>
+        where address_id = #{addressId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectAddressId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT address_id
+        FROM czb_address,czb_contract_records
+        WHERE
+        record_id=#{contractRecordId,jdbcType = VARCHAR} AND
+        czb_address.user_id=czb_contract_records.user_id AND
+        czb_address.is_default=1
+    </select>
+</mapper>

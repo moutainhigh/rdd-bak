@@ -14,10 +14,15 @@
     <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="user_yun_id" property="userYunId" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="commission_level_one" property="commissionLevelOne" jdbcType="VARCHAR" />
+    <result column="commission_level_two" property="commissionLevelTwo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
-    is_login_pc, user_name, user_id_card, create_at, update_at
+    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted, 
+    commission_level_one, commission_level_two
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -33,13 +38,15 @@
     insert into czb_user (user_id, user_account, user_psw, 
       user_type, user_rank, is_identified, 
       superior_user, is_login_pc, user_name, 
-      user_id_card, create_at, update_at
-      )
+      user_id_card, create_at, update_at, 
+      user_yun_id, is_deleted, commission_level_one, 
+      commission_level_two)
     values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
       #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
       #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
-      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR}, 
+      #{commissionLevelTwo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
     insert into czb_user
@@ -80,6 +87,18 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="userYunId != null" >
+        user_yun_id,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="commissionLevelOne != null" >
+        commission_level_one,
+      </if>
+      <if test="commissionLevelTwo != null" >
+        commission_level_two,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -117,6 +136,18 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userYunId != null" >
+        #{userYunId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="commissionLevelOne != null" >
+        #{commissionLevelOne,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionLevelTwo != null" >
+        #{commissionLevelTwo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +187,18 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="userYunId != null" >
+        user_yun_id = #{userYunId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="commissionLevelOne != null" >
+        commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionLevelTwo != null" >
+        commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
@@ -171,24 +214,11 @@
       user_name = #{userName,jdbcType=VARCHAR},
       user_id_card = #{userIdCard,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      user_yun_id = #{userYunId,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
+      commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
-  <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    *
-    from czb_user
-    where user_account = #{account,jdbcType=VARCHAR}
-  </select>
-
-  <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
-    SELECT
-        count(user_id)
-    FROM
-        czb_user
-    WHERE
-        user_account = #{account,jdbcType=VARCHAR}
-  </select>
-
-
 </mapper>

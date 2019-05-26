@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapperExtra">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.UserIncomeInfo">
+        <id column="info_id" property="infoId" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="fanyong_income" property="fanyongIncome" jdbcType="DOUBLE"/>
+        <result column="share_income" property="shareIncome" jdbcType="DOUBLE"/>
+        <result column="pay_total_rent" property="payTotalRent" jdbcType="DOUBLE"/>
+        <result column="got_total_rent" property="gotTotalRent" jdbcType="DOUBLE"/>
+        <result column="other_income" property="otherIncome" jdbcType="DOUBLE"/>
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
+        <result column="withdrawed" property="withdrawed" jdbcType="DOUBLE"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    info_id, user_id, fanyong_income, share_income, pay_total_rent, got_total_rent, other_income,
+    create_at, update_at, withdrawed
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from czb_user_income_info
+        where info_id = #{infoId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from czb_user_income_info
+    where info_id = #{infoId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.UserIncomeInfo">
+    insert into czb_user_income_info (info_id, user_id, fanyong_income, 
+      share_income, pay_total_rent, got_total_rent, 
+      other_income, create_at, update_at
+      )
+    values (#{infoId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{fanyongIncome,jdbcType=DOUBLE}, 
+      #{shareIncome,jdbcType=DOUBLE}, #{payTotalRent,jdbcType=DOUBLE}, #{gotTotalRent,jdbcType=DOUBLE}, 
+      #{otherIncome,jdbcType=DOUBLE}, now(), now()
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.UserIncomeInfo">
+        insert into czb_user_income_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="infoId != null">
+                info_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="fanyongIncome != null">
+                fanyong_income,
+            </if>
+            <if test="shareIncome != null">
+                share_income,
+            </if>
+            <if test="payTotalRent != null">
+                pay_total_rent,
+            </if>
+            <if test="gotTotalRent != null">
+                got_total_rent,
+            </if>
+            <if test="otherIncome != null">
+                other_income,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="infoId != null">
+                #{infoId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="fanyongIncome != null">
+                #{fanyongIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="shareIncome != null">
+                #{shareIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="payTotalRent != null">
+                #{payTotalRent,jdbcType=DOUBLE},
+            </if>
+            <if test="gotTotalRent != null">
+                #{gotTotalRent,jdbcType=DOUBLE},
+            </if>
+            <if test="otherIncome != null">
+                #{otherIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.UserIncomeInfo">
+        update czb_user_income_info
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="fanyongIncome != null">
+                fanyong_income = #{fanyongIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="shareIncome != null">
+                share_income = #{shareIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="payTotalRent != null">
+                pay_total_rent = #{payTotalRent,jdbcType=DOUBLE},
+            </if>
+            <if test="gotTotalRent != null">
+                got_total_rent = #{gotTotalRent,jdbcType=DOUBLE},
+            </if>
+            <if test="otherIncome != null">
+                other_income = #{otherIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                update_at = now(),
+            </if>
+        </set>
+        where info_id = #{infoId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.UserIncomeInfo">
+    update czb_user_income_info
+    set user_id = #{userId,jdbcType=VARCHAR},
+      fanyong_income = #{fanyongIncome,jdbcType=DOUBLE},
+      share_income = #{shareIncome,jdbcType=DOUBLE},
+      pay_total_rent = #{payTotalRent,jdbcType=DOUBLE},
+      got_total_rent = #{gotTotalRent,jdbcType=DOUBLE},
+      other_income = #{otherIncome,jdbcType=DOUBLE},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where info_id = #{infoId,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectUserIncomeInfo" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO"
+            parameterType="java.lang.String">
+    select
+      user_id as userId,
+      info_id as infoId,
+      fanyong_income AS fanyongIncome,
+      share_income as shareIncome,
+      pay_total_rent AS payTotalRent,
+      got_total_rent as gotTotalRent,
+      other_income AS otherIncome,
+      withdrawed AS withdrawed
+    from czb_user_income_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectOneUserIncomeInfo" resultType="com.cqut.czb.bn.entity.entity.UserIncomeInfo"
+            parameterType="java.lang.String">
+    select
+      user_id as userId,
+      info_id as infoId,
+      fanyong_income AS fanyongIncome,
+      share_income as shareIncome,
+      pay_total_rent AS payTotalRent,
+      got_total_rent as gotTotalRent,
+      other_income AS otherIncome
+    from czb_user_income_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+    LIMIT 1;
+  </select>
+
+
+</mapper>

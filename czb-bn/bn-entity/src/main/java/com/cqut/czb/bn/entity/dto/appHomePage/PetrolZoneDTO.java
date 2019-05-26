@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.entity.dto.appHomePage;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * 创建人：陈德强
@@ -9,13 +9,39 @@ import java.util.Date;
  */
 public class PetrolZoneDTO {
 
+    private String petrolName;
+
     private Integer petrolKind;
 
-    private Double petrolDenomination;
+    private String petrolRemark;//油卡备注（字典）
 
-    private Double petrolPrice;
+    private List<Double> petrolPrice;
 
-    private Double discount;
+    private String area;
+
+    public String getPetrolRemark() {
+        return petrolRemark;
+    }
+
+    public void setPetrolRemark(String petrolRemark) {
+        this.petrolRemark = petrolRemark;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getPetrolName() {
+        return petrolName;
+    }
+
+    public void setPetrolName(String petrolName) {
+        this.petrolName = petrolName;
+    }
 
     public Integer getPetrolKind() {
         return petrolKind;
@@ -25,28 +51,11 @@ public class PetrolZoneDTO {
         this.petrolKind = petrolKind;
     }
 
-    public Double getPetrolDenomination() {
-        return petrolDenomination;
-    }
-
-    public void setPetrolDenomination(Double petrolDenomination) {
-        this.petrolDenomination = petrolDenomination;
-    }
-
-    public Double getPetrolPrice() {
+    public List<Double> getPetrolPrice() {
         return petrolPrice;
     }
 
-    public void setPetrolPrice(Double petrolPrice) {
+    public void setPetrolPrice(List<Double> petrolPrice) {
         this.petrolPrice = petrolPrice;
     }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
-
 }

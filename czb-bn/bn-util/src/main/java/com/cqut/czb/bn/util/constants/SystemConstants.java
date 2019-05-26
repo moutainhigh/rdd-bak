@@ -6,6 +6,9 @@ public class SystemConstants {
 
     public static String COMMA_REGEX = ",";
 
+    public static Double  VIP_PRICE = 0.01;
+
+    public static final String IPAPI="https://www.ddcattom.com:8443";
     /**
      * 表示数据库中false的值
      * */
@@ -55,4 +58,24 @@ public class SystemConstants {
     /*使用权*/
     public static  String HOLD_TYPE_USE="2";
 
+    /**
+     * 导出个人收款记录excel的头部
+     */
+    public static final String[] PAY_TO_PERSON_RECORDS = {"合同号","收款人姓名","收款人身份证号","开户行","银行卡账号","应打款金额","实打款金额","打款状态","打款时间"};
+    /**
+     * 导出平台收款记录excel的头部
+     */
+    public static final String[] PLATFORM_INCOME_RECORDS = {"合同号","企业名字","应收款金额","实收款金额","目标月","企业打款时间","收款状态"};
+
+    /**
+     * 导出油卡寄送记录excel的excel头部
+     */
+    public static final String[] PETROL_DELIVERY_RECORD_HEAD = { "油卡编号", "油卡类型","寄送状态","收卡人姓名", "购卡时间","收卡人电话", "收卡主地址", "收卡详细地址","快递单号","快递公司" };
+    /**
+     * 导出充值记录excel的头部
+     */
+    public static final String[] PETROL_RECHARGE_EXCEL_HEAD={"姓名","油卡号码","油卡类型","充值金额","支付价格","电话号码","购卡时间","购卡方式"};
+
+    public static final int PERSONAL_USER = 0;
+    public static final int ENTERPRISE_USER = 1;
 }

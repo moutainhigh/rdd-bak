@@ -27,6 +27,14 @@ public class User {
 
     private Date updateAt;
 
+    private String userYunId;
+
+    private Integer isDeleted;
+
+    private String commissionLevelOne;
+
+    private String commissionLevelTwo;
+
     public String getUserId() {
         return userId;
     }
@@ -121,5 +129,37 @@ public class User {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getUserYunId() {
+        return userYunId;
+    }
+
+    public void setUserYunId(String userYunId) {
+        this.userYunId = userYunId == null ? null : userYunId.trim();
+    }
+
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public String getCommissionLevelOne() {
+        return commissionLevelOne;
+    }
+
+    public void setCommissionLevelOne(String commissionLevelOne) {
+        this.commissionLevelOne = commissionLevelOne == null ? null : commissionLevelOne.trim();
+    }
+
+    public String getCommissionLevelTwo() {
+        return commissionLevelTwo;
+    }
+
+    public void setCommissionLevelTwo(String commissionLevelTwo) {
+        this.commissionLevelTwo = commissionLevelTwo == null ? null : commissionLevelTwo.trim();
     }
 }

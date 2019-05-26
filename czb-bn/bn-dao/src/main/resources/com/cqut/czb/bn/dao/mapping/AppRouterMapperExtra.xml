@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.AppRouter" >
+        <id column="router_id" property="routerId" jdbcType="VARCHAR" />
+        <result column="path_type" property="pathType" jdbcType="INTEGER" />
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+        <result column="is_show" property="isShow" jdbcType="INTEGER" />
+        <result column="icon_path_id" property="iconPathId" jdbcType="VARCHAR" />
+        <result column="menu_identity_code" property="menuIdentityCode" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="android_path" property="androidPath" jdbcType="VARCHAR" />
+        <result column="ios_path" property="iosPath" jdbcType="VARCHAR" />
+        <result column="order" property="order" jdbcType="INTEGER" />
+        <result column="user_type" property="userType" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    router_id, path_type, menu_name, is_show, icon_path_id, menu_identity_code, create_at,
+    update_at, android_path, ios_path, `order`, user_type
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_app_router
+        <where>
+            <if test="menuName!=null and menuName!=''">
+                menu_name like concat('%',#{menuName,jdbcType=VARCHAR},'%') </if>
+            <if test="menuIdentityCode!=null and menuIdentityCode!=''">
+                AND menu_identity_code like concat('%',#{menuIdentityCode,jdbcType=VARCHAR},'%') </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_app_router
+        where router_id = #{routerId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+        insert into czb_app_router (router_id, path_type, menu_name,
+        menu_path, is_show, icon_path_id,
+        menu_identity_code, create_at, update_at
+        )
+        values (#{routerId,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR},
+        #{menuPath,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{iconPathId,jdbcType=VARCHAR},
+        #{menuIdentityCode,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+        insert into czb_app_router
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="routerId != null" >
+                router_id,
+            </if>
+            <if test="pathType!=null">
+                path_type,
+            </if>
+            <if test="menuName != null" >
+                menu_name,
+            </if>
+            <if test="isShow != null" >
+                is_show,
+            </if>
+            <if test="iconPathId != null" >
+                icon_path_id,
+            </if>
+            <if test="menuIdentityCode != null" >
+                menu_identity_code,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+            <if test="androidPath != null" >
+                android_path,
+            </if>
+            <if test="iosPath != null" >
+                ios_path,
+            </if>
+            <if test="order != null" >
+                `order`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="routerId != null" >
+                #{routerId,jdbcType=VARCHAR},
+            </if>
+            <if test="pathType!=null">
+                #{pathType,jdbcType=INTEGER},
+            </if>
+            <if test="menuName != null" >
+                #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="isShow != null" >
+                #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="iconPathId != null" >
+                #{iconPathId,jdbcType=VARCHAR},
+            </if>
+            <if test="menuIdentityCode != null" >
+                #{menuIdentityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="androidPath != null" >
+                #{androidPath,jdbcType=VARCHAR},
+            </if>
+            <if test="iosPath != null" >
+                #{iosPath,jdbcType=VARCHAR},
+            </if>
+            <if test="order != null" >
+                #{order,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+        update czb_app_router
+        <set >
+            <if test="menuName != null and menuName!=''" >
+                menu_name = #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="isShow != null" >
+                is_show = #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="iconPathId != null and iconPathId!=''" >
+                icon_path_id = #{iconPathId,jdbcType=VARCHAR},
+            </if>
+            <if test="menuIdentityCode != null and menuIdentityCode!=''" >
+                menu_identity_code = #{menuIdentityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="androidPath != null and androidPath!=''" >
+                android_path = #{androidPath,jdbcType=VARCHAR},
+            </if>
+            <if test="iosPath!= null and iosPath!=''" >
+                ios_path = #{iosPath,jdbcType=VARCHAR},
+            </if>
+            <if test="order != null" >
+                `order` = #{order,jdbcType=INTEGER},
+            </if>
+        </set>
+        where router_id = #{routerId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.AppRouter" >
+        update czb_app_router
+        set
+        menu_name = #{menuName,jdbcType=VARCHAR},
+        menu_path = #{menuPath,jdbcType=VARCHAR},
+        is_show = #{isShow,jdbcType=INTEGER},
+        icon_path_id = #{iconPathId,jdbcType=VARCHAR},
+        menu_identity_code = #{menuIdentityCode,jdbcType=VARCHAR},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where router_id = #{routerId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectAppRouters" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" >
+        select
+         path_type as pathType , menu_name as menuName,
+        android_path as androidPath, ios_path as iosPath, `order`, user_type as userType,file_name as fileName,save_path as savePath,remark
+        from czb_app_router,czb_file
+        where
+        user_type=#{userType,jdbcType=INTEGER} and
+        menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR} and
+        czb_file.file_id=czb_app_router.icon_path_id and
+        is_show=1
+        ORDER BY `order` ASC
+    </select>
+</mapper>

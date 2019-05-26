@@ -5,11 +5,9 @@ import java.util.Date;
 public class AppRouter {
     private String routerId;
 
-    private Integer appType;
+    private Integer pathType;
 
     private String menuName;
-
-    private String menuPath;
 
     private Integer isShow;
 
@@ -21,6 +19,14 @@ public class AppRouter {
 
     private Date updateAt;
 
+    private String androidPath;
+
+    private String iosPath;
+
+    private Integer order;
+
+    private Integer userType;
+
     public String getRouterId() {
         return routerId;
     }
@@ -29,12 +35,12 @@ public class AppRouter {
         this.routerId = routerId == null ? null : routerId.trim();
     }
 
-    public Integer getAppType() {
-        return appType;
+    public Integer getPathType() {
+        return pathType;
     }
 
-    public void setAppType(Integer appType) {
-        this.appType = appType;
+    public void setPathType(Integer pathType) {
+        this.pathType = pathType;
     }
 
     public String getMenuName() {
@@ -43,14 +49,6 @@ public class AppRouter {
 
     public void setMenuName(String menuName) {
         this.menuName = menuName == null ? null : menuName.trim();
-    }
-
-    public String getMenuPath() {
-        return menuPath;
-    }
-
-    public void setMenuPath(String menuPath) {
-        this.menuPath = menuPath == null ? null : menuPath.trim();
     }
 
     public Integer getIsShow() {
@@ -91,5 +89,37 @@ public class AppRouter {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getAndroidPath() {
+        return androidPath;
+    }
+
+    public void setAndroidPath(String androidPath) {
+        this.androidPath = androidPath == null ? null : androidPath.trim();
+    }
+
+    public String getIosPath() {
+        return iosPath;
+    }
+
+    public void setIosPath(String iosPath) {
+        this.iosPath = iosPath == null ? null : iosPath.trim();
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }

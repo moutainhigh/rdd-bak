@@ -1,0 +1,56 @@
+package com.cqut.czb.bn.api.controller.verifyAsynNoticeInfo;
+
+import com.cqut.czb.bn.service.IPaymentRecordService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+/**
+ * @author 陈德强
+ * @date 2019/5/7
+ * */
+
+@RestController
+@RequestMapping("/verifyAsyn")
+public class VerifyAsynNoticeInfoController {
+	@Resource(name="paymentRecordService")
+	private IPaymentRecordService paymentRecordService;
+	/**
+	 * 油卡购买：验证异步通知信息(支付宝(爱虎))
+	 */
+	@RequestMapping(value="/verifyBuyPetrolInfoAiHu", method= RequestMethod.POST)
+	public void verifyBuyPetrolInfoAiHu(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		//商户订单号
+		String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
+		System.out.println("slkdajflkas"+out_trade_no);
+		try {
+			response.getWriter().print(paymentRecordService.verifyAsynNoticeInfoAiHu(request));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 油卡充值：验证异步通知信息(支付宝(爱虎))recharge
+	 */
+	@RequestMapping(value="/verifyPetrolRechargeInfoAiHu", method= RequestMethod.POST)
+	public void verifyPetrolRechargeInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("支付宝回调——充值接口");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		try {
+			response.getWriter().print(paymentRecordService.verifyAsynNoticeInfoAiHu(request));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
