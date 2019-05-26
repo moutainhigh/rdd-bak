@@ -149,7 +149,11 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayableMoney());
             row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getPayableMoney());
+            if (payToPersonDTOS.get(i).getActualPayMoney()!=null){
+            row.createCell(count++).setCellValue(payToPersonDTOS.get(i).getActualPayMoney());}
+            else {
+                row.createCell(count++).setCellValue("");
+            }
             row.createCell(count).setCellType(CellType.STRING);
             if (payToPersonDTOS.get(i).getState()==0){
             row.createCell(count++).setCellValue("未打款");}

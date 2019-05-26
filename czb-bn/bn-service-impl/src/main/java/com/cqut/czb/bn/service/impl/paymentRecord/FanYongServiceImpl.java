@@ -161,14 +161,11 @@ public class FanYongServiceImpl implements FanYongService {
             double beforeIncome=0.00;//定义之前的余额
             if(olduserIncomeInfo.getFanyongIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()))).doubleValue();
-            }
-            if(olduserIncomeInfo.getShareIncome()!=null){
+            }else  if(olduserIncomeInfo.getShareIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getShareIncome()))).doubleValue();
-            }
-            if(olduserIncomeInfo.getOtherIncome()!=null){
+            }else if(olduserIncomeInfo.getOtherIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getOtherIncome()))).doubleValue();
-            }
-            if(olduserIncomeInfo.getWithdrawed()!=null){
+            }else if(olduserIncomeInfo.getWithdrawed()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(olduserIncomeInfo.getWithdrawed()))).doubleValue();
             }
             beforeIncome=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(amount))).doubleValue();//减掉变更金额
