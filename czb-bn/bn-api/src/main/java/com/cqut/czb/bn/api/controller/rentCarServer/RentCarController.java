@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.api.controller.rentCarServer;
 
+import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.AddCompanyContractList;
 import com.cqut.czb.bn.entity.dto.rentCar.AddPersonContractInputDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.OneContractInfoInputDTO;
@@ -23,6 +25,9 @@ public class RentCarController {
 
     @Autowired
     RedisUtils redisUtils;
+
+    @Autowired
+    UserDetailService userDetailService;
 
     /**
      * 获取个人收益记录
@@ -88,4 +93,20 @@ public class RentCarController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(rentCarService.getContact(user.getUserId()));
     }
+
+    /**
+     * 验证验证码正确性
+     */
+    @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
+    public  JSONResult checkVerificationCode(@RequestBody VerificationCodeDTO input){
+        //判断验证码是否为空
+        if(input==null){
+            System.out.println("为空");
+            return new JSONResult(false);
+        }
+        VerificationCodeDTO verificationCodeDTO1=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
+
+        return new JSONResult(userDetailService.checkContractVcode(verificationCodeDTO1));
+    }
+
 }

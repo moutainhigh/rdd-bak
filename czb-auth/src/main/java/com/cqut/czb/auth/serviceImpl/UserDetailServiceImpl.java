@@ -147,13 +147,11 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     public boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO) {
-        //判断信息是否为空 user.setUserPsw(bCryptPasswordEncoder.encode(user.getUserPsw()));
-        System.out.println("inter service");
+        //判断信息是否为空
         if (verificationCodeDTO == null)
             return false;
         if (verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO) != 0) {//如果不为零则验证码未过期（返回的是验证码个数）
             //更改用户的密码
-            System.out.println("inter service");
             verificationCodeDTO.setUserPsw(bCryptPasswordEncoder.encode(verificationCodeDTO.getUserPsw()));
             boolean updateUserPSW = userMapperExtra.updateUserPSW(verificationCodeDTO) > 0;
             //更改验证码的状态
@@ -265,4 +263,10 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         return 1 == user.getIsIdentified();
     }
+
+    @Override
+    public VerificationCodeDTO checkContractVcode(VerificationCodeDTO verificationCodeDTO) {
+        return verificationCodeMapperExtra.selectContractVcode(verificationCodeDTO);
+    }
+
 }
