@@ -205,15 +205,16 @@
 
     <select id="selectIncomeState" resultType="java.lang.Integer">
         SELECT
-            COUNT(a.record_id)
+        COUNT(a.record_id)
         FROM
-            czb_contract_records a
-        LEFT JOIN czb_platform_income_records b ON a.record_id = b.contract_record_id
+        czb_platform_income_records a
+        LEFT JOIN czb_contract_records b ON a.contract_record_id = b.record_id
         WHERE
-            a.contract_end_time > NOW() AND  a.contract_start_time &lt;=NOW()
-        AND a.contract_father_id is null
-        AND date_format(b.enterprise_pay_time, '%Y-%m') = date_format(NOW(),'%Y-%m')
-        AND a.user_id=#{id,jdbcType=VARCHAR}
+        b.contract_father_id IS NULL
+        AND b.contract_end_time > NOW()
+        AND b.contract_start_time &lt;= NOW()
+        AND a.state=0
+        AND b.user_id=#{id,jdbcType=VARCHAR}
     </select>
     <select id="selectContractMonth" resultType="java.lang.Integer">
          SELECT

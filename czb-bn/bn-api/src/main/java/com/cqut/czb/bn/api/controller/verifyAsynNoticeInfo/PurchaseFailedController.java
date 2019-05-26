@@ -34,8 +34,9 @@ public class PurchaseFailedController {
      */
     @RequestMapping(value = "/CancelPayPetrol",method = RequestMethod.POST)
     public JSONResult CancelPayPetrol(Principal principal){
+        System.out.println("dfksjkfjalsdjfk");
         User user = (User)redisUtils.get(principal.getName());
-        if (user==null||user.getUserId()==null){
+        if (user==null&&user.getUserId()==null){
             return new JSONResult(ResponseCodeConstants.FAILURE, "用户信息有误");
         }
         Iterator<Map.Entry<String,Petrol>> currentPetrol = PetrolCache.currentPetrolMap.entrySet().iterator();
@@ -48,9 +49,9 @@ public class PurchaseFailedController {
                 petrol.setOwnerId("");//将用户id置为空
                 petrol.setEndTime(0);
                 PetrolCache.AllpetrolMap.put(petrol.getPetrolNum(),petrol);
-                return new JSONResult(ResponseCodeConstants.FAILURE, "订单已取消");
+                return new JSONResult(ResponseCodeConstants.SUCCESS, "订单已取消");
             }
         }
-        return  new JSONResult(ResponseCodeConstants.FAILURE, "2订单已取消");
+        return  new JSONResult(ResponseCodeConstants.SUCCESS, "订单已取消");
     }
 }

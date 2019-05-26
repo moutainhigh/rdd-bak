@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,16 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
 
     @Override
     public Workbook exportRecords(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) throws Exception {
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+//        try {
+//            Date exportTime = format.parse(platformIncomeRecordsDTO.getExportTime());
+//            int compareTo = date1.compareTo(date2);
+//
+//            System.out.println(compareTo);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS = platformIncomeRecordsMapperExtra.selectIncomeList(platformIncomeRecordsDTO); //查询选择月份中有哪些合同
         if (platformIncomeRecordsDTOS==null||platformIncomeRecordsDTOS.size()==0){
             return null;
@@ -206,7 +217,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
 
     @Override
     public Boolean selectPayState(User user) {  //当月应付款合同数与已付款合同数比较
-        return (platformIncomeRecordsMapperExtra.selectIncomeState(user.getUserId())==platformIncomeRecordsMapperExtra.selectContractMonth(user.getUserId()));
+        return (platformIncomeRecordsMapperExtra.selectIncomeState(user.getUserId())>0);
     }
 
     //导入生成execl表
