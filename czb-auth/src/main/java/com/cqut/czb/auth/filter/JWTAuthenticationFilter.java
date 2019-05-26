@@ -11,6 +11,7 @@ import com.cqut.czb.bn.entity.dto.user.LoginUser;
 import com.cqut.czb.bn.entity.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,7 +58,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             if(userDetailsService == null){
                 userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
             }
+            if(redisUtils == null){
+                redisUtils = SpringUtils.getBean(RedisUtils.class);
+            }
             String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
+            if(!tokenHeader.equals(redisUtils.get(JwtTool.getUsername(token) + AuthConfig.TOKEN))) {
+                throw new AccountExpiredException("token已失效，请重新登录");
+            }
             loginUser.setAccount(JwtTool.getUsername(token));
             UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
             loginUser.setPassword(userDetails.getPassword());
