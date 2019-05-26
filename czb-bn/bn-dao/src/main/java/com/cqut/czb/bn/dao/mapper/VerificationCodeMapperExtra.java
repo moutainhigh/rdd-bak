@@ -18,6 +18,11 @@ public interface VerificationCodeMapperExtra {
     int selectVerificationCode(VerificationCodeDTO verificationCodeDTO);
 
     /**
+     * 查出相应的验证码
+     */
+    VerificationCodeDTO selectContractVcode(VerificationCodeDTO verificationCodeDTO);
+
+    /**
      * 更改验证码的状态
      * @param verificationCodeDTO
      * @return

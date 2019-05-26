@@ -43,4 +43,8 @@ public interface UserDetailService {
 
     boolean isCertification(User user);
 
+    /**
+     * 合同验证码验证
+     */
+    VerificationCodeDTO checkContractVcode(VerificationCodeDTO verificationCodeDTO);
 }

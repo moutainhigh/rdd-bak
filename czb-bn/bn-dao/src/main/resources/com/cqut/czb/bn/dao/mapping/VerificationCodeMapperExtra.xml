@@ -29,6 +29,18 @@
       user_account=#{userAccount,jdbcType=VARCHAR}
    </select>
 
+   <select id="selectContractVcode" resultType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO">
+      select
+      content,verification_code_id,user_account
+      from czb_verification_code
+      where
+      state = 0 and
+      content=#{content,jdbcType=VARCHAR} and
+      user_account=#{userAccount,jdbcType=VARCHAR}
+   </select>
+
+
+
    <update id="updateVerificationCode" parameterType="com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO" >
       update czb_verification_code
       <set >
