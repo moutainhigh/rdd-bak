@@ -34,7 +34,7 @@ public class AppBuyPetrolController {
     RedisUtils redisUtils;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
+    public synchronized JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
 //    public JSONResult buyPetrol(PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();
@@ -55,10 +55,10 @@ public class AppBuyPetrolController {
         }
 
         //检测今日是否已经购买了油卡或充值
-        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
-        if(isTodayHadBuy){//true
-            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
-        }
+//        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
+//        if(isTodayHadBuy){//true
+//            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
+//        }
 
         //处理购油或充值
         Map<String,Object> BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);

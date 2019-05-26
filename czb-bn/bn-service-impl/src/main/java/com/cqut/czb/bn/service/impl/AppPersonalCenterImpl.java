@@ -123,12 +123,16 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             return null;
         }
         for(int i=0;i<myIncomeLogDTOS.size();i++){
-            if(myIncomeLogDTOS.get(i).getCommissionLevel()==1){
+            if(myIncomeLogDTOS.get(i).getCommissionLevel()==null){
                 myIncomeLogDTOS.get(i).setIncomeClass("一级收益");
-                System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
-            }else if(myIncomeLogDTOS.get(i).getCommissionLevel()==2){
-                myIncomeLogDTOS.get(i).setIncomeClass("二级收益");
-                System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
+            }else{
+                if(myIncomeLogDTOS.get(i).getCommissionLevel()==1){
+                    myIncomeLogDTOS.get(i).setIncomeClass("一级收益");
+                    System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
+                }else if(myIncomeLogDTOS.get(i).getCommissionLevel()==2){
+                    myIncomeLogDTOS.get(i).setIncomeClass("二级收益");
+                    System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
+                }
             }
             System.out.println(user.getUserName());
             myIncomeLogDTOS.get(i).setUserName(user.getUserName());

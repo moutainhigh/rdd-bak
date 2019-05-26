@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -52,6 +51,6 @@ public class StartInputPetrol  implements CommandLineRunner  {
                     }
                 }
             }
-        }, 0, 60000, TimeUnit.MILLISECONDS);
+        }, 0, 10000, TimeUnit.MILLISECONDS);
     }
 }

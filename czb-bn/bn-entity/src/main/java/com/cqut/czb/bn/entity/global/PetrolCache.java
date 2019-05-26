@@ -140,7 +140,7 @@ public class PetrolCache {
             if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice) {
                 petrol.setOwnerId(ownerId);
                 //当前时间加十分钟
-                long currentTime = System.currentTimeMillis() + 60 * 1000;
+                long currentTime = System.currentTimeMillis() + 120 * 1000;
                 petrol.setEndTime(currentTime);
                 //将其放入当前暂存的一个currentPetrolMap中(可以覆盖以往的)。
                 currentPetrolMap.put(petrol.getPetrolNum(), petrol);
