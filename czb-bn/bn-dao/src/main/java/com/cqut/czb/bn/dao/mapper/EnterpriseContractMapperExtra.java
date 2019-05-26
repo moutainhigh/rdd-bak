@@ -18,5 +18,5 @@ public interface EnterpriseContractMapperExtra {
 
     List<EnterprisePayDTO> getIncomeList(String id);
 
-    Double getIncomeTotalMoney(String id);
+    TotalMoney getIncomeTotalMoney(String id);
 }

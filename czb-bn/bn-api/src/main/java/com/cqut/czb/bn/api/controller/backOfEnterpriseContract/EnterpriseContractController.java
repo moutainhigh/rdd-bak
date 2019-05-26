@@ -55,6 +55,7 @@ public class EnterpriseContractController {
     @GetMapping("/getTotalIncome")
     public JSONResult getToealIncome(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
+
         return new JSONResult(contractService.getTotalIncome(user));
     }
 
