@@ -39,7 +39,7 @@ public class AiHuAlipayConfig {
 	public static String format = "json";
 	
 	//订单允许的最晚付款时间30分钟
-	public static String timeout_express = "1m";
+	public static String timeout_express = "30m";
 	
 	//产品码
 	public static String product_code = "QUICK_MSECURITY_PAY";
