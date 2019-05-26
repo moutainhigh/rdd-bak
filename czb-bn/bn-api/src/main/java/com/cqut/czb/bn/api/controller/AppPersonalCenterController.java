@@ -117,11 +117,11 @@ public class AppPersonalCenterController {
     @RequestMapping(value = "/getFanYonginfo",method = RequestMethod.GET)
     public JSONResult getFanYonginfo(Principal principal, MyIncomeLogDTO myIncomeLogDTO){
         User user = (User)redisUtils.get(principal.getName());
-        if(user==null||myIncomeLogDTO==null){
+        if(user==null&&myIncomeLogDTO==null){
             return null;
         }
         myIncomeLogDTO.setUserId(user.getUserId());
-        return new JSONResult(appPersonalCenterService.selectIncomeLog(myIncomeLogDTO));
+        return new JSONResult(appPersonalCenterService.selectIncomeLog(myIncomeLogDTO,user));
     }
 
     @RequestMapping(value = "/getUserIncomeInfo",method = RequestMethod.GET)

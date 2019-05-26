@@ -80,7 +80,7 @@ public class FanYongServiceImpl implements FanYongService {
      * 共用方法——处理用户收益信息表
      * k为第几级：0为本人，1为上级，2为上上级
      */
-    boolean changeUserIncomeInfo(String commissionSourceUser,String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId) {
+    boolean changeUserIncomeInfo( String commissionSourceUser,String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId) {
         String uuid = StringUtil.createId();//新生成的id号（可能要用）
         boolean ischangeUserIncomeInfo;
         //amount为变更金额
@@ -99,7 +99,7 @@ public class FanYongServiceImpl implements FanYongService {
             userIncomeInfo1.setOtherIncome(0.00);
             ischangeUserIncomeInfo = userIncomeInfoMapperExtra.insert(userIncomeInfo1) > 0;//进行新增
             System.out.println("新增用户收益信息表完毕" + k + ischangeUserIncomeInfo);
-            boolean insertIncomeLog = insertIncomeLog(commissionSourceUser,commissionGotUser,uuid,amount,type,userIncomeInfo1, orgId);
+            boolean insertIncomeLog = insertIncomeLog(k ,commissionSourceUser,commissionGotUser,uuid,amount,type,userIncomeInfo1, orgId);
             return insertIncomeLog;
         } else {
             //用户收益信息表——更改
@@ -111,7 +111,7 @@ public class FanYongServiceImpl implements FanYongService {
                     userIncomeInfo.setShareIncome(0.00);
                 ischangeUserIncomeInfo = userIncomeInfoMapperExtra.updateByPrimaryKeySelective(userIncomeInfo) > 0;//进行修改
                 System.out.println("更改用户收益信息表完毕" + ischangeUserIncomeInfo);
-                boolean insertIncomeLog = insertIncomeLog(commissionSourceUser,commissionGotUser,userIncomeInfo.getInfoId(), amount,type,userIncomeInfo, orgId);
+                boolean insertIncomeLog = insertIncomeLog(k,commissionSourceUser,commissionGotUser,userIncomeInfo.getInfoId(), amount,type,userIncomeInfo, orgId);
                 if (ischangeUserIncomeInfo == true && insertIncomeLog == true)
                     return true;
                 else {
@@ -126,9 +126,10 @@ public class FanYongServiceImpl implements FanYongService {
      * 新增收益变更记录表
      * type: 0 返佣，1 提现，2 消费，3 推荐，4 其他
      */
-    boolean insertIncomeLog(String commissionSourceUser,String commissionGotUser,String uuid, double amount, int type, UserIncomeInfo olduserIncomeInfo,String orgId) {
+    boolean insertIncomeLog(int commissionLevel, String commissionSourceUser,String commissionGotUser,String uuid, double amount, int type, UserIncomeInfo olduserIncomeInfo,String orgId) {
         //收益变更记录表——插入
         IncomeLog incomeLog = new IncomeLog();
+        incomeLog.setCommissionLevel(commissionLevel);
         incomeLog.setCommissionGotUser(commissionGotUser);
         incomeLog.setCommissionSourceUser(commissionSourceUser);
         incomeLog.setRecordId(StringUtil.createId());
