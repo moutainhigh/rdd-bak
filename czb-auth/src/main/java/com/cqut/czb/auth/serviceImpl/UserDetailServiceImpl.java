@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 import com.cqut.czb.bn.util.mapper.BeanMapper;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -35,15 +36,18 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     private final EnterpriseInfoMapper enterpriseInfoMapper;
 
+    private final UserIncomeInfoMapper userIncomeInfoMapper;
+
     private final RedisUtils redisUtils;
 
     @Autowired
-    public UserDetailServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationCodeMapperExtra verificationCodeMapperExtra, EnterpriseInfoMapper enterpriseInfoMapper, RedisUtils redisUtils) {
+    public UserDetailServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationCodeMapperExtra verificationCodeMapperExtra, EnterpriseInfoMapper enterpriseInfoMapper, UserIncomeInfoMapper userIncomeInfoMapper, RedisUtils redisUtils) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.verificationCodeMapperExtra = verificationCodeMapperExtra;
         this.enterpriseInfoMapper = enterpriseInfoMapper;
+        this.userIncomeInfoMapper = userIncomeInfoMapper;
         this.redisUtils = redisUtils;
     }
 
@@ -73,8 +77,22 @@ public class UserDetailServiceImpl implements UserDetailService {
                 user.setSuperiorUser(null);
             }
         }
-
-        return (userMapper.insertSelective(user) > 0) + "";
+        UserIncomeInfo userIncomeInfo = new UserIncomeInfo();
+        userIncomeInfo.setUserId(user.getUserId());
+        userIncomeInfo.setInfoId(StringUtil.createId());
+        userIncomeInfo.setFanyongIncome(0.00);
+        userIncomeInfo.setShareIncome(0.00);
+        userIncomeInfo.setGotTotalRent(0.00);
+        userIncomeInfo.setOtherIncome(0.00);
+        userIncomeInfo.setPayTotalRent(0.00);
+        userIncomeInfo.setWithdrawed(0.00);
+        userIncomeInfo.setCreateAt(new Date());
+        boolean isInsert = userIncomeInfoMapper.insertSelective(userIncomeInfo) > 0;
+        if(isInsert) {
+            return (userMapper.insertSelective(user) > 0) + "";
+        } else {
+            return false + "";
+        }
     }
 
     @Override
@@ -95,19 +113,35 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setIsIdentified(1);
         user.setIsLoginPc(0);
         user.setUserRank(0);
-        boolean isInsertUser = userMapper.insertSelective(user) > 0;
 
-        EnterpriseInfo enterpriseInfo = BeanMapper.map(enterpriseUserDTO, EnterpriseInfo.class);
-        enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
-        enterpriseInfo.setContactInfo(enterpriseUserDTO.getUserAccount());
-        enterpriseInfo.setEnterpriseName(enterpriseUserDTO.getUserName());
-        enterpriseInfo.setIsDeleted(0);
-        enterpriseInfo.setCreateAt(new Date());
-        enterpriseInfo.setUserId(user.getUserId());
+        UserIncomeInfo userIncomeInfo = new UserIncomeInfo();
+        userIncomeInfo.setUserId(user.getUserId());
+        userIncomeInfo.setInfoId(StringUtil.createId());
+        userIncomeInfo.setFanyongIncome(0.00);
+        userIncomeInfo.setShareIncome(0.00);
+        userIncomeInfo.setGotTotalRent(0.00);
+        userIncomeInfo.setOtherIncome(0.00);
+        userIncomeInfo.setPayTotalRent(0.00);
+        userIncomeInfo.setWithdrawed(0.00);
+        userIncomeInfo.setCreateAt(new Date());
+        boolean isInsert = userIncomeInfoMapper.insertSelective(userIncomeInfo) > 0;
+        if(isInsert) {
+            boolean isInsertUser = userMapper.insertSelective(user) > 0;
 
-        boolean isInsertEnterprise = enterpriseInfoMapper.insertSelective(enterpriseInfo) > 0;
+            EnterpriseInfo enterpriseInfo = BeanMapper.map(enterpriseUserDTO, EnterpriseInfo.class);
+            enterpriseInfo.setEnterpriseInfoId(StringUtil.createId());
+            enterpriseInfo.setContactInfo(enterpriseUserDTO.getUserAccount());
+            enterpriseInfo.setEnterpriseName(enterpriseUserDTO.getUserName());
+            enterpriseInfo.setIsDeleted(0);
+            enterpriseInfo.setCreateAt(new Date());
+            enterpriseInfo.setUserId(user.getUserId());
 
-        return (isInsertUser && isInsertEnterprise) + "";
+            boolean isInsertEnterprise = enterpriseInfoMapper.insertSelective(enterpriseInfo) > 0;
+
+            return (isInsertUser && isInsertEnterprise) + "";
+        } else {
+            return false + "";
+        }
     }
 
     @Override
