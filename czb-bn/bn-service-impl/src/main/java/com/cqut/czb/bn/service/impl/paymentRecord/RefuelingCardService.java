@@ -34,6 +34,9 @@ public class RefuelingCardService implements IRefuelingCard {
     @Autowired
     PetrolDeliveryRecordsMapper petrolDeliveryRecordsMapper;
 
+    @Autowired
+    PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
+
     // 同一时间只允许一个线程访问购买油卡接口
     public synchronized Map payCallback(Object[] param) {
         // 支付宝支付
@@ -262,7 +265,7 @@ public class RefuelingCardService implements IRefuelingCard {
         petrolDeliveryRecords.setPetrolNum(petrolNum);
         petrolDeliveryRecords.setDeliveryState(0);
         petrolDeliveryRecords.setRecordId(StringUtil.createId());
-        boolean isInsert = petrolDeliveryRecordsMapper.insert(petrolDeliveryRecords) > 0;
+        boolean isInsert = petrolDeliveryRecordsMapperExtra.insert(petrolDeliveryRecords) > 0;
         System.out.println("新增油卡邮寄记录" + isInsert);
 
         boolean beginFanYong = fanYongService.beginFanYong(ownerId, money, actualPayment, orgId);
