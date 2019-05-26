@@ -56,7 +56,7 @@
             czb_platform_income_records a
         LEFT JOIN czb_contract_records b ON a.contract_record_id = b.contract_father_id
         LEFT JOIN czb_cars_persons c ON b.record_id = c.contract_record_id
-        WHERE  b.user_id = #{id,jdbcType=VARCHAR}
+        WHERE  b.user_id = #{id,jdbcType=VARCHAR} AND a.actual_receipts_money is not NULL
         AND is_deleted = 0
     </select>
     <!--平台收款总额-->
@@ -66,7 +66,7 @@
         FROM
             czb_platform_income_records a
         LEFT JOIN czb_contract_records b ON a.contract_record_id = b.contract_father_id
-        WHERE  b.user_id = #{id,jdbcType=VARCHAR}
+        WHERE  b.user_id = #{id,jdbcType=VARCHAR} AND a.actual_receipts_money is not NULL
         AND is_deleted = 0
     </select>
     <!--合同油卡号-->

@@ -65,8 +65,8 @@
           LEFT JOIN czb_user b ON a.user_id = b.user_id
           <where>
               <if test="exportTime!=null">
-                  MONTH(a.contract_start_time)=MONTH(#{exportTime,jdbcType=TIMESTAMP}) AND a.contract_father_id is null
-                  AND  a.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP}
+                  a.contract_start_time &lt;=(#{exportTime,jdbcType=TIMESTAMP}) AND a.contract_father_id is null
+                  AND  a.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP} AND a.contract_state=1
               </if>
           </where>
     </select>
@@ -83,7 +83,7 @@
             FROM
                 czb_contract_records a
             LEFT JOIN czb_cars_persons b ON a.record_id=b.contract_record_id
-            LEFT JOIN czb_service_plan c ON b.plan_id = c.plan_id
+            LEFT JOIN czb_service_plan c ON b.plan_id = c.plan_id AND a.contract_state=1
             WHERE
                 contract_father_id in  <foreach collection="list" item="item" index="index"
                  separator="," open="(" close=")">
@@ -210,9 +210,8 @@
             czb_contract_records a
         LEFT JOIN czb_platform_income_records b ON a.record_id = b.contract_record_id
         WHERE
-            a.contract_end_time > NOW()
+            a.contract_end_time > NOW() AND  a.contract_start_time &lt;=NOW()
         AND a.contract_father_id is null
-        AND MONTH(enterprise_pay_time) = MONTH(a.contract_start_time)
         AND date_format(b.enterprise_pay_time, '%Y-%m') = date_format(NOW(),'%Y-%m')
         AND a.user_id=#{id,jdbcType=VARCHAR}
     </select>
@@ -222,7 +221,7 @@
         FROM
             czb_contract_records a
         WHERE
-            a.contract_end_time > NOW()
+            a.contract_end_time > NOW() AND  a.contract_start_time &lt;=NOW()
         AND a.contract_father_id IS NULL
         AND a.user_id=#{id,jdbcType=VARCHAR}
     </select>
@@ -240,8 +239,8 @@
         LEFT JOIN   czb_platform_income_records a ON b.record_id=a.contract_record_id
         LEFT JOIN czb_user ON b.user_id = czb_user.user_id
        WHERE
-        MONTH(b.contract_start_time)=MONTH(#{platform.exportTime,jdbcType=TIMESTAMP}) AND b.contract_father_id is null
-        AND  b.contract_end_time>=#{platform.exportTime,jdbcType=TIMESTAMP}
+        b.contract_start_time &lt;=#{platform.exportTime,jdbcType=TIMESTAMP} AND b.contract_father_id is null
+        AND  b.contract_end_time>=#{platform.exportTime,jdbcType=TIMESTAMP} AND a.contract_state=1
         AND    b.record_id  not IN <foreach collection="list" item="item" index="index"
                                 separator="," open="(" close=")">
         #{item.contractRecordId,jdbcType=VARCHAR}
