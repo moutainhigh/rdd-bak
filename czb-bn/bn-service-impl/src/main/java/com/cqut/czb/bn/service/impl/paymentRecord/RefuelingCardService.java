@@ -186,7 +186,7 @@ public class RefuelingCardService implements IRefuelingCard {
             }
             if ("addressId".equals(temp[0])) {
                 addressId = temp[1];
-                System.out.println("用户id:" + addressId);
+                System.out.println("用户addressId:" + addressId);
             }
         }
 
