@@ -53,7 +53,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         loginUser.setAccount(request.getParameter("account"));
         loginUser.setPassword(request.getParameter("password"));
         String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
-        if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && !tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX))) {
+        if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX))) {
             if(userDetailsService == null){
                 userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
             }
