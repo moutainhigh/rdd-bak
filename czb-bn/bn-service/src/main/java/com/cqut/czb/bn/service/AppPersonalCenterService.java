@@ -59,5 +59,5 @@ public interface AppPersonalCenterService {
      * @param myIncomeLogDTO
      * @return
      */
-    List<MyIncomeLogDTO>  selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO);
+    List<MyIncomeLogDTO>  selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO,User user);
 }

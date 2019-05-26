@@ -24,6 +24,36 @@ public class MyIncomeLogDTO {
 
     private Integer type;
 
+    private String userName;
+
+    private String incomeClass;
+
+    private Integer commissionLevel;
+
+    public Integer getCommissionLevel() {
+        return commissionLevel;
+    }
+
+    public void setCommissionLevel(Integer commissionLevel) {
+        this.commissionLevel = commissionLevel;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getIncomeClass() {
+        return incomeClass;
+    }
+
+    public void setIncomeClass(String incomeClass) {
+        this.incomeClass = incomeClass;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public Integer getType() {
         return type;
     }

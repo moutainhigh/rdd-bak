@@ -31,6 +31,8 @@ public class IncomeLog {
 
     private String commissionGotUser;
 
+    private Integer commissionLevel;
+
     public String getRecordId() {
         return recordId;
     }
@@ -141,5 +143,13 @@ public class IncomeLog {
 
     public void setCommissionGotUser(String commissionGotUser) {
         this.commissionGotUser = commissionGotUser == null ? null : commissionGotUser.trim();
+    }
+
+    public Integer getCommissionLevel() {
+        return commissionLevel;
+    }
+
+    public void setCommissionLevel(Integer commissionLevel) {
+        this.commissionLevel = commissionLevel;
     }
 }

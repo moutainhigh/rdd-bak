@@ -23,6 +23,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     UserMapperExtra userMapperExtra;
 
     @Autowired
+    UserMapper userMapper;
+
+    @Autowired
     UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
 
     @Autowired
@@ -113,7 +116,23 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     }
 
     @Override
-    public List<MyIncomeLogDTO> selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO) {
-        return incomeLogMapperExtra.selectIncomeLog(myIncomeLogDTO);
+    public List<MyIncomeLogDTO> selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO,User user) {
+
+        List<MyIncomeLogDTO> myIncomeLogDTOS=incomeLogMapperExtra.selectIncomeLog(myIncomeLogDTO);
+        if(myIncomeLogDTOS==null){
+            return null;
+        }
+        for(int i=0;i<myIncomeLogDTOS.size();i++){
+            if(myIncomeLogDTOS.get(i).getCommissionLevel()==1){
+                myIncomeLogDTOS.get(i).setIncomeClass("一级收益");
+                System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
+            }else if(myIncomeLogDTOS.get(i).getCommissionLevel()==2){
+                myIncomeLogDTOS.get(i).setIncomeClass("二级收益");
+                System.out.println( myIncomeLogDTOS.get(i).getIncomeClass());
+            }
+            System.out.println(user.getUserName());
+            myIncomeLogDTOS.get(i).setUserName(user.getUserName());
+        }
+        return myIncomeLogDTOS;
     }
 }

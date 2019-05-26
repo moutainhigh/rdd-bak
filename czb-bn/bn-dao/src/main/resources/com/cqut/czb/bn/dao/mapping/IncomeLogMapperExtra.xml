@@ -16,11 +16,12 @@
     <result column="withdraw_account" property="withdrawAccount" jdbcType="DOUBLE" />
     <result column="commission_source_user" property="commissionSourceUser" jdbcType="VARCHAR" />
     <result column="commission_got_user" property="commissionGotUser" jdbcType="VARCHAR" />
+    <result column="commission_level" property="commissionLevel" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, amount, type, info_id, before_change_income, remark, souse_id, create_at,
     update_at, withdraw_to, withdraw_name, withdraw_account, commission_source_user,
-    commission_got_user
+    commission_got_user, commission_level
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -37,13 +38,15 @@
       info_id, before_change_income, remark, 
       souse_id, create_at, update_at, 
       withdraw_to, withdraw_name, withdraw_account,
-        commission_source_user, commission_got_user
+        commission_source_user, commission_got_user,
+        commission_level
       )
     values (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
       #{infoId,jdbcType=VARCHAR}, #{beforeChangeIncome,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
       #{souseId,jdbcType=VARCHAR}, now(), now(),
       #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE},
-      #{commissionSourceUser,jdbcType=VARCHAR}, #{commissionGotUser,jdbcType=VARCHAR})
+      #{commissionSourceUser,jdbcType=VARCHAR}, #{commissionGotUser,jdbcType=VARCHAR}
+      ,#{commissionLevel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
     insert into czb_income_log
@@ -187,7 +190,8 @@
     i.create_at as createAt,
     withdraw_to as withdrawTo,
     withdraw_account as withdrawAccount,
-    withdraw_name as withdrawName
+    withdraw_name as withdrawName,
+	commission_level as commissionLevel
     from
     czb_income_log as i,
     czb_user_income_info as u

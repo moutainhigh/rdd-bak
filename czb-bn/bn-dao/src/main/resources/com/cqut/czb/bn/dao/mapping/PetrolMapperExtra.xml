@@ -85,7 +85,7 @@
   <select id="selectPetrolZone" resultMap="petrolZoneResult">
      select petrol_type,`area`
      from czb_petrol_sale_config
-     WHERE area=#{area,jdbcType = VARCHAR}
+     WHERE area=#{area,jdbcType = VARCHAR} and sale_state=1
      GROUP BY petrol_type
   </select>
 
