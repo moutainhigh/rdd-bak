@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
@@ -38,7 +39,7 @@ public interface AppBuyPetrolService {
      * @param petrolInputDTO
      * @return
      */
-    Map<String,String> PurchaseControl(PetrolInputDTO petrolInputDTO);
+    Map<String, Object> PurchaseControl(PetrolInputDTO petrolInputDTO);
 
 
     /**
