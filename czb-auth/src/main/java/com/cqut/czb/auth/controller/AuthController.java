@@ -126,9 +126,6 @@ public class AuthController {
             System.out.println("为空");
             return new JSONResult(false);
         }
-        System.out.println(input.getContent());
-        System.out.println(input.getUserAccount());
-        System.out.println(input.getUserPsw());
         VerificationCodeDTO verificationCodeDTO=new VerificationCodeDTO(input.getUserAccount(),input.getContent());
         verificationCodeDTO.setUserPsw(input.getUserPsw());
         boolean checkVerificationCode=userDetailService.checkVerificationCode(verificationCodeDTO);
