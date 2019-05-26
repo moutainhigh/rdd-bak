@@ -140,9 +140,11 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             //添加来源姓名
             if(myIncomeLogDTOS.get(i).getCommissionSourceUser()==null){
                 myIncomeLogDTOS.get(i).setUserName("无");
-            }else {
+            }
+            else
+            {
                 User user1=userMapper.selectByPrimaryKey(myIncomeLogDTOS.get(i).getCommissionSourceUser());
-                if(user1==null&&user1.getUserName()==null){
+                if(user1==null){
                     myIncomeLogDTOS.get(i).setUserName("无");
                 }else {
                     myIncomeLogDTOS.get(i).setUserName(user1.getUserName());
