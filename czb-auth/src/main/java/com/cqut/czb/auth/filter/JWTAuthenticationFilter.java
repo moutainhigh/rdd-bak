@@ -55,15 +55,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         loginUser.setPassword(request.getParameter("password"));
         String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
         if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX))) {
-            if(userDetailsService == null){
-                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
-            }
             if(redisUtils == null){
                 redisUtils = SpringUtils.getBean(RedisUtils.class);
             }
             String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
             if(!tokenHeader.equals(redisUtils.get(JwtTool.getUsername(token) + AuthConfig.TOKEN))) {
                 throw new AccountExpiredException("token已失效，请重新登录");
+            }
+            if(userDetailsService == null){
+                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
             }
             loginUser.setAccount(JwtTool.getUsername(token));
             UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
