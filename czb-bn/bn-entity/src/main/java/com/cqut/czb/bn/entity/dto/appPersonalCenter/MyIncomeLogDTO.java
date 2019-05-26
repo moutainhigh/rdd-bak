@@ -14,10 +14,8 @@ public class MyIncomeLogDTO {
 
     private String remark;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createAt;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateAt;
 
     private String withdrawTo;
@@ -33,6 +31,26 @@ public class MyIncomeLogDTO {
     private String incomeClass;
 
     private Integer commissionLevel;
+
+    private String commissionSourceUser;
+
+    private String commissionGotUser;
+
+    public String getCommissionGotUser() {
+        return commissionGotUser;
+    }
+
+    public void setCommissionGotUser(String commissionGotUser) {
+        this.commissionGotUser = commissionGotUser;
+    }
+
+    public String getCommissionSourceUser() {
+        return commissionSourceUser;
+    }
+
+    public void setCommissionSourceUser(String commissionSourceUser) {
+        this.commissionSourceUser = commissionSourceUser;
+    }
 
     public Integer getCommissionLevel() {
         return commissionLevel;
