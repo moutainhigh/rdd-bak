@@ -193,7 +193,7 @@
     withdraw_name as withdrawName,
 	commission_level as commissionLevel,
 	commission_got_user as commissionGotUser,
-	commission_level as commissionSourceUser
+	commission_source_user as commissionSourceUser
     from
     czb_income_log as i,
     czb_user_income_info as u
