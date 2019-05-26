@@ -39,6 +39,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
 
     @Override
     public Boolean updatePetrolDelivery(DeliveryInput deliveryInput) {
+        if (deliveryInput.getDeliveryNum()!=null&&deliveryInput.getDeliveryCompany()!=null){
+            deliveryInput.setDeliveryState(1);
+        }
         return (petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0);
     }
 
