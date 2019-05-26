@@ -52,7 +52,7 @@ public class EnterpriseContractController {
         return new JSONResult(contractService.getIncomeList(user));
     }
 
-    @GetMapping("getTotalIncome")
+    @GetMapping("/getTotalIncome")
     public JSONResult getToealIncome(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(contractService.getTotalIncome(user));
