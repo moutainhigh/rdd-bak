@@ -52,6 +52,13 @@ public class EnterpriseContractController {
         return new JSONResult(contractService.getIncomeList(user));
     }
 
+    @GetMapping("getTotalIncome")
+    public JSONResult getToealIncome(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(contractService.getTotalIncome(user));
+    }
+
+
     /**
      * 获得企业此合同已购油卡
      * @param info

@@ -19,4 +19,6 @@ public interface EnterpriseContractService {
     List<PetrolPayInfo> getPetrolPayInfoList(String petrolId);
 
     List<EnterprisePayDTO> getIncomeList(User user);
+
+    Double getTotalIncome(User user);
 }
