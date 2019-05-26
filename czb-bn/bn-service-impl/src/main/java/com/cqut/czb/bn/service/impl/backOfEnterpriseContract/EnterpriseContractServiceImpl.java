@@ -44,7 +44,12 @@ public class EnterpriseContractServiceImpl implements EnterpriseContractService{
     }
 
     @Override
-    public Double getTotalIncome(User user) {
-        return contractMapperExtra.getIncomeTotalMoney(user.getUserId());
+    public TotalMoney getTotalIncome(User user) {
+        TotalMoney total =contractMapperExtra.getIncomeTotalMoney(user.getUserId());
+        if (total!=null){
+        return total;}
+        else {
+            total.setTotalMoney(0.00);
+            return total;}
     }
 }

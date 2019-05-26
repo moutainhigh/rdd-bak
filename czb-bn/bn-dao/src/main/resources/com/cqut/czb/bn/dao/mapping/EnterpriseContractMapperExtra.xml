@@ -60,9 +60,9 @@
         AND is_deleted = 0
     </select>
     <!--平台收款总额-->
-    <select id="getIncomeTotalMoney" parameterType="java.lang.String" resultType="java.lang.Double">
+    <select id="getIncomeTotalMoney" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.TotalMoney">
         SELECT
-        SUM(a.actual_receipts_money) AS
+        SUM(a.actual_receipts_money) AS totalMoney
         FROM
             czb_platform_income_records a
         LEFT JOIN czb_contract_records b ON a.contract_record_id = b.contract_father_id

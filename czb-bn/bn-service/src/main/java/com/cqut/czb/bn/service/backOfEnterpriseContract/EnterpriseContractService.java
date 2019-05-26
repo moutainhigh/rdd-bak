@@ -20,5 +20,5 @@ public interface EnterpriseContractService {
 
     List<EnterprisePayDTO> getIncomeList(User user);
 
-    Double getTotalIncome(User user);
+    TotalMoney getTotalIncome(User user);
 }
