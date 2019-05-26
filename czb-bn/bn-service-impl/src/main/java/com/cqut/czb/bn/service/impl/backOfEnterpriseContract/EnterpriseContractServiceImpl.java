@@ -40,14 +40,11 @@ public class EnterpriseContractServiceImpl implements EnterpriseContractService{
     @Override
     public List<EnterprisePayDTO> getIncomeList(User user) {
         List<EnterprisePayDTO> enterprisePayDTOS = contractMapperExtra.getIncomeList(user.getUserId());
-        if (enterprisePayDTOS!=null&&enterprisePayDTOS.size()!=0) {
-            Double money = contractMapperExtra.getIncomeTotalMoney(user.getUserId());
-            if (money!=null) {
-                enterprisePayDTOS.get(0).setTotalMoney(money);
-            }else {
-                enterprisePayDTOS.get(0).setTotalMoney(0.0);
-            }
-        }
         return enterprisePayDTOS;
+    }
+
+    @Override
+    public Double getTotalIncome(User user) {
+        return contractMapperExtra.getIncomeTotalMoney(user.getUserId());
     }
 }
