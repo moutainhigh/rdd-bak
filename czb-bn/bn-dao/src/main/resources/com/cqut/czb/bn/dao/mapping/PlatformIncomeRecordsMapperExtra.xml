@@ -216,7 +216,7 @@
         AND date_format(b.enterprise_pay_time, '%Y-%m') = date_format(NOW(),'%Y-%m')
         AND a.user_id=#{id,jdbcType=VARCHAR}
     </select>
-    <select id="selectContractMonth">
+    <select id="selectContractMonth" resultType="java.lang.Integer">
          SELECT
             COUNT(record_id)
         FROM
