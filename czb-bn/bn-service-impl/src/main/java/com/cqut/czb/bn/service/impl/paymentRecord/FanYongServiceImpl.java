@@ -73,16 +73,7 @@ public class FanYongServiceImpl implements FanYongService {
                 changeUserIncomeInfo(userId,userIdUp2,fangyongRate,oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2, orgId);
             }
         }
-
-        //对本人的操作
-//        UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userId);//查出原收益信息
-//        //更改个人收益信息和新增收益变更记录表
-//        boolean changeUserIncomeInfo = changeUserIncomeInfo(fangyongMoney,oldUserIncomeInfo, money, actualPayment, userId, 0, 0, orgId);
-//
-//        if (changeUserIncomeInfo)
-//            return true;
-//        else
-            return true;
+        return true;
     }
 
     /**
@@ -118,17 +109,6 @@ public class FanYongServiceImpl implements FanYongService {
                 userIncomeInfo.setFanyongIncome(fangyongIncome);
                 if (userIncomeInfo.getShareIncome() == null)
                     userIncomeInfo.setShareIncome(0.00);
-//                if (k == 0) {
-//                    if (userIncomeInfo.getWithdrawed()!=null)
-//                    {
-//                        double withdraw=(BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(actualPayment)).add(BigDecimal.valueOf(userIncomeInfo.getWithdrawed()))).doubleValue();
-//                        userIncomeInfo.setWithdrawed(withdraw);
-//                    }
-//                    else {
-//                        double withdraw=(BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(actualPayment))).doubleValue();
-//                        userIncomeInfo.setWithdrawed(withdraw);
-//                    }
-//                }
                 ischangeUserIncomeInfo = userIncomeInfoMapperExtra.updateByPrimaryKeySelective(userIncomeInfo) > 0;//进行修改
                 System.out.println("更改用户收益信息表完毕" + ischangeUserIncomeInfo);
                 boolean insertIncomeLog = insertIncomeLog(commissionSourceUser,commissionGotUser,userIncomeInfo.getInfoId(), amount,type,userIncomeInfo, orgId);
@@ -161,11 +141,14 @@ public class FanYongServiceImpl implements FanYongService {
             double beforeIncome=0.00;//定义之前的余额
             if(olduserIncomeInfo.getFanyongIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getFanyongIncome()))).doubleValue();
-            }else  if(olduserIncomeInfo.getShareIncome()!=null){
+            }
+            if(olduserIncomeInfo.getShareIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getShareIncome()))).doubleValue();
-            }else if(olduserIncomeInfo.getOtherIncome()!=null){
+            }
+            if(olduserIncomeInfo.getOtherIncome()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).add(BigDecimal.valueOf(olduserIncomeInfo.getOtherIncome()))).doubleValue();
-            }else if(olduserIncomeInfo.getWithdrawed()!=null){
+            }
+            if(olduserIncomeInfo.getWithdrawed()!=null){
                 beforeIncome=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(olduserIncomeInfo.getWithdrawed()))).doubleValue();
             }
             beforeIncome=(BigDecimal.valueOf(beforeIncome).subtract(BigDecimal.valueOf(amount))).doubleValue();//减掉变更金额
