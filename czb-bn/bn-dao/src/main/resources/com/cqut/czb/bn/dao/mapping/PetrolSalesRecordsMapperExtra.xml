@@ -124,6 +124,7 @@ INNER JOIN (
     czb_petrol_sales_records AS cpsr
     WHERE
     buyer_id = #{userId,jdbcType = VARCHAR}
+    and cpsr.state = 1
     ) AS t_cpsr ON cp.petrol_id = t_cpsr.cpsr_p_id
     AND cp.owner_id = t_cpsr.buyer_id
     and cp.petrol_kind = 0

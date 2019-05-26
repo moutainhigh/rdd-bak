@@ -34,7 +34,7 @@ public class AppBuyPetrolController {
     RedisUtils redisUtils;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
+    public synchronized JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
 //    public JSONResult buyPetrol(PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();

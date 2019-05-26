@@ -23,4 +23,6 @@ public interface IDictService {
     boolean deleteDict(DictInputDTO dictInputDTO);
 
     boolean insertDict(DictInputDTO dictInputDTO);
+
+    Dict getDicByName(DictInputDTO dictInputDTO);
 }
