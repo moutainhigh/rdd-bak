@@ -5,6 +5,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -140,25 +141,28 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     }
 
     @Override
-    public Map<String,String> PurchaseControl(PetrolInputDTO petrolInputDTO) {
+    public Map<String,Object> PurchaseControl(PetrolInputDTO petrolInputDTO) {
         //判断是哪种油卡
         if(petrolInputDTO.getPetrolKind()==0){//0代表国通卡
             System.out.println("购买国通卡：0");
             Petrol petrol=PetrolCache.randomPetrol(petrolInputDTO); //随机获取一张卡
             if(petrol==null)
             {
-                Map<String,String> info=new HashMap<>();
+                Map<String,Object> info=new HashMap<>();
                 info.put("-1","油卡申请失败，无此类油卡");
                 return info;
             }
             petrolInputDTO.setPayType("0");//0为购买油卡，2为充值
             String buyPetrol=BuyPetrol(petrol,petrolInputDTO);//返回生成的支付单串
             if(buyPetrol!=null){
-                Map<String,String> info=new HashMap<>();
-                info.put("0",buyPetrol);
+                Map<String,Object> info=new HashMap<>();
+                PetrolBackInfoDTO petrolBackInfoDTO=new PetrolBackInfoDTO();
+                petrolBackInfoDTO.setPaymentOrder(buyPetrol);
+                petrolBackInfoDTO.setPetrol(petrol);
+                info.put("0",petrolBackInfoDTO);
                 return info;
             }else {
-                Map<String,String> info=new HashMap<>();
+                Map<String,Object> info=new HashMap<>();
                 info.put("-1","油卡申请失败，信息有误，无此法生成订单");
                 return info;
             }
@@ -171,18 +175,21 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 Petrol petrol2=PetrolCache.randomPetrol(petrolInputDTO); //随机获取一张卡
                 if(petrol2==null)
                 {
-                    Map<String,String> info=new HashMap<>();
+                    Map<String,Object> info=new HashMap<>();
                     info.put("-1","油卡申请失败，无此类油卡");
                     return info;
                 }
                 petrolInputDTO.setPayType("0");//0为购买油卡，2为充值
                 String buyPetrol=BuyPetrol(petrol2,petrolInputDTO);//返回生成的支付单串
                 if(buyPetrol!=null){
-                    Map<String,String> info=new HashMap<>();
-                    info.put("0",buyPetrol);
+                    Map<String,Object> info=new HashMap<>();
+                    PetrolBackInfoDTO petrolBackInfoDTO=new PetrolBackInfoDTO();
+                    petrolBackInfoDTO.setPaymentOrder(buyPetrol);
+                    petrolBackInfoDTO.setPetrol(petrol2);
+                    info.put("0",petrolBackInfoDTO);
                     return info;
                 }else {
-                    Map<String,String> info=new HashMap<>();
+                    Map<String,Object> info=new HashMap<>();
                     info.put("-1","油卡申请失败，信息有误，无此法生成订单");
                     return info;
                 }
@@ -190,18 +197,20 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 petrolInputDTO.setPayType("2");//0为购买油卡，2为充值
                 String buyPetrol=BuyPetrol(petrol1,petrolInputDTO);//返回生成的支付单串
                 if(buyPetrol!=null){
-                    Map<String,String> info=new HashMap<>();
-                    info.put("2",buyPetrol);
+                    Map<String,Object> info=new HashMap<>();
+                    PetrolBackInfoDTO petrolBackInfoDTO=new PetrolBackInfoDTO();
+                    petrolBackInfoDTO.setPaymentOrder(buyPetrol);
+                    petrolBackInfoDTO.setPetrol(petrol1);
+                    info.put("2",petrolBackInfoDTO);
                     return info;
                 }else {
-                    Map<String,String> info=new HashMap<>();
+                    Map<String,Object> info=new HashMap<>();
                     info.put("-1","油卡申请失败，信息有误，无此法生成订单");
                     return info;
                 }
             }
 
         }
-
         return null;
     }
 

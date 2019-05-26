@@ -138,9 +138,11 @@ public class PlatformIncomeRecordsController {
         return new JSONResult(platformIncomeRecordsService.selectPetrol(platformIncomeRecordsDTO, pageDTO));
     }
 
-    @PostMapping("/selectState")
+    @GetMapping("/selectState")
     public JSONResult selectState(Principal principal){
+        System.out.println(principal==null);
         User user = (User) redisUtils.get(principal.getName());
+        System.out.println(user==null);
         return new JSONResult(platformIncomeRecordsService.selectPayState(user));
     }
 }

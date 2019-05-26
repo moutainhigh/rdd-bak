@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -30,9 +31,6 @@ public class AppBuyPetrolController {
     private  AppBuyPetrolService appBuyPetrolService;
 
     @Autowired
-    private AppHomePageService appHomePageService;
-
-    @Autowired
     RedisUtils redisUtils;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
@@ -57,23 +55,27 @@ public class AppBuyPetrolController {
         }
 
         //检测今日是否已经购买了油卡或充值
-        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
-        if(isTodayHadBuy){//true
-            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
-        }
+//        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
+//        if(isTodayHadBuy){//true
+//            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
+//        }
 
         //处理购油或充值
-        Map<String,String> BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
+        Map<String,Object> BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
         if(BuyPetrol==null){
             return new JSONResult("无法生成订单",ResponseCodeConstants.FAILURE);
         }else {
            if(BuyPetrol.get("-1")!=null){
-               return  new JSONResult(BuyPetrol.get("-1"),ResponseCodeConstants.FAILURE);
+               System.out.println((String)BuyPetrol.get("-1"));
+               return  new JSONResult( (String)BuyPetrol.get("-1"),ResponseCodeConstants.FAILURE);
            }else if(BuyPetrol.get("0")!=null){
+               System.out.println((PetrolBackInfoDTO)BuyPetrol.get("0"));
                return  new JSONResult("购买成功",200,BuyPetrol.get("0"));
            }else if(BuyPetrol.get("2")!=null){
+               System.out.println((PetrolBackInfoDTO)BuyPetrol.get("2"));
                return  new JSONResult("充值成功",200,BuyPetrol.get("2"));
            }else {
+               System.out.println((String)BuyPetrol.get("-1"));
                return new JSONResult("无法生成订单",ResponseCodeConstants.FAILURE);
            }
         }
