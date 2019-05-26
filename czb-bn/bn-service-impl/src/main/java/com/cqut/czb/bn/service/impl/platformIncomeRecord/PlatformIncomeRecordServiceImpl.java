@@ -60,12 +60,34 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         if (platformIncomeRecordsDTOS==null||platformIncomeRecordsDTOS.size()==0){
             return null;
         }
-        platformIncomeRecordsDTOS.get(0).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));
-        platformIncomeRecordsDTOS.get(0).setExportTime(platformIncomeRecordsDTO.getExportTime());//取一条数据查看当前月是否已经导出过
-        List<PlatformIncomeRecordsDTO> selectPayRecord = platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTOS.get(0));
+        platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));
+//        platformIncomeRecordsDTOS.get(0).setExportTime(platformIncomeRecordsDTO.getExportTime());//取一条数据查看当前月是否已经导出过
+        List<PlatformIncomeRecordsDTO> selectPayRecord = platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTO);
         if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
-            platformIncomeRecordsDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));
-            return getWorkBook(platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTO));
+            if (selectPayRecord.size()==platformIncomeRecordsDTOS.size()) { //如果合同数与打款记录数相等则无新合同
+                platformIncomeRecordsDTO.setState(0); //导出当月为企业未打款的记录
+                return getWorkBook(platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTO));
+            }else {
+                List<PlatformIncomeRecordsDTO> newContract = platformIncomeRecordsMapperExtra.selectNewContract(selectPayRecord,platformIncomeRecordsDTO); //如果不等于则有新的合同
+                System.out.println(newContract.get(0).getRecordId());
+                List<PlatformIncomeRecordsDTO> incomeMoney = platformIncomeRecordsMapperExtra.selectIncome(newContract);
+                for(int i=0;i<newContract.size();i++){ //将合同与应打款合并
+                    for (int j=0;j<incomeMoney.size();j++){
+                        if(newContract.get(i).getContractRecordId().equals(incomeMoney.get(i).getContractRecordId())){
+                            newContract.get(i).setRecordId(StringUtil.createId());
+                            newContract.get(i).setReceivableMoney(incomeMoney.get(i).getReceivableMoney());
+                            newContract.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));  //将有合同数据的目标年月数写为选择的年月数
+                            newContract.get(i).setState(0); //将平台对该合同的收款状态设为未收款
+                            newContract.get(i).setIsDeleted(0);
+                            newContract.get(i).setIsDistributed(0);
+                        }
+                    }
+                }
+                int isInert = platformIncomeRecordsMapperExtra.insert(newContract);    //插入新的合同记录
+                    platformIncomeRecordsDTO.setState(0); //导出当月为企业未打款的记录
+                    platformIncomeRecordsDTO.setRecordId(StringUtil.createId());
+                    return getWorkBook(platformIncomeRecordsMapperExtra.selectByPrimaryKey(platformIncomeRecordsDTO)); //重新导出
+            }
         }
         List<PlatformIncomeRecordsDTO> incomeMoney = platformIncomeRecordsMapperExtra.selectIncome(platformIncomeRecordsDTOS);//查询这些合同企业的打款总数
         for(int i=0;i<platformIncomeRecordsDTOS.size();i++){ //将合同与应打款合并
@@ -76,7 +98,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
                     platformIncomeRecordsDTOS.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(platformIncomeRecordsDTO.getExportTime()));  //将有合同数据的目标年月数写为选择的年月数
                     platformIncomeRecordsDTOS.get(i).setState(0); //将平台对该合同的收款状态设为未收款
                     platformIncomeRecordsDTOS.get(i).setIsDeleted(0);
-                    platformIncomeRecordsDTO.setIsDistributed(0);
+                    platformIncomeRecordsDTOS.get(i).setIsDistributed(0);
                 }
             }
         }

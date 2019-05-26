@@ -116,6 +116,7 @@ public class PayToPersonController {
     public JSONResult searchProcess(){
         if( ImportPayToPerson.processing.intValue() ==100){  //如果进度为100则当前台调用时归零
             ImportPayToPerson.processing=0.0;
+            ImportPayToPerson.processNum=0.0;
             return new JSONResult(100);
         }
         return new JSONResult(ImportPayToPerson.processing);
