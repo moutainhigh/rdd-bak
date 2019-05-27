@@ -28,3 +28,7 @@ dependencies {
     compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.3.49.ALL'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.12.RELEASE'
 }
+
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}

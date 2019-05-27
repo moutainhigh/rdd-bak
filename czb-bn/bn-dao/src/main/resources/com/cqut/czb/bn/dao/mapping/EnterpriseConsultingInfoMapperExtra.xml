@@ -8,9 +8,12 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="is_handled" property="isHandled" jdbcType="INTEGER" />
+    <result column="applicant_id" property="applicantId" jdbcType="VARCHAR" />
+    <result column="applicant_account" property="applicantAccount" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    consulting_id, enterprise_name, contact_phone, create_at, update_at, is_handled
+    consulting_id, enterprise_name, contact_phone, create_at, update_at, is_handled,
+    applicant_id, applicant_account
   </sql>
   <select id="getConsultingInfoList" parameterType="com.cqut.czb.bn.entity.dto.consultingManagement.ConsultingInputDTO" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/> from czb_enterprise_consulting_info
@@ -36,4 +39,8 @@
       #{id,jdbcType=VARCHAR}
     </foreach>
   </update>
+
+  <select id="getLastConsultation" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from czb_enterprise_consulting_info where applicant_id = #{userId,jdbcType = VARCHAR} order by create_at desc limit 1
+  </select>
 </mapper>

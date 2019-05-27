@@ -18,6 +18,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version:  '1.5.12.RELEASE'
     compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
 }
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}
 
 
 

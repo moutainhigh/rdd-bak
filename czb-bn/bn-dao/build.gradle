@@ -32,3 +32,6 @@ dependencies {
     compile project(':czb-bn:bn-entity')
 
 }
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}

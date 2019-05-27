@@ -6,6 +6,24 @@ public class ConsultingInputDTO extends PageDTO {
     private String enterpriseName;
     private String contactPhone;
     private Integer isHandled;
+    private String applicantId;
+    private String applicantAccount;
+
+    public String getApplicantId() {
+        return applicantId;
+    }
+
+    public void setApplicantId(String applicantId) {
+        this.applicantId = applicantId;
+    }
+
+    public String getApplicantAccount() {
+        return applicantAccount;
+    }
+
+    public void setApplicantAccount(String applicantAccount) {
+        this.applicantAccount = applicantAccount;
+    }
 
     public String getEnterpriseName() {
         return enterpriseName;
