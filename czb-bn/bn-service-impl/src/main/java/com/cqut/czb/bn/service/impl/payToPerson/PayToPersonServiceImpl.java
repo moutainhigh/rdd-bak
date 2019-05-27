@@ -39,9 +39,10 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //精确到日
         SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");//精确到月
         Calendar c = Calendar.getInstance();
+        Date reExportTime = monthFormat.parse(payToPersonDTO.getExportTime());
         try {
             Date exportTime = monthFormat.parse(payToPersonDTO.getExportTime());
-            int compareTo = exportTime.compareTo(format.parse(format.format(new Date()))); //是否导出当前月
+            int compareTo = exportTime.compareTo(monthFormat.parse(format.format(new Date()))); //是否导出当前月
             if(compareTo==0){
                 payToPersonDTO.setExportTime(format.format(new Date())); //导出当前月则根据现在时间筛选是否开始与结束
             }else{
@@ -59,7 +60,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         if(payToPersonDTOS==null||payToPersonDTOS.size()==0){
                 return null;
         }
-        payToPersonDTO.setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+        payToPersonDTO.setTargetYearMonth(reExportTime);
         List<PayToPersonDTO> selectPayRecord = payToPersonMapperExtra.selectByPrimaryKey(payToPersonDTO);//查看当月是否导出过
         if (selectPayRecord!=null&&selectPayRecord.size()>0){ //如果查到了对应数据则表示已经导出过了
             if (payToPersonDTOS.size()==selectPayRecord.size()){//如果合同数与打款记录数相等则无新合同
@@ -71,7 +72,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
                     newContract.get(i).setRecordId(StringUtil.createId());
                     newContract.get(i).setState(0);
                     newContract.get(i).setIsDeleted(0);
-                    newContract.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+                    newContract.get(i).setTargetYearMonth(reExportTime);
                 }
                 int isAdd = payToPersonMapperExtra.insert(newContract);   //将新数据插入数据库后开始导出
                     payToPersonDTO.setState(0);
@@ -82,7 +83,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
             payToPersonDTOS.get(i).setRecordId(StringUtil.createId());
             payToPersonDTOS.get(i).setState(0);
             payToPersonDTOS.get(i).setIsDeleted(0);
-            payToPersonDTOS.get(i).setTargetYearMonth(new SimpleDateFormat("yyyy-MM").parse(payToPersonDTO.getExportTime()));
+            payToPersonDTOS.get(i).setTargetYearMonth(reExportTime);
         }
 
         int isAdd = payToPersonMapperExtra.insert(payToPersonDTOS);   //将数据插入数据库后开始导出

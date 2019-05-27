@@ -77,6 +77,9 @@
             <if test="iosPath != null" >
                 ios_path,
             </if>
+            <if test="userType != null" >
+                user_type,
+            </if>
             <if test="order != null" >
                 `order`,
             </if>
@@ -111,6 +114,9 @@
             </if>
             <if test="iosPath != null" >
                 #{iosPath,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null" >
+                #{userType,jdbcType=INTEGER},
             </if>
             <if test="order != null" >
                 #{order,jdbcType=INTEGER},
@@ -147,6 +153,9 @@
             <if test="order != null" >
                 `order` = #{order,jdbcType=INTEGER},
             </if>
+            <if test="userType != null" >
+                user_type = #{userType,jdbcType=INTEGER}
+            </if>
         </set>
         where router_id = #{routerId,jdbcType=VARCHAR}
     </update>
@@ -158,6 +167,7 @@
         is_show = #{isShow,jdbcType=INTEGER},
         icon_path_id = #{iconPathId,jdbcType=VARCHAR},
         menu_identity_code = #{menuIdentityCode,jdbcType=VARCHAR},
+        user_type = #{userType,jdbcType=VARCHAR},
         create_at = #{createAt,jdbcType=TIMESTAMP},
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where router_id = #{routerId,jdbcType=VARCHAR}
