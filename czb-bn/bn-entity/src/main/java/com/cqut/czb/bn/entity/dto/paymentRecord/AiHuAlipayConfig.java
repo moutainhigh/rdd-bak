@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.dto.paymentRecord;
 
 public class AiHuAlipayConfig {
 
-	private static final String SERVER_IP = "39.98.250.45";
+	private static final String SERVER_IP = "47.110.9.136";
 
 	//APPID
 	public static final  String app_id = "2018060160263534";
