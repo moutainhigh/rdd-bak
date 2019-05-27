@@ -31,8 +31,6 @@ public interface PetrolMapperExtra {
      */
     List<PetrolZoneDTO> selectPetrolZone(@Param(value = "area") String area);
 
-    List<Double> getPetrolPrice(int petrolKind);
-
     List<Petrol> selectPetrol();
 
     List<PetrolInfoDTO> selectPetrolInfoDTO();

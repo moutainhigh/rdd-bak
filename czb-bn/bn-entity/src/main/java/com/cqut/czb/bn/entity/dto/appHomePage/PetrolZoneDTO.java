@@ -15,7 +15,7 @@ public class PetrolZoneDTO {
 
     private String petrolRemark;//油卡备注（字典）
 
-    private List<Double> petrolPrice;
+    private List<petrolInfoDTO> petrolPriceInfo;//油卡价格相关信息
 
     private String area;
 
@@ -51,11 +51,11 @@ public class PetrolZoneDTO {
         this.petrolKind = petrolKind;
     }
 
-    public List<Double> getPetrolPrice() {
-        return petrolPrice;
+    public List<petrolInfoDTO> getPetrolPriceInfo() {
+        return petrolPriceInfo;
     }
 
-    public void setPetrolPrice(List<Double> petrolPrice) {
-        this.petrolPrice = petrolPrice;
+    public void setPetrolPriceInfo(List<petrolInfoDTO> petrolPriceInfo) {
+        this.petrolPriceInfo = petrolPriceInfo;
     }
 }
