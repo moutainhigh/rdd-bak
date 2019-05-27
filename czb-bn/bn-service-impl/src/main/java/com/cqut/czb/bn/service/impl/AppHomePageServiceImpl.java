@@ -80,9 +80,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     public List<PetrolZoneDTO> selectPetrolZone(String area) {
         //从字典中查出对应油卡的描述
         Dict t=dictMapperExtra.selectDictByName("petrolRemark");
-        System.out.println(t.getContent());
         JSONObject json = JSON.parseObject(t.getContent());
-        System.out.println(json.get("1"));
         List<PetrolZoneDTO> petrolZoneDTOList=petrolMapperExtra.selectPetrolZone(area);
         if(petrolZoneDTOList==null)
             return null;
