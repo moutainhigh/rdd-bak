@@ -16,6 +16,7 @@ import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -244,6 +245,20 @@ public class UserDetailServiceImpl implements UserDetailService {
             return code.equals("200");
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public User loadUserByUsername(String account) throws UsernameNotFoundException {
+        if(!redisUtils.hasKey(account)) {
+            User user = userMapperExtra.findUserByAccount(account);
+            if(user != null) {
+                return user;
+            } else {
+                throw new UsernameNotFoundException("该用户名不存在");
+            }
+        } else {
+            return (User)redisUtils.get(account);
         }
     }
 

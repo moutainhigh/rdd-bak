@@ -9,6 +9,7 @@ public interface UserDetailService {
     String registerPersonalUser(PersonalUserDTO personalUserDTO);
     String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO);
     Boolean checkAccount(User user);
+    User loadUserByUsername(String account);
 
     /**
      * 添加验证码并发送验证码

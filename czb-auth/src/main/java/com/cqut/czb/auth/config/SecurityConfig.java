@@ -1,6 +1,7 @@
 package com.cqut.czb.auth.config;
 
 import com.cqut.czb.auth.filter.JWTAuthenticationFilter;
+import com.cqut.czb.auth.filter.JWTAuthenticationPCFilter;
 import com.cqut.czb.auth.filter.JWTAuthorizationFilter;
 import com.cqut.czb.auth.provider.DaoAuthenticationProvider;
 import jodd.util.StringUtil;
@@ -97,6 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //设置登录拦截器
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                //设置登录PC拦截器
+                .addFilter(new JWTAuthenticationPCFilter(authenticationManager()))
                 //设置接口身份认证拦截器
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // 不需要session
