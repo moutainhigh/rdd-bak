@@ -60,7 +60,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         Date reExportTime = monthFormat.parse(platformIncomeRecordsDTO.getExportTime());  //保留开始导出时间为目标月
         try {
             Date exportTime = monthFormat.parse(platformIncomeRecordsDTO.getExportTime());
-            int compareTo = exportTime.compareTo(format.parse(format.format(new Date()))); //是否导出当前月
+            int compareTo = exportTime.compareTo(monthFormat.parse(format.format(new Date()))); //是否导出当前月
             if(compareTo==0){
                     platformIncomeRecordsDTO.setExportTime(format.format(new Date())); //导出当前月则根据现在时间筛选是否开始与结束
             }else{

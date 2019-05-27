@@ -75,10 +75,12 @@
             LEFT JOIN czb_pay_to_person b ON a.record_id = b.contract_record_id
             LEFT JOIN czb_cars_persons c ON a.record_id = c.contract_record_id
             LEFT JOIN czb_service_plan d ON c.plan_id = d.plan_id
+            LEFT JOIN czb_platform_income_records e ON a.contract_father_id = e.contract_record_id
              WHERE
                a.contract_father_id is NOT null
                AND  a.contract_end_time>=#{exportTime,jdbcType=TIMESTAMP} AND a.contract_start_time &lt;=#{exportTime,jdbcType=TIMESTAMP}
-               AND a.contract_state=1
+               AND a.contract_state=1 AND e.actual_receipts_money is NOT  NULL
+               AND date_format(e.target_year_month, '%Y-%m')=date_format(#{exportTime,jdbcType=TIMESTAMP}, '%Y-%m')
     </select>
 
     <insert id="insert" parameterType="java.util.List" >

@@ -42,7 +42,7 @@ public class PayToPersonServiceImpl implements PayToPersonService{
         Date reExportTime = monthFormat.parse(payToPersonDTO.getExportTime());
         try {
             Date exportTime = monthFormat.parse(payToPersonDTO.getExportTime());
-            int compareTo = exportTime.compareTo(format.parse(format.format(new Date()))); //是否导出当前月
+            int compareTo = exportTime.compareTo(monthFormat.parse(format.format(new Date()))); //是否导出当前月
             if(compareTo==0){
                 payToPersonDTO.setExportTime(format.format(new Date())); //导出当前月则根据现在时间筛选是否开始与结束
             }else{
