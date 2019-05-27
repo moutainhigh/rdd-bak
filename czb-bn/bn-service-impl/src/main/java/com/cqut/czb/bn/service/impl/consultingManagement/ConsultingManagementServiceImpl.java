@@ -32,6 +32,11 @@ public class ConsultingManagementServiceImpl implements IConsultingManagementSer
     }
 
     @Override
+    public EnterpriseConsultingInfo getLastConsultation(String userId) {
+        return enterpriseConsultingInfoMapperExtra.getLastConsultation(userId);
+    }
+
+    @Override
     public int insertConsultation(ConsultingInputDTO inputDTO) {
         EnterpriseConsultingInfo enterpriseConsultingInfo = new EnterpriseConsultingInfo();
         enterpriseConsultingInfo.setConsultingId(StringUtil.createId());
@@ -39,6 +44,8 @@ public class ConsultingManagementServiceImpl implements IConsultingManagementSer
         enterpriseConsultingInfo.setEnterpriseName(inputDTO.getEnterpriseName());
         enterpriseConsultingInfo.setIsHandled(0);
         enterpriseConsultingInfo.setCreateAt(new Date());
+        enterpriseConsultingInfo.setApplicantId(inputDTO.getApplicantId());
+        enterpriseConsultingInfo.setApplicantAccount(inputDTO.getApplicantAccount());
         return enterpriseConsultingInfoMapper.insert(enterpriseConsultingInfo);
     }
 

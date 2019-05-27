@@ -1,6 +1,4 @@
 package com.cqut.czb.bn.entity.dto.appCaptchaConfig;
-
-
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
@@ -10,9 +8,6 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-
-
-
 /**
  * 创建人：陈德强
  * 作用：阿里云短信服务操作配置
@@ -40,9 +35,9 @@ public class PhoneCode {
         return vcode;
     }
 
-    //    public  void main(String[] args) {
-//        String phone = "15730353007"; //此处可输入你的手机号码进行测试
-//        this.getPhonemsg(phone);
+//        public static   void main(String[] args) {
+//        String phone = "15310490895"; //此处可输入你的手机号码进行测试
+//        new PhoneCode().getPhonemsg(phone,"6666");
 //    }
 
     /**
@@ -111,18 +106,18 @@ public class PhoneCode {
             if (sendSmsResponse.getCode() != null
                     && sendSmsResponse.getCode().equals("OK")) {
                 // 请求成功
-                System.out.println("获取验证码成功！！！");
+                System.out.println("验证码获取成功");
             } else {
                 //如果验证码出错，会输出错误码告诉你具体原因
                 System.out.println(sendSmsResponse.getCode());
-                System.out.println("获取验证码失败...");
+                System.out.println("验证码获取失败");
             }
         } catch (ServerException e) {
             e.printStackTrace();
-            return "由于系统维护，暂时无法注册！！！";
+            return "系统维护，暂时无法注册";
         } catch (ClientException e) {
             e.printStackTrace();
-            return "由于系统维护，暂时无法注册！！！";
+            return "系统维护，暂时无法注册";
         }
         return "true";
     }
