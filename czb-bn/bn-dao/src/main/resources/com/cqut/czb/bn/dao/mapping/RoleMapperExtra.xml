@@ -23,6 +23,14 @@
       </if>
     </where>
   </select>
+  <select id="findRole" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    select
+    count(role_name)
+    from czb_role
+    <where>
+        role_name = #{roleName,jdbcType=VARCHAR}
+    </where>
+  </select>
   <select id="selectMenuList" resultType="com.cqut.czb.bn.entity.entity.Menu" >
     select
     id, role_id as 'roleId', cm.menu_id as 'menuId', menu_name as 'menuName', menu_path as 'menuPath', menu_level as 'menuLevel',  parent
