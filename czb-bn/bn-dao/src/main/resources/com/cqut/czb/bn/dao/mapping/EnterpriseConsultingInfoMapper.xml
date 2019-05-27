@@ -8,9 +8,12 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="is_handled" property="isHandled" jdbcType="INTEGER" />
+    <result column="applicant_id" property="applicantId" jdbcType="VARCHAR" />
+    <result column="applicant_account" property="applicantAccount" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    consulting_id, enterprise_name, contact_phone, create_at, update_at, is_handled
+    consulting_id, enterprise_name, contact_phone, create_at, update_at, is_handled, 
+    applicant_id, applicant_account
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseConsultingInfo" >
     insert into czb_enterprise_consulting_info (consulting_id, enterprise_name, contact_phone, 
-      create_at, update_at, is_handled
-      )
+      create_at, update_at, is_handled, 
+      applicant_id, applicant_account)
     values (#{consultingId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{isHandled,jdbcType=INTEGER}
-      )
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{isHandled,jdbcType=INTEGER}, 
+      #{applicantId,jdbcType=VARCHAR}, #{applicantAccount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.EnterpriseConsultingInfo" >
     insert into czb_enterprise_consulting_info
@@ -51,6 +54,12 @@
       <if test="isHandled != null" >
         is_handled,
       </if>
+      <if test="applicantId != null" >
+        applicant_id,
+      </if>
+      <if test="applicantAccount != null" >
+        applicant_account,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="consultingId != null" >
@@ -70,6 +79,12 @@
       </if>
       <if test="isHandled != null" >
         #{isHandled,jdbcType=INTEGER},
+      </if>
+      <if test="applicantId != null" >
+        #{applicantId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantAccount != null" >
+        #{applicantAccount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +106,12 @@
       <if test="isHandled != null" >
         is_handled = #{isHandled,jdbcType=INTEGER},
       </if>
+      <if test="applicantId != null" >
+        applicant_id = #{applicantId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantAccount != null" >
+        applicant_account = #{applicantAccount,jdbcType=VARCHAR},
+      </if>
     </set>
     where consulting_id = #{consultingId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +121,9 @@
       contact_phone = #{contactPhone,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      is_handled = #{isHandled,jdbcType=INTEGER}
+      is_handled = #{isHandled,jdbcType=INTEGER},
+      applicant_id = #{applicantId,jdbcType=VARCHAR},
+      applicant_account = #{applicantAccount,jdbcType=VARCHAR}
     where consulting_id = #{consultingId,jdbcType=VARCHAR}
   </update>
 </mapper>

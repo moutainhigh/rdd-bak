@@ -12,3 +12,7 @@ dependencies {
     compile project(":czb-bn:bn-entity")
     compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.3.49.ALL'
 }
+
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}
