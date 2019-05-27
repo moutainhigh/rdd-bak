@@ -61,7 +61,7 @@ public class JWTAuthenticationPCFilter extends UsernamePasswordAuthenticationFil
                 response.setCharacterEncoding("utf-8");
                 response.setHeader("Content-Type", "application/json;charset=utf-8");
                 JSONObject result = new JSONObject();
-                result.put(AuthConfig.FAILED_REASON, "token已失效，请重新登录");
+                result.put(AuthConfig.FAILED_REASON, "身份验证已过期，请重新登录");
                 result.put(AuthConfig.STATUS, false);
                 try {
                     response.getWriter().write(result.toJSONString());
