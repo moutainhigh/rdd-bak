@@ -26,7 +26,9 @@ public class MyIncomeLogDTO {
 
     private Integer type;
 
-    private String userName;
+    private String userName;//收益来源人的姓名
+
+    private String userAccount;//收益来源人的电话
 
     private String incomeClass;
 
@@ -35,6 +37,14 @@ public class MyIncomeLogDTO {
     private String commissionSourceUser;
 
     private String commissionGotUser;
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
 
     public String getCommissionGotUser() {
         return commissionGotUser;
