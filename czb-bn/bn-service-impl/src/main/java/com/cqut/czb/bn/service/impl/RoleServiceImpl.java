@@ -5,7 +5,6 @@ import com.cqut.czb.bn.dao.mapper.RoleMapperExtra;
 import com.cqut.czb.bn.dao.mapper.RoleMenuMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
@@ -27,19 +26,30 @@ import java.util.List;
 public class RoleServiceImpl implements IRoleService {
 
     @Autowired
-    private RoleMapperExtra roleMapperExtra;
+    private final RoleMapperExtra roleMapperExtra;
 
     @Autowired
-    RoleMenuMapperExtra roleMenuMapperExtra;
+    private final RoleMenuMapperExtra roleMenuMapperExtra;
 
     @Autowired
-    MenuMapperExtra menuMapperExtra;
+    private final MenuMapperExtra menuMapperExtra;
 
     @Autowired
-    UserRoleMapperExtra userRoleMapperExtra;
+    private final UserRoleMapperExtra userRoleMapperExtra;
+
+    public RoleServiceImpl(RoleMapperExtra roleMapperExtra, RoleMenuMapperExtra roleMenuMapperExtra, MenuMapperExtra menuMapperExtra, UserRoleMapperExtra userRoleMapperExtra) {
+        this.roleMapperExtra = roleMapperExtra;
+        this.roleMenuMapperExtra = roleMenuMapperExtra;
+        this.menuMapperExtra = menuMapperExtra;
+        this.userRoleMapperExtra = userRoleMapperExtra;
+    }
 
     @Override
     public boolean insertRole(RoleInputDTO roleInputDTO) {
+        boolean isExist = roleMapperExtra.findRole(roleInputDTO) > 0;
+        if(isExist) {
+            return false;
+        }
         roleInputDTO.setRoleId(StringUtil.createId());
         boolean isInsert = true;
         if(roleInputDTO.getAuthorities() != null) {

@@ -11,4 +11,6 @@ public interface EnterpriseConsultingInfoMapperExtra {
 
     int handleConsultation(@Param("list") String[] list);
 
+    EnterpriseConsultingInfo getLastConsultation(@Param("userId") String userId);
+
 }

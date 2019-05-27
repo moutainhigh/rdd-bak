@@ -13,4 +13,6 @@ public interface IConsultingManagementService {
     int handleConsultation(HandleConsultationInputDTO inputDTO);
 
     int insertConsultation(ConsultingInputDTO inputDTO);
+
+    EnterpriseConsultingInfo getLastConsultation(String userId);
 }

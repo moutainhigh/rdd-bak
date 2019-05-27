@@ -14,4 +14,6 @@ public interface RoleMapperExtra {
     int updateRole(RoleInputDTO roleInputDTO);
 
     List<RoleDTO> selectRole(RoleInputDTO roleInputDTO);
+
+    int findRole(RoleInputDTO roleInputDTO);
 }
