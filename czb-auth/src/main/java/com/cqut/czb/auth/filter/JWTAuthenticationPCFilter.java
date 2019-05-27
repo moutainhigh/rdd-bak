@@ -115,7 +115,7 @@ public class JWTAuthenticationPCFilter extends UsernamePasswordAuthenticationFil
             response.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "application/json;charset=utf-8");
             JSONObject result = new JSONObject();
-            result.put(AuthConfig.FAILED_REASON, "请不要使用APP账号登录");
+            result.put(AuthConfig.FAILED_REASON, "请不要使用用户账号登录");
             result.put(AuthConfig.STATUS, false);
             response.getWriter().write(result.toJSONString());
             return ;
