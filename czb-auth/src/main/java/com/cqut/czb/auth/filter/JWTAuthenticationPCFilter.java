@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
-import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
+import com.cqut.czb.auth.service.UserDetailService;
+import com.cqut.czb.auth.serviceImpl.UserDetailServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
@@ -15,8 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 /**
  * 该类用于登录，登录成功后设置token信息
  */
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JWTAuthenticationPCFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
 
@@ -37,12 +36,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private RedisUtils redisUtils;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailService userDetailService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationPCFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         //设置登录接口的api
-        super.setFilterProcessesUrl("/auth/login");
+        super.setFilterProcessesUrl("/auth/loginPC");
     }
 
     //登录方法
@@ -71,12 +70,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 }
                 return null;
             }
-            if(userDetailsService == null){
-                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
+            if(userDetailService == null){
+                userDetailService = SpringUtils.getBean(UserDetailServiceImpl.class);
             }
             loginUser.setAccount(JwtTool.getUsername(token));
-            UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
-            loginUser.setPassword(userDetails.getPassword());
+            User user =  userDetailService.loadUserByUsername(loginUser.getAccount());
+            loginUser.setPassword(user.getUserPsw());
         }
         if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
             try {
@@ -99,7 +98,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) throws IOException, AuthenticationException {
 
         // 调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
         // 所以就是JwtUser啦
@@ -111,6 +110,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         User user=jwtUser.getUser();
+        if(1 != user.getIsLoginPc()) {
+            // 使用APP账号无法登陆PC
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("Content-Type", "application/json;charset=utf-8");
+            JSONObject result = new JSONObject();
+            result.put(AuthConfig.FAILED_REASON, "请不要使用APP账号登录");
+            result.put(AuthConfig.STATUS, false);
+            response.getWriter().write(result.toJSONString());
+            return ;
+        }
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
         redisUtils.put(jwtUser.getAccount(), user);
         if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {
