@@ -79,7 +79,7 @@
   <resultMap type="com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO" id="petrolZoneResult">
     <result property="petrolKind" column="petrol_type"/>
     <result property="area" column="area"/>
-    <collection property="petrolPrice" column="{petrolKind=petrol_type, area=area}" javaType="list" select="getPetrolPrice"/>
+    <collection property="petrolPriceInfo" column="{petrolKind=petrol_type, area=area}" javaType="list" select="SelectPetrolPriceInfo"/>
   </resultMap>
 
   <select id="selectPetrolZone" resultMap="petrolZoneResult">
@@ -89,12 +89,12 @@
      GROUP BY petrol_type
   </select>
 
-  <select id="getPetrolPrice" resultType="java.lang.Double">
+  <select id="SelectPetrolPriceInfo" resultType="com.cqut.czb.bn.entity.dto.appHomePage.petrolInfoDTO">
      select
-     petrol_price as 'petrolPrice'
+     petrol_price as 'petrolPrice' ,petrol_denomination as 'petrolDenomination'
      from czb_petrol
      WHERE petrol_kind=#{petrolKind} and  `state`=1 and area=#{area}
-     GROUP BY  petrol_price
+     GROUP BY petrol_price,petrol_denomination
      order by
      petrol_price desc
   </select>
