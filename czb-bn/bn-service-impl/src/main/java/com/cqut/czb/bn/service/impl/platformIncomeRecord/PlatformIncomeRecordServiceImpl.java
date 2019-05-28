@@ -127,17 +127,23 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     }
 
     @Override
-    public boolean handleManyPlatFormIncomeRecords(String contractRecordIds) {
+    public boolean handleManyPlatFormIncomeRecords(String contractRecordIds,String recordIds) {
         String[] contractRecordId=contractRecordIds.split(",");
+        String[] recordId=recordIds.split(",");
+        PlatformIncomeRecordsDTO platformIncomeRecordsDTO=new PlatformIncomeRecordsDTO();
         for(int i=0;i<contractRecordId.length;i++){
-            handleOnePlatFormIncomeRecord(contractRecordId[i]);
+            platformIncomeRecordsDTO.setRecordId(recordId[i]);
+            platformIncomeRecordsDTO.setContractRecordId(contractRecordId[i]);
+            handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO);
         }
         return true;
     }
 
 
     @Override
-    public boolean handleOnePlatFormIncomeRecord(String contractRecordId) {
+    public boolean handleOnePlatFormIncomeRecord(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
+        String contractRecordId=platformIncomeRecordsDTO.getContractRecordId();
+
         if(contractRecordId==null)//数据为空
             return false;
         PetrolSalesRecords petrolSalesRecords=isHaveDistributionPetrol(contractRecordId);//查出购买记录
@@ -145,6 +151,15 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
 
         if(petrolSalesRecords==null){//为空则————分配油卡
             System.out.println("以前没有分配过油卡，合同id为："+contractRecordId);
+            PlatformIncomeRecords platformIncomeRecords=new PlatformIncomeRecords();
+            platformIncomeRecords.setRecordId(platformIncomeRecordsDTO.getRecordId());
+            platformIncomeRecords.setContractRecordId(contractRecordId);
+            platformIncomeRecords.setIsDistributed(1);
+            platformIncomeRecords.setState(1);
+            platformIncomeRecords.setRemark(platformIncomeRecords.getRemark());
+            platformIncomeRecords.setIsNeedRecharge(0);
+            boolean isChangeRecord=platformIncomeRecordsMapperExtra.updateByPrimaryKeySelective(platformIncomeRecords)>0;
+            System.out.println("改变状态收款记录:分配油卡"+isChangeRecord);
             //开始查询相关信息（petrolKind,petrolPrice,ownerId）
             PetrolInputDTO petrolInputDTO=contractRecordsMapperExtra.selectOwnerId(contractRecordId);
             if(petrolInputDTO==null){
@@ -195,6 +210,15 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             }
         }else {//不为空充值
             System.out.println("以前分配过油卡，将充值，合同id为："+contractRecordId);
+            PlatformIncomeRecords platformIncomeRecords=new PlatformIncomeRecords();
+            platformIncomeRecords.setContractRecordId(contractRecordId);
+            platformIncomeRecords.setRecordId(platformIncomeRecordsDTO.getRecordId());
+            platformIncomeRecords.setIsDistributed(1);
+            platformIncomeRecords.setState(1);
+            platformIncomeRecords.setRemark(platformIncomeRecords.getRemark());
+            platformIncomeRecords.setIsNeedRecharge(0);
+            boolean isChangeRecord=platformIncomeRecordsMapperExtra.updateByPrimaryKeySelective(platformIncomeRecords)>0;
+            System.out.println("改变状态收款记录:分配油卡"+isChangeRecord);
             //新增购买记录表——插入（充值）;
             petrolSalesRecords.setPaymentMethod(4);
             petrolSalesRecords.setRecordId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15));//自动生成的id

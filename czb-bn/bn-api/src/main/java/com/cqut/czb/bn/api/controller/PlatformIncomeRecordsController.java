@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @EnableAsync
 @RestController
-@RequestMapping("/api/platform")
+@RequestMapping("/platform")
 public class PlatformIncomeRecordsController {
 
     @Autowired
@@ -95,8 +95,8 @@ public class PlatformIncomeRecordsController {
      * 分配油卡（多张）
      */
     @GetMapping("/distributionManyPetrols")
-    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds) {
-        return new JSONResult(platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds));
+    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds,@Param("recordId") String recordId) {
+        return new JSONResult(platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds,recordId));
     }
 
     /**
@@ -105,7 +105,7 @@ public class PlatformIncomeRecordsController {
      */
     @GetMapping("/distributionOnePetrols")
     public JSONResult distributionOnePetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
-        return new JSONResult(platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO.getContractRecordId()));
+        return new JSONResult(platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO));
     }
 
 
