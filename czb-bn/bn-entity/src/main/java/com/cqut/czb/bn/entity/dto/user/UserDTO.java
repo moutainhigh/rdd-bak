@@ -20,7 +20,7 @@ public class UserDTO {
 
     private List<RoleDTO> roleList;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     public String getUserAccount() {
