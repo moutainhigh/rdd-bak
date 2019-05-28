@@ -141,7 +141,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         if(contractRecordId==null)//数据为空
             return false;
         PetrolSalesRecords petrolSalesRecords=isHaveDistributionPetrol(contractRecordId);//查出购买记录
-        double petrolPrice=100;//无法确定（暂时死的数据）
+        double petrolPrice=256;//无法确定（暂时死的数据）
 
         if(petrolSalesRecords==null){//为空则————分配油卡
             System.out.println("以前没有分配过油卡，合同id为："+contractRecordId);
@@ -160,6 +160,7 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             else {//有相应的油卡
                 //更改卡的状态
                 petrol.setState(2);
+                petrol.setOwnerId(petrolInputDTO.getOwnerId());
                 boolean statePetrol= petrolMapperExtra.updateByPrimaryKeySelective(petrol) > 0;
                 System.out.println("油卡状态更改"+statePetrol+":"+petrol.getPetrolNum());
                 //新增油卡的购买销售信息
@@ -169,20 +170,20 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
                 petrolSalesRecords.setPaymentMethod(4);//4为合同打款
                 petrolSalesRecords.setPetrolKind(petrolInputDTO.getPetrolKind());//油卡种类
                 petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
-                petrolSalesRecords.setRecordId(StringUtil.createId());
+//                petrolSalesRecords.setRecordId(StringUtil.createId());//自动生成的id
+                petrolSalesRecords.setRecordId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15));//自动生成的id
                 petrolSalesRecords.setState(1);//1为已支付
-                petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+                petrolSalesRecords.setTurnoverAmount(petrolInputDTO.getPetrolPrice());//查出的金额
                 petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
-                petrolSalesRecords.setRecordType(0);
-                petrolSalesRecords.setIsRecharged(0);
-                petrolSalesRecords.setContractId(contractRecordId);
+                petrolSalesRecords.setRecordType(0);//1 实体卡充值， 0 普通购买
+                petrolSalesRecords.setIsRecharged(0);//1 充值到卡，0 未充值
+                petrolSalesRecords.setContractId(contractRecordId);//来源合同id
                 boolean insertPetrolSalesRecords = petrolSalesRecordsMapperExtra.insert(petrolSalesRecords) > 0;
                 System.out.println("新增购买记录表完毕" + insertPetrolSalesRecords);
 
                 //新增油卡邮寄记录——插入
                 PetrolDeliveryRecords petrolDeliveryRecords = new PetrolDeliveryRecords();
-                String addressId=addressMapperExtra.selectAddressId(contractRecordId);
-                petrolDeliveryRecords.setAddressId(addressId);
+                petrolDeliveryRecords.setAddressId(petrolInputDTO.getAddressId());
                 petrolDeliveryRecords.setPetrolNum(petrol.getPetrolNum());
                 petrolDeliveryRecords.setDeliveryState(0);
                 petrolDeliveryRecords.setRecordId(StringUtil.createId());
@@ -196,7 +197,8 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             System.out.println("以前分配过油卡，将充值，合同id为："+contractRecordId);
             //新增购买记录表——插入（充值）;
             petrolSalesRecords.setPaymentMethod(4);
-            petrolSalesRecords.setRecordId(StringUtil.createId());
+            petrolSalesRecords.setRecordId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15));//自动生成的id
+            //petrolSalesRecords.setRecordId(StringUtil.createId());
             petrolSalesRecords.setState(1);//1为已支付
             petrolSalesRecords.setTurnoverAmount(petrolSalesRecords.getTurnoverAmount());///价格有问题**********
             petrolSalesRecords.setIsRecharged(1);
