@@ -99,15 +99,17 @@
     </update>
 
     <select id="selectOwnerId" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
-       SELECT
-        czb_contract_records.user_id as owenrId,
+        SELECT
         petrol_type as petrolKind,
-        czb_address.address_id AS addressId
-        FROM czb_contract_records,czb_cars_persons,czb_address
+        ccr.user_id as ownerId,
+        contract_father_id AS contractFatherId,
+        ca.address_id AS addressId
+        FROM
+	    czb_cars_persons AS ccp,czb_contract_records as ccr,czb_address AS ca
         WHERE
-        record_id=#{contractRecordId,jdbcType=VARCHAR} AND
-        contract_record_id=record_id AND
-        czb_contract_records.contract_father_id=czb_address.user_id AND
-        czb_address.is_default=1
+        contract_record_id=#{contractRecordId,jdbcType=VARCHAR} AND
+        ccr.record_id=#{contractRecordId,jdbcType=VARCHAR} AND
+        ca.user_id=ccr.contract_father_id AND
+        ca.is_default=1
     </select>
 </mapper>
