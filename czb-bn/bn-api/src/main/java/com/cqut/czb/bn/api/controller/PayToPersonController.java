@@ -6,6 +6,8 @@ import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PayToPersonService;
 import com.cqut.czb.bn.service.impl.payToPerson.ImportPayToPerson;
+import com.cqut.czb.bn.service.impl.payToPerson.PayToPersonServiceImpl;
+import com.cqut.czb.bn.service.impl.platformIncomeRecord.ImportPlatformIncome;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -105,7 +107,15 @@ public class PayToPersonController {
      */
     @PostMapping("/importPayRecords")
     public JSONResult importPayRecords(@Param("file")MultipartFile file) throws Exception{
-        return new JSONResult(payToPersonService.importPayList(file));
+        try{
+            return new JSONResult(payToPersonService.importPayList(file));
+
+        } catch (Exception e){
+            ImportPayToPerson.processing=0.0;
+            ImportPayToPerson.processNum=0.0;
+            return new JSONResult("上传文件出现错误",110);
+        }
+
     }
 
     /**

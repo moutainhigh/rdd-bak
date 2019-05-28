@@ -111,7 +111,14 @@ public class PlatformIncomeRecordsController {
 
     @PostMapping("/importIncomeRecords")
     public JSONResult impoertIncomeRecords(MultipartFile file) throws Exception {
-        return new JSONResult(platformIncomeRecordsService.importRecords(file));
+        try{
+            return new JSONResult(platformIncomeRecordsService.importRecords(file));
+
+        } catch (Exception e){
+            ImportPlatformIncome.processing=0.0;
+            ImportPlatformIncome.processNum=0.0;
+            return new JSONResult("上传文件出现错误",110);
+        }
     }
 
     /**
@@ -125,7 +132,7 @@ public class PlatformIncomeRecordsController {
             ImportPlatformIncome.processNum=0.0;
             return new JSONResult(100);
         }
-        return new JSONResult(ImportPlatformIncome.processNum);
+        return new JSONResult(ImportPlatformIncome.processing);
     }
 
     /**
