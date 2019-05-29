@@ -1,11 +1,11 @@
-package com.cqut.czb.bn.entity.dto.recommenderInvitee;
+package com.cqut.czb.bn.entity.dto.myTeam;
 
 import java.util.List;
 
 /**
  *  受邀请者DTO
  * */
-public class InviteeDTO {
+public class TeamDTO {
 
     private String userId;
 
@@ -15,7 +15,7 @@ public class InviteeDTO {
 
     private Double amount;
 
-    private List<InviteeDTO> inviteeDTOList;
+    private List<TeamDTO> teamDTOList;
 
     public String getUserId() {
         return userId;
@@ -41,19 +41,19 @@ public class InviteeDTO {
         this.userName = userName;
     }
 
-    public List<InviteeDTO> getInviteeDTOList() {
-        return inviteeDTOList;
-    }
-
-    public void setInviteeDTOList(List<InviteeDTO> inviteeDTOList) {
-        this.inviteeDTOList = inviteeDTOList;
-    }
-
     public Double getAmount() {
         return amount;
     }
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public List<TeamDTO> getTeamDTOList() {
+        return teamDTOList;
+    }
+
+    public void setTeamDTOList(List<TeamDTO> teamDTOList) {
+        this.teamDTOList = teamDTOList;
     }
 }
