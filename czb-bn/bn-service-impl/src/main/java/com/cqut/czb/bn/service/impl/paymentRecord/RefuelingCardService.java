@@ -256,6 +256,9 @@ public class RefuelingCardService implements IRefuelingCard {
         //更改油卡购买信息的状态
         petrolSalesRecords.setState(1);
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
+        if(petrol.getPetrolKind()==0){
+            petrolSalesRecords.setIsRecharged(-1);
+        }
         boolean update=petrolSalesRecordsMapperExtra.updateByPrimaryKeySelective(petrolSalesRecords)>0;
         System.out.println("更改购买信息:"+update);
 
