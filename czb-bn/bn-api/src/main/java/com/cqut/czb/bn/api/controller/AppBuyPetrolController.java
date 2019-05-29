@@ -45,7 +45,6 @@ public class AppBuyPetrolController {
         //防止数据为空
         if(petrolInputDTO==null||user==null){
             return new JSONResult("申请数据有误", ResponseCodeConstants.FAILURE);
-
         }
 
         //检测是否有未完成的订单
@@ -55,10 +54,10 @@ public class AppBuyPetrolController {
         }
 
         //检测今日是否已经购买了油卡或充值
-        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
-        if(isTodayHadBuy){//true
-            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
-        }
+//        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
+//        if(isTodayHadBuy){//true
+//            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
+//        }
 
         //处理购油或充值
         Map<String,Object> BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
