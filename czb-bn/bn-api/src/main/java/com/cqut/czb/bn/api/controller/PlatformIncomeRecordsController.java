@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @EnableAsync
 @RestController
-@RequestMapping("/api/platform")
+@RequestMapping("/platform")
 public class PlatformIncomeRecordsController {
 
     @Autowired
@@ -95,8 +95,8 @@ public class PlatformIncomeRecordsController {
      * 分配油卡（多张）
      */
     @GetMapping("/distributionManyPetrols")
-    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds) {
-        return new JSONResult(platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds));
+    public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds,@Param("recordId") String recordId) {
+        return new JSONResult(platformIncomeRecordsService.handleManyPlatFormIncomeRecords(contractRecordIds,recordId));
     }
 
     /**
@@ -105,13 +105,20 @@ public class PlatformIncomeRecordsController {
      */
     @GetMapping("/distributionOnePetrols")
     public JSONResult distributionOnePetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
-        return new JSONResult(platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO.getContractRecordId()));
+        return new JSONResult(platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO));
     }
 
 
     @PostMapping("/importIncomeRecords")
     public JSONResult impoertIncomeRecords(MultipartFile file) throws Exception {
-        return new JSONResult(platformIncomeRecordsService.importRecords(file));
+        try{
+            return new JSONResult(platformIncomeRecordsService.importRecords(file));
+
+        } catch (Exception e){
+            ImportPlatformIncome.processing=0.0;
+            ImportPlatformIncome.processNum=0.0;
+            return new JSONResult("上传文件出现错误",110);
+        }
     }
 
     /**
@@ -125,7 +132,7 @@ public class PlatformIncomeRecordsController {
             ImportPlatformIncome.processNum=0.0;
             return new JSONResult(100);
         }
-        return new JSONResult(ImportPlatformIncome.processNum);
+        return new JSONResult(ImportPlatformIncome.processing);
     }
 
     /**

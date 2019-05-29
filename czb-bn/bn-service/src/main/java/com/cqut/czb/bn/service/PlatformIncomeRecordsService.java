@@ -24,13 +24,13 @@ public interface PlatformIncomeRecordsService {
     /**
      * 对多条记录进行操作
      */
-    boolean handleManyPlatFormIncomeRecords(String contractRecordIds);
+    boolean handleManyPlatFormIncomeRecords(String contractRecordIds,String recordId);
 
     /**
      * 处理单条记录油卡或充值
      * @return
      */
-    boolean handleOnePlatFormIncomeRecord(String contractRecordId);
+    boolean handleOnePlatFormIncomeRecord(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
 
     /**
      * 检测是否分配了油卡

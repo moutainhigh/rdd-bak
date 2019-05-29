@@ -80,10 +80,10 @@ public class ImportPlatformIncome {
                 // 解析文档
                 if (xssfRow != null && xssfRow.getLastCellNum() >= 7 && xssfRow.getCell(0) != null) {
                     platformIncomeRecordsDTO = resolveXlsx(xssfRow);
-                    processNum++;
                     System.out.println("异步调用"+processNum);
                     if (platformIncomeRecordsDTO != null) {
                         list.add(platformIncomeRecordsDTO);
+                        System.out.print(xssfSheet.getLastRowNum());
                         processing= ++processNum/(xssfSheet.getLastRowNum())*100;
                     }
 
