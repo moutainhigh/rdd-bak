@@ -85,7 +85,7 @@ INNER JOIN (
             and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
         </if>
     </where>
-) AS t3 ON t3.petrol_id = t1.petrol_id
+) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.transaction_time desc
   </select>
 
     <!--个人中心油卡信息查看-->
@@ -247,6 +247,7 @@ INNER JOIN (
             <if test="petrolKind != null and petrolKind != ''">
                 and petrol_kind = #{petrolKind,jdbcType = INTEGER}
             </if>
+            and is_recharged != -1
         </where>
         ) AS t_cpsr
         INNER JOIN (
@@ -271,7 +272,7 @@ INNER JOIN (
         petrol_price
         FROM
         czb_petrol
-        ) AS cp ON cp.petrol_id = t_cpsr.petrol_id
+        ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
     </select>
 
     <update id="recharge" parameterType="java.lang.String">
