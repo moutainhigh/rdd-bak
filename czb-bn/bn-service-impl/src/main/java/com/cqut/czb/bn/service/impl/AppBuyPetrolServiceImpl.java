@@ -119,8 +119,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         {
             Date date = new Date();
             DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
-            System.out.println(df1.format(date));
-            System.out.println(df1.format(petrolSalesRecords.getTransactionTime()).equals(df1.format(date)));
             if(df1.format(petrolSalesRecords.getTransactionTime()).equals(df1.format(date))){
                 System.out.println("今日已经购买了油卡,或充值了一次，请明天再来");
                 return true;
