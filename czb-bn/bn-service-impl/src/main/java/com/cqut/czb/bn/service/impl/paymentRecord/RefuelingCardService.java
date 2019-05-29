@@ -260,13 +260,15 @@ public class RefuelingCardService implements IRefuelingCard {
         System.out.println("更改购买信息:"+update);
 
         //新增油卡邮寄记录——插入
-        PetrolDeliveryRecords petrolDeliveryRecords = new PetrolDeliveryRecords();
-        petrolDeliveryRecords.setAddressId(addressId);
-        petrolDeliveryRecords.setPetrolNum(petrolNum);
-        petrolDeliveryRecords.setDeliveryState(0);
-        petrolDeliveryRecords.setRecordId(StringUtil.createId());
-        boolean isInsert = petrolDeliveryRecordsMapperExtra.insert(petrolDeliveryRecords) > 0;
-        System.out.println("新增油卡邮寄记录" + isInsert);
+       if(petrol.getPetrolType()==1){//实体卡才寄送
+           PetrolDeliveryRecords petrolDeliveryRecords = new PetrolDeliveryRecords();
+           petrolDeliveryRecords.setAddressId(addressId);
+           petrolDeliveryRecords.setPetrolNum(petrolNum);
+           petrolDeliveryRecords.setDeliveryState(0);
+           petrolDeliveryRecords.setRecordId(StringUtil.createId());
+           boolean isInsert = petrolDeliveryRecordsMapperExtra.insert(petrolDeliveryRecords) > 0;
+           System.out.println("新增油卡邮寄记录" + isInsert);
+       }
 
         boolean beginFanYong = fanYongService.beginFanYong(ownerId, money, actualPayment, orgId);
 
