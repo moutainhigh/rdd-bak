@@ -131,7 +131,7 @@
       <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
       <result column="user_name" property="userName" jdbcType="VARCHAR" />
       <result column="amount" property="amount" jdbcType="DOUBLE" />
-      <collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />
+      <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">
     select cu.user_id, user_account, user_name, sum(amount) as 'amount'
@@ -145,18 +145,18 @@
     group by cu.user_id
     order by amount desc
   </select>
-  <select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">
-    select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'
-    from czb_user cu
-    left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
-    left join czb_income_log cil on cuii.info_id = cil.info_id
-    <where>
-      cu.superior_user = #{userId, jdbcType=VARCHAR}
-      and type = 0
-    </where>
-    group by cu.user_id
-    order by amount desc
-  </select>
+  <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
+    <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->
+    <!--from czb_user cu-->
+    <!--left join czb_user_income_info cuii on  cu.user_id = cuii.user_id-->
+    <!--left join czb_income_log cil on cuii.info_id = cil.info_id-->
+    <!--<where>-->
+      <!--cu.superior_user = #{userId, jdbcType=VARCHAR}-->
+      <!--and type = 0-->
+    <!--</where>-->
+    <!--group by cu.user_id-->
+    <!--order by amount desc-->
+  <!--</select>-->
   <select id="selectRecommender" resultType="com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO">
     select user_id as 'userId', user_account as 'userAccount', user_name as 'userName'
     from czb_user

@@ -80,9 +80,13 @@ public class UserManagementController {
      *  我的团队接口
      * */
     @RequestMapping(value = "/selectTeam", method = RequestMethod.GET)
-    public  JSONResult selectTeam(Principal principal){
-        User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(userService.selectTeam(user.getUserId()));
+    public  JSONResult selectTeam(Principal principal, String userId){
+        if(null == userId || "".equals(userId)) {
+            User user = (User) redisUtils.get(principal.getName());
+            return new JSONResult(userService.selectTeam(user.getUserId()));
+        } else {
+            return new JSONResult(userService.selectTeam(userId));
+        }
     }
 
     /**

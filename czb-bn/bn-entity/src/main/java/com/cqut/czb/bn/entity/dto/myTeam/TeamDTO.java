@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.myTeam;
 
-import java.util.List;
-
 /**
  *  受邀请者DTO
  * */
@@ -15,7 +13,7 @@ public class TeamDTO {
 
     private Double amount;
 
-    private List<TeamDTO> teamDTOList;
+//    private List<TeamDTO> teamDTOList;
 
     public String getUserId() {
         return userId;
@@ -47,13 +45,5 @@ public class TeamDTO {
 
     public void setAmount(Double amount) {
         this.amount = amount;
-    }
-
-    public List<TeamDTO> getTeamDTOList() {
-        return teamDTOList;
-    }
-
-    public void setTeamDTOList(List<TeamDTO> teamDTOList) {
-        this.teamDTOList = teamDTOList;
     }
 }
