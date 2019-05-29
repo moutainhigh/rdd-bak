@@ -157,4 +157,15 @@
     group by cu.user_id
     order by amount desc
   </select>
+  <select id="selectRecommender" resultMap="com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO">
+    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName'
+    from czb_user
+    <where>
+      user_id = (
+      select superior_user
+      from czb_user
+      where user_id = #{userId, jdbcType=VARCHAR}
+      )
+    </where>
+  </select>
 </mapper>

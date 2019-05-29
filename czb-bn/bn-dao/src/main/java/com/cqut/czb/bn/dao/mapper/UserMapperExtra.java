@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
+import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
@@ -25,6 +26,8 @@ public interface UserMapperExtra {
     int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
 
     List<TeamDTO> selectTeam(String userId);
+
+    RecommenderDTO selectRecommender(String userId);
 
     /**
      * 修改密码——个人中心

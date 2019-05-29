@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
@@ -28,4 +29,6 @@ public interface IUserService {
     UserDTO selectUserInfo(User user);
 
     List<TeamDTO> selectTeam(String userId);
+
+    RecommenderDTO selectRecommender(String userId);
 }

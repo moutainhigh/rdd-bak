@@ -84,4 +84,13 @@ public class UserManagementController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(userService.selectTeam(user.getUserId()));
     }
+
+    /**
+     * 获取推荐人
+     * */
+    @RequestMapping(value = "selectRecommender", method = RequestMethod.GET)
+    public  JSONResult selectRecommender(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(userService.selectRecommender(user.getUserId()));
+    }
 }

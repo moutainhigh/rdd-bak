@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.RoleMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
@@ -143,6 +144,11 @@ public class UserServiceImpl implements IUserService {
     public List<TeamDTO> selectTeam(String userId) {
         List<TeamDTO> teamDTOList = userMapperExtra.selectTeam(userId);
         return teamDTOList;
+    }
+
+    @Override
+    public RecommenderDTO selectRecommender(String userId) {
+        return userMapperExtra.selectRecommender(userId);
     }
 
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {
