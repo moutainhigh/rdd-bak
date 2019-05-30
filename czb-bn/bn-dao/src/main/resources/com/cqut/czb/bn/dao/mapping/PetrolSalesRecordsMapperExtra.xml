@@ -46,7 +46,7 @@ FROM
             and records.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
           </if>
           <if test="transactionTime != null">
-            and records.transaction_time like concat('%',#{transactionTime,jdbcType=TIMESTAMP},'%')
+            and records.transaction_time like concat('%',DATE_FORMAT(#{transactionTime,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
           </if>
 
         </where>
