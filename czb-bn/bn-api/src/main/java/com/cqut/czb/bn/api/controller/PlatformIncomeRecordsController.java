@@ -92,7 +92,7 @@ public class PlatformIncomeRecordsController {
     }
 
     /**
-     * 分配油卡（多张）
+     * 为多个公司分配油卡
      */
     @GetMapping("/distributionManyPetrols")
     public JSONResult distributionManyPetrols(@Param("contractRecordIds") String contractRecordIds,@Param("recordId") String recordId) {
@@ -100,12 +100,12 @@ public class PlatformIncomeRecordsController {
     }
 
     /**
-     * 分配油卡（一张）
+     * 为一个公司分配油卡
      * @return
      */
     @GetMapping("/distributionOnePetrols")
     public JSONResult distributionOnePetrols(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
-        return new JSONResult(platformIncomeRecordsService.handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO));
+        return new JSONResult(platformIncomeRecordsService.selectSonContractId(platformIncomeRecordsDTO));
     }
 
 

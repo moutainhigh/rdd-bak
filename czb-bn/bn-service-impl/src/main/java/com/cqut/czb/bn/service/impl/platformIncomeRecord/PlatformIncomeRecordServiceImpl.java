@@ -134,32 +134,22 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
         for(int i=0;i<contractRecordId.length;i++){
             platformIncomeRecordsDTO.setRecordId(recordId[i]);
             platformIncomeRecordsDTO.setContractRecordId(contractRecordId[i]);
-            handleOnePlatFormIncomeRecord(platformIncomeRecordsDTO);
+            selectSonContractId(platformIncomeRecordsDTO);
         }
         return true;
     }
 
 
     @Override
-    public boolean handleOnePlatFormIncomeRecord(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
-        String contractRecordId=platformIncomeRecordsDTO.getContractRecordId();
-
-        if(contractRecordId==null)//数据为空
+    public boolean handleOnePlatFormIncomeRecord(String contractRecordId) {
+        if(contractRecordId==null){
             return false;
+        }
         PetrolSalesRecords petrolSalesRecords=isHaveDistributionPetrol(contractRecordId);//查出购买记录
-        double petrolPrice=256;//无法确定（暂时死的数据）
+        double petrolPrice=0.03;//无法确定（暂时死的数据）
 
         if(petrolSalesRecords==null){//为空则————分配油卡
             System.out.println("以前没有分配过油卡，合同id为："+contractRecordId);
-            PlatformIncomeRecords platformIncomeRecords=new PlatformIncomeRecords();
-            platformIncomeRecords.setRecordId(platformIncomeRecordsDTO.getRecordId());
-            platformIncomeRecords.setContractRecordId(contractRecordId);
-            platformIncomeRecords.setIsDistributed(1);
-            platformIncomeRecords.setState(1);
-            platformIncomeRecords.setRemark(platformIncomeRecords.getRemark());
-            platformIncomeRecords.setIsNeedRecharge(0);
-            boolean isChangeRecord=platformIncomeRecordsMapperExtra.updateByPrimaryKeySelective(platformIncomeRecords)>0;
-            System.out.println("改变状态收款记录:分配油卡"+isChangeRecord);
             //开始查询相关信息（petrolKind,petrolPrice,ownerId）
             PetrolInputDTO petrolInputDTO=contractRecordsMapperExtra.selectOwnerId(contractRecordId);
             if(petrolInputDTO==null){
@@ -210,15 +200,6 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             }
         }else {//不为空充值
             System.out.println("以前分配过油卡，将充值，合同id为："+contractRecordId);
-            PlatformIncomeRecords platformIncomeRecords=new PlatformIncomeRecords();
-            platformIncomeRecords.setContractRecordId(contractRecordId);
-            platformIncomeRecords.setRecordId(platformIncomeRecordsDTO.getRecordId());
-            platformIncomeRecords.setIsDistributed(1);
-            platformIncomeRecords.setState(1);
-            platformIncomeRecords.setRemark(platformIncomeRecords.getRemark());
-            platformIncomeRecords.setIsNeedRecharge(0);
-            boolean isChangeRecord=platformIncomeRecordsMapperExtra.updateByPrimaryKeySelective(platformIncomeRecords)>0;
-            System.out.println("改变状态收款记录:分配油卡"+isChangeRecord);
             //新增购买记录表——插入（充值）;
             petrolSalesRecords.setPaymentMethod(4);
             petrolSalesRecords.setRecordId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15));//自动生成的id
@@ -232,6 +213,28 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
             return true;
         }
+    }
+
+    @Override
+    public boolean selectSonContractId(PlatformIncomeRecordsDTO platformIncomeRecordsDTO) {
+        if(platformIncomeRecordsDTO==null){
+            return false;
+        }
+        List<ContractRecords> contractRecordsList=contractRecordsMapperExtra.selectContractIds(platformIncomeRecordsDTO);
+        for(int i=0;i<contractRecordsList.size();i++){
+            if(contractRecordsList.get(i)!=null)
+            handleOnePlatFormIncomeRecord(contractRecordsList.get(i).getRecordId());
+        }
+        PlatformIncomeRecords platformIncomeRecords=new PlatformIncomeRecords();
+        platformIncomeRecords.setRecordId(platformIncomeRecordsDTO.getRecordId());
+        platformIncomeRecords.setContractRecordId(platformIncomeRecordsDTO.getContractRecordId());
+        platformIncomeRecords.setIsDistributed(1);
+        platformIncomeRecords.setState(1);
+        platformIncomeRecords.setRemark(platformIncomeRecords.getRemark());
+        platformIncomeRecords.setIsNeedRecharge(0);
+        boolean isChangeRecord=platformIncomeRecordsMapperExtra.updateByPrimaryKeySelective(platformIncomeRecords)>0;
+        System.out.println("改变状态收款记录"+isChangeRecord);
+        return true;
     }
 
     @Override
