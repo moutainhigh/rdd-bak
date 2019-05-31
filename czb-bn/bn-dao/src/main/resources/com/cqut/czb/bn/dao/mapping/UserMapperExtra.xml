@@ -140,7 +140,7 @@
     left join czb_income_log cil on cuii.info_id = cil.info_id
     <where>
       cu.superior_user = #{userId, jdbcType=VARCHAR}
-      and type = 0
+      and (type = 0 or type is null)
     </where>
     group by cu.user_id
     order by amount desc
