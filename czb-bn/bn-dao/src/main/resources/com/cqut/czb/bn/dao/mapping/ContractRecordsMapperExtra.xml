@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.ContractRecordsMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ContractRecords" >
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="signed_time" property="signedTime" jdbcType="TIMESTAMP" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="contract_start_time" property="contractStartTime" jdbcType="TIMESTAMP" />
+        <result column="contract_end_time" property="contractEndTime" jdbcType="TIMESTAMP" />
+        <result column="contract_state" property="contractState" jdbcType="INTEGER" />
+        <result column="contract_type" property="contractType" jdbcType="INTEGER" />
+        <result column="rent" property="rent" jdbcType="DOUBLE" />
+        <result column="third_contract_num" property="thirdContractNum" jdbcType="VARCHAR" />
+        <result column="got_total_money" property="gotTotalMoney" jdbcType="DOUBLE" />
+        <result column="judge_user_id" property="judgeUserId" jdbcType="VARCHAR" />
+        <result column="judge_time" property="judgeTime" jdbcType="TIMESTAMP" />
+        <result column="pay_total_money" property="payTotalMoney" jdbcType="DOUBLE" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="contract_father_id" property="contractFatherId" jdbcType="VARCHAR" />
+        <result column="witness_id" property="witnessId" jdbcType="VARCHAR" />
+        <result column="bank_of_deposit" property="bankOfDeposit" jdbcType="VARCHAR" />
+        <result column="bank_account_num" property="bankAccountNum" jdbcType="VARCHAR" />
+        <result column="bank_user_name" property="bankUserName" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    record_id, signed_time, user_id, contract_start_time, contract_end_time, contract_state,
+    contract_type, rent, third_contract_num, got_total_money, judge_user_id, judge_time,
+    pay_total_money, create_at, update_at, contract_father_id, witness_id, bank_of_deposit,
+    bank_account_num, bank_user_name
+  </sql>
+
+
+
     <!--企业合同和个人合同列表通用接口-->
     <select id="selectContractList" resultType="com.cqut.czb.bn.entity.dto.contractManagement.ContractDTO" parameterType="com.cqut.czb.bn.entity.dto.contractManagement.ContractInputDTO" >
         select
@@ -36,6 +67,15 @@
           </if>
         </where>
     </select>
+
+    <select id="selectContractIds" parameterType="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from czb_contract_records
+        where contract_father_id = #{contractRecordId,jdbcType=VARCHAR}
+    </select>
+
+
     <!--根据个人合同查看企业合同-->
     <select id="selectEnterpriseContract" resultType="com.cqut.czb.bn.entity.dto.contractManagement.ContractDTO" parameterType="java.lang.String">
       select
@@ -99,15 +139,17 @@
     </update>
 
     <select id="selectOwnerId" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
-       SELECT
-        czb_contract_records.user_id as owenrId,
+        SELECT
         petrol_type as petrolKind,
-        czb_address.address_id AS addressId
-        FROM czb_contract_records,czb_cars_persons,czb_address
+        ccr.user_id as ownerId,
+        contract_father_id AS contractFatherId,
+        ca.address_id AS addressId
+        FROM
+	    czb_cars_persons AS ccp,czb_contract_records as ccr,czb_address AS ca
         WHERE
-        record_id=#{contractRecordId,jdbcType=VARCHAR} AND
-        contract_record_id=record_id AND
-        czb_contract_records.contract_father_id=czb_address.user_id AND
-        czb_address.is_default=1
+        contract_record_id=#{contractRecordId,jdbcType=VARCHAR} AND
+        ccr.record_id=#{contractRecordId,jdbcType=VARCHAR} AND
+        ca.user_id=ccr.contract_father_id AND
+        ca.is_default=1
     </select>
 </mapper>

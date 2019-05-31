@@ -76,9 +76,25 @@ public class UserManagementController {
         return new JSONResult(userService.selectUserInfo(user));
     }
 
-    @RequestMapping(value = "/selectRecommenderInvitee", method = RequestMethod.GET)
-    public  JSONResult selectRecommenderInvitee(String userId){
-//        User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(userService.selectRecommenderInvitee(userId));
+    /**
+     *  我的团队接口
+     * */
+    @RequestMapping(value = "/selectTeam", method = RequestMethod.GET)
+    public  JSONResult selectTeam(Principal principal, String userId){
+        if(null == userId || "".equals(userId)) {
+            User user = (User) redisUtils.get(principal.getName());
+            return new JSONResult(userService.selectTeam(user.getUserId()));
+        } else {
+            return new JSONResult(userService.selectTeam(userId));
+        }
+    }
+
+    /**
+     * 获取推荐人
+     * */
+    @RequestMapping(value = "selectRecommender", method = RequestMethod.GET)
+    public  JSONResult selectRecommender(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(userService.selectRecommender(user.getUserId()));
     }
 }

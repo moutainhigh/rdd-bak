@@ -45,15 +45,15 @@ public class FanYongServiceImpl implements FanYongService {
         Dict dict1 = dictMapperExtra.selectDictByName("fangyong1");
         Dict dict2 = dictMapperExtra.selectDictByName("fangyong2");
         Dict dict3 = dictMapperExtra.selectDictByName("fangyong_rate");
-        if (dict1 != null && dict1.getContent() != null) {
+        if (dict1 != null || dict1.getContent() != null) {
             fangyong1 = Double.valueOf(dict1.getContent());
             System.out.println("fangyong1：" + fangyong1);
         }
-        if (dict2 != null && dict2.getContent() != null) {
+        if (dict2 != null || dict2.getContent() != null) {
             fangyong2 = Double.valueOf(dict2.getContent());
             System.out.println("fangyong2：" + fangyong2);
         }
-        if (dict3 != null && dict3.getContent() != null) {
+        if (dict3 != null || dict3.getContent() != null) {
             fangyongRate = Double.valueOf(dict3.getContent());
             System.out.println("fangyongRate：" + fangyongRate);
         }

@@ -12,7 +12,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class DictServiceImpl implements IDictService {
@@ -42,6 +44,7 @@ public class DictServiceImpl implements IDictService {
         String name = "android";
         dictInputDTO.setName(name);
         List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
+        ArrayList<String> url = new ArrayList<>();
         for(Dict dict: dictList) {
             if("android_version".equals(dict.getName())) {
                 appInfoDTO.setVersion(dict.getContent());
@@ -49,10 +52,12 @@ public class DictServiceImpl implements IDictService {
             if("android_description".equals(dict.getName())) {
                 appInfoDTO.setDescription(dict.getContent());
             }
-            if("android_url".equals(dict.getName())) {
-                appInfoDTO.setUrl(dict.getContent());
+            if(dict.getName().startsWith("android_url")) {
+                url.add(dict.getContent());
             }
         }
+        Random random = new Random();
+        appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         return appInfoDTO;
     }
 
@@ -63,6 +68,7 @@ public class DictServiceImpl implements IDictService {
         String name = "ios";
         dictInputDTO.setName(name);
         List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
+        ArrayList<String> url = new ArrayList<>();
         for(Dict dict: dictList) {
             if("ios_version".equals(dict.getName())) {
                 appInfoDTO.setVersion(dict.getContent());
@@ -70,10 +76,12 @@ public class DictServiceImpl implements IDictService {
             if("ios_description".equals(dict.getName())) {
                 appInfoDTO.setDescription(dict.getContent());
             }
-            if("ios_url".equals(dict.getName())) {
-                appInfoDTO.setUrl(dict.getContent());
+            if(dict.getName().startsWith("ios_url")) {
+                url.add(dict.getContent());
             }
         }
+        Random random = new Random();
+        appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         return appInfoDTO;
     }
 

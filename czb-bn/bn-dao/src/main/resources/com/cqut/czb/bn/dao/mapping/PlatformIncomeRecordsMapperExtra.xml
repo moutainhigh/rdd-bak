@@ -177,7 +177,7 @@
         <where>
             a.is_deleted = 0
             <if test="contractRecordId!=null and contractRecordId!=''">
-                AND a.contract_record_id=#{contractRecordId,jdbcType=VAECHAR}
+                AND a.contract_record_id=#{contractRecordId,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

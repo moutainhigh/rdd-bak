@@ -4,7 +4,8 @@ import com.cqut.czb.bn.dao.mapper.RoleMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.recommenderInvitee.InviteeDTO;
+import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
+import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
@@ -29,13 +30,19 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
     @Autowired
-    UserMapperExtra userMapperExtra;
+    private final UserMapperExtra userMapperExtra;
 
     @Autowired
-    UserRoleMapperExtra userRoleMapperExtra;
+    private final UserRoleMapperExtra userRoleMapperExtra;
 
     @Autowired
-    RoleMapperExtra roleMapperExtra;
+    private final RoleMapperExtra roleMapperExtra;
+
+    public UserServiceImpl(UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra) {
+        this.userMapperExtra = userMapperExtra;
+        this.userRoleMapperExtra = userRoleMapperExtra;
+        this.roleMapperExtra = roleMapperExtra;
+    }
 
     @Override
     public boolean deleteUser(UserIdDTO userIdDTO) {
@@ -134,9 +141,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<InviteeDTO> selectRecommenderInvitee(String userId) {
-        List<InviteeDTO> inviteeDTOList = userMapperExtra.selectRecommenderInvitee(userId);
-        return inviteeDTOList;
+    public List<TeamDTO> selectTeam(String userId) {
+        List<TeamDTO> teamDTOList = userMapperExtra.selectTeam(userId);
+        return teamDTOList;
+    }
+
+    @Override
+    public RecommenderDTO selectRecommender(String userId) {
+        return userMapperExtra.selectRecommender(userId);
     }
 
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {

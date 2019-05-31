@@ -38,6 +38,9 @@
             <if test="enterpriseInfo.contactInfo!=null and enterpriseInfo.contactInfo!=''">
                 AND contact_info like concat('%',#{enterpriseInfo.contactInfo,jdbcType=VARCHAR},'%')
             </if>
+            <if test="enterpriseInfo.orgCode!=null and enterpriseInfo.orgCode!=''">
+                AND org_code like concat('%',#{enterpriseInfo.orgCode,jdbcType=VARCHAR},'%')
+            </if>
             <if test="enterpriseInfo.startTime!=null and enterpriseInfo.endTime==null">
                 AND czb_enterprise_info.create_at >= #{enterpriseInfo.startTime,jdbcType=TIMESTAMP}
             </if>

@@ -4,6 +4,9 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractInputDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.PersonalContractDetailDTO;
+import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
+import com.cqut.czb.bn.entity.entity.ContractRecords;
+import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,4 +24,6 @@ public interface ContractRecordsMapperExtra {
     int changeContractState(ContractInputDTO contractInputDTO);
 
     PetrolInputDTO selectOwnerId(@Param("contractRecordId") String contractRecordId);
+
+    List<ContractRecords> selectContractIds(PlatformIncomeRecordsDTO platformIncomeRecordsDTO);
 }

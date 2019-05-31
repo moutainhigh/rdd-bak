@@ -95,7 +95,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         petrolSalesRecords.setState(0);//1为已支付
         petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
         petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
-        if(petrolInputDTO.getPayType()=="0"){
+        if(petrolInputDTO.getPayType()=="0"){//0为普通购买
             petrolSalesRecords.setRecordType(0);
         }else {
             petrolSalesRecords.setRecordType(1);
@@ -103,14 +103,14 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         petrolSalesRecords.setIsRecharged(0);
         petrolSalesRecords.setContractId(contractId);
         boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
-        System.out.println("新增油卡充值记录完毕"+insertPetrolSalesRecords);
+        System.out.println("新增油卡购买或充值记录完毕"+insertPetrolSalesRecords);
         return rs;
     }
 
     @Override
     public boolean isTodayHadBuy(PetrolInputDTO petrolInputDTO) {
         PetrolSalesRecords petrolSalesRecords=petrolSalesRecordsMapperExtra.selectPetrolSalesRecords(petrolInputDTO);
-        if(petrolSalesRecords==null&&petrolSalesRecords.getTransactionTime()==null)
+        if(petrolSalesRecords==null||petrolSalesRecords.getTransactionTime()==null)
         {
             System.out.println("今日是否买过油卡"+petrolSalesRecords==null);
             return false;
@@ -119,8 +119,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         {
             Date date = new Date();
             DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
-            System.out.println(df1.format(date));
-            System.out.println(df1.format(petrolSalesRecords.getTransactionTime()).equals(df1.format(date)));
             if(df1.format(petrolSalesRecords.getTransactionTime()).equals(df1.format(date))){
                 System.out.println("今日已经购买了油卡,或充值了一次，请明天再来");
                 return true;
