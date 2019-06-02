@@ -46,6 +46,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
+
+        if(null == tokenHeader || "".equals(tokenHeader)) {
+            throw new SecurityException("登录信息不能为空");
+        }
         try {
             String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
             String username = JwtTool.getUsername(token);
@@ -58,7 +62,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 chain.doFilter(request, response);
             }
         }catch (Exception e){
-            chain.doFilter(request, response);
+            throw new SecurityException("身份验证过期");
         }
     }
 
