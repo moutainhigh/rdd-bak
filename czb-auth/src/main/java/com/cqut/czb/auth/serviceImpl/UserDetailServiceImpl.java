@@ -54,7 +54,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
 
     @Override
-    public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
+    synchronized public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
         if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return "该用户已存在";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
@@ -97,7 +97,7 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
-    public String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
+    synchronized public String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
         if(userMapperExtra.checkAccount(enterpriseUserDTO.getUserAccount())) return "该用户已存在";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(enterpriseUserDTO, VerificationCodeDTO.class);
