@@ -35,6 +35,12 @@ public class User {
 
     private String commissionLevelTwo;
 
+    private Integer partner;
+
+    private Date missionStartTime;
+
+    private Date missionEndTime;
+
     public String getUserId() {
         return userId;
     }
@@ -161,5 +167,29 @@ public class User {
 
     public void setCommissionLevelTwo(String commissionLevelTwo) {
         this.commissionLevelTwo = commissionLevelTwo == null ? null : commissionLevelTwo.trim();
+    }
+
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Integer partner) {
+        this.partner = partner;
+    }
+
+    public Date getMissionStartTime() {
+        return missionStartTime;
+    }
+
+    public void setMissionStartTime(Date missionStartTime) {
+        this.missionStartTime = missionStartTime;
+    }
+
+    public Date getMissionEndTime() {
+        return missionEndTime;
+    }
+
+    public void setMissionEndTime(Date missionEndTime) {
+        this.missionEndTime = missionEndTime;
     }
 }

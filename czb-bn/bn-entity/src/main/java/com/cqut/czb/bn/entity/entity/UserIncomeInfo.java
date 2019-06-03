@@ -23,6 +23,8 @@ public class UserIncomeInfo {
 
     private Double withdrawed;
 
+    private Double totalConsumption;
+
     public String getInfoId() {
         return infoId;
     }
@@ -101,5 +103,13 @@ public class UserIncomeInfo {
 
     public void setWithdrawed(Double withdrawed) {
         this.withdrawed = withdrawed;
+    }
+
+    public Double getTotalConsumption() {
+        return totalConsumption;
+    }
+
+    public void setTotalConsumption(Double totalConsumption) {
+        this.totalConsumption = totalConsumption;
     }
 }
