@@ -18,6 +18,8 @@ public class UserDTO {
 
     private Integer userRank;
 
+    private Integer partner;
+
     private String superiorUser;
 
     private List<RoleDTO> roleList;
@@ -87,5 +89,13 @@ public class UserDTO {
 
     public void setSuperiorUser(String superiorUser) {
         this.superiorUser = superiorUser;
+    }
+
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Integer partner) {
+        this.partner = partner;
     }
 }

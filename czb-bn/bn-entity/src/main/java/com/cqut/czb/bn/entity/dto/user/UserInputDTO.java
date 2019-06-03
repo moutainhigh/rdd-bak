@@ -17,6 +17,10 @@ public class UserInputDTO {
 
     private String userName;
 
+    private Integer partner;
+
+    private String superiorUser;
+
     private Integer userType;
 
     private Integer userRank;
@@ -102,5 +106,21 @@ public class UserInputDTO {
 
     public void setRoleId(String roleId) {
         this.roleId = roleId;
+    }
+
+    public String getSuperiorUser() {
+        return superiorUser;
+    }
+
+    public void setSuperiorUser(String superiorUser) {
+        this.superiorUser = superiorUser;
+    }
+
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Integer partner) {
+        this.partner = partner;
     }
 }

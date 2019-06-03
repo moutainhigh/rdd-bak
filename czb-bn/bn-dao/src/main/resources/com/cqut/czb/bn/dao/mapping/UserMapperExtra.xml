@@ -48,32 +48,41 @@
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="enterprise_name" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="user_rank" property="userRank" jdbcType="INTEGER" />
+    <result column="partner" property="partner" jdbcType="INTEGER" />
     <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <collection property="roleList" column="user_id" javaType="list" select="selectRole" />
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account, u.user_name, u.enterprise_name, u.user_rank, cu.user_account as 'superior_user', u.create_at
+    u.user_id, u.user_account, u.user_name, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at
     from
     (select
-    cu.user_id, user_account, user_name, enterprise_name, user_rank, superior_user, cu.create_at
+    cu.user_id, user_account, user_name, enterprise_name, user_rank, partner, superior_user, cu.create_at
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
-      <if test="userAccount != null and userAccount != ''">
-        and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="userName != null and userName != ''">
-        and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="createAt != null">
-        and cu.create_at between #{createStartTime} and #{createEndTime}
-      </if>
-      and cu.is_deleted = 0
+      cu.is_deleted = 0
     </where>
     ) as u
     left join czb_user cu on u.superior_user = cu.user_id
+      <where>
+        <if test="userAccount != null and userAccount != ''">
+            and u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="userName != null and userName != ''">
+            and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="createAt != null">
+            and u..create_at between #{createStartTime} and #{createEndTime}
+        </if>
+        <if test="partner != null">
+          and u.partner = #{partner,jdbcType=INTEGER}
+        </if>
+        <if test="superiorUser != null and superiorUser != ''">
+            and superior_user like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
+        </if>
+    </where>
   </select>
   <resultMap id="RoleResultMap" type="com.cqut.czb.bn.entity.dto.role.RoleDTO" >
     <id column="role_id" property="roleId" jdbcType="VARCHAR" />
