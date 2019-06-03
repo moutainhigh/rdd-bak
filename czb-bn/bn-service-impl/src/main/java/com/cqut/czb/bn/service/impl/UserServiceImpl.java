@@ -62,7 +62,19 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean updateUser(UserInputDTO userInputDTO) {
-        return false;
+        if(null != userInputDTO.getSuperiorUser() && !"".equals(userInputDTO.getSuperiorUser())) {
+            User user = userMapperExtra.findUserByAccount(userInputDTO.getSuperiorUser());
+            userInputDTO.setSuperiorUser(user.getUserAccount());
+        }
+        boolean isAssignRole = true;
+        if(null != userInputDTO.getRoleId() && !"".equals(userInputDTO.getRoleId())) {
+            isAssignRole = assignRole(userInputDTO);
+        }
+        if(isAssignRole) {
+            return userMapperExtra.updateUser(userInputDTO) > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -83,7 +95,7 @@ public class UserServiceImpl implements IUserService {
         userRole.setUserId(userInputDTO.getUserId());
         List<UserRole> deleteList = userRoleMapperExtra.slectUserRoleList(userRole);
         boolean isInsert = true;
-        if(userInputDTO.getRoleId() != null) {
+        if(userInputDTO.getRoleId() != null && !"".equals(userInputDTO)) {
             List<UserRole> tempList = new ArrayList<>();
             List<UserRole> insertList = initUserRoleList(userInputDTO);
             for(UserRole delete: deleteList) {
