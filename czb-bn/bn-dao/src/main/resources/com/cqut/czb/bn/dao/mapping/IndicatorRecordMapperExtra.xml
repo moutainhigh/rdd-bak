@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.IndicatorRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.IndicatorRecord" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="target_promotion_number" property="targetPromotionNumber" jdbcType="INTEGER" />
+    <result column="actual_promotion_number" property="actualPromotionNumber" jdbcType="INTEGER" />
+    <result column="target_new_consumer" property="targetNewConsumer" jdbcType="INTEGER" />
+    <result column="actual_new_consumer" property="actualNewConsumer" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="indicator_begin_time" property="indicatorBeginTime" jdbcType="TIMESTAMP" />
+    <result column="indicator_end_time" property="indicatorEndTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, target_promotion_number, actual_promotion_number, target_new_consumer, 
+    actual_new_consumer, state, indicator_begin_time, indicator_end_time, user_id, create_at, 
+    update_at
+  </sql>
+  <select id="selectIndicatorRecordInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_indicator_record
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and indicator_begin_time like concat('%',DATE_FORMAT(now(),'%Y-%m')  ,'%')
+  </select>
+</mapper>

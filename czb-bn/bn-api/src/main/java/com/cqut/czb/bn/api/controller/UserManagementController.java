@@ -97,4 +97,9 @@ public class UserManagementController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(userService.selectRecommender(user.getUserId()));
     }
+
+    @RequestMapping(value = "changePartner", method = RequestMethod.POST)
+    public  JSONResult changePartner(UserInputDTO userInputDTO){
+        return new JSONResult(userService.changePartner(userInputDTO));
+    }
 }
