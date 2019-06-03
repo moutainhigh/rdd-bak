@@ -42,9 +42,22 @@
         and is_deleted = 0
   </select>
 
-  <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+  <resultMap id="UserResultMap" type="com.cqut.czb.bn.entity.dto.user.UserDTO" >
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="enterprise_name" property="enterpriseName" jdbcType="VARCHAR" />
+    <result column="user_rank" property="userRank" jdbcType="INTEGER" />
+    <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <collection property="roleList" column="user_id" javaType="list" select="selectRole" />
+  </resultMap>
+  <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    cu.user_id as 'userId', user_account as 'userAccount', user_name as 'userName', enterprise_name as 'enterpriseName', user_rank as 'userRank', cu.create_at as 'createAt'
+    u.user_id, u.user_account, u.user_name, u.enterprise_name, u.user_rank, cu.user_account as 'superior_user', u.create_at
+    from
+    (select
+    cu.user_id, user_account, user_name, enterprise_name, user_rank, superior_user, cu.create_at
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
@@ -59,6 +72,29 @@
       </if>
       and cu.is_deleted = 0
     </where>
+    ) as u
+    left join czb_user cu on u.superior_user = cu.user_id
+  </select>
+  <resultMap id="RoleResultMap" type="com.cqut.czb.bn.entity.dto.role.RoleDTO" >
+    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <collection property="menuList" column="role_id" javaType="list" select="selectMenuList"/>
+  </resultMap>
+  <select id="selectRole" resultMap="RoleResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    select
+    cr.role_id, cr.role_name
+    from czb_role cr
+    left join czb_user_role cur on cr.role_id = cur.role_id
+    <where>
+      user_id = #{userId, jdbcType=VARCHAR}
+    </where>
+  </select>
+  <select id="selectMenuList" resultType="com.cqut.czb.bn.entity.entity.Menu" >
+    select
+    id, role_id as 'roleId', cm.menu_id as 'menuId', menu_name as 'menuName', menu_path as 'menuPath', menu_level as 'menuLevel',  parent
+    from czb_menu cm
+    left join czb_role_menu crm on cm.menu_id = crm.menu_id
+    where role_id = #{roleId,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >

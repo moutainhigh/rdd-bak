@@ -73,19 +73,7 @@ public class UserServiceImpl implements IUserService {
         }
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
         List<UserDTO> userList = userMapperExtra.selectUser(userInputDTO);
-        for(UserDTO userDTO: userList) {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(userDTO.getUserId());
-            List<UserRole> userRoleList = userRoleMapperExtra.slectUserRoleList(userRole);
-            for(UserRole userRole1: userRoleList) {
-                RoleInputDTO roleInputDTO = new RoleInputDTO();
-                roleInputDTO.setRoleId(userRole1.getRoleId());
-                List<RoleDTO> roleDTOList = roleMapperExtra.selectRole(roleInputDTO);
-                if(roleDTOList.size() > 0) {
-                    userDTO.setRoleList(roleDTOList);
-                }
-            }
-        }
+
         return new PageInfo<>(userList);
     }
 

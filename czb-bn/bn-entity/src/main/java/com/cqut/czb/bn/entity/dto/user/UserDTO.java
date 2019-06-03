@@ -18,6 +18,8 @@ public class UserDTO {
 
     private Integer userRank;
 
+    private String superiorUser;
+
     private List<RoleDTO> roleList;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -77,5 +79,13 @@ public class UserDTO {
 
     public void setRoleList(List<RoleDTO> roleList) {
         this.roleList = roleList;
+    }
+
+    public String getSuperiorUser() {
+        return superiorUser;
+    }
+
+    public void setSuperiorUser(String superiorUser) {
+        this.superiorUser = superiorUser;
     }
 }
