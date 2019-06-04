@@ -5,10 +5,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IndicatorRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,9 +32,8 @@ public class PartnerAssessmentController {
         return new JSONResult(indicatorRecordService.ConfirmComplianceByState(recordIds));
     }
 
-    @PostMapping(value = "exportExamination")
-    public JSONResult exportExamination(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input){
-
-        return null;
+    @PostMapping(value = "exportExaminationRecords")
+    public JSONResult exportExaminationRecords(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input){
+        return new JSONResult(indicatorRecordService.exportExaminationRecords(response,request,input));
     }
 }
