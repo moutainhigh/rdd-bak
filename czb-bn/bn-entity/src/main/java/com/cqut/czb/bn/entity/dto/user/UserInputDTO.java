@@ -32,9 +32,13 @@ public class UserInputDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createAt;
 
-    private Date createStartTime;
+    /**
+     * 指标开始时间
+     * */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date missionStartTime;
 
-    private Date createEndTime;
+    private Date missionEndTime;
 
     public Date getCreateAt() {
         return createAt;
@@ -84,22 +88,6 @@ public class UserInputDTO {
         this.userRank = userRank;
     }
 
-    public Date getCreateStartTime() {
-        return createStartTime;
-    }
-
-    public void setCreateStartTime(Date createStartTime) {
-        this.createStartTime = createStartTime;
-    }
-
-    public Date getCreateEndTime() {
-        return createEndTime;
-    }
-
-    public void setCreateEndTime(Date createEndTime) {
-        this.createEndTime = createEndTime;
-    }
-
     public String getRoleId() {
         return roleId;
     }
@@ -122,5 +110,21 @@ public class UserInputDTO {
 
     public void setPartner(Integer partner) {
         this.partner = partner;
+    }
+
+    public Date getMissionStartTime() {
+        return missionStartTime;
+    }
+
+    public void setMissionStartTime(Date missionStartTime) {
+        this.missionStartTime = missionStartTime;
+    }
+
+    public Date getMissionEndTime() {
+        return missionEndTime;
+    }
+
+    public void setMissionEndTime(Date missionEndTime) {
+        this.missionEndTime = missionEndTime;
     }
 }
