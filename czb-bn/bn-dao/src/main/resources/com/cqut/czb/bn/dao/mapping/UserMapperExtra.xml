@@ -37,11 +37,8 @@
   <update id="updateUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     update czb_user
     <set >
-      <if test="userAccount != null" >
+      <if test="userAccount != null and userAccount != ''" >
         user_account = #{userAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="userPsw != null" >
-        user_psw = #{userPsw,jdbcType=VARCHAR},
       </if>
       <if test="userType != null" >
         user_type = #{userType,jdbcType=INTEGER},
@@ -49,34 +46,13 @@
       <if test="userRank != null" >
         user_rank = #{userRank,jdbcType=INTEGER},
       </if>
-      <if test="isIdentified != null" >
-        is_identified = #{isIdentified,jdbcType=INTEGER},
-      </if>
-      <if test="superiorUser != null" >
+      <if test="superiorUser != null and superiorUser != ''" >
         superior_user = #{superiorUser,jdbcType=VARCHAR},
       </if>
-      <if test="isLoginPc != null" >
-        is_login_pc = #{isLoginPc,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null" >
+      <if test="userName != null and userName != ''" >
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="userIdCard != null" >
-        user_id_card = #{userIdCard,jdbcType=VARCHAR},
-      </if>
         update_at = now(),
-      <if test="userYunId != null" >
-        user_yun_id = #{userYunId,jdbcType=VARCHAR},
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=INTEGER},
-      </if>
-      <if test="commissionLevelOne != null" >
-        commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
-      </if>
-      <if test="commissionLevelTwo != null" >
-        commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
-      </if>
       <if test="partner != null" >
         partner = #{partner,jdbcType=INTEGER},
       </if>
@@ -131,15 +107,16 @@
             and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
         </if>
         <if test="createAt != null">
-            and u..create_at between #{createStartTime} and #{createEndTime}
+            and u.create_at like concat('%',DATE_FORMAT(#{createAt,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
         </if>
         <if test="partner != null">
           and u.partner = #{partner,jdbcType=INTEGER}
         </if>
         <if test="superiorUser != null and superiorUser != ''">
-            and superior_user like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
+            and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
         </if>
     </where>
+    order by u.create_at desc
   </select>
   <resultMap id="RoleResultMap" type="com.cqut.czb.bn.entity.dto.role.RoleDTO" >
     <id column="role_id" property="roleId" jdbcType="VARCHAR" />

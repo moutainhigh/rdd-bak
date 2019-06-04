@@ -87,10 +87,6 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public PageInfo<UserDTO> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO) {
-        if(userInputDTO.getCreateAt() != null) {
-            userInputDTO.setCreateStartTime(DateUtil.getDateStart(userInputDTO.getCreateAt()));
-            userInputDTO.setCreateEndTime(DateUtil.getDateEnd(userInputDTO.getCreateAt()));
-        }
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
         List<UserDTO> userList = userMapperExtra.selectUser(userInputDTO);
 
@@ -170,6 +166,12 @@ public class UserServiceImpl implements IUserService {
         boolean isUpdateIndicatorRecord =true;
         if(null != indicatorRecord) {
             indicatorRecord.setUpdateAt(new Date());
+            indicatorRecord.setIndicatorBeginTime(userInputDTO.getMissionStartTime());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(userInputDTO.getMissionStartTime());
+            cal.add(Calendar.MONTH, 1);
+            userInputDTO.setMissionEndTime(cal.getTime());
+            indicatorRecord.setIndicatorEndTime(cal.getTime());
             if( 1 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
@@ -182,23 +184,25 @@ public class UserServiceImpl implements IUserService {
             }
         } else if(0 != userInputDTO.getPartner()) {
             indicatorRecord = new IndicatorRecord();
+            indicatorRecord.setRecordId(StringUtil.createId());
             indicatorRecord.setCreateAt(new Date());
+            indicatorRecord.setState(0);
             indicatorRecord.setUserId(userInputDTO.getUserId());
-            Date date = new Date();
-            indicatorRecord.setIndicatorBeginTime(date);
+            indicatorRecord.setIndicatorBeginTime(userInputDTO.getMissionStartTime());
             Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
+            cal.setTime(userInputDTO.getMissionStartTime());
             cal.add(Calendar.MONTH, 1);
+            userInputDTO.setMissionEndTime(cal.getTime());
             indicatorRecord.setIndicatorEndTime(cal.getTime());
             if (1 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
-                isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+                isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
             }
             if (2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
-                isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+                isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
             }
         }
         
