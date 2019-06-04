@@ -24,4 +24,9 @@ public class PartnerAssessmentController {
     public JSONResult getIndicatorRecordList(IndicatorRecordDTO input, PageDTO pageDTO){
         return new JSONResult(indicatorRecordService.getIndicatorRecordList(input,pageDTO));
     }
+
+    @RequestMapping(value = "/comfirmCompliance",method = RequestMethod.POST)
+    public JSONResult comfirmComplianceByRecordIds(String recordIds){
+        return new JSONResult(indicatorRecordService.ConfirmComplianceByState(recordIds));
+    }
 }

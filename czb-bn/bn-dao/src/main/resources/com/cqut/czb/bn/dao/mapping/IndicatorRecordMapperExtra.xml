@@ -60,4 +60,14 @@
             AND indicator_end_time &lt;= #{indicatorEndTime,jdbcType=TIMESTAMP}
         </if>
     </select>
+    <update id="ConfirmComplianceByState">
+        UPDATE czb_indicator_record
+            SET state = 1
+            WHERE
+	        state = 0
+	        AND record_id in
+        <trim prefix="("  suffix=")" suffixOverrides="" prefixOverrides="">
+            ${recordIds}
+        </trim>
+    </update>
 </mapper>

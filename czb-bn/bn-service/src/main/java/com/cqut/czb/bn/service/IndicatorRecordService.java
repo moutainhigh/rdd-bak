@@ -4,8 +4,6 @@ import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.github.pagehelper.PageInfo;
 
-import java.util.List;
-
 /**
  * 创建人：徐皓东
  * 创建时间：2019/06/03
@@ -14,5 +12,5 @@ import java.util.List;
 public interface IndicatorRecordService {
     PageInfo<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO, PageDTO pageDTO);
 
-    Boolean ConfirmCompliance(List<String> recordIds);
+    Boolean ConfirmComplianceByState(String recordIds);
 }

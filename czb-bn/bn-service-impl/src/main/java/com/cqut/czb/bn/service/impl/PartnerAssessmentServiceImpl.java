@@ -22,7 +22,11 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     }
 
     @Override
-    public Boolean ConfirmCompliance(List<String> recordIds) {
-        return null;
+    public Boolean ConfirmComplianceByState(String recordIds) {
+        if(recordIds != null && recordIds != ""){
+            return indicatorRecordMapperExtra.ConfirmComplianceByState(recordIds) > 0;
+        }else{
+            return false;
+        }
     }
 }
