@@ -32,7 +32,7 @@ public class PartnerAssessmentController {
         return new JSONResult(indicatorRecordService.ConfirmComplianceByState(recordIds));
     }
 
-    @PostMapping(value = "exportExaminationRecords")
+    @PostMapping(value = "/exportExaminationRecords")
     public JSONResult exportExaminationRecords(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input){
         return new JSONResult(indicatorRecordService.exportExaminationRecords(response,request,input));
     }
