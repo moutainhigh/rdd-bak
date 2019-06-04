@@ -26,4 +26,48 @@
     where user_id = #{userId,jdbcType=VARCHAR}
     and indicator_begin_time like concat('%',DATE_FORMAT(now(),'%Y-%m')  ,'%')
   </select>
+    <select id="getIndicatorRecordList" resultType="com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO" parameterType="com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO">
+        SELECT
+        czb_user.user_id as userId,
+        czb_user.user_account as userAccount,
+        partner,
+        record_id as recordId,
+        target_promotion_number as targetPromotionNumber,
+        actual_promotion_number as actualPromotionNumber,
+        target_new_consumer as targetNewConsumer,
+        actual_new_consumer as actualNewConsumer,
+        state,
+        indicator_begin_time as indicatorBeginTime,
+        indicator_end_time as indicatorEndTime
+        FROM
+        czb_user
+        LEFT JOIN czb_indicator_record ON czb_user.user_id = czb_indicator_record.user_id
+        WHERE
+        czb_indicator_record.user_id IS NOT NULL
+        <if test=" userAccount != null and userAccount != ''">
+            AND user_account = #{userAccount,jdbcType = VARCHAR}
+        </if>
+        <if test=" state != null ">
+            AND state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="partner != null ">
+            AND partner = #{partner,jdbcType = INTEGER}
+        </if>
+        <if test="indicatorBeginTime != null">
+            AND indicator_begin_time &gt;= #{indicatorBeginTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="indicatorEndTime != null">
+            AND indicator_end_time &lt;= #{indicatorEndTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+    <update id="ConfirmComplianceByState">
+        UPDATE czb_indicator_record
+            SET state = 1
+            WHERE
+	        state = 0
+	        AND record_id in
+        <trim prefix="("  suffix=")" suffixOverrides="" prefixOverrides="">
+            ${recordIds}
+        </trim>
+    </update>
 </mapper>
