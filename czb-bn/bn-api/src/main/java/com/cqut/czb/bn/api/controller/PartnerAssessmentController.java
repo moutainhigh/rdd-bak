@@ -5,9 +5,13 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IndicatorRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 合伙人考核管理
@@ -15,8 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
  * 更新日期: 2019/06/03
  */
 @RestController
-@RequestMapping("/api/partnerAssessment")
+@RequestMapping("/partnerAssessment")
 public class PartnerAssessmentController {
+
     @Autowired
     IndicatorRecordService indicatorRecordService;
 
@@ -28,5 +33,11 @@ public class PartnerAssessmentController {
     @RequestMapping(value = "/comfirmCompliance",method = RequestMethod.POST)
     public JSONResult comfirmComplianceByRecordIds(String recordIds){
         return new JSONResult(indicatorRecordService.ConfirmComplianceByState(recordIds));
+    }
+
+    @PostMapping(value = "exportExamination")
+    public JSONResult exportExamination(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input){
+
+        return null;
     }
 }
