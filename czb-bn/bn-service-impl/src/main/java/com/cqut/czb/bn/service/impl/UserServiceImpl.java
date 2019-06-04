@@ -1,8 +1,6 @@
 package com.cqut.czb.bn.service.impl;
 
-import com.cqut.czb.bn.dao.mapper.RoleMapperExtra;
-import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
-import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
@@ -11,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
+import com.cqut.czb.bn.entity.entity.IndicatorRecord;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IUserService;
@@ -23,25 +22,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
     private final UserMapperExtra userMapperExtra;
 
-    @Autowired
     private final UserRoleMapperExtra userRoleMapperExtra;
 
-    @Autowired
     private final RoleMapperExtra roleMapperExtra;
 
-    public UserServiceImpl(UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra) {
+    private final DictMapperExtra dictMapperExtra;
+
+    private final IndicatorRecordMapperExtra indicatorRecordMapperExtra;
+
+    private final IndicatorRecordMapper indicatorRecordMapper;
+
+    @Autowired
+    public UserServiceImpl(UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper) {
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
         this.roleMapperExtra = roleMapperExtra;
+        this.dictMapperExtra = dictMapperExtra;
+        this.indicatorRecordMapperExtra = indicatorRecordMapperExtra;
+        this.indicatorRecordMapper = indicatorRecordMapper;
     }
 
     @Override
@@ -154,6 +162,51 @@ public class UserServiceImpl implements IUserService {
     @Override
     public RecommenderDTO selectRecommender(String userId) {
         return userMapperExtra.selectRecommender(userId);
+    }
+
+    @Override
+    public boolean changePartner(UserInputDTO userInputDTO) {
+        IndicatorRecord indicatorRecord = indicatorRecordMapperExtra.selectIndicatorRecordInfo(userInputDTO.getUserId());
+        boolean isUpdateIndicatorRecord =true;
+        if(null != indicatorRecord) {
+            indicatorRecord.setUpdateAt(new Date());
+            if( 1 == userInputDTO.getPartner()) {
+                indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryNumIndicators").getContent()));
+                indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
+                isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+            }
+            if( 2 == userInputDTO.getPartner()) {
+                indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
+                indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
+                isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+            }
+        } else if(0 != userInputDTO.getPartner()) {
+            indicatorRecord = new IndicatorRecord();
+            indicatorRecord.setCreateAt(new Date());
+            indicatorRecord.setUserId(userInputDTO.getUserId());
+            Date date = new Date();
+            indicatorRecord.setIndicatorBeginTime(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.MONTH, 1);
+            indicatorRecord.setIndicatorEndTime(cal.getTime());
+            if (1 == userInputDTO.getPartner()) {
+                indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryNumIndicators").getContent()));
+                indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
+                isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+            }
+            if (2 == userInputDTO.getPartner()) {
+                indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
+                indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
+                isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+            }
+        }
+        
+        if(isUpdateIndicatorRecord) {
+            return userMapperExtra.updateUser(userInputDTO) > 0;
+        } else {
+            return false;
+        }
     }
 
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {
