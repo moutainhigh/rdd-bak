@@ -155,7 +155,7 @@
         a.user_account,
         a.partner,
         a.superior_user,
-        COUNT(b.user_id) as total_count，
+        COUNT(b.user_id) as total_count,
         SUM(c.create_at) AS near_time
         FROM
         czb_user a
