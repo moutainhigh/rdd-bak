@@ -76,6 +76,11 @@ public class SystemConstants {
      */
     public static final String[] PETROL_RECHARGE_EXCEL_HEAD={"姓名","油卡号码","油卡类型","充值金额","支付价格","电话号码","购卡时间","购卡方式"};
 
+    /**
+     * 导出合伙人考核excel的头部
+     */
+    public static final String[] PARTNER_ASSESSMENT_EXCEL_HEAD = {"手机号码","合伙人类型","月目标推荐人数","月推荐人数","月目标首次消费人数","月新用户首次消费人数","状态","任务开始时间","任务结束时间"};
+
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }
