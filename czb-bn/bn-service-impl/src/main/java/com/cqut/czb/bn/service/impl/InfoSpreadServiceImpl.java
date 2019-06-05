@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     PartnerMapperExtra partnerMapperExtra;
 
     @Override
-    public PartnerDTO getPartnerInfo(PartnerDTO partnerDTO)  {
+    public PartnerDTO getPartnerInfo(PartnerDTO partnerDTO, User user)  {
         SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         try {
+            partnerDTO.setUserId(user.getUserId());
             if (month.parse(month.format(new Date())).compareTo(month.parse(partnerDTO.getMonthTime()))!=0) { //如果导出时间不为当月
                 return partnerMapperExtra.selectHistoryInfo(partnerDTO);
             }else {
@@ -57,7 +59,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     }
 
     @Override
-    public List<PartnerDTO> getNewChildByDay(PartnerDTO partnerDTO) {
+    public List<PartnerDTO> getNewChildByDay(PartnerDTO partnerDTO,User user) {
+        partnerDTO.setUserId(user.getUserId());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         List<PartnerDTO> childByDay = new ArrayList<>();
@@ -75,13 +78,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
         return childByDay;
     }
 
     @Override
-    public PartnerDTO getTotalInfo(PartnerDTO partnerDTO) {
+    public PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user) {
+        partnerDTO.setUserId(user.getUserId());
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = new PartnerDTO();
         partner.setTotalCount(getChildCount(totalChilds));
