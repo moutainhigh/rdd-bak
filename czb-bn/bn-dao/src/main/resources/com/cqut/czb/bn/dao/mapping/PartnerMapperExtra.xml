@@ -146,6 +146,7 @@
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
         <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
+        <result column="near_time" property="nearTime" jdbcType="TIMESTAMP" />
        <result column="total_count" property="totalCount" jdbcType="INTEGER" />
     </resultMap>
     <select id="selectNextChild" resultMap="PartnerChildMap" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO"  >
@@ -154,10 +155,12 @@
         a.user_account,
         a.partner,
         a.superior_user,
-        COUNT(b.user_id) as total_count
+        COUNT(b.user_id) as total_count，
+        SUM(c.create_at) AS near_time
         FROM
         czb_user a
         LEFT JOIN czb_user b ON a.user_id = b.superior_user
+        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
         <where>
             <if test="userId!=null and userId!=''">
                 a.superior_user = #{userId,jdbcType=VARCHAR}
