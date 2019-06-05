@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.api.controller.infoSpreadController;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
+
+import java.security.Principal;
 
 
 /**
@@ -18,15 +22,17 @@ import springfox.documentation.spring.web.json.Json;
 public class infoSpreadController {
     @Autowired
     InfoSpreadService infoSpreadService;
-
+    @Autowired
+    RedisUtils redisUtils;
     /**
      * 获取合伙人信息
      * @param partnerDTO
      * @return
      */
     @GetMapping("/getPartnerInfo")
-    public JSONResult getPartnerInfo(PartnerDTO partnerDTO){
-        return new JSONResult(infoSpreadService.getPartnerInfo(partnerDTO));
+    public JSONResult getPartnerInfo(PartnerDTO partnerDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(infoSpreadService.getPartnerInfo(partnerDTO,user));
     }
 
     /**
@@ -46,8 +52,9 @@ public class infoSpreadController {
      * @return
      */
     @GetMapping("/getChildByDay")
-    public JSONResult getChildByDay(PartnerDTO partnerDTO){
-        return new JSONResult(infoSpreadService.getNewChildByDay(partnerDTO));
+    public JSONResult getChildByDay(PartnerDTO partnerDTO,Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(infoSpreadService.getNewChildByDay(partnerDTO,user));
     }
 
     /**
@@ -56,7 +63,8 @@ public class infoSpreadController {
      * @return
      */
     @GetMapping("/getTotalInfo")
-    public  JSONResult getTotalInfo(PartnerDTO partnerDTO){
-        return new JSONResult(infoSpreadService.getTotalInfo(partnerDTO));
+    public  JSONResult getTotalInfo(PartnerDTO partnerDTO,Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(infoSpreadService.getTotalInfo(partnerDTO,user));
     }
 }
