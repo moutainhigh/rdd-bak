@@ -85,8 +85,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user) {
         partnerDTO.setUserId(user.getUserId());
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
-        PartnerDTO partner = new PartnerDTO();
-        partner.setUserId(user.getUserId());
+        PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);
         partner.setTotalCount(getChildCount(totalChilds));
         partner.setTotalMoney(getChildTotallMoney(totalChilds));
         return partner;
