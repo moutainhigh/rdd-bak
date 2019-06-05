@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface InfoSpreadService {
@@ -13,7 +14,7 @@ public interface InfoSpreadService {
 
      List<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO);
 
-     List<PartnerDTO> getNewChildByDay(PartnerDTO partnerDTO,User user);
+     ArrayList getNewChildByDay(PartnerDTO partnerDTO, User user);
 
      PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user);
  }

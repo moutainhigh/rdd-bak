@@ -59,18 +59,18 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     }
 
     @Override
-    public List<PartnerDTO> getNewChildByDay(PartnerDTO partnerDTO,User user) {
+    public ArrayList getNewChildByDay(PartnerDTO partnerDTO,User user) {
         partnerDTO.setUserId(user.getUserId());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
-        List<PartnerDTO> childByDay = new ArrayList<>();
+        ArrayList childByDay = new ArrayList<>();
+        int[] promotion = new int[7];
+        int[] consumption = new int[7];
         try {
             partnerDTO.setMonthTime(format.format(new Date()));
             for (int i=0;i<7;i++) {
-                PartnerDTO partner = new PartnerDTO();
-                partner.setActualPromotionNumber(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(partnerDTO)));
-                partner.setActualNewConsumer(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(partnerDTO)));
-                childByDay.add(partner);
+                promotion[i]=(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(partnerDTO)));
+                consumption[i]=(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(partnerDTO)));
                 c.setTime(format.parse(partnerDTO.getMonthTime()));
                 c.add(Calendar.DATE, -1);
                 partnerDTO.setMonthTime(format.format(c.getTime()));
@@ -78,6 +78,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         }catch (Exception e){
             e.printStackTrace();
         }
+        childByDay.add(promotion);
+        childByDay.add(consumption);
         return childByDay;
     }
 
@@ -103,7 +105,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public int getChildCount(List<PartnerDTO> partnerDTOS){
         int count = 0;          //合伙人下级数量
       if (partnerDTOS!=null&&partnerDTOS.size()!=0){
-          count = count + partnerDTOS.size()-1;       //如果有子级就加
+          count = count + partnerDTOS.size();       //如果有子级就加
           for (int i = 0; i<partnerDTOS.size(); i++){
               getChildCount(partnerDTOS.get(i).getChildPartner());
           }
