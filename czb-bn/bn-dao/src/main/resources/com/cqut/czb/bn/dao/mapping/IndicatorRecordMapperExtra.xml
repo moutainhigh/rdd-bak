@@ -45,7 +45,7 @@
         WHERE
         czb_indicator_record.user_id IS NOT NULL
         <if test=" userAccount != null and userAccount != ''">
-            AND user_account = #{userAccount,jdbcType = VARCHAR}
+            AND user_account like concat('%',#{userAccount,jdbcType = VARCHAR},'%')
         </if>
         <if test=" state != null ">
             AND state = #{state,jdbcType=INTEGER}
