@@ -103,7 +103,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     //子级总数
     public int getChildCount(List<PartnerDTO> partnerDTOS){
         int count = 0;          //合伙人下级数量
-      while (partnerDTOS!=null&&partnerDTOS.size()!=0){
+      if (partnerDTOS!=null&&partnerDTOS.size()!=0){
           count = count + partnerDTOS.size()-1;       //如果有子级就加
           for (int i = 0; i<partnerDTOS.size(); i++){
               getChildCount(partnerDTOS.get(i).getChildPartner());
@@ -114,7 +114,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     //子级消费总金额
     public Double getChildTotallMoney(List<PartnerDTO> partnerDTOS){
         Double count = 0.0;          //合伙人下级消费总数
-        while (partnerDTOS!=null&&partnerDTOS.size()!=0){
+        if (partnerDTOS!=null&&partnerDTOS.size()!=0){
 
             for (int i = 0; i<partnerDTOS.size(); i++){
                 count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加
