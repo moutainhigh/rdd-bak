@@ -1,14 +1,14 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.cqut.czb.bn.entity.dto.NotifyInsertInputDTO;
+import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @RestController
 @RequestMapping("/api/petrolManagement")
@@ -18,7 +18,10 @@ public class PetrolManagementController {
     @RequestMapping(value = "/getPetrolList",method = RequestMethod.GET)
     public JSONResult getPetrolList(GetPetrolListInputDTO inputDTO){
 //        return null;
-        return new JSONResult(petrolManagementService.getPetrolList(inputDTO));
+        DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
+        dataWithCountOutputDTO.setData(petrolManagementService.getPetrolList(inputDTO));
+        dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolMoneyCount(inputDTO));
+        return new JSONResult(dataWithCountOutputDTO);
     }
 
     @RequestMapping(value="/uploadPetrol",method=RequestMethod.POST)
@@ -43,5 +46,10 @@ public class PetrolManagementController {
     public JSONResult notSalePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 
         return new JSONResult(petrolManagementService.notSalePetrol(inputDTO.getPetrolIds()));
+    }
+
+    @RequestMapping(value = "/modifyPetrol",method = RequestMethod.POST)
+    public JSONResult modifyPetrol(@RequestBody ModifyPetrolInputDTO inputDTO){
+        return new JSONResult(petrolManagementService.modifyPetrol(inputDTO));
     }
 }

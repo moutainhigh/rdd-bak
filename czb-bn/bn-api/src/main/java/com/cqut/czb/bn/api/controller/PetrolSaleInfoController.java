@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
@@ -31,7 +32,10 @@ public class PetrolSaleInfoController {
     IPetrolRechargeService petrolRechargeService;
     @RequestMapping(value = "/getSaleInfoList",method = RequestMethod.GET)
     public JSONResult getSaleInfoList(GetPetrolSaleInfoInputDTO inputDTO){
-        return new JSONResult(petrolManagementService.getPetrolSaleInfoList(inputDTO));
+        DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
+        dataWithCountOutputDTO.setData(petrolManagementService.getPetrolSaleInfoList(inputDTO));
+        dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO));
+        return new JSONResult(dataWithCountOutputDTO);
     }
 
     @RequestMapping(value = "/getPetrolRechargeList",method = RequestMethod.GET)
