@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.PetrolMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
@@ -31,6 +32,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
     @Autowired
     AppHomePageService appHomePageService;
+    @Autowired
+    PetrolMapper petrolMapper;
 
     /**
      * 获取油卡列表
@@ -115,6 +118,34 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
 
         appHomePageService.selectAllPetrol();
         return result;
+    }
+
+    @Override
+    public boolean modifyPetrol(ModifyPetrolInputDTO inputDTO) {
+        boolean isRemoved = PetrolCache.clearPetrol("AllpetrolMap",inputDTO.getPetrolNum()) >=1;
+        if(!isRemoved){
+            return isRemoved;
+        }else {
+            Petrol petrol = new Petrol();
+            petrol.setPetrolId(inputDTO.getPetrolId());
+            petrol.setArea(inputDTO.getArea());
+            petrol.setPetrolDenomination(Double.parseDouble(inputDTO.getPetrolDenomination()));
+            petrol.setPetrolPrice(Double.parseDouble(inputDTO.getPetrolPrice()));
+            petrol.setPetrolPsw(inputDTO.getPetrolPsw());
+            return petrolMapper.updateByPrimaryKeySelective(petrol)>0;
+        }
+
+    }
+
+    @Override
+    public String getPetrolMoneyCount(GetPetrolListInputDTO inputDTO) {
+
+        return petrolMapperExtra.sumOfPetrolMoney(inputDTO);
+    }
+
+    @Override
+    public String getPetrolSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO) {
+        return petrolSalesRecordsMapperExtra.sumOfPetrolSaleMoney(infoInputDTO);
     }
 
     /**

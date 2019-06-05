@@ -98,7 +98,8 @@ public class PetrolCache {
      * 移除某张油卡
      * 根据传来的名字进行操作
      */
-    public static void clearPetrol(String mapName, String petrolNum) {
+    public static int clearPetrol(String mapName, String petrolNum) {
+        int result = 0;
         if (mapName.trim() == "AllpetrolMap") {
             Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
             while (it.hasNext()) {
@@ -107,8 +108,10 @@ public class PetrolCache {
                 if (key == petrolNum) {
                     System.out.println("delete this: " + key + ";" );
                     it.remove();
+                    result++;
                 }
             }
+
         } else if (mapName.trim() == "currentPetrolMap") {
             Iterator<Map.Entry<String, Petrol>> it = currentPetrolMap.entrySet().iterator();
             while (it.hasNext()) {
@@ -116,10 +119,13 @@ public class PetrolCache {
                 String key = entry.getKey();
                 if (key == petrolNum) {
                     System.out.println("delete this: " + key);
-                    currentPetrolMap.remove(petrolNum);
+                    it.remove();
+                    result ++;
                 }
             }
+
         }
+        return result;
     }
 
     /**

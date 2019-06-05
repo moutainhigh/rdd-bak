@@ -49,4 +49,6 @@ public interface PetrolSalesRecordsMapperExtra {
      * @return
      */
     int updateByPrimaryKeySelective(PetrolSalesRecords record);
+
+    String sumOfPetrolSaleMoney(GetPetrolSaleInfoInputDTO infoInputDTO);
 }

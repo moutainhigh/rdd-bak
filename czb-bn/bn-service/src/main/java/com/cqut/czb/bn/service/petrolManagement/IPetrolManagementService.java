@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.petrolManagement;
 
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
@@ -17,4 +18,11 @@ public interface IPetrolManagementService {
     int salePetrol(String petrolIds);
 
     int notSalePetrol(String petrolIds);
+
+    boolean modifyPetrol(ModifyPetrolInputDTO inputDTO);
+
+    String getPetrolMoneyCount(GetPetrolListInputDTO inputDTO);
+
+    String getPetrolSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO);
+
 }
