@@ -7,7 +7,6 @@ import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
-import com.cqut.czb.bn.entity.dto.user.UserTreeDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,7 +29,7 @@ public interface UserMapperExtra {
 
     RecommenderDTO selectRecommender(String userId);
 
-    UserTreeDTO getAllUserByOneParent(@Param("userId") String userId);
+//    UserTreeDTO getAllUserByOneParent(@Param("userId") String userId);
 
     /**
      * 修改密码——个人中心
