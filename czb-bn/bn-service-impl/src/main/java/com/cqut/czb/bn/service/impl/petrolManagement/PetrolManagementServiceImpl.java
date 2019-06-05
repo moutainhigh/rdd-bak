@@ -1,6 +1,5 @@
 package com.cqut.czb.bn.service.impl.petrolManagement;
 
-import com.cqut.czb.bn.dao.mapper.PetrolMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
@@ -11,7 +10,6 @@ import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +30,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
     @Autowired
     AppHomePageService appHomePageService;
-    @Autowired
-    PetrolMapper petrolMapper;
+//    @Autowired
+//    PetrolMapper petrolMapper;
 
     /**
      * 获取油卡列表
@@ -132,7 +130,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             petrol.setPetrolDenomination(Double.parseDouble(inputDTO.getPetrolDenomination()));
             petrol.setPetrolPrice(Double.parseDouble(inputDTO.getPetrolPrice()));
             petrol.setPetrolPsw(inputDTO.getPetrolPsw());
-            return petrolMapper.updateByPrimaryKeySelective(petrol)>0;
+            return false;
         }
 
     }
