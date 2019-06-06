@@ -1,9 +1,12 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.InfoSpreadService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +60,9 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     }
 
     @Override
-    public List<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO) {       //查询下一级的列表及每个子级的下一级人数
-        return partnerMapperExtra.selectNextChild(partnerDTO);
+    public PageInfo<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO, PageDTO pageDTO) {       //查询下一级的列表及每个子级的下一级人数
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        return new PageInfo<>(partnerMapperExtra.selectNextChild(partnerDTO));
     }
 
     @Override
