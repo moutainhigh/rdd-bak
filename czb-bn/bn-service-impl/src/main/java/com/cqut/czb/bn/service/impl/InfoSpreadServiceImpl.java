@@ -38,9 +38,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 //                Date lastMonth = c.getTime();
 //                historyChild.setMonthTime(format.format(lastMonth));                           //取上个月的时间
 //                PartnerDTO lastMonthInfo = getPartnerInfo(historyChild);                    //查询上个月合伙人的指标数据
-                partner.setChildPartner(getPartnerChildInfoWithTime(partnerDTO));            //获取指定月份中注册的子级用户
-                partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
-                partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+                List<PartnerDTO> child = getPartnerChildInfoWithTime(partnerDTO);
+                if (child!=null&&child.size()!=0) {
+                    partner.setChildPartner(child);            //获取指定月份中注册的子级用户
+                    partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
+                    partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+                }
                 return partner;
             }
         }catch (Exception e){
