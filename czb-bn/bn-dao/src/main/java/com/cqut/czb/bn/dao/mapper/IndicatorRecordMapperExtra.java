@@ -8,9 +8,15 @@ import java.util.List;
 
 public interface IndicatorRecordMapperExtra {
 
-    List<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO);
+    List<IndicatorRecordDTO> getIndicatorRecordList(@Param("indicatorRecordDTO")IndicatorRecordDTO indicatorRecordDTO);
 
+    /*
+        批量确认达标
+     */
     int ConfirmComplianceByState(@Param("recordIds")String recordIds);
 
+    int insertIndicatorRecordList(List<IndicatorRecordDTO> list);
+
     IndicatorRecord selectIndicatorRecordInfo(String userId);
+
 }

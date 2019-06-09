@@ -5,10 +5,15 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IndicatorRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 /**
  * 合伙人考核管理
@@ -16,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * 更新日期: 2019/06/03
  */
 @RestController
+@Validated
 @RequestMapping("/partnerAssessment")
 public class PartnerAssessmentController {
 
@@ -28,7 +34,7 @@ public class PartnerAssessmentController {
     }
 
     @RequestMapping(value = "/comfirmCompliance",method = RequestMethod.POST)
-    public JSONResult comfirmComplianceByRecordIds(String recordIds){
+    public JSONResult comfirmComplianceByRecordIds(@NotNull(message = "确认ID不能为空")String recordIds){
         return new JSONResult(indicatorRecordService.ConfirmComplianceByState(recordIds));
     }
 

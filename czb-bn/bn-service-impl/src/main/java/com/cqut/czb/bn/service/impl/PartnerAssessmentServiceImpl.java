@@ -3,12 +3,10 @@ package com.cqut.czb.bn.service.impl;
 import com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.entity.IndicatorRecord;
-import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.util.constants.SystemConstants;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 @Service
 public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.IndicatorRecordService {
@@ -29,13 +30,40 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     @Override
     public PageInfo<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
-        List<IndicatorRecordDTO> list = indicatorRecordMapperExtra.getIndicatorRecordList(indicatorRecordDTO);
-        return new PageInfo<>(list);
+        return new PageInfo<>(indicatorRecordMapperExtra.getIndicatorRecordList(indicatorRecordDTO));
     }
 
     @Override
     public Boolean ConfirmComplianceByState(String recordIds) {
         if(recordIds != null && recordIds != ""){
+            IndicatorRecordDTO temp = new IndicatorRecordDTO();
+            temp.setRecordIds(recordIds);
+            List<IndicatorRecordDTO> list = indicatorRecordMapperExtra.getIndicatorRecordList(temp);
+
+            //迭代器遍历，删除不需要新增记录的元素
+            Iterator iterator = list.iterator();
+            Calendar c = Calendar.getInstance();
+            while (iterator.hasNext()){
+                IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
+                if(indicatorRecordDTO.getState() == 1 || indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
+                    iterator.remove();
+                }else{
+                    //将指标开始时间和结束时间增加一个月
+                    c.setTime(indicatorRecordDTO.getIndicatorBeginTime());
+                    c.add(Calendar.MONTH, +1);
+                    indicatorRecordDTO.setIndicatorBeginTime(c.getTime());
+
+                    c.setTime(indicatorRecordDTO.getIndicatorEndTime());
+                    c.add(Calendar.MONTH, +1);
+                    indicatorRecordDTO.setIndicatorEndTime(c.getTime());
+
+                    indicatorRecordDTO.setRecordId(StringUtil.createId());
+                }
+            }
+
+            if(list.size() > 0){
+                indicatorRecordMapperExtra.insertIndicatorRecordList(list);
+            }
             return indicatorRecordMapperExtra.ConfirmComplianceByState(recordIds) > 0;
         }else{
             return false;

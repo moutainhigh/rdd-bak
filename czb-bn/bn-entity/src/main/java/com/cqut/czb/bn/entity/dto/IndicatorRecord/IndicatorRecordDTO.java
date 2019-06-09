@@ -5,29 +5,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class IndicatorRecordDTO{
-    String recordId;
+    private String recordId;
 
-    String userId;
+    private String userId;
 
-    String userAccount;
+    private String userAccount;
 
-    Integer partner;
+    private Integer partner;
 
-    Integer targetPromotionNumber;
+    private Integer targetPromotionNumber;
 
-    Integer actualPromotionNumber;
+    private Integer actualPromotionNumber;
 
-    Integer targetNewConsumer;
+    private Integer targetNewConsumer;
 
-    Integer actualNewConsumer;
+    private Integer actualNewConsumer;
 
-    Integer state;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date indicatorBeginTime;
+    private Integer state;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date indicatorEndTime;
+    private Date indicatorBeginTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date indicatorEndTime;
+
+    private Date missionStartTime;
+
+    private Date missionEndTime;
+
+    private String recordIds;
 
     public String getRecordId() {
         return recordId;
@@ -115,5 +121,29 @@ public class IndicatorRecordDTO{
 
     public void setIndicatorEndTime(Date indicatorEndTime) {
         this.indicatorEndTime = indicatorEndTime;
+    }
+
+    public Date getMissionStartTime() {
+        return missionStartTime;
+    }
+
+    public void setMissionStartTime(Date missionStartTime) {
+        this.missionStartTime = missionStartTime;
+    }
+
+    public Date getMissionEndTime() {
+        return missionEndTime;
+    }
+
+    public void setMissionEndTime(Date missionEndTime) {
+        this.missionEndTime = missionEndTime;
+    }
+
+    public String getRecordIds() {
+        return recordIds;
+    }
+
+    public void setRecordIds(String recordIds) {
+        this.recordIds = recordIds;
     }
 }
