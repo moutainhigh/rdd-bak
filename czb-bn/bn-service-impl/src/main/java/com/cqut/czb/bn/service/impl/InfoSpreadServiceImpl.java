@@ -1,9 +1,12 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.InfoSpreadService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +41,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 //                Date lastMonth = c.getTime();
 //                historyChild.setMonthTime(format.format(lastMonth));                           //取上个月的时间
 //                PartnerDTO lastMonthInfo = getPartnerInfo(historyChild);                    //查询上个月合伙人的指标数据
-                partner.setChildPartner(getPartnerChildInfoWithTime(partnerDTO));            //获取指定月份中注册的子级用户
-                partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
-                partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+                List<PartnerDTO> child = getPartnerChildInfoWithTime(partnerDTO);
+                if (child!=null&&child.size()!=0) {
+                    partner.setChildPartner(child);            //获取指定月份中注册的子级用户
+                    partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
+                    partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+                }
                 return partner;
             }
         }catch (Exception e){
@@ -54,23 +60,24 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     }
 
     @Override
-    public List<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO) {       //查询下一级的列表及每个子级的下一级人数
-        return partnerMapperExtra.selectNextChild(partnerDTO);
+    public PageInfo<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO, PageDTO pageDTO) {       //查询下一级的列表及每个子级的下一级人数
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        return new PageInfo<>(partnerMapperExtra.selectNextChild(partnerDTO));
     }
 
     @Override
-    public List<PartnerDTO> getNewChildByDay(PartnerDTO partnerDTO,User user) {
+    public ArrayList getNewChildByDay(PartnerDTO partnerDTO,User user) {
         partnerDTO.setUserId(user.getUserId());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
-        List<PartnerDTO> childByDay = new ArrayList<>();
+        ArrayList childByDay = new ArrayList<>();
+        int[] promotion = new int[7];
+        int[] consumption = new int[7];
         try {
             partnerDTO.setMonthTime(format.format(new Date()));
             for (int i=0;i<7;i++) {
-                PartnerDTO partner = new PartnerDTO();
-                partner.setActualPromotionNumber(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(partnerDTO)));
-                partner.setActualNewConsumer(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(partnerDTO)));
-                childByDay.add(partner);
+                promotion[i]=(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(partnerDTO)));
+                consumption[i]=(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(partnerDTO)));
                 c.setTime(format.parse(partnerDTO.getMonthTime()));
                 c.add(Calendar.DATE, -1);
                 partnerDTO.setMonthTime(format.format(c.getTime()));
@@ -78,6 +85,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         }catch (Exception e){
             e.printStackTrace();
         }
+        childByDay.add(promotion);
+        childByDay.add(consumption);
         return childByDay;
     }
 
@@ -85,7 +94,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user) {
         partnerDTO.setUserId(user.getUserId());
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
-        PartnerDTO partner = new PartnerDTO();
+        PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);
         partner.setTotalCount(getChildCount(totalChilds));
         partner.setTotalMoney(getChildTotallMoney(totalChilds));
         return partner;
@@ -102,8 +111,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     //子级总数
     public int getChildCount(List<PartnerDTO> partnerDTOS){
         int count = 0;          //合伙人下级数量
-      while (partnerDTOS!=null&&partnerDTOS.size()!=0){
-          count = count + partnerDTOS.size()-1;       //如果有子级就加
+      if (partnerDTOS!=null&&partnerDTOS.size()!=0){
+          count = count + partnerDTOS.size();       //如果有子级就加
           for (int i = 0; i<partnerDTOS.size(); i++){
               getChildCount(partnerDTOS.get(i).getChildPartner());
           }
@@ -113,7 +122,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     //子级消费总金额
     public Double getChildTotallMoney(List<PartnerDTO> partnerDTOS){
         Double count = 0.0;          //合伙人下级消费总数
-        while (partnerDTOS!=null&&partnerDTOS.size()!=0){
+        if (partnerDTOS!=null&&partnerDTOS.size()!=0){
 
             for (int i = 0; i<partnerDTOS.size(); i++){
                 count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加

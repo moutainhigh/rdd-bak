@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.infoSpreadController;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -41,8 +42,8 @@ public class infoSpreadController {
      * @return
      */
     @GetMapping("/getNextChild")
-    public JSONResult getNextChild(PartnerDTO partnerDTO){
-        return new JSONResult(infoSpreadService.getNextChildInfo(partnerDTO));
+    public JSONResult getNextChild(PartnerDTO partnerDTO, PageDTO pageDTO){
+        return new JSONResult(infoSpreadService.getNextChildInfo(partnerDTO,pageDTO));
 
     }
 
