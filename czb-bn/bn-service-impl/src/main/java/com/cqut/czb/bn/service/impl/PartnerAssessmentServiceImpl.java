@@ -50,7 +50,7 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
             Calendar c = Calendar.getInstance();
             while (iterator.hasNext()){
                 IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
-                if(indicatorRecordDTO.getState() == 1 || indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
+                if(indicatorRecordDTO.getState() == 2 || indicatorRecordDTO.getState() == 3 || indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
                     iterator.remove();
                 }else{
                     //将指标开始时间和结束时间增加一个月
@@ -62,14 +62,25 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
                     c.add(Calendar.MONTH, +1);
                     indicatorRecordDTO.setIndicatorEndTime(c.getTime());
 
-                    indicatorRecordDTO.setRecordId(StringUtil.createId());
+//                    indicatorRecordDTO.setRecordId(StringUtil.createId());
+
+                    if(indicatorRecordDTO.getTargetNewConsumer() <= indicatorRecordDTO.getActualNewConsumer()
+                            &&indicatorRecordDTO.getTargetPromotionNumber() <= indicatorRecordDTO.getActualPromotionNumber()){
+                        indicatorRecordDTO.setState(2);
+                    }else{
+                        indicatorRecordDTO.setState(3);
+                    }
                 }
             }
-
+            int i = 0;
             if(list.size() > 0){
-                indicatorRecordMapperExtra.insertIndicatorRecordList(list);
+                i = indicatorRecordMapperExtra.ConfirmComplianceByState(list);
             }
-            return indicatorRecordMapperExtra.ConfirmComplianceByState(recordIds) > 0;
+            for(IndicatorRecordDTO indicatorRecordDTO : list){
+                indicatorRecordDTO.setRecordId(StringUtil.createId());
+            }
+            indicatorRecordMapperExtra.insertIndicatorRecordList(list);
+            return i > 0;
         }else{
             return false;
         }

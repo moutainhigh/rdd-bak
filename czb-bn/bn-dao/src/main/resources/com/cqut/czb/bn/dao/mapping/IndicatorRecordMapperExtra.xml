@@ -68,15 +68,22 @@
             </trim>
         </if>
     </select>
-    <update id="ConfirmComplianceByState">
-        UPDATE czb_indicator_record
-            SET state = 2
-            WHERE
-	        state != 2
-	        AND record_id in
-        <trim prefix="("  suffix=")" suffixOverrides="" prefixOverrides="">
-            ${recordIds}
-        </trim>
+    <update id="ConfirmComplianceByState" parameterType="java.util.List">
+        UPDATE `czb`.`czb_indicator_record`
+        <set>
+            <trim prefix="state = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when record_id = #{item.recordId,jdbcType = VARCHAR}
+                    then #{item.state, jdbcType = INTEGER}
+                </foreach>
+            </trim>
+        </set>
+        <where>
+            record_id in
+            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+                #{item.recordId,jdbcType=VARCHAR}
+            </foreach>
+        </where>
     </update>
     <update id="statisticsPeople" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         UPDATE `czb`.`czb_indicator_record`
@@ -84,7 +91,7 @@
               `actual_new_consumer` = #{actualNewConsumer,jdbcType = INTEGER},
               `state` = 1
           WHERE
-	          `state` != 2
+	          `state` != 2 and `state` != 3
 	      AND
 	          user_id = #{userId,jdbcType = VARCHAR};
     </update>
@@ -99,9 +106,9 @@
             (
               #{item.recordId,jdbcType = VARCHAR},
               #{item.targetPromotionNumber,jdbcType = INTEGER},
-              #{item.actualPromotionNumber,jdbcType = INTEGER},
+              0,
               #{item.targetNewConsumer,jdbcType = INTEGER},
-              #{item.actualNewConsumer,jdbcType = INTEGER},
+              0,
               0,
               #{item.indicatorBeginTime,jdbcType=TIMESTAMP},
               #{item.indicatorEndTime,jdbcType=TIMESTAMP},
