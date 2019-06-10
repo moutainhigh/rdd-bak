@@ -70,9 +70,9 @@
     </select>
     <update id="ConfirmComplianceByState">
         UPDATE czb_indicator_record
-            SET state = 1
+            SET state = 2
             WHERE
-	        state = 0
+	        state != 2
 	        AND record_id in
         <trim prefix="("  suffix=")" suffixOverrides="" prefixOverrides="">
             ${recordIds}
