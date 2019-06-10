@@ -18,4 +18,9 @@ public interface IndicatorRecordService {
     Boolean ConfirmComplianceByState(String recordIds);
 
     String exportExaminationRecords(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input);
+
+    /**
+     * 统计两个实际人数
+     */
+    Boolean statisticsPeople(String userId);
 }

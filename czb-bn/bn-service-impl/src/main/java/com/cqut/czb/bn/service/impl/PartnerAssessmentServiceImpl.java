@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra;
+import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -24,8 +26,11 @@ import java.util.Iterator;
 import java.util.List;
 @Service
 public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.IndicatorRecordService {
+
     @Autowired
     IndicatorRecordMapperExtra indicatorRecordMapperExtra;
+    @Autowired
+    PartnerMapperExtra partnerMapperExtra;
 
     @Override
     public PageInfo<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO, PageDTO pageDTO) {
@@ -102,6 +107,45 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
                 return "Excel数据量过大，请缩短导出文件的时间间隔";
             }
         }
+    }
+
+    @Override
+    public Boolean statisticsPeople(String userId) {
+        PartnerDTO partnerDTO = new PartnerDTO();
+        partnerDTO.setUserId(userId);
+        PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);
+        List<PartnerDTO> child = getPartnerChildInfoWithTime(partnerDTO);
+        if (child!=null&&child.size()!=0) {
+            partner.setChildPartner(child);            //获取指定月份中注册的子级用户
+            partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
+            partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+        }else{
+            partner.setActualNewConsumer(0);
+            partner.setActualPromotionNumber(0);
+        }
+        if(indicatorRecordMapperExtra.statisticsPeople(partner) > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public List<PartnerDTO> getPartnerChildInfoWithTime(PartnerDTO partnerDTO){
+        return partnerMapperExtra.selectPartnerChildInfoWithTime(partnerDTO);
+    }
+
+    public int getChildCount(List<PartnerDTO> partnerDTOS){
+        int count = 0;          //合伙人下级数量
+        if (partnerDTOS!=null&&partnerDTOS.size()!=0){
+            count = count + partnerDTOS.size();       //如果有子级就加
+            for (int i = 0; i<partnerDTOS.size(); i++){
+                getChildCount(partnerDTOS.get(i).getChildPartner());
+            }
+        }
+        return count;
+    }
+
+    public List<PartnerDTO> getPartnerChildInfoWithMoney(PartnerDTO partnerDTO){
+        return partnerMapperExtra.selectPartnerChildInfoWithMoney(partnerDTO);
     }
 
     public Workbook getPartnerAssessmentRecordWorkBook(List<IndicatorRecordDTO> list){

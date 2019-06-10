@@ -78,6 +78,16 @@
             ${recordIds}
         </trim>
     </update>
+    <update id="statisticsPeople" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        UPDATE `czb`.`czb_indicator_record`
+          SET `actual_promotion_number` = #{actualPromotionNumber,jdbcType = INTEGER},
+              `actual_new_consumer` = #{actualNewConsumer,jdbcType = INTEGER},
+              `state` = 1
+          WHERE
+	          `state` != 2
+	      AND
+	          user_id = #{userId,jdbcType = VARCHAR};
+    </update>
     <insert id="insertIndicatorRecordList" parameterType="java.util.List">
       INSERT INTO `czb`.`czb_indicator_record`
       ( `record_id`,`target_promotion_number`, `actual_promotion_number`,
