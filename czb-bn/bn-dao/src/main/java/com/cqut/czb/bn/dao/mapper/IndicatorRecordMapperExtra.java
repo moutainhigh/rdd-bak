@@ -14,7 +14,7 @@ public interface IndicatorRecordMapperExtra {
     /*
         批量确认达标
      */
-    int ConfirmComplianceByState(@Param("recordIds")String recordIds);
+    int ConfirmComplianceByState(List<IndicatorRecordDTO> list);
 
     int insertIndicatorRecordList(List<IndicatorRecordDTO> list);
 
