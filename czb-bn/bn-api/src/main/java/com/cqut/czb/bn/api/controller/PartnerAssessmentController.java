@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IndicatorRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class PartnerAssessmentController {
     }
 
     @GetMapping(value = "/statistics")
-    public JSONResult statisticsPeople(@NotNull(message = "USER_ID不能为空")String userId){
-        return new JSONResult(indicatorRecordService.statisticsPeople(userId));
+    public JSONResult statisticsPeople(PartnerDTO partnerDTO){
+        return new JSONResult(indicatorRecordService.statisticsPeople(partnerDTO));
     }
 }

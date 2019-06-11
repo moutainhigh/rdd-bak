@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.github.pagehelper.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,5 +23,5 @@ public interface IndicatorRecordService {
     /**
      * 统计两个实际人数
      */
-    Boolean statisticsPeople(String userId);
+    Boolean statisticsPeople(PartnerDTO partnerDTO);
 }

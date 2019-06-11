@@ -121,10 +121,9 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     }
 
     @Override
-    public Boolean statisticsPeople(String userId) {
-        PartnerDTO partnerDTO = new PartnerDTO();
-        partnerDTO.setUserId(userId);
+    public Boolean statisticsPeople(PartnerDTO partnerDTO) {
         PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);
+
         List<PartnerDTO> child = getPartnerChildInfoWithTime(partnerDTO);
         if (child!=null&&child.size()!=0) {
             partner.setChildPartner(child);            //获取指定月份中注册的子级用户
