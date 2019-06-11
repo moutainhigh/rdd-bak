@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.service.impl.InfoSpreadServiceImpl;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -20,10 +21,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 @Service
 public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.IndicatorRecordService {
 
@@ -31,6 +30,8 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     IndicatorRecordMapperExtra indicatorRecordMapperExtra;
     @Autowired
     PartnerMapperExtra partnerMapperExtra;
+    @Autowired
+    InfoSpreadServiceImpl infoSpreadService;
 
     @Override
     public PageInfo<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO, PageDTO pageDTO) {
@@ -123,12 +124,14 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     @Override
     public Boolean statisticsPeople(PartnerDTO partnerDTO) {
         PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);
-
-        List<PartnerDTO> child = getPartnerChildInfoWithTime(partnerDTO);
+        List<PartnerDTO> children = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
+        List<PartnerDTO> ids = new ArrayList<>();
+        infoSpreadService.getChildIds(ids,children);
+        List<PartnerDTO> child = getPartnerChildInfoWithTime(ids,partnerDTO);
         if (child!=null&&child.size()!=0) {
             partner.setChildPartner(child);            //获取指定月份中注册的子级用户
             partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
-            partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+            partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(ids,partnerDTO)));
         }else{
             partner.setActualNewConsumer(0);
             partner.setActualPromotionNumber(0);
@@ -139,8 +142,11 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
         return false;
     }
 
-    public List<PartnerDTO> getPartnerChildInfoWithTime(PartnerDTO partnerDTO){
-        return partnerMapperExtra.selectPartnerChildInfoWithTime(partnerDTO);
+    public List<PartnerDTO> getPartnerChildInfoWithTime(List<PartnerDTO> list, PartnerDTO partnerDTO){
+        if(list.size()==0 || list==null){
+            return new ArrayList<>();
+        }
+        return partnerMapperExtra.selectPartnerChildInfoWithTime(list,partnerDTO);
     }
 
     public int getChildCount(List<PartnerDTO> partnerDTOS){
@@ -154,8 +160,8 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
         return count;
     }
 
-    public List<PartnerDTO> getPartnerChildInfoWithMoney(PartnerDTO partnerDTO){
-        return partnerMapperExtra.selectPartnerChildInfoWithMoney(partnerDTO);
+    public List<PartnerDTO> getPartnerChildInfoWithMoney(List<PartnerDTO>list, PartnerDTO partnerDTO){
+        return partnerMapperExtra.selectPartnerChildInfoWithMoney(list,partnerDTO);
     }
 
     public Workbook getPartnerAssessmentRecordWorkBook(List<IndicatorRecordDTO> list){

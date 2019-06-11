@@ -25,14 +25,19 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     @Override
     public PartnerDTO getPartnerInfo(PartnerDTO partnerDTO, User user)  {
         SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
             partnerDTO.setUserId(user.getUserId());
             if (month.parse(month.format(new Date())).compareTo(month.parse(partnerDTO.getMonthTime()))!=0) { //如果导出时间不为当月
+                PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
+                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
                 return partnerMapperExtra.selectHistoryInfo(partnerDTO);
             }else {
                 PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);      //找到合伙人指标数据
+                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
 //                partner.setChildPartner(getPartnerChildInfo(partnerDTO));                      //找到合伙人当月的子级用户
 //                PartnerDTO historyChild = new PartnerDTO();                                    //创建新对象用以查询上一个月的数据
 //                historyChild.setUserId(partner.getUserId());
@@ -41,11 +46,13 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 //                Date lastMonth = c.getTime();
 //                historyChild.setMonthTime(format.format(lastMonth));                           //取上个月的时间
 //                PartnerDTO lastMonthInfo = getPartnerInfo(historyChild);                    //查询上个月合伙人的指标数据
-                List<PartnerDTO> child = getPartnerChildInfoWithTime(partnerDTO);
+                List<PartnerDTO> totalChild = getPartnerChildInfo(partnerDTO);
+                List<PartnerDTO> ids = new ArrayList<>();
+                List<PartnerDTO> child = getPartnerChildInfoWithTime(getChildIds(ids,totalChild),partnerDTO);
                 if (child!=null&&child.size()!=0) {
                     partner.setChildPartner(child);            //获取指定月份中注册的子级用户
                     partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
-                    partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(partnerDTO)));
+                    partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(ids,partnerDTO)));
                 }
                 return partner;
             }
@@ -71,13 +78,15 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         ArrayList childByDay = new ArrayList<>();
+        List<PartnerDTO> children = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         int[] promotion = new int[7];
         int[] consumption = new int[7];
         try {
             partnerDTO.setMonthTime(format.format(new Date()));
             for (int i=0;i<7;i++) {
-                promotion[i]=(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(partnerDTO)));
-                consumption[i]=(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(partnerDTO)));
+                List<PartnerDTO> ids = new ArrayList<>();
+                promotion[i]=(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(getChildIds(ids,children),partnerDTO)));
+                consumption[i]=(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(ids,partnerDTO)));
                 c.setTime(format.parse(partnerDTO.getMonthTime()));
                 c.add(Calendar.DATE, -1);
                 partnerDTO.setMonthTime(format.format(c.getTime()));
@@ -96,16 +105,16 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);
         partner.setTotalCount(getChildCount(totalChilds));
-        partner.setTotalMoney(getChildTotallMoney(totalChilds));
+        partner.setTotalMoney(getChildTotalMoney(totalChilds));
         return partner;
     }
 
-    public List<PartnerDTO> getPartnerChildInfoWithTime(PartnerDTO partnerDTO){
-        return partnerMapperExtra.selectPartnerChildInfoWithTime(partnerDTO);
+    public List<PartnerDTO> getPartnerChildInfoWithTime(List<PartnerDTO> list,PartnerDTO partnerDTO){
+        return partnerMapperExtra.selectPartnerChildInfoWithTime(list,partnerDTO);
     }
 
-    public List<PartnerDTO> getPartnerChildInfoWithMoney(PartnerDTO partnerDTO){
-        return partnerMapperExtra.selectPartnerChildInfoWithMoney(partnerDTO);
+    public List<PartnerDTO> getPartnerChildInfoWithMoney(List<PartnerDTO> list,PartnerDTO partnerDTO){
+        return partnerMapperExtra.selectPartnerChildInfoWithMoney(list,partnerDTO);
     }
 
     //子级总数
@@ -119,14 +128,27 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
       }
       return count;
     }
+
+    public List<PartnerDTO> getChildIds(List<PartnerDTO> ids,List<PartnerDTO> partnerDTOS){
+        if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
+            for (int i = 0; i < partnerDTOS.size(); i++) {
+                ids.add(partnerDTOS.get(i));
+                getChildIds(ids, partnerDTOS.get(i).getChildPartner());
+            }
+        }
+        return ids;
+    }
+
+
+
     //子级消费总金额
-    public Double getChildTotallMoney(List<PartnerDTO> partnerDTOS){
+    public Double getChildTotalMoney(List<PartnerDTO> partnerDTOS){
         Double count = 0.0;          //合伙人下级消费总数
         if (partnerDTOS!=null&&partnerDTOS.size()!=0){
 
             for (int i = 0; i<partnerDTOS.size(); i++){
                 count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加
-                getChildTotallMoney(partnerDTOS.get(i).getChildPartner());
+                getChildTotalMoney(partnerDTOS.get(i).getChildPartner());
             }
         }
         return count;
