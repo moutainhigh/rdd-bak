@@ -9,7 +9,6 @@ public interface IRefuelingCard {
 
 	/**
 	 * 购买油卡支付成功后的处理
-	 * @param i
 	 * @param param
 	 * @return
 	 */
