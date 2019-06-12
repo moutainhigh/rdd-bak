@@ -119,7 +119,15 @@
         AND b.record_id is NOT NULL
     </select>
 
-
+<select id="selectPartner" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+                a.user_id,
+                a.partner,
+                a.user_account
+            FROM
+                czb_user a
+        WHERE a.user_id = #{userId,jdbcType=VARCHAR}
+</select>
 
     <resultMap id="PartnerMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -145,6 +153,9 @@
     <where>
         <if test="userId!=null and userId!=''">
         a.user_id = #{userId,jdbcType=VARCHAR}
+        </if>
+        <if test="monthTime!=null">
+            AND DATE_FORMAT(b.indicator_begin_time,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         </if>
     </where>
     </select>

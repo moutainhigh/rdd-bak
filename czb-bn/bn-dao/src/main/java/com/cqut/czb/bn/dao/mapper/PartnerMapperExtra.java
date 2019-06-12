@@ -10,6 +10,8 @@ public interface PartnerMapperExtra {
 
      PartnerDTO selectPartnerInfo(PartnerDTO partnerDTO);
 
+    PartnerDTO selectPartner(PartnerDTO partnerDTO);
+
      PartnerDTO selectHistoryInfo(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectPartnerChildInfoWithTime(@Param("list")List<PartnerDTO> children ,@Param("partner") PartnerDTO partnerDTO);
