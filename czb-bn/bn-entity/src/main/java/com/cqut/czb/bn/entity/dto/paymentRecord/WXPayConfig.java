@@ -43,7 +43,7 @@ public class WXPayConfig {
 	public static final String device_info = "WEB";
 
 	// 商品描述
-	public static final String body = "DD猫";
+	public static final String body = "人多多";
 
 	// 请求预支付接口
 	public static final String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
