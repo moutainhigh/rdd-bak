@@ -10,7 +10,7 @@ public interface PartnerMapperExtra {
 
      PartnerDTO selectPartnerInfo(PartnerDTO partnerDTO);
 
-    PartnerDTO selectPartner(PartnerDTO partnerDTO);
+     PartnerDTO selectPartner(PartnerDTO partnerDTO);
 
      PartnerDTO selectHistoryInfo(PartnerDTO partnerDTO);
 
@@ -23,4 +23,6 @@ public interface PartnerMapperExtra {
     List<PartnerDTO> selectPartnerChildWithDayMoney(@Param("list")List<PartnerDTO> children ,@Param("partner") PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectNextChild(PartnerDTO partnerDTO);
+
+    List<PartnerDTO> selectNextChildMoney(PartnerDTO partnerDTO);
 }

@@ -69,7 +69,17 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     @Override
     public PageInfo<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO, PageDTO pageDTO) {       //查询下一级的列表及每个子级的下一级人数
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
-        return new PageInfo<>(partnerMapperExtra.selectNextChild(partnerDTO));
+        List<PartnerDTO> nextChild = partnerMapperExtra.selectNextChild(partnerDTO);
+        List<PartnerDTO> nextChildMoney = partnerMapperExtra.selectNextChildMoney(partnerDTO);
+        for(int i=0;i<nextChild.size();i++){
+            for (int j=0;j<nextChildMoney.size();j++){
+                if (nextChild.get(i).getUserId().equals(nextChildMoney.get(j).getUserId())){
+                    nextChild.get(i).setTotalMoney(nextChildMoney.get(j).getTotalMoney());
+                    nextChild.get(i).setNearTime(nextChildMoney.get(j).getNearTime());
+                }
+            }
+        }
+        return new PageInfo<>(nextChild);
     }
 
     @Override

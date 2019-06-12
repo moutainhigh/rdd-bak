@@ -119,15 +119,15 @@
         AND b.record_id is NOT NULL
     </select>
 
-<select id="selectPartner" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+    <select id="selectPartner" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         SELECT
-                a.user_id,
+                a.user_id as userId,
                 a.partner,
-                a.user_account
+                a.user_account as userAccount
             FROM
                 czb_user a
         WHERE a.user_id = #{userId,jdbcType=VARCHAR}
-</select>
+    </select>
 
     <resultMap id="PartnerMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -173,12 +173,10 @@
         a.user_account,
         a.partner,
         a.superior_user,
-        COUNT(b.user_id) as total_count,
-        SUM(c.create_at) AS near_time
+        COUNT(b.user_id) as total_count
         FROM
         czb_user a
         LEFT JOIN czb_user b ON a.user_id = b.superior_user
-        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
         <where>
             <if test="userId!=null and userId!=''">
                 a.superior_user = #{userId,jdbcType=VARCHAR}
@@ -187,6 +185,23 @@
         GROUP BY a.user_id
     </select>
 
+    <select id="selectNextChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        SELECT
+        a.user_id as userId,
+        a.user_account as userAccount,
+        a.partner,
+        SUM(c.money) as totalMoney,
+        MAX(c.create_at) AS nearTime
+        FROM
+        czb_user a
+        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
+        <where>
+            <if test="userId!=null and userId!=''">
+                a.superior_user = #{userId,jdbcType=VARCHAR}
+            </if>
+        </where>
+        GROUP BY a.user_id
+    </select>
 
     <resultMap id="HistoryInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
