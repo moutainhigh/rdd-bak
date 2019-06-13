@@ -9,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class InfoSpreadServiceImpl implements InfoSpreadService{
 
     @Autowired
@@ -121,7 +123,9 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 
     @Override
     public PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user) {
+        if (partnerDTO.getUserId()==null){
         partnerDTO.setUserId(user.getUserId());
+        }
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = partnerMapperExtra.selectPartner(partnerDTO);
         partner.setTotalCount(getChildCount(totalChilds));
