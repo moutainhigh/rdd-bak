@@ -1,8 +1,9 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolBackInfoDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -65,10 +66,10 @@ public class AppBuyPetrolController {
                System.out.println((String)BuyPetrol.get("-1"));
                return  new JSONResult( (String)BuyPetrol.get("-1"),ResponseCodeConstants.FAILURE);
            }else if(BuyPetrol.get("0")!=null){
-               System.out.println((PetrolBackInfoDTO)BuyPetrol.get("0"));
+               System.out.println((AliPetrolBackInfoDTO)BuyPetrol.get("0"));
                return  new JSONResult("购买成功",200,BuyPetrol.get("0"));
            }else if(BuyPetrol.get("2")!=null){
-               System.out.println((PetrolBackInfoDTO)BuyPetrol.get("2"));
+               System.out.println((AliPetrolBackInfoDTO)BuyPetrol.get("2"));
                return  new JSONResult("充值成功",200,BuyPetrol.get("2"));
            }else {
                System.out.println((String)BuyPetrol.get("-1"));
@@ -113,10 +114,10 @@ public class AppBuyPetrolController {
                 System.out.println((String)BuyPetrol.get("-1"));
                 return  new JSONResult( (String)BuyPetrol.get("-1"),ResponseCodeConstants.FAILURE);
             }else if(BuyPetrol.get("0")!=null){
-                System.out.println((PetrolBackInfoDTO)BuyPetrol.get("0"));
+                System.out.println((WeChatPetrolBackInfoDTO)BuyPetrol.get("0"));
                 return  new JSONResult("购买成功",200,BuyPetrol.get("0"));
             }else if(BuyPetrol.get("2")!=null){
-                System.out.println((PetrolBackInfoDTO)BuyPetrol.get("2"));
+                System.out.println((WeChatPetrolBackInfoDTO)BuyPetrol.get("2"));
                 return  new JSONResult("充值成功",200,BuyPetrol.get("2"));
             }else {
                 System.out.println((String)BuyPetrol.get("-1"));
