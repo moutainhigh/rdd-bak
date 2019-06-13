@@ -18,4 +18,9 @@ public interface IPaymentRecordService {
 	 */
 	String verifyAsynNoticeInfoAiHu(HttpServletRequest request);
 
+	/**
+	 * 验证异步通知(微信)
+	 */
+	String orderPayNotify(HttpServletRequest request);
+
 }

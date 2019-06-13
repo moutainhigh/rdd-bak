@@ -1,29 +1,34 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.*;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolBackInfoDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
+import com.cqut.czb.bn.entity.dto.paymentRecord.HttpUtil;
+import com.cqut.czb.bn.entity.dto.paymentRecord.WXPayConfig;
+import com.cqut.czb.bn.entity.dto.paymentRecord.WXUtils;
 import com.cqut.czb.bn.entity.entity.*;
-import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
 import com.cqut.czb.bn.entity.dto.paymentRecord.GetAlipayClient;
-import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
-import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.*;
 
 @Service
 public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
+
+    private String characterEncoding = "UTF-8";
 
     @Autowired
     private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
@@ -32,13 +37,69 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     private PetrolMapperExtra petrolMapperExtra;
 
     @Override
-    public String BuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
+    public JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
 
+        /**
+         * 生成起调参数串——返回给app（支付宝的支付订单）
+         */
+        String rs = null;//用于保存起调参数,
+        String orgId = WXUtils.getRandomStr();
+        // 设置参数
+        PetrolSalesRecordsDTO petrolSalesRecordsDTO = new PetrolSalesRecordsDTO();
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters.put("appid", WXPayConfig.app_id);
+        parameters.put("mch_id", WXPayConfig.mch_id);
+        parameters.put("device_info", WXPayConfig.device_info);
+        String nonceStrTemp = WXUtils.getRandomStr();
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("sign_type", WXPayConfig.sign_type);
+        parameters.put("body", WXPayConfig.body);
+        parameters.put("out_trade_no", orgId);
+        BigInteger totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100))
+                .toBigInteger();
+        System.out.println(totalFee);
+        parameters.put("total_fee", totalFee);
+        parameters.put("spbill_create_ip", WXPayConfig.spbill_create_ip);
+        parameters.put("notify_url", WXPayConfig.notify_url);//通用一个接口（购买和充值）
+        parameters.put("trade_type", WXPayConfig.trade_type);
+        parameters.put("detail","微信支付购买油卡");//支付的类容备注
+        String k=petrolSalesRecordsDTO.getWeChatPassbackParams(
+                orgId,petrolInputDTO.getPayType(),
+                petrolInputDTO.getOwnerId(),
+                petrol.getPetrolNum(),petrolInputDTO.getAddressId());
+//        parameters.put("attach", "payType'0^petrolNum'2019053127^^ownerId'155786053583269^addressId'155887601466326^orgId'GM6X9A7AMC3471XDZP6VUQESZZU6DQB8");
+        parameters.put("attach",k);
+        parameters.put("sign", WXUtils.createSign(characterEncoding, parameters));//编码格式
+        // 转为xml格式
+        String info = WXUtils.map2xml(parameters);
+        rs = HttpUtil.httpsRequest(WXPayConfig.URL, "POST", info);
+        System.out.println(rs);
+        // 获取xml结果转换为jsonobject
+        Map<String, Object> result = new TreeMap<String, Object>();
+        result = WXUtils.xml2Map(rs);
+        JSONObject jo = (JSONObject) JSONObject.toJSON(result);
+
+        // 生成调起支付sign
+        SortedMap<String, Object> signParam = new TreeMap<String, Object>();
+        signParam.put("appid", jo.getString("appid"));
+        signParam.put("partnerid", jo.getString("mch_id"));
+        signParam.put("prepayid", jo.getString("prepay_id"));
+        signParam.put("packageValue", "Sign=WXPay");
+        signParam.put("noncestr", nonceStrTemp);
+        String a = System.currentTimeMillis() + "";
+        signParam.put("timestamp", a.substring(0, 10));
+        signParam.put("sign", WXUtils.createSign(characterEncoding, signParam));
+        JSONObject joo = (JSONObject) JSONObject.toJSON(signParam);
+        return joo;
+    }
+
+    @Override
+    public String AlipayBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
         //检验是否都为空
         if (petrol == null && petrolInputDTO == null)
             return "没有油卡或传入数据有误（为空）";
         /**
-         * 生成起调参数串——返回给app（支付订单）
+         * 生成起调参数串——返回给app（支付宝的支付订单）
          */
         String rs = null;//用于保存起调参数,
         GetAlipayClient getAlipayClient = GetAlipayClient.getInstance(petrolInputDTO.getPayType());//"0"代表的是购油
@@ -88,7 +149,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
         petrolSalesRecords.setPetrolId(petrol.getPetrolId());
         petrolSalesRecords.setBuyerId(ownerId);
-        petrolSalesRecords.setPaymentMethod(1);//1为支付宝支付
+        petrolSalesRecords.setPaymentMethod(petrolInputDTO.getPaymentMethod());//1为支付宝支付
         petrolSalesRecords.setPetrolKind(petrolKind);//油卡种类
         petrolSalesRecords.setPetrolNum(petrolNum);//卡号
         petrolSalesRecords.setRecordId(orgId);
@@ -151,18 +212,31 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 return info;
             }
             petrolInputDTO.setPayType("0");//0为购买油卡，2为充值
-            String buyPetrol=BuyPetrol(petrol,petrolInputDTO);//返回生成的支付单串
+            String buyPetrol=null;//用于保存生成的订单串
+            JSONObject WeChatPayOrder=null;//用于保存微信生成的订单
+            if(petrolInputDTO.getPaymentMethod()==1){//支付宝支付
+                buyPetrol=AlipayBuyPetrol(petrol,petrolInputDTO);//返回生成的支付单串
+            }else if(petrolInputDTO.getPaymentMethod()==2){//微信支付
+                WeChatPayOrder=WechatBuyPetrol(petrol,petrolInputDTO);//返回生成的支付单串
+            }
             if(buyPetrol!=null){
                 Map<String,Object> info=new HashMap<>();
-                PetrolBackInfoDTO petrolBackInfoDTO=new PetrolBackInfoDTO();
+                AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                 petrolBackInfoDTO.setPaymentOrder(buyPetrol);
                 petrolBackInfoDTO.setPetrol(petrol);
                 info.put("0",petrolBackInfoDTO);
                 return info;
-            }else {
+            }else if(WeChatPayOrder!=null){
                 Map<String,Object> info=new HashMap<>();
-                info.put("-1","油卡申请失败，信息有误，无此法生成订单");
+                WeChatPetrolBackInfoDTO weChatPetrolBackInfoDTO=new WeChatPetrolBackInfoDTO();
+                weChatPetrolBackInfoDTO.setWeChatPaymentOrder(WeChatPayOrder);
+                weChatPetrolBackInfoDTO.setPetrol(petrol);
+                info.put("0",weChatPetrolBackInfoDTO);
                 return info;
+            }else {
+                    Map<String,Object> info=new HashMap<>();
+                    info.put("-1","油卡申请失败，信息有误，无此法生成订单");
+                    return info;
             }
         }else if(petrolInputDTO.getPetrolKind()==1||petrolInputDTO.getPetrolKind()==2){
             System.out.println("购买中石油1或中石化2："+petrolInputDTO.getPetrolKind());
@@ -178,13 +252,27 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                     return info;
                 }
                 petrolInputDTO.setPayType("0");//0为购买油卡，2为充值
-                String buyPetrol=BuyPetrol(petrol2,petrolInputDTO);//返回生成的支付单串
+                String buyPetrol=null;//用于保存生成的订单串
+                JSONObject WeChatPayOrder=null;//用于保存微信生成的订单
+                if(petrolInputDTO.getPaymentMethod()==1){//支付宝支付
+                    buyPetrol=AlipayBuyPetrol(petrol2,petrolInputDTO);//返回生成的支付单串
+                }else if(petrolInputDTO.getPaymentMethod()==2){//微信支付
+                    WeChatPayOrder=WechatBuyPetrol(petrol2,petrolInputDTO);//返回生成的支付单串
+                }
+
                 if(buyPetrol!=null){
                     Map<String,Object> info=new HashMap<>();
-                    PetrolBackInfoDTO petrolBackInfoDTO=new PetrolBackInfoDTO();
+                    AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                     petrolBackInfoDTO.setPaymentOrder(buyPetrol);
                     petrolBackInfoDTO.setPetrol(petrol2);
                     info.put("0",petrolBackInfoDTO);
+                    return info;
+                }else if(WeChatPayOrder!=null){
+                    Map<String,Object> info=new HashMap<>();
+                    WeChatPetrolBackInfoDTO weChatPetrolBackInfoDTO=new WeChatPetrolBackInfoDTO();
+                    weChatPetrolBackInfoDTO.setWeChatPaymentOrder(WeChatPayOrder);
+                    weChatPetrolBackInfoDTO.setPetrol(petrol2);
+                    info.put("0",weChatPetrolBackInfoDTO);
                     return info;
                 }else {
                     Map<String,Object> info=new HashMap<>();
@@ -193,13 +281,27 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 }
             }else{//不为空则————执行充值
                 petrolInputDTO.setPayType("2");//0为购买油卡，2为充值
-                String buyPetrol=BuyPetrol(petrol1,petrolInputDTO);//返回生成的支付单串
+                String buyPetrol=null;//用于保存生成的订单串
+                JSONObject WeChatPayOrder=null;//用于保存微信生成的订单
+                if(petrolInputDTO.getPaymentMethod()==1){//支付宝支付
+                    buyPetrol=AlipayBuyPetrol(petrol1,petrolInputDTO);//返回生成的支付单串
+                }else if(petrolInputDTO.getPaymentMethod()==2){//微信支付
+                    WeChatPayOrder=WechatBuyPetrol(petrol1,petrolInputDTO);//返回生成的支付单串
+                }
+
                 if(buyPetrol!=null){
                     Map<String,Object> info=new HashMap<>();
-                    PetrolBackInfoDTO petrolBackInfoDTO=new PetrolBackInfoDTO();
+                    AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                     petrolBackInfoDTO.setPaymentOrder(buyPetrol);
                     petrolBackInfoDTO.setPetrol(petrol1);
                     info.put("2",petrolBackInfoDTO);
+                    return info;
+                }else if(WeChatPayOrder!=null){
+                    Map<String,Object> info=new HashMap<>();
+                    WeChatPetrolBackInfoDTO weChatPetrolBackInfoDTO=new WeChatPetrolBackInfoDTO();
+                    weChatPetrolBackInfoDTO.setWeChatPaymentOrder(WeChatPayOrder);
+                    weChatPetrolBackInfoDTO.setPetrol(petrol1);
+                    info.put("0",weChatPetrolBackInfoDTO);
                     return info;
                 }else {
                     Map<String,Object> info=new HashMap<>();

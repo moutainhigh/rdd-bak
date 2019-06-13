@@ -14,6 +14,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -38,7 +39,7 @@ public class RefuelingCardService implements IRefuelingCard {
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
 
     // 同一时间只允许一个线程访问购买油卡接口
-    public synchronized Map payCallback(Object[] param) {
+    public synchronized Map AliPayCallback(Object[] param) {
         // 支付宝支付
         Map<String, String> result = new HashMap<>();
         Map<String, String> params = (HashMap<String, String>) param[0];
@@ -49,6 +50,14 @@ public class RefuelingCardService implements IRefuelingCard {
             result.put("fail", AlipayConfig.response_fail);
             return result;
         }
+    }
+
+    @Override
+    public Map WeChatPayCallback(Object[] param) {
+        Map<String, Object> restmap = (HashMap<String, Object>) param[0];
+        Map<String, Integer> result = new HashMap<>();
+        result.put("success",addPaymentRecordDataForWechat(restmap));
+        return result;
     }
 
     @Override
@@ -228,6 +237,48 @@ public class RefuelingCardService implements IRefuelingCard {
         return 1;
     }
 
+
+    /**
+     * 获取订单数据存入数据库(微信)
+     */
+    public int addPaymentRecordDataForWechat(Map<String, Object> restmap) {
+        System.out.println(restmap.get("attach"));
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        //商户订单号
+        String out_trade_no = restmap.get("out_trade_no").toString();
+        System.out.println(out_trade_no);
+        //微信交易订单号
+        String transaction_id=restmap.get("transaction_id").toString();
+        System.out.println(transaction_id);
+        String[] temp;
+        String orgId ="";
+        String payType = "";
+        int count = 0;
+        double money = 0;
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println(orgId);
+            }
+            if ("payType".equals(temp[0])) {
+                System.out.println(temp[0] + ":" + temp[1]);
+                payType = temp[1];
+                System.out.println(payType);
+            }
+            if ("money".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+            }
+            if ("count".equals(temp[0])) {
+                count = Integer.parseInt(temp[1]);
+            }
+        }
+        return 1;
+    }
+
+
+
+
     /**
      * 进行所有的操作——相关表的增删改查（油卡表，新增购买记录表，收益变更记录表，用户收益信息表）
      *
@@ -294,5 +345,9 @@ public class RefuelingCardService implements IRefuelingCard {
     public boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords) {
         return petrolSalesRecordsMapperExtra.insert(petrolSalesRecords) > 0;
     }
+
+
+
+
 
 }

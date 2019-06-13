@@ -53,4 +53,21 @@ public class VerifyAsynNoticeInfoController {
 		}
 	}
 
+
+	/**
+	 * 验证异步通知信息(微信)(充值和购买的接口)
+	 */
+	@RequestMapping(value="/verifyBuyPetrolInfoWeChat", method=RequestMethod.POST)
+	public void verifyBuyPetrolInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("微信成功回调");
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/xml");
+		try {
+//			response.getWriter().write(paymentRecordService.orderPayNotify(request));
+			response.getWriter().write("success");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
