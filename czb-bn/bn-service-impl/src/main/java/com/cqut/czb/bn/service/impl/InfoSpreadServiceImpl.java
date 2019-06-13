@@ -26,40 +26,50 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public PartnerDTO getPartnerInfo(PartnerDTO partnerDTO, User user)  {
         SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Calendar c = Calendar.getInstance();
-        try {
+//        Calendar c = Calendar.getInstance();
+//        try {
+//            partnerDTO.setUserId(user.getUserId());
+//            if (month.parse(month.format(new Date())).compareTo(month.parse(partnerDTO.getMonthTime()))!=0) { //如果导出时间不为当月
+//                PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
+//                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+//                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
+//                return partner;
+//            }else {
+//                PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);      //找到合伙人指标数据
+//                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+//                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
+////                partner.setChildPartner(getPartnerChildInfo(partnerDTO));                      //找到合伙人当月的子级用户
+////                PartnerDTO historyChild = new PartnerDTO();                                    //创建新对象用以查询上一个月的数据
+////                historyChild.setUserId(partner.getUserId());
+////                c.setTime(format.parse(partnerDTO.getMonthTime()));
+////                c.add(Calendar.MONTH,-1);
+////                Date lastMonth = c.getTime();
+////                historyChild.setMonthTime(format.format(lastMonth));                           //取上个月的时间
+////                PartnerDTO lastMonthInfo = getPartnerInfo(historyChild);                    //查询上个月合伙人的指标数据
+//                List<PartnerDTO> totalChild = getPartnerChildInfo(partnerDTO);
+//                List<PartnerDTO> ids = new ArrayList<>();
+//                List<PartnerDTO> child = getPartnerChildInfoWithTime(getChildIds(ids,totalChild),partnerDTO);
+//                if (child!=null&&child.size()!=0) {
+//                    partner.setChildPartner(child);            //获取指定月份中注册的子级用户
+//                    partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
+//                    partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(ids,partnerDTO)));
+//                }
+//                return partner;
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return new PartnerDTO();
+        try{
             partnerDTO.setUserId(user.getUserId());
-            if (month.parse(month.format(new Date())).compareTo(month.parse(partnerDTO.getMonthTime()))!=0) { //如果导出时间不为当月
-                PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
-                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
-                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
-                return partnerMapperExtra.selectHistoryInfo(partnerDTO);
-            }else {
-                PartnerDTO partner = partnerMapperExtra.selectPartnerInfo(partnerDTO);      //找到合伙人指标数据
-                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
-                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
-//                partner.setChildPartner(getPartnerChildInfo(partnerDTO));                      //找到合伙人当月的子级用户
-//                PartnerDTO historyChild = new PartnerDTO();                                    //创建新对象用以查询上一个月的数据
-//                historyChild.setUserId(partner.getUserId());
-//                c.setTime(format.parse(partnerDTO.getMonthTime()));
-//                c.add(Calendar.MONTH,-1);
-//                Date lastMonth = c.getTime();
-//                historyChild.setMonthTime(format.format(lastMonth));                           //取上个月的时间
-//                PartnerDTO lastMonthInfo = getPartnerInfo(historyChild);                    //查询上个月合伙人的指标数据
-                List<PartnerDTO> totalChild = getPartnerChildInfo(partnerDTO);
-                List<PartnerDTO> ids = new ArrayList<>();
-                List<PartnerDTO> child = getPartnerChildInfoWithTime(getChildIds(ids,totalChild),partnerDTO);
-                if (child!=null&&child.size()!=0) {
-                    partner.setChildPartner(child);            //获取指定月份中注册的子级用户
-                    partner.setActualPromotionNumber(getChildCount(partner.getChildPartner()));
-                    partner.setActualNewConsumer(getChildCount(getPartnerChildInfoWithMoney(ids,partnerDTO)));
-                }
-                return partner;
-            }
+            PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
+            partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+            partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
+            return partner;
         }catch (Exception e){
             e.printStackTrace();
         }
-        return new PartnerDTO();
+       return null;
     }
 
     public List<PartnerDTO> getPartnerChildInfo(PartnerDTO partnerDTO){
@@ -133,17 +143,27 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
       if (partnerDTOS!=null&&partnerDTOS.size()!=0){
           count = count + partnerDTOS.size();       //如果有子级就加
           for (int i = 0; i<partnerDTOS.size(); i++){
-              getChildCount(partnerDTOS.get(i).getChildPartner());
+              count+=getChildCount(partnerDTOS.get(i).getChildPartner());
           }
       }
       return count;
     }
-
+    //取出子级的user_id
     public List<PartnerDTO> getChildIds(List<PartnerDTO> ids,List<PartnerDTO> partnerDTOS){
         if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
             for (int i = 0; i < partnerDTOS.size(); i++) {
                 ids.add(partnerDTOS.get(i));
                 getChildIds(ids, partnerDTOS.get(i).getChildPartner());
+            }
+        }
+        return ids;
+    }
+    //取出父级的user_id
+    public List<PartnerDTO> getPartnerIds(List<PartnerDTO> ids,List<PartnerDTO> partnerDTOS){
+        if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
+            for (int i = 0; i < partnerDTOS.size(); i++) {
+                ids.add(partnerDTOS.get(i));
+                getChildIds(ids, partnerDTOS.get(i).getPartnerList());
             }
         }
         return ids;
@@ -162,6 +182,29 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
             }
         }
         return count;
+    }
+
+    public List<PartnerDTO> selectAllPartnerInfo(PartnerDTO partnerDTO){
+        return partnerMapperExtra.selectAllPartnerInfo(partnerDTO);
+    }
+
+    public Boolean addChildPromotion(PartnerDTO partnerDTO){
+        if (partnerDTO.getUserId()!=null){
+            List<PartnerDTO> partnerList = partnerMapperExtra.selectAllPartnerInfo(partnerDTO);
+            List<PartnerDTO> ids = new ArrayList<>();
+            return (partnerMapperExtra.addChildPromotion(getPartnerIds(ids,partnerList),partnerDTO)>0);
+        }else {
+            return null;
+        }
+    }
+    public Boolean addChildConsumer(PartnerDTO partnerDTO){
+        if (partnerDTO.getUserId()!=null){
+            List<PartnerDTO> partnerList = partnerMapperExtra.selectAllPartnerInfo(partnerDTO);
+            List<PartnerDTO> ids = new ArrayList<>();
+            return (partnerMapperExtra.addChildConsumer(getPartnerIds(ids,partnerList),partnerDTO)>0);
+        }else {
+            return null;
+        }
     }
 
 }

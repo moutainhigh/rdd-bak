@@ -6,7 +6,14 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface PartnerMapperExtra {
+
+    int addChildPromotion (@Param("list")List<PartnerDTO> partnerDTOS ,@Param("partner") PartnerDTO partnerDTO);
+
+    int addChildConsumer (@Param("list")List<PartnerDTO> partnerDTOS ,@Param("partner") PartnerDTO partnerDTO);
+
      List<PartnerDTO> selectPartnerChildInfo(PartnerDTO partnerDTO);
+
+    List<PartnerDTO> selectAllPartnerInfo(PartnerDTO partnerDTO);
 
      PartnerDTO selectPartnerInfo(PartnerDTO partnerDTO);
 
