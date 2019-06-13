@@ -222,7 +222,7 @@
       and (type = 0 or type is null)
     </where>
     group by cu.user_id
-    order by amount desc
+    order by cu.create_at desc, amount desc
   </select>
   <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
     <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->
