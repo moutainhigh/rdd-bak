@@ -56,7 +56,7 @@ public class RefuelingCardService implements IRefuelingCard {
     public Map WeChatPayCallback(Object[] param) {
         Map<String, Object> restmap = (HashMap<String, Object>) param[0];
         Map<String, Integer> result = new HashMap<>();
-        result.put("success",addPaymentRecordDataForWechat(restmap));
+        result.put("success",addPaymentRecordDataForWechat(restmap));//返回后进行判断
         return result;
     }
 
@@ -248,30 +248,74 @@ public class RefuelingCardService implements IRefuelingCard {
         String out_trade_no = restmap.get("out_trade_no").toString();
         System.out.println(out_trade_no);
         //微信交易订单号
-        String transaction_id=restmap.get("transaction_id").toString();
-        System.out.println(transaction_id);
+        String thirdOrderId=restmap.get("transaction_id").toString();
+        System.out.println(thirdOrderId);
         String[] temp;
         String orgId ="";
         String payType = "";
-        int count = 0;
-        double money = 0;
+        String petrolNum="";
+        double money =(double)restmap.get("total_fee");
+        String ownerId="";
+        double actualPayment=money;//后面有变化
+        String addressId="";
         for (String data : resDate) {
             temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
             if ("orgId".equals(temp[0])) {
                 orgId = temp[1];
                 System.out.println(orgId);
+            }
+            if ("petrolNum".equals(temp[0])) {
+                petrolNum = temp[1];
+                System.out.println("油卡号petrolNum:" + petrolNum);
             }
             if ("payType".equals(temp[0])) {
                 System.out.println(temp[0] + ":" + temp[1]);
                 payType = temp[1];
                 System.out.println(payType);
             }
-            if ("money".equals(temp[0])) {
-                money = Double.valueOf(temp[1]);
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+                System.out.println("用户id:" + ownerId);
             }
-            if ("count".equals(temp[0])) {
-                count = Integer.parseInt(temp[1]);
+            if ("addressId".equals(temp[0])) {
+                addressId = temp[1];
+                System.out.println("用户addressId:" + addressId);
             }
+        }
+        //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
+        if ("2".equals(payType)) {
+            System.out.println("开始充值0");
+            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId,money, petrolNum, ownerId, actualPayment, orgId);
+            if (beginPetrolRecharge == true)
+                return 1;
+            else
+                return 2;
+        } else if ("0".equals(payType)) {
+//			此处插入购油的相关信息，油卡购买记录
+            boolean ischange = changeInfo(thirdOrderId,money, petrolNum, ownerId, actualPayment, addressId, orgId);
+
+            //若插入失败则放回卡
+            if (ischange != true) {
+                Petrol petrol = PetrolCache.currentPetrolMap.get(petrolNum);
+                if (petrol == null) {
+                    return 2;
+                }
+                petrol.setOwnerId("");
+                petrol.setEndTime(0);
+                PetrolCache.AllpetrolMap.put(petrolNum, petrol);//放回all中
+                PetrolCache.currentPetrolMap.remove(petrolNum);
+                return 2;
+            }
+
+            //成功后移除对应的卡
+            PetrolCache.currentPetrolMap.remove(petrolNum);
+            return 1;
+
+        } else if ("1".equals(payType)) {
+            System.out.println("优惠卷" + payType);
         }
         return 1;
     }

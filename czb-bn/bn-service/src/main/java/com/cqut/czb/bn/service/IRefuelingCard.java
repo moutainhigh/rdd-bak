@@ -15,7 +15,7 @@ public interface IRefuelingCard {
 	Map AliPayCallback(Object[] param);
 
     /**
-     * 购买(或充值)油卡支付成功后的处理(支付宝)
+     * 购买(或充值)油卡支付成功后的处理(微信)
      * @param param
      * @return
      */

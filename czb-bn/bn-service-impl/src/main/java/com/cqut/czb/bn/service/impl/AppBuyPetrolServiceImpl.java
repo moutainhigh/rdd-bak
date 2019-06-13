@@ -88,8 +88,28 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         signParam.put("noncestr", nonceStrTemp);
         String a = System.currentTimeMillis() + "";
         signParam.put("timestamp", a.substring(0, 10));
-        signParam.put("sign", WXUtils.createSign(characterEncoding, signParam));
+        signParam.put("sign", jo.get("sign"));
         JSONObject joo = (JSONObject) JSONObject.toJSON(signParam);
+
+        //插入购买信息
+//        PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
+//        petrolSalesRecords.setPetrolId(petrol.getPetrolId());
+//        petrolSalesRecords.setBuyerId(petrolInputDTO.getOwnerId());
+//        petrolSalesRecords.setPaymentMethod(petrolInputDTO.getPaymentMethod());//1为支付宝支付
+//        petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());//油卡种类
+//        petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
+//        petrolSalesRecords.setRecordId(orgId);
+//        petrolSalesRecords.setState(0);//1为已支付
+//        petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+//        petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
+//        if(petrolInputDTO.getPayType()=="0"){//0为普通购买
+//            petrolSalesRecords.setRecordType(0);
+//        }else {
+//            petrolSalesRecords.setRecordType(1);
+//        }
+//        petrolSalesRecords.setIsRecharged(0);
+//        boolean insertPetrolSalesRecords=petrolSalesRecordsMapperExtra.insert(petrolSalesRecords)>0;
+//        System.out.println("新增油卡购买或充值记录完毕"+insertPetrolSalesRecords);
         return joo;
     }
 

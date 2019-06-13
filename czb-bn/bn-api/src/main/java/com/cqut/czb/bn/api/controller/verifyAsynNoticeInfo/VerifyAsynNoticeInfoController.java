@@ -63,8 +63,8 @@ public class VerifyAsynNoticeInfoController {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/xml");
 		try {
-//			response.getWriter().write(paymentRecordService.orderPayNotify(request));
-			response.getWriter().write("success");
+			response.getWriter().write(paymentRecordService.orderPayNotify(request));
+//			response.getWriter().write("success");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
