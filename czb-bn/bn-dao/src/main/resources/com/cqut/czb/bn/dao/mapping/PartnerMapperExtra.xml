@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.PartnerMapperExtra" >
+
+    <update id="addChildPromotion">
+        UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
+        SET actual_promotion_number = actual_promotion_number + 1
+        WHERE
+        a.user_id IN <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+                      #{item.userId,jdbcType=VARCHAR}
+                  </foreach>
+        AND indicator_begin_time &lt;=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND indicator_end_time>=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND partner!=0
+    </update>
+
+    <update id="addChildConsumer">
+        UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
+        SET actual_new_consumer = actual_new_consumer + 1
+        WHERE
+        a.user_id IN <foreach collection="list" item="item" index="index"
+                            separator="," open="(" close=")">
+        #{item.userId,jdbcType=VARCHAR}
+    </foreach>
+        AND indicator_begin_time &lt;=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND indicator_end_time>=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND partner!=0
+    </update>
+
     <!--全部子级-->
     <resultMap id="ChildInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -21,6 +47,20 @@
         superior_user = #{userId,jdbcType=VARCHAR}
         GROUP BY
         a.user_id
+    </select>
+
+    <!--全部是合伙人的父级-->
+    <resultMap id="AllPartnerInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        <id column="superior_user" property="userId" jdbcType="VARCHAR" />
+        <collection property="partnerList" column="superior_user" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectAllPartnerInfo"/>
+    </resultMap>
+    <select id="selectAllPartnerInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="AllPartnerInfoMap">
+        SELECT
+        superior_user
+        FROM
+        czb_user
+        WHERE
+        user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
     <!--限制时间查找子级-->

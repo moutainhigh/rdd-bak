@@ -19,4 +19,10 @@ public interface InfoSpreadService {
      ArrayList getNewChildByDay(PartnerDTO partnerDTO, User user);
 
      PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user);
+
+     List<PartnerDTO> selectAllPartnerInfo(PartnerDTO partnerDTO);
+
+     public Boolean addChildPromotion(PartnerDTO partnerDTO);
+
+     public Boolean addChildConsumer(PartnerDTO partnerDTO);
  }
