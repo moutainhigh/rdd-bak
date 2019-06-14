@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.IndicatorRecord" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="target_promotion_number" property="targetPromotionNumber" jdbcType="INTEGER" />
+    <result column="actual_promotion_number" property="actualPromotionNumber" jdbcType="INTEGER" />
+    <result column="target_new_consumer" property="targetNewConsumer" jdbcType="INTEGER" />
+    <result column="actual_new_consumer" property="actualNewConsumer" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="indicator_begin_time" property="indicatorBeginTime" jdbcType="TIMESTAMP" />
+    <result column="indicator_end_time" property="indicatorEndTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, target_promotion_number, actual_promotion_number, target_new_consumer, 
+    actual_new_consumer, state, indicator_begin_time, indicator_end_time, user_id, create_at, 
+    update_at
+  </sql>
+  <select id="selectIndicatorRecordInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_indicator_record
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and indicator_begin_time like concat('%',DATE_FORMAT(now(),'%Y-%m')  ,'%')
+  </select>
+    <select id="getIndicatorRecordList" resultType="com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO">
+        SELECT
+        czb_user.user_id as userId,
+        czb_user.user_account as userAccount,
+        partner,
+        record_id as recordId,
+        target_promotion_number as targetPromotionNumber,
+        actual_promotion_number as actualPromotionNumber,
+        target_new_consumer as targetNewConsumer,
+        actual_new_consumer as actualNewConsumer,
+        state,
+        indicator_begin_time as indicatorBeginTime,
+        indicator_end_time as indicatorEndTime,
+        mission_start_time as missionStartTime,
+        mission_end_time as missionEndTime
+        FROM
+        czb_user
+        LEFT JOIN czb_indicator_record ON czb_user.user_id = czb_indicator_record.user_id
+        WHERE
+        czb_indicator_record.user_id IS NOT NULL
+        <if test=" indicatorRecordDTO.userAccount != null and indicatorRecordDTO.userAccount != ''">
+            AND user_account like concat('%',#{indicatorRecordDTO.userAccount,jdbcType = VARCHAR},'%')
+        </if>
+        <if test=" indicatorRecordDTO.state != null ">
+            AND state = #{indicatorRecordDTO.state,jdbcType=INTEGER}
+        </if>
+        <if test="indicatorRecordDTO.partner != null ">
+            AND partner = #{indicatorRecordDTO.partner,jdbcType = INTEGER}
+        </if>
+        <if test="indicatorRecordDTO.indicatorBeginTime != null">
+            AND indicator_begin_time &gt;= #{indicatorRecordDTO.indicatorBeginTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="indicatorRecordDTO.indicatorEndTime != null">
+            AND indicator_end_time &lt;= #{indicatorRecordDTO.indicatorEndTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="indicatorRecordDTO.recordIds != null">
+            AND record_id in
+            <trim prefix="("  suffix=")" suffixOverrides="" prefixOverrides="">
+                ${indicatorRecordDTO.recordIds}
+            </trim>
+        </if>
+    </select>
+    <update id="ConfirmComplianceByState" parameterType="java.util.List">
+        UPDATE `czb`.`czb_indicator_record`
+        <set>
+            <trim prefix="state = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when record_id = #{item.recordId,jdbcType = VARCHAR}
+                    then #{item.state, jdbcType = INTEGER}
+                </foreach>
+            </trim>
+        </set>
+        <where>
+            record_id in
+            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+                #{item.recordId,jdbcType=VARCHAR}
+            </foreach>
+        </where>
+    </update>
+    <update id="statisticsPeople" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        UPDATE `czb`.`czb_indicator_record`
+          SET `actual_promotion_number` = #{actualPromotionNumber,jdbcType = INTEGER},
+              `actual_new_consumer` = #{actualNewConsumer,jdbcType = INTEGER},
+              `state` = 1
+          WHERE
+	          `state` != 2 and `state` != 3
+	      AND
+	          user_id = #{userId,jdbcType = VARCHAR};
+    </update>
+    <insert id="insertIndicatorRecordList" parameterType="java.util.List">
+      INSERT INTO `czb`.`czb_indicator_record`
+      ( `record_id`,`target_promotion_number`, `actual_promotion_number`,
+      `target_new_consumer`, `actual_new_consumer`,
+      `state`, `indicator_begin_time`, `indicator_end_time`,
+      `user_id`, `create_at`, `update_at`)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+              #{item.recordId,jdbcType = VARCHAR},
+              #{item.targetPromotionNumber,jdbcType = INTEGER},
+              0,
+              #{item.targetNewConsumer,jdbcType = INTEGER},
+              0,
+              0,
+              #{item.indicatorBeginTime,jdbcType=TIMESTAMP},
+              #{item.indicatorEndTime,jdbcType=TIMESTAMP},
+              #{item.userId,jdbcType = VARCHAR},
+              NOW(),
+              NOW()
+            )
+        </foreach>
+    </insert>
+</mapper>

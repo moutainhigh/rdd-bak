@@ -261,8 +261,8 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
     public int importRecords(MultipartFile file) throws Exception {
         InputStream inputStream = file.getInputStream();
         List<PlatformIncomeRecordsDTO> platformIncomeRecordsDTOS = null;
-        Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();
-        platformIncomeRecordsDTOS = ImportPlatformIncome.readExcel(file.getOriginalFilename(), inputStream);
+//        Map<String, PayToPersonDTO> personDTOMap = new HashMap<>();try {
+            platformIncomeRecordsDTOS = ImportPlatformIncome.readExcel(file.getOriginalFilename(), inputStream);
         System.out.println("99999999"+platformIncomeRecordsDTOS.get(0).getContractRecordId());
         int countForInsert = platformIncomeRecordsMapperExtra.updateImportData(platformIncomeRecordsDTOS);
 //        System.out.println("countForInsert " + countForInsert);

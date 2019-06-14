@@ -42,4 +42,6 @@ public interface PlatformIncomeRecordsService {
     PetrolSalesRecords isHaveDistributionPetrol(String contractRecordId);
 
     Boolean selectPayState(User user);
+
+
 }

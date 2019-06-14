@@ -97,4 +97,14 @@ public class UserManagementController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(userService.selectRecommender(user.getUserId()));
     }
+
+    @RequestMapping(value = "changePartner", method = RequestMethod.POST)
+    public  JSONResult changePartner(UserInputDTO userInputDTO){
+        boolean isChange = userService.changePartner(userInputDTO);
+        if(isChange) {
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "更换合伙人类型成功");
+        } else {
+            return new JSONResult(ResponseCodeConstants.FAILURE, "更换合伙人类型失败");
+        }
+    }
 }

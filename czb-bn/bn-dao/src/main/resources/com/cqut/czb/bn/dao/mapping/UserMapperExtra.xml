@@ -18,11 +18,14 @@
     <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
     <result column="commission_level_one" property="commissionLevelOne" jdbcType="VARCHAR" />
     <result column="commission_level_two" property="commissionLevelTwo" jdbcType="VARCHAR" />
+    <result column="partner" property="partner" jdbcType="INTEGER" />
+    <result column="mission_start_time" property="missionStartTime" jdbcType="TIMESTAMP" />
+    <result column="mission_end_time" property="missionEndTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
-    commission_level_one, commission_level_two
+    commission_level_one, commission_level_two, partner, mission_start_time, mission_end_time
   </sql>
   <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -31,7 +34,40 @@
     where user_account = #{account,jdbcType=VARCHAR}
     and is_deleted = 0
   </select>
-
+  <update id="updateUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+    update czb_user
+    <set >
+      <if test="userAccount != null and userAccount != ''" >
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userRank != null" >
+        user_rank = #{userRank,jdbcType=INTEGER},
+      </if>
+      <if test="superiorUser != null and superiorUser != ''" >
+        superior_user = #{superiorUser,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null and userName != ''" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+        update_at = now(),
+      <if test="partner != null" >
+        partner = #{partner,jdbcType=INTEGER},
+      </if>
+      <if test="isLoginPc != null">
+        is_login_pc = #{isLoginPc,jdbcType=INTEGER},
+      </if>
+      <if test="missionStartTime != null" >
+        mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="missionEndTime != null" >
+        mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
   <select id="checkAccount" resultType="java.lang.Boolean" parameterType="java.lang.String">
     SELECT
         count(user_id)
@@ -42,23 +78,69 @@
         and is_deleted = 0
   </select>
 
-  <select id="selectUser" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+  <resultMap id="UserResultMap" type="com.cqut.czb.bn.entity.dto.user.UserDTO" >
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="enterprise_name" property="enterpriseName" jdbcType="VARCHAR" />
+    <result column="user_rank" property="userRank" jdbcType="INTEGER" />
+    <result column="partner" property="partner" jdbcType="INTEGER" />
+    <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <collection property="roleList" column="user_id" javaType="list" select="selectRole" />
+  </resultMap>
+  <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    cu.user_id as 'userId', user_account as 'userAccount', user_name as 'userName', enterprise_name as 'enterpriseName', user_rank as 'userRank', cu.create_at as 'createAt'
+    u.user_id, u.user_account, u.user_name, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at
+    from
+    (select
+    cu.user_id, user_account, user_name, enterprise_name, user_rank, partner, superior_user, cu.create_at
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
-      <if test="userAccount != null and userAccount != ''">
-        and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="userName != null and userName != ''">
-        and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="createAt != null">
-        and cu.create_at between #{createStartTime} and #{createEndTime}
-      </if>
-      and cu.is_deleted = 0
+      cu.is_deleted = 0
     </where>
+    ) as u
+    left join czb_user cu on u.superior_user = cu.user_id
+      <where>
+        <if test="userAccount != null and userAccount != ''">
+            and u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="userName != null and userName != ''">
+            and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="createAt != null">
+            and u.create_at like concat('%',DATE_FORMAT(#{createAt,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
+        </if>
+        <if test="partner != null">
+          and u.partner = #{partner,jdbcType=INTEGER}
+        </if>
+        <if test="superiorUser != null and superiorUser != ''">
+            and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
+        </if>
+    </where>
+    order by u.create_at desc
+  </select>
+  <resultMap id="RoleResultMap" type="com.cqut.czb.bn.entity.dto.role.RoleDTO" >
+    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <collection property="menuList" column="role_id" javaType="list" select="selectMenuList"/>
+  </resultMap>
+  <select id="selectRole" resultMap="RoleResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+    select
+    cr.role_id, cr.role_name
+    from czb_role cr
+    left join czb_user_role cur on cr.role_id = cur.role_id
+    <where>
+      user_id = #{userId, jdbcType=VARCHAR}
+    </where>
+  </select>
+  <select id="selectMenuList" resultType="com.cqut.czb.bn.entity.entity.Menu" >
+    select
+    id, role_id as 'roleId', cm.menu_id as 'menuId', menu_name as 'menuName', menu_path as 'menuPath', menu_level as 'menuLevel',  parent
+    from czb_menu cm
+    left join czb_role_menu crm on cm.menu_id = crm.menu_id
+    where role_id = #{roleId,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
@@ -143,7 +225,7 @@
       and (type = 0 or type is null)
     </where>
     group by cu.user_id
-    order by amount desc
+    order by cu.create_at desc, amount desc
   </select>
   <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
     <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->

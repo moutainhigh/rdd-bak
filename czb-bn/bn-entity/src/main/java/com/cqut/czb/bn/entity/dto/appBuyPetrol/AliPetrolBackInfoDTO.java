@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.dto.appBuyPetrol;
 
 import com.cqut.czb.bn.entity.entity.Petrol;
 
-public class PetrolBackInfoDTO {
+public class AliPetrolBackInfoDTO {
 
    private String paymentOrder;//支付订单
 

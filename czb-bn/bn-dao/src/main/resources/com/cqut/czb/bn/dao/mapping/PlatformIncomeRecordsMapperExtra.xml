@@ -163,7 +163,14 @@
         where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
 
-    <select id="selectPetrolList" parameterType="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" resultType="com.cqut.czb.bn.entity.entity.Petrol">
+    <resultMap id="petrolListMap" type="com.cqut.czb.bn.entity.entity.Petrol">
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+        <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+        <result column="petrol_psw" property="petrolPsw" jdbcType="VARCHAR" />
+        <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="selectPetrolList" parameterType="com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO" resultMap="petrolListMap">
             SELECT
             c.petrol_num,
             c.petrol_kind,
@@ -172,10 +179,11 @@
             c.petrol_type
         FROM
             czb_platform_income_records a
-        LEFT JOIN czb_petrol_sales_records b ON a.contract_record_id = b.contract_id
+        LEFT JOIN czb_contract_records d ON a.contract_record_id = d.contract_father_id
+        LEFT JOIN czb_petrol_sales_records b ON d.record_id = b.contract_id
         LEFT JOIN czb_petrol c ON b.petrol_id = c.petrol_id
         <where>
-            a.is_deleted = 0
+            a.is_deleted = 0  AND b.record_type = 0
             <if test="contractRecordId!=null and contractRecordId!=''">
                 AND a.contract_record_id=#{contractRecordId,jdbcType=VARCHAR}
             </if>

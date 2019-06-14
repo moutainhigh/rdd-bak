@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.service;
 
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolBackInfoDTO;
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 
@@ -14,10 +14,16 @@ import java.util.Map;
 public interface AppBuyPetrolService {
 
     /**
-     * 购买油卡
+     * 用支付宝购买油卡
      * 生成起调参数串——返回给app（支付订单）
      */
-    String BuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO);
+    String AlipayBuyPetrol(Petrol petrol,PetrolInputDTO petrolInputDTO);
+
+    /**
+     * 用微信购买油卡
+     * 生成起调参数串——返回给app（支付订单）
+     */
+    JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO);
 
     /**
      * 判断今日是否购买了油卡

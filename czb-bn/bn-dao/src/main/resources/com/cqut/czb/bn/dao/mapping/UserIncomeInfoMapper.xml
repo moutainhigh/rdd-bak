@@ -12,10 +12,11 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="withdrawed" property="withdrawed" jdbcType="DOUBLE" />
+    <result column="total_consumption" property="totalConsumption" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     info_id, user_id, fanyong_income, share_income, pay_total_rent, got_total_rent, other_income, 
-    create_at, update_at, withdrawed
+    create_at, update_at, withdrawed, total_consumption
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -31,11 +32,11 @@
     insert into czb_user_income_info (info_id, user_id, fanyong_income, 
       share_income, pay_total_rent, got_total_rent, 
       other_income, create_at, update_at, 
-      withdrawed)
+      withdrawed, total_consumption)
     values (#{infoId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{fanyongIncome,jdbcType=DOUBLE}, 
       #{shareIncome,jdbcType=DOUBLE}, #{payTotalRent,jdbcType=DOUBLE}, #{gotTotalRent,jdbcType=DOUBLE}, 
       #{otherIncome,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{withdrawed,jdbcType=DOUBLE})
+      #{withdrawed,jdbcType=DOUBLE}, #{totalConsumption,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.UserIncomeInfo" >
     insert into czb_user_income_info
@@ -70,6 +71,9 @@
       <if test="withdrawed != null" >
         withdrawed,
       </if>
+      <if test="totalConsumption != null" >
+        total_consumption,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="infoId != null" >
@@ -101,6 +105,9 @@
       </if>
       <if test="withdrawed != null" >
         #{withdrawed,jdbcType=DOUBLE},
+      </if>
+      <if test="totalConsumption != null" >
+        #{totalConsumption,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -134,6 +141,9 @@
       <if test="withdrawed != null" >
         withdrawed = #{withdrawed,jdbcType=DOUBLE},
       </if>
+      <if test="totalConsumption != null" >
+        total_consumption = #{totalConsumption,jdbcType=DOUBLE},
+      </if>
     </set>
     where info_id = #{infoId,jdbcType=VARCHAR}
   </update>
@@ -147,7 +157,8 @@
       other_income = #{otherIncome,jdbcType=DOUBLE},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      withdrawed = #{withdrawed,jdbcType=DOUBLE}
+      withdrawed = #{withdrawed,jdbcType=DOUBLE},
+      total_consumption = #{totalConsumption,jdbcType=DOUBLE}
     where info_id = #{infoId,jdbcType=VARCHAR}
   </update>
 </mapper>

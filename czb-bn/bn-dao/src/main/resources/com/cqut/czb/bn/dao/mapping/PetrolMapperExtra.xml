@@ -218,4 +218,35 @@
     </where>
   </update>
 
+
+  <select id="sumOfPetrolMoney" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
+    select sum(petrol_price) from czb_petrol
+    <where>
+      <if test="petrolNum != null and petrolNum !=''" >
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolKind != null and petrolKind !=''" >
+        AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' " >
+        AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}
+      </if>
+      <if test="petrolPrice != null and petrolPrice != ''" >
+        AND petrol_price = #{petrolPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="state != null and state != ''" >
+        AND state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="area != null and area != ''" >
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolType != null and petrolType != ''" >
+        AND petrol_type = #{petrolType,jdbcType=INTEGER}
+      </if>
+      <if test="createAt != null" >
+        AND create_at &gt;= #{createAt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+
 </mapper>

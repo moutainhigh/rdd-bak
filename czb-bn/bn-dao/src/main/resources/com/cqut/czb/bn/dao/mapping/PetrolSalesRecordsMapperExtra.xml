@@ -48,7 +48,7 @@ FROM
           <if test="transactionTime != null">
             and records.transaction_time like concat('%',DATE_FORMAT(#{transactionTime,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
           </if>
-
+            and state = 1
         </where>
 	) AS t1
     INNER JOIN (
@@ -81,9 +81,9 @@ INNER JOIN (
       <if test="petrolDenomination != null and petrolDenomination != '' ">
         AND petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
       </if>
-        <if test="petrolKind != null and petrolKind != '' ">
-            and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
-        </if>
+      <if test="petrolKind != null and petrolKind != '' ">
+        and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+      </if>
     </where>
 ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.transaction_time desc
   </select>
@@ -248,6 +248,7 @@ INNER JOIN (
                 and petrol_kind = #{petrolKind,jdbcType = INTEGER}
             </if>
             and is_recharged != -1
+            and state = 1
         </where>
         ) AS t_cpsr
         INNER JOIN (
@@ -358,7 +359,63 @@ INNER JOIN (
         </set>
         where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
-    
+
+
+    <select id="sumOfPetrolSaleMoney" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" >
+        SELECT
+        sum(t3.petrol_price)
+          FROM
+        (
+        SELECT
+        *
+        FROM
+        czb_petrol_sales_records AS records
+        <where>
+            <if test="paymentMethod != null and paymentMethod != ''">
+                and records.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
+            </if>
+            <if test="transactionTime != null">
+                and records.transaction_time like concat('%',DATE_FORMAT(#{transactionTime,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
+            </if>
+
+        </where>
+        ) AS t1
+        INNER JOIN (
+        SELECT
+        _user.user_id,
+        _user.user_account
+        FROM
+        czb_user AS _user
+        <where>
+            <if test="owner != null and owner != ''">
+                and _user.user_account like concat('%',#{owner,jdbcType = VARCHAR},'%')
+            </if>
+        </where>
+        ) AS t2 ON t1.buyer_id = t2.user_id
+        INNER JOIN (
+        SELECT
+        *
+        FROM
+        czb_petrol AS petrol
+        <where>
+            <if test="area != null and area !=''">
+                AND petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="petrolNum != null and petrolNum != ''">
+                AND petrol.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="petrolPrice != null and petrolPrice != ''">
+                AND petrol.petrol_price =#{petrolPrice,jdbcType = DOUBLE}
+            </if>
+            <if test="petrolDenomination != null and petrolDenomination != '' ">
+                AND petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
+            </if>
+            <if test="petrolKind != null and petrolKind != '' ">
+                and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+            </if>
+        </where>
+        ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.transaction_time desc
+    </select>
     <!--个人中心油卡详情获取新版，按日期分组返回数据 级联查询-->
     <!--<resultMap id="getGTPetrolListGroupByDate" type="com.cqut.czb.bn.entity.dto.appPersonalPetrol.PersonalPetrolGT">-->
         <!--<result property="date" column="t_date"/>-->

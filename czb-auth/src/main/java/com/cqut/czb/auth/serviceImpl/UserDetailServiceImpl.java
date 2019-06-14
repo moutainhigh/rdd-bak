@@ -6,11 +6,14 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
+import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
+import com.cqut.czb.bn.service.InfoSpreadService;
+import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.mapper.BeanMapper;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -41,8 +44,10 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     private final RedisUtils redisUtils;
 
+    private final InfoSpreadService infoSpreadService;
+
     @Autowired
-    public UserDetailServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationCodeMapperExtra verificationCodeMapperExtra, EnterpriseInfoMapper enterpriseInfoMapper, UserIncomeInfoMapper userIncomeInfoMapper, RedisUtils redisUtils) {
+    public UserDetailServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationCodeMapperExtra verificationCodeMapperExtra, EnterpriseInfoMapper enterpriseInfoMapper, UserIncomeInfoMapper userIncomeInfoMapper, RedisUtils redisUtils, InfoSpreadService infoSpreadService) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -50,11 +55,12 @@ public class UserDetailServiceImpl implements UserDetailService {
         this.enterpriseInfoMapper = enterpriseInfoMapper;
         this.userIncomeInfoMapper = userIncomeInfoMapper;
         this.redisUtils = redisUtils;
+        this.infoSpreadService = infoSpreadService;
     }
 
 
     @Override
-    public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
+    synchronized public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
         if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return "该用户已存在";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
@@ -70,7 +76,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         user.setIsLoginPc(0);
         user.setUserRank(0);
         if(null == personalUserDTO.getSuperiorUser() && "".equals(personalUserDTO.getSuperiorUser())) {
-            user.setSuperiorUser(userMapperExtra.findUserByAccount("18008354161").getUserId());
+//            user.setSuperiorUser(userMapperExtra.findUserByAccount("18008354161").getUserId());
         } else {
             if(userMapperExtra.checkAccount(personalUserDTO.getSuperiorUser())) {
                 user.setSuperiorUser(userMapperExtra.findUserByAccount(personalUserDTO.getSuperiorUser()).getUserId());
@@ -90,14 +96,23 @@ public class UserDetailServiceImpl implements UserDetailService {
         userIncomeInfo.setCreateAt(new Date());
         boolean isInsert = userIncomeInfoMapper.insertSelective(userIncomeInfo) > 0;
         if(isInsert) {
-            return (userMapper.insertSelective(user) > 0) + "";
+            if(userMapper.insertSelective(user) > 0) {
+                PartnerDTO partnerDTO = new PartnerDTO();
+                partnerDTO.setUserId(user.getUserId());
+                partnerDTO.setMonthTime(DateUtil.dateToStr(user.getCreateAt()));
+                infoSpreadService.addChildPromotion(partnerDTO);
+            } else {
+                return String.valueOf("用户注册失败");
+            }
         } else {
-            return false + "";
+            return String.valueOf("用户收益信息添加失败");
         }
+
+        return String.valueOf(true);
     }
 
     @Override
-    public String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
+    synchronized public String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
         if(userMapperExtra.checkAccount(enterpriseUserDTO.getUserAccount())) return "该用户已存在";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(enterpriseUserDTO, VerificationCodeDTO.class);

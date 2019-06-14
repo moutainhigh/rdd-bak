@@ -31,4 +31,6 @@ public interface IUserService {
     List<TeamDTO> selectTeam(String userId);
 
     RecommenderDTO selectRecommender(String userId);
+
+    boolean changePartner(UserInputDTO userInputDTO);
 }

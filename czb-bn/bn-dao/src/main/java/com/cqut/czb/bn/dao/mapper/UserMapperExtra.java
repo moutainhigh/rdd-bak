@@ -29,6 +29,8 @@ public interface UserMapperExtra {
 
     RecommenderDTO selectRecommender(String userId);
 
+//    UserTreeDTO getAllUserByOneParent(@Param("userId") String userId);
+
     /**
      * 修改密码——个人中心
      * @param user
