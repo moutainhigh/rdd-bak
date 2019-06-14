@@ -13,7 +13,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -50,7 +49,7 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
             Calendar c = Calendar.getInstance();
             while (iterator.hasNext()){
                 IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
-                if(indicatorRecordDTO.getState() == 2 || indicatorRecordDTO.getState() == 3 || indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
+                if(indicatorRecordDTO.getState() == 2 || indicatorRecordDTO.getState() == 3 ){
                     iterator.remove();
                 }else{
                     //将指标开始时间和结束时间增加一个月
@@ -75,6 +74,13 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
             int i = 0;
             if(list.size() > 0){
                 i = indicatorRecordMapperExtra.ConfirmComplianceByState(list);
+            }
+            iterator = list.iterator();
+            while (iterator.hasNext()) {
+                IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
+                if(indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
+                    iterator.remove();
+                }
             }
             for(IndicatorRecordDTO indicatorRecordDTO : list){
                 indicatorRecordDTO.setRecordId(StringUtil.createId());
