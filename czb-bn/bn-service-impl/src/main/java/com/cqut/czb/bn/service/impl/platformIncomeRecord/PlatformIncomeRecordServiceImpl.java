@@ -19,6 +19,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@Transactional
 public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsService{
 
     @Autowired
@@ -321,6 +323,9 @@ public class PlatformIncomeRecordServiceImpl implements PlatformIncomeRecordsSer
             row.createCell(count++).setCellValue("未打款");
         }
         return workbook;
+    }
+    public List<PlatformIncomeRecordsDTO> isNeedRecharge(){
+        return null;
     }
 
 }

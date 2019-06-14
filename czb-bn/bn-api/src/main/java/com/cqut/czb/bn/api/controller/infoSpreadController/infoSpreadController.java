@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
@@ -67,5 +68,30 @@ public class infoSpreadController {
     public  JSONResult getTotalInfo(PartnerDTO partnerDTO,Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(infoSpreadService.getTotalInfo(partnerDTO,user));
+    }
+
+    @GetMapping("/getAllPartner")
+    public JSONResult getAllPartner(PartnerDTO partnerDTO){
+        return new JSONResult(infoSpreadService.selectAllPartnerInfo(partnerDTO));
+    }
+
+    /**
+     * 对新用户的父级合伙人的每月新增人数指标加一
+     * @param partnerDTO
+     * @return
+     */
+    @PostMapping("/addChildPromotion")
+    public JSONResult addChildPromotion(PartnerDTO partnerDTO){
+        return new JSONResult(infoSpreadService.addChildPromotion(partnerDTO));
+    }
+
+    /**
+     * 对新用户的父级合伙人的每月新增消费人数指标加一
+     * @param partnerDTO
+     * @return
+     */
+    @PostMapping("/addChildConsumer")
+    public JSONResult addChildConsumer(PartnerDTO partnerDTO){
+        return new JSONResult(infoSpreadService.addChildConsumer(partnerDTO));
     }
 }
