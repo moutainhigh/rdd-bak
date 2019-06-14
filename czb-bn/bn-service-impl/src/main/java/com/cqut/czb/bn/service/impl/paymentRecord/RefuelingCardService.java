@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -254,9 +255,11 @@ public class RefuelingCardService implements IRefuelingCard {
         String orgId ="";
         String payType = "";
         String petrolNum="";
-        double money =(double)restmap.get("total_fee");
+        double money=Double.valueOf(restmap.get("total_fee").toString());
+        money=(BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP)).doubleValue();
+        System.out.println("money"+money);
         String ownerId="";
-        double actualPayment=money;//后面有变化
+        double actualPayment=0.00;//后面有变化
         String addressId="";
         for (String data : resDate) {
             temp = data.split("\'");
