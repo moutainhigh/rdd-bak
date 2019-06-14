@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.service.impl.InfoSpreadServiceImpl;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -31,7 +33,8 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     PartnerMapperExtra partnerMapperExtra;
     @Autowired
     InfoSpreadServiceImpl infoSpreadService;
-
+    @Autowired
+    DictMapperExtra dictMapperExtra;
     @Override
     public PageInfo<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
@@ -73,6 +76,12 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
                 }
             }
             int i = 0;
+            Dict businessNumIndicators = dictMapperExtra.selectDictByName("businessNumIndicators");
+            Dict businessConNumIndicators = dictMapperExtra.selectDictByName("businessConNumIndicators");
+
+            Dict ordinaryNumIndicators = dictMapperExtra.selectDictByName("ordinaryNumIndicators");
+            Dict ordinaryConNumIndicators = dictMapperExtra.selectDictByName("ordinaryConNumIndicators");
+
             if(list.size() > 0){
                 i = indicatorRecordMapperExtra.ConfirmComplianceByState(list);
             }
@@ -81,6 +90,15 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
                 IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
                 if(indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
                     iterator.remove();
+                }
+                if(indicatorRecordDTO.getPartner() == 0){
+                    iterator.remove();
+                }else if (indicatorRecordDTO.getPartner() == 1){
+                    indicatorRecordDTO.setActualPromotionNumber(Integer.valueOf(businessNumIndicators.getContent()));
+                    indicatorRecordDTO.setActualNewConsumer(Integer.valueOf(businessConNumIndicators.getContent()));
+                }else if (indicatorRecordDTO.getPartner() == 2){
+                    indicatorRecordDTO.setActualPromotionNumber(Integer.valueOf(ordinaryNumIndicators.getContent()));
+                    indicatorRecordDTO.setActualNewConsumer(Integer.valueOf(ordinaryConNumIndicators.getContent()));
                 }
             }
             for(IndicatorRecordDTO indicatorRecordDTO : list){
