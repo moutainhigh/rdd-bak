@@ -131,7 +131,6 @@
                                separator="," open="(" close=")">
         #{item.userId,jdbcType=VARCHAR}
     </foreach>
-        AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND DATE_FORMAT(b.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND b.record_id is NOT NULL
     </select>
