@@ -100,13 +100,15 @@ public class UserDetailServiceImpl implements UserDetailService {
                 PartnerDTO partnerDTO = new PartnerDTO();
                 partnerDTO.setUserId(user.getUserId());
                 partnerDTO.setMonthTime(DateUtil.dateToStr(user.getCreateAt()));
-                return String.valueOf(infoSpreadService.addChildPromotion(partnerDTO));
+                infoSpreadService.addChildPromotion(partnerDTO);
             } else {
-                return String.valueOf(false);
+                return String.valueOf("用户注册失败");
             }
         } else {
             return String.valueOf("用户收益信息添加失败");
         }
+
+        return String.valueOf(true);
     }
 
     @Override
