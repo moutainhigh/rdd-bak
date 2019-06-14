@@ -31,6 +31,8 @@ public class PartnerDTO {
 
     private Date nearTime;      //最近的消费时间
 
+    private Double nextTotalMoney;  //直推消费总额
+
     private Double totalMoney;      //子级总消费
 
     private Integer totalCount;     //子级用户总数
@@ -137,6 +139,14 @@ public class PartnerDTO {
 
     public void setNearTime(Date nearTime) {
         this.nearTime = nearTime;
+    }
+
+    public Double getNextTotalMoney() {
+        return nextTotalMoney;
+    }
+
+    public void setNextTotalMoney(Double nextTotalMoney) {
+        this.nextTotalMoney = nextTotalMoney;
     }
 
     public Double getTotalMoney() {

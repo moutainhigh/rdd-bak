@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.service.impl.InfoSpreadServiceImpl;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -14,7 +16,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,7 +33,8 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
     PartnerMapperExtra partnerMapperExtra;
     @Autowired
     InfoSpreadServiceImpl infoSpreadService;
-
+    @Autowired
+    DictMapperExtra dictMapperExtra;
     @Override
     public PageInfo<IndicatorRecordDTO> getIndicatorRecordList(IndicatorRecordDTO indicatorRecordDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
@@ -51,7 +53,7 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
             Calendar c = Calendar.getInstance();
             while (iterator.hasNext()){
                 IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
-                if(indicatorRecordDTO.getState() == 2 || indicatorRecordDTO.getState() == 3 || indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
+                if(indicatorRecordDTO.getState() == 2 || indicatorRecordDTO.getState() == 3 ){
                     iterator.remove();
                 }else{
                     //将指标开始时间和结束时间增加一个月
@@ -74,8 +76,30 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
                 }
             }
             int i = 0;
+            Dict businessNumIndicators = dictMapperExtra.selectDictByName("businessNumIndicators");
+            Dict businessConNumIndicators = dictMapperExtra.selectDictByName("businessConNumIndicators");
+
+            Dict ordinaryNumIndicators = dictMapperExtra.selectDictByName("ordinaryNumIndicators");
+            Dict ordinaryConNumIndicators = dictMapperExtra.selectDictByName("ordinaryConNumIndicators");
+
             if(list.size() > 0){
                 i = indicatorRecordMapperExtra.ConfirmComplianceByState(list);
+            }
+            iterator = list.iterator();
+            while (iterator.hasNext()) {
+                IndicatorRecordDTO indicatorRecordDTO = (IndicatorRecordDTO) iterator.next();
+                if(indicatorRecordDTO.getMissionEndTime().getTime() < new Date().getTime()){
+                    iterator.remove();
+                }
+                if(indicatorRecordDTO.getPartner() == 0){
+                    iterator.remove();
+                }else if (indicatorRecordDTO.getPartner() == 1){
+                    indicatorRecordDTO.setActualPromotionNumber(Integer.valueOf(businessNumIndicators.getContent()));
+                    indicatorRecordDTO.setActualNewConsumer(Integer.valueOf(businessConNumIndicators.getContent()));
+                }else if (indicatorRecordDTO.getPartner() == 2){
+                    indicatorRecordDTO.setActualPromotionNumber(Integer.valueOf(ordinaryNumIndicators.getContent()));
+                    indicatorRecordDTO.setActualNewConsumer(Integer.valueOf(ordinaryConNumIndicators.getContent()));
+                }
             }
             for(IndicatorRecordDTO indicatorRecordDTO : list){
                 indicatorRecordDTO.setRecordId(StringUtil.createId());
