@@ -881,3 +881,5 @@ CREATE TABLE `czb_vip_recharge_records` (
 -- ----------------------------
 -- Records of czb_vip_recharge_records
 -- ----------------------------
+
+SET FOREIGN_KEY_CHECKS = 1;

@@ -30,3 +30,5 @@ CREATE TABLE `czb_enterprise_consulting_info` (
   `applicant_account` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`consulting_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+SET FOREIGN_KEY_CHECKS = 1;

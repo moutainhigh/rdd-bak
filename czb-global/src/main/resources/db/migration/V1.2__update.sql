@@ -41,3 +41,5 @@ CREATE TABLE `czb_income_log` (
 -- ----------------------------
 -- Records of czb_income_log
 -- ----------------------------
+
+SET FOREIGN_KEY_CHECKS = 1;
