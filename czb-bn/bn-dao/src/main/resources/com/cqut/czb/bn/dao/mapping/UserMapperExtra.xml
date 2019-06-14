@@ -56,6 +56,9 @@
       <if test="partner != null" >
         partner = #{partner,jdbcType=INTEGER},
       </if>
+      <if test="isLoginPc != null">
+        is_login_pc = #{isLoginPc,jdbcType=INTEGER},
+      </if>
       <if test="missionStartTime != null" >
         mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
       </if>

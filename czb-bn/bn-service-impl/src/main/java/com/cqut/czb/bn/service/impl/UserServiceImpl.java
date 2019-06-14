@@ -182,6 +182,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
+            userInputDTO.setIsLoginPc(1);
         } else if(0 != userInputDTO.getPartner()) {
             indicatorRecord = new IndicatorRecord();
             indicatorRecord.setRecordId(StringUtil.createId());
@@ -204,6 +205,9 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
             }
+            userInputDTO.setIsLoginPc(1);
+        } else if(0 == userInputDTO.getPartner()){
+            userInputDTO.setIsLoginPc(0);
         }
         
         if(isUpdateIndicatorRecord) {
