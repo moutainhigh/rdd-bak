@@ -84,11 +84,11 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         signParam.put("appid", jo.getString("appid"));
         signParam.put("partnerid", jo.getString("mch_id"));
         signParam.put("prepayid", jo.getString("prepay_id"));
-        signParam.put("packageValue", "Sign=WXPay");
+        signParam.put("package", "Sign=WXPay");
         signParam.put("noncestr", nonceStrTemp);
         String a = System.currentTimeMillis() + "";
         signParam.put("timestamp", a.substring(0, 10));
-        signParam.put("sign", jo.get("sign"));
+        signParam.put("sign", WXUtils.createSign(characterEncoding, signParam));
         JSONObject joo = (JSONObject) JSONObject.toJSON(signParam);
 
         //插入购买信息
