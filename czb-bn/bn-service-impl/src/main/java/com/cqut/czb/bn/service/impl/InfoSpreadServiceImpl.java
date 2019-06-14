@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +29,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public PartnerDTO getPartnerInfo(PartnerDTO partnerDTO, User user)  {
         SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        partnerDTO.setUserId(user.getUserId());
 //        Calendar c = Calendar.getInstance();
 //        try {
 //            partnerDTO.setUserId(user.getUserId());
@@ -63,10 +65,9 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 //        }
 //        return new PartnerDTO();
         try{
-            partnerDTO.setUserId(user.getUserId());
             PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
             partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
-            partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));
+            partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));        //去掉返回时间末尾的.0
             return partner;
         }catch (Exception e){
             e.printStackTrace();
@@ -129,7 +130,15 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = partnerMapperExtra.selectPartner(partnerDTO);
         partner.setTotalCount(getChildCount(totalChilds));
-        partner.setTotalMoney(getChildTotalMoney(totalChilds));
+        Double totalMoney = getChildTotalMoney(totalChilds);
+        partner.setTotalMoney((totalMoney));
+        Double nextTotalMoney = 0.00;
+        for (int i=0;i<totalChilds.size();i++){
+            if (totalChilds.get(i).getTotalMoney()!=null){
+            nextTotalMoney+=totalChilds.get(i).getTotalMoney();}
+        }
+        nextTotalMoney = (Double) changeToBigDecimal(nextTotalMoney);
+        partner.setNextTotalMoney(nextTotalMoney);
         return partner;
     }
 
@@ -181,7 +190,9 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTOS!=null&&partnerDTOS.size()!=0){
 
             for (int i = 0; i<partnerDTOS.size(); i++){
-                count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加
+                if (partnerDTOS.get(i).getTotalMoney()!=null) {
+                    count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加
+                }
                 getChildTotalMoney(partnerDTOS.get(i).getChildPartner());
             }
         }
@@ -209,6 +220,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         }else {
             return null;
         }
+    }
+
+    public Double changeToBigDecimal(Double num){
+        BigDecimal b = new BigDecimal(num);
+        num = b.setScale(2, BigDecimal.ROUND_DOWN).doubleValue(); //直接去掉金额小数点两位后面的数
+        return num;
     }
 
 }

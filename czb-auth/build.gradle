@@ -35,6 +35,9 @@ dependencies {
 
     compile project(':czb-bn:bn-dao')
     compile project(':czb-bn:bn-entity')
+    compile project(':czb-bn:bn-service-impl')
+    compile project(':czb-bn:bn-service')
+
 }
 
 

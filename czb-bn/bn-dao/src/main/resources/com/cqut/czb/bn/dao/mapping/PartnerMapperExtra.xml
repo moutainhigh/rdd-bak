@@ -39,7 +39,7 @@
         a.user_id,
         partner,
         a.superior_user,
-        COUNT(b.money) AS moneys
+        sum(b.money) AS moneys
         FROM
         czb_user a
         LEFT JOIN czb_consumption_record b on a.user_id = b.user_id
@@ -131,7 +131,6 @@
                                separator="," open="(" close=")">
         #{item.userId,jdbcType=VARCHAR}
     </foreach>
-        AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND DATE_FORMAT(b.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND b.record_id is NOT NULL
     </select>
@@ -246,6 +245,7 @@
     <resultMap id="HistoryInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
         <result column="mission_start_time" property="missionStartTime" jdbcType="TIMESTAMP" />
         <result column="mission_end_time" property="missionEndTime" jdbcType="TIMESTAMP" />
         <result column="target_promotion_number" property="targetPromotionNumber" jdbcType="INTEGER" />
@@ -257,6 +257,7 @@
         SELECT
             a.user_id,
             a.partner,
+            a.user_account,
             a.mission_start_time,
             a.mission_end_time,
             b.target_new_consumer,
