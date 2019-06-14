@@ -14,6 +14,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -38,7 +39,7 @@ public class RefuelingCardService implements IRefuelingCard {
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
 
     // 同一时间只允许一个线程访问购买油卡接口
-    public synchronized Map payCallback(Object[] param) {
+    public synchronized Map AliPayCallback(Object[] param) {
         // 支付宝支付
         Map<String, String> result = new HashMap<>();
         Map<String, String> params = (HashMap<String, String>) param[0];
@@ -49,6 +50,14 @@ public class RefuelingCardService implements IRefuelingCard {
             result.put("fail", AlipayConfig.response_fail);
             return result;
         }
+    }
+
+    @Override
+    public Map WeChatPayCallback(Object[] param) {
+        Map<String, Object> restmap = (HashMap<String, Object>) param[0];
+        Map<String, Integer> result = new HashMap<>();
+        result.put("success",addPaymentRecordDataForWechat(restmap));//返回后进行判断
+        return result;
     }
 
     @Override
@@ -228,6 +237,92 @@ public class RefuelingCardService implements IRefuelingCard {
         return 1;
     }
 
+
+    /**
+     * 获取订单数据存入数据库(微信)
+     */
+    public int addPaymentRecordDataForWechat(Map<String, Object> restmap) {
+        System.out.println(restmap.get("attach"));
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        //商户订单号
+        String out_trade_no = restmap.get("out_trade_no").toString();
+        System.out.println(out_trade_no);
+        //微信交易订单号
+        String thirdOrderId=restmap.get("transaction_id").toString();
+        System.out.println(thirdOrderId);
+        String[] temp;
+        String orgId ="";
+        String payType = "";
+        String petrolNum="";
+        double money =(double)restmap.get("total_fee");
+        String ownerId="";
+        double actualPayment=money;//后面有变化
+        String addressId="";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println(orgId);
+            }
+            if ("petrolNum".equals(temp[0])) {
+                petrolNum = temp[1];
+                System.out.println("油卡号petrolNum:" + petrolNum);
+            }
+            if ("payType".equals(temp[0])) {
+                System.out.println(temp[0] + ":" + temp[1]);
+                payType = temp[1];
+                System.out.println(payType);
+            }
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+                System.out.println("用户id:" + ownerId);
+            }
+            if ("addressId".equals(temp[0])) {
+                addressId = temp[1];
+                System.out.println("用户addressId:" + addressId);
+            }
+        }
+        //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
+        if ("2".equals(payType)) {
+            System.out.println("开始充值0");
+            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId,money, petrolNum, ownerId, actualPayment, orgId);
+            if (beginPetrolRecharge == true)
+                return 1;
+            else
+                return 2;
+        } else if ("0".equals(payType)) {
+//			此处插入购油的相关信息，油卡购买记录
+            boolean ischange = changeInfo(thirdOrderId,money, petrolNum, ownerId, actualPayment, addressId, orgId);
+
+            //若插入失败则放回卡
+            if (ischange != true) {
+                Petrol petrol = PetrolCache.currentPetrolMap.get(petrolNum);
+                if (petrol == null) {
+                    return 2;
+                }
+                petrol.setOwnerId("");
+                petrol.setEndTime(0);
+                PetrolCache.AllpetrolMap.put(petrolNum, petrol);//放回all中
+                PetrolCache.currentPetrolMap.remove(petrolNum);
+                return 2;
+            }
+
+            //成功后移除对应的卡
+            PetrolCache.currentPetrolMap.remove(petrolNum);
+            return 1;
+
+        } else if ("1".equals(payType)) {
+            System.out.println("优惠卷" + payType);
+        }
+        return 1;
+    }
+
+
+
+
     /**
      * 进行所有的操作——相关表的增删改查（油卡表，新增购买记录表，收益变更记录表，用户收益信息表）
      *
@@ -294,5 +389,9 @@ public class RefuelingCardService implements IRefuelingCard {
     public boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords) {
         return petrolSalesRecordsMapperExtra.insert(petrolSalesRecords) > 0;
     }
+
+
+
+
 
 }

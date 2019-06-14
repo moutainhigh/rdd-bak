@@ -3,12 +3,15 @@ package com.cqut.czb.bn.service.impl.paymentRecord;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.cqut.czb.bn.entity.dto.paymentRecord.AiHuAlipayConfig;
+import com.cqut.czb.bn.entity.dto.paymentRecord.FileUtil;
+import com.cqut.czb.bn.entity.dto.paymentRecord.WXUtils;
 import com.cqut.czb.bn.service.IPaymentRecordService;
 import com.cqut.czb.bn.service.IRefuelingCard;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -61,7 +64,7 @@ public class PaymentRecordService implements IPaymentRecordService {
 //				支付账单是否一致
 				if (isCorrectDataAiHu(params)) {//交易成功
 					Object[] param = { params };
-					Map result = refuelingCard.payCallback(param);//1为支付宝支付（用于拓展）
+					Map result = refuelingCard.AliPayCallback(param);//1为支付宝支付（用于拓展）
 					if (AlipayConfig.response_success.equals(result.get("success"))) {
 						return AlipayConfig.response_success;
 					} else if (AlipayConfig.response_fail.equals(result.get("fail"))) {
@@ -85,8 +88,43 @@ public class PaymentRecordService implements IPaymentRecordService {
 	}
 
 
+	/**
+	 * 微信
+	 * @param request
+	 * @return
+	 */
+	public String orderPayNotify(HttpServletRequest request) {
+		try {
+			System.out.println("进入微信回调方法");
+			ServletInputStream in = request.getInputStream();
+			String resxml = FileUtil.inputStream2String(in);
+			System.out.println("回调参数：" + resxml);
+			Map<String, Object> restmap = WXUtils.xml2Map(resxml);
+			if ("SUCCESS".equals(restmap.get("result_code"))) {
+				// 订单支付成功 业务处理
+				if (checkSign(restmap)) {
+					// 进行业务处理
+					Object[] param = { restmap };
+					Map<String, Integer> result = refuelingCard.WeChatPayCallback(param);
+					if (result.get("success") == 1) {
+						return getSuccess();
+					} else {
+						return AlipayConfig.response_fail;
+					}
+				} else {
+					return AlipayConfig.response_fail;
+				}
+			} else {
+				return AlipayConfig.response_fail;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return getSuccess();
+		}
+	}
+
 	/*
-	 * 验证数据是否正确
+	 * 验证数据是否正确（支付宝）
 	 */
 	private boolean isCorrectData(Map<String, String> params) {
 
@@ -119,6 +157,32 @@ public class PaymentRecordService implements IPaymentRecordService {
 		}
 
 		return true;
+	}
+
+	// 验证签名（微信）
+	public boolean checkSign(Map<String, Object> restmap) {
+		String sign = (String) restmap.get("sign"); // 返回的签名
+		restmap.remove("sign");
+		SortedMap<String, Object> sortedMap = new TreeMap<String, Object>();
+		for (Map.Entry<String, Object> entry : restmap.entrySet()) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		String signnow = WXUtils.createSign(characterEncoding, sortedMap);
+		if (sign.equals(signnow)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 微信异步通知成功
+	public String getSuccess() {
+		SortedMap<String, Object> respMap = new TreeMap<>();
+		respMap = new TreeMap<String, Object>();
+		respMap.put("return_code", "SUCCESS"); // 响应给微信服务器
+		respMap.put("return_msg", "OK");
+		String resXml = WXUtils.map2xml(respMap);
+		return resXml;
 	}
 
 

@@ -40,6 +40,8 @@ public class UserInputDTO {
 
     private Date missionEndTime;
 
+    private Integer isLoginPc;
+
     public Date getCreateAt() {
         return createAt;
     }
@@ -126,5 +128,13 @@ public class UserInputDTO {
 
     public void setMissionEndTime(Date missionEndTime) {
         this.missionEndTime = missionEndTime;
+    }
+
+    public Integer getIsLoginPc() {
+        return isLoginPc;
+    }
+
+    public void setIsLoginPc(Integer isLoginPc) {
+        this.isLoginPc = isLoginPc;
     }
 }

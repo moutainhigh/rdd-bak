@@ -18,7 +18,17 @@ public class PetrolInputDTO {
 
     private String payType;//执行的操作0为购油。2为充值
 
+    private Integer paymentMethod;//0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
+
     public PetrolInputDTO() {
+    }
+
+    public Integer getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(Integer paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public String getContractId() {

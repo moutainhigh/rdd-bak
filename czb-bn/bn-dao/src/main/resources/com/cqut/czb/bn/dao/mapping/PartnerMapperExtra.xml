@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.PartnerMapperExtra" >
+
+    <update id="addChildPromotion">
+        UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
+        SET actual_promotion_number = actual_promotion_number + 1
+        WHERE
+        a.user_id IN <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+                      #{item.userId,jdbcType=VARCHAR}
+                  </foreach>
+        AND indicator_begin_time &lt;=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND indicator_end_time>=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND partner!=0
+    </update>
+
+    <update id="addChildConsumer">
+        UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
+        SET actual_new_consumer = actual_new_consumer + 1
+        WHERE
+        a.user_id IN <foreach collection="list" item="item" index="index"
+                            separator="," open="(" close=")">
+        #{item.userId,jdbcType=VARCHAR}
+    </foreach>
+        AND indicator_begin_time &lt;=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND indicator_end_time>=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND partner!=0
+    </update>
+
     <!--全部子级-->
     <resultMap id="ChildInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -23,13 +49,26 @@
         a.user_id
     </select>
 
+    <!--全部是合伙人的父级-->
+    <resultMap id="AllPartnerInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        <id column="superior_user" property="userId" jdbcType="VARCHAR" />
+        <collection property="partnerList" column="superior_user" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectAllPartnerInfo"/>
+    </resultMap>
+    <select id="selectAllPartnerInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="AllPartnerInfoMap">
+        SELECT
+        superior_user
+        FROM
+        czb_user
+        WHERE
+        user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
     <!--限制时间查找子级-->
     <resultMap id="ChildWithTimeMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
-        <collection property="childPartner" column="{userId=user_id,monthTime=create_at}" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildInfoWithTime"/>
     </resultMap>
-    <select id="selectPartnerChildInfoWithTime" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildWithTimeMap">
+    <select id="selectPartnerChildInfoWithTime"  resultMap="ChildWithTimeMap">
         SELECT
         a.user_id,
         partner,
@@ -38,9 +77,12 @@
         FROM
         czb_user a
         WHERE
-        superior_user = #{userId,jdbcType=VARCHAR}
-        <if test="monthTime!=null">
-            AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
+        a.user_id in <foreach collection="list" item="item" index="index"
+                              separator="," open="(" close=")">
+        #{item.userId,jdbcType=VARCHAR}
+    </foreach>
+        <if test="partner.monthTime!=null">
+            AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         </if>
         GROUP BY
         a.user_id
@@ -49,9 +91,8 @@
     <resultMap id="ChildWithDayMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
-        <collection property="childPartner" column="{userId=user_id,monthTime=create_at}" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildInfoWithDay"/>
     </resultMap>
-    <select id="selectPartnerChildInfoWithDay" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildWithDayMap">
+    <select id="selectPartnerChildInfoWithDay"  resultMap="ChildWithDayMap">
         SELECT
         a.user_id,
         partner,
@@ -60,9 +101,12 @@
         FROM
         czb_user a
         WHERE
-        superior_user = #{userId,jdbcType=VARCHAR}
-        <if test="monthTime!=null">
-            AND DATE_FORMAT(a.create_at,'%Y-%m-%d') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        a.user_id in <foreach collection="list" item="item" index="index"
+                              separator="," open="(" close=")">
+        #{item.userId,jdbcType=VARCHAR}
+    </foreach>
+        <if test="partner.monthTime!=null">
+            AND DATE_FORMAT(a.create_at,'%Y-%m-%d') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         </if>
         GROUP BY
         a.user_id
@@ -72,7 +116,6 @@
     <resultMap id="ChildWithMoneyMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
-        <collection property="childPartner" column="{userId=user_id,monthTime=create_at}" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildInfoWithTime"/>
     </resultMap>
     <select id="selectPartnerChildInfoWithMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildWithMoneyMap">
         SELECT
@@ -84,16 +127,18 @@
         czb_user a
         LEFT JOIN czb_consumption_record b on  a.user_id=b.user_id
         WHERE
-        superior_user = #{userId,jdbcType=VARCHAR}
-        AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
-        AND DATE_FORMAT(b.create_at,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
+        a.user_id in <foreach collection="list" item="item" index="index"
+                               separator="," open="(" close=")">
+        #{item.userId,jdbcType=VARCHAR}
+    </foreach>
+        AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
+        AND DATE_FORMAT(b.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND b.record_id is NOT NULL
     </select>
 
     <resultMap id="ChildWithDayMoneyMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
-        <collection property="childPartner" column="{userId=user_id,monthTime=create_at}" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildWithDayMoney"/>
     </resultMap>
     <select id="selectPartnerChildWithDayMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildWithDayMoneyMap">
         SELECT
@@ -105,12 +150,24 @@
         czb_user a
         LEFT JOIN czb_consumption_record b on  a.user_id=b.user_id
         WHERE
-        superior_user = #{userId,jdbcType=VARCHAR}
-        AND DATE_FORMAT(a.create_at,'%Y-%m-%d') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        a.user_id in <foreach collection="list" item="item" index="index"
+                              separator="," open="(" close=")">
+        #{item.userId,jdbcType=VARCHAR}
+    </foreach>
+        AND DATE_FORMAT(a.create_at,'%Y-%m-%d') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        AND DATE_FORMAT(b.create_at,'%Y-%m-%d') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND b.record_id is NOT NULL
     </select>
 
-
+    <select id="selectPartner" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+                a.user_id as userId,
+                a.partner,
+                a.user_account as userAccount
+            FROM
+                czb_user a
+        WHERE a.user_id = #{userId,jdbcType=VARCHAR}
+    </select>
 
     <resultMap id="PartnerMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -137,6 +194,9 @@
         <if test="userId!=null and userId!=''">
         a.user_id = #{userId,jdbcType=VARCHAR}
         </if>
+        <if test="monthTime!=null">
+            AND DATE_FORMAT(b.indicator_begin_time,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
+        </if>
     </where>
     </select>
 
@@ -153,12 +213,10 @@
         a.user_account,
         a.partner,
         a.superior_user,
-        COUNT(b.user_id) as total_count,
-        SUM(c.create_at) AS near_time
+        COUNT(b.user_id) as total_count
         FROM
         czb_user a
         LEFT JOIN czb_user b ON a.user_id = b.superior_user
-        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
         <where>
             <if test="userId!=null and userId!=''">
                 a.superior_user = #{userId,jdbcType=VARCHAR}
@@ -167,6 +225,23 @@
         GROUP BY a.user_id
     </select>
 
+    <select id="selectNextChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        SELECT
+        a.user_id as userId,
+        a.user_account as userAccount,
+        a.partner,
+        SUM(c.money) as totalMoney,
+        MAX(c.create_at) AS nearTime
+        FROM
+        czb_user a
+        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
+        <where>
+            <if test="userId!=null and userId!=''">
+                a.superior_user = #{userId,jdbcType=VARCHAR}
+            </if>
+        </where>
+        GROUP BY a.user_id
+    </select>
 
     <resultMap id="HistoryInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />

@@ -190,8 +190,18 @@ public class PetrolSalesRecordsDTO {
         this.updateAt = updateAt;
     }
 
-
-
+    //微信支付——订单格外数据
+    public String getWeChatPassbackParams(String orgId, String payType,String ownerId,
+                                          String petrolNum,String addressId){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("payType", payType);
+        pbp.put("ownerId", ownerId);
+        pbp.put("petrolNum", petrolNum);
+        pbp.put("addressId", addressId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+    //支付宝支付——订单格外数据
     public String getPassbackParams(String orgId, String payType,String contractId,
                                     Double money, Integer petrolKind ,String ownerId,
                                     String petrolNum,String addressId) {
