@@ -67,6 +67,7 @@
                 ${indicatorRecordDTO.recordIds}
             </trim>
         </if>
+        ORDER BY indicator_begin_time DESC
     </select>
     <update id="ConfirmComplianceByState" parameterType="java.util.List">
         UPDATE `czb`.`czb_indicator_record`

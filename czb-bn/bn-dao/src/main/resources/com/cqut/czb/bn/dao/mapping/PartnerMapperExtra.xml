@@ -9,8 +9,8 @@
         a.user_id IN <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
                       #{item.userId,jdbcType=VARCHAR}
                   </foreach>
-        AND indicator_begin_time &lt;=#{partner.monthTime,jdbcType=TIMESTAMP}
-        AND indicator_end_time>=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND partner!=0
     </update>
 
@@ -22,8 +22,8 @@
                             separator="," open="(" close=")">
         #{item.userId,jdbcType=VARCHAR}
     </foreach>
-        AND indicator_begin_time &lt;=#{partner.monthTime,jdbcType=TIMESTAMP}
-        AND indicator_end_time>=#{partner.monthTime,jdbcType=TIMESTAMP}
+        AND DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND partner!=0
     </update>
 
@@ -131,7 +131,6 @@
                                separator="," open="(" close=")">
         #{item.userId,jdbcType=VARCHAR}
     </foreach>
-        AND DATE_FORMAT(a.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND DATE_FORMAT(b.create_at,'%Y-%m') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m')
         AND b.record_id is NOT NULL
     </select>
