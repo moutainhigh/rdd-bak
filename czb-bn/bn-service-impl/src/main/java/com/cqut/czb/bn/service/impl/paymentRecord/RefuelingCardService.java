@@ -3,9 +3,11 @@ package com.cqut.czb.bn.service.impl.paymentRecord;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
+import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.IRefuelingCard;
+import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -40,7 +43,10 @@ public class RefuelingCardService implements IRefuelingCard {
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
 
     @Autowired
-    ConsumptionRecordMapper consumptionRecordMapper;
+    ConsumptionRecordMapperExtra consumptionRecordMapperExtra;
+
+    @Autowired
+    InfoSpreadService infoSpreadService;
 
     // 同一时间只允许一个线程访问购买油卡接口
     public synchronized Map AliPayCallback(Object[] param) {
@@ -204,6 +210,18 @@ public class RefuelingCardService implements IRefuelingCard {
                 System.out.println("用户addressId:" + addressId);
             }
         }
+        //查询是否为首次消费
+        List<ConsumptionRecord> consumptionRecordList=consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
+        if(consumptionRecordList.size()==0){
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = formatter.format(currentTime);
+            PartnerDTO partnerDTO=new PartnerDTO();
+            partnerDTO.setUserId(ownerId);
+            partnerDTO.setMonthTime(dateString);
+            boolean isSuccessful=infoSpreadService.addChildConsumer(partnerDTO);
+            System.out.println("插入消费人数"+isSuccessful);
+        }
         //插入消费记录
         ConsumptionRecord consumptionRecord=new ConsumptionRecord();
         consumptionRecord.setRecordId(StringUtil.createId());
@@ -214,7 +232,7 @@ public class RefuelingCardService implements IRefuelingCard {
         consumptionRecord.setUserId(ownerId);
         consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
         consumptionRecord.setPayMethod(1);//1为支付宝2为微信
-        boolean insertInfo= consumptionRecordMapper.insert(consumptionRecord)>0;
+        boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
         System.out.println("插入用户消费记录"+insertInfo);
 
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
@@ -302,6 +320,19 @@ public class RefuelingCardService implements IRefuelingCard {
                 System.out.println("用户addressId:" + addressId);
             }
         }
+        //查询是否为首次消费
+        List<ConsumptionRecord> consumptionRecordList=consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
+        if(consumptionRecordList.size()==0){
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = formatter.format(currentTime);
+            PartnerDTO partnerDTO=new PartnerDTO();
+            partnerDTO.setUserId(ownerId);
+            partnerDTO.setMonthTime(dateString);
+            boolean isSuccessful=infoSpreadService.addChildConsumer(partnerDTO);
+            System.out.println("插入消费人数"+isSuccessful);
+        }
+        //插入消费记录
         ConsumptionRecord consumptionRecord=new ConsumptionRecord();
         consumptionRecord.setRecordId(StringUtil.createId());
         consumptionRecord.setLocalOrderId(orgId);//本地订单号
@@ -311,7 +342,7 @@ public class RefuelingCardService implements IRefuelingCard {
         consumptionRecord.setUserId(ownerId);
         consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
         consumptionRecord.setPayMethod(2);//1为支付宝2为微信
-        boolean insertInfo= consumptionRecordMapper.insert(consumptionRecord)>0;
+        boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
         System.out.println("插入用户消费记录"+insertInfo);
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {

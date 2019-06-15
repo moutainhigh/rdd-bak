@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.ConsumptionRecordMapper" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ConsumptionRecordMapperExtra" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
     <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="local_order_id" property="localOrderId" jdbcType="VARCHAR" />
@@ -34,8 +34,8 @@
       update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{localOrderId,jdbcType=VARCHAR}, #{thirdOrderId,jdbcType=VARCHAR}, 
       #{money,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
-      #{originalAmount,jdbcType=DOUBLE}, #{payMethod,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{originalAmount,jdbcType=DOUBLE}, #{payMethod,jdbcType=INTEGER},now(),
+      now())
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
     insert into czb_consumption_record
