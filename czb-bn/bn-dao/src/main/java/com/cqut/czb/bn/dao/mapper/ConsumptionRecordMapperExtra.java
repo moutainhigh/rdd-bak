@@ -11,7 +11,7 @@ public interface ConsumptionRecordMapperExtra {
 
     int insertSelective(ConsumptionRecord record);
 
-    List<ConsumptionRecord> selectByPrimaryKey(String recordId);
+    List<ConsumptionRecord> selectByPrimaryKey(String userId);
 
     int updateByPrimaryKeySelective(ConsumptionRecord record);
 
