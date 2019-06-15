@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.paymentRecord;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
@@ -222,29 +223,48 @@ public class RefuelingCardService implements IRefuelingCard {
             boolean isSuccessful=infoSpreadService.addChildConsumer(partnerDTO);
             System.out.println("插入消费人数"+isSuccessful);
         }
-        //插入消费记录
-        ConsumptionRecord consumptionRecord=new ConsumptionRecord();
-        consumptionRecord.setRecordId(StringUtil.createId());
-        consumptionRecord.setLocalOrderId(orgId);//本地订单号
-        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
-        consumptionRecord.setMoney(money);
-        consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
-        consumptionRecord.setUserId(ownerId);
-        consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
-        consumptionRecord.setPayMethod(1);//1为支付宝2为微信
-        boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
-        System.out.println("插入用户消费记录"+insertInfo);
 
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
             System.out.println("开始充值");
+            PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
+            petrolSalesRecords=petrolSalesRecordsMapperExtra.selectInfoByOrgId(orgId);
+            PetrolInputDTO petrolInputDTO=new PetrolInputDTO();
+            petrolInputDTO.setOwnerId(ownerId);
+            petrolInputDTO.setPetrolKind(petrolSalesRecords.getPetrolKind());
+            Petrol petrol1= petrolMapperExtra.selectDifferentPetrol(petrolInputDTO);
+            //插入消费记录
+            ConsumptionRecord consumptionRecord=new ConsumptionRecord();
+            consumptionRecord.setRecordId(StringUtil.createId());
+            consumptionRecord.setLocalOrderId(orgId);//本地订单号
+            consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+            consumptionRecord.setMoney(money);
+            consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
+            consumptionRecord.setUserId(ownerId);
+            consumptionRecord.setOriginalAmount(petrol1.getPetrolDenomination());//油卡面额
+            consumptionRecord.setPayMethod(1);//1为支付宝2为微信
+            boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
+            System.out.println("插入用户消费记录"+insertInfo);
+
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId,money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
             else
                 return 2;
         } else if ("0".equals(payType)) {
-            //此处插入购油的相关信息，油卡购买记录
+            System.out.println("开始购买");
+            //插入消费记录
+            ConsumptionRecord consumptionRecord=new ConsumptionRecord();
+            consumptionRecord.setRecordId(StringUtil.createId());
+            consumptionRecord.setLocalOrderId(orgId);//本地订单号
+            consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+            consumptionRecord.setMoney(money);
+            consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
+            consumptionRecord.setUserId(ownerId);
+            consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
+            consumptionRecord.setPayMethod(2);//1为支付宝2为微信
+            boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
+            System.out.println("插入用户消费记录"+insertInfo);
             boolean ischange = changeInfo(thirdOrderId,money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
             //若插入失败则放回卡
@@ -332,27 +352,47 @@ public class RefuelingCardService implements IRefuelingCard {
             boolean isSuccessful=infoSpreadService.addChildConsumer(partnerDTO);
             System.out.println("插入消费人数"+isSuccessful);
         }
-        //插入消费记录
-        ConsumptionRecord consumptionRecord=new ConsumptionRecord();
-        consumptionRecord.setRecordId(StringUtil.createId());
-        consumptionRecord.setLocalOrderId(orgId);//本地订单号
-        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
-        consumptionRecord.setMoney(money);
-        consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
-        consumptionRecord.setUserId(ownerId);
-        consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
-        consumptionRecord.setPayMethod(2);//1为支付宝2为微信
-        boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
-        System.out.println("插入用户消费记录"+insertInfo);
+
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
-            System.out.println("开始充值0");
+            System.out.println("开始充值2");
+            PetrolSalesRecords petrolSalesRecords=new PetrolSalesRecords();
+            petrolSalesRecords=petrolSalesRecordsMapperExtra.selectInfoByOrgId(orgId);
+            PetrolInputDTO petrolInputDTO=new PetrolInputDTO();
+            petrolInputDTO.setOwnerId(ownerId);
+            petrolInputDTO.setPetrolKind(petrolSalesRecords.getPetrolKind());
+            Petrol petrol1= petrolMapperExtra.selectDifferentPetrol(petrolInputDTO);
+            //插入消费记录
+            ConsumptionRecord consumptionRecord=new ConsumptionRecord();
+            consumptionRecord.setRecordId(StringUtil.createId());
+            consumptionRecord.setLocalOrderId(orgId);//本地订单号
+            consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+            consumptionRecord.setMoney(money);
+            consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
+            consumptionRecord.setUserId(ownerId);
+            consumptionRecord.setOriginalAmount(petrol1.getPetrolDenomination());//油卡面额
+            consumptionRecord.setPayMethod(1);//1为支付宝2为微信
+            boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
+            System.out.println("插入用户消费记录"+insertInfo);
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId,money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
             else
                 return 2;
         } else if ("0".equals(payType)) {
+            System.out.println("开始购买0");
+            //插入消费记录
+            ConsumptionRecord consumptionRecord=new ConsumptionRecord();
+            consumptionRecord.setRecordId(StringUtil.createId());
+            consumptionRecord.setLocalOrderId(orgId);//本地订单号
+            consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+            consumptionRecord.setMoney(money);
+            consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
+            consumptionRecord.setUserId(ownerId);
+            consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
+            consumptionRecord.setPayMethod(2);//1为支付宝2为微信
+            boolean insertInfo= consumptionRecordMapperExtra.insert(consumptionRecord)>0;
+            System.out.println("插入用户消费记录"+insertInfo);
 //			此处插入购油的相关信息，油卡购买记录
             boolean ischange = changeInfo(thirdOrderId,money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
