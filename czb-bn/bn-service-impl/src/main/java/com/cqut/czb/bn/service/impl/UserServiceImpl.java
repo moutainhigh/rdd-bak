@@ -166,20 +166,25 @@ public class UserServiceImpl implements IUserService {
         boolean isUpdateIndicatorRecord =true;
         if(null != indicatorRecord) {
             indicatorRecord.setUpdateAt(new Date());
-            indicatorRecord.setIndicatorBeginTime(userInputDTO.getMissionStartTime());
+            indicatorRecord.setIndicatorBeginTime(DateUtil.getDateStart(userInputDTO.getMissionStartTime()));
             Calendar cal = Calendar.getInstance();
             cal.setTime(userInputDTO.getMissionStartTime());
             cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH,-1);
             userInputDTO.setMissionEndTime(cal.getTime());
-            indicatorRecord.setIndicatorEndTime(cal.getTime());
+            indicatorRecord.setIndicatorEndTime(DateUtil.getDateEnd(cal.getTime()));
             if( 1 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
+                indicatorRecord.setActualNewConsumer(0);
+                indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
             if( 2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
+                indicatorRecord.setActualNewConsumer(0);
+                indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
             userInputDTO.setIsLoginPc(1);
@@ -189,20 +194,25 @@ public class UserServiceImpl implements IUserService {
             indicatorRecord.setCreateAt(new Date());
             indicatorRecord.setState(0);
             indicatorRecord.setUserId(userInputDTO.getUserId());
-            indicatorRecord.setIndicatorBeginTime(userInputDTO.getMissionStartTime());
+            indicatorRecord.setIndicatorBeginTime(DateUtil.getDateStart(userInputDTO.getMissionStartTime()));
             Calendar cal = Calendar.getInstance();
             cal.setTime(userInputDTO.getMissionStartTime());
             cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH,-1);
             userInputDTO.setMissionEndTime(cal.getTime());
-            indicatorRecord.setIndicatorEndTime(cal.getTime());
+            indicatorRecord.setIndicatorEndTime(DateUtil.getDateEnd(cal.getTime()));
             if (1 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
+                indicatorRecord.setActualNewConsumer(0);
+                indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
             }
             if (2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("businessConNumIndicators").getContent()));
+                indicatorRecord.setActualNewConsumer(0);
+                indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
             }
             userInputDTO.setIsLoginPc(1);

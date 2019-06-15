@@ -176,7 +176,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
             for (int i = 0; i < partnerDTOS.size(); i++) {
                 ids.add(partnerDTOS.get(i));
-                getChildIds(ids, partnerDTOS.get(i).getPartnerList());
+                getPartnerIds(ids, partnerDTOS.get(i).getPartnerList());
             }
         }
         return ids;
@@ -207,7 +207,11 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTO.getUserId()!=null){
             List<PartnerDTO> partnerList = partnerMapperExtra.selectAllPartnerInfo(partnerDTO);
             List<PartnerDTO> ids = new ArrayList<>();
-            return (partnerMapperExtra.addChildPromotion(getPartnerIds(ids,partnerList),partnerDTO)>0);
+            if (partnerList!=null&&partnerList.size()!=0) {
+                return (partnerMapperExtra.addChildPromotion(getPartnerIds(ids, partnerList), partnerDTO) > 0);
+            }else {
+                return false;
+            }
         }else {
             return null;
         }
@@ -216,7 +220,11 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTO.getUserId()!=null){
             List<PartnerDTO> partnerList = partnerMapperExtra.selectAllPartnerInfo(partnerDTO);
             List<PartnerDTO> ids = new ArrayList<>();
-            return (partnerMapperExtra.addChildConsumer(getPartnerIds(ids,partnerList),partnerDTO)>0);
+            if (partnerList!=null&&partnerList.size()!=0) {
+                return (partnerMapperExtra.addChildConsumer(getPartnerIds(ids, partnerList), partnerDTO) > 0);
+            }else {
+                return false;
+            }
         }else {
             return null;
         }

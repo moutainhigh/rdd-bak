@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ConsumptionRecordMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="local_order_id" property="localOrderId" jdbcType="VARCHAR" />
+    <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="original_amount" property="originalAmount" jdbcType="DOUBLE" />
+    <result column="pay_method" property="payMethod" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, local_order_id, third_order_id, money, type, user_id, original_amount, 
+    pay_method, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_consumption_record
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_consumption_record
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
+    insert into czb_consumption_record (record_id, local_order_id, third_order_id, 
+      money, type, user_id, 
+      original_amount, pay_method, create_at, 
+      update_at)
+    values (#{recordId,jdbcType=VARCHAR}, #{localOrderId,jdbcType=VARCHAR}, #{thirdOrderId,jdbcType=VARCHAR}, 
+      #{money,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
+      #{originalAmount,jdbcType=DOUBLE}, #{payMethod,jdbcType=INTEGER},now(),
+      now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
+    insert into czb_consumption_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="localOrderId != null" >
+        local_order_id,
+      </if>
+      <if test="thirdOrderId != null" >
+        third_order_id,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="originalAmount != null" >
+        original_amount,
+      </if>
+      <if test="payMethod != null" >
+        pay_method,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=VARCHAR},
+      </if>
+      <if test="localOrderId != null" >
+        #{localOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderId != null" >
+        #{thirdOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="originalAmount != null" >
+        #{originalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="payMethod != null" >
+        #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
+    update czb_consumption_record
+    <set >
+      <if test="localOrderId != null" >
+        local_order_id = #{localOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderId != null" >
+        third_order_id = #{thirdOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="originalAmount != null" >
+        original_amount = #{originalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="payMethod != null" >
+        pay_method = #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
+    update czb_consumption_record
+    set local_order_id = #{localOrderId,jdbcType=VARCHAR},
+      third_order_id = #{thirdOrderId,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=VARCHAR},
+      original_amount = #{originalAmount,jdbcType=DOUBLE},
+      pay_method = #{payMethod,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+</mapper>
