@@ -26,11 +26,9 @@ public class VerifyAsynNoticeInfoController {
 	 */
 	@RequestMapping(value="/verifyBuyPetrolInfoAiHu", method= RequestMethod.POST)
 	public void verifyBuyPetrolInfoAiHu(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-		response.setCharacterEncoding("utf-8");
+        System.out.println("支付宝回调——购买接口");
+	    response.setCharacterEncoding("utf-8");
 		response.setHeader("content-type", "text/html;charset=utf-8");
-		//商户订单号
-		String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
-		System.out.println("slkdajflkas"+out_trade_no);
 		try {
 			response.getWriter().print(paymentRecordService.verifyAsynNoticeInfoAiHu(request));
 		} catch (IOException e) {
@@ -64,7 +62,6 @@ public class VerifyAsynNoticeInfoController {
 		response.setContentType("text/xml");
 		try {
 			response.getWriter().write(paymentRecordService.orderPayNotify(request));
-//			response.getWriter().write("success");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

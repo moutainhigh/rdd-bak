@@ -34,8 +34,8 @@
       update_at)
     values (#{recordId,jdbcType=VARCHAR}, #{localOrderId,jdbcType=VARCHAR}, #{thirdOrderId,jdbcType=VARCHAR}, 
       #{money,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
-      #{originalAmount,jdbcType=DOUBLE}, #{payMethod,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{originalAmount,jdbcType=DOUBLE}, #{payMethod,jdbcType=INTEGER},now(),
+      now())
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.ConsumptionRecord" >
     insert into czb_consumption_record

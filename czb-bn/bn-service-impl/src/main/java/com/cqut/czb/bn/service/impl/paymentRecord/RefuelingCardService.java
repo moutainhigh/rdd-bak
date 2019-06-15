@@ -39,6 +39,9 @@ public class RefuelingCardService implements IRefuelingCard {
     @Autowired
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
 
+    @Autowired
+    ConsumptionRecordMapper consumptionRecordMapper;
+
     // 同一时间只允许一个线程访问购买油卡接口
     public synchronized Map AliPayCallback(Object[] param) {
         // 支付宝支付
@@ -143,7 +146,6 @@ public class RefuelingCardService implements IRefuelingCard {
      * 获取订单数据存入数据库(支付宝)
      */
     public synchronized int getAddPaymentRecordData(Map<String, String> params) {
-
         String[] resDate = params.get("passback_params").split("\\^");
         String[] temp;
         String thirdOrderId=params.get("trade_no");
@@ -202,17 +204,29 @@ public class RefuelingCardService implements IRefuelingCard {
                 System.out.println("用户addressId:" + addressId);
             }
         }
+        //插入消费记录
+        ConsumptionRecord consumptionRecord=new ConsumptionRecord();
+        consumptionRecord.setRecordId(StringUtil.createId());
+        consumptionRecord.setLocalOrderId(orgId);//本地订单号
+        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+        consumptionRecord.setMoney(money);
+        consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
+        consumptionRecord.setUserId(ownerId);
+        consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
+        consumptionRecord.setPayMethod(1);//1为支付宝2为微信
+        boolean insertInfo= consumptionRecordMapper.insert(consumptionRecord)>0;
+        System.out.println("插入用户消费记录"+insertInfo);
 
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
-            System.out.println("开始充值0");
+            System.out.println("开始充值");
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId,money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
             else
                 return 2;
         } else if ("0".equals(payType)) {
-//			此处插入购油的相关信息，油卡购买记录
+            //此处插入购油的相关信息，油卡购买记录
             boolean ischange = changeInfo(thirdOrderId,money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
             //若插入失败则放回卡
@@ -288,6 +302,17 @@ public class RefuelingCardService implements IRefuelingCard {
                 System.out.println("用户addressId:" + addressId);
             }
         }
+        ConsumptionRecord consumptionRecord=new ConsumptionRecord();
+        consumptionRecord.setRecordId(StringUtil.createId());
+        consumptionRecord.setLocalOrderId(orgId);//本地订单号
+        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+        consumptionRecord.setMoney(money);
+        consumptionRecord.setType(Integer.valueOf(payType));//0为油卡购买，1为油卡充值
+        consumptionRecord.setUserId(ownerId);
+        consumptionRecord.setOriginalAmount(PetrolCache.currentPetrolMap.get(petrolNum).getPetrolDenomination());//油卡面额
+        consumptionRecord.setPayMethod(2);//1为支付宝2为微信
+        boolean insertInfo= consumptionRecordMapper.insert(consumptionRecord)>0;
+        System.out.println("插入用户消费记录"+insertInfo);
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
             System.out.println("开始充值0");

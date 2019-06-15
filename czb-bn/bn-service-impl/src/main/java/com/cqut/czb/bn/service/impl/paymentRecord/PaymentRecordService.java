@@ -95,10 +95,8 @@ public class PaymentRecordService implements IPaymentRecordService {
 	 */
 	public String orderPayNotify(HttpServletRequest request) {
 		try {
-			System.out.println("进入微信回调方法");
 			ServletInputStream in = request.getInputStream();
 			String resxml = FileUtil.inputStream2String(in);
-			System.out.println("回调参数：" + resxml);
 			Map<String, Object> restmap = WXUtils.xml2Map(resxml);
 			if ("SUCCESS".equals(restmap.get("result_code"))) {
 				// 订单支付成功 业务处理
