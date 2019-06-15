@@ -176,7 +176,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
             for (int i = 0; i < partnerDTOS.size(); i++) {
                 ids.add(partnerDTOS.get(i));
-                getChildIds(ids, partnerDTOS.get(i).getPartnerList());
+                getPartnerIds(ids, partnerDTOS.get(i).getPartnerList());
             }
         }
         return ids;
