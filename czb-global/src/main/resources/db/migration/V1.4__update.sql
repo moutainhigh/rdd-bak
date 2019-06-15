@@ -13,9 +13,6 @@ File Encoding         : 65001
 Date: 2019-05-27 20:48:20
 */
 
-SET FOREIGN_KEY_CHECKS=0;
-
-
 ALTER TABLE czb_user ADD mission_start_time TIMESTAMP NULL COMMENT '任务开始时间';
 ALTER TABLE czb_user ADD mission_end_time TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '任务结束时间';
 ALTER TABLE czb_user ADD partner INT ( 1 ) DEFAULT 0 COMMENT '合伙人(0 不是合伙人 1 事业合伙人 2 普通合伙人)';
@@ -23,6 +20,8 @@ ALTER TABLE czb_user ADD partner INT ( 1 ) DEFAULT 0 COMMENT '合伙人(0 不是
 ALTER TABLE czb_user_income_info ADD total_consumption double ( 10,2 ) DEFAULT 0 COMMENT '个人总消费金额';
 
 ALTER TABLE czb_petrol_sales_records MODIFY `record_id` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
 -- Table structure for czb_indicator_record
