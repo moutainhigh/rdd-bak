@@ -26,7 +26,7 @@ public class RedisUtils {
     public void put(String key, Object object) {
         ValueOperations<String, Object> operations=redisTemplate.opsForValue();
         // 默认1天登录超时
-        operations.set(key, object,60*60*24, TimeUnit.SECONDS);
+        operations.set(key, object,60*60*24*15, TimeUnit.SECONDS);
     }
 
     /**
