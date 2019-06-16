@@ -13,7 +13,7 @@ import com.cqut.czb.bn.entity.entity.IndicatorRecord;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IUserService;
-import com.cqut.czb.bn.util.RedisUtils;
+import com.cqut.czb.bn.util.RedisUtil;
 import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -45,10 +45,10 @@ public class UserServiceImpl implements IUserService {
 
     private final IndicatorRecordMapper indicatorRecordMapper;
 
-    private final RedisUtils redisUtils;
+    private final RedisUtil redisUtil;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtils redisUtils) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements IUserService {
         this.dictMapperExtra = dictMapperExtra;
         this.indicatorRecordMapperExtra = indicatorRecordMapperExtra;
         this.indicatorRecordMapper = indicatorRecordMapper;
-        this.redisUtils = redisUtils;
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -230,7 +230,7 @@ public class UserServiceImpl implements IUserService {
         if(isUpdateIndicatorRecord) {
             if(userMapperExtra.updateUser(userInputDTO) > 0) {
                 User user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
-                redisUtils.put(user.getUserAccount(), user);
+                redisUtil.put(user.getUserAccount(), user);
             }
             return true;
         } else {
