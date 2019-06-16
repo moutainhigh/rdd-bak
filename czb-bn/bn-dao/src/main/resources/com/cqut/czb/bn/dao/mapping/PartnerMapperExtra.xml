@@ -60,7 +60,8 @@
         FROM
         czb_user
         WHERE
-        user_id = #{userId,jdbcType=VARCHAR}
+        user_id = #{userId,jdbcType=VARCHAR} AND superior_user is not null
+
     </select>
 
     <!--限制时间查找子级-->

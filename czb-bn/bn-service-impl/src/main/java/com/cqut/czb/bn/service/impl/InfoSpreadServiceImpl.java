@@ -229,7 +229,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
                 return false;
             }
         }else {
-            return null;
+            return false;
         }
     }
 
