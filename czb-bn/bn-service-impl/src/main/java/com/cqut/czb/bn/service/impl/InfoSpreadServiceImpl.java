@@ -66,8 +66,10 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 //        return new PartnerDTO();
         try{
             PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
-            partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
-            partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));        //去掉返回时间末尾的.0
+            if(partner!=null&&partner.getMissionStartTime()!=null&&partner.getMissionEndTime()!=null) {
+                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));        //去掉返回时间末尾的.0
+            }
             return partner;
         }catch (Exception e){
             e.printStackTrace();
@@ -89,6 +91,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
                 if (nextChild.get(i).getUserId().equals(nextChildMoney.get(j).getUserId())){
                     nextChild.get(i).setTotalMoney(nextChildMoney.get(j).getTotalMoney());
                     nextChild.get(i).setNearTime(nextChildMoney.get(j).getNearTime());
+                    break;
                 }
             }
         }
