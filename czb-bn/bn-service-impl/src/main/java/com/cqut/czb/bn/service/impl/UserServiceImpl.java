@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.entity.IndicatorRecord;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IUserService;
+import com.cqut.czb.bn.util.RedisUtils;
 import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -30,6 +31,8 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements IUserService {
 
+    private final UserMapper userMapper;
+
     private final UserMapperExtra userMapperExtra;
 
     private final UserRoleMapperExtra userRoleMapperExtra;
@@ -42,14 +45,18 @@ public class UserServiceImpl implements IUserService {
 
     private final IndicatorRecordMapper indicatorRecordMapper;
 
+    private final RedisUtils redisUtils;
+
     @Autowired
-    public UserServiceImpl(UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtils redisUtils) {
+        this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
         this.roleMapperExtra = roleMapperExtra;
         this.dictMapperExtra = dictMapperExtra;
         this.indicatorRecordMapperExtra = indicatorRecordMapperExtra;
         this.indicatorRecordMapper = indicatorRecordMapper;
+        this.redisUtils = redisUtils;
     }
 
     @Override
@@ -221,7 +228,11 @@ public class UserServiceImpl implements IUserService {
         }
         
         if(isUpdateIndicatorRecord) {
-            return userMapperExtra.updateUser(userInputDTO) > 0;
+            if(userMapperExtra.updateUser(userInputDTO) > 0) {
+                User user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
+                redisUtils.put(user.getUserAccount(), user);
+            }
+            return true;
         } else {
             return false;
         }
