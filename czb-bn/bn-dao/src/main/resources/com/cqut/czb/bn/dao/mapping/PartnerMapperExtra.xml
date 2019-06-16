@@ -60,7 +60,8 @@
         FROM
         czb_user
         WHERE
-        user_id = #{userId,jdbcType=VARCHAR}
+        user_id = #{userId,jdbcType=VARCHAR} AND superior_user is not null
+
     </select>
 
     <!--限制时间查找子级-->
@@ -143,8 +144,7 @@
         SELECT
         a.user_id,
         a.partner,
-        a.create_at,
-        b.money
+        a.create_at
         FROM
         czb_user a
         LEFT JOIN czb_consumption_record b on  a.user_id=b.user_id
@@ -153,9 +153,9 @@
                               separator="," open="(" close=")">
         #{item.userId,jdbcType=VARCHAR}
     </foreach>
-        AND DATE_FORMAT(a.create_at,'%Y-%m-%d') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND DATE_FORMAT(b.create_at,'%Y-%m-%d') = DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND b.record_id is NOT NULL
+        GROUP BY a.user_id
     </select>
 
     <select id="selectPartner" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >

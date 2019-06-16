@@ -1,4 +1,4 @@
-package com.cqut.czb.auth.util;
+package com.cqut.czb.bn.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisOperations;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * redis内存使用
  * */
 @Component
-public class RedisUtils {
+public class RedisUtil {
 
     @Autowired
     private RedisTemplate redisTemplate;

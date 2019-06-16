@@ -66,8 +66,10 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 //        return new PartnerDTO();
         try{
             PartnerDTO partner = partnerMapperExtra.selectHistoryInfo(partnerDTO);
-            partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
-            partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));        //去掉返回时间末尾的.0
+            if(partner!=null&&partner.getMissionStartTime()!=null&&partner.getMissionEndTime()!=null) {
+                partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
+                partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));        //去掉返回时间末尾的.0
+            }
             return partner;
         }catch (Exception e){
             e.printStackTrace();
@@ -89,6 +91,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
                 if (nextChild.get(i).getUserId().equals(nextChildMoney.get(j).getUserId())){
                     nextChild.get(i).setTotalMoney(nextChildMoney.get(j).getTotalMoney());
                     nextChild.get(i).setNearTime(nextChildMoney.get(j).getNearTime());
+                    break;
                 }
             }
         }
@@ -166,7 +169,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
             for (int i = 0; i < partnerDTOS.size(); i++) {
                 ids.add(partnerDTOS.get(i));
-                getChildIds(ids, partnerDTOS.get(i).getChildPartner());
+                if(partnerDTOS.get(i).getChildPartner()!=null){
+                getChildIds(ids, partnerDTOS.get(i).getChildPartner());}
             }
         }
         return ids;
@@ -176,7 +180,9 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTOS!=null&&partnerDTOS.size()!=0) {
             for (int i = 0; i < partnerDTOS.size(); i++) {
                 ids.add(partnerDTOS.get(i));
-                getPartnerIds(ids, partnerDTOS.get(i).getPartnerList());
+                if (partnerDTOS.get(i).getPartnerList()!=null) {
+                    getPartnerIds(ids, partnerDTOS.get(i).getPartnerList());
+                }
             }
         }
         return ids;
@@ -226,7 +232,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
                 return false;
             }
         }else {
-            return null;
+            return false;
         }
     }
 
