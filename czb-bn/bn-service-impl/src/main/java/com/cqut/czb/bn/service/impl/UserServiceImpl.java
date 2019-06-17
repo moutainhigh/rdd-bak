@@ -79,17 +79,9 @@ public class UserServiceImpl implements IUserService {
     public boolean updateUser(UserInputDTO userInputDTO) {
         if(null != userInputDTO.getSuperiorUser() && !"".equals(userInputDTO.getSuperiorUser())) {
             User user = userMapperExtra.findUserByAccount(userInputDTO.getSuperiorUser());
-            userInputDTO.setSuperiorUser(user.getUserAccount());
+            userInputDTO.setSuperiorUser(user.getUserId());
         }
-        boolean isAssignRole = true;
-        if(null != userInputDTO.getRoleId() && !"".equals(userInputDTO.getRoleId())) {
-            isAssignRole = assignRole(userInputDTO);
-        }
-        if(isAssignRole) {
             return userMapperExtra.updateUser(userInputDTO) > 0;
-        } else {
-            return false;
-        }
     }
 
     @Override
@@ -193,6 +185,8 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
+                userInputDTO.setSuperiorUser("");
             }
             userInputDTO.setIsLoginPc(1);
         } else if(0 != userInputDTO.getPartner()) {
@@ -221,6 +215,8 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
+                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
+                userInputDTO.setSuperiorUser("");
             }
             userInputDTO.setIsLoginPc(1);
         } else if(0 == userInputDTO.getPartner()){
