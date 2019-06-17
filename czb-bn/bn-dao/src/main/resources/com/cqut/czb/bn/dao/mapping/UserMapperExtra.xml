@@ -46,7 +46,7 @@
       <if test="userRank != null" >
         user_rank = #{userRank,jdbcType=INTEGER},
       </if>
-      <if test="superiorUser != null and superiorUser != ''" >
+      <if test="superiorUser != null" >
         superior_user = #{superiorUser,jdbcType=VARCHAR},
       </if>
       <if test="userName != null and userName != ''" >
