@@ -81,15 +81,7 @@ public class UserServiceImpl implements IUserService {
             User user = userMapperExtra.findUserByAccount(userInputDTO.getSuperiorUser());
             userInputDTO.setSuperiorUser(user.getUserId());
         }
-        boolean isAssignRole = true;
-        if(null != userInputDTO.getRoleId() && !"".equals(userInputDTO.getRoleId())) {
-            isAssignRole = assignRole(userInputDTO);
-        }
-        if(isAssignRole) {
             return userMapperExtra.updateUser(userInputDTO) > 0;
-        } else {
-            return false;
-        }
     }
 
     @Override
