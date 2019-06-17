@@ -35,11 +35,17 @@ public class User {
 
     private String commissionLevelTwo;
 
-    private Integer partner;
-
     private Date missionStartTime;
 
     private Date missionEndTime;
+
+    private Integer partner;
+
+    private String oldSuperior;
+
+    private String firstLevelPartner;
+
+    private String secondLevelPartner;
 
     public String getUserId() {
         return userId;
@@ -169,14 +175,6 @@ public class User {
         this.commissionLevelTwo = commissionLevelTwo == null ? null : commissionLevelTwo.trim();
     }
 
-    public Integer getPartner() {
-        return partner;
-    }
-
-    public void setPartner(Integer partner) {
-        this.partner = partner;
-    }
-
     public Date getMissionStartTime() {
         return missionStartTime;
     }
@@ -191,5 +189,37 @@ public class User {
 
     public void setMissionEndTime(Date missionEndTime) {
         this.missionEndTime = missionEndTime;
+    }
+
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Integer partner) {
+        this.partner = partner;
+    }
+
+    public String getOldSuperior() {
+        return oldSuperior;
+    }
+
+    public void setOldSuperior(String oldSuperior) {
+        this.oldSuperior = oldSuperior == null ? null : oldSuperior.trim();
+    }
+
+    public String getFirstLevelPartner() {
+        return firstLevelPartner;
+    }
+
+    public void setFirstLevelPartner(String firstLevelPartner) {
+        this.firstLevelPartner = firstLevelPartner == null ? null : firstLevelPartner.trim();
+    }
+
+    public String getSecondLevelPartner() {
+        return secondLevelPartner;
+    }
+
+    public void setSecondLevelPartner(String secondLevelPartner) {
+        this.secondLevelPartner = secondLevelPartner == null ? null : secondLevelPartner.trim();
     }
 }

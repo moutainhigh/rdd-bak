@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.UserMapperExtra" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.User" >
-    <id column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
-    <result column="user_psw" property="userPsw" jdbcType="VARCHAR" />
-    <result column="user_type" property="userType" jdbcType="INTEGER" />
-    <result column="user_rank" property="userRank" jdbcType="INTEGER" />
-    <result column="is_identified" property="isIdentified" jdbcType="INTEGER" />
-    <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
-    <result column="is_login_pc" property="isLoginPc" jdbcType="INTEGER" />
-    <result column="user_name" property="userName" jdbcType="VARCHAR" />
-    <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
-    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="user_yun_id" property="userYunId" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
-    <result column="commission_level_one" property="commissionLevelOne" jdbcType="VARCHAR" />
-    <result column="commission_level_two" property="commissionLevelTwo" jdbcType="VARCHAR" />
-    <result column="partner" property="partner" jdbcType="INTEGER" />
-    <result column="mission_start_time" property="missionStartTime" jdbcType="TIMESTAMP" />
-    <result column="mission_end_time" property="missionEndTime" jdbcType="TIMESTAMP" />
+<mapper namespace="com.cqut.czb.bn.dao.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.User">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_psw" jdbcType="VARCHAR" property="userPsw" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="user_rank" jdbcType="INTEGER" property="userRank" />
+    <result column="is_identified" jdbcType="INTEGER" property="isIdentified" />
+    <result column="superior_user" jdbcType="VARCHAR" property="superiorUser" />
+    <result column="is_login_pc" jdbcType="INTEGER" property="isLoginPc" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_id_card" jdbcType="VARCHAR" property="userIdCard" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="user_yun_id" jdbcType="VARCHAR" property="userYunId" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="commission_level_one" jdbcType="VARCHAR" property="commissionLevelOne" />
+    <result column="commission_level_two" jdbcType="VARCHAR" property="commissionLevelTwo" />
+    <result column="mission_start_time" jdbcType="TIMESTAMP" property="missionStartTime" />
+    <result column="mission_end_time" jdbcType="TIMESTAMP" property="missionEndTime" />
+    <result column="partner" jdbcType="INTEGER" property="partner" />
+    <result column="old_superior" jdbcType="VARCHAR" property="oldSuperior" />
+    <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
+    <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
-    commission_level_one, commission_level_two, partner, mission_start_time, mission_end_time
+    commission_level_one, commission_level_two, mission_start_time, mission_end_time,
+    partner, old_superior, first_level_partner, second_level_partner
   </sql>
   <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
