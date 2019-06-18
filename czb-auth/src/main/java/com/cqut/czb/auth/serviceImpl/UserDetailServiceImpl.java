@@ -79,7 +79,16 @@ public class UserDetailServiceImpl implements UserDetailService {
 //            user.setSuperiorUser(userMapperExtra.findUserByAccount("18008354161").getUserId());
         } else {
             if(userMapperExtra.checkAccount(personalUserDTO.getSuperiorUser())) {
-                user.setSuperiorUser(userMapperExtra.findUserByAccount(personalUserDTO.getSuperiorUser()).getUserId());
+                User superior = userMapperExtra.findUserByAccount(personalUserDTO.getSuperiorUser());
+                user.setSuperiorUser(superior.getUserId());
+                user.setFirstLevelPartner(superior.getFirstLevelPartner());
+                user.setSecondLevelPartner(superior.getSecondLevelPartner());
+                if(1 == superior.getPartner()) {
+                    user.setSecondLevelPartner(superior.getUserId());
+                }
+                if(2 == superior.getPartner()) {
+                    user.setFirstLevelPartner(superior.getUserId());
+                }
             } else {
                 user.setSuperiorUser(null);
             }
