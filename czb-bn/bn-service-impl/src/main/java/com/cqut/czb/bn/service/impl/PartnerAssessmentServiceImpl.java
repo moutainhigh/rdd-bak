@@ -5,9 +5,8 @@ import com.cqut.czb.bn.dao.mapper.IndicatorRecordMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.entity.Dict;
-import com.cqut.czb.bn.service.impl.InfoSpreadServiceImpl;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -16,6 +15,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -93,10 +93,10 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
                 }
                 if(indicatorRecordDTO.getPartner() == 0){
                     iterator.remove();
-                }else if (indicatorRecordDTO.getPartner() == 1){
+                }else if (indicatorRecordDTO.getPartner() == 2){
                     indicatorRecordDTO.setActualPromotionNumber(Integer.valueOf(businessNumIndicators.getContent()));
                     indicatorRecordDTO.setActualNewConsumer(Integer.valueOf(businessConNumIndicators.getContent()));
-                }else if (indicatorRecordDTO.getPartner() == 2){
+                }else if (indicatorRecordDTO.getPartner() == 1){
                     indicatorRecordDTO.setActualPromotionNumber(Integer.valueOf(ordinaryNumIndicators.getContent()));
                     indicatorRecordDTO.setActualNewConsumer(Integer.valueOf(ordinaryConNumIndicators.getContent()));
                 }
@@ -207,9 +207,9 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
 
             row.createCell(count++).setCellValue(list.get(i).getUserAccount());
 
-            if(list.get(i).getPartner() == 2){
+            if(list.get(i).getPartner() == 1){
                 row.createCell(count++).setCellValue("普通合伙人");
-            }else if (list.get(i).getPartner() == 1){
+            }else if (list.get(i).getPartner() == 2){
                 row.createCell(count++).setCellValue("事业合伙人");
             }else{
                 count++;
