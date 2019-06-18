@@ -42,6 +42,8 @@ public class UserInputDTO {
 
     private Integer isLoginPc;
 
+    private String oldSuperior;
+
     public Date getCreateAt() {
         return createAt;
     }
@@ -136,5 +138,13 @@ public class UserInputDTO {
 
     public void setIsLoginPc(Integer isLoginPc) {
         this.isLoginPc = isLoginPc;
+    }
+
+    public String getOldSuperior() {
+        return oldSuperior;
+    }
+
+    public void setOldSuperior(String oldSuperior) {
+        this.oldSuperior = oldSuperior;
     }
 }

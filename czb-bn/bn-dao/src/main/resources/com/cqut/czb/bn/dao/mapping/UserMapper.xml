@@ -18,14 +18,18 @@
     <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
     <result column="commission_level_one" jdbcType="VARCHAR" property="commissionLevelOne" />
     <result column="commission_level_two" jdbcType="VARCHAR" property="commissionLevelTwo" />
-    <result column="partner" jdbcType="INTEGER" property="partner" />
     <result column="mission_start_time" jdbcType="TIMESTAMP" property="missionStartTime" />
     <result column="mission_end_time" jdbcType="TIMESTAMP" property="missionEndTime" />
+    <result column="partner" jdbcType="INTEGER" property="partner" />
+    <result column="old_superior" jdbcType="VARCHAR" property="oldSuperior" />
+    <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
+    <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
   </resultMap>
   <sql id="Base_Column_List">
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted, 
-    commission_level_one, commission_level_two, partner, mission_start_time, mission_end_time
+    commission_level_one, commission_level_two, mission_start_time, mission_end_time, 
+    partner, old_superior, first_level_partner, second_level_partner
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -43,15 +47,17 @@
       superior_user, is_login_pc, user_name, 
       user_id_card, create_at, update_at, 
       user_yun_id, is_deleted, commission_level_one, 
-      commission_level_two, partner, mission_start_time, 
-      mission_end_time)
+      commission_level_two, mission_start_time, 
+      mission_end_time, partner, old_superior, 
+      first_level_partner, second_level_partner)
     values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
       #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
       #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
       #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
       #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR}, 
-      #{commissionLevelTwo,jdbcType=VARCHAR}, #{partner,jdbcType=INTEGER}, #{missionStartTime,jdbcType=TIMESTAMP}, 
-      #{missionEndTime,jdbcType=TIMESTAMP})
+      #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP}, 
+      #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR}, 
+      #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User">
     insert into czb_user
@@ -104,14 +110,23 @@
       <if test="commissionLevelTwo != null">
         commission_level_two,
       </if>
-      <if test="partner != null">
-        partner,
-      </if>
       <if test="missionStartTime != null">
         mission_start_time,
       </if>
       <if test="missionEndTime != null">
         mission_end_time,
+      </if>
+      <if test="partner != null">
+        partner,
+      </if>
+      <if test="oldSuperior != null">
+        old_superior,
+      </if>
+      <if test="firstLevelPartner != null">
+        first_level_partner,
+      </if>
+      <if test="secondLevelPartner != null">
+        second_level_partner,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -163,14 +178,23 @@
       <if test="commissionLevelTwo != null">
         #{commissionLevelTwo,jdbcType=VARCHAR},
       </if>
-      <if test="partner != null">
-        #{partner,jdbcType=INTEGER},
-      </if>
       <if test="missionStartTime != null">
         #{missionStartTime,jdbcType=TIMESTAMP},
       </if>
       <if test="missionEndTime != null">
         #{missionEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partner != null">
+        #{partner,jdbcType=INTEGER},
+      </if>
+      <if test="oldSuperior != null">
+        #{oldSuperior,jdbcType=VARCHAR},
+      </if>
+      <if test="firstLevelPartner != null">
+        #{firstLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondLevelPartner != null">
+        #{secondLevelPartner,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -222,14 +246,23 @@
       <if test="commissionLevelTwo != null">
         commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
       </if>
-      <if test="partner != null">
-        partner = #{partner,jdbcType=INTEGER},
-      </if>
       <if test="missionStartTime != null">
         mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
       </if>
       <if test="missionEndTime != null">
         mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partner != null">
+        partner = #{partner,jdbcType=INTEGER},
+      </if>
+      <if test="oldSuperior != null">
+        old_superior = #{oldSuperior,jdbcType=VARCHAR},
+      </if>
+      <if test="firstLevelPartner != null">
+        first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondLevelPartner != null">
+        second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
@@ -251,9 +284,12 @@
       is_deleted = #{isDeleted,jdbcType=INTEGER},
       commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
       commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
-      partner = #{partner,jdbcType=INTEGER},
       mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
-      mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP}
+      mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
+      partner = #{partner,jdbcType=INTEGER},
+      old_superior = #{oldSuperior,jdbcType=VARCHAR},
+      first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
+      second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
 </mapper>

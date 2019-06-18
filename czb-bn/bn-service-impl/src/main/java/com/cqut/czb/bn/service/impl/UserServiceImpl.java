@@ -185,6 +185,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
             }
             userInputDTO.setIsLoginPc(1);
@@ -214,6 +215,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
+                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
             }
             userInputDTO.setIsLoginPc(1);
