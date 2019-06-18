@@ -6,35 +6,46 @@
         UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
         SET actual_promotion_number = actual_promotion_number + 1
         WHERE
-        a.user_id IN <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
-                      #{item.userId,jdbcType=VARCHAR}
-                  </foreach>
-        AND DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+         DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND partner!=0
+        <if test="firstPartner!=null and secondPartner==null">
+            AND a.user_id = #{firstPartner,jdbcType=VARCHAR}
+        </if>
+        <if test="firstPartner==null and secondPartner!=null">
+            AND a.user_id = #{secondPartner,jdbcType=VARCHAR}
+        </if>
+        <if test="firstPartner!=null and secondPartner!=null">
+            AND a.user_id = #{secondPartner,jdbcType=VARCHAR} OR a.user_id = #{firstPartner,jdbcType=VARCHAR}
+        </if>
     </update>
 
     <update id="addChildConsumer">
         UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
         SET actual_new_consumer = actual_new_consumer + 1
         WHERE
-        a.user_id IN <foreach collection="list" item="item" index="index"
-                            separator="," open="(" close=")">
-        #{item.userId,jdbcType=VARCHAR}
-    </foreach>
-        AND DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+         DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND partner!=0
+        <if test="firstPartner!=null and secondPartner==null">
+            AND a.user_id = #{firstPartner,jdbcType=VARCHAR}
+        </if>
+        <if test="firstPartner==null and secondPartner!=null">
+            AND a.user_id = #{secondPartner,jdbcType=VARCHAR}
+        </if>
+        <if test="firstPartner!=null and secondPartner!=null">
+            AND a.user_id = #{secondPartner,jdbcType=VARCHAR} OR a.user_id = #{firstPartner,jdbcType=VARCHAR}
+        </if>
     </update>
 
     <!--全部子级-->
-    <resultMap id="ChildInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+    <resultMap id="ChildInMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
         <result column="moneys"  property="totalMoney" jdbcType="DOUBLE"/>
-        <collection property="childPartner" column="user_id" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildInfo"/>
+        <collection property="childPartner" column="user_id" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildInfoTest"/>
     </resultMap>
-    <select id="selectPartnerChildInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInfoMap">
+    <select id="selectPartnerChildInfoTest" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInMap">
         SELECT
         a.user_id,
         partner,
@@ -49,18 +60,43 @@
         a.user_id
     </select>
 
+
+    <resultMap id="ChildInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        <id column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="partner" property="partner" jdbcType="INTEGER" />
+        <result column="moneys"  property="totalMoney" jdbcType="DOUBLE"/>
+    </resultMap>
+    <select id="selectPartnerChildInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInfoMap">
+        SELECT
+        a.user_id,
+        partner,
+        sum(b.money) AS moneys
+        FROM
+        czb_user a
+        LEFT JOIN czb_consumption_record b on a.user_id = b.user_id
+        WHERE
+        first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR}
+        GROUP BY
+        a.user_id
+    </select>
+
+
+
     <!--全部是合伙人的父级-->
     <resultMap id="AllPartnerInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="superior_user" property="userId" jdbcType="VARCHAR" />
-        <collection property="partnerList" column="superior_user" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectAllPartnerInfo"/>
+        <result column="first_level_partner" property="firstPartner" jdbcType="VARCHAR"/>
+        <result column="second_level_partner" property="secondPartner" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="selectAllPartnerInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="AllPartnerInfoMap">
         SELECT
-        superior_user
+        superior_user，
+        first_level_partner，
+        second_level_partner
         FROM
         czb_user
         WHERE
-        user_id = #{userId,jdbcType=VARCHAR} AND superior_user is not null
+        user_id = #{userId,jdbcType=VARCHAR} AND first_level_partner is not null OR second_level_partner IS  NOT NULL
 
     </select>
 

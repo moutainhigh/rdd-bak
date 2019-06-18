@@ -27,6 +27,10 @@ public class PartnerDTO {
 
     private List<PartnerDTO> partnerList;
 
+    private String firstPartner;
+
+    private String secondPartner;
+
     private String monthTime;
 
     private Date nearTime;      //最近的消费时间
@@ -127,6 +131,22 @@ public class PartnerDTO {
 
     public void setPartnerList(List<PartnerDTO> partnerList) {
         this.partnerList = partnerList;
+    }
+
+    public String getFirstPartner() {
+        return firstPartner;
+    }
+
+    public void setFirstPartner(String firstPartner) {
+        this.firstPartner = firstPartner;
+    }
+
+    public String getSecondPartner() {
+        return secondPartner;
+    }
+
+    public void setSecondPartner(String secondPartner) {
+        this.secondPartner = secondPartner;
     }
 
     public void setMonthTime(String monthTime) {

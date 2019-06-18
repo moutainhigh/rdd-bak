@@ -20,7 +20,7 @@ public interface InfoSpreadService {
 
      PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user);
 
-     List<PartnerDTO> selectAllPartnerInfo(PartnerDTO partnerDTO);
+     PartnerDTO selectAllPartnerInfo(PartnerDTO partnerDTO);
 
      public Boolean addChildPromotion(PartnerDTO partnerDTO);
 

@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface PartnerMapperExtra {
 
-    int addChildPromotion (@Param("list")List<PartnerDTO> partnerDTOS ,@Param("partner") PartnerDTO partnerDTO);
+    int addChildPromotion (PartnerDTO partner);
 
-    int addChildConsumer (@Param("list")List<PartnerDTO> partnerDTOS ,@Param("partner") PartnerDTO partnerDTO);
+    int addChildConsumer (PartnerDTO partner);
 
      List<PartnerDTO> selectPartnerChildInfo(PartnerDTO partnerDTO);
 
-    List<PartnerDTO> selectAllPartnerInfo(PartnerDTO partnerDTO);
+    PartnerDTO selectAllPartnerInfo(PartnerDTO partnerDTO);
 
      PartnerDTO selectPartnerInfo(PartnerDTO partnerDTO);
 
