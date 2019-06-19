@@ -4,10 +4,10 @@
 
     <update id="addChildPromotion">
         UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
-        SET actual_promotion_number = actual_promotion_number + 1
+        SET actual_promotion_number = actual_promotion_number + 1,a.update_at=now()
         WHERE
-         DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
-        AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+         DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND partner!=0
         <if test="firstPartner!=null and secondPartner==null">
             AND a.user_id = #{firstPartner,jdbcType=VARCHAR}
@@ -16,16 +16,16 @@
             AND a.user_id = #{secondPartner,jdbcType=VARCHAR}
         </if>
         <if test="firstPartner!=null and secondPartner!=null">
-            AND a.user_id = #{secondPartner,jdbcType=VARCHAR} OR a.user_id = #{firstPartner,jdbcType=VARCHAR}
+            AND (a.user_id = #{secondPartner,jdbcType=VARCHAR} OR a.user_id = #{firstPartner,jdbcType=VARCHAR})
         </if>
     </update>
 
     <update id="addChildConsumer">
         UPDATE czb_indicator_record a LEFT JOIN czb_user b ON a.user_id= b.user_id
-        SET actual_new_consumer = actual_new_consumer + 1
+        SET actual_new_consumer = actual_new_consumer + 1,a.update_at=now()
         WHERE
-         DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
-        AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{partner.monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+         DATE_FORMAT(indicator_begin_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+        AND DATE_FORMAT(indicator_end_time,'%Y-%m-%d')>= DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m-%d')
         AND partner!=0
         <if test="firstPartner!=null and secondPartner==null">
             AND a.user_id = #{firstPartner,jdbcType=VARCHAR}
@@ -34,7 +34,7 @@
             AND a.user_id = #{secondPartner,jdbcType=VARCHAR}
         </if>
         <if test="firstPartner!=null and secondPartner!=null">
-            AND a.user_id = #{secondPartner,jdbcType=VARCHAR} OR a.user_id = #{firstPartner,jdbcType=VARCHAR}
+            AND (a.user_id = #{secondPartner,jdbcType=VARCHAR} OR a.user_id = #{firstPartner,jdbcType=VARCHAR})
         </if>
     </update>
 
@@ -97,7 +97,6 @@
         czb_user
         WHERE
         user_id = #{userId,jdbcType=VARCHAR} AND (first_level_partner is not null OR second_level_partner IS  NOT NULL)
-
     </select>
 
     <!--限制时间查找子级-->
