@@ -76,9 +76,13 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         try {
             partnerDTO.setMonthTime(format.format(new Date()));
             for (int i=0;i<7;i++) {
-                List<PartnerDTO> ids = new ArrayList<>();
-                promotion[i]=(getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(children,partnerDTO)));
-                consumption[i]=(getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(children,partnerDTO)));
+                if (children!=null&&children.size()!=0) {
+                    promotion[i] = (getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(children, partnerDTO)));
+                    consumption[i] = (getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(children, partnerDTO)));
+                }else {
+                    promotion[i] = 0;
+                    consumption[i] = 0;
+                }
                 c.setTime(format.parse(partnerDTO.getMonthTime()));
                 c.add(Calendar.DATE, -1);
                 partnerDTO.setMonthTime(format.format(c.getTime()));

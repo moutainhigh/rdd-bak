@@ -90,13 +90,13 @@
     </resultMap>
     <select id="selectAllPartnerInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="AllPartnerInfoMap">
         SELECT
-        superior_user，
-        first_level_partner，
+        superior_user,
+        first_level_partner,
         second_level_partner
         FROM
         czb_user
         WHERE
-        user_id = #{userId,jdbcType=VARCHAR} AND first_level_partner is not null OR second_level_partner IS  NOT NULL
+        user_id = #{userId,jdbcType=VARCHAR} AND (first_level_partner is not null OR second_level_partner IS  NOT NULL)
 
     </select>
 
