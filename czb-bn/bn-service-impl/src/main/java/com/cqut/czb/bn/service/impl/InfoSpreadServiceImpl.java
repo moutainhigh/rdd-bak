@@ -77,8 +77,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
             partnerDTO.setMonthTime(format.format(new Date()));
             for (int i=0;i<7;i++) {
                 if (children!=null&&children.size()!=0) {
-                    promotion[i] = (getChildCount(partnerMapperExtra.selectPartnerChildInfoWithDay(children, partnerDTO)));
-                    consumption[i] = (getChildCount(partnerMapperExtra.selectPartnerChildWithDayMoney(children, partnerDTO)));
+                    promotion[i] = (partnerMapperExtra.selectPartnerChildInfoWithDay(children, partnerDTO).size());
+                    consumption[i] = (partnerMapperExtra.selectPartnerChildWithDayMoney(children, partnerDTO).size());
                 }else {
                     promotion[i] = 0;
                     consumption[i] = 0;
@@ -103,9 +103,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = partnerMapperExtra.selectPartner(partnerDTO);
         if(totalChilds!=null&&totalChilds.size()!=0) {
-            partner.setTotalCount(getChildCount(totalChilds));
+            partner.setTotalCount(totalChilds.size());
             Double totalMoney = getChildTotalMoney(totalChilds);
             partner.setTotalMoney((totalMoney));
+        }else {
+            partner.setTotalCount(0);
+            partner.setTotalMoney(0.00);
         }
         Double nextTotalMoney = 0.00;
         List<PartnerDTO> nextChildMoney = partnerMapperExtra.selectNextChildMoney(partnerDTO);
@@ -175,7 +178,6 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
                 if (partnerDTOS.get(i).getTotalMoney()!=null) {
                     count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加
                 }
-                getChildTotalMoney(partnerDTOS.get(i).getChildPartner());
             }
         }
         return count;
