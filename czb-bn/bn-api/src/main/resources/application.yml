@@ -8,7 +8,7 @@ spring:
 #    username: ${MYSQL_USER:czb_user}
 #    password: ${MYSQL_PASS:Q@iG4#6F}
 
-    url: jdbc:mysql://${MYSQL_URL:39.98.250.45:3306/${MYSQL_DATABASE:czb}}?characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:39.98.250.45:3306/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:G@6tSRWx}
 

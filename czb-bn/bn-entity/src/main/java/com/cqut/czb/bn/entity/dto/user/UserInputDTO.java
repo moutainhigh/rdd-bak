@@ -44,6 +44,10 @@ public class UserInputDTO {
 
     private String oldSuperior;
 
+    private String firstLevelPartner;
+
+    private String secondLevelPartner;
+
     public Date getCreateAt() {
         return createAt;
     }
@@ -146,5 +150,21 @@ public class UserInputDTO {
 
     public void setOldSuperior(String oldSuperior) {
         this.oldSuperior = oldSuperior;
+    }
+
+    public String getFirstLevelPartner() {
+        return firstLevelPartner;
+    }
+
+    public void setFirstLevelPartner(String firstLevelPartner) {
+        this.firstLevelPartner = firstLevelPartner;
+    }
+
+    public String getSecondLevelPartner() {
+        return secondLevelPartner;
+    }
+
+    public void setSecondLevelPartner(String secondLevelPartner) {
+        this.secondLevelPartner = secondLevelPartner;
     }
 }

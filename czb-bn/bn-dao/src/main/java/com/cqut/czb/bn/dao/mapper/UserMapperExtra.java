@@ -29,6 +29,12 @@ public interface UserMapperExtra {
 
     RecommenderDTO selectRecommender(String userId);
 
+    List<User> getAllSubUser();
+
+    int insertAllSubUser(String userId);
+
+    int updatePartnerState(@Param("userList")List<User> userList, @Param("first") String first,@Param("second") String second);
+
 //    UserTreeDTO getAllUserByOneParent(@Param("userId") String userId);
 
     /**

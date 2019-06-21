@@ -177,6 +177,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setTargetNewConsumer(Integer.parseInt(dictMapperExtra.selectDictByName("ordinaryConNumIndicators").getContent()));
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
+                userInputDTO.setSecondLevelPartner("");
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
             if( 2 == userInputDTO.getPartner()) {
@@ -185,6 +186,8 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
+                userInputDTO.setFirstLevelPartner("");
+                userInputDTO.setSecondLevelPartner("");
                 userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
             }
@@ -208,6 +211,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
+                userInputDTO.setSecondLevelPartner("");
             }
             if (2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
@@ -215,6 +219,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
+                userInputDTO.setFirstLevelPartner("");
                 userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
             }
@@ -224,8 +229,39 @@ public class UserServiceImpl implements IUserService {
         }
         
         if(isUpdateIndicatorRecord) {
+            User user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
+            userMapperExtra.insertAllSubUser(userInputDTO.getUserId());
+            List<User> userList = userMapperExtra.getAllSubUser();
+            if(0 == userInputDTO.getPartner()) {
+                if(1 == user.getPartner()) {
+                    // 2级变0级
+                    userMapperExtra.updatePartnerState(userList, null, "");
+                }
+                if(2 == user.getPartner()) {
+                    // 1级变0级
+                    userMapperExtra.updatePartnerState(userList, "", null);
+                }
+            }
+            if(1 == userInputDTO.getPartner()) {
+                if(2 == user.getPartner()) {
+                    // 1级变2级
+                    userMapperExtra.updatePartnerState(userList, "", userInputDTO.getUserId());
+                }
+                if(0 == user.getPartner()) {
+                    userMapperExtra.updatePartnerState(userList, null, userInputDTO.getUserId());
+                }
+            }
+            if(2 == userInputDTO.getPartner()) {
+                if(1 == user.getPartner()) {
+                    // 2级变1级
+                    userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), "");
+                }
+                if(0 == user.getPartner()) {
+                    userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), null);
+                }
+            }
             if(userMapperExtra.updateUser(userInputDTO) > 0) {
-                User user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
+                user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
                 redisUtil.put(user.getUserAccount(), user);
             }
             return true;
