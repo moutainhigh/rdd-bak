@@ -67,6 +67,12 @@
       <if test="oldSuperior != null and oldSuperior != ''" >
         old_superior = #{oldSuperior, jdbcType=VARCHAR},
       </if>
+      <if test="firstLevelPartner != null">
+        first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondLevelPartner != null">
+        second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
@@ -252,4 +258,30 @@
       )
     </where>
   </select>
+
+  <insert id="insertAllSubUser">
+    {call getAllSubUser(#{userId, jdbcType=VARCHAR})}
+  </insert>
+  <select id="getAllSubUser" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.User">
+    select user_id as 'userId', user_account as 'userAccount', superior_user as 'superiorUser', partner
+    from temprefree
+  </select>
+
+  <update id="updatePartnerState">
+    <foreach collection="userList" index="index" item="item" separator=";" open="" close="" >
+    update czb_user
+    <set>
+      <if test="first != null">
+        first_level_partner = #{first,jdbcType=VARCHAR},
+      </if>
+      <if test="second != null">
+        second_level_partner = #{second,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+      user_id = #{item.userId, jdbcType=VARCHAR}
+    </where>
+    </foreach>
+  </update>
+
 </mapper>
