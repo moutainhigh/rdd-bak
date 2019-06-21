@@ -1,11 +1,11 @@
-package com.cqut.czb.bn.entity.dto.paymentRecord;
+package com.cqut.czb.bn.entity.dto.PayConfig;
 
 /**
  * 
  * @author chendeqiang
  *
  */
-public class WXPayConfig {
+public class WeChatPayConfig {
 
 	// 密钥key
 	public static final String key = "CHONGQINGAiDonginformation201808";
@@ -24,10 +24,10 @@ public class WXPayConfig {
 	public static final String sign_type = "MD5";
 
 	//终端ip
-	public static final String spbill_create_ip = UrlConfig.BACK_URL;
+	public static final String spbill_create_ip = UrlConfig.NOTIGY_URL;
 	
     //通知地址1(购买油卡的回调地址)
-	public static final String notify_url = "http://"+UrlConfig.BACK_URL+":8899/verifyAsyn/verifyBuyPetrolInfoWeChat";
+	public static final String notify_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyPetrolInfoWeChat";
 
 	//交易类型
 	public static final String trade_type = "APP";

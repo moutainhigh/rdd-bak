@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto.paymentRecord;
+package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.cqut.czb.bn.util.md5.MD5Util;
 import org.w3c.dom.Document;
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class WXUtils {
+public class WeChatUtils {
 
     // 得到32位随机数
     public static String getRandomStr() {
@@ -41,7 +41,7 @@ public class WXUtils {
                 sb.append(k + "=" + v + "&");  
             }  
         }  
-        sb.append("key=" + WXPayConfig.key);  
+        sb.append("key=" + WeChatPayConfig.key);
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
         return sign;  
     }
