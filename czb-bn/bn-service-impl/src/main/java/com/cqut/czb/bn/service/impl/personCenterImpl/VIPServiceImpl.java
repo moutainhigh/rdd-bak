@@ -9,8 +9,8 @@ import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.appVIP.VipRechargeRecordDTO;
-import com.cqut.czb.bn.entity.dto.paymentRecord.AiHuAlipayConfig;
-import com.cqut.czb.bn.entity.dto.paymentRecord.GetAlipayClient;
+import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.AlipayClientConfig;
 import com.cqut.czb.bn.entity.entity.VipRechargeRecords;
 import com.cqut.czb.bn.service.personCenterService.IVIPService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -46,12 +46,12 @@ public class VIPServiceImpl implements IVIPService {
          * 生成起调参数串
          */
         String rs=null;
-        GetAlipayClient getAlipayClient=GetAlipayClient.getInstance("1");//"1"代表的是充值
-        AlipayClient alipayClient=getAlipayClient.getAlipayClient();
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("1");//"1"代表的是充值
+        AlipayClient alipayClient= alipayClientConfig.getAlipayClient();
         AlipayTradeAppPayRequest request=new AlipayTradeAppPayRequest();
 
         request.setBizModel(toAlipayTradeAppPayModel(vipRechargeRecordDTO.getRecordId()));
-        request.setNotifyUrl(getAlipayClient.getCallBackUrl());
+        request.setNotifyUrl(alipayClientConfig.getCallBackUrl());
 
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -70,8 +70,8 @@ public class VIPServiceImpl implements IVIPService {
         boolean signVerified = false;
         try {
             // 调用SDK验证签名
-            signVerified = AlipaySignature.rsaCheckV1(params, AiHuAlipayConfig.alipay_public_key,
-                    AiHuAlipayConfig.charset, AiHuAlipayConfig.sign_type);
+            signVerified = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key,
+                    AliPayConfig.charset, AliPayConfig.sign_type);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class VIPServiceImpl implements IVIPService {
     private boolean isCorrectData(Map<String, String> params) {
 
         // 验证app_id是否一致
-        if (!params.get("app_id").equals(AiHuAlipayConfig.app_id)) {
+        if (!params.get("app_id").equals(AliPayConfig.app_id)) {
             return false;
         }
 
@@ -150,10 +150,10 @@ public class VIPServiceImpl implements IVIPService {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setSubject("车租宝支付宝支付");
         model.setOutTradeNo(orgId);
-        model.setTimeoutExpress(AiHuAlipayConfig.timeout_express);
+        model.setTimeoutExpress(AliPayConfig.timeout_express);
 //        turnoverAmount.toString()——死数据（方便测试）
         model.setTotalAmount("0.01");
-        model.setProductCode(AiHuAlipayConfig.product_code);
+        model.setProductCode(AliPayConfig.product_code);
         model.setPassbackParams(getPassbackParams(orgId));
         return model;
     }

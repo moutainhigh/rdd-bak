@@ -1,9 +1,9 @@
-package com.cqut.czb.bn.entity.dto.paymentRecord;
+package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import javax.servlet.ServletInputStream;
 import java.io.*;
 
-public class FileUtil {
+public class WeChatFileUtil {
 
 	private static String escapedChars = "&quot;";
 	private static String customaryChar = "\"";
@@ -52,7 +52,7 @@ public class FileUtil {
 	 * 获取项目根目录
 	 */
 	public static String getRootPath() {
-		FileUtil r = new FileUtil();
+		WeChatFileUtil r = new WeChatFileUtil();
 		String path = r.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 		path = path.substring(1, path.indexOf("/WEB-INF"));
 		return path;

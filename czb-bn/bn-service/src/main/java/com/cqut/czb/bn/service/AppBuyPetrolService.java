@@ -47,10 +47,9 @@ public interface AppBuyPetrolService {
      */
     Map<String, Object> PurchaseControl(PetrolInputDTO petrolInputDTO);
 
-
     /**
-     * 新增油卡购买（充值）记录
+     * 新增油卡购买或充值记录
      */
-    boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords);
+    boolean insertPetrolSalesRecords(Petrol petrol,PetrolInputDTO petrolInputDTO,String orgId);
 
 }

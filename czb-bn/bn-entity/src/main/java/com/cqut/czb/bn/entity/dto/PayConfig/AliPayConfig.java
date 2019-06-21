@@ -1,6 +1,6 @@
-package com.cqut.czb.bn.entity.dto.paymentRecord;
+package com.cqut.czb.bn.entity.dto.PayConfig;
 
-public class AiHuAlipayConfig {
+public class AliPayConfig {
 
 	//APPID
 	public static final  String app_id = "2018060160263534";
@@ -15,17 +15,20 @@ public class AiHuAlipayConfig {
 	public static final  String gatewayUrl = "https://openapi.alipay.com/gateway.do";
 
 	//购买油卡的回调的url
-	public static String notify_url ="http://"+UrlConfig.BACK_URL+":8899/verifyAsyn/verifyBuyPetrolInfoAiHu";
+	public static String notify_url ="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyPetrolInfoAiHu";
 	//充值的回调的url
-	public static String recharge_url="http://"+UrlConfig.BACK_URL+":8899/personCenter/VIP/purchaseVIP";
+	public static String recharge_url="http://"+ UrlConfig.NOTIGY_URL+":8899/personCenter/VIP/purchaseVIP";
 	//购买油卡充值url
-	public static String PetrolRecharge_url="http://"+UrlConfig.BACK_URL+":8899/verifyAsyn/verifyPetrolRechargeInfoAiHu";
+	public static String PetrolRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyPetrolRechargeInfoAiHu";
 
 	// 加密方式
 	public static String sign_type = "RSA2";
 	
 	// 字符编码格式
 	public static String charset = "UTF-8";
+
+	//网页端的编码格式
+	public static String webCharset="GBK";
 
 	//参数返回格式
 	public static String format = "json";

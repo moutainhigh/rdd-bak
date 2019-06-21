@@ -6,7 +6,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
-import com.cqut.czb.bn.entity.dto.paymentRecord.AiHuAlipayConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
@@ -143,8 +143,8 @@ public class MyWalletImpl implements MyWallet {
         incomeLog.setWithdrawName(alipayRecordDTO.getPaymentName());
 
         // 支付宝参数设置
-        AlipayClient alipayClient = new DefaultAlipayClient(AiHuAlipayConfig.gatewayUrl, AiHuAlipayConfig.app_id,
-                AiHuAlipayConfig.merchant_private_key, "json", "utf-8", AiHuAlipayConfig.alipay_public_key, "RSA2");
+        AlipayClient alipayClient = new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+                AliPayConfig.merchant_private_key, "json", "utf-8", AliPayConfig.alipay_public_key, "RSA2");
         AlipayFundTransToaccountTransferRequest request1 = new AlipayFundTransToaccountTransferRequest();
 
         request1.setBizContent("{" + "\"out_biz_no\":\"" + System.currentTimeMillis() + "\","

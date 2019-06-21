@@ -1,10 +1,10 @@
-package com.cqut.czb.bn.entity.dto.paymentRecord;
+package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import javax.net.ssl.X509TrustManager;
 import javax.security.cert.CertificateException;
 import javax.security.cert.X509Certificate;
 
-public class MyX509TrustManager implements X509TrustManager {
+public class WeChatMyX509TrustManager implements X509TrustManager {
 
 	// 检查客户端证书
 	public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {

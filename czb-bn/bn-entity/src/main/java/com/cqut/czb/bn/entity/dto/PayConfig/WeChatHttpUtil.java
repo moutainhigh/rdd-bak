@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto.paymentRecord;
+package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import javax.net.ssl.TrustManager;
 import java.io.*;
 import java.net.*;
 
-public class HttpUtil {
+public class WeChatHttpUtil {
 	// post请求
 	public static final String HTTP_POST = "POST";
 
@@ -169,7 +169,7 @@ public class HttpUtil {
 		return resultBuffer.toString();
 	}
 
-	private static Logger log = LoggerFactory.getLogger(HttpUtil.class);
+	private static Logger log = LoggerFactory.getLogger(WeChatHttpUtil.class);
 
 	/**
 	 * 发送https请求
@@ -186,7 +186,7 @@ public class HttpUtil {
 			String outputStr) {
 		try {
 			// 创建SSLContext对象，并使用我们指定的信任管理器初始化
-			TrustManager[] tm = { new MyX509TrustManager() };
+			TrustManager[] tm = { new WeChatMyX509TrustManager() };
 			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
 			sslContext.init(null, tm, new java.security.SecureRandom());
 			// 从上述SSLContext对象中得到SSLSocketFactory对象
