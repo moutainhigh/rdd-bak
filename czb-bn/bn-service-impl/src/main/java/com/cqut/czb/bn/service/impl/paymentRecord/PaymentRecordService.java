@@ -2,9 +2,9 @@ package com.cqut.czb.bn.service.impl.paymentRecord;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.cqut.czb.bn.entity.dto.paymentRecord.AiHuAlipayConfig;
-import com.cqut.czb.bn.entity.dto.paymentRecord.FileUtil;
-import com.cqut.czb.bn.entity.dto.paymentRecord.WXUtils;
+import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatFileUtil;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.service.IPaymentRecordService;
 import com.cqut.czb.bn.service.IRefuelingCard;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
@@ -52,8 +52,8 @@ public class PaymentRecordService implements IPaymentRecordService {
 		boolean signVerfied = false;
 		try {
 			//检测支付订单是否被篡改
-			signVerfied = AlipaySignature.rsaCheckV1(params, AiHuAlipayConfig.alipay_public_key,
-					AiHuAlipayConfig.charset, AiHuAlipayConfig.sign_type);
+			signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key,
+					AliPayConfig.charset, AliPayConfig.sign_type);
 			System.out.println("408 " + signVerfied);
 		} catch (AlipayApiException e) {
 			e.printStackTrace();
@@ -96,8 +96,8 @@ public class PaymentRecordService implements IPaymentRecordService {
 	public String orderPayNotify(HttpServletRequest request) {
 		try {
 			ServletInputStream in = request.getInputStream();
-			String resxml = FileUtil.inputStream2String(in);
-			Map<String, Object> restmap = WXUtils.xml2Map(resxml);
+			String resxml = WeChatFileUtil.inputStream2String(in);
+			Map<String, Object> restmap = WeChatUtils.xml2Map(resxml);
 			if ("SUCCESS".equals(restmap.get("result_code"))) {
 				// 订单支付成功 业务处理
 				if (checkSign(restmap)) {
@@ -143,7 +143,7 @@ public class PaymentRecordService implements IPaymentRecordService {
 
 		System.out.println("675 " + params.get("app_id"));
 		// 验证app_id是否一致
-		if (!params.get("app_id").equals(AiHuAlipayConfig.app_id)) {
+		if (!params.get("app_id").equals(AliPayConfig.app_id)) {
 			System.out.println("错误app_id:" + params.get("app_id"));
 			return false;
 		}
@@ -165,7 +165,7 @@ public class PaymentRecordService implements IPaymentRecordService {
 		for (Map.Entry<String, Object> entry : restmap.entrySet()) {
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
-		String signnow = WXUtils.createSign(characterEncoding, sortedMap);
+		String signnow = WeChatUtils.createSign(characterEncoding, sortedMap);
 		if (sign.equals(signnow)) {
 			return true;
 		} else {
@@ -179,7 +179,7 @@ public class PaymentRecordService implements IPaymentRecordService {
 		respMap = new TreeMap<String, Object>();
 		respMap.put("return_code", "SUCCESS"); // 响应给微信服务器
 		respMap.put("return_msg", "OK");
-		String resXml = WXUtils.map2xml(respMap);
+		String resXml = WeChatUtils.map2xml(respMap);
 		return resXml;
 	}
 
