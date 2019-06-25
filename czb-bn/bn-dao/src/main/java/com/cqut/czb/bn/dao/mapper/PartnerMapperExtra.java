@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface PartnerMapperExtra {
 
+    List<PartnerDTO> selectChildMoneyByName(PartnerDTO partnerDTO);
+
+    List<PartnerDTO> selectChildByName(PartnerDTO partnerDTO);
+
     int addChildPromotion (PartnerDTO partner);
 
     int addChildConsumer (PartnerDTO partner);

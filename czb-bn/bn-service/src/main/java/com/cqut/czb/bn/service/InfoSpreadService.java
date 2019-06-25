@@ -25,4 +25,6 @@ public interface InfoSpreadService {
      public Boolean addChildPromotion(PartnerDTO partnerDTO);
 
      public Boolean addChildConsumer(PartnerDTO partnerDTO);
+
+     PageInfo<PartnerDTO> getChildByName(PartnerDTO partnerDTO,PageDTO pageDTO);
  }
