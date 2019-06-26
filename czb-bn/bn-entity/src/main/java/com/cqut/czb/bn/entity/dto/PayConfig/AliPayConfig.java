@@ -44,8 +44,4 @@ public class AliPayConfig {
 	
 	//失败
 	public static String response_fail = "failure";
-
-	public AiHuAlipayConfig() {
-//		http://106.91.31.205:8899/verifyAsyn/verifyAsynNoticeInfoAiHu
-	}
 }
