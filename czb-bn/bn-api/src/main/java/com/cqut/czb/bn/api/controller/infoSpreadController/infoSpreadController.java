@@ -94,4 +94,9 @@ public class infoSpreadController {
     public JSONResult addChildConsumer(PartnerDTO partnerDTO){
         return new JSONResult(infoSpreadService.addChildConsumer(partnerDTO));
     }
+
+    @PostMapping("/getChildByName")
+    public JSONResult getChildByName(PartnerDTO partnerDTO,PageDTO pageDTO){
+        return new JSONResult(infoSpreadService.getChildByName(partnerDTO,pageDTO));
+    }
 }

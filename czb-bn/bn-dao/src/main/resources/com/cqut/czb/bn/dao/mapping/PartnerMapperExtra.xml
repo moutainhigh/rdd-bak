@@ -41,6 +41,7 @@
     <!--全部子级-->
     <resultMap id="ChildInMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
         <result column="moneys"  property="totalMoney" jdbcType="DOUBLE"/>
         <collection property="childPartner" column="user_id" ofType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" select="selectPartnerChildInfoTest"/>
@@ -48,6 +49,7 @@
     <select id="selectPartnerChildInfoTest" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInMap">
         SELECT
         a.user_id,
+        a.user_account,
         partner,
         a.superior_user,
         sum(b.money) AS moneys
@@ -63,12 +65,14 @@
 
     <resultMap id="ChildInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
         <result column="moneys"  property="totalMoney" jdbcType="DOUBLE"/>
     </resultMap>
     <select id="selectPartnerChildInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInfoMap">
         SELECT
         a.user_id,
+        a.user_account,
         partner,
         sum(b.money) AS moneys
         FROM
@@ -234,6 +238,43 @@
     </where>
     </select>
 
+    <select id="selectChildByName" resultMap="PartnerChildMap" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO"  >
+        SELECT
+        a.user_id,
+        a.user_account,
+        a.partner,
+        a.superior_user,
+        COUNT(b.user_id) as total_count
+        FROM
+        czb_user a
+        LEFT JOIN czb_user b ON a.user_id = b.superior_user
+        <where>
+            <if test="userAccount!=null and userAccount!=''">
+                (SUBSTR(user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+            </if>
+        </where>
+        GROUP BY a.user_id
+    </select>
+
+    <select id="selectChildMoneyByName" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        SELECT
+        a.user_id as userId,
+        a.user_account as userAccount,
+        a.partner,
+        SUM(c.money) as totalMoney,
+        MAX(c.create_at) AS nearTime
+        FROM
+        czb_user a
+        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
+        <where>
+            <if test="userAccount!=null and userAccount!=''">
+                (SUBSTR(user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+            </if>
+        </where>
+        GROUP BY a.user_id
+    </select>
+
+
     <resultMap id="PartnerChildMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
@@ -306,4 +347,5 @@
             a.user_id = #{userId,jdbcType=VARCHAR}
         AND DATE_FORMAT(b.indicator_begin_time,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
     </select>
+
 </mapper>

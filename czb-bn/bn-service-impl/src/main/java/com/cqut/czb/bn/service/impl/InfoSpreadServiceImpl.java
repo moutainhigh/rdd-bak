@@ -104,7 +104,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         PartnerDTO partner = partnerMapperExtra.selectPartner(partnerDTO);
         if(totalChilds!=null&&totalChilds.size()!=0) {
             partner.setTotalCount(totalChilds.size());
-            Double totalMoney = getChildTotalMoney(totalChilds);
+            Double totalMoney = (Double) changeToBigDecimal(getChildTotalMoney(totalChilds));
             partner.setTotalMoney((totalMoney));
         }else {
             partner.setTotalCount(0);
@@ -177,6 +177,8 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
             for (int i = 0; i<partnerDTOS.size(); i++){
                 if (partnerDTOS.get(i).getTotalMoney()!=null) {
                     count = count + partnerDTOS.get(i).getTotalMoney();       //如果有子级就加
+                    System.out.println("金额"+partnerDTOS.get(i).getTotalMoney()+"第"+i+"位"+partnerDTOS.get(i).getUserAccount());
+                    System.out.println("总金额："+count);
                 }
             }
         }
@@ -214,6 +216,23 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         }else {
             return false;
         }
+    }
+
+    @Override
+    public PageInfo<PartnerDTO> getChildByName(PartnerDTO partnerDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        List<PartnerDTO> childByName = partnerMapperExtra.selectChildByName(partnerDTO);
+        List<PartnerDTO> childMoneyByName = partnerMapperExtra.selectChildMoneyByName(partnerDTO);
+        for(int i=0 ; i<childByName.size() ; i++){
+            for (int j=0;j<childMoneyByName.size();j++){
+                if (childByName.get(i).getUserId().equals(childMoneyByName.get(j).getUserId())){
+                    childByName.get(i).setTotalMoney(childMoneyByName.get(j).getTotalMoney());
+                    childByName.get(i).setNearTime(childMoneyByName.get(j).getNearTime());
+                    break;
+                }
+            }
+        }
+        return new PageInfo<>(childByName);
     }
 
     public Double changeToBigDecimal(Double num){
