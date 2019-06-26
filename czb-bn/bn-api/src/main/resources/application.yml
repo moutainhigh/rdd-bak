@@ -4,7 +4,7 @@ spring:
 
   #数据库配置
   datasource:
-    url: jdbc:mysql://${MYSQL_URL:172.16.43.86:9525/${MYSQL_DATABASE:czb}}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:172.16.43.86:9525/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
     username: ${MYSQL_USER:czb_user}
     password: ${MYSQL_PASS:Q@iG4#6F}
 
