@@ -19,18 +19,19 @@ CREATE TABLE `czb_shop`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for czb_shop_commodity
+-- Table structure for czb_commodity
 -- ----------------------------
-DROP TABLE IF EXISTS `czb_shop_commodity`;
-CREATE TABLE `czb_shop_commodity`  (
+DROP TABLE IF EXISTS `czb_commodity`;
+CREATE TABLE `czb_commodity`  (
   `commodity_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `shop_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `commodity_title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `commodity_info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `discount` double(3, 2) NULL DEFAULT NULL,
-  `commodity_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `commodity_img` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `commodity_price` double(10, 2) NULL DEFAULT NULL,
   `classification` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `usage_count` int(3) NULL DEFAULT NULL,
   `create_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`commodity_id`) USING BTREE
@@ -124,6 +125,34 @@ CREATE TABLE `czb_order`  (
   `third_order` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pay_method` int(1) NULL DEFAULT NULL,
   `state` int(1) NULL DEFAULT NULL,
+  `total_count` int(3) NULL DEFAULT NULL,
+  `create_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for czb_commodity_usage_record
+-- ----------------------------
+DROP TABLE IF EXISTS `czb_commodity_usage_record`;
+CREATE TABLE `czb_commodity_usage_record`  (
+  `record_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `order_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `usage_time` timestamp(0) NULL DEFAULT NULL,
+  `create_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`record_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for czb_file_function
+-- ----------------------------
+DROP TABLE IF EXISTS `czb_file_function`;
+CREATE TABLE `czb_file_function`  (
+  `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `group_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `file_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `local_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `create_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
