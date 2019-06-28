@@ -153,6 +153,11 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
                     myIncomeLogDTOS.get(i).setUserName(user1.getUserName());
                 }
             }
+
+            if(myIncomeLogDTO.getType()==4)//系统补贴
+            {
+                myIncomeLogDTOS.get(i).setUserAccount("系统补贴");
+            }
         }
         return myIncomeLogDTOS;
     }
