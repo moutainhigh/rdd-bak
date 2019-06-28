@@ -232,32 +232,34 @@ public class UserServiceImpl implements IUserService {
             User user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
             userMapperExtra.insertAllSubUser(userInputDTO.getUserId());
             List<User> userList = userMapperExtra.getAllSubUser();
-            if(0 == userInputDTO.getPartner()) {
-                if(1 == user.getPartner()) {
-                    // 2级变0级
-                    userMapperExtra.updatePartnerState(userList, null, "");
+            if(null != userList && 0 < userList.size()) {
+                if (0 == userInputDTO.getPartner()) {
+                    if (1 == user.getPartner()) {
+                        // 2级变0级
+                        userMapperExtra.updatePartnerState(userList, null, "");
+                    }
+                    if (2 == user.getPartner()) {
+                        // 1级变0级
+                        userMapperExtra.updatePartnerState(userList, "", null);
+                    }
                 }
-                if(2 == user.getPartner()) {
-                    // 1级变0级
-                    userMapperExtra.updatePartnerState(userList, "", null);
+                if (1 == userInputDTO.getPartner()) {
+                    if (2 == user.getPartner()) {
+                        // 1级变2级
+                        userMapperExtra.updatePartnerState(userList, "", userInputDTO.getUserId());
+                    }
+                    if (0 == user.getPartner()) {
+                        userMapperExtra.updatePartnerState(userList, null, userInputDTO.getUserId());
+                    }
                 }
-            }
-            if(1 == userInputDTO.getPartner()) {
-                if(2 == user.getPartner()) {
-                    // 1级变2级
-                    userMapperExtra.updatePartnerState(userList, "", userInputDTO.getUserId());
-                }
-                if(0 == user.getPartner()) {
-                    userMapperExtra.updatePartnerState(userList, null, userInputDTO.getUserId());
-                }
-            }
-            if(2 == userInputDTO.getPartner()) {
-                if(1 == user.getPartner()) {
-                    // 2级变1级
-                    userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), "");
-                }
-                if(0 == user.getPartner()) {
-                    userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), null);
+                if (2 == userInputDTO.getPartner()) {
+                    if (1 == user.getPartner()) {
+                        // 2级变1级
+                        userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), "");
+                    }
+                    if (0 == user.getPartner()) {
+                        userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), null);
+                    }
                 }
             }
             if(userMapperExtra.updateUser(userInputDTO) > 0) {
