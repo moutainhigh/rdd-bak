@@ -20,7 +20,17 @@ public class PetrolInputDTO {
 
     private Integer paymentMethod;//0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
 
+    private String area;
+
     public PetrolInputDTO() {
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public Integer getPaymentMethod() {

@@ -18,6 +18,7 @@ public class PetrolCache {
     /**
      * 传入一个油卡list
      * 先清空数据向AllPetrolMap中加入油卡队列
+     *
      * @param petrols
      */
     public static void changeAllPetrolMap(List<Petrol> petrols) {
@@ -30,6 +31,7 @@ public class PetrolCache {
     /**
      * 传入一个油卡list
      * 不清空数据向AllPetrolMap中加入油卡队列
+     *
      * @param petrols
      */
     public static void addAllPetrolMap(List<Petrol> petrols) {
@@ -44,6 +46,7 @@ public class PetrolCache {
     /**
      * 传入一个油卡list
      * 不清空数据向currentPetrolMap中加入油卡队列
+     *
      * @param petrols
      */
     public static void addcurrentPetrolMap(List<Petrol> petrols) {
@@ -79,12 +82,12 @@ public class PetrolCache {
      * 移除所有的油卡
      */
     public static void clearPetrolMap(String mapName) {
-        if(mapName.trim() == "AllpetrolMap"){
+        if (mapName.trim().equals("AllpetrolMap")) {
             Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
             while (it.hasNext()) {
                 it.remove();//使用迭代器的remove()方法删除元素
             }
-        }else if(mapName.trim() == "currentPetrolMap"){
+        } else if (mapName.trim().equals("currentPetrolMap")) {
             Iterator<Map.Entry<String, Petrol>> it = currentPetrolMap.entrySet().iterator();
             while (it.hasNext()) {
                 it.remove();//使用迭代器的remove()方法删除元素
@@ -100,27 +103,27 @@ public class PetrolCache {
      */
     public static int clearPetrol(String mapName, String petrolNum) {
         int result = 0;
-        if (mapName.trim() == "AllpetrolMap") {
+        if (mapName.trim().equals("AllpetrolMap")) {
             Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String, Petrol> entry = it.next();
                 String key = entry.getKey();
-                if (key == petrolNum) {
-                    System.out.println("delete this: " + key + ";" );
+                if (key .equals(petrolNum)) {
+                    System.out.println("delete this: " + key + ";");
                     it.remove();
                     result++;
                 }
             }
 
-        } else if (mapName.trim() == "currentPetrolMap") {
+        } else if (mapName.trim().equals("currentPetrolMap")) {
             Iterator<Map.Entry<String, Petrol>> it = currentPetrolMap.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String, Petrol> entry = it.next();
                 String key = entry.getKey();
-                if (key == petrolNum) {
+                if (key.equals(petrolNum)) {
                     System.out.println("delete this: " + key);
                     it.remove();
-                    result ++;
+                    result++;
                 }
             }
 
@@ -137,13 +140,15 @@ public class PetrolCache {
     public static Petrol randomPetrol(PetrolInputDTO petrolInputDTO) {
         int petrolKind = petrolInputDTO.getPetrolKind();
         double petrolPrice = petrolInputDTO.getPetrolPrice();
+        String area = petrolInputDTO.getArea();
+//        String area = "河北省";
         String ownerId = petrolInputDTO.getOwnerId();
         Petrol petrol = new Petrol(); //当前遍历的油卡值
         Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Petrol> entry = it.next();
             petrol = entry.getValue();//当前遍历的油卡值
-            if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice) {
+            if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice && petrol.getArea().equals(area)) {
                 petrol.setOwnerId(ownerId);
                 //当前时间加十分钟
                 long currentTime = System.currentTimeMillis() + 120 * 1000;
@@ -152,7 +157,7 @@ public class PetrolCache {
                 currentPetrolMap.put(petrol.getPetrolNum(), petrol);
 //                AllpetrolMap.remove(petrol.getPetrolNum());
                 it.remove();
-                System.out.println("randomPetrol"+AllpetrolMap.size()+":"+currentPetrolMap.size());
+                System.out.println("randomPetrol" + AllpetrolMap.size() + ":" + currentPetrolMap.size());
                 return petrol;
             }
         }
@@ -163,14 +168,14 @@ public class PetrolCache {
      * 放回一张卡
      */
     public static void putBackPetrol(String mapName, Petrol petrol) {
-        if(mapName.trim()=="AllpetrolMap"){
-            if (isContainPetorlMap(AllpetrolMap, petrol.getPetrolNum())!= false) {
+        if (mapName.trim() .equals("AllpetrolMap")) {
+            if (isContainPetorlMap(AllpetrolMap, petrol.getPetrolNum()) != false) {
                 AllpetrolMap.put(petrol.getPetrolNum(), petrol);
-                System.out.println("all"+AllpetrolMap.size());
-                System.out.println("current"+currentPetrolMap.size());
+                System.out.println("all" + AllpetrolMap.size());
+                System.out.println("current" + currentPetrolMap.size());
             }
-        }else if(mapName.trim()=="currentPetrolMap"){
-            if (isContainPetorlMap(currentPetrolMap, petrol.getPetrolNum())!= false) {
+        } else if (mapName.trim().equals("currentPetrolMap")) {
+            if (isContainPetorlMap(currentPetrolMap, petrol.getPetrolNum()) != false) {
                 currentPetrolMap.put(petrol.getPetrolNum(), petrol);
                 System.out.println("all" + AllpetrolMap.size());
                 System.out.println("current" + currentPetrolMap.size());
@@ -185,7 +190,7 @@ public class PetrolCache {
             Map.Entry<String, Petrol> entry = currentPetrol.next();
             String key = entry.getKey();
             Petrol petrol = PetrolCache.currentPetrolMap.get(key);
-            if (petrol.getOwnerId() == null || petrol.getOwnerId() == userId) {
+            if (petrol.getOwnerId() == null || petrol.getOwnerId().equals(userId)) {
                 System.out.println("存在未完成订单");
                 return false;
             }
