@@ -230,7 +230,7 @@
         from czb_user cu
         left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
         where
-          cu.superior_user = '155888669469738'
+          cu.superior_user = #{userId, jdbcType=VARCHAR}
                 ) cu
                 left join czb_income_log cil on cil.info_id = cu.info_id
           and (type = 0 or type is null)
