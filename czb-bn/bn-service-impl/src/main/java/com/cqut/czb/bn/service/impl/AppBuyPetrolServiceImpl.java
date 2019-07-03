@@ -14,6 +14,7 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -150,6 +151,9 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Override
     public Map<String,Object> PurchaseControl(PetrolInputDTO petrolInputDTO) {
+        if(StringUtil.isNullOrEmpty(petrolInputDTO.getArea())) {
+            petrolInputDTO.setArea("重庆市");
+        }
         //判断是哪种油卡
         if(petrolInputDTO.getPetrolKind()==0){//0代表国通卡
             System.out.println("购买国通卡：0");
