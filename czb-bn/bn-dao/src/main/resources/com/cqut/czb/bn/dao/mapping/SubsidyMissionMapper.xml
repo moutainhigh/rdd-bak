@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.SubsidyMissionMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.SubsidyMission" >
+    <id column="mission_id" property="missionId" jdbcType="VARCHAR" />
+    <result column="target_year_month" property="targetYearMonth" jdbcType="TIMESTAMP" />
+    <result column="subsidy_percent" property="subsidyPercent" jdbcType="DOUBLE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="partner" property="partner" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    mission_id, target_year_month, subsidy_percent, state, partner, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_subsidy_mission
+    where mission_id = #{missionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_subsidy_mission
+    where mission_id = #{missionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.SubsidyMission" >
+    insert into czb_subsidy_mission (mission_id, target_year_month, subsidy_percent, 
+      state, partner, create_at, 
+      update_at)
+    values (#{missionId,jdbcType=VARCHAR}, #{targetYearMonth,jdbcType=TIMESTAMP}, #{subsidyPercent,jdbcType=DOUBLE}, 
+      #{state,jdbcType=INTEGER}, #{partner,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.SubsidyMission" >
+    insert into czb_subsidy_mission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="missionId != null" >
+        mission_id,
+      </if>
+      <if test="targetYearMonth != null" >
+        target_year_month,
+      </if>
+      <if test="subsidyPercent != null" >
+        subsidy_percent,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="partner != null" >
+        partner,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="missionId != null" >
+        #{missionId,jdbcType=VARCHAR},
+      </if>
+      <if test="targetYearMonth != null" >
+        #{targetYearMonth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subsidyPercent != null" >
+        #{subsidyPercent,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="partner != null" >
+        #{partner,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.SubsidyMission" >
+    update czb_subsidy_mission
+    <set >
+      <if test="targetYearMonth != null" >
+        target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subsidyPercent != null" >
+        subsidy_percent = #{subsidyPercent,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="partner != null" >
+        partner = #{partner,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mission_id = #{missionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.SubsidyMission" >
+    update czb_subsidy_mission
+    set target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP},
+      subsidy_percent = #{subsidyPercent,jdbcType=DOUBLE},
+      state = #{state,jdbcType=INTEGER},
+      partner = #{partner,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where mission_id = #{missionId,jdbcType=VARCHAR}
+  </update>
+</mapper>
