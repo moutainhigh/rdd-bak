@@ -33,6 +33,8 @@ public class IncomeLog {
 
     private Integer commissionLevel;
 
+    private Date targetYearMonth;
+
     public String getRecordId() {
         return recordId;
     }
@@ -151,5 +153,13 @@ public class IncomeLog {
 
     public void setCommissionLevel(Integer commissionLevel) {
         this.commissionLevel = commissionLevel;
+    }
+
+    public Date getTargetYearMonth() {
+        return targetYearMonth;
+    }
+
+    public void setTargetYearMonth(Date targetYearMonth) {
+        this.targetYearMonth = targetYearMonth;
     }
 }

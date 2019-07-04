@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.MsgRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.MsgRecord" >
+    <id column="msg_record_id" property="msgRecordId" jdbcType="VARCHAR" />
+    <result column="msg_model_id" property="msgModelId" jdbcType="VARCHAR" />
+    <result column="msg_announcer_id" property="msgAnnouncerId" jdbcType="VARCHAR" />
+    <result column="msg_receiver_id" property="msgReceiverId" jdbcType="VARCHAR" />
+    <result column="msg_state" property="msgState" jdbcType="INTEGER" />
+    <result column="alert" property="alert" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    msg_record_id, msg_model_id, msg_announcer_id, msg_receiver_id, msg_state, alert, 
+    create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_msg_record
+    where msg_record_id = #{msgRecordId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_msg_record
+    where msg_record_id = #{msgRecordId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.MsgRecord" >
+    insert into czb_msg_record (msg_record_id, msg_model_id, msg_announcer_id, 
+      msg_receiver_id, msg_state, alert, 
+      create_at, update_at)
+    values (#{msgRecordId,jdbcType=VARCHAR}, #{msgModelId,jdbcType=VARCHAR}, #{msgAnnouncerId,jdbcType=VARCHAR}, 
+      #{msgReceiverId,jdbcType=VARCHAR}, #{msgState,jdbcType=INTEGER}, #{alert,jdbcType=INTEGER}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.MsgRecord" >
+    insert into czb_msg_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msgRecordId != null" >
+        msg_record_id,
+      </if>
+      <if test="msgModelId != null" >
+        msg_model_id,
+      </if>
+      <if test="msgAnnouncerId != null" >
+        msg_announcer_id,
+      </if>
+      <if test="msgReceiverId != null" >
+        msg_receiver_id,
+      </if>
+      <if test="msgState != null" >
+        msg_state,
+      </if>
+      <if test="alert != null" >
+        alert,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msgRecordId != null" >
+        #{msgRecordId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgModelId != null" >
+        #{msgModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgAnnouncerId != null" >
+        #{msgAnnouncerId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgReceiverId != null" >
+        #{msgReceiverId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgState != null" >
+        #{msgState,jdbcType=INTEGER},
+      </if>
+      <if test="alert != null" >
+        #{alert,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.MsgRecord" >
+    update czb_msg_record
+    <set >
+      <if test="msgModelId != null" >
+        msg_model_id = #{msgModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgAnnouncerId != null" >
+        msg_announcer_id = #{msgAnnouncerId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgReceiverId != null" >
+        msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgState != null" >
+        msg_state = #{msgState,jdbcType=INTEGER},
+      </if>
+      <if test="alert != null" >
+        alert = #{alert,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where msg_record_id = #{msgRecordId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.MsgRecord" >
+    update czb_msg_record
+    set msg_model_id = #{msgModelId,jdbcType=VARCHAR},
+      msg_announcer_id = #{msgAnnouncerId,jdbcType=VARCHAR},
+      msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR},
+      msg_state = #{msgState,jdbcType=INTEGER},
+      alert = #{alert,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where msg_record_id = #{msgRecordId,jdbcType=VARCHAR}
+  </update>
+</mapper>

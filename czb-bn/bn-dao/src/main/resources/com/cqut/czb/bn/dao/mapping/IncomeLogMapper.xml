@@ -17,11 +17,12 @@
     <result column="commission_source_user" property="commissionSourceUser" jdbcType="VARCHAR" />
     <result column="commission_got_user" property="commissionGotUser" jdbcType="VARCHAR" />
     <result column="commission_level" property="commissionLevel" jdbcType="INTEGER" />
+    <result column="target_year_month" property="targetYearMonth" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, amount, type, info_id, before_change_income, remark, souse_id, create_at, 
     update_at, withdraw_to, withdraw_name, withdraw_account, commission_source_user, 
-    commission_got_user, commission_level
+    commission_got_user, commission_level, target_year_month
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -39,13 +40,13 @@
       souse_id, create_at, update_at, 
       withdraw_to, withdraw_name, withdraw_account, 
       commission_source_user, commission_got_user, 
-      commission_level)
+      commission_level, target_year_month)
     values (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
       #{infoId,jdbcType=VARCHAR}, #{beforeChangeIncome,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
       #{souseId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
       #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE}, 
       #{commissionSourceUser,jdbcType=VARCHAR}, #{commissionGotUser,jdbcType=VARCHAR}, 
-      #{commissionLevel,jdbcType=INTEGER})
+      #{commissionLevel,jdbcType=INTEGER}, #{targetYearMonth,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
     insert into czb_income_log
@@ -95,6 +96,9 @@
       <if test="commissionLevel != null" >
         commission_level,
       </if>
+      <if test="targetYearMonth != null" >
+        target_year_month,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -141,6 +145,9 @@
       </if>
       <if test="commissionLevel != null" >
         #{commissionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="targetYearMonth != null" >
+        #{targetYearMonth,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -189,6 +196,9 @@
       <if test="commissionLevel != null" >
         commission_level = #{commissionLevel,jdbcType=INTEGER},
       </if>
+      <if test="targetYearMonth != null" >
+        target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -207,7 +217,8 @@
       withdraw_account = #{withdrawAccount,jdbcType=DOUBLE},
       commission_source_user = #{commissionSourceUser,jdbcType=VARCHAR},
       commission_got_user = #{commissionGotUser,jdbcType=VARCHAR},
-      commission_level = #{commissionLevel,jdbcType=INTEGER}
+      commission_level = #{commissionLevel,jdbcType=INTEGER},
+      target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>
