@@ -16,4 +16,6 @@ public interface RoleMapperExtra {
     List<RoleDTO> selectRole(RoleInputDTO roleInputDTO);
 
     int findRole(RoleInputDTO roleInputDTO);
+
+    String selectRoleId(String userId);
 }

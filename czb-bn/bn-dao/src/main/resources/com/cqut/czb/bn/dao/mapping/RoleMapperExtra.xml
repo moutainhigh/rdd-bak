@@ -23,6 +23,18 @@
       </if>
     </where>
   </select>
+
+  <select id="selectRole" resultType="java.lang.String" parameterType="java.lang.String" >
+    select
+    cr.role_id
+    from czb_role cr
+    left join czb_user_role cur on cur.role_id = cr.role_id
+    <where>
+      <if test="userId != null and userId != ''">
+        user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
   <select id="findRole" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
     select
     count(role_name)
