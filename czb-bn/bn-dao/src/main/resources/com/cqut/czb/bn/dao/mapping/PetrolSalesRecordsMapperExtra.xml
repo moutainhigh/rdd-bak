@@ -377,7 +377,7 @@ INNER JOIN (
             <if test="transactionTime != null">
                 and records.transaction_time like concat('%',DATE_FORMAT(#{transactionTime,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
             </if>
-
+              and state = 1
         </where>
         ) AS t1
         INNER JOIN (
