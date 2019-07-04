@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.RoleApiMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.RoleApi" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="api_id" property="apiId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_id, api_id, create_at, update_at
+  </sql>
+  <select id="getAllRoleApi" resultMap="allRoleApiMap">
+    select distinct role_id  from czb_role_api
+  </select>
+  <resultMap id="allRoleApiMap" type="com.cqut.czb.bn.entity.dto.roleApi.RoleApiIdDTO">
+    <result column="role_id" property="roleId" jdbcType="VARCHAR"/>
+    <collection property="api" column="role_id" javaType="list" select="getApiListByRoleId"/>
+  </resultMap>
+  <select id="getApiListByRoleId" resultType="com.cqut.czb.bn.entity.dto.roleApi.RoleApiUrlDTO">
+    select role_id roleId,api_id apiId,api_url apiUrl,api_name apiName,api_remark apiRemark,pid from czb_role_api inner join czb_api using(api_id) where role_id = role_id
+  </select>
+
+</mapper>

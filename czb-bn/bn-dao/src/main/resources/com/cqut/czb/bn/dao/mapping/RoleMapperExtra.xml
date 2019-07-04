@@ -24,7 +24,7 @@
     </where>
   </select>
 
-  <select id="selectRole" resultType="java.lang.String" parameterType="java.lang.String" >
+  <select id="selectRoleId" resultType="java.lang.String" parameterType="java.lang.String" >
     select
     cr.role_id
     from czb_role cr
