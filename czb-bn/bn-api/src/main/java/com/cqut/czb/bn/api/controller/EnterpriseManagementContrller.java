@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 /**EnterpriseManagementContrller 企业管理
  *
  */
-@RequestMapping("/enterprise")
+@RequestMapping("/api/enterprise")
 @CrossOrigin
 @RestController
 public class EnterpriseManagementContrller {

@@ -20,7 +20,7 @@ import java.security.Principal;
  * /infoSpread 推广信息
  */
 @RestController
-@RequestMapping("/infoSpread")
+@RequestMapping("/api/infoSpread")
 public class infoSpreadController {
     @Autowired
     InfoSpreadService infoSpreadService;

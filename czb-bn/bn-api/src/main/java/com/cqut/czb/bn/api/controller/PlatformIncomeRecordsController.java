@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @EnableAsync
 @RestController
-@RequestMapping("/platform")
+@RequestMapping("/api/platform")
 public class PlatformIncomeRecordsController {
 
     @Autowired

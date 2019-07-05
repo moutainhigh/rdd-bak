@@ -24,7 +24,7 @@ import java.util.Map;
  * 作用：购买油卡
  */
 @RestController
-@RequestMapping("/AppBuyPetrol")
+@RequestMapping("/api/AppBuyPetrol")
 public class AppBuyPetrolController {
 
     @Autowired

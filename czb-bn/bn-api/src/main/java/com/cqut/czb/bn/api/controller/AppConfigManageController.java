@@ -17,7 +17,7 @@ import java.security.Principal;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/AppConfig")
+@RequestMapping("/api/AppConfig")
 public class AppConfigManageController {
 
     @Autowired

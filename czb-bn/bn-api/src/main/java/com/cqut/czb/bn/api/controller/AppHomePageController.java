@@ -28,7 +28,7 @@ import java.util.List;
  * 创建时间：2019/4/20
  */
 @RestController
-@RequestMapping("/AppHomePage")
+@RequestMapping("/api/AppHomePage")
 public class AppHomePageController {
 
     @Autowired
