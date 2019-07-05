@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@RequestMapping("/renCar")
+@RequestMapping("/api/renCar")
 @RestController
 public class RentCarController {
     @Autowired

@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/signContract")
+@RequestMapping("/api/signContract")
 public class ContractController {
     @Autowired
     private  ContractService contractService;

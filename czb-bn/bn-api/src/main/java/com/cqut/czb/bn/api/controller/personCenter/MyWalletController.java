@@ -20,7 +20,7 @@ import java.security.Principal;
  * 业务：提现
  */
 @RestController
-@RequestMapping("/personCenter")
+@RequestMapping("/api/personCenter")
 public class MyWalletController {
 
     @Autowired
