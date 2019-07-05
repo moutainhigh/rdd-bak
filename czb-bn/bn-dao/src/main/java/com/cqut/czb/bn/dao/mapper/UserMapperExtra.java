@@ -15,6 +15,8 @@ import java.util.List;
 public interface UserMapperExtra {
     User findUserByAccount(String account);
 
+    UserDTO findUserDTOByAccount(String account);
+
     Boolean checkAccount(@Param("account") String account);
 
     int deleteUser(UserIdDTO userIdDTO);

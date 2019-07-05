@@ -33,6 +33,40 @@
     where user_account = #{account,jdbcType=VARCHAR}
     and is_deleted = 0
   </select>
+  <resultMap id="dtoResultMap" type="com.cqut.czb.bn.entity.dto.user.UserDTO">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_psw" jdbcType="VARCHAR" property="userPsw" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="user_rank" jdbcType="INTEGER" property="userRank" />
+    <result column="is_identified" jdbcType="INTEGER" property="isIdentified" />
+    <result column="superior_user" jdbcType="VARCHAR" property="superiorUser" />
+    <result column="is_login_pc" jdbcType="INTEGER" property="isLoginPc" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_id_card" jdbcType="VARCHAR" property="userIdCard" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="user_yun_id" jdbcType="VARCHAR" property="userYunId" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="commission_level_one" jdbcType="VARCHAR" property="commissionLevelOne" />
+    <result column="commission_level_two" jdbcType="VARCHAR" property="commissionLevelTwo" />
+    <result column="mission_start_time" jdbcType="TIMESTAMP" property="missionStartTime" />
+    <result column="mission_end_time" jdbcType="TIMESTAMP" property="missionEndTime" />
+    <result column="partner" jdbcType="INTEGER" property="partner" />
+    <result column="old_superior" jdbcType="VARCHAR" property="oldSuperior" />
+    <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
+    <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+  </resultMap>
+  <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >
+    select
+    cu.*, cr.role_id
+    from czb_user cu
+    left join czb_user_role cur on cu.user_id = cur.user_id
+    left join czb_role cr on cr.role_id = cur.role_id
+    where user_account = #{account,jdbcType=VARCHAR}
+    and is_deleted = 0
+  </select>
   <update id="updateUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     update czb_user
     <set >
