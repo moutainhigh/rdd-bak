@@ -27,6 +27,10 @@ public class RolePermissions {
     }
 
     public static List<RoleApiUrlDTO> getCurrentApiByRoleId(String roleId){
+        roleId = roleId==null ? "":roleId;
+        if("".equals(roleId)){
+            return rolePermissionMap.get("666666");//普通用户的角色id写死为666666
+        }
         return rolePermissionMap.get(roleId);
     }
 
@@ -35,6 +39,9 @@ public class RolePermissions {
            return false;
         }
         List<RoleApiUrlDTO> roleApiList = getCurrentApiByRoleId(roleId);
+        if (roleApiList == null || roleApiList.size() ==0){
+            return false;
+        }
         for(RoleApiUrlDTO roleApiUrlDTO:roleApiList){
             if(apiPath.equals(roleApiUrlDTO.getApiUrl())){
                 return true;
