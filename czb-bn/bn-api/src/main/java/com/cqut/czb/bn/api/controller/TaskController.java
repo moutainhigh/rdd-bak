@@ -1,9 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.dao.mapper.RoleApiMapperExtra;
-import com.cqut.czb.bn.entity.dto.roleApi.RoleApiIdDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
-import com.cqut.czb.bn.service.impl.Cache.RolePermissions;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,14 +111,14 @@ public class TaskController {
     class RequestToMethodItem {
         String requestUrl;
         String requestType;
-        String controllerNeme;
+        String controllerName;
         String requestMethodName;
         Class<?>[] methodParamTypes;
 
-        public RequestToMethodItem(String requestUrl, String requestType, String controllerNeme, String requestMethodName, Class<?>[] methodParamTypes) {
+        public RequestToMethodItem(String requestUrl, String requestType, String controllerName, String requestMethodName, Class<?>[] methodParamTypes) {
             this.requestUrl = requestUrl;
             this.requestType = requestType;
-            this.controllerNeme = controllerNeme;
+            this.controllerName = controllerName;
             this.requestMethodName = requestMethodName;
             this.methodParamTypes = methodParamTypes;
         }
@@ -141,12 +139,12 @@ public class TaskController {
             this.requestType = requestType;
         }
 
-        public String getControllerNeme() {
-            return controllerNeme;
+        public String getControllerName() {
+            return controllerName;
         }
 
-        public void setControllerNeme(String controllerNeme) {
-            this.controllerNeme = controllerNeme;
+        public void setControllerName(String controllerName) {
+            this.controllerName = controllerName;
         }
 
         public String getRequestMethodName() {
