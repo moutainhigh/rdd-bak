@@ -27,4 +27,6 @@ public interface InfoSpreadService {
      public Boolean addChildConsumer(PartnerDTO partnerDTO);
 
      PageInfo<PartnerDTO> getChildByName(PartnerDTO partnerDTO,PageDTO pageDTO);
+
+     PageInfo<PartnerDTO> myTotalChildMoney(PartnerDTO partnerDTO,PageDTO pageDTO);
  }

@@ -95,8 +95,25 @@ public class infoSpreadController {
         return new JSONResult(infoSpreadService.addChildConsumer(partnerDTO));
     }
 
+    /**
+     * 通过用户名查询
+      * @param partnerDTO
+     * @param pageDTO
+     * @return
+     */
     @PostMapping("/getChildByName")
     public JSONResult getChildByName(PartnerDTO partnerDTO,PageDTO pageDTO){
         return new JSONResult(infoSpreadService.getChildByName(partnerDTO,pageDTO));
+    }
+
+    /**
+     * 我的总下级消费
+     * @param partnerDTO
+     * @param pageDTO
+     * @return
+     */
+    @GetMapping("/totalChildMoney")
+    public JSONResult myTotalChildMoney(PartnerDTO partnerDTO,PageDTO pageDTO){
+        return new JSONResult(infoSpreadService.myTotalChildMoney(partnerDTO,pageDTO));
     }
 }

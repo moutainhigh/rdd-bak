@@ -235,6 +235,13 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         return new PageInfo<>(childByName);
     }
 
+    @Override
+    public PageInfo<PartnerDTO> myTotalChildMoney(PartnerDTO partnerDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        List<PartnerDTO> myTotalChildMoney = partnerMapperExtra.selectMyTotalChildMoney(partnerDTO);
+        return new PageInfo<>(myTotalChildMoney);
+    }
+
     public Double changeToBigDecimal(Double num){
         BigDecimal b = new BigDecimal(num);
         num = b.setScale(2, BigDecimal.ROUND_DOWN).doubleValue(); //直接去掉金额小数点两位后面的数

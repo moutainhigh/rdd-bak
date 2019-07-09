@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PartnerMapperExtra {
 
+    List<PartnerDTO> selectMyTotalChildMoney(PartnerDTO partnerDTO);
+
     List<PartnerDTO> selectChildMoneyByName(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectChildByName(PartnerDTO partnerDTO);

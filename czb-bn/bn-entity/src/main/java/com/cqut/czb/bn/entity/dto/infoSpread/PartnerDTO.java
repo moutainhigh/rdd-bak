@@ -11,6 +11,8 @@ public class PartnerDTO {
 
     private String userAccount;
 
+    private Integer type;  //消费类型
+
     private String missionStartTime;
 
     private String missionEndTime;
@@ -63,6 +65,14 @@ public class PartnerDTO {
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getMissionStartTime() {
