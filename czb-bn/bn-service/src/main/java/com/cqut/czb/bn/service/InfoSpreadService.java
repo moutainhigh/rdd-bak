@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface InfoSpreadService {
 
+     PageInfo allPartnerManage(PartnerDTO partnerDTO,PageDTO pageDTO);
+
      PartnerDTO getPartnerInfo(PartnerDTO partnerDTO,User user);
 
      List<PartnerDTO> getPartnerChildInfo(PartnerDTO partnerDTO);

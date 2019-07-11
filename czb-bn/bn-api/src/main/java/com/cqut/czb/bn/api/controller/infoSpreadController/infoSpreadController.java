@@ -116,4 +116,15 @@ public class infoSpreadController {
     public JSONResult myTotalChildMoney(PartnerDTO partnerDTO,PageDTO pageDTO){
         return new JSONResult(infoSpreadService.myTotalChildMoney(partnerDTO,pageDTO));
     }
+
+    /**
+     * 合伙人信息管理
+     * @param partnerDTO
+     * @param pageDTO
+     * @return
+     */
+    @GetMapping("/allPartnerManage")
+    public JSONResult allPartnerManage(PartnerDTO partnerDTO,PageDTO pageDTO) {
+        return new JSONResult(infoSpreadService.allPartnerManage(partnerDTO,pageDTO));
+    }
 }

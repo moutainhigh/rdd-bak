@@ -26,6 +26,24 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     PartnerMapperExtra partnerMapperExtra;
 
     @Override
+    public PageInfo allPartnerManage(PartnerDTO partnerDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        List<PartnerDTO> partnerDTOList =  partnerMapperExtra.selectAllPartnerManage(partnerDTO);
+        List<PartnerDTO> childCount = partnerMapperExtra.selectAllPartnerCount(partnerDTO);
+        if (partnerDTOList.size()!=0&&partnerDTOList!=null&&childCount!=null&&childCount.size()!=0) {
+            for (int i = 0; i < partnerDTOList.size(); i++) {
+                for (int j=0; j<childCount.size(); j++){
+                    if (partnerDTOList.get(i).getUserId().equals(childCount.get(j).getUserId())){
+                        partnerDTOList.get(i).setTotalCount(childCount.get(j).getTotalCount());
+                        break;
+                    }
+                }
+            }
+        }
+        return new PageInfo<>(partnerDTOList);
+    }
+
+    @Override
     public PartnerDTO getPartnerInfo(PartnerDTO partnerDTO, User user)  {
         SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
