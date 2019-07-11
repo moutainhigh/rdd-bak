@@ -172,5 +172,6 @@
     remark
     from czb_announcement as a,czb_file as c
     where is_show=1 AND a.img_file_id=c.file_id
+    AND a.location_code=#{locationCode,jdbcType=VARCHAR}
   </select>
 </mapper>

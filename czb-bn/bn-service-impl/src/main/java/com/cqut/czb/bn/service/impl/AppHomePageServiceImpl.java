@@ -62,12 +62,20 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     PetrolPriceReportMapperExtra petrolPriceReportMapperExtra;
 
     @Override
-    public List<appAnnouncementDTO> selectAnnouncement() {
-        return announcementMapperExtra.selectAnnouncement();
+    public List<appAnnouncementDTO> selectAnnouncement(String locationCode) {
+        if(locationCode==null&&locationCode.equals("")){
+            System.out.println("locationCode为空");
+            return null;
+        }
+        return announcementMapperExtra.selectAnnouncement(locationCode);
     }
 
     @Override
     public List<petrolPriceReportDTO> selectPetrolPriceReport(String area) {
+        if(area==null&&area.equals("")){
+            System.out.println("area为空");
+            return null;
+        }
         return petrolPriceReportMapperExtra.selectAll(area);
     }
 

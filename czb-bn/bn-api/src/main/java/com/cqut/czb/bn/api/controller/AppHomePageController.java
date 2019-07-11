@@ -12,6 +12,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +42,8 @@ public class AppHomePageController {
      * @return
      */
     @RequestMapping(value = "/selectAnnouncement",method = RequestMethod.GET)
-    public JSONResult selectAnnouncement(){
-        return new JSONResult(appHomePageService.selectAnnouncement());
+    public JSONResult selectAnnouncement(@Param("locationCode") String locationCode){
+        return new JSONResult(appHomePageService.selectAnnouncement(locationCode));
     }
 
     /**
@@ -64,7 +65,7 @@ public class AppHomePageController {
     }
 
     /**
-     * app油卡专区，查找出对应油卡表未售出的油卡，以及获取保存未售出油卡
+     * app油卡专区，查找出对应油卡表未售出的油卡，以及获取保存未售出油卡 0国通，1中石油，2中石化
      * @return
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
@@ -76,7 +77,7 @@ public class AppHomePageController {
     }
 
     /**
-     * 首页菜单路由获取  0国通，1中石油，2中石化
+     * 首页菜单路由获取
      */
     @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
     public JSONResult selectHomePageRouters( AppRouterDTO appRouterDTO){
