@@ -43,6 +43,9 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectAnnouncement",method = RequestMethod.GET)
     public JSONResult selectAnnouncement(@Param("locationCode") String locationCode){
+        if(locationCode==null&&locationCode.equals("")){
+            locationCode="homePage";
+        }
         return new JSONResult(appHomePageService.selectAnnouncement(locationCode));
     }
 
