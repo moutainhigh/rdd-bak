@@ -4,10 +4,12 @@ import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +29,8 @@ public class AuthController {
     @Autowired
     RedisUtils redisUtils;
 
+    @Autowired
+    AppHomePageService appHomePageService;
     /**
      *  个人用户注册
      * */
@@ -45,6 +49,11 @@ public class AuthController {
             jsonResult.setData(true);
             return jsonResult;
         }
+    }
+
+    @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
+    public JSONResult selectHomePageRouters( AppRouterDTO appRouterDTO){
+        return new JSONResult(appHomePageService.selectHomePageRouters(appRouterDTO));
     }
 
     /**
