@@ -39,7 +39,7 @@ public class AppShopSettleInController {
      */
     @RequestMapping(value = "/selectShopSettleInRouters", method = RequestMethod.GET)
     public JSONResult selectHomePageRouters(AppRouterDTO appRouterDTO) {
-        return new JSONResult(appHomePageService.selectHomePageRouters(appRouterDTO));
+        return new JSONResult(appShopSettleInService.selectShopSettleInRouters(appRouterDTO));
     }
 
     /**
