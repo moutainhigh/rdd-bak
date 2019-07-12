@@ -2,7 +2,9 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
 import com.cqut.czb.bn.dao.mapper.CommodityMapperExtra;
+import com.cqut.czb.bn.entity.dto.Commodity.AllCommodityDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.service.AppShopSettleInService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,12 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
     }
 
     @Override
-    public List<AppRouterDTO> selectShopSettleInRouters(AppRouterDTO appRouterDTO) {
-        return appRouterMapperExtra.selectAppRouters(appRouterDTO);
+    public List<AllCommodityDTO> selectAllCommodity(String classification) {
+        return commodityMapperExtra.selectAllCommodity(classification);
+    }
+
+    @Override
+    public ServiceDetailsDTO selectServiceDetails(String commodityId) {
+        return commodityMapperExtra.selectServiceDetails(commodityId);
     }
 }
