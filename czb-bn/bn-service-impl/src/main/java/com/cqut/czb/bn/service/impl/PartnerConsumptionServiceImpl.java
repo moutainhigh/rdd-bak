@@ -20,17 +20,6 @@ public class PartnerConsumptionServiceImpl implements PartnerConsumptionService 
     public PageInfo<PartnerDTO> getConsumptionList(PartnerDTO partnerDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         List<PartnerDTO> partnerDTOList =  partnerConsumptionMapperExtra.selectConsumptionList(partnerDTO);
-        List<PartnerDTO> childCount = partnerConsumptionMapperExtra.selectConsumptionCount(partnerDTO);
-        if (partnerDTOList.size()!=0&&partnerDTOList!=null&&childCount!=null&&childCount.size()!=0) {
-            for (int i = 0; i < partnerDTOList.size(); i++) {
-                for (int j=0; j<childCount.size(); j++){
-                    if (partnerDTOList.get(i).getUserId().equals(childCount.get(j).getUserId())){
-                        partnerDTOList.get(i).setTotalCount(childCount.get(j).getTotalCount());
-                        break;
-                    }
-                }
-            }
-        }
         return new PageInfo<>(partnerDTOList);
     }
 

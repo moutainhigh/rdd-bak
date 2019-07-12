@@ -43,6 +43,12 @@ public class PartnerDTO {
 
     private Integer totalCount;     //子级用户总数
 
+    private Integer consumptionCount; //消费次数
+
+    private Integer payMethod;  //支付方式
+
+    private String thirdOrderId; //第三方订单号
+
     public String getUserId() {
         return userId;
     }
@@ -193,5 +199,29 @@ public class PartnerDTO {
 
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public Integer getConsumptionCount() {
+        return consumptionCount;
+    }
+
+    public void setConsumptionCount(Integer consumptionCount) {
+        this.consumptionCount = consumptionCount;
+    }
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
     }
 }

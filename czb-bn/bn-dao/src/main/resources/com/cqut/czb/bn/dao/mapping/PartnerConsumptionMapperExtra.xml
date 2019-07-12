@@ -3,21 +3,22 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.PartnerConsumptionMapperExtra" >
 
    <select id="selectConsumptionList" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
-        SELECT
-            a.user_id AS userId,
-            a.user_account AS  userAccount,
-            SUM(b.money) AS totalMoney,
-            COUNT(b.money) AS consumptionCount
-        FROM
-            czb_user a
-        LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner  OR a.user_id = c.second_level_partner )
-        LEFT JOIN czb_consumption_record b ON c.user_id = b.user_id
-        WHERE
-        a.partner!=0
-        <if test="userAccount!=null and userAccount!=''">
-            AND (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
-        </if>
-        GROUP BY a.user_id ORDER BY SUM(b.money) DESC
+       SELECT
+       a.user_id AS userId,
+       a.user_account AS  userAccount,
+       COUNT(b.money) AS consumptionCount,
+       SUM(b.money) AS totalMoney,
+       MAX(b.create_at) AS nearTime
+       FROM
+       czb_user a
+       LEFT JOIN czb_consumption_record b ON a.user_id = b.user_id
+       WHERE
+       b.money IS NOT NULL
+       <if test="userAccount!=null and userAccount!=''">
+           AND (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+       </if>
+       GROUP BY
+       a.user_id ORDER BY  SUM(b.money) DESC, MAX(b.create_at) DESC
    </select>
 
     <select id="selectConsumptionCount" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
@@ -50,10 +51,7 @@
         WHERE
          b.money is not NULL
         <if test="userId !=null and userId !=''">
-            AND (
-            a.first_level_partner = #{userId,jdbcType=VARCHAR}
-            OR a.second_level_partner = #{userId,jdbcType=VARCHAR}
-            )
+          AND a.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         ORDER BY b.create_at DESC
     </select>
