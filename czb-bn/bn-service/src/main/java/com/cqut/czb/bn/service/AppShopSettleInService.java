@@ -1,20 +1,25 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.Commodity.AllCommodityDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 
 import java.util.List;
 
 public interface AppShopSettleInService {
     /**
-     * 获取对应商品
+     * get the corresponding  goods information
      */
     List<CommodityDTO> selectCommodity(String classification);
 
     /**
-     * 获取首页的所有路由
-     * @param appRouterDTO
-     * @return
+     * get all the goods information
      */
-    List<AppRouterDTO> selectShopSettleInRouters(AppRouterDTO appRouterDTO);
+    List<AllCommodityDTO> selectAllCommodity(String classification);
+
+    /**
+     * get Service details information
+     */
+    ServiceDetailsDTO selectServiceDetails(String commodityId);
 }

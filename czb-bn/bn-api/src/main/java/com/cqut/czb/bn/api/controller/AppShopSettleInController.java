@@ -1,6 +1,5 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.AppShopSettleInService;
@@ -25,7 +24,7 @@ public class AppShopSettleInController {
     public AppShopSettleInService appShopSettleInService;
 
     /**
-     * app商家入驻广告展示
+     * app's Advertising display for merchants to enter
      *
      * @return
      */
@@ -35,19 +34,28 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app商家入驻路由配置
-     */
-    @RequestMapping(value = "/selectShopSettleInRouters", method = RequestMethod.GET)
-    public JSONResult selectHomePageRouters(AppRouterDTO appRouterDTO) {
-        return new JSONResult(appShopSettleInService.selectShopSettleInRouters(appRouterDTO));
-    }
-
-    /**
-     * app获取各个标签的展示商品
+     * app's Get display items for each navigation item
      */
     @RequestMapping(value = "/selectGoods", method = RequestMethod.GET)
     public JSONResult selectGoods(@Param("classification") String classification) {
         return new JSONResult(appShopSettleInService.selectCommodity(classification));
+    }
+
+    /**
+     * app's Get all the goods information
+     */
+    @RequestMapping(value = "/selectAllGoods", method = RequestMethod.GET)
+    public JSONResult selectAllGoods(@Param("classification") String classification) {
+        return new JSONResult(appShopSettleInService.selectAllCommodity(classification));
+    }
+
+
+    /**
+     * app's Get Service details information
+     */
+    @RequestMapping(value = "/selectServiceDetails", method = RequestMethod.GET)
+    public JSONResult selectServiceDetails(@Param("commodityId") String commodityId) {
+        return new JSONResult(appShopSettleInService.selectServiceDetails(commodityId));
     }
 
 }
