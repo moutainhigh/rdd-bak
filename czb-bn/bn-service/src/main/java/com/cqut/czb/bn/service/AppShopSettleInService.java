@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.Commodity.AllCommodityDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.NavDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 
@@ -22,4 +23,9 @@ public interface AppShopSettleInService {
      * get Service details information
      */
     ServiceDetailsDTO selectServiceDetails(String commodityId);
+
+    /**
+     * get the nav
+     */
+    List<NavDTO> selectShopSettleInNav();
 }

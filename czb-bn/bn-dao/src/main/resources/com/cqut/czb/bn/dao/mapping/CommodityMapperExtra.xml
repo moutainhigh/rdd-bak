@@ -23,7 +23,11 @@
         select
         <include refid="Base_Column_List"/>
         from czb_commodity
-        where classification = #{classification,jdbcType=VARCHAR}
+        <where>
+            <if test="classification!=null and classification!=''">
+                classification=#{classification,jdbcType=VARCHAR}
+            </if>
+        </where>
     </select>
 
     <select id="selectServiceDetails" resultType="com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO" parameterType="java.lang.String">
@@ -73,4 +77,9 @@
         classification=#{navName}
     </select>
 
+    <!--get the nav-->
+    <select id="selectShopSettleNav" resultType="com.cqut.czb.bn.entity.dto.Commodity.NavDTO">
+        select distinct classification as navName
+        from czb_commodity
+    </select>
 </mapper>
