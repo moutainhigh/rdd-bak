@@ -24,7 +24,7 @@ public class AppShopSettleInController {
     public AppShopSettleInService appShopSettleInService;
 
     /**
-     * app's Advertising display for merchants to enter
+     * app's Advertising display for merchants to enter（商家入驻轮播图）
      *
      * @return
      */
@@ -34,7 +34,7 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app's Get display items for each navigation item
+     * app's Get display items for each navigation item（获取单个导航栏信息）
      */
     @RequestMapping(value = "/selectGoods", method = RequestMethod.GET)
     public JSONResult selectGoods(@Param("classification") String classification) {
@@ -42,7 +42,7 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app's Get all the goods information
+     * app's Get all the goods information（获取多个导航栏信息）
      */
     @RequestMapping(value = "/selectAllGoods", method = RequestMethod.GET)
     public JSONResult selectAllGoods(@Param("classification") String classification) {
@@ -51,11 +51,19 @@ public class AppShopSettleInController {
 
 
     /**
-     * app's Get Service details information
+     * app's Get Service details information（获取商品具体的信息）
      */
     @RequestMapping(value = "/selectServiceDetails", method = RequestMethod.GET)
     public JSONResult selectServiceDetails(@Param("commodityId") String commodityId) {
         return new JSONResult(appShopSettleInService.selectServiceDetails(commodityId));
+    }
+
+    /**
+     * app's Get the nav（获取导航栏）
+     */
+    @RequestMapping(value = "/selectShopSettleInNav", method = RequestMethod.GET)
+    public JSONResult selectShopSettleInNav() {
+        return new JSONResult(appShopSettleInService.selectShopSettleInNav());
     }
 
 }
