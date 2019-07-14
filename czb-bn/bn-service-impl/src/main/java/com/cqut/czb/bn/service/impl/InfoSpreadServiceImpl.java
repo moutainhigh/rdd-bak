@@ -115,12 +115,12 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 
     @Override
     public PartnerDTO getTotalInfo(PartnerDTO partnerDTO,User user) {
-        if (partnerDTO.getUserId()==null){
+        if (partnerDTO.getUserId()==null||partnerDTO.getUserId()==""){
         partnerDTO.setUserId(user.getUserId());
         }
         List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = partnerMapperExtra.selectPartner(partnerDTO);
-        if(totalChilds!=null&&totalChilds.size()!=0) {
+        if(totalChilds!=null&&totalChilds.size()!=0&&partner!=null) {
             partner.setTotalCount(totalChilds.size());
             Double totalMoney = (Double) changeToBigDecimal(getChildTotalMoney(totalChilds));
             partner.setTotalMoney((totalMoney));

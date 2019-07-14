@@ -33,6 +33,8 @@ public class PartnerDTO {
 
     private String secondPartner;
 
+    private String superior;   //推荐人
+
     private String monthTime;
 
     private Date nearTime;      //最近的消费时间
@@ -167,6 +169,14 @@ public class PartnerDTO {
 
     public void setMonthTime(String monthTime) {
         this.monthTime = monthTime;
+    }
+
+    public String getSuperior() {
+        return superior;
+    }
+
+    public void setSuperior(String superior) {
+        this.superior = superior;
     }
 
     public Date getNearTime() {

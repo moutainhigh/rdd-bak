@@ -67,6 +67,9 @@ public class infoSpreadController {
     @GetMapping("/getTotalInfo")
     public  JSONResult getTotalInfo(PartnerDTO partnerDTO,Principal principal){
         User user = (User)redisUtils.get(principal.getName());
+        if (user==null){
+            return null;
+        }
         return new JSONResult(infoSpreadService.getTotalInfo(partnerDTO,user));
     }
 

@@ -79,9 +79,9 @@
         czb_user a
         LEFT JOIN czb_consumption_record b on a.user_id = b.user_id
         WHERE
-        first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR}
+        (first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR})
         GROUP BY
-        a.user_id
+        a.user_id  ORDER BY sum(b.money) DESC
     </select>
 
 
@@ -297,7 +297,7 @@
                 a.superior_user = #{userId,jdbcType=VARCHAR}
             </if>
         </where>
-        GROUP BY a.user_id
+        GROUP BY a.user_id ORDER  BY COUNT(b.user_id) DESC
     </select>
 
     <select id="selectNextChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">

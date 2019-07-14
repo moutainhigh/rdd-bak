@@ -5,6 +5,7 @@
    <select id="selectConsumptionList" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
        SELECT
        a.user_id AS userId,
+       a.partner AS partner,
        a.user_account AS  userAccount,
        COUNT(b.money) AS consumptionCount,
        SUM(b.money) AS totalMoney,
@@ -12,10 +13,28 @@
        FROM
        czb_user a
        LEFT JOIN czb_consumption_record b ON a.user_id = b.user_id
+       LEFT JOIN czb_user c ON a.first_level_partner = c.user_id
+       LEFT JOIN czb_user d ON a.second_level_partner = d.user_id
        WHERE
        b.money IS NOT NULL
        <if test="userAccount!=null and userAccount!=''">
            AND (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+       </if>
+       <if test="partner!=null and partner!=''">
+           AND( (SUBSTR(c.user_account,1,3) LIKE CONCAT('%',#{partner,jdbcType=VARCHAR},'%') OR  SUBSTR(c.user_account,8,4) LIKE CONCAT('%',#{partner,jdbcType=VARCHAR},'%'))
+                OR  (SUBSTR(d.user_account,1,3) LIKE CONCAT('%',#{partner,jdbcType=VARCHAR},'%') OR  SUBSTR(d.user_account,8,4) LIKE CONCAT('%',#{partner,jdbcType=VARCHAR},'%')) )
+       </if>
+       <if test="superior!=null and superior!=''">
+           AND a.user_id in (SELECT user_id from temprefree)
+       </if>
+       <if test="missionStartTime!=null and missionStartTime!='' and (missionEndTime==null or missionEndTime=='')">
+           AND b.create_at >= #{missionStartTime,jdbcType=TIMESTAMP}
+       </if>
+       <if test="(missionStartTime==null or missionStartTime=='' ) and missionEndTime!=null and missionEndTime!=''">
+           AND b.create_at &lt;= #{missionEndTime,jdbcType=TIMESTAMP}
+       </if>
+       <if test="missionStartTime!=null and missionStartTime!=''  and missionEndTime!=null and missionEndTime!='' " >
+           AND #{missionStartTime,jdbcType=TIMESTAMP} &lt;=b.create_at &lt;= #{missionEndTime,jdbcType=TIMESTAMP}
        </if>
        GROUP BY
        a.user_id ORDER BY  SUM(b.money) DESC, MAX(b.create_at) DESC
