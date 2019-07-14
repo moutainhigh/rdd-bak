@@ -1,6 +1,6 @@
 package com.cqut.czb.auth.jwt;
 
-import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class JwtUser implements UserDetails {
     private String account;
     private String username;
     private String password;
-    private User user;
+    private UserDTO user;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -26,7 +26,7 @@ public class JwtUser implements UserDetails {
     }
 
     // 写一个能直接使用user创建jwtUser的构造器
-    public JwtUser(User user) {
+    public JwtUser(UserDTO user) {
         this.user = user;
         id = user.getUserId();
         account = user.getUserAccount();
@@ -93,11 +93,11 @@ public class JwtUser implements UserDetails {
                 '}';
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 }

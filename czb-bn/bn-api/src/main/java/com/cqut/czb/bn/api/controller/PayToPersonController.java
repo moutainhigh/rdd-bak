@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 @EnableAsync
 @RestController
-@RequestMapping("payToPerson")
+@RequestMapping("/api/payToPerson")
 public class PayToPersonController {
 
     @Autowired

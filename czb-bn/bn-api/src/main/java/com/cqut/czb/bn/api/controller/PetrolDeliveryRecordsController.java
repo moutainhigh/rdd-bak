@@ -27,7 +27,7 @@ import java.util.Map;
 /**   PetrolDeliveryRecordsController  油卡快递模块
  *
  */
-@RequestMapping("/petrolDelivery")
+@RequestMapping("/api/petrolDelivery")
 @RestController
 public class PetrolDeliveryRecordsController {
     @Autowired

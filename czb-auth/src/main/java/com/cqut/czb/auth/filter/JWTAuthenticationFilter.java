@@ -8,7 +8,7 @@ import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.entity.dto.user.LoginUser;
-import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -110,7 +110,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
 
-        User user=jwtUser.getUser();
+        UserDTO user=jwtUser.getUser();
 //        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
         redisUtils.put(jwtUser.getAccount(), user);
         if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {

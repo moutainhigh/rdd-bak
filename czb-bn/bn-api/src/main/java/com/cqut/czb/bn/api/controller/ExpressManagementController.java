@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/express")
+@RequestMapping("/api/express")
 public class ExpressManagementController {
 
     @Autowired ExpressService expressService;

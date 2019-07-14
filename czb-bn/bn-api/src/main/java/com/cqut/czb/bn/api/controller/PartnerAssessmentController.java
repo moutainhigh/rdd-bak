@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @Validated
-@RequestMapping("/partnerAssessment")
+@RequestMapping("/api/partnerAssessment")
 public class PartnerAssessmentController {
 
     @Autowired

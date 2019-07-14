@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/signContract")
+@RequestMapping("/api/signContract")
 public class ContractController {
     @Autowired
     private  ContractService contractService;
@@ -36,11 +36,11 @@ public class ContractController {
 
 
     /**
-     * 获得平台在云合同长效令牌token，客户端需要定时更新，后续操作都需要传入token
+     * 获得平台在云合同长效令牌token，客户端需要定时更新，后续操作都需要传入token(token已改)
      * @return token字符串
      */
     @RequestMapping(value = "/getContractToken", method = RequestMethod.GET)
-    public String getContractToken(){
+    public String getContractToken(Principal principal){
         return contractService.getContractToken();
     }
 
@@ -223,10 +223,10 @@ public class ContractController {
 //    }
 
     /**
-     * 企业签订正文个人信息添加
+     * 企业签订正文个人信息添加(token已改)
      */
     @RequestMapping(value = "/addCompanySignedPersonal", method = RequestMethod.POST)
-    public JSONResult addCompanySignedPersonal(@RequestBody CompanySignedPersonal personal){
+    public JSONResult addCompanySignedPersonal(Principal principal, @RequestBody CompanySignedPersonal personal){
         JSONObject json = contractService.addCompanySignedPersonal(personal);
         String code = json.getString("code");
         json.remove("code");
@@ -258,18 +258,18 @@ public class ContractController {
     }
 
     /**
-     * 获得套餐
+     * 获得套餐(token已改)
      */
     @RequestMapping(value = "/getTaoCanId", method = RequestMethod.GET)
-    public JSONResult getTaoCanId(){
+    public JSONResult getTaoCanId(Principal principal){
         return new JSONResult(contractService.getTaoCanId());
     }
 
     /**
-     * 未提交企业合同个人信息列表获取
+     * 未提交企业合同个人信息列表获取(token已改)
      */
     @RequestMapping(value = "/getWithoutCommitPersonInfo", method = RequestMethod.POST)
-    public JSONResult getWithoutCommitPersonInfo(@RequestBody ContractIdInfo idInfo){
+    public JSONResult getWithoutCommitPersonInfo(Principal principal, @RequestBody ContractIdInfo idInfo){
         JSONObject json = contractService.getWithoutCommitPersonInfo(idInfo.getContractId());
         List<CarsPersonsResultDTO> resultDTOList = json.getJSONArray("personList");
 
@@ -277,30 +277,30 @@ public class ContractController {
     }
 
     /**
-     * 多选或单选删除企业合同个人信息列表中的某人
+     * 多选或单选删除企业合同个人信息列表中的某人(token已改)
      */
     @RequestMapping(value = "/removePersonInfo", method = RequestMethod.POST)
-    public JSONResult removePersonInfo(@RequestBody ContractIdListDTO contractIdList){
+    public JSONResult removePersonInfo(Principal principal, @RequestBody ContractIdListDTO contractIdList){
         boolean success= contractService.removePersonInfo(contractIdList.getContractIdLists());
 
         return new JSONResult();
     }
 
     /**
-     * 云合同异步消息回调地址
+     * 云合同异步消息回调地址(token已改)
      */
     @RequestMapping(value = "/getAsynchronousInfo", method = RequestMethod.POST)
-    public void getAsynchronousInfo(@RequestBody AsynchronousInfo info){
+    public void getAsynchronousInfo(Principal principal, @RequestBody AsynchronousInfo info){
         System.out.println(info.toString());
         if(info != null && info.getNoticeType() == 2)
             contractService.asynchronousInfo(info.getMap());
     }
 
     /**
-     * 查看合同状态
+     * 查看合同状态(token已改)
      */
     @RequestMapping(value = "/getContractStatus", method = RequestMethod.POST)
-    public JSONResult getContractStatus(@RequestBody ContractIdInfo info){
+    public JSONResult getContractStatus(Principal principal, @RequestBody ContractIdInfo info){
         JSONObject json = new JSONObject();
         json.put("contractStatus", contractService.getContractStatus(info.getContractId()));
 
@@ -378,18 +378,18 @@ public class ContractController {
     }
 
     /**
-     * 企业合同为添加个人信息，删除初始化的合同记录
+     * 企业合同为添加个人信息，删除初始化的合同记录(token已改)
      */
     @RequestMapping(value = "/deleteContract", method = RequestMethod.POST)
-    public JSONResult deleteContract(@RequestBody ContractIdInfo contractId){
+    public JSONResult deleteContract(Principal principal, @RequestBody ContractIdInfo contractId){
         return  contractService.deleteContract(contractId.getContractId());
     }
 
     /**
-     * 根据合同id，查找signerId和thirdContractId。
+     * 根据合同id，查找signerId和thirdContractId。(token已改)
      */
     @RequestMapping(value = "/getSignerIdAndYunContractId", method = RequestMethod.POST)
-    public JSONResult getSignerIdAndYunContractId(@RequestBody ContractIdInfo info){
+    public JSONResult getSignerIdAndYunContractId(Principal principal, @RequestBody ContractIdInfo info){
         return contractService.getSignerIdAndYunContractId(info.getContractId());
     }
 }

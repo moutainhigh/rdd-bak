@@ -20,7 +20,7 @@ import java.security.Principal;
  * /infoSpread 推广信息
  */
 @RestController
-@RequestMapping("/infoSpread")
+@RequestMapping("/api/infoSpread")
 public class infoSpreadController {
     @Autowired
     InfoSpreadService infoSpreadService;
@@ -67,6 +67,9 @@ public class infoSpreadController {
     @GetMapping("/getTotalInfo")
     public  JSONResult getTotalInfo(PartnerDTO partnerDTO,Principal principal){
         User user = (User)redisUtils.get(principal.getName());
+        if (user==null){
+            return null;
+        }
         return new JSONResult(infoSpreadService.getTotalInfo(partnerDTO,user));
     }
 
@@ -95,8 +98,36 @@ public class infoSpreadController {
         return new JSONResult(infoSpreadService.addChildConsumer(partnerDTO));
     }
 
+    /**
+     * 通过用户名查询
+      * @param partnerDTO
+     * @param pageDTO
+     * @return
+     */
     @PostMapping("/getChildByName")
     public JSONResult getChildByName(PartnerDTO partnerDTO,PageDTO pageDTO){
         return new JSONResult(infoSpreadService.getChildByName(partnerDTO,pageDTO));
+    }
+
+    /**
+     * 我的总下级消费
+     * @param partnerDTO
+     * @param pageDTO
+     * @return
+     */
+    @GetMapping("/totalChildMoney")
+    public JSONResult myTotalChildMoney(PartnerDTO partnerDTO,PageDTO pageDTO){
+        return new JSONResult(infoSpreadService.myTotalChildMoney(partnerDTO,pageDTO));
+    }
+
+    /**
+     * 合伙人信息管理
+     * @param partnerDTO
+     * @param pageDTO
+     * @return
+     */
+    @GetMapping("/allPartnerManage")
+    public JSONResult allPartnerManage(PartnerDTO partnerDTO,PageDTO pageDTO) {
+        return new JSONResult(infoSpreadService.allPartnerManage(partnerDTO,pageDTO));
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/enterpriseContract")
+@RequestMapping("/api/enterpriseContract")
 public class EnterpriseContractController {
     @Autowired
     private EnterpriseContractService contractService;

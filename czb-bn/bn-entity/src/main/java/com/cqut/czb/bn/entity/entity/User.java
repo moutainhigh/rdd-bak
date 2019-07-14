@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class User {
@@ -23,6 +25,7 @@ public class User {
 
     private String userIdCard;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     private Date updateAt;

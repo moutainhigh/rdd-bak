@@ -20,7 +20,7 @@ public interface AppHomePageService {
      * 获取广告内容表
      * @return
      */
-    List<appAnnouncementDTO> selectAnnouncement();
+    List<appAnnouncementDTO> selectAnnouncement(String locationCode);
 
     /**
      * 油价播报

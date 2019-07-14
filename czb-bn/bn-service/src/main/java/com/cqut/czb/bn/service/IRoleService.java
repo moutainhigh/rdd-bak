@@ -20,4 +20,6 @@ public interface IRoleService {
     boolean updateRole(RoleInputDTO roleInputDTO);
 
     PageInfo<RoleDTO> selectRole(RoleInputDTO roleInputDTO, PageDTO pageDTO);
+
+    String selectRoleId(String userId);
 }

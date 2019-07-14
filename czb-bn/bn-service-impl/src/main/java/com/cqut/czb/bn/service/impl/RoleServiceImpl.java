@@ -128,6 +128,11 @@ public class RoleServiceImpl implements IRoleService {
         return new PageInfo<>(roleList);
     }
 
+    @Override
+    public String selectRoleId(String userId) {
+        return roleMapperExtra.selectRoleId(userId);
+    }
+
     public List<RoleMenuDTO> initRoleMenuList(RoleInputDTO roleInputDTO) {
         List<RoleMenuDTO> roleMenuDTOList = new ArrayList<>();
         for(String authority : roleInputDTO.getAuthorities().split(",")) {

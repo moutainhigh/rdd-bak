@@ -79,9 +79,9 @@
         czb_user a
         LEFT JOIN czb_consumption_record b on a.user_id = b.user_id
         WHERE
-        first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR}
+        (first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR})
         GROUP BY
-        a.user_id
+        a.user_id  ORDER BY sum(b.money) DESC
     </select>
 
 
@@ -250,7 +250,7 @@
         LEFT JOIN czb_user b ON a.user_id = b.superior_user
         <where>
             <if test="userAccount!=null and userAccount!=''">
-                (SUBSTR(user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+                (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
             </if>
         </where>
         GROUP BY a.user_id
@@ -268,7 +268,7 @@
         LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
         <where>
             <if test="userAccount!=null and userAccount!=''">
-                (SUBSTR(user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+                (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
             </if>
         </where>
         GROUP BY a.user_id
@@ -297,7 +297,7 @@
                 a.superior_user = #{userId,jdbcType=VARCHAR}
             </if>
         </where>
-        GROUP BY a.user_id
+        GROUP BY a.user_id ORDER  BY COUNT(b.user_id) DESC
     </select>
 
     <select id="selectNextChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
@@ -346,6 +346,58 @@
         WHERE
             a.user_id = #{userId,jdbcType=VARCHAR}
         AND DATE_FORMAT(b.indicator_begin_time,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
+    </select>
+
+    <select id="selectMyTotalChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+         SELECT
+            a.user_account AS userAccount,
+            b.money AS totalMoney,
+            b.type AS `type`,
+            b.create_at AS nearTime
+        FROM
+            czb_user a
+        LEFT JOIN czb_consumption_record b ON a.user_id = b.user_id
+        WHERE
+            (
+              a.first_level_partner = #{firstPartner,jdbcType=VARCHAR}
+           OR a.second_level_partner = #{secondPartner,jdbcType=VARCHAR}
+            ) AND b.money is not null
+    </select>
+
+    <select id="selectAllPartnerManage" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        SELECT
+        a.user_id AS userId,
+        a.user_account AS  userAccount,
+        a.partner AS partner,
+        SUM(b.money) AS totalMoney,
+        COUNT(b.money) AS consumptionCount,
+        MAX(b.create_at) as nearTime
+        FROM
+        czb_user a
+        LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner  OR a.user_id = c.second_level_partner )
+        LEFT JOIN czb_consumption_record b ON c.user_id = b.user_id
+        WHERE
+        a.partner!=0
+        <if test="userAccount!=null and userAccount!=''">
+            AND (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+        </if>
+        GROUP BY a.user_id ORDER BY SUM(b.money) DESC
+    </select>
+
+    <select id="selectAllPartnerCount" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        SELECT
+        a.user_id AS userId,
+        a.user_account as userAccount,
+        COUNT(c.user_id) AS totalCount
+        FROM
+        czb_user a
+        LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner  OR a.user_id = c.second_level_partner )
+        WHERE
+        a.partner!=0
+        <if test="userAccount!=null and userAccount!=''">
+            AND (SUBSTR(a.user_account,1,3) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%') OR  SUBSTR(a.user_account,8,4) LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%'))
+        </if>
+        GROUP BY a.user_id ORDER BY COUNT(c.user_id) DESC
     </select>
 
 </mapper>

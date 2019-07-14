@@ -21,5 +21,5 @@ public interface AnnouncementMapperExtra {
 
     int updateByPrimaryKey(Announcement record);
 
-    List<appAnnouncementDTO> selectAnnouncement();
+    List<appAnnouncementDTO> selectAnnouncement(@Param("locationCode") String locationCode);
 }

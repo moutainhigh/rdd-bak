@@ -62,12 +62,20 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     PetrolPriceReportMapperExtra petrolPriceReportMapperExtra;
 
     @Override
-    public List<appAnnouncementDTO> selectAnnouncement() {
-        return announcementMapperExtra.selectAnnouncement();
+    public List<appAnnouncementDTO> selectAnnouncement(String locationCode) {
+        if(locationCode==null&&locationCode.equals("")){
+            System.out.println("locationCode为空");
+            return null;
+        }
+        return announcementMapperExtra.selectAnnouncement(locationCode);
     }
 
     @Override
     public List<petrolPriceReportDTO> selectPetrolPriceReport(String area) {
+        if(area==null&&area.equals("")){
+            System.out.println("area为空");
+            return null;
+        }
         return petrolPriceReportMapperExtra.selectAll(area);
     }
 
@@ -110,10 +118,10 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         if (!CollectionUtils.isEmpty(petrols)){//判断所有的油卡是否为空
             for( int i = 0 ; i < petrols.size() ; i++) {//内部不锁定，效率最高，但在多线程要考虑并发操作的问题。
                 if(PetrolCache.currentPetrolMap.containsKey(petrols.get(i).getPetrolNum())){
-                    System.out.println("MAP2中包含卡号"+petrols.get(i).getPetrolNum());
+//                    System.out.println("MAP2中包含卡号"+petrols.get(i).getPetrolNum());
                     continue;
                 }
-                System.out.println("MAP2中不包含卡号"+petrols.get(i).getPetrolNum());
+//                System.out.println("MAP2中不包含卡号"+petrols.get(i).getPetrolNum());
                 petrolMap.put(petrols.get(i).getPetrolId(),petrols.get(i));
             }
         }else {

@@ -1,79 +1,15 @@
 package com.cqut.czb.bn.entity.dto.user;
 
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.cqut.czb.bn.entity.entity.User;
 
-import java.util.Date;
 import java.util.List;
 
-public class UserDTO {
-
-    private String userId;
-
-    private String userAccount;
-
-    private String userName;
-
-    private String enterpriseName;
-
-    private Integer userRank;
-
-    private Integer partner;
-
-    private String superiorUser;
+public class UserDTO extends User {
 
     private List<RoleDTO> roleList;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createAt;
-
-    public String getUserAccount() {
-        return userAccount;
-    }
-
-    public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEnterpriseName() {
-        return enterpriseName;
-    }
-
-    public void setEnterpriseName(String enterpriseName) {
-        this.enterpriseName = enterpriseName;
-    }
-
-    public Integer getUserRank() {
-        return userRank;
-    }
-
-    public void setUserRank(Integer userRank) {
-        this.userRank = userRank;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    private String roleId;
 
     public List<RoleDTO> getRoleList() {
         return roleList;
@@ -83,19 +19,11 @@ public class UserDTO {
         this.roleList = roleList;
     }
 
-    public String getSuperiorUser() {
-        return superiorUser;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setSuperiorUser(String superiorUser) {
-        this.superiorUser = superiorUser;
-    }
-
-    public Integer getPartner() {
-        return partner;
-    }
-
-    public void setPartner(Integer partner) {
-        this.partner = partner;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }

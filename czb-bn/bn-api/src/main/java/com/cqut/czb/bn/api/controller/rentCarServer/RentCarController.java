@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@RequestMapping("/renCar")
+@RequestMapping("/api/renCar")
 @RestController
 public class RentCarController {
     @Autowired
@@ -69,10 +69,10 @@ public class RentCarController {
     }
 
     /**
-     * 企业合同概要信息列表获取
+     * 企业合同概要信息列表获取(token已改)
      */
     @RequestMapping(value = "/getCompanyPersonList", method = RequestMethod.POST)
-    public JSONResult getCompanyPersonList(@RequestBody ContractIdInfo idInfo){
+    public JSONResult getCompanyPersonList(Principal principal, @RequestBody ContractIdInfo idInfo){
         return new JSONResult(rentCarService.getOneCompanyContractInfo(idInfo.getContractId()));
     }
 
@@ -95,10 +95,10 @@ public class RentCarController {
     }
 
     /**
-     * 验证验证码正确性
+     * 验证验证码正确性(token已改)
      */
     @RequestMapping(value = "/checkVerificationCode",method = RequestMethod.POST)
-    public  JSONResult checkVerificationCode(@RequestBody VerificationCodeDTO input){
+    public  JSONResult checkVerificationCode(Principal principal, @RequestBody VerificationCodeDTO input){
         //判断验证码是否为空
         if(input==null){
             System.out.println("为空");

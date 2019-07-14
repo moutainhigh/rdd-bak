@@ -16,7 +16,7 @@ import java.security.Principal;
  *
  */
 @RestController
-@RequestMapping("/appRouter")
+@RequestMapping("/api/appRouter")
 public class AppRouterManageController {
 
     @Autowired

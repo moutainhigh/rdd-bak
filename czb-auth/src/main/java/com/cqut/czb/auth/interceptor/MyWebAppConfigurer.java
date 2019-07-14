@@ -9,6 +9,9 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
     @Autowired
     MyInterceptor interceptor;
 
+    @Autowired
+    PrivilegeInterceptor privilegeInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -18,7 +21,9 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 
         // excludePathPatterns 用户排除拦截
 
-        registry.addInterceptor(interceptor).addPathPatterns("/**");
+//        registry.addInterceptor(interceptor).addPathPatterns("/**");
+
+        registry.addInterceptor(privilegeInterceptor).addPathPatterns("/api/**");
 
         super.addInterceptors(registry);
     }
