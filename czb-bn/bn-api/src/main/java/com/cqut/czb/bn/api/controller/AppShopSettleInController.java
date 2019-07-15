@@ -66,4 +66,12 @@ public class AppShopSettleInController {
         return new JSONResult(appShopSettleInService.selectShopSettleInNav());
     }
 
+    /**
+     * app's Get the information input（获取信息录入必填项）
+     */
+    @RequestMapping(value = "/getInputItem", method = RequestMethod.GET)
+    public JSONResult getInputItem(@Param("commodityId") String commodityId) {
+        return new JSONResult(appShopSettleInService.getInputItem(commodityId));
+    }
+
 }

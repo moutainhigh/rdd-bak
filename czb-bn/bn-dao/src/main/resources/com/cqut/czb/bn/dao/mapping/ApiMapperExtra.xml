@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ApiMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Api" >
+    <id column="api_id" property="apiId" jdbcType="VARCHAR" />
+    <result column="api_url" property="apiUrl" jdbcType="VARCHAR" />
+    <result column="api_name" property="apiName" jdbcType="VARCHAR" />
+    <result column="api_remark" property="apiRemark" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    api_id, api_url, api_name, api_remark, pid, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_api
+    where api_id = #{apiId,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectAllInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_api
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_api
+    where api_id = #{apiId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Api" >
+    insert into czb_api (api_id, api_url, api_name, 
+      api_remark, pid, create_at, 
+      update_at)
+    values (#{apiId,jdbcType=VARCHAR}, #{apiUrl,jdbcType=VARCHAR}, #{apiName,jdbcType=VARCHAR}, 
+      #{apiRemark,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Api" >
+    insert into czb_api
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="apiId != null" >
+        api_id,
+      </if>
+      <if test="apiUrl != null" >
+        api_url,
+      </if>
+      <if test="apiName != null" >
+        api_name,
+      </if>
+      <if test="apiRemark != null" >
+        api_remark,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="apiId != null" >
+        #{apiId,jdbcType=VARCHAR},
+      </if>
+      <if test="apiUrl != null" >
+        #{apiUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="apiName != null" >
+        #{apiName,jdbcType=VARCHAR},
+      </if>
+      <if test="apiRemark != null" >
+        #{apiRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Api" >
+    update czb_api
+    <set >
+      <if test="apiUrl != null" >
+        api_url = #{apiUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="apiName != null" >
+        api_name = #{apiName,jdbcType=VARCHAR},
+      </if>
+      <if test="apiRemark != null" >
+        api_remark = #{apiRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where api_id = #{apiId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Api" >
+    update czb_api
+    set api_url = #{apiUrl,jdbcType=VARCHAR},
+      api_name = #{apiName,jdbcType=VARCHAR},
+      api_remark = #{apiRemark,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where api_id = #{apiId,jdbcType=VARCHAR}
+  </update>
+</mapper>
