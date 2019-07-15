@@ -23,9 +23,9 @@ public class PartnerConsumptionServiceImpl implements PartnerConsumptionService 
     @Override
     public PageInfo<PartnerDTO> getConsumptionList(PartnerDTO partnerDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
-        if (partnerDTO.getSuperior()==null||("").equals(partnerDTO.getSuperior())){
-            userMapperExtra.insertAllSubUser(partnerDTO.getSuperior());
-        }
+//        if (partnerDTO.getSuperior()==null||("").equals(partnerDTO.getSuperior())){
+//            userMapperExtra.insertAllSubUser(partnerDTO.getSuperior());
+//        }
         List<PartnerDTO> partnerDTOList =  partnerConsumptionMapperExtra.selectConsumptionList(partnerDTO);
 
         return new PageInfo<>(partnerDTOList);
