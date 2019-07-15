@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.PartnerMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -24,6 +25,9 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
 
     @Autowired
     PartnerMapperExtra partnerMapperExtra;
+
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     @Override
     public PageInfo allPartnerManage(PartnerDTO partnerDTO, PageDTO pageDTO) {
@@ -118,8 +122,15 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         if (partnerDTO.getUserId()==null||partnerDTO.getUserId()==""){
         partnerDTO.setUserId(user.getUserId());
         }
-        List<PartnerDTO> totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
         PartnerDTO partner = partnerMapperExtra.selectPartner(partnerDTO);
+        List<PartnerDTO> totalChilds = new ArrayList<>();
+        if (partner.getPartner()!=0){
+             totalChilds = partnerMapperExtra.selectPartnerChildInfo(partnerDTO);
+        }else {
+            userMapperExtra.insertAllSubUser(partnerDTO.getUserId());
+             totalChilds = partnerMapperExtra.selectNoPartnerChildInfo(partnerDTO);
+        }
+
         if(totalChilds!=null&&totalChilds.size()!=0&&partner!=null) {
             partner.setTotalCount(totalChilds.size());
             Double totalMoney = (Double) changeToBigDecimal(getChildTotalMoney(totalChilds));

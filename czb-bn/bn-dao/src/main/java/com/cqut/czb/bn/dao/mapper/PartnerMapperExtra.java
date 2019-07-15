@@ -23,6 +23,8 @@ public interface PartnerMapperExtra {
 
      List<PartnerDTO> selectPartnerChildInfo(PartnerDTO partnerDTO);
 
+    List<PartnerDTO> selectNoPartnerChildInfo(PartnerDTO partnerDTO);
+
     PartnerDTO selectAllPartnerInfo(PartnerDTO partnerDTO);
 
      PartnerDTO selectPartnerInfo(PartnerDTO partnerDTO);

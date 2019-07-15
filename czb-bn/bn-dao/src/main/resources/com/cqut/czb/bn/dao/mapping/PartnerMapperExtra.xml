@@ -69,6 +69,21 @@
         <result column="partner" property="partner" jdbcType="INTEGER" />
         <result column="moneys"  property="totalMoney" jdbcType="DOUBLE"/>
     </resultMap>
+    <select id="selectNoPartnerChildInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInfoMap">
+        SELECT
+        a.user_id,
+        a.user_account,
+        partner,
+        sum(b.money) AS moneys
+        FROM
+        czb_user a
+        LEFT JOIN czb_consumption_record b on a.user_id = b.user_id
+        WHERE
+        a.user_id in (SELECT user_id FROM temprefree)
+        GROUP BY
+        a.user_id  ORDER BY sum(b.money) DESC
+    </select>
+
     <select id="selectPartnerChildInfo" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="ChildInfoMap">
         SELECT
         a.user_id,
@@ -79,12 +94,10 @@
         czb_user a
         LEFT JOIN czb_consumption_record b on a.user_id = b.user_id
         WHERE
-        (first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR})
+        (a.first_level_partner = #{userId,jdbcType=VARCHAR} or a.second_level_partner = #{userId,jdbcType=VARCHAR})
         GROUP BY
         a.user_id  ORDER BY sum(b.money) DESC
     </select>
-
-
 
     <!--全部是合伙人的父级-->
     <resultMap id="AllPartnerInfoMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
@@ -391,7 +404,7 @@
         COUNT(c.user_id) AS totalCount
         FROM
         czb_user a
-        LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner  OR a.user_id = c.second_level_partner )
+        LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner OR a.user_id = c.second_level_partner)
         WHERE
         a.partner!=0
         <if test="userAccount!=null and userAccount!=''">
