@@ -6,6 +6,7 @@ CREATE TABLE `czb_subsidy_user` (
   `relation_id` varchar(20) NOT NULL,
   `mission_id` varchar(20) NOT NULL,
   `user_id` varchar(20) NOT NULL,
+  `amount` double(10,2) NOT NULL,
   PRIMARY KEY (`relation_id`),
   KEY `user_id` (`user_id`),
   KEY `mission_id` (`mission_id`),
