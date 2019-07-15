@@ -33,6 +33,8 @@ public class PartnerDTO {
 
     private String secondPartner;
 
+    private String superior;   //推荐人
+
     private String monthTime;
 
     private Date nearTime;      //最近的消费时间
@@ -42,6 +44,12 @@ public class PartnerDTO {
     private Double totalMoney;      //子级总消费
 
     private Integer totalCount;     //子级用户总数
+
+    private Integer consumptionCount; //消费次数
+
+    private Integer payMethod;  //支付方式
+
+    private String thirdOrderId; //第三方订单号
 
     public String getUserId() {
         return userId;
@@ -163,6 +171,14 @@ public class PartnerDTO {
         this.monthTime = monthTime;
     }
 
+    public String getSuperior() {
+        return superior;
+    }
+
+    public void setSuperior(String superior) {
+        this.superior = superior;
+    }
+
     public Date getNearTime() {
         return nearTime;
     }
@@ -193,5 +209,29 @@ public class PartnerDTO {
 
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public Integer getConsumptionCount() {
+        return consumptionCount;
+    }
+
+    public void setConsumptionCount(Integer consumptionCount) {
+        this.consumptionCount = consumptionCount;
+    }
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
     }
 }

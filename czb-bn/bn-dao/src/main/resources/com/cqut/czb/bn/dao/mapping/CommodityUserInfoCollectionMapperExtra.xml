@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CommodityUserInfoCollectionMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.CommodityUserInfoCollection" >
+    <id column="info_id" property="infoId" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+    <result column="info_title" property="infoTitle" jdbcType="VARCHAR" />
+    <result column="info_content" property="infoContent" jdbcType="VARCHAR" />
+    <result column="info_code" property="infoCode" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    info_id, shop_id, commodity_id, info_title, info_content, info_code, create_at, update_at
+  </sql>
+  <select id="selectInfoInput" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO" parameterType="java.lang.String" >
+    select
+          info_id as infoId, shop_id as shopId, commodity_id as commodityId,
+          info_title as infoTitle, info_content as infoContent, info_code as infoCode
+    from czb_commodity_user_info_collection
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

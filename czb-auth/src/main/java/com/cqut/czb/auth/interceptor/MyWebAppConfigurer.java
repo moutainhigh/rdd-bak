@@ -21,9 +21,9 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 
         // excludePathPatterns 用户排除拦截
 
-//        registry.addInterceptor(interceptor).addPathPatterns("/**");
+        registry.addInterceptor(interceptor).addPathPatterns("/**");
 
-        registry.addInterceptor(privilegeInterceptor).addPathPatterns("/api/**");
+//        registry.addInterceptor(privilegeInterceptor).addPathPatterns("/api/**");
 
         super.addInterceptors(registry);
     }

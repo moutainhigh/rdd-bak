@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.PartnerConsumptionMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.service.PartnerConsumptionService;
@@ -16,21 +17,17 @@ public class PartnerConsumptionServiceImpl implements PartnerConsumptionService 
     @Autowired
     PartnerConsumptionMapperExtra partnerConsumptionMapperExtra;
 
+    @Autowired
+    UserMapperExtra userMapperExtra;
+
     @Override
     public PageInfo<PartnerDTO> getConsumptionList(PartnerDTO partnerDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
-        List<PartnerDTO> partnerDTOList =  partnerConsumptionMapperExtra.selectConsumptionList(partnerDTO);
-        List<PartnerDTO> childCount = partnerConsumptionMapperExtra.selectConsumptionCount(partnerDTO);
-        if (partnerDTOList.size()!=0&&partnerDTOList!=null&&childCount!=null&&childCount.size()!=0) {
-            for (int i = 0; i < partnerDTOList.size(); i++) {
-                for (int j=0; j<childCount.size(); j++){
-                    if (partnerDTOList.get(i).getUserId().equals(childCount.get(j).getUserId())){
-                        partnerDTOList.get(i).setTotalCount(childCount.get(j).getTotalCount());
-                        break;
-                    }
-                }
-            }
+        if (partnerDTO.getSuperior()==null||("").equals(partnerDTO.getSuperior())){
+            userMapperExtra.insertAllSubUser(partnerDTO.getSuperior());
         }
+        List<PartnerDTO> partnerDTOList =  partnerConsumptionMapperExtra.selectConsumptionList(partnerDTO);
+
         return new PageInfo<>(partnerDTOList);
     }
 
