@@ -191,7 +191,13 @@ public class PetrolCache {
             String key = entry.getKey();
             Petrol petrol = PetrolCache.currentPetrolMap.get(key);
             if (petrol.getOwnerId() == null || petrol.getOwnerId().equals(userId)) {
+                System.out.println("放回前"+ PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
+                currentPetrol.remove();        //移除油卡
                 System.out.println("存在未完成订单");
+                petrol.setOwnerId("");//将用户id置为空
+                petrol.setEndTime(0);
+                PetrolCache.AllpetrolMap.put(petrol.getPetrolNum(),petrol);
+                System.out.println("放会后"+ PetrolCache.AllpetrolMap.size()+ ":"+PetrolCache.currentPetrolMap.size());
                 return false;
             }
         }

@@ -67,4 +67,10 @@
     </set>
     where role_id = #{roleId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAllRole" resultType="com.cqut.czb.bn.entity.entity.Role">
+    select
+    role_id as roleId, role_name as roleName
+    from czb_role
+  </select>
 </mapper>
