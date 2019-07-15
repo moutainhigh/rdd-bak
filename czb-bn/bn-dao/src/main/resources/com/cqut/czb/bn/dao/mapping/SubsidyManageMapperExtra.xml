@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org// DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.SubsidyManageMapperExtra">
+
+    <!--结果集1-->
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.subsidyManage.Subsidy">
+        <result column="id" property="subsidyId" jdbcType="VARCHAR"/>
+        <result column="targetMonth" property="subsidyMonth" jdbcType="VARCHAR"/>
+        <result column="rate" property="subsidyRate" jdbcType="DOUBLE"/>
+        <result column="time" property="subsidyTime" jdbcType="VARCHAR"/>
+        <result column="amount" property="subsidyMoney" jdbcType="DOUBLE"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="monthReceive" property="currentMonthProfit" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <!--结果集2-->
+    <resultMap id="MissionResultMap" type="com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMission">
+        <result column="id" property="missionId" jdbcType="VARCHAR"/>
+        <result column="subsidyMonth" property="subsidyMonth" jdbcType="VARCHAR"/>
+        <result column="subsidyRate" property="subsidyRate" jdbcType="DOUBLE"/>
+        <result column="createAt" property="subsidyTime" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="partner" property="subsidyType" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--补贴记录表格数据-->
+    <select id="getSubsidyData" parameterType="com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO" resultMap="BaseResultMap">
+        SELECT
+            big.id,
+            big.targetMonth,
+            big.rate,
+            big.time,
+            big.amount,
+            big.account,
+            sum(logtwo.amount) monthReceive
+        FROM
+            (
+                SELECT
+                    log.record_id id,
+                    date_format(
+                        log.target_year_month,
+                        '%Y-%m'
+                    ) targetMonth,
+                    log.target_year_month targetTime,
+                    mission.subsidy_percent rate,
+                    date_format(
+                    log.create_at,
+                    '%Y-%m-%d'
+                    ) time,
+                    log.amount amount,
+                    log.info_id info,
+                    userTable.user_account account
+                FROM
+                    czb_income_log log
+                LEFT JOIN czb_user_income_info income ON log.info_id = income.info_id
+                LEFT JOIN czb_user userTable ON income.user_id = userTable.user_id
+                LEFT JOIN czb_subsidy_mission mission ON mission.mission_id = log.souse_id
+                WHERE
+                    log.type = 5
+            ) big
+        LEFT JOIN czb_income_log logtwo ON logtwo.info_id = big.info
+        WHERE
+            DATE_FORMAT(logtwo.create_at, '%Y%m') = DATE_FORMAT(big.targetTime, '%Y%m')
+        <if test="account != null and account != ''">
+            AND big.account like concat("%", #{account}, "%")
+        </if>
+        <if test="subsidyMonth != null and subsidyMonth != ''">
+            AND DATE_FORMAT(#{subsidyMonth}, '%Y%m') = DATE_FORMAT(big.targetTime, '%Y%m')
+        </if>
+        <if test="subsidyTime != null and subsidyTime != ''">
+            AND DATE_FORMAT(#{subsidyTime}, '%Y%m%d') = DATE_FORMAT(big.time, '%Y%m%d')
+        </if>
+        GROUP BY
+            id
+    </select>
+
+    <select id="getSubsidyMissionData" parameterType="com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO" resultMap="MissionResultMap">
+        SELECT
+            mission.mission_id id,
+            date_format(
+                mission.target_year_month,
+                '%Y-%m'
+            ) subsidyMonth,
+            subsidy_percent subsidyRate,
+            date_format(
+                mission.create_at,
+                '%Y-%m-%d'
+            ) createAt,
+            state,
+            users.partner
+        FROM
+            czb_subsidy_mission mission
+        LEFT JOIN czb_user users ON mission.partner = users.user_account
+        <where>
+            <if test="subsidyTime != null and subsidyTime != ''">
+                DATE_FORMAT(mission.create_at, '%Y%m%d') = DATE_FORMAT(#{subsidyTime}, '%Y%m%d')
+            </if>
+            <if test="subsidyMonth != null and subsidyMonth != ''">
+                AND DATE_FORMAT(#{subsidyMonth}, '%Y%m') = DATE_FORMAT(
+                mission.target_year_month,
+                '%Y%m'
+                )
+            </if>
+            <if test="partnerType != null and partnerType != ''">
+                AND
+                users.partner = #{partnerType}
+            </if>
+        </where>
+    </select>
+
+</mapper>
