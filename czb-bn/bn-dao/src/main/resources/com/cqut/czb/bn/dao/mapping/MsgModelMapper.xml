@@ -8,9 +8,13 @@
     <result column="msg_content" property="msgContent" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="altert" property="altert" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    msg_model_id, announcer_id, msg_title, msg_content, create_at, update_at
+    msg_model_id, announcer_id, msg_title, msg_content, create_at, update_at, msg_type, 
+    endTime, altert
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,10 +28,12 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.MsgModel" >
     insert into czb_msg_model (msg_model_id, announcer_id, msg_title, 
-      msg_content, create_at, update_at
+      msg_content, create_at, update_at, 
+      msg_type, endTime, altert
       )
     values (#{msgModelId,jdbcType=VARCHAR}, #{announcerId,jdbcType=VARCHAR}, #{msgTitle,jdbcType=VARCHAR}, 
-      #{msgContent,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{msgContent,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{msgType,jdbcType=INTEGER}, #{endtime,jdbcType=TIMESTAMP}, #{altert,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.MsgModel" >
@@ -51,6 +57,15 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="altert != null" >
+        altert,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="msgModelId != null" >
@@ -70,6 +85,15 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=INTEGER},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altert != null" >
+        #{altert,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -91,6 +115,15 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=INTEGER},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altert != null" >
+        altert = #{altert,jdbcType=INTEGER},
+      </if>
     </set>
     where msg_model_id = #{msgModelId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +133,10 @@
       msg_title = #{msgTitle,jdbcType=VARCHAR},
       msg_content = #{msgContent,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      msg_type = #{msgType,jdbcType=INTEGER},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      altert = #{altert,jdbcType=INTEGER}
     where msg_model_id = #{msgModelId,jdbcType=VARCHAR}
   </update>
 </mapper>
