@@ -15,6 +15,12 @@ public class MsgModel {
 
     private Date updateAt;
 
+    private Integer msgType;
+
+    private Date endtime;
+
+    private Integer altert;
+
     public String getMsgModelId() {
         return msgModelId;
     }
@@ -61,5 +67,29 @@ public class MsgModel {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(Integer msgType) {
+        this.msgType = msgType;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
+    }
+
+    public Integer getAltert() {
+        return altert;
+    }
+
+    public void setAltert(Integer altert) {
+        this.altert = altert;
     }
 }

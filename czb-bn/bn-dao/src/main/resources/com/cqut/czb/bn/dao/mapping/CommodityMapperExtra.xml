@@ -32,7 +32,7 @@
 
     <select id="selectServiceDetails" resultType="com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO" parameterType="java.lang.String">
        select
-        commodity_title as commodityTitle, commodity_info as commodityInfo,
+        commodity_id, commodity_title as commodityTitle, commodity_info as commodityInfo,
         discount, commodity_img as commodityImg,
         commodity_price as commodityPrice, classification, usage_count as usageCount,
         shop_address as shopAddress,shop_content as shopContent,shop_name as shopName,

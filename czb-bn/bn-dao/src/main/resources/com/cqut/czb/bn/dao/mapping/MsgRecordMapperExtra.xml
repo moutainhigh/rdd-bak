@@ -4,9 +4,9 @@
 
   <select id="selectMsgRecords" resultType="com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO" parameterType="java.lang.String" >
   select
-          msg_announcer_id as msgAnnouncerId, msg_receiver_id as msgReceiverId,msg_record_id as msgRecordId,
-          msg_state as msgState, alert as alert, msg_title as msgTitle, msg_content as msgContent,
-          czb_msg_model.create_at as createAt
+        msg_announcer_id as msgAnnouncerId, msg_receiver_id as msgReceiverId,msg_record_id as msgRecordId,
+        msg_state as msgState, msg_title as msgTitle, msg_content as msgContent,czb_msg_model.msg_type AS msgType,
+        czb_msg_model.create_at as createAt
   from
           czb_msg_record,czb_msg_model
   WHERE
@@ -14,24 +14,27 @@
           AND
           msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR}
           AND
-          msg_state=0
+		  czb_msg_record.create_at>UNIX_TIMESTAMP()
+		  ORDER BY msg_state ASC,msg_type ASC,czb_msg_model.create_at DESC
   </select>
 
     <select id="getOnePopMessages" resultType="com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO" parameterType="java.lang.String" >
-      select
+       select
               msg_announcer_id as msgAnnouncerId, msg_receiver_id as msgReceiverId,msg_record_id as msgRecordId,
-              msg_state as msgState, msg_title as msgTitle, msg_content as msgContent,
+              msg_state as msgState, msg_title as msgTitle, msg_content as msgContent,msg_type AS msgType,
               czb_msg_model.create_at as createAt
       from
               czb_msg_record,czb_msg_model
       WHERE
               czb_msg_record.msg_model_id=czb_msg_model.msg_model_id
               AND
-              msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR}
+              msg_receiver_id = "155937282021834"
               AND
               msg_state=0
               and
-              alert=1
+              czb_msg_model.altert=1
+              AND
+			  czb_msg_record.create_at>UNIX_TIMESTAMP()
               ORDER BY czb_msg_model.create_at DESC
               limit 1
   </select>

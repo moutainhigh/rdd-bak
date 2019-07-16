@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.SubsidyUserMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.SubsidyUser" >
+    <id column="relation_id" property="relationId" jdbcType="VARCHAR" />
+    <result column="mission_id" property="missionId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    relation_id, mission_id, user_id, amount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_subsidy_user
+    where relation_id = #{relationId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_subsidy_user
+    where relation_id = #{relationId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.SubsidyUser" >
+    insert into czb_subsidy_user (relation_id, mission_id, user_id, 
+      amount)
+    values (#{relationId,jdbcType=VARCHAR}, #{missionId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.SubsidyUser" >
+    insert into czb_subsidy_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="relationId != null" >
+        relation_id,
+      </if>
+      <if test="missionId != null" >
+        mission_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="relationId != null" >
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="missionId != null" >
+        #{missionId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.SubsidyUser" >
+    update czb_subsidy_user
+    <set >
+      <if test="missionId != null" >
+        mission_id = #{missionId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where relation_id = #{relationId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.SubsidyUser" >
+    update czb_subsidy_user
+    set mission_id = #{missionId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DOUBLE}
+    where relation_id = #{relationId,jdbcType=VARCHAR}
+  </update>
+</mapper>
