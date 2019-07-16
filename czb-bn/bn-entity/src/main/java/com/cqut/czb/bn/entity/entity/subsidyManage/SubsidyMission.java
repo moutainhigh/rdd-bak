@@ -25,6 +25,12 @@ public class SubsidyMission {
     // 补贴对象
     private Integer subsidyType;
 
+    public SubsidyMission(String missionId, Double subsidyRate, String subsidyMonth) {
+        this.missionId = missionId;
+        this.subsidyRate = subsidyRate;
+        this.subsidyMonth = subsidyMonth;
+    }
+
     public String getMissionId() {
         return missionId;
     }

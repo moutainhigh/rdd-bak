@@ -42,7 +42,7 @@
                         '%Y-%m'
                     ) targetMonth,
                     log.target_year_month targetTime,
-                    mission.subsidy_percent rate,
+                    mission.subs rate,
                     date_format(
                     log.create_at,
                     '%Y-%m-%d'
@@ -108,4 +108,116 @@
         </where>
     </select>
 
+    <insert id="inserLog">
+            insert into czb_income_log
+            (
+            record_id,
+            amount,
+            type,
+            info_id,
+            before_change_income,
+            remark,
+            souse_id,
+            target_year_month,
+            create_at,
+            update_at
+            )
+            values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.recordId},
+            #{item.amount},
+            #{item.type},
+            #{item.infoId},
+            #{item.beforeMoney},
+            '补贴',
+            #{item.sourceId},
+            #{item.targetMonth},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+            )
+        </foreach>
+    </insert>
+
+    <!--根据补贴金额，更新用户收益-->
+    <update id="changeIncome">
+        <foreach collection="list" item="item" separator=";">
+            UPDATE czb_user_income_info
+            <set>
+                other_income = other_income + #{item.amount}
+            </set>
+            <where>
+                info_id = #{item.infoId}
+            </where>
+        </foreach>
+    </update>
+
+    <!--更新补贴任务状态-->
+    <update id="updateState" parameterType="java.lang.String">
+        update czb_subsidy_mission
+        set state = 1
+        where
+        mission_id = #{missionId}
+    </update>
+
+    <!--根据补贴任务表筛选出收益变更记录表的数据-->
+    <select id="getSubsidyMissionSomeInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyIncomeLog">
+        SELECT
+            info.info_id infoId,
+            (
+                info.fanyong_income + info.share_income + info.got_total_rent + info.other_income
+            ) beforeMoney,
+            date_format(mission.target_year_month,'%Y-%m-%d') targetMonth,
+            subUser.mission_id sourceId,
+            subUser.amount
+        FROM
+            czb_user_income_info info
+        LEFT JOIN czb_subsidy_user subUser ON subUser.user_id = info.user_id
+        LEFT JOIN czb_subsidy_mission mission ON mission.mission_id = #{missionId}
+        WHERE
+            subUser.mission_id = #{missionId}
+            and
+            mission.state = 0
+    </select>
+
+    <insert id="insertSubsidyMission" parameterType="com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMission">
+        insert INTO czb_subsidy_mission
+        (
+        mission_id,
+        target_year_month,
+        subsidy_percent,
+        state,
+        create_at,
+        update_at
+        )
+        VALUES
+        (
+        #{missionId},
+        #{subsidyMonth},
+        #{subsidyRate},
+        0,
+        CURRENT_TIMESTAMP ,
+        CURRENT_TIMESTAMP
+        )
+    </insert>
+
+
+    <insert id="insertMissionUserRelation" parameterType="java.util.List">
+        INSERT INTO czb_subsidy_user
+        (
+        relation_id,
+        mission_id,
+        user_id,
+        amount
+        )
+        values
+        <foreach collection="list" item="item" separator="," index="index">
+            (
+            #{item.relationId},
+            #{item.missionId},
+            #{item.userId},
+            #{item.amount}
+            )
+        </foreach>
+    </insert>
 </mapper>
