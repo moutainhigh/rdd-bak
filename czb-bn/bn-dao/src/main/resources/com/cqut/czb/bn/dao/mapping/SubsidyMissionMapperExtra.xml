@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.SubsidyMissionMapperExtra" >
+  <select id="getPartnerSubordinates" resultType="com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesQueryDTO">
+    <if test="createSubsidiesQueryDTO.subsidyRent != null and createSubsidiesQueryDTO.subsidyMonth != null">
+      SELECT
+      sum( czb_income_log.amount ) monthlyEarnings,
+      sum( czb_income_log.amount ) * ${createSubsidiesQueryDTO.subsidyRent}  subsidies,
+      incomeInfo.minConsumersNumber,
+      incomeInfo.minConsumptionAmount,
+      incomeInfo.minConsumptionTimes,
+      incomeInfo.userAccount,
+      incomeInfo.userId,
+      incomeInfo.partner
+      FROM
+      czb_income_log
+      RIGHT JOIN (
+      SELECT
+      *
+      FROM
+      czb_user_income_info
+      RIGHT JOIN (
+    </if>
+    SELECT
+    count( czb_user.superior_user ) minConsumersNumber,
+    consumption.minConsumptionAmount,
+    consumption.minConsumptionTimes,
+    consumption.userAccount,
+    consumption.userId,
+    consumption.partner
+    FROM
+    czb_user
+    RIGHT JOIN (
+    SELECT
+    count( czb_consumption_record.money ) minConsumptionAmount,
+    user1.user_id userId,
+    count( czb_consumption_record.user_id ) minConsumptionTimes,
+    user_account userAccount,
+    user1.partner
+    FROM
+    czb_consumption_record
+    RIGHT JOIN (
+    SELECT
+    czb_user.user_id,
+    user_account,
+    czb_user.first_level_partner,
+    czb_user.second_level_partner partnerId,
+    czb_user.partner
+    FROM
+    czb_user
+    JOIN ( SELECT user_id partnerId FROM czb_user
+    <if test="createSubsidiesQueryDTO.userAccount != null and createSubsidiesQueryDTO.userAccount != ''">
+      WHERE
+      user_account = #{createSubsidiesQueryDTO.userAccount,jdbcType = VARCHAR}
+    </if>
+    ) AS partnerIds
+    WHERE
+    ( user_id = partnerId
+    <if test=" createSubsidiesQueryDTO.partner == null">
+      OR first_level_partner = partnerId
+      OR second_level_partner = partnerId
+      )
+    </if>
+    <if test=" 1 == createSubsidiesQueryDTO.partner">
+      OR second_level_partner = partnerId )
+      AND
+      (czb_user.partner = 1 OR czb_user.partner = 0)
+    </if>
+    <if test=" 2 == createSubsidiesQueryDTO.partner">
+      OR first_level_partner = partnerId )
+      AND
+      (czb_user.partner = 2 OR czb_user.partner = 0)
+    </if>
+    <if test=" 0 == createSubsidiesQueryDTO.partner ">
+      )
+    </if>
+    ) AS user1 ON czb_consumption_record.user_id = user1.user_id
+    <if test="createSubsidiesQueryDTO.startTime != null and createSubsidiesQueryDTO.endTime != null">
+    WHERE
+    ( czb_consumption_record.create_at &gt;= #{createSubsidiesQueryDTO.startTime, jdbcType = TIMESTAMP} OR czb_consumption_record.create_at IS NULL )
+    AND ( czb_consumption_record.create_at &lt;= #{createSubsidiesQueryDTO.endTime, jdbcType = TIMESTAMP} OR czb_consumption_record.create_at IS NULL )
+    </if>
+    GROUP BY
+    user1.user_id
+    HAVING
+    1 = 1
+    <if test =" createSubsidiesQueryDTO.minConsumptionAmount != null ">
+      AND minConsumptionAmount &gt;= #{createSubsidiesQueryDTO.minConsumptionAmount, jdbcType = DOUBLE}
+    </if>
+    <if test = " createSubsidiesQueryDTO.minConsumptionTimes != null ">
+      AND minConsumptionTimes &gt;= #{createSubsidiesQueryDTO.minConsumptionTimes, jdbcType = INTEGER}
+    </if>
+
+    ) AS consumption ON consumption.userId = czb_user.superior_user
+    <if test="createSubsidiesQueryDTO.startTime != null and createSubsidiesQueryDTO.endTime != null">
+      WHERE
+      ( czb_user.create_at &gt;= #{createSubsidiesQueryDTO.startTime,jdbcType = TIMESTAMP} OR czb_user.create_at IS NULL )
+      AND ( czb_user.create_at &lt;= #{createSubsidiesQueryDTO.endTime, jdbcType = TIMESTAMP} OR czb_user.create_at IS NULL )
+    </if>
+    GROUP BY
+    consumption.userId
+    <if test=" createSubsidiesQueryDTO.minConsumersNumber != null">
+      HAVING
+      count( czb_user.superior_user ) >= #{createSubsidiesQueryDTO.minConsumersNumber, jdbcType = INTEGER}
+    </if>
+
+    <if test="createSubsidiesQueryDTO.subsidyRent != null and createSubsidiesQueryDTO.subsidyMonth != null">
+    ) AS superior ON superior.userId = czb_user_income_info.user_id
+    ) AS incomeInfo ON czb_income_log.info_id = incomeInfo.info_id
+    WHERE
+    czb_income_log.type NOT IN ( 1, 2 )
+    <if test="createSubsidiesQueryDTO.subsidyMonth != null">
+    AND
+      DATE_FORMAT( czb_income_log.create_at, '%Y%m' ) = DATE_FORMAT( #{createSubsidiesQueryDTO.subsidyMonth, jdbcType = TIMESTAMP} , '%Y%m' )
+    </if>
+    GROUP BY
+    incomeInfo.info_id
+    </if>
+  </select>
+</mapper>
