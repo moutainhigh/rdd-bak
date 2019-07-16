@@ -12,6 +12,8 @@ public class MsgRecordDTO {
 
     private Integer msgState;
 
+    private Integer msgType;
+
     private Integer alert;
 
     private String msgTitle;
@@ -21,6 +23,14 @@ public class MsgRecordDTO {
     private Date createAt;
 
     private String createTime;
+
+    public Integer getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(Integer msgType) {
+        this.msgType = msgType;
+    }
 
     public String getMsgRecordId() {
         return msgRecordId;
