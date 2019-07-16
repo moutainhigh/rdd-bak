@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.MsgRecordMapperExtra;
 import com.cqut.czb.bn.entity.dto.appMessageManage.ModifyInfoDTO;
+import com.cqut.czb.bn.entity.dto.appMessageManage.MsgNumDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.AppMessageManageService;
@@ -17,18 +18,15 @@ public class AppMessageManageServiceImpl implements AppMessageManageService {
 
     @Override
     public List<MsgRecordDTO> getMessages(User user) {
-        if(user==null){
+        if(user==null) {
             return null;
         }
-        List<MsgRecordDTO> msgRecordDTOS=msgRecordMapperExtra.selectMsgRecords(user.getUserId());
-        if(msgRecordDTOS==null)
-        {
-            return  null;
-        }
-        for(int i=0;i<msgRecordDTOS.size();i++){
-            msgRecordDTOS.get(i).setCreateTime(DateFormat.getDateInstance().format(msgRecordDTOS.get(i).getCreateAt()));
-        }
-        return msgRecordDTOS;
+        return  msgRecordMapperExtra.selectMsgRecords(user.getUserId());
+    }
+
+    @Override
+    public int getMsgNum(User user) {
+        return msgRecordMapperExtra.selectMsgNum(user.getUserId());
     }
 
     @Override
@@ -37,10 +35,6 @@ public class AppMessageManageServiceImpl implements AppMessageManageService {
             return null;
         }
         MsgRecordDTO msgRecordDTO=msgRecordMapperExtra.getOnePopMessages(user.getUserId());
-        if (msgRecordDTO==null){
-            return null;
-        }
-        msgRecordDTO.setCreateTime(DateFormat.getDateInstance().format(msgRecordDTO.getCreateAt()));
         return msgRecordDTO;
     }
 

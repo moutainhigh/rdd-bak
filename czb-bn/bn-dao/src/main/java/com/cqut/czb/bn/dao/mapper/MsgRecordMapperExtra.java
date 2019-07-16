@@ -13,4 +13,6 @@ public interface MsgRecordMapperExtra {
     MsgRecordDTO getOnePopMessages(@Param("msgReceiverId") String msgReceiverId);
 
     int modifyMessage(ModifyInfoDTO modifyInfoDTO);
+
+    int selectMsgNum(@Param("msgReceiverId") String msgReceiverId);
 }

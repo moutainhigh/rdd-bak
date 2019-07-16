@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.appMessageManage.ModifyInfoDTO;
+import com.cqut.czb.bn.entity.dto.appMessageManage.MsgNumDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO;
 import com.cqut.czb.bn.entity.entity.User;
 
@@ -14,6 +15,12 @@ public interface AppMessageManageService {
     List<MsgRecordDTO> getMessages(User user);
 
     /**
+     * app get all the message number
+     */
+    int getMsgNum(User user);
+
+    /**
+     *
      * app get the one of the most recently and not be read Message(首页弹窗，获取最近一条未读信息)
      */
     MsgRecordDTO getOnePopMessages(User user);
@@ -22,4 +29,6 @@ public interface AppMessageManageService {
      * modify the message
      */
     boolean modifyMessage(User user, ModifyInfoDTO modifyInfoDTO);
+
+
 }
