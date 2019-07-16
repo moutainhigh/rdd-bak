@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 
 public class CreateSubsidiesOutputDTO {
 
+
+
     private PageInfo<CreateSubsidiesQueryDTO> createSubsidiesQueryDTOList;
 
     private Double totalSubsidies;

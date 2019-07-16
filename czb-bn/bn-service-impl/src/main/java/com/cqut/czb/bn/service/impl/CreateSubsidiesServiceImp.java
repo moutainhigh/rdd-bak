@@ -20,6 +20,7 @@ public class CreateSubsidiesServiceImp implements CreateSubsidiesService {
     @Autowired
     SubsidyMissionMapperExtra subsidyMissionMapperExtra;
 
+
     @Override
     public CreateSubsidiesOutputDTO getPartnerSubordinates(CreateSubsidiesQueryDTO createSubsidiesQueryDTO) {
         CreateSubsidiesOutputDTO createSubsidiesOutputDTO = new CreateSubsidiesOutputDTO();

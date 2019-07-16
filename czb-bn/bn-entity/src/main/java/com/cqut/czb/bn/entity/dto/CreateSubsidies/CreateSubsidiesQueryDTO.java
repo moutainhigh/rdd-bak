@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class CreateSubsidiesQueryDTO extends PageDTO {
     /**
+     *
      * 用户ID
      */
     private String userId;
