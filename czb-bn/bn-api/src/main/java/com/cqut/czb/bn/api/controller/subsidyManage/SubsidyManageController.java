@@ -4,14 +4,15 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO;
 import com.cqut.czb.bn.entity.entity.subsidyManage.Subsidy;
 import com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMission;
+import com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMissionUser;
+import com.cqut.czb.bn.entity.entity.subsidyManage.UserIds;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.subsidyManage.SubsidyManageService;
 import com.github.pagehelper.PageInfo;
+import net.sf.json.JSONObject;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,10 +42,52 @@ public class SubsidyManageController {
     }
 
 
+    /**
+     * 补贴管理表格数据获取
+     * @param searchDTO
+     * @param pageDTO
+     * @return
+     */
     @GetMapping("/getSubsidyMissionData")
     public JSONResult getSubsidyMissionData(SubsidySearchDTO searchDTO, PageDTO pageDTO){
         PageInfo<SubsidyMission> subsidyMissionList = subsidyManageService.getSubsidyMissionData(searchDTO, pageDTO);
 
         return new JSONResult(subsidyMissionList);
     }
+
+    /**
+     * 删除补贴任务
+     * @param
+     * @return
+     */
+    @PostMapping("/deleteSubsidyMission")
+    public JSONResult deleteSubsidyMission(@RequestBody SubsidyMissionUser input) {
+        boolean success = subsidyManageService.deleteSubsidyMission(input.getMissionId());
+        if (success) {
+            return new JSONResult("删除成功",200);
+        } else {
+            return new JSONResult("删除失败", 500);
+        }
+    }
+
+    /**
+     * 发放补贴
+     * @param input
+     * @return
+     */
+    @PostMapping("/sendSubsidy")
+    public JSONResult sendSubsidy(@RequestBody SubsidyMissionUser input) {
+        return subsidyManageService.sendSubsidy(input.getMissionId());
+    }
+
+    /**
+     * 创建补贴任务
+     * @param input
+     * @return
+     */
+    @PostMapping("/createSubsidyMission")
+    public JSONResult createSubsidyMission(@RequestBody  UserIds input) {
+        return subsidyManageService.createSubsidyMission(input);
+    }
+
 }
