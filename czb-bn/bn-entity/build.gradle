@@ -19,7 +19,7 @@ dependencies {
     //compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.12.RELEASE'
     compile group: 'com.auth0', name: 'java-jwt', version: '3.3.0'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '1.5.12.RELEASE'
-
+    compile group: 'com.github.pagehelper', name: 'pagehelper-spring-boot-starter', version: '1.2.3'
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.5'
     compile project(':czb-bn:bn-util')

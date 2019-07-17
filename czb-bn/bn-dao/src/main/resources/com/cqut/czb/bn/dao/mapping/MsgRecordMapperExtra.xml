@@ -18,6 +18,24 @@
 		  ORDER BY msg_state ASC,msg_type ASC,czb_msg_model.create_at DESC
   </select>
 
+    <select id="selectMsgNum" resultType="java.lang.Integer" parameterType="java.lang.String" >
+      select
+            COUNT(czb_msg_record.msg_state) AS msgState
+      from
+              czb_msg_record,czb_msg_model
+      WHERE
+              czb_msg_record.msg_model_id=czb_msg_model.msg_model_id
+              AND
+              msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR}
+              AND
+              czb_msg_record.msg_state=0
+              AND
+              czb_msg_model.msg_type=1
+              and
+              czb_msg_record.create_at>UNIX_TIMESTAMP()
+              ORDER BY msg_state ASC,msg_type ASC,czb_msg_model.create_at DESC
+      </select>
+
     <select id="getOnePopMessages" resultType="com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO" parameterType="java.lang.String" >
        select
               msg_announcer_id as msgAnnouncerId, msg_receiver_id as msgReceiverId,msg_record_id as msgRecordId,
@@ -45,7 +63,7 @@
         msg_state=1
         where
         msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR} and
-        msg_announcer_id=#{msgReceiverId,jdbcType=VARCHAR}
+        msg_record_id=#{msgRecordId,jdbcType=VARCHAR}
     </update>
 
 </mapper>

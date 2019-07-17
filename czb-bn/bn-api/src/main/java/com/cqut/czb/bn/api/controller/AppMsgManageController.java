@@ -29,7 +29,18 @@ public class AppMsgManageController {
     AppMessageManageService appMessageManageService;
 
     /**
-     * app get all the Messages of the person(获取个人所有的未读信息)
+     * app get Message number(获取未读数量)
+     */
+    @RequestMapping(value = "/getMsgNum", method = RequestMethod.GET)
+    public JSONResult getMsgNum(Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+//        User user=new User();
+//        user.setUserId("156225046615657");
+        return new JSONResult(appMessageManageService.getMsgNum(user));
+    }
+
+    /**
+     * app get all the Messages of the person(获取个人近期的所有信息)
      */
     @RequestMapping(value = "/getMessages", method = RequestMethod.GET)
     public JSONResult getMessages(Principal principal) {
@@ -61,7 +72,7 @@ public class AppMsgManageController {
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();
 //        user.setUserId("156225046615657");
-//        modifyInfoDTO.setMsgRecordId("1");
+//        modifyInfoDTO.setMsgRecordId("9");
         return new JSONResult(appMessageManageService.modifyMessage(user,modifyInfoDTO));
     }
 
