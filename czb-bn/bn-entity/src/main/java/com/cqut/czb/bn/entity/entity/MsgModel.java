@@ -23,6 +23,8 @@ public class MsgModel {
 
     private Integer receiverType;
 
+    private Integer isSend;
+
     public String getMsgModelId() {
         return msgModelId;
     }
@@ -101,5 +103,13 @@ public class MsgModel {
 
     public void setReceiverType(Integer receiverType) {
         this.receiverType = receiverType;
+    }
+
+    public Integer getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(Integer isSend) {
+        this.isSend = isSend;
     }
 }
