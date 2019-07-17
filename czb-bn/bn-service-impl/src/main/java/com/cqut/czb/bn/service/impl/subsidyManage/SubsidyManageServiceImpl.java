@@ -2,6 +2,9 @@ package com.cqut.czb.bn.service.impl.subsidyManage;
 
 import com.cqut.czb.bn.dao.mapper.SubsidyManageMapperExtra;
 import com.cqut.czb.bn.dao.mapper.SubsidyMissionMapper;
+import com.cqut.czb.bn.dao.mapper.SubsidyMissionMapperExtra;
+import com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesOutputDTO;
+import com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesQueryDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO;
 import com.cqut.czb.bn.entity.entity.subsidyManage.*;
@@ -32,6 +35,10 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
 
     @Autowired
     private SubsidyMissionMapper subsidyMissionMapper;
+
+    @Autowired
+    private SubsidyMissionMapperExtra subsidyMissionMapperExtra;
+
 
     @Override
     public PageInfo<Subsidy> getSubsidyData(SubsidySearchDTO searchDTO, PageDTO pageDTO) {
@@ -73,7 +80,7 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
     }
 
     @Override
-    public JSONResult createSubsidyMission(UserIds input) {
+    public JSONResult createSubsidyMission(CreateSubsidiesQueryDTO createDto, UserIds input) {
 
         // 生成补贴任务
         String missionId = StringUtil.createId();
@@ -81,24 +88,46 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
         int insertSubsidyMission = subsidyManageMapper.insertSubsidyMission(subsidyMission);
         System.out.println("1234123412341234123412341234123" +missionId);
 
-        // 删除前端页面勾选出的用户
-
-        // 生成补贴、用户关系数据
-        // TODO 测试数据
-        List<SubsidyMissionUser> missions = new ArrayList<>();
-        SubsidyMissionUser a = new SubsidyMissionUser();
-        a.setRelationId(StringUtil.createId());
-        a.setMissionId(missionId);
-        a.setUserId("155896401758586");
-        a.setAmount((double) 50);
-        SubsidyMissionUser b = new SubsidyMissionUser();
-        b.setRelationId(StringUtil.createId());
-        b.setMissionId(missionId);
-        b.setUserId("155894225604277");
-        b.setAmount((double) 50);
-
-        missions.add(a);
-        missions.add(b);
+        // 删除前端页面勾选出的用户(若有) 并生成补贴、用户关系数据
+        // createSubsidiesQueryDTOs为根据前端查询的条件，进行所有用户的查询，然后删除前端取消的userId后进行插入补贴关系数据list
+        List<CreateSubsidiesQueryDTO> createSubsidiesQueryDTOs = subsidyMissionMapperExtra.getPartnerSubordinates(createDto);
+        List<SubsidyMissionUser> missions = new ArrayList<>(); // 补贴关系数据list
+        if(input.getUserIdS() != null){
+            System.out.println("初始长度" + createSubsidiesQueryDTOs.size());
+            String[] ids= input.getUserIdS().split(",");
+            System.out.println("要删长度" + ids.length);
+            int times = 0; // 若ids删完了，则不进行删除id的for循环，提高性能
+            for (int i = 0; i<createSubsidiesQueryDTOs.size(); i++) {
+                if(times != ids.length) {
+                    for (String id:ids) {
+                        if(createSubsidiesQueryDTOs.get(i).getUserId().equals(id)){
+                            createSubsidiesQueryDTOs.remove(i);
+                            i--;
+                            times++;
+                            break;
+                        }
+                    }
+                } else {
+                    CreateSubsidiesQueryDTO dto = createSubsidiesQueryDTOs.get(i);
+                    SubsidyMissionUser mission = new SubsidyMissionUser();
+                    mission.setRelationId(StringUtil.createId());
+                    mission.setMissionId(missionId);
+                    mission.setUserId(dto.getUserId());
+                    mission.setAmount(dto.getSubsidies());
+                    missions.add(mission);
+                }
+            }
+            System.out.println("删后长度" + createSubsidiesQueryDTOs.size());
+        } else {
+            for (CreateSubsidiesQueryDTO data:createSubsidiesQueryDTOs) {
+                SubsidyMissionUser mission = new SubsidyMissionUser();
+                mission.setRelationId(StringUtil.createId());
+                mission.setMissionId(missionId);
+                mission.setUserId(data.getUserId());
+                mission.setAmount(data.getSubsidies());
+                missions.add(mission);
+            }
+        }
 
         boolean insertSuccess = (missions.size() == subsidyManageMapper.insertMissionUserRelation(missions)) ;
 
