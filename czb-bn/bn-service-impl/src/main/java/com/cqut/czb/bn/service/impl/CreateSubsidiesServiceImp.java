@@ -32,6 +32,8 @@ public class CreateSubsidiesServiceImp implements CreateSubsidiesService {
                 totalSubsidies += partnerSubordinate.getSubsidies();
             }
         }
+        //总补贴金额保留两位小数
+        totalSubsidies = (double) Math.round(totalSubsidies * 100) / 100;
         createSubsidiesOutputDTO.setTotalSubsidies(totalSubsidies);
         return createSubsidiesOutputDTO;
     }
