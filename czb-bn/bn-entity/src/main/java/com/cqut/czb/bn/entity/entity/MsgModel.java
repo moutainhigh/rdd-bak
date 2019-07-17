@@ -17,9 +17,11 @@ public class MsgModel {
 
     private Integer msgType;
 
-    private Date endtime;
+    private Date endTime;
 
     private Integer altert;
+
+    private Integer receiverType;
 
     public String getMsgModelId() {
         return msgModelId;
@@ -77,12 +79,12 @@ public class MsgModel {
         this.msgType = msgType;
     }
 
-    public Date getEndtime() {
-        return endtime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getAltert() {
@@ -91,5 +93,13 @@ public class MsgModel {
 
     public void setAltert(Integer altert) {
         this.altert = altert;
+    }
+
+    public Integer getReceiverType() {
+        return receiverType;
+    }
+
+    public void setReceiverType(Integer receiverType) {
+        this.receiverType = receiverType;
     }
 }
