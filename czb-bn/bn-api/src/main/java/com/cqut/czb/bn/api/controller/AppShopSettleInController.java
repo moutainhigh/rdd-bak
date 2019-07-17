@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.AppShopSettleInService;
@@ -37,8 +38,8 @@ public class AppShopSettleInController {
      * app's Get display items for each navigation item（获取单个导航栏信息）
      */
     @RequestMapping(value = "/selectGoods", method = RequestMethod.GET)
-    public JSONResult selectGoods(@Param("classification") String classification) {
-        return new JSONResult(appShopSettleInService.selectCommodity(classification));
+    public JSONResult selectGoods(PageDTO pageDTO, @Param("classification") String classification) {
+        return new JSONResult(appShopSettleInService.selectCommodity(pageDTO,classification));
     }
 
     /**
