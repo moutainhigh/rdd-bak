@@ -12,10 +12,11 @@
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="altert" property="altert" jdbcType="INTEGER" />
     <result column="receiver_type" property="receiverType" jdbcType="INTEGER" />
+    <result column="is_send" property="isSend" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     msg_model_id, announcer_id, msg_title, msg_content, create_at, update_at, msg_type, 
-    end_time, altert, receiver_type
+    end_time, altert, receiver_type, is_send
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -31,11 +32,11 @@
     insert into czb_msg_model (msg_model_id, announcer_id, msg_title, 
       msg_content, create_at, update_at, 
       msg_type, end_time, altert, 
-      receiver_type)
+      receiver_type, is_send)
     values (#{msgModelId,jdbcType=VARCHAR}, #{announcerId,jdbcType=VARCHAR}, #{msgTitle,jdbcType=VARCHAR}, 
       #{msgContent,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
       #{msgType,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, #{altert,jdbcType=INTEGER}, 
-      #{receiverType,jdbcType=INTEGER})
+      #{receiverType,jdbcType=INTEGER}, #{isSend,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.MsgModel" >
     insert into czb_msg_model
@@ -70,6 +71,9 @@
       <if test="receiverType != null" >
         receiver_type,
       </if>
+      <if test="isSend != null" >
+        is_send,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="msgModelId != null" >
@@ -101,6 +105,9 @@
       </if>
       <if test="receiverType != null" >
         #{receiverType,jdbcType=INTEGER},
+      </if>
+      <if test="isSend != null" >
+        #{isSend,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -134,6 +141,9 @@
       <if test="receiverType != null" >
         receiver_type = #{receiverType,jdbcType=INTEGER},
       </if>
+      <if test="isSend != null" >
+        is_send = #{isSend,jdbcType=INTEGER},
+      </if>
     </set>
     where msg_model_id = #{msgModelId,jdbcType=VARCHAR}
   </update>
@@ -147,7 +157,8 @@
       msg_type = #{msgType,jdbcType=INTEGER},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       altert = #{altert,jdbcType=INTEGER},
-      receiver_type = #{receiverType,jdbcType=INTEGER}
+      receiver_type = #{receiverType,jdbcType=INTEGER},
+      is_send = #{isSend,jdbcType=INTEGER}
     where msg_model_id = #{msgModelId,jdbcType=VARCHAR}
   </update>
 </mapper>
