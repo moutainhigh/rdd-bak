@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.subsidyManage;
 
+import com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesQueryDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO;
 import com.cqut.czb.bn.entity.entity.subsidyManage.Subsidy;
@@ -33,5 +34,5 @@ public interface SubsidyManageService {
     JSONResult sendSubsidy(String missionId);
 
     // 创建补贴任务
-    JSONResult createSubsidyMission(UserIds input);
+    JSONResult createSubsidyMission(CreateSubsidiesQueryDTO createDto, UserIds input);
 }
