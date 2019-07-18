@@ -3,7 +3,9 @@ package com.cqut.czb.bn.service.impl;
 import com.cqut.czb.bn.dao.mapper.MsgModelMapper;
 import com.cqut.czb.bn.dao.mapper.MsgModelMapperExtra;
 import com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO;
+import com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO;
 import com.cqut.czb.bn.entity.entity.MsgModel;
+import com.cqut.czb.bn.entity.entity.MsgRecord;
 import com.cqut.czb.bn.service.MessageManagementService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * @Description
@@ -26,6 +29,8 @@ public class MessageManagementServiceImpl implements MessageManagementService {
 
     @Autowired
     MsgModelMapper msgModelMapper;
+
+    private static Random random = new Random();
 
     @Override
     public PageInfo getMessageList(MessageListDTO messageListDTO) {
@@ -52,7 +57,34 @@ public class MessageManagementServiceImpl implements MessageManagementService {
 
     @Override
     public Boolean sendMessage(String msgModelId) {
-        MsgModel msgModel = msgModelMapper.selectByPrimaryKey(msgModelId);
-        return null;
+        try{
+            //创建多个ID，使用纳秒级的时间戳
+            List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId);
+            for(MsgRecord msgRecord: msgRecordList){
+                msgRecord.setMsgRecordId(createId());
+            }
+            MsgModel msgModel = msgModelMapper.selectByPrimaryKey(msgModelId);
+            return null;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public static String createMillisTimestamp() {
+        return String.valueOf(System.nanoTime());
+    }
+
+    public static String createId() {
+        return createMillisTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
+    }
+
+    public static void main(String[] args){
+        long[] a = new long[1000];
+        for(int i = 0; i < 1000; i++){
+            a[i] = System.nanoTime();
+        }
+        for(int i = 0; i < 1000; i++){
+            System.out.println(a[i]);
+        }
     }
 }
