@@ -47,7 +47,7 @@ public class AppShopSettleInController {
     }
 
     @GetMapping("/getCommodityOrder")
-    public JSONResult getCommodityOrder(Integer state, Principal principal){
+    public JSONResult getCommodityOrder(@Param("state") Integer state, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appShopSettleInService.getCommodityOrderList(user.getUserId(),state));
     }
