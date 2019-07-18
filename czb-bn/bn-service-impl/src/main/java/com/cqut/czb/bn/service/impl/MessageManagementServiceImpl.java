@@ -56,15 +56,14 @@ public class MessageManagementServiceImpl implements MessageManagementService {
     }
 
     @Override
-    public Boolean sendMessage(String msgModelId) {
+    public Boolean sendMessage(String msgModelId, Integer receiverType) {
         try{
             //创建多个ID，使用纳秒级的时间戳
-            List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId);
+            List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId,receiverType);
             for(MsgRecord msgRecord: msgRecordList){
                 msgRecord.setMsgRecordId(createId());
             }
-            MsgModel msgModel = msgModelMapper.selectByPrimaryKey(msgModelId);
-            return null;
+            return msgModelMapperExtra.insertMessages(msgRecordList) > 0;
         }catch (Exception e){
             return false;
         }
@@ -76,15 +75,5 @@ public class MessageManagementServiceImpl implements MessageManagementService {
 
     public static String createId() {
         return createMillisTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
-    }
-
-    public static void main(String[] args){
-        long[] a = new long[1000];
-        for(int i = 0; i < 1000; i++){
-            a[i] = System.nanoTime();
-        }
-        for(int i = 0; i < 1000; i++){
-            System.out.println(a[i]);
-        }
     }
 }

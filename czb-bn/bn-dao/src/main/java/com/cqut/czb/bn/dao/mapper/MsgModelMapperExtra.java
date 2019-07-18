@@ -14,5 +14,7 @@ import java.util.List;
 public interface MsgModelMapperExtra {
     public List<MessageListDTO> getMessageModelList(@Param("messageListDTO") MessageListDTO messageListDTO);
 
-    public List<MsgRecord> getMessageRecordList(String msgModelId);
+    public List<MsgRecord> getMessageRecordList(@Param("msgModelId") String msgModelId,@Param("receiverType") Integer receiverType);
+
+    public int insertMessages(List<MsgRecord> msgRecords);
 }

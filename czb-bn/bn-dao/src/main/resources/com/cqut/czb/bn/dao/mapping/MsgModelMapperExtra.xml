@@ -1,48 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.MsgModelMapperExtra" >
-  <select id="getMessageModelList" resultType="com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO">
-    SELECT
-    msg_model_id messageModelId,
-    msg_title messageTitle,
-    msg_content messageContent,
-    czb_msg_model.create_at messageSendTime,
-    czb_msg_model.altert 'alter',
-    czb_msg_model.receiver_type receiverType,
-    is_send isSend
-    FROM
-    czb_msg_model
-    WHERE
-    1 = 1
-    <if test=" messageListDTO.messageTitle != null">
-      AND msg_title LIKE concat('%',#{messageListDTO.messageTitle,jdbcType = VARCHAR},'%')
-    </if>
-    <if test="messageListDTO.messageStartTime != null">
-      AND czb_msg_model.create_at &gt;= #{messageListDTO.messageStartTime, jdbcType = TIMESTAMP}
-    </if>
-    <if test="messageListDTO.messageEndTime != null">
-      AND czb_msg_model.create_at &lt;= #{messageListDTO.messageEndTime, jdbcType = TIMESTAMP}
-    </if>
-    <if test="messageListDTO.receiverType != null">
-      AND receiver_type = #{messageListDTO.receicerType, jdbcType = INTEGER}
-    </if>
-    <if test="messageListDTO.isSend != null">
-        AND is_send = #{messageListDTO.isSend, jdbcType = INTEGER}
-    </if>
-  </select>
-  <select id="getMessageRecordList" parameterType="com." resultType="com.cqut.czb.bn.entity.entity.MsgRecord">
-	SELECT
-	msgModel.msgAnnouncerId,
-	msgModel.msgRecordId,
-	0 msgState,
-	0 'alert',
-	receiver_type receiverType,
-	NOW( ) createAt,
-	NOW( ) updateAt
-    FROM
-	czb_user
-	JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId, czb_msg_model.receiver_type FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} ) AS msgModel
-    WHERE
-	user_type = msgModel.receiver_type
-  </select>
+      <select id="getMessageModelList" resultType="com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO">
+        SELECT
+        msg_model_id messageModelId,
+        msg_title messageTitle,
+        msg_content messageContent,
+        czb_msg_model.create_at messageSendTime,
+        czb_msg_model.altert 'alter',
+        czb_msg_model.receiver_type receiverType,
+        is_send isSend
+        FROM
+        czb_msg_model
+        WHERE
+        1 = 1
+        <if test=" messageListDTO.messageTitle != null">
+          AND msg_title LIKE concat('%',#{messageListDTO.messageTitle,jdbcType = VARCHAR},'%')
+        </if>
+        <if test="messageListDTO.messageStartTime != null">
+          AND czb_msg_model.create_at &gt;= #{messageListDTO.messageStartTime, jdbcType = TIMESTAMP}
+        </if>
+        <if test="messageListDTO.messageEndTime != null">
+          AND czb_msg_model.create_at &lt;= #{messageListDTO.messageEndTime, jdbcType = TIMESTAMP}
+        </if>
+        <if test="messageListDTO.receiverType != null">
+          AND receiver_type = #{messageListDTO.receicerType, jdbcType = INTEGER}
+        </if>
+        <if test="messageListDTO.isSend != null">
+            AND is_send = #{messageListDTO.isSend, jdbcType = INTEGER}
+        </if>
+      </select>
+      <select id="getMessageRecordList" resultType="com.cqut.czb.bn.entity.entity.MsgRecord">
+        SELECT
+        user_id msgReceiverId,
+        msgModel.msgAnnouncerId,
+        msgModel.msgRecordId,
+        0 msgState,
+        0 'alert',
+        NOW( ) createAt,
+        NOW( ) updateAt
+        FROM
+        czb_user
+        JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} ) AS msgModel
+        where
+        <if test="receiverType == 0">
+        1 = 1
+        </if>
+        <if test="receiverType == 1">
+        OR partner = 0
+        </if>
+        <if test="receiverType == 2">
+        OR partner = 1
+        OR partner = 2
+        </if>
+      </select>
+
+    <insert id="insertMessages" parameterType="java.util.List">
+        INSERT INTO `czb`.`czb_msg_record`
+        (
+        `msg_record_id`,
+        `msg_model_id`,
+        `msg_announcer_id`,
+        `msg_receiver_id`,
+        `msg_state`, `alert`,
+        `create_at`,
+        `update_at`
+        )
+        VALUES
+            <foreach collection="temps" item="temp" separator=",">
+                (
+                    #{temp.msgRecordId},
+                    #{temp.msgModelId},
+                    #{temp.msgAnnouncerId},
+                    #{temp.msgReceiverId},
+                    0,
+                    0,
+                    now(),
+                    NOW()
+                )
+            </foreach>
+    </insert>
 </mapper>

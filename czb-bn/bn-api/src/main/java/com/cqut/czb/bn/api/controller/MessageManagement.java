@@ -39,7 +39,7 @@ public class MessageManagement {
         return new JSONResult(messageManagementService.deleteMsgModelById(msgModelId));
     }
 
-    
+
     @PostMapping("/createMsgModel")
     public JSONResult createMsgModel(MsgModel msgModel, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
@@ -48,7 +48,7 @@ public class MessageManagement {
     }
 
     @PostMapping("/sendMessage")
-    public JSONResult sendMessage(String msgModelId){
-        return new JSONResult(messageManagementService.sendMessage(msgModelId));
+    public JSONResult sendMessage(String msgModelId,Integer receiverType){
+        return new JSONResult(messageManagementService.sendMessage(msgModelId, receiverType));
     }
 }

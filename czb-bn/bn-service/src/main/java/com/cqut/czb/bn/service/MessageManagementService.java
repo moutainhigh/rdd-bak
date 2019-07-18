@@ -18,5 +18,5 @@ public interface MessageManagementService {
 
     Boolean createMsgModel(MsgModel msgModel);
 
-    Boolean sendMessage(String msgModelId);
+    Boolean sendMessage(String msgModelId, Integer receiverType);
 }
