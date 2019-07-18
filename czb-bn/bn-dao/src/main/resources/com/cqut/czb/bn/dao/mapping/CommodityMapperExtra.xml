@@ -26,7 +26,7 @@
 	czb_order.id
 	ORDER BY czb_order.create_at DESC
   </select>
-    <select id="selectCommoditys" resultMap="BaseResultMap" parameterType="java.lang.String">
+
     <select id="selectCommoditys" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" parameterType="java.lang.String">
         select
         commodity_id as commodityId, shop_id as shopId, commodity_title as commodityTitle, commodity_info as commodityInfo,
@@ -44,16 +44,18 @@
     <select id="selectServiceDetails" resultType="com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO" parameterType="java.lang.String">
        select
         commodity_id as commodityId, commodity_title as commodityTitle, commodity_info as commodityInfo,
-        discount, commodity_img as commodityImg,
+        discount, save_path as commodityImg,
         commodity_price as commodityPrice, classification, usage_count as usageCount,
         shop_address as shopAddress,shop_content as shopContent,shop_name as shopName,
         shop_phone as shopPhone
         from
-        czb_commodity,czb_shop
+        czb_commodity,czb_shop,czb_file
         WHERE
         czb_commodity.shop_id=czb_shop.shop_id
         AND
         commodity_id=#{commodityId,jdbcType=VARCHAR}
+         and
+          commodity_img=file_id
   </select>
 
     <!--级联查询-->

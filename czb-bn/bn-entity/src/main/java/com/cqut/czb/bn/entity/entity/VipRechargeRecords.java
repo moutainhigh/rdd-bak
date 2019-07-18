@@ -7,7 +7,7 @@ public class VipRechargeRecords {
 
     private String userId;
 
-    private Double account;
+    private Double amount;
 
     private Integer rechargeWay;
 
@@ -19,7 +19,7 @@ public class VipRechargeRecords {
 
     private Date updateAt;
 
-    private String area;
+    private String vipAreaConfigId;
 
     private Date rechargeTime;
 
@@ -39,12 +39,12 @@ public class VipRechargeRecords {
         this.userId = userId == null ? null : userId.trim();
     }
 
-    public Double getAccount() {
-        return account;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setAccount(Double account) {
-        this.account = account;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public Integer getRechargeWay() {
@@ -87,12 +87,12 @@ public class VipRechargeRecords {
         this.updateAt = updateAt;
     }
 
-    public String getArea() {
-        return area;
+    public String getVipAreaConfigId() {
+        return vipAreaConfigId;
     }
 
-    public void setArea(String area) {
-        this.area = area == null ? null : area.trim();
+    public void setVipAreaConfigId(String vipAreaConfigId) {
+        this.vipAreaConfigId = vipAreaConfigId == null ? null : vipAreaConfigId.trim();
     }
 
     public Date getRechargeTime() {

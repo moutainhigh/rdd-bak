@@ -4,18 +4,18 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
     <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="account" property="account" jdbcType="DOUBLE" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
     <result column="recharge_way" property="rechargeWay" jdbcType="INTEGER" />
     <result column="is_received" property="isReceived" jdbcType="INTEGER" />
     <result column="third_trade_num" property="thirdTradeNum" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="vip_area_config_id" property="vipAreaConfigId" jdbcType="VARCHAR" />
     <result column="recharge_time" property="rechargeTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, user_id, account, recharge_way, is_received, third_trade_num, create_at, 
-    update_at, area, recharge_time
+    record_id, user_id, amount, recharge_way, is_received, third_trade_num, create_at, 
+    update_at, vip_area_config_id, recharge_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -28,13 +28,13 @@
     where record_id = #{recordId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
-    insert into czb_vip_recharge_records (record_id, user_id, account, 
+    insert into czb_vip_recharge_records (record_id, user_id, amount, 
       recharge_way, is_received, third_trade_num, 
-      create_at, update_at, area, 
+      create_at, update_at, vip_area_config_id, 
       recharge_time)
-    values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{account,jdbcType=DOUBLE}, 
+    values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, 
       #{rechargeWay,jdbcType=INTEGER}, #{isReceived,jdbcType=INTEGER}, #{thirdTradeNum,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{area,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{vipAreaConfigId,jdbcType=VARCHAR}, 
       #{rechargeTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
@@ -46,8 +46,8 @@
       <if test="userId != null" >
         user_id,
       </if>
-      <if test="account != null" >
-        account,
+      <if test="amount != null" >
+        amount,
       </if>
       <if test="rechargeWay != null" >
         recharge_way,
@@ -64,8 +64,8 @@
       <if test="updateAt != null" >
         update_at,
       </if>
-      <if test="area != null" >
-        area,
+      <if test="vipAreaConfigId != null" >
+        vip_area_config_id,
       </if>
       <if test="rechargeTime != null" >
         recharge_time,
@@ -78,8 +78,8 @@
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="account != null" >
-        #{account,jdbcType=DOUBLE},
+      <if test="amount != null" >
+        #{amount,jdbcType=DOUBLE},
       </if>
       <if test="rechargeWay != null" >
         #{rechargeWay,jdbcType=INTEGER},
@@ -96,8 +96,8 @@
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="area != null" >
-        #{area,jdbcType=VARCHAR},
+      <if test="vipAreaConfigId != null" >
+        #{vipAreaConfigId,jdbcType=VARCHAR},
       </if>
       <if test="rechargeTime != null" >
         #{rechargeTime,jdbcType=TIMESTAMP},
@@ -110,8 +110,8 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="account != null" >
-        account = #{account,jdbcType=DOUBLE},
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DOUBLE},
       </if>
       <if test="rechargeWay != null" >
         recharge_way = #{rechargeWay,jdbcType=INTEGER},
@@ -128,8 +128,8 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="area != null" >
-        area = #{area,jdbcType=VARCHAR},
+      <if test="vipAreaConfigId != null" >
+        vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR},
       </if>
       <if test="rechargeTime != null" >
         recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
@@ -140,13 +140,13 @@
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
     update czb_vip_recharge_records
     set user_id = #{userId,jdbcType=VARCHAR},
-      account = #{account,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=DOUBLE},
       recharge_way = #{rechargeWay,jdbcType=INTEGER},
       is_received = #{isReceived,jdbcType=INTEGER},
       third_trade_num = #{thirdTradeNum,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      area = #{area,jdbcType=VARCHAR},
+      vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR},
       recharge_time = #{rechargeTime,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
