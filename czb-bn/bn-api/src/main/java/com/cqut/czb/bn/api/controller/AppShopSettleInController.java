@@ -1,15 +1,16 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.AppShopSettleInService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 /**
  * author：陈德强
@@ -23,6 +24,9 @@ public class AppShopSettleInController {
 
     @Autowired
     public AppShopSettleInService appShopSettleInService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * app's Advertising display for merchants to enter（商家入驻轮播图）
@@ -42,6 +46,16 @@ public class AppShopSettleInController {
         return new JSONResult(appShopSettleInService.selectCommodity(pageDTO,classification));
     }
 
+    @GetMapping("/getCommodityOrder")
+    public JSONResult getCommodityOrder(Integer state, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(appShopSettleInService.getCommodityOrderList(user.getUserId(),state));
+    }
+
+    @PostMapping("/useService")
+    public JSONResult useService(Integer orderId){
+        return new JSONResult(appShopSettleInService.useService(orderId));
+    }
     /**
      * app's Get all the goods information（获取多个导航栏信息）
      */

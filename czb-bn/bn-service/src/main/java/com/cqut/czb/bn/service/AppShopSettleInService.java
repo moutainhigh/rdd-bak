@@ -2,8 +2,6 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.Commodity.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
-import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -18,9 +16,10 @@ public interface AppShopSettleInService {
      */
     List<AllCommodityDTO> selectAllCommodity(String classification);
 
-    /**
-     * get Service details information
-     */
+
+    List<UserCommodityOrderDTO> getCommodityOrderList(String userId,Integer state);
+
+    Boolean useService(Integer orderId);
     ServiceDetailsDTO selectServiceDetails(String commodityId);
 
     /**

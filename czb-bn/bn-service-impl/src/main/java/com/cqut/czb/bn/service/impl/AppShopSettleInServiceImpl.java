@@ -2,6 +2,12 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
 import com.cqut.czb.bn.dao.mapper.CommodityMapperExtra;
+import com.cqut.czb.bn.entity.dto.Commodity.AllCommodityDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.UserCommodityOrderDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.NavDTO;
+import com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO;
 import com.cqut.czb.bn.dao.mapper.CommodityUserInfoCollectionMapperExtra;
 import com.cqut.czb.bn.entity.dto.Commodity.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
@@ -10,6 +16,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.jvm.hotspot.runtime.ppc.PPCCurrentFrameGuess;
 
 import java.util.List;
 
@@ -34,6 +41,16 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
         return pageInfo.getList();
     }
 
+
+    public List<UserCommodityOrderDTO> getCommodityOrderList(String userId,Integer state) {
+        return commodityMapperExtra.getCommodityOrderList(userId,state);
+    }
+
+    @Override
+    public Boolean useService(Integer orderId) {
+
+        return null;
+    }
     @Override
     public List<AllCommodityDTO> selectAllCommodity(String classification) {
         return commodityMapperExtra.selectAllCommodity(classification);

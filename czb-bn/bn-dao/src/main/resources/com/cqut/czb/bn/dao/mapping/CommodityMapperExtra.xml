@@ -2,6 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.CommodityMapperExtra">
 
+  <select id="getCommodityOrderList" resultType="com.cqut.czb.bn.entity.dto.Commodity.UserCommodityOrderDTO">
+    SELECT
+	czb_order.id orderId,
+	shop_name shopName,
+	shop_address shopAddress,
+	commodity_title commodityTitle,
+	commodity_price commodityPrice,
+	usage_count usageCount,
+	usage_count - count(*) surplusCount,
+	shop_phone shopPhone,
+	czb_order.create_at createAt
+    FROM
+	czb_order
+	LEFT JOIN czb_shop ON czb_order.shop_id = czb_shop.shop_id
+	LEFT JOIN czb_commodity ON czb_order.commodity_id = czb_commodity.commodity_id
+	LEFT JOIN czb_commodity_usage_record ON czb_order.id = czb_commodity_usage_record.order_id
+    WHERE
+	czb_order.comsumer_id = #{userId,jdbcType=VARCHAR}
+	AND
+	czb_order.state = #{state,jdbcType=INTEGER}
+    GROUP BY
+	czb_order.id
+	ORDER BY czb_order.create_at DESC
+  </select>
+    <select id="selectCommoditys" resultMap="BaseResultMap" parameterType="java.lang.String">
     <select id="selectCommoditys" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" parameterType="java.lang.String">
         select
         commodity_id as commodityId, shop_id as shopId, commodity_title as commodityTitle, commodity_info as commodityInfo,
