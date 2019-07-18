@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
+    <id column="vip_area_config_id" property="vipAreaConfigId" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="vip_state" property="vipState" jdbcType="INTEGER" />
+    <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    vip_area_config_id, area, vip_state, vip_price, create_at, update_at
+  </sql>
+  <select id="getVipAreaList" parameterType="com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO" resultType="com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO">
+    SELECT
+	czb_vip_area_config.vip_area_config_id vipAreaConfigId,
+	czb_vip_area_config.area area,
+	czb_vip_area_config.vip_price vipPrice,
+	czb_vip_area_config.vip_state vipState,
+	count( czb_vip_recharge_records.vip_area_config_id ) vipNum
+    FROM
+	czb_vip_area_config
+	LEFT JOIN czb_vip_recharge_records ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+    WHERE
+	czb_vip_area_config.area like concat('%',#{area,jdbcType = VARCHAR},'%')
+    GROUP BY
+	czb_vip_area_config.vip_area_config_id
+  </select>
+
+  <insert id="addVipArea" parameterType="com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO">
+    insert into czb_vip_area_config (vip_area_config_id, area, vip_state,
+      vip_price, create_at, update_at
+      )
+    values (#{vipAreaConfigId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{vipState,jdbcType=INTEGER},
+      #{vipPrice,jdbcType=DOUBLE}, now(), now()
+      )
+  </insert>
+</mapper>
