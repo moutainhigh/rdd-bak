@@ -24,7 +24,7 @@
           AND czb_msg_model.create_at &lt;= #{messageListDTO.messageEndTime, jdbcType = TIMESTAMP}
         </if>
         <if test="messageListDTO.receiverType != null">
-          AND receiver_type = #{messageListDTO.receicerType, jdbcType = INTEGER}
+          AND receiver_type = #{messageListDTO.receiverType, jdbcType = INTEGER}
         </if>
         <if test="messageListDTO.isSend != null">
             AND is_send = #{messageListDTO.isSend, jdbcType = INTEGER}
@@ -41,7 +41,7 @@
         NOW( ) updateAt
         FROM
         czb_user
-        JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} ) AS msgModel
+        JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} AND is_send = 0 ) AS msgModel
         where
         <if test="receiverType == 0">
         1 = 1
@@ -67,12 +67,12 @@
         `update_at`
         )
         VALUES
-            <foreach collection="temps" item="temp" separator=",">
+            <foreach collection="list" item="item" index="index" separator=",">
                 (
-                    #{temp.msgRecordId},
-                    #{temp.msgModelId},
-                    #{temp.msgAnnouncerId},
-                    #{temp.msgReceiverId},
+                    #{item.msgRecordId},
+                    #{item.msgModelId},
+                    #{item.msgAnnouncerId},
+                    #{item.msgReceiverId},
                     0,
                     0,
                     now(),
