@@ -27,8 +27,19 @@ public class Subsidy {
     // 补贴金额
     private Double subsidyMoney;
 
+    // 补贴对象
+    private Integer subsidyType;
+
     public Subsidy() {
 
+    }
+
+    public Integer getSubsidyType() {
+        return subsidyType;
+    }
+
+    public void setSubsidyType(Integer subsidyType) {
+        this.subsidyType = subsidyType;
     }
 
     public String getSubsidyId() {

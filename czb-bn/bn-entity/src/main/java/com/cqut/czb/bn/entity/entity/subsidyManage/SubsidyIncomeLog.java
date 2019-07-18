@@ -42,7 +42,7 @@ public class SubsidyIncomeLog {
     private Double beforeMoney;
 
     public SubsidyIncomeLog(){
-        this(StringUtil.createId(), 5, "补贴");
+        this(StringUtil.createId(), 4, "补贴");
     }
 
     public SubsidyIncomeLog(String recordId, Integer type, String remark){
