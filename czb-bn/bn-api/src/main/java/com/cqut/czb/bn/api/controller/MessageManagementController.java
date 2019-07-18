@@ -21,7 +21,7 @@ import java.security.Principal;
  */
 @RestController
 @RequestMapping("/api/messageManagement")
-public class MessageManagement {
+public class MessageManagementController {
 
     @Autowired
     MessageManagementService messageManagementService;
@@ -48,7 +48,7 @@ public class MessageManagement {
     }
 
     @PostMapping("/sendMessage")
-    public JSONResult sendMessage(String msgModelId,Integer receiverType){
-        return new JSONResult(messageManagementService.sendMessage(msgModelId, receiverType));
+    public JSONResult sendMessage(String msgModelId){
+        return new JSONResult(messageManagementService.sendMessage(msgModelId));
     }
 }
