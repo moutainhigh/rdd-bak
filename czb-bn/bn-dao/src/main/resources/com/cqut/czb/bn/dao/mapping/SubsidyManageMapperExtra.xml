@@ -11,6 +11,7 @@
         <result column="amount" property="subsidyMoney" jdbcType="DOUBLE"/>
         <result column="account" property="account" jdbcType="VARCHAR"/>
         <result column="monthReceive" property="currentMonthProfit" jdbcType="DOUBLE"/>
+        <result column="subsidyType" property="subsidyType" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--结果集2-->
@@ -32,6 +33,7 @@
             big.time,
             big.amount,
             big.account,
+            big.partner subsidyType,
             sum(logtwo.amount) monthReceive
         FROM
             (
@@ -42,7 +44,9 @@
                         '%Y-%m'
                     ) targetMonth,
                     log.target_year_month targetTime,
-                    mission.subs rate,
+                    mission.subsidy_percent rate,
+                    mission.create_at missionTime,
+                    mission.partner,
                     date_format(
                     log.create_at,
                     '%Y-%m-%d'
@@ -56,9 +60,14 @@
                 LEFT JOIN czb_user userTable ON income.user_id = userTable.user_id
                 LEFT JOIN czb_subsidy_mission mission ON mission.mission_id = log.souse_id
                 WHERE
-                    log.type = 5
+                    log.remark = '补贴'
             ) big
-        LEFT JOIN czb_income_log logtwo ON logtwo.info_id = big.info
+        LEFT JOIN czb_income_log logtwo ON logtwo.info_id = big.info and unix_timestamp(
+        logtwo.create_at
+        ) 	&lt;
+        unix_timestamp(
+        big.missionTime
+        )
         WHERE
             DATE_FORMAT(logtwo.create_at, '%Y%m') = DATE_FORMAT(big.targetTime, '%Y%m')
         <if test="account != null and account != ''">
@@ -87,10 +96,9 @@
                 '%Y-%m-%d'
             ) createAt,
             state,
-            users.partner
+            mission.partner
         FROM
             czb_subsidy_mission mission
-        LEFT JOIN czb_user users ON mission.partner = users.user_account
         <where>
             <if test="subsidyTime != null and subsidyTime != ''">
                 DATE_FORMAT(mission.create_at, '%Y%m%d') = DATE_FORMAT(#{subsidyTime}, '%Y%m%d')
@@ -103,12 +111,16 @@
             </if>
             <if test="partnerType != null and partnerType != ''">
                 AND
-                users.partner = #{partnerType}
+                mission.partner = #{partnerType}
+            </if>
+            <if test="partnerType == 0">
+                AND
+                mission.partner = #{partnerType}
             </if>
         </where>
     </select>
 
-    <insert id="inserLog">
+    <insert id="inserLog" parameterType="java.util.List">
             insert into czb_income_log
             (
             record_id,
@@ -123,7 +135,7 @@
             update_at
             )
             values
-        <foreach collection="list" item="item" separator=",">
+        <foreach collection="list" item="item" separator="," index="index">
             (
             #{item.recordId},
             #{item.amount},
@@ -180,6 +192,7 @@
             mission.state = 0
     </select>
 
+    <!--插入补贴任务-->
     <insert id="insertSubsidyMission" parameterType="com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMission">
         insert INTO czb_subsidy_mission
         (
@@ -187,6 +200,7 @@
         target_year_month,
         subsidy_percent,
         state,
+        partner,
         create_at,
         update_at
         )
@@ -196,12 +210,13 @@
         #{subsidyMonth},
         #{subsidyRate},
         0,
+        #{subsidyType},
         CURRENT_TIMESTAMP ,
         CURRENT_TIMESTAMP
         )
     </insert>
 
-
+    <!--插入补贴任务关系-->
     <insert id="insertMissionUserRelation" parameterType="java.util.List">
         INSERT INTO czb_subsidy_user
         (
@@ -220,4 +235,13 @@
             )
         </foreach>
     </insert>
+
+    <!--删除补贴任务前，删除关系-->
+    <delete id="deleteRelation" parameterType="java.lang.String">
+        DELETE
+        FROM
+            czb_subsidy_user
+        WHERE
+            mission_id = #{missionId}
+    </delete>
 </mapper>

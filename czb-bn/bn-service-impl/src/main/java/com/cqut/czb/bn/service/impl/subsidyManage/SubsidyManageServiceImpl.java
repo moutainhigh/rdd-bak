@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * auth: 谭深化
@@ -38,6 +39,8 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
 
     @Autowired
     private SubsidyMissionMapperExtra subsidyMissionMapperExtra;
+
+    private static Random random = new Random();
 
 
     @Override
@@ -58,8 +61,8 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
 
     @Override
     public boolean deleteSubsidyMission(String missionId) {
-
-        return subsidyMissionMapper.deleteByPrimaryKey(missionId) > 0;
+        int deleteRelation = subsidyManageMapper.deleteRelation(missionId);
+        return deleteRelation> 0 && subsidyMissionMapper.deleteByPrimaryKey(missionId) > 0;
     }
 
     @Override
@@ -83,8 +86,9 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
     public JSONResult createSubsidyMission(CreateSubsidiesQueryDTO createDto, UserIds input) {
 
         // 生成补贴任务
-        String missionId = StringUtil.createId();
+        String missionId = createId();
         SubsidyMission subsidyMission = new SubsidyMission(missionId ,input.getSubsidyRent(), input.getSubsidyMonth());
+        subsidyMission.setSubsidyType(createDto.getPartner());
         int insertSubsidyMission = subsidyManageMapper.insertSubsidyMission(subsidyMission);
         System.out.println("1234123412341234123412341234123" +missionId);
 
@@ -99,18 +103,29 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
             int times = 0; // 若ids删完了，则不进行删除id的for循环，提高性能
             for (int i = 0; i<createSubsidiesQueryDTOs.size(); i++) {
                 if(times != ids.length) {
+                    boolean isDelete = false; // 是否进行了删除
                     for (String id:ids) {
                         if(createSubsidiesQueryDTOs.get(i).getUserId().equals(id)){
                             createSubsidiesQueryDTOs.remove(i);
                             i--;
                             times++;
+                            isDelete = true;
                             break;
                         }
+                    }
+                    if(!isDelete){
+                        CreateSubsidiesQueryDTO dto = createSubsidiesQueryDTOs.get(i);
+                        SubsidyMissionUser mission = new SubsidyMissionUser();
+                        mission.setRelationId(createId());
+                        mission.setMissionId(missionId);
+                        mission.setUserId(dto.getUserId());
+                        mission.setAmount(dto.getSubsidies());
+                        missions.add(mission);
                     }
                 } else {
                     CreateSubsidiesQueryDTO dto = createSubsidiesQueryDTOs.get(i);
                     SubsidyMissionUser mission = new SubsidyMissionUser();
-                    mission.setRelationId(StringUtil.createId());
+                    mission.setRelationId(createId());
                     mission.setMissionId(missionId);
                     mission.setUserId(dto.getUserId());
                     mission.setAmount(dto.getSubsidies());
@@ -121,13 +136,14 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
         } else {
             for (CreateSubsidiesQueryDTO data:createSubsidiesQueryDTOs) {
                 SubsidyMissionUser mission = new SubsidyMissionUser();
-                mission.setRelationId(StringUtil.createId());
+                mission.setRelationId(createId());
                 mission.setMissionId(missionId);
                 mission.setUserId(data.getUserId());
                 mission.setAmount(data.getSubsidies());
                 missions.add(mission);
             }
         }
+        System.out.println("任务长度"+missions.size());
 
         boolean insertSuccess = (missions.size() == subsidyManageMapper.insertMissionUserRelation(missions)) ;
 
@@ -136,5 +152,14 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
         } else {
             return new JSONResult("生成补贴任务失败", 500, insertSubsidyMission + " " + insertSuccess);
         }
+    }
+
+
+    public static String createMillisTimestamp() {
+        return String.valueOf(System.nanoTime());
+    }
+
+    public static String createId() {
+        return createMillisTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
     }
 }

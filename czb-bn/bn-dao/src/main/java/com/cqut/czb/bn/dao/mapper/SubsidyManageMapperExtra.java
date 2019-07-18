@@ -42,4 +42,7 @@ public interface SubsidyManageMapperExtra {
 
     // 插入补贴任务，用户id关系数据
     int insertMissionUserRelation(@Param("list") List<SubsidyMissionUser> list);
+
+    // 删除补贴任务前删除关系
+    int deleteRelation(@Param("missionId") String missionId);
 }

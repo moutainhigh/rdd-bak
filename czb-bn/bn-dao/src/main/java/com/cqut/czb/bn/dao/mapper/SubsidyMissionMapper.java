@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.entity.SubsidyMission;
+import org.apache.ibatis.annotations.Param;
 
 public interface SubsidyMissionMapper {
     int deleteByPrimaryKey(String missionId);
