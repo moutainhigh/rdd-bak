@@ -39,6 +39,7 @@ public class MessageManagement {
         return new JSONResult(messageManagementService.deleteMsgModelById(msgModelId));
     }
 
+    
     @PostMapping("/createMsgModel")
     public JSONResult createMsgModel(MsgModel msgModel, Principal principal){
         User user = (User)redisUtils.get(principal.getName());

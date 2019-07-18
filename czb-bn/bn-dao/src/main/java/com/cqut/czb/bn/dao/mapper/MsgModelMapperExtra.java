@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO;
+import com.cqut.czb.bn.entity.entity.MsgRecord;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,4 +13,6 @@ import java.util.List;
  */
 public interface MsgModelMapperExtra {
     public List<MessageListDTO> getMessageModelList(@Param("messageListDTO") MessageListDTO messageListDTO);
+
+    public List<MsgRecord> getMessageRecordList(String msgModelId);
 }

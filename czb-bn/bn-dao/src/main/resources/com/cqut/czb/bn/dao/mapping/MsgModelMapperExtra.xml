@@ -30,4 +30,19 @@
         AND is_send = #{messageListDTO.isSend, jdbcType = INTEGER}
     </if>
   </select>
+  <select id="getMessageRecordList" parameterType="com." resultType="com.cqut.czb.bn.entity.entity.MsgRecord">
+	SELECT
+	msgModel.msgAnnouncerId,
+	msgModel.msgRecordId,
+	0 msgState,
+	0 'alert',
+	receiver_type receiverType,
+	NOW( ) createAt,
+	NOW( ) updateAt
+    FROM
+	czb_user
+	JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId, czb_msg_model.receiver_type FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} ) AS msgModel
+    WHERE
+	user_type = msgModel.receiver_type
+  </select>
 </mapper>
