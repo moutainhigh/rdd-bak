@@ -62,6 +62,7 @@ public class MessageManagementServiceImpl implements MessageManagementService {
             List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId,receiverType);
             for(MsgRecord msgRecord: msgRecordList){
                 msgRecord.setMsgRecordId(createId());
+                msgRecord.setMsgModelId(msgModelId);
             }
             return msgModelMapperExtra.insertMessages(msgRecordList) > 0;
         }catch (Exception e){
