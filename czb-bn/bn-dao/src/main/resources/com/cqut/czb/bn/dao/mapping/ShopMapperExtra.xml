@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ShopMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
+        <id column="shop_id" property="shopId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR" />
+        <result column="shop_content" property="shopContent" jdbcType="VARCHAR" />
+        <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="selectShop" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
+        select
+        shop_id, a.user_id, user_account, shop_name, shop_phone, shop_content, shop_address, a.create_at, a.update_at
+        from czb_shop a
+        LEFT JOIN  czb_user b ON a.user_id = b.user_id
+        where a.user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
+        update czb_shop
+        set user_id = #{userId,jdbcType=VARCHAR},
+        shop_name = #{shopName,jdbcType=VARCHAR},
+        shop_phone = #{shopPhone,jdbcType=VARCHAR},
+        shop_content = #{shopContent,jdbcType=VARCHAR},
+        shop_address = #{shopAddress,jdbcType=VARCHAR},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where shop_id = #{shopId,jdbcType=VARCHAR}
+    </update>
+</mapper>

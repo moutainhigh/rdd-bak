@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.subsidyManage;
 
+import com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesQueryDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO;
 import com.cqut.czb.bn.entity.entity.subsidyManage.Subsidy;
@@ -85,9 +86,9 @@ public class SubsidyManageController {
      * @param input
      * @return
      */
-    @PostMapping("/createSubsidyMission")
-    public JSONResult createSubsidyMission(@RequestBody  UserIds input) {
-        return subsidyManageService.createSubsidyMission(input);
+    @GetMapping("/createSubsidyMission")
+    public JSONResult createSubsidyMission(CreateSubsidiesQueryDTO createDto, UserIds input) {
+        return subsidyManageService.createSubsidyMission(createDto, input);
     }
 
 }
