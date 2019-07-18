@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.entity.MsgModel;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.MessageManagementService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,7 @@ public class MessageManagementController {
     }
 
     @PostMapping("/deleteMsgModelById")
-    public JSONResult deleteMsgModelById(String msgModelId){
+    public JSONResult deleteMsgModelById(@Param("msgModelId")String msgModelId){
         return new JSONResult(messageManagementService.deleteMsgModelById(msgModelId));
     }
 
@@ -48,7 +49,7 @@ public class MessageManagementController {
     }
 
     @PostMapping("/sendMessage")
-    public JSONResult sendMessage(String msgModelId){
+    public JSONResult sendMessage(@Param("msgModelId")String msgModelId){
         return new JSONResult(messageManagementService.sendMessage(msgModelId));
     }
 }
