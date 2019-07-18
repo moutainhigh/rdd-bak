@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 
 public class User {
@@ -25,7 +23,6 @@ public class User {
 
     private String userIdCard;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     private Date updateAt;
@@ -49,6 +46,8 @@ public class User {
     private String firstLevelPartner;
 
     private String secondLevelPartner;
+
+    private Integer isVip;
 
     public String getUserId() {
         return userId;
@@ -224,5 +223,13 @@ public class User {
 
     public void setSecondLevelPartner(String secondLevelPartner) {
         this.secondLevelPartner = secondLevelPartner == null ? null : secondLevelPartner.trim();
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
     }
 }

@@ -10,10 +10,12 @@
     <result column="third_trade_num" property="thirdTradeNum" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="recharge_time" property="rechargeTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, user_id, account, recharge_way, is_received, third_trade_num, create_at, 
-    update_at
+    update_at, area, recharge_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -28,10 +30,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
     insert into czb_vip_recharge_records (record_id, user_id, account, 
       recharge_way, is_received, third_trade_num, 
-      create_at, update_at)
+      create_at, update_at, area, 
+      recharge_time)
     values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{account,jdbcType=DOUBLE}, 
       #{rechargeWay,jdbcType=INTEGER}, #{isReceived,jdbcType=INTEGER}, #{thirdTradeNum,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{area,jdbcType=VARCHAR}, 
+      #{rechargeTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
     insert into czb_vip_recharge_records
@@ -60,6 +64,12 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="rechargeTime != null" >
+        recharge_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -85,6 +95,12 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeTime != null" >
+        #{rechargeTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -112,6 +128,12 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeTime != null" >
+        recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -123,7 +145,9 @@
       is_received = #{isReceived,jdbcType=INTEGER},
       third_trade_num = #{thirdTradeNum,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      area = #{area,jdbcType=VARCHAR},
+      recharge_time = #{rechargeTime,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>

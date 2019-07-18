@@ -19,6 +19,10 @@ public class VipRechargeRecords {
 
     private Date updateAt;
 
+    private String area;
+
+    private Date rechargeTime;
+
     public String getRecordId() {
         return recordId;
     }
@@ -81,5 +85,21 @@ public class VipRechargeRecords {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area == null ? null : area.trim();
+    }
+
+    public Date getRechargeTime() {
+        return rechargeTime;
+    }
+
+    public void setRechargeTime(Date rechargeTime) {
+        this.rechargeTime = rechargeTime;
     }
 }

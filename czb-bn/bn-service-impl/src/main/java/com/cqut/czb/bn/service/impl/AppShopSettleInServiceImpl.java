@@ -27,10 +27,11 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
 
 
     @Override
-    public PageInfo<CommodityDTO> selectCommodity(PageDTO pageDTO, String classification) {
+    public List<CommodityDTO> selectCommodity(PageDTO pageDTO, String classification) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         List<CommodityDTO> commodityDTOList=commodityMapperExtra.selectCommoditys(classification);
-        return new PageInfo<>(commodityDTOList);
+        PageInfo<CommodityDTO> pageInfo=new PageInfo<>(commodityDTOList);
+        return pageInfo.getList();
     }
 
     @Override

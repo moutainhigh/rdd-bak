@@ -27,6 +27,8 @@ public class AppRouter {
 
     private Integer userType;
 
+    private Integer isVipPath;
+
     public String getRouterId() {
         return routerId;
     }
@@ -121,5 +123,13 @@ public class AppRouter {
 
     public void setUserType(Integer userType) {
         this.userType = userType;
+    }
+
+    public Integer getIsVipPath() {
+        return isVipPath;
+    }
+
+    public void setIsVipPath(Integer isVipPath) {
+        this.isVipPath = isVipPath;
     }
 }

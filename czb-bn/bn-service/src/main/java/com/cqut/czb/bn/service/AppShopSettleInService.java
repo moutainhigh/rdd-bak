@@ -11,7 +11,7 @@ public interface AppShopSettleInService {
     /**
      * get the corresponding  goods information
      */
-    PageInfo<CommodityDTO> selectCommodity(PageDTO pageDTO, String classification);
+    List<CommodityDTO> selectCommodity(PageDTO pageDTO, String classification);
 
     /**
      * get all the goods information
