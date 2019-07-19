@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service;
 import com.cqut.czb.bn.entity.dto.Commodity.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AppShopSettleInService {
@@ -19,7 +20,10 @@ public interface AppShopSettleInService {
 
     List<UserCommodityOrderDTO> getCommodityOrderList(String userId,Integer state);
 
-    Boolean useService(Integer orderId);
+    Boolean useService(String orderId);
+
+    List<Date> getUsageList(String orderId);
+
     ServiceDetailsDTO selectServiceDetails(String commodityId);
 
     /**

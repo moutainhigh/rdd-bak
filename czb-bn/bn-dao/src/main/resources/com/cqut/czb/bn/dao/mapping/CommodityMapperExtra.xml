@@ -12,12 +12,14 @@
 	usage_count usageCount,
 	usage_count - count(*) surplusCount,
 	shop_phone shopPhone,
-	czb_order.create_at createAt
+	czb_order.create_at createAt,
+	save_path savePath
     FROM
 	czb_order
 	LEFT JOIN czb_shop ON czb_order.shop_id = czb_shop.shop_id
 	LEFT JOIN czb_commodity ON czb_order.commodity_id = czb_commodity.commodity_id
 	LEFT JOIN czb_commodity_usage_record ON czb_order.id = czb_commodity_usage_record.order_id
+	LEFT JOIN czb_file ON czb_file.file_id = czb_commodity.commodity_img
     WHERE
 	czb_order.comsumer_id = #{userId,jdbcType=VARCHAR}
 	AND

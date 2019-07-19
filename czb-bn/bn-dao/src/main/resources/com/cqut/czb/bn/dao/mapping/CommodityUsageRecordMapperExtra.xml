@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CommodityUsageRecordMapperExtra" >
+  <select id="selectOrderIdCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    COUNT(*)
+    FROM czb_commodity_usage_record
+    WHERE order_id = #{orderId,jdbcType = VARCHAR}
+    GROUP BY order_id
+  </select>
+  <select id="getUsageList" parameterType="java.lang.String" resultType="java.util.Date">
+    SELECT
+	usage_time UsageTime
+    FROM
+	czb_commodity_usage_record
+    WHERE
+	order_id = #{orderId,jdbcType = VARCHAR}
+    ORDER BY usage_time DESC
+  </select>
+</mapper>
