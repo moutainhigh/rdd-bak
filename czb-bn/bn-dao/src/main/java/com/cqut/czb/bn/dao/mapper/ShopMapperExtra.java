@@ -8,5 +8,7 @@ import java.util.List;
 public interface ShopMapperExtra {
     ShopDTO selectShop(ShopDTO shopDTO);
 
+    int updateShopInfo(ShopDTO shopDTO);
+
     List<ShopDTO> selectSrc(ShopDTO shopDTO);
 }

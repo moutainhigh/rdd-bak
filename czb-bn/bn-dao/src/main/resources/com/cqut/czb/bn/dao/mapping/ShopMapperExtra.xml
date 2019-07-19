@@ -20,15 +20,31 @@
         where a.user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
-    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
-        update czb_shop
-        set user_id = #{userId,jdbcType=VARCHAR},
-        shop_name = #{shopName,jdbcType=VARCHAR},
-        shop_phone = #{shopPhone,jdbcType=VARCHAR},
-        shop_content = #{shopContent,jdbcType=VARCHAR},
-        shop_address = #{shopAddress,jdbcType=VARCHAR},
-        create_at = #{createAt,jdbcType=TIMESTAMP},
-        update_at = #{updateAt,jdbcType=TIMESTAMP}
-        where shop_id = #{shopId,jdbcType=VARCHAR}
-    </update>
+    <update id="updateShopInfo" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
+            update czb_shop
+            <set >
+                <if test="userId != null" >
+                    user_id = #{userId,jdbcType=VARCHAR},
+                </if>
+                <if test="shopName != null" >
+                    shop_name = #{shopName,jdbcType=VARCHAR},
+                </if>
+                <if test="shopPhone != null" >
+                    shop_phone = #{shopPhone,jdbcType=VARCHAR},
+                </if>
+                <if test="shopContent != null" >
+                    shop_content = #{shopContent,jdbcType=VARCHAR},
+                </if>
+                <if test="shopAddress != null" >
+                    shop_address = #{shopAddress,jdbcType=VARCHAR},
+                </if>
+                <if test="createAt != null" >
+                    create_at = #{createAt,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updateAt != null" >
+                    update_at = #{updateAt,jdbcType=TIMESTAMP},
+                </if>
+            </set>
+            where shop_id = #{shopId,jdbcType=VARCHAR}
+        </update>
 </mapper>

@@ -20,4 +20,6 @@ public interface CommodityMapperExtra {
 
     List<NavDTO> selectShopSettleNav();
 
+    List<CommodityDTO> selectCommodityByShop(CommodityDTO commodityDTO);
+
 }

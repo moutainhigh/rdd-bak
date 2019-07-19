@@ -97,4 +97,37 @@
         select distinct classification as navName
         from czb_commodity
     </select>
+
+    <select id="selectCommodityByShop" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO">
+        SELECT
+            commodity_id AS commodityId,
+            shop_id AS shopId,
+            commodity_title AS commodityTitle,
+            commodity_info AS commodityInfo,
+            discount AS discount,
+            commodity_img AS commodityImg,
+            b.save_path AS savePath,
+            commodity_price AS commodityPrice,
+            classification AS classification,
+            usage_count AS usageCount,
+            a.create_at AS createAt,
+            a.update_at AS updateAt
+        FROM
+            czb_commodity
+        LEFT JOIN czb_file b ON a.commodity_img = b.file_id
+        WHERE
+             shop_id = #{shopId,jdbcType=VARCHAR}
+        <if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
+            AND a.create_at >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="(startTime==null or startTime=='' ) and endTime!=null and endTime!=''">
+            AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="commodityPrice!=null">
+            AND commodity_price = #{commodityPrice,jdbcType=DOUBLE}
+        </if>
+    </select>
 </mapper>
