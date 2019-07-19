@@ -43,7 +43,7 @@
         czb_user
         JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} AND is_send = 0 ) AS msgModel
         where
-          1 = 1 
+          1 = 1
         <if test="receiverType == 1">
         OR partner = 0
         </if>
