@@ -14,6 +14,7 @@ import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -48,8 +49,13 @@ public class MessageManagementServiceImpl implements MessageManagementService {
     public Boolean createMsgModel(MsgModel msgModel) {
         try{
             //默认为未发送状态
+            if(msgModel.getMsgContent() == null || msgModel.getMsgTitle() == null || msgModel.getMsgType() == null || msgModel.getReceiverType() == null || msgModel.getAltert() == null){
+                return false;
+            }
             msgModel.setIsSend(0);
             msgModel.setMsgModelId(StringUtil.createId());
+            msgModel.setCreateAt(new Date());
+            msgModel.setUpdateAt(new Date());
             return msgModelMapper.insert(msgModel) > 0;
         }catch (Exception e){
             return false;
