@@ -36,4 +36,12 @@
       #{vipPrice,jdbcType=DOUBLE}, now(), now()
       )
   </insert>
+
+    <select id="selectVipAreaConfigByArea" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.VipAreaConfig">
+        select
+        <include refid="Base_Column_List" />
+        from czb_vip_area_config
+        where vip_area_config_id = #{area,jdbcType=VARCHAR}
+        AND vip_state = 1
+    </select>
 </mapper>

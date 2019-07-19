@@ -26,6 +26,16 @@ public class AppRouterDTO {
 
     private String remark;
 
+    private String isVipPath;
+
+    public String getIsVipPath() {
+        return isVipPath;
+    }
+
+    public void setIsVipPath(String isVipPath) {
+        this.isVipPath = isVipPath;
+    }
+
     public Integer getPathType() {
         return pathType;
     }

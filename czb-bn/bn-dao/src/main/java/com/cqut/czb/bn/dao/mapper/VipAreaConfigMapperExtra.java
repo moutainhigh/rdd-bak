@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO;
+import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface VipAreaConfigMapperExtra {
     List<VipAreaDTO> getVipAreaList(VipAreaDTO vipAreaDTO);
 
     int addVipArea(VipAreaDTO vipAreaDTO);
+
+    VipAreaConfig selectVipAreaConfigByArea(String area);
 }
