@@ -8,9 +8,9 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapperExtra;
-import com.cqut.czb.bn.entity.dto.appVIP.VipRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.AlipayClientConfig;
+import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO;
 import com.cqut.czb.bn.entity.entity.VipRechargeRecords;
 import com.cqut.czb.bn.service.personCenterService.IVIPService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -34,12 +34,12 @@ public class VIPServiceImpl implements IVIPService {
 
     @Override
     public String createVIPOrder(String userId) {
-        VipRechargeRecordDTO vipRechargeRecordDTO = new VipRechargeRecordDTO();
+        VipRechargeRecordListDTO vipRechargeRecordDTO = new VipRechargeRecordListDTO();
         vipRechargeRecordDTO.setRecordId(StringUtil.createId());
         vipRechargeRecordDTO.setUserId(userId);
         vipRechargeRecordDTO.setRechargeWay(1);
         vipRechargeRecordDTO.setIsReceived(0);
-        vipRechargeRecordDTO.setAccount(SystemConstants.VIP_PRICE);
+        vipRechargeRecordDTO.setAmount(SystemConstants.VIP_PRICE);
         vipRechargeRecordsMapperExtra.insertVipRechargeRecord(vipRechargeRecordDTO);
 
         /**

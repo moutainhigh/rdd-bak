@@ -1,12 +1,14 @@
 package com.cqut.czb.bn.entity.dto.appVIP;
 
-public class VipRechargeRecordDTO {
+import com.cqut.czb.bn.entity.dto.PageDTO;
+
+public class VipRechargeRecordDTO extends PageDTO {
 
     private String recordId;
 
     private String userId;
 
-    private Double account;
+    private Double amount;
 
     private Integer rechargeWay;
 
@@ -30,12 +32,12 @@ public class VipRechargeRecordDTO {
         this.userId = userId;
     }
 
-    public Double getAccount() {
-        return account;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setAccount(Double account) {
-        this.account = account;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public Integer getRechargeWay() {

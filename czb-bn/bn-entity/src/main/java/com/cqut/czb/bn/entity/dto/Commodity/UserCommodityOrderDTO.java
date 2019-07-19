@@ -21,6 +21,16 @@ public class UserCommodityOrderDTO {
 
     private Date createAt;
 
+    private String savePath;
+
+    public String getSavePath() {
+        return savePath;
+    }
+
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
+    }
+
     public String getOrderId() {
         return orderId;
     }

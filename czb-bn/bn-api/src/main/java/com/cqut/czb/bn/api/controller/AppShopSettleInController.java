@@ -47,13 +47,13 @@ public class AppShopSettleInController {
     }
 
     @GetMapping("/getCommodityOrder")
-    public JSONResult getCommodityOrder(Integer state, Principal principal){
+    public JSONResult getCommodityOrder(@Param("state") Integer state, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appShopSettleInService.getCommodityOrderList(user.getUserId(),state));
     }
 
     @PostMapping("/useService")
-    public JSONResult useService(Integer orderId){
+    public JSONResult useService(@Param("orderId") String orderId){
         return new JSONResult(appShopSettleInService.useService(orderId));
     }
     /**
@@ -64,6 +64,11 @@ public class AppShopSettleInController {
         return new JSONResult(appShopSettleInService.selectAllCommodity(classification));
     }
 
+
+    @PostMapping("/getUsageList")
+    public JSONResult getUsageList(@Param("orderId") String orderId){
+        return new JSONResult(appShopSettleInService.getUsageList(orderId));
+    }
 
     /**
      * app's Get Service details information（获取商品具体的信息）

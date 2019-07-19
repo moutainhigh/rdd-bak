@@ -60,4 +60,38 @@
       now(),
     </trim>
   </insert>
+
+  <select id="getVipRechargeRecord" parameterType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO" resultType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO">
+    SELECT
+    record_id recordId,
+    czb_vip_recharge_records.user_id userId,
+    amount,
+    recharge_way rechargeWay,
+    is_received isReceived,
+    third_trade_num thirdTradeNum,
+    area,
+    recharge_time rechargeTime,
+    user_account userAccount
+    FROM
+    czb_vip_recharge_records
+    LEFT JOIN czb_user ON czb_user.user_id = czb_vip_recharge_records.user_id
+    LEFT JOIN czb_vip_area_config ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+    WHERE
+    is_received = 1
+    <if test="startTime != null">
+    AND recharge_time &gt;= #{startTime,jdbcType = TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+    AND recharge_time &lt;= #{endTime,jdbcType = TIMESTAMP}
+    </if>
+    <if test="area != null">
+    AND area LIKE concat('%',#{area,jdbcType = VARCHAR},'%')
+    </if>
+    <if test="userAccount != null">
+    AND czb_user.user_account LIKE concat('%',#{userAccount,jdbcType = VARCHAR},'%')
+    </if>
+    <if test="rechargeWay != null">
+    AND recharge_way = #{rechargeWay,jdbcType = INTEGER}
+    </if>
+  </select>
 </mapper>
