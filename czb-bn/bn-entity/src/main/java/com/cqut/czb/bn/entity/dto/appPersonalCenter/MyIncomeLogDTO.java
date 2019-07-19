@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.appPersonalCenter;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 
 public class MyIncomeLogDTO {

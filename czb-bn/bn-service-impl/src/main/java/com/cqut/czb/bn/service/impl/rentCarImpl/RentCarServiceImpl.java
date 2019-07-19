@@ -4,14 +4,12 @@ import com.cqut.czb.bn.dao.mapper.RentCarMapperExtra;
 import com.cqut.czb.bn.entity.dto.rentCar.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.rentCarService.RentCarService;
-import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Service

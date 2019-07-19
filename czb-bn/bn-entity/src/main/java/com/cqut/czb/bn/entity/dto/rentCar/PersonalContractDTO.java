@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.rentCar;
 
-import java.math.BigDecimal;
-
 public class PersonalContractDTO {
     /**
      * 合同编号

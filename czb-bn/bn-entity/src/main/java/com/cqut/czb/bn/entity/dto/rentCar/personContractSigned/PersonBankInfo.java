@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.rentCar.personContractSigned;
 
-import javax.validation.constraints.NotNull;
-
 public class PersonBankInfo {
 
     /**

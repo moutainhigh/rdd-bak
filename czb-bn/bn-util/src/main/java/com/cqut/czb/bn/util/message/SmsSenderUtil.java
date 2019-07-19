@@ -1,13 +1,12 @@
 package com.cqut.czb.bn.util.message;
 
+import com.alibaba.fastjson.JSONArray;
+import jodd.http.HttpRequest;
+import jodd.http.HttpResponse;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
-
-import com.alibaba.fastjson.JSONArray;
-
-import jodd.http.HttpRequest;
-import jodd.http.HttpResponse;
 
 /**
  * 发送短信工具类

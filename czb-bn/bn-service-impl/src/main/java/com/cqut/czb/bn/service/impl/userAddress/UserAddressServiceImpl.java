@@ -6,7 +6,6 @@ import com.cqut.czb.bn.entity.dto.address.AddressInputDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 import com.cqut.czb.bn.service.userAddress.IUserAddressService;
 import com.cqut.czb.bn.util.string.StringUtil;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

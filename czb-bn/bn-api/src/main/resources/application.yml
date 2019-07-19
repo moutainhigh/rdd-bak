@@ -22,7 +22,6 @@ spring:
 #    password: r2Z0@WJM
     host: localhost
     port: 6379
-    password: root
     jedis:
       pool:
         max-active: 200

@@ -1,18 +1,12 @@
 package com.cqut.czb.bn.service.rentCarService;
 
-import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.SignerMap;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedInfoDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdListDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import net.sf.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

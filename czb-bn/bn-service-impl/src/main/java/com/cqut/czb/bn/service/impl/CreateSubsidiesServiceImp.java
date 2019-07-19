@@ -24,7 +24,9 @@ public class CreateSubsidiesServiceImp implements CreateSubsidiesService {
     @Override
     public CreateSubsidiesOutputDTO getPartnerSubordinates(CreateSubsidiesQueryDTO createSubsidiesQueryDTO) {
         CreateSubsidiesOutputDTO createSubsidiesOutputDTO = new CreateSubsidiesOutputDTO();
-        PageHelper.startPage(createSubsidiesQueryDTO.getCurrentPage(),createSubsidiesQueryDTO.getPageSize());
+        if(createSubsidiesQueryDTO.getCurrentPage() != 0 && createSubsidiesQueryDTO.getPageSize() != 0){
+            PageHelper.startPage(createSubsidiesQueryDTO.getCurrentPage(),createSubsidiesQueryDTO.getPageSize());
+        }
         createSubsidiesOutputDTO.setCreateSubsidiesQueryDTOList(new PageInfo<>(subsidyMissionMapperExtra.getPartnerSubordinates(createSubsidiesQueryDTO)));
         double totalSubsidies = 0.0;
         for(CreateSubsidiesQueryDTO partnerSubordinate : createSubsidiesOutputDTO.getCreateSubsidiesQueryDTOList().getList()){

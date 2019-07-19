@@ -4,20 +4,17 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
-import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * 创建人：陈德强
@@ -91,9 +88,9 @@ public class AppPersonalCenterController {
      * 获取User信息及企业信息
      */
     @RequestMapping(value = "/appGetUserEnterpriseInfo",method = RequestMethod.GET)
-    public JSONResult appGetUserEnterpriseInfo(Principal principal){
+    public JSONResult appGetUserEnterpriseInfo(@Param("area") String area, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user));
+        return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user, area));
     }
 
     /**

@@ -7,9 +7,7 @@ import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolDeliveryRecords;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
-import com.cqut.czb.bn.entity.entity.PlatformIncomeRecords;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

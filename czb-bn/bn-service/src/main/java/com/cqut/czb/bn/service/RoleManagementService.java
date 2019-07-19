@@ -1,8 +1,8 @@
 package com.cqut.czb.bn.service;
 
 
+import com.cqut.czb.bn.entity.dto.role.RoleTypeDTO;
 
-import com.cqut.czb.bn.entity.dto.role.*;
 import java.util.List;
 
 public interface RoleManagementService{

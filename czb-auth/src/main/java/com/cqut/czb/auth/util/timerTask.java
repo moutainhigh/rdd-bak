@@ -2,9 +2,7 @@ package com.cqut.czb.auth.util;
 
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
-import com.cqut.czb.bn.entity.entity.VerificationCode;
 import org.springframework.beans.factory.annotation.Autowired;
-
 
 import java.util.TimerTask;
 

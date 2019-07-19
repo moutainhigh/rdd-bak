@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service.impl.rentCarImpl;
 
 import com.alibaba.fastjson.JSON;
+import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
 import com.cqut.czb.bn.dao.mapper.RentCarMapperExtra;
 import com.cqut.czb.bn.entity.dto.appRentCarContract.EnterpriseRegisterDTO;
+import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.ContractLog;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonCar;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
@@ -12,12 +14,10 @@ import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.PersonBankInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.method.GetIdentifyCode;
 import com.cqut.czb.bn.util.method.HttpClient4;
-import com.cqut.czb.bn.dao.mapper.ContractMapperExtra;
-import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
-import com.cqut.czb.bn.service.rentCarService.ContractService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

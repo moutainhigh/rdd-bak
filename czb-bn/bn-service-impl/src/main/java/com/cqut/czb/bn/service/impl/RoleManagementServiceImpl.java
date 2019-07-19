@@ -2,9 +2,7 @@ package com.cqut.czb.bn.service.impl;
 
 
 import com.cqut.czb.bn.dao.mapper.RoleManagementMapper;
-
 import com.cqut.czb.bn.entity.dto.role.RoleTypeDTO;
-
 import com.cqut.czb.bn.service.RoleManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

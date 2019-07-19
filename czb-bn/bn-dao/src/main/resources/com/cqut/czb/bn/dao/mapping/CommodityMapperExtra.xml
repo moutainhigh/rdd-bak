@@ -10,7 +10,7 @@
 	commodity_title commodityTitle,
 	commodity_price commodityPrice,
 	usage_count usageCount,
-	usage_count - count(*) surplusCount,
+	usage_count - count(czb_commodity_usage_record.order_id) surplusCount,
 	shop_phone shopPhone,
 	czb_order.create_at createAt,
 	save_path savePath

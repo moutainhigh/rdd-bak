@@ -22,6 +22,16 @@ public class PersonalCenterUserDTO {
 
     private String userPsw;
 
+    private Integer isVip;
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
     public String getUserPsw() {
         return userPsw;
     }

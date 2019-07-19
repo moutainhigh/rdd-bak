@@ -2,11 +2,7 @@ package com.cqut.czb.bn.util;
 
 import com.cqut.czb.bn.util.config.Config;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HttpJiamiUtils {
     public static String CZBSign(Map<String,String> map){

@@ -1,8 +1,8 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuIdDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
-import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IMenuService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;

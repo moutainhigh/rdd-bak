@@ -1,9 +1,5 @@
 package com.cqut.czb.bn.entity.dto.appHomePage;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.Date;
-
 /**
  * 创建人：陈德强
  * 时间：2019/4/30

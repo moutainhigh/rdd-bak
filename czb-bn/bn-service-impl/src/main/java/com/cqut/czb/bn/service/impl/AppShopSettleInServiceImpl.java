@@ -59,11 +59,16 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
         commodityUsageRecord.setCreateAt(new Date());
         commodityUsageRecord.setUpdateAt(new Date());
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        if(order.getTotalCount() >= commodityUsageRecordMapperExtra.selectOrderIdCount(orderId)){
+        int usageCount = commodityUsageRecordMapperExtra.selectOrderIdCount(orderId);
+        if(order.getTotalCount() <= usageCount){
             order.setState(1);
             orderMapper.updateByPrimaryKeySelective(order);
             return false;
         }else{
+            if(order.getTotalCount() == usageCount + 1){
+                order.setState(1);
+                orderMapper.updateByPrimaryKeySelective(order);
+            }
             return commodityUsageRecordMapper.insert(commodityUsageRecord) > 0;
         }
 

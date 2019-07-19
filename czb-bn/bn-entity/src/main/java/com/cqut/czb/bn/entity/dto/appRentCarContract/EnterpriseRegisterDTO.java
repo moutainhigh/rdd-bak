@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.appRentCarContract;
 
-import javax.validation.constraints.NotNull;
-
 public class EnterpriseRegisterDTO {
     /**
      * 企业名称

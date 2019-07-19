@@ -1,8 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.backOfEnterpriseContract.*;
-import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

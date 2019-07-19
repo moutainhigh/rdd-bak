@@ -5,18 +5,11 @@ import com.cqut.czb.bn.entity.dto.appRentCarContract.PersonalRegisterDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.ContractLog;
 import com.cqut.czb.bn.entity.dto.rentCar.PersonSignedInputInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CarsPersonsDTO;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.CompanySignedPersonal;
-import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.TaoCanDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.CarNumAndRent;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.PersonBankInfo;
 import com.cqut.czb.bn.entity.dto.rentCar.personContractSigned.SignerIdAndContractId;
-import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
-import io.swagger.models.auth.In;
-import net.sf.json.JSONObject;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

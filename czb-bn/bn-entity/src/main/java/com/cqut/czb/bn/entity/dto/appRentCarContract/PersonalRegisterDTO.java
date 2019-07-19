@@ -1,8 +1,5 @@
 package com.cqut.czb.bn.entity.dto.appRentCarContract;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 public class PersonalRegisterDTO {
     /**
      * 用户姓名（最长 15 字符）

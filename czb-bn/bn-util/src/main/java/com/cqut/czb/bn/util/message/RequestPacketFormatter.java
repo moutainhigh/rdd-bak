@@ -1,10 +1,9 @@
 package com.cqut.czb.bn.util.message;
 
-import java.security.NoSuchAlgorithmException;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.security.NoSuchAlgorithmException;
 
 
 

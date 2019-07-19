@@ -1,7 +1,8 @@
 package com.cqut.czb.bn.service;
 
 
-import com.cqut.czb.bn.entity.entity.*;
+import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 
 import java.util.Map;
 

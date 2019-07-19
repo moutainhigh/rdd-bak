@@ -1,12 +1,9 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.petrolSaleConfig.SetAreaConfigInputDTO;
-import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 import com.cqut.czb.bn.entity.global.JSONResult;
-import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.cqut.czb.bn.service.petrolSaleConfigService.IPetrolSaleConfigService;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

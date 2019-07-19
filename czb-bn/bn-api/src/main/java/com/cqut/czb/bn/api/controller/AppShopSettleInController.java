@@ -52,7 +52,7 @@ public class AppShopSettleInController {
         return new JSONResult(appShopSettleInService.getCommodityOrderList(user.getUserId(),state));
     }
 
-    @PostMapping("/useService")
+    @GetMapping("/useService")
     public JSONResult useService(@Param("orderId") String orderId){
         return new JSONResult(appShopSettleInService.useService(orderId));
     }
@@ -65,7 +65,7 @@ public class AppShopSettleInController {
     }
 
 
-    @PostMapping("/getUsageList")
+    @GetMapping("/getUsageList")
     public JSONResult getUsageList(@Param("orderId") String orderId){
         return new JSONResult(appShopSettleInService.getUsageList(orderId));
     }

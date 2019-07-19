@@ -17,7 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /** 油卡邮寄功能
  *
@@ -137,6 +140,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                     row.createCell(count++).setCellValue("中石油");
                 else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
                     row.createCell(count++).setCellValue("中石化");
+
                 if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
                 row.createCell(count++).setCellValue("未邮寄");
                 else if(petrolDeliveryDTOS.get(i).getDeliveryState()==1)

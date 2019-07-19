@@ -5,8 +5,6 @@ import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.InsertIncomeInfo;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.WithDrawLogDTO;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;

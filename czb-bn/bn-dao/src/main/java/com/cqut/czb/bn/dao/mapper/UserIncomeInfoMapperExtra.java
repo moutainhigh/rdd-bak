@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
-
-import java.util.List;
 
 public interface UserIncomeInfoMapperExtra {
     int deleteByPrimaryKey(String infoId);

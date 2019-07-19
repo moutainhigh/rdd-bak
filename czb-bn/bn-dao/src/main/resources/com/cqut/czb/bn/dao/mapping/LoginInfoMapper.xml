@@ -102,7 +102,7 @@
       </if>
       <if test="longitude != null" >
         longitude = #{longitude,jdbcType=VARCHAR},
-      </if>
+      </if>R
       <if test="latitude != null" >
         latitude = #{latitude,jdbcType=VARCHAR},
       </if>

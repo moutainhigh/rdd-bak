@@ -232,7 +232,8 @@
     user_account AS userAccount,
     user_type AS userType,
     user_rank AS userRank,
-    user_name AS userName
+    user_name AS userName,
+    is_vip AS isVip
     FROM czb_user,czb_enterprise_info
     WHERE
     czb_user.user_id=#{userId,jdbcType=VARCHAR} AND

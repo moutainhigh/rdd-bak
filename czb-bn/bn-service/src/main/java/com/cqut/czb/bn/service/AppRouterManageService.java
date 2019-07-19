@@ -2,7 +2,6 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
-import com.cqut.czb.bn.entity.entity.Menu;
 import com.cqut.czb.bn.entity.entity.User;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;

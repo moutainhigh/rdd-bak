@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.rentCar;
 
-import io.swagger.models.auth.In;
-
 public class AsynchronousInfo {
     // 合同状态，1 未签署完消息 2 合同签署完成消息
     private Integer noticeType;

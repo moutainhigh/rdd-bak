@@ -3,7 +3,6 @@ package com.cqut.czb.bn.dao.mapper;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
 import com.cqut.czb.bn.entity.entity.PayToPerson;
 
-import javax.validation.constraints.Size;
 import java.util.List;
 
 public interface PayToPersonMapper {

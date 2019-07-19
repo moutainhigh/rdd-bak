@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.appPersonalCenter;
 
-import java.util.Date;
-
 public class AppRouterDTO {
 
     private Integer pathType;

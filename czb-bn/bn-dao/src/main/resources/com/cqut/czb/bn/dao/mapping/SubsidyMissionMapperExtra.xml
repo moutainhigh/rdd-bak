@@ -3,6 +3,7 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.SubsidyMissionMapperExtra" >
   <select id="getPartnerSubordinates" resultType="com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesQueryDTO">
     <if test="createSubsidiesQueryDTO.subsidyRent != null and createSubsidiesQueryDTO.subsidyMonth != null">
+
       SELECT
       sum( czb_income_log.amount ) monthlyEarnings,
       sum( czb_income_log.amount ) * ${createSubsidiesQueryDTO.subsidyRent}  subsidies,

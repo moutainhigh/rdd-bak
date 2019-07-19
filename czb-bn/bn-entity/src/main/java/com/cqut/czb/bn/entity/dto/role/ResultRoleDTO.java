@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.role;
 
-import org.springframework.expression.spel.ast.BooleanLiteral;
-
 public class ResultRoleDTO {
     private String roleId;
 

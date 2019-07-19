@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.role;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * RoleManagementController 获取角色信息DTO
  * 设计者:   杨强

@@ -5,8 +5,6 @@ import com.cqut.czb.bn.entity.dto.consultingManagement.HandleConsultationInputDT
 import com.cqut.czb.bn.entity.entity.EnterpriseConsultingInfo;
 import com.github.pagehelper.PageInfo;
 
-import java.util.List;
-
 public interface IConsultingManagementService {
     PageInfo<EnterpriseConsultingInfo> getConsultingList(ConsultingInputDTO inputDTO);
 

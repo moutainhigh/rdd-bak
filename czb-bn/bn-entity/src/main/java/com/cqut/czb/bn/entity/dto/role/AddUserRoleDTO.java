@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.role;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * userManagementDTO 存入用户角色信息
  * 设计者:   罗杏函

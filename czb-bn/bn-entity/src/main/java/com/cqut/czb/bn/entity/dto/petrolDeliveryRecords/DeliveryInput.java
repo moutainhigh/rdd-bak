@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.petrolDeliveryRecords;
 
-import java.util.Date;
-
 public class DeliveryInput {
 
     private String recordId;

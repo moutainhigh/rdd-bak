@@ -8,7 +8,6 @@ import com.cqut.czb.bn.entity.entity.Petrol;
 import com.github.pagehelper.PageInfo;
 
 import java.io.InputStream;
-import java.util.List;
 
 public interface IPetrolManagementService {
     PageInfo<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO);

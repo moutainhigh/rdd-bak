@@ -6,6 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface SubsidyMissionMapperExtra {
-    
+
     List<CreateSubsidiesQueryDTO> getPartnerSubordinates(@Param("createSubsidiesQueryDTO") CreateSubsidiesQueryDTO createSubsidiesQueryDTO);
 }

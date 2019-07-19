@@ -1,27 +1,16 @@
 package com.cqut.czb.bn.api.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
-import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
-import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import com.cqut.czb.bn.entity.entity.AppRouter;
-
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 创建者：陈德强
