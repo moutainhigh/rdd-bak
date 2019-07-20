@@ -52,5 +52,6 @@
         <include refid="Base_Column_List" />
         from czb_vip_area_config
         where area = #{area,jdbcType=VARCHAR}
+        AND vip_state
     </select>
 </mapper>
