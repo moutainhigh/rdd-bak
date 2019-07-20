@@ -32,9 +32,4 @@ public class VIPRechargeRecordController {
     public JSONResult deleteVIPRechargeByID(@Param("vipRechargeRecordId")String vipRechargeRecordId){
         return new JSONResult(vipRechargeRecordService.deleteVIPRechargeByID(vipRechargeRecordId));
     }
-
-    @GetMapping("/getVipPrice")
-    public JSONResult getVipPrice(@Param("area")String area){
-        return new JSONResult(vipRechargeRecordService.getVipPrice(area));
-    }
 }

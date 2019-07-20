@@ -53,4 +53,9 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
     public Boolean deleteVipArea(String vipAreaId) {
         return vipAreaConfigMapper.deleteByPrimaryKey(vipAreaId) > 0;
     }
+
+    @Override
+    public VipAreaConfig getVipPrice(String area) {
+        return vipAreaConfigMapperExtra.selectVipPrice(area);
+    }
 }

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordDTO;
@@ -27,6 +28,9 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
     @Autowired
     VipRechargeRecordsMapper vipRechargeRecordsMapper;
 
+    @Autowired
+    VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
+
     @Override
     public VipRechargeRecordDTO getVipRechargeRecordList(VipRechargeRecordListDTO vipRechargeRecordListDTO) {
         PageHelper.startPage(vipRechargeRecordListDTO.getCurrentPage(), vipRechargeRecordListDTO.getPageSize());
@@ -46,8 +50,5 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
         return vipRechargeRecordsMapper.deleteByPrimaryKey(vipRechargeRecordId) > 0;
     }
 
-    @Override
-    public VipAreaConfig getVipPrice(String area) {
-        return null;
-    }
+
 }
