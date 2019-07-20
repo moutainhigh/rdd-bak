@@ -43,7 +43,7 @@ public class VIPAreaManagementController {
         return new JSONResult(vipAreaManagementService.deleteVipArea(vipAreaId));
     }
 
-    @GetMapping("/getVipPrice")
+    @GetMapping("/getVipPriceAndNote")
     public JSONResult getVipPrice(@Param("area")String area){
         return new JSONResult(vipAreaManagementService.getVipPrice(area));
     }
