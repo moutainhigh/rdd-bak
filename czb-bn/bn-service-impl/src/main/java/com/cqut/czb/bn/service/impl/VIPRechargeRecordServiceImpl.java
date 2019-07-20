@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.VipRechargeRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO;
+import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.service.VIPRechargeRecordService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -43,5 +44,10 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
     @Override
     public Boolean deleteVIPRechargeByID(String vipRechargeRecordId) {
         return vipRechargeRecordsMapper.deleteByPrimaryKey(vipRechargeRecordId) > 0;
+    }
+
+    @Override
+    public VipAreaConfig getVipPrice(String area) {
+        return null;
     }
 }
