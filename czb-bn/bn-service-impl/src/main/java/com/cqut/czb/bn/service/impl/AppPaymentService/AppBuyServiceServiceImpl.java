@@ -44,17 +44,11 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
     public UserInfoCollectedMapperExtra userInfoCollectedMapperExtra;
 
     @Override
-    public String PrePaymentControl(User user, BuyServiceDTO buyServiceDTO) {
+    public String AliPayBuyService(User user,BuyServiceDTO buyServiceDTO) {
+
         if(user==null||buyServiceDTO==null){
             return null;
         }
-        //生成订单
-        String AliOrder=AliPayBuyService(user,buyServiceDTO);
-        return AliOrder;
-    }
-
-    @Override
-    public String AliPayBuyService(User user,BuyServiceDTO buyServiceDTO) {
         //查出商品
         CommodityDTO commodityDTO=commodityMapperExtra.selectOneCommodity(buyServiceDTO);
         /**
@@ -73,7 +67,7 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
         //购买者id
         String ownerId = user.getUserId();
         request.setBizModel(AliParameterConfig.getBizModel2(thirdOrder, actualPrice,commodityId ,ownerId));//支付订单
-        request.setNotifyUrl(AliPayConfig.notify_url);//支付回调接口
+        request.setNotifyUrl(AliPayConfig.BuyService_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
@@ -125,7 +119,9 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
         System.out.println("插入订单"+(insertOrder>0));
 
         //插入必填信息
-        String str = "[{'infoTitle':'姓名','infoContent':'强爸爸'},{'infoTitle':'电话','infoContent':'147852963321'},{'infoTitle':'地址','infoContent':'卡蒂克'}]" ;  // 一个未转化的字符串
+//      String str = "[{'infoTitle':'姓名','infoContent':'强爸爸'},{'infoTitle':'电话','infoContent':'147852963321'},{'infoTitle':'地址','infoContent':'卡蒂克'}]" ;  // 一个未转化的字符串
+        String str=buyServiceDTO.getInputInfo();
+        System.out.println(str);
         List<UserInfoCollected> userInfoCollectedList=  new ArrayList<UserInfoCollected>();
         //查出此产品的必填信息
         List<CommodityUserInfoCollectionDTO> commodityUserInfoCollectionDTOS= commodityUserInfoCollectionMapperExtra.selectInfoInput(commodityDTO.getCommodityId());

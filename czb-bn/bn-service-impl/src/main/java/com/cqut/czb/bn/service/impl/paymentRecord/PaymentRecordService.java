@@ -73,26 +73,7 @@ public class PaymentRecordService implements IPaymentRecordService {
 		return AlipayConfig.response_fail;
 	}
 
-	//解析订单
-	public Map<String, String>  parseOrder(Map<String, String> params,Map requestParams){
-		//解读相应的信息
-		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
-			String name = (String) iter.next();
-			String[] values = (String[]) requestParams.get(name);
-			String valueStr = "";
-			for (int i = 0; i < values.length; i++) {
-				valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
-			}
-			if (name.equals("fund_bill_list")) {
-				valueStr = valueStr.replace("&quot;", "\"");
-			}
-			params.put(name, valueStr);
-		}
-		return params;
-	}
-
 	@Override
-	@SuppressWarnings("rawtypes")
 	public String verifyBuyServiceAiLi(HttpServletRequest request) {
 		// 获取支付宝POST过来反馈信息
 		Map<String, String> params = new HashMap<String, String>();
@@ -261,6 +242,24 @@ public class PaymentRecordService implements IPaymentRecordService {
 		return resXml;
 	}
 
+	//解析订单
+	@Override
+	public Map<String, String>  parseOrder(Map<String, String> params,Map requestParams){
+		//解读相应的信息
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+			}
+			if (name.equals("fund_bill_list")) {
+				valueStr = valueStr.replace("&quot;", "\"");
+			}
+			params.put(name, valueStr);
+		}
+		return params;
+	}
 
 
 

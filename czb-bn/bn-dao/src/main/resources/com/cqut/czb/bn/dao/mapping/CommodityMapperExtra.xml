@@ -105,10 +105,7 @@
         usage_count as usageCount, czb_commodity.create_at as createAt, czb_commodity.update_at as updateAt
         from czb_commodity
         where
-        shop_Id=#{shopId,jdbcType=VARCHAR} and
-        commodity_price=#{commodityPrice,jdbcType=DOUBLE} and
-        classification=#{classification,jdbcType=VARCHAR}
-        limit 1
+        commodity_id=#{commodityId,jdbcType=VARCHAR}
     </select>
 
 

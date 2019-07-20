@@ -11,11 +11,6 @@ import java.util.Map;
 public interface AppBuyServiceService {
 
     /**
-     * 油卡服务和充值分流处理(支付前的处理)
-     */
-    String PrePaymentControl(User user, BuyServiceDTO buyServiceDTO);
-
-    /**
      * 用支付宝购买服务
      * 生成起调参数串——返回给app（支付订单）
      */

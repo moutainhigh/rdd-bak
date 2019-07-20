@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 public class VerifyAsynNoticeInfoController {
 	@Resource(name="paymentRecordService")
 	private IPaymentRecordService paymentRecordService;
+
 	/**
 	 * 油卡购买：验证异步通知信息(支付宝(爱虎))
 	 */

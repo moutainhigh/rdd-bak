@@ -4,15 +4,16 @@ public class BuyServiceDTO {
 
     private String userId;
 
-    private String commodityId="1";//商品的id
+    private String commodityId;//商品的id
 
-    private String shopId="1";
+    private String shopId;
 
-    private Double commodityPrice=999.0;
+    private Double commodityPrice;
 
-    private String classification="22";
+    private String classification;
 
-    private String inputInfo="[{'infoTitle':'a','infoContent':'aa'},{'infoTitle':'b','infoContent':'bb'}]";
+    private String inputInfo;
+//    "[{'infoTitle':'a','infoContent':'aa'},{'infoTitle':'b','infoContent':'bb'}]"
 
     public String getUserId() {
         return userId;

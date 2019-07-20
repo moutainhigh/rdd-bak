@@ -33,12 +33,9 @@ public class AppBuyServiceController {
      * app buy service and input information(购买服务和录入信息)支付宝
      */
     @RequestMapping(value = "/AliBuyService", method = RequestMethod.POST)
-        public JSONResult AliBuyService(Principal principal,  BuyServiceDTO buyServiceDTO) {
-//        User user = (User)redisUtils.get(principal.getName());
-        User user=new User();
-        user.setUserId("1111111111");
-        buyServiceDTO.setClassification("汽车");
-        String info =appBuyServiceService.PrePaymentControl(user,buyServiceDTO);
+        public JSONResult AliBuyService(Principal principal,@RequestBody BuyServiceDTO buyServiceDTO) {
+        User user = (User)redisUtils.get(principal.getName());
+        String info =appBuyServiceService.AliPayBuyService(user,buyServiceDTO);
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
         }else {
@@ -50,11 +47,8 @@ public class AppBuyServiceController {
      * app buy service and input information(购买服务和录入信息)微信
      */
     @RequestMapping(value = "/WeChatBuyService", method = RequestMethod.POST)
-    public JSONResult WeChatBuyService(Principal principal,  BuyServiceDTO buyServiceDTO) {
-//        User user = (User)redisUtils.get(principal.getName());
-        User user=new User();
-        user.setUserId("114598766523");
-        buyServiceDTO.setClassification("汽车");
+    public JSONResult WeChatBuyService(Principal principal,@RequestBody BuyServiceDTO buyServiceDTO) {
+        User user = (User)redisUtils.get(principal.getName());
         JSONObject info =appBuyServiceService.WeChatBuyService(user,buyServiceDTO);
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
