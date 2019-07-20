@@ -19,8 +19,21 @@ public interface IPaymentRecordService {
 	String verifyAsynNoticeInfoAiHu(HttpServletRequest request);
 
 	/**
+	 * 购买服务回调处理
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	String verifyBuyServiceAiLi(HttpServletRequest request);
+
+	/**
 	 * 验证异步通知(微信)
 	 */
 	String orderPayNotify(HttpServletRequest request);
+
+	/**
+	 * 验证异步通知(微信)
+	 */
+	String buyServiceOrderPayNotify(HttpServletRequest request);
 
 }

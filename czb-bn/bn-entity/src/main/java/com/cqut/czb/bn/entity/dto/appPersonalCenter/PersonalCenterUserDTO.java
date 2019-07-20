@@ -24,16 +24,6 @@ public class PersonalCenterUserDTO {
 
     private Integer isVip;
 
-    private Integer haveVip;
-
-    public Integer getHaveVip() {
-        return haveVip;
-    }
-
-    public void setHaveVip(Integer haveVip) {
-        this.haveVip = haveVip;
-    }
-
     public Integer getIsVip() {
         return isVip;
     }

@@ -31,7 +31,7 @@ public class AppHomePageController {
      * @return
      */
     @RequestMapping(value = "/selectAnnouncement",method = RequestMethod.GET)
-    public JSONResult selectAnnouncement(@Param("locationCode") String locationCode){
+    public JSONResult selectAnnouncement(@RequestParam("locationCode") String locationCode){
         if(locationCode==null&&locationCode.equals("")){
             locationCode="homePage";
         }
@@ -62,7 +62,6 @@ public class AppHomePageController {
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
     public JSONResult selectPetrol(@RequestParam(name="area") String area){
-        System.out.println(area);
         if(area==null)
             return new JSONResult("无法获取当前位置", ResponseCodeConstants.FAILURE);
         return new JSONResult(appHomePageService.selectPetrolZone(area));

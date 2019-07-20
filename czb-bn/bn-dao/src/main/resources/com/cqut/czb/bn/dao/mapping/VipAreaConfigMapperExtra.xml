@@ -41,7 +41,14 @@
         select
         <include refid="Base_Column_List" />
         from czb_vip_area_config
-        where area = #{area,jdbcType=VARCHAR}
+        where vip_area_config_id.area = #{area,jdbcType=VARCHAR}
         AND vip_state = 1
+    </select>
+    <!--selectVipPrice-->
+    <select id="selectVipPrice" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vip_area_config
+        where area = #{area,jdbcType=VARCHAR}
     </select>
 </mapper>

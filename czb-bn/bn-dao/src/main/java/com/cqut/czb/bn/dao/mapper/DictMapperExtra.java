@@ -18,6 +18,6 @@ public interface DictMapperExtra {
 
     int insertDict(DictInputDTO dictInputDTO);
 
-
+    List<Dict> selectPetrolInfo();
 
 }

@@ -98,6 +98,21 @@
         from czb_commodity
     </select>
 
+    <select id="selectOneCommodity" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" parameterType="com.cqut.czb.bn.entity.dto.appBuyService.BuyServiceDTO">
+        select
+        commodity_id as commodityId, shop_id as shopId, commodity_title as commodityTitle, commodity_info as commodityInfo,
+        discount as discount,commodity_price as commodityPrice, classification as classification,
+        usage_count as usageCount, czb_commodity.create_at as createAt, czb_commodity.update_at as updateAt
+        from czb_commodity
+        where
+        shop_Id=#{shopId,jdbcType=VARCHAR} and
+        commodity_price=#{commodityPrice,jdbcType=DOUBLE} and
+        classification=#{classification,jdbcType=VARCHAR}
+        limit 1
+    </select>
+
+
+
     <select id="selectCommodityByShop" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO">
         SELECT
             commodity_id AS commodityId,

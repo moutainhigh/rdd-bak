@@ -30,6 +30,17 @@
     from czb_dict
     where name like concat('', #{name,jdbcType=VARCHAR}, '%')
   </select>
+
+  <select id="selectPetrolInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_dict
+    where
+    `name` like concat('',"petrolRemark", '%') OR
+    `name` like concat('',"fangyong1", '%') OR
+    `name` like concat('',"fangyong2", '%')
+  </select>
+
   <insert id="insertDict" parameterType="com.cqut.czb.bn.entity.dto.dict.DictInputDTO" >
     insert into czb_dict
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -145,4 +145,53 @@
             AND  a.id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')
         </if>
     </select>
+
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Order" >
+    insert into czb_order (id, comsumer_id, commodity_id,
+      shop_id, actual_price, third_order,
+      pay_method, state, total_count,
+      create_at, update_at)
+    values (#{id,jdbcType=VARCHAR}, #{comsumerId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR},
+      #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR},
+      #{payMethod,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{totalCount,jdbcType=INTEGER},
+      now(),now())
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Order" >
+    update czb_order
+    <set >
+      <if test="comsumerId != null" >
+        comsumer_id = #{comsumerId,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityId != null" >
+        commodity_id = #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="actualPrice != null" >
+        actual_price = #{actualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="thirdOrder != null" >
+        third_order = #{thirdOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="payMethod != null" >
+        pay_method = #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt = null" >
+        update_at =now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
 </mapper>

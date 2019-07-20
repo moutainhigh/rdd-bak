@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.UserCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.NavDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.ServiceDetailsDTO;
+import com.cqut.czb.bn.entity.dto.appBuyService.BuyServiceDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface CommodityMapperExtra {
     List<AllCommodityDTO> selectAllCommodity(@Param("classification") String classification);
 
     List<NavDTO> selectShopSettleNav();
+
+    CommodityDTO selectOneCommodity(BuyServiceDTO buyServiceDTO);
 
     List<CommodityDTO> selectCommodityByShop(CommodityDTO commodityDTO);
 
