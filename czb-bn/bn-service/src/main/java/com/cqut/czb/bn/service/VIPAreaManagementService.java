@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO;
+import com.cqut.czb.bn.entity.dto.VipArea.VipPriceAndNote;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.github.pagehelper.PageInfo;
 
@@ -18,5 +19,5 @@ public interface VIPAreaManagementService {
 
     Boolean deleteVipArea(String vipAreaId);
 
-    VipAreaConfig getVipPrice(String area);
+    VipPriceAndNote getVipPriceAndNote(String area);
 }
