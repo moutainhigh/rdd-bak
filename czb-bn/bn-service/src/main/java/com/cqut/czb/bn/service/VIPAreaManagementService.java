@@ -15,4 +15,6 @@ public interface VIPAreaManagementService {
     Boolean addVipArea(VipAreaDTO vipAreaDTO);
 
     Boolean editVipArea(VipAreaConfig vipAreaConfig);
+
+    Boolean deleteVipArea(String vipAreaId);
 }

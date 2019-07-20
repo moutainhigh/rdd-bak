@@ -90,7 +90,7 @@
     <if test="userAccount != null">
     AND czb_user.user_account LIKE concat('%',#{userAccount,jdbcType = VARCHAR},'%')
     </if>
-    <if test="rechargeWay != null">
+    <if test="rechargeWay != null and rechargeWay != ''">
     AND recharge_way = #{rechargeWay,jdbcType = INTEGER}
     </if>
   </select>

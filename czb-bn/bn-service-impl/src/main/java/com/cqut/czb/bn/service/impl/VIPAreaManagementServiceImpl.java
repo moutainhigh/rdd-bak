@@ -45,6 +45,12 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
 
     @Override
     public Boolean editVipArea(VipAreaConfig vipAreaConfig) {
+        vipAreaConfig.setUpdateAt(new Date());
         return vipAreaConfigMapper.updateByPrimaryKeySelective(vipAreaConfig) > 0;
+    }
+
+    @Override
+    public Boolean deleteVipArea(String vipAreaId) {
+        return vipAreaConfigMapper.deleteByPrimaryKey(vipAreaId) > 0;
     }
 }

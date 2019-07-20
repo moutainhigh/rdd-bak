@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +40,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Autowired
     private IncomeLogMapperExtra incomeLogMapperExtra;
+
+    @Autowired
+    private VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
 
     @Override
     public UserIncomeInfoDTO selectUserIncomeInfo(String userId) {
@@ -86,14 +90,21 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
         if (user==null){
             return null;
         }
+        User user1 = userMapper.selectByPrimaryKey(user.getUserId());
         PersonalCenterUserDTO personalCenterUserDTO=userMapperExtra.GetUserEnterpriseInfo(user.getUserId());
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
         if(personalCenterUserDTO==null){
             personalCenterUserDTO = new PersonalCenterUserDTO();
-            personalCenterUserDTO.setUserName(user.getUserName());
-            personalCenterUserDTO.setUserAccount(user.getUserAccount());
-            personalCenterUserDTO.setUserType(user.getUserType());
-            personalCenterUserDTO.setUserRank(user.getUserRank());
-            personalCenterUserDTO.setIsVip(user.getIsVip());
+            personalCenterUserDTO.setUserName(user1.getUserName());
+            personalCenterUserDTO.setUserAccount(user1.getUserAccount());
+            personalCenterUserDTO.setUserType(user1.getUserType());
+            personalCenterUserDTO.setUserRank(user1.getUserRank());
+            personalCenterUserDTO.setIsVip(user1.getIsVip());
+            if(vipAreaConfig == null){
+                personalCenterUserDTO.setHaveVip(0);
+            }else{
+                personalCenterUserDTO.setHaveVip(1);
+            }
         }
 
         return personalCenterUserDTO;

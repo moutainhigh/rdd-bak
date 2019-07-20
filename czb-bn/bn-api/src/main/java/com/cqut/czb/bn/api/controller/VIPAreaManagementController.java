@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.VIPAreaManagementService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,5 +36,10 @@ public class VIPAreaManagementController {
     @PostMapping("/editVipArea")
     public JSONResult editVipArea(VipAreaConfig vipAreaConfig){
         return new JSONResult(vipAreaManagementService.editVipArea(vipAreaConfig));
+    }
+
+    @PostMapping("/deleteVipArea")
+    public JSONResult deleteVipArea(@Param("vipAreaId")String vipAreaId){
+        return new JSONResult(vipAreaManagementService.deleteVipArea(vipAreaId));
     }
 }
