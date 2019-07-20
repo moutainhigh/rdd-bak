@@ -101,7 +101,7 @@ public class VerifyAsynNoticeInfoController {
 
 
     /**
-     * vip充值：验证异步通知信息(支付宝(爱虎))
+     * vip充值：验证异步通知信息(支付宝)
      */
     @RequestMapping(value="/verifyRechargeVipInfoAiHu", method= RequestMethod.POST)
     public synchronized void verifyRechargeVipInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
@@ -109,12 +109,26 @@ public class VerifyAsynNoticeInfoController {
         response.setCharacterEncoding("utf-8");
         response.setHeader("content-type", "text/html;charset=utf-8");
         try {
-            System.out.println("购买服务购买成功");
+            System.out.println("充值vip购买成功");
             response.getWriter().print(paymentRecordService.verifyBuyServiceAiLi(request));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
+	/**
+	 * vip充值：验证异步通知信息(微信)
+	 */
+	@RequestMapping(value="/verifyRechargeVipInfoWeChat", method= RequestMethod.POST)
+	public synchronized void verifyRechargeVipInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("微信回调—充值接口");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		try {
+			System.out.println("充值vip购买成功");
+			response.getWriter().print(paymentRecordService.verifyBuyServiceAiLi(request));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

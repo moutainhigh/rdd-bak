@@ -94,35 +94,15 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
 
         buyServiceDTO.setUserId(user.getUserId());
 
-        String orderList = null;//用于保存起调参数,
-//        String orgId = WeChatUtils.getRandomStr();
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String nonceStrTemp = WeChatUtils.getRandomStr();
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatParameterConfig.getParameters2(nonceStrTemp,orgId,user.getUserId(),commodityDTO);
-        // 转为xml格式
-        String info = WeChatUtils.map2xml(parameters);
-        orderList = WeChatHttpUtil.httpsRequest(WeChatPayConfig.URL, "POST", info);
-        // 获取xml结果转换为jsonobject
-        Map<String, Object> result = new TreeMap<String, Object>();
-        result = WeChatUtils.xml2Map(orderList);
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(result);
-        // 生成调起支付sign
-        SortedMap<String, Object> signParam = new TreeMap<String, Object>();
-        signParam.put("appid", jsonObject.getString("appid"));
-        signParam.put("partnerid", jsonObject.getString("mch_id"));
-        signParam.put("prepayid", jsonObject.getString("prepay_id"));
-        signParam.put("package", "Sign=WXPay");
-        signParam.put("noncestr", nonceStrTemp);
-        String a = System.currentTimeMillis() + "";
-        signParam.put("timestamp", a.substring(0, 10));
-        signParam.put("sign", WeChatUtils.createSign("UTF-8", signParam));
-        JSONObject orderString = (JSONObject) JSONObject.toJSON(signParam);
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersService(nonceStrTemp,orgId,user.getUserId(),commodityDTO);
 
         //插入必填信息及生成预支付订单
         insertInfo(orgId,commodityDTO,user,buyServiceDTO);
 
-        return orderString;
+        return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
 
     }
 
@@ -174,7 +154,6 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
             System.out.println("成功插入userInfoCollectedList"+isInsert);
             return true;
         }
-
         return true;
     }
 
