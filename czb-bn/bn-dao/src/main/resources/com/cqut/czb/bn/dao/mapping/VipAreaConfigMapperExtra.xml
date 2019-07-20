@@ -41,7 +41,7 @@
         select
         <include refid="Base_Column_List" />
         from czb_vip_area_config
-        where vip_area_config_id.area = #{area,jdbcType=VARCHAR}
+        where area = #{area,jdbcType=VARCHAR}
         AND vip_state = 1
     </select>
 </mapper>
