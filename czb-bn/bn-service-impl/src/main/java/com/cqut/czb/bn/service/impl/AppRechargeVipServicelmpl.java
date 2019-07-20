@@ -7,7 +7,6 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
-import com.cqut.czb.bn.entity.dto.appBuyService.BuyServiceDTO;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
@@ -15,9 +14,7 @@ import com.cqut.czb.bn.service.AppRechargeVipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.UUID;
 
 @Service
@@ -28,6 +25,11 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
 
     @Override
     public String AliRechargeVip(User user, RechargeVipDTO rechargeVipDTO) {
+        if(rechargeVipDTO==null){
+            System.out.println("地区为空");
+            return null;
+        }
+
         //查出相应地区的vip价格
         VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea());
 
@@ -64,6 +66,10 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
 
     @Override
     public JSONObject WeChatRechargeVip(User user,RechargeVipDTO rechargeVipDTO) {
+        if(rechargeVipDTO==null){
+            System.out.println("地区为空");
+            return null;
+        }
         //查出相应地区的vip价格
         VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea());
 
@@ -71,34 +77,14 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
             System.out.println("此地区没有VIP");
             return null;
         }
-
-//        rechargeVipDTO.setUserId();
-
-//        String orgId = WeChatUtils.getRandomStr();
+        /**
+         * 生成起调参数串——返回给app（微信的支付订单）
+         */
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String nonceStrTemp = WeChatUtils.getRandomStr();
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatParameterConfig.getParameters2(nonceStrTemp,orgId,user.getUserId(),null);
-        // 转为xml格式
-        String info = WeChatUtils.map2xml(parameters);
-        String orderList = null;//用于保存起调参数,
-        orderList = WeChatHttpUtil.httpsRequest(WeChatPayConfig.URL, "POST", info);
-        // 获取xml结果转换为jsonobject
-        Map<String, Object> result = new TreeMap<String, Object>();
-        result = WeChatUtils.xml2Map(orderList);
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(result);
-        // 生成调起支付sign
-        SortedMap<String, Object> signParam = new TreeMap<String, Object>();
-        signParam.put("appid", jsonObject.getString("appid"));
-        signParam.put("partnerid", jsonObject.getString("mch_id"));
-        signParam.put("prepayid", jsonObject.getString("prepay_id"));
-        signParam.put("package", "Sign=WXPay");
-        signParam.put("noncestr", nonceStrTemp);
-        String a = System.currentTimeMillis() + "";
-        signParam.put("timestamp", a.substring(0, 10));
-        signParam.put("sign", WeChatUtils.createSign("UTF-8", signParam));
-        JSONObject orderString = (JSONObject) JSONObject.toJSON(signParam);
-
-        return orderString;
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersVIP(nonceStrTemp,orgId,user.getUserId(),vipAreaConfig);
+        return WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
+
 }
