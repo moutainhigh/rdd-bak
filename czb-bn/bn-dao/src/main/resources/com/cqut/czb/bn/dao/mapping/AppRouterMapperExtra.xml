@@ -175,6 +175,7 @@
 
     <select id="selectAppRouters" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" >
         select
+                is_vip_path isVipPath,
          path_type as pathType , menu_name as menuName,
         android_path as androidPath, ios_path as iosPath, `order`, user_type as userType,file_name as fileName,save_path as savePath,remark
         from czb_app_router,czb_file
