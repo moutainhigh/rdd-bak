@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl;
+package com.cqut.czb.bn.service.impl.AppPaymentService;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
