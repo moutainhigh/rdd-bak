@@ -113,7 +113,7 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
         order.setShopId(commodityDTO.getShopId());
         order.setState(0);
         order.setComsumerId(user.getUserId());
-        order.setTotalCount(1);
+        order.setTotalCount(commodityDTO.getUsageCount());
         order.setThirdOrder("");
         int insertOrder=orderMapperExtra.insert(order);
         System.out.println("插入订单"+(insertOrder>0));
