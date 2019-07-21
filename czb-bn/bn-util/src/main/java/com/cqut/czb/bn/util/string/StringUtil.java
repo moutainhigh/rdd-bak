@@ -33,6 +33,14 @@ public class StringUtil {
     }
 
 
+    public static String createNanoTimeTimestamp() {
+        return String.valueOf(System.nanoTime());
+    }
+
+    public static String createNanoTimeId() {
+        return createNanoTimeTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
+    }
+
     /**
      * 生成当前纳秒值的字符串
      * */

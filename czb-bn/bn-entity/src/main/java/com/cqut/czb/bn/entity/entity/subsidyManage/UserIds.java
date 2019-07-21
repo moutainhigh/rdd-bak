@@ -10,6 +10,17 @@ public class UserIds {
     // 用户ids
     private String userIdS;
 
+    // 指定金额
+    private Double subsidyMoney;
+
+    public Double getSubsidyMoney() {
+        return subsidyMoney;
+    }
+
+    public void setSubsidyMoney(Double subsidyMoney) {
+        this.subsidyMoney = subsidyMoney;
+    }
+
     public String getUserIdS() {
         return userIdS;
     }

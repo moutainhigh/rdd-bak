@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO;
-import com.cqut.czb.bn.entity.entity.subsidyManage.Subsidy;
-import com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyIncomeLog;
-import com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMission;
-import com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMissionUser;
+import com.cqut.czb.bn.entity.entity.subsidyManage.*;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,4 +42,7 @@ public interface SubsidyManageMapperExtra {
 
     // 删除补贴任务前删除关系
     int deleteRelation(@Param("missionId") String missionId);
+
+    // 补贴任务管理查看
+    Page<SeeSubsidy> seeTableData(@Param("missionId") String missionId);
 }

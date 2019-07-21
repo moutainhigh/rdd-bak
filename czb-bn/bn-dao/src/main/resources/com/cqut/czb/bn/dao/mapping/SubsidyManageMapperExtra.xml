@@ -117,6 +117,10 @@
                 AND
                 mission.partner = #{partnerType}
             </if>
+            <if test="account != null and account != ''">
+                AND
+                mission.mission_id = #{account}
+            </if>
         </where>
     </select>
 
@@ -201,6 +205,7 @@
         subsidy_percent,
         state,
         partner,
+        money_type,
         create_at,
         update_at
         )
@@ -211,6 +216,7 @@
         #{subsidyRate},
         0,
         #{subsidyType},
+        #{moneyType},
         CURRENT_TIMESTAMP ,
         CURRENT_TIMESTAMP
         )
@@ -244,4 +250,18 @@
         WHERE
             mission_id = #{missionId}
     </delete>
+
+    <select id="seeTableData" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.subsidyManage.SeeSubsidy">
+        SELECT
+            `user`.user_account account,
+            mission.money_type type,
+            `user`.partner,
+            subuser.amount
+        FROM
+            czb_subsidy_user subuser
+        LEFT JOIN czb_subsidy_mission mission ON mission.mission_id = #{missionId}
+        LEFT JOIN czb_user USER ON `user`.user_id = subuser.user_id
+        WHERE
+            subuser.mission_id = #{missionId}
+    </select>
 </mapper>

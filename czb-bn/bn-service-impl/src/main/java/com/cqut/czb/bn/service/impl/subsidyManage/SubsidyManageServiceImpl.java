@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -62,7 +63,7 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
     @Override
     public boolean deleteSubsidyMission(String missionId) {
         int deleteRelation = subsidyManageMapper.deleteRelation(missionId);
-        return deleteRelation> 0 && subsidyMissionMapper.deleteByPrimaryKey(missionId) > 0;
+        return subsidyMissionMapper.deleteByPrimaryKey(missionId) > 0;
     }
 
     @Override
@@ -89,6 +90,12 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
         String missionId = createId();
         SubsidyMission subsidyMission = new SubsidyMission(missionId ,input.getSubsidyRent(), input.getSubsidyMonth());
         subsidyMission.setSubsidyType(createDto.getPartner());
+        // 设置是否指定金额
+        if(null == input.getSubsidyMoney()){
+            subsidyMission.setMoneyType(0); // 比例金额
+        } else {
+            subsidyMission.setMoneyType(1); // 指定金额
+        }
         int insertSubsidyMission = subsidyManageMapper.insertSubsidyMission(subsidyMission);
         System.out.println("1234123412341234123412341234123" +missionId);
 
@@ -115,32 +122,32 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
                     }
                     if(!isDelete){
                         CreateSubsidiesQueryDTO dto = createSubsidiesQueryDTOs.get(i);
-                        SubsidyMissionUser mission = new SubsidyMissionUser();
-                        mission.setRelationId(createId());
-                        mission.setMissionId(missionId);
-                        mission.setUserId(dto.getUserId());
-                        mission.setAmount(dto.getSubsidies());
-                        missions.add(mission);
+                        // 如果前端传来的指定金额不为空，则type为1
+                        if(null != input.getSubsidyMoney()) {
+                            missions.add(getOneMission(dto, missionId, 1,input));
+                        } else {
+                            missions.add(getOneMission(dto, missionId, 0,input));
+                        }
                     }
                 } else {
                     CreateSubsidiesQueryDTO dto = createSubsidiesQueryDTOs.get(i);
-                    SubsidyMissionUser mission = new SubsidyMissionUser();
-                    mission.setRelationId(createId());
-                    mission.setMissionId(missionId);
-                    mission.setUserId(dto.getUserId());
-                    mission.setAmount(dto.getSubsidies());
-                    missions.add(mission);
+                    // 如果前端传来的指定金额不为空，则type为1
+                    if(null != input.getSubsidyMoney()) {
+                        missions.add(getOneMission(dto, missionId, 1,input));
+                    } else {
+                        missions.add(getOneMission(dto, missionId, 0,input));
+                    }
                 }
             }
             System.out.println("删后长度" + createSubsidiesQueryDTOs.size());
         } else {
             for (CreateSubsidiesQueryDTO data:createSubsidiesQueryDTOs) {
-                SubsidyMissionUser mission = new SubsidyMissionUser();
-                mission.setRelationId(createId());
-                mission.setMissionId(missionId);
-                mission.setUserId(data.getUserId());
-                mission.setAmount(data.getSubsidies());
-                missions.add(mission);
+                // 如果前端传来的指定金额不为空，则type为1
+                if(null != input.getSubsidyMoney()) {
+                    missions.add(getOneMission(data, missionId, 1,input));
+                } else {
+                    missions.add(getOneMission(data, missionId, 0,input));
+                }
             }
         }
         System.out.println("任务长度"+missions.size());
@@ -148,12 +155,51 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
         boolean insertSuccess = (missions.size() == subsidyManageMapper.insertMissionUserRelation(missions)) ;
 
         if (insertSubsidyMission == 1 && insertSuccess) {
-            return new JSONResult("生成补贴任务成功", 200, insertSubsidyMission + " " + insertSuccess);
+            return new JSONResult("生成补贴任务成功", 200, missionId);
         } else {
             return new JSONResult("生成补贴任务失败", 500, insertSubsidyMission + " " + insertSuccess);
         }
     }
 
+    public JSONResult seeTableData(String missionId, PageDTO pageDTO) {
+        Page<SeeSubsidy> subsidyListFirst = subsidyManageMapper.seeTableData(missionId);
+        Double allAmount = Double.valueOf("0");
+        for(SeeSubsidy data:subsidyListFirst){
+            allAmount = allAmount + data.getAmount();
+        }
+        DecimalFormat df = new DecimalFormat("#.00");
+        SeeSubsidyListDTO result = new SeeSubsidyListDTO();
+        result.setAmountAll(Double.valueOf(df.format(allAmount)));
+        result.setPeopleAmount(subsidyListFirst.size());
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        Page<SeeSubsidy> subsidyList = subsidyManageMapper.seeTableData(missionId);
+        result.setSeeSubsidyPageInfo(new PageInfo(subsidyList));
+
+
+        return new JSONResult(result);
+    }
+
+    /**
+     * 构造并返回补贴任务类
+     * @param oneDto
+     * @param missionId
+     * @param type
+     * @param input
+     * @return
+     */
+    public SubsidyMissionUser getOneMission(CreateSubsidiesQueryDTO oneDto, String missionId, Integer type, UserIds input) {
+        SubsidyMissionUser mission = new SubsidyMissionUser();
+        mission.setRelationId(createId());
+        mission.setMissionId(missionId);
+        mission.setUserId(oneDto.getUserId());
+        if(type == 0) {
+            mission.setAmount(oneDto.getSubsidies());
+        } else if(type == 1){
+            mission.setAmount(input.getSubsidyMoney());
+        }
+
+        return mission;
+    }
 
     public static String createMillisTimestamp() {
         return String.valueOf(System.nanoTime());
