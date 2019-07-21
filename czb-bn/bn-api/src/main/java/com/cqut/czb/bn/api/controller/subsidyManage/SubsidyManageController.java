@@ -91,4 +91,15 @@ public class SubsidyManageController {
         return subsidyManageService.createSubsidyMission(createDto, input);
     }
 
+    /**
+     *
+     * @param input
+     * @param pageDTO
+     * @return
+     */
+    @GetMapping("/seeTableData")
+    public JSONResult seeTableData(SubsidyMissionUser input, PageDTO pageDTO) {
+        return subsidyManageService.seeTableData(input.getMissionId(), pageDTO);
+    }
+
 }

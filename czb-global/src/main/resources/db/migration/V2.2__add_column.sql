@@ -1,0 +1,1 @@
+alter table czb_subsidy_mission add money_type TINYINT(2) COMMENT '是否是指定的金额';

@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.subsidyManage;
 import com.cqut.czb.bn.entity.dto.CreateSubsidies.CreateSubsidiesQueryDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.subsidyManage.SubsidySearchDTO;
+import com.cqut.czb.bn.entity.entity.subsidyManage.SeeSubsidy;
 import com.cqut.czb.bn.entity.entity.subsidyManage.Subsidy;
 import com.cqut.czb.bn.entity.entity.subsidyManage.SubsidyMission;
 import com.cqut.czb.bn.entity.entity.subsidyManage.UserIds;
@@ -35,4 +36,7 @@ public interface SubsidyManageService {
 
     // 创建补贴任务
     JSONResult createSubsidyMission(CreateSubsidiesQueryDTO createDto, UserIds input);
+
+    // 补贴任务管理查看
+    JSONResult seeTableData(String missionId, PageDTO pageDTO);
 }
