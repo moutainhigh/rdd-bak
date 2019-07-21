@@ -21,6 +21,9 @@ public interface IPaymentRecordService {
 	 */
 	String verifyBuyServiceAiLi(HttpServletRequest request);
 
+	/**
+	 * 充值vip回调处理支付宝
+	 */
 	String verifyVipRechargeAiLi(HttpServletRequest request);
 
 
@@ -36,7 +39,7 @@ public interface IPaymentRecordService {
 
 
 	/**
-	 * 购买服务回调处理(微信)
+	 * 充值vip回调处理(微信)
 	 */
 	String rechargeVipOrderPayNotify(HttpServletRequest request);
 

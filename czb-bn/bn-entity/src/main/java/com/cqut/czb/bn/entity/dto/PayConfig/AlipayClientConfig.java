@@ -29,7 +29,7 @@ public class AlipayClientConfig {
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
-			instance.setCallBackUrl(AliPayConfig.recharge_url);
+			instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
 		}else if(operationType=="2"){//"2"代表的是充值
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
