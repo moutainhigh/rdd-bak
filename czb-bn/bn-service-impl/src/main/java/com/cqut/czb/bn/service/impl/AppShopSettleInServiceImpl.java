@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.Commodity.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.entity.Commodity;
 import com.cqut.czb.bn.entity.entity.CommodityUsageRecord;
 import com.cqut.czb.bn.entity.entity.Order;
 import com.cqut.czb.bn.service.AppShopSettleInService;
@@ -36,6 +37,9 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
     @Autowired
     public CommodityUsageRecordMapperExtra commodityUsageRecordMapperExtra;
 
+    @Autowired
+    public CommodityMapper commodityMapper;
+
 
     @Override
     public List<CommodityDTO> selectCommodity(PageDTO pageDTO, String classification) {
@@ -47,7 +51,8 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
 
 
     public List<UserCommodityOrderDTO> getCommodityOrderList(String userId,Integer state) {
-        return commodityMapperExtra.getCommodityOrderList(userId,state);
+        List<UserCommodityOrderDTO> a = commodityMapperExtra.getCommodityOrderList(userId,state);
+        return a;
     }
 
     @Override
@@ -59,13 +64,15 @@ public class AppShopSettleInServiceImpl implements AppShopSettleInService {
         commodityUsageRecord.setCreateAt(new Date());
         commodityUsageRecord.setUpdateAt(new Date());
         Order order = orderMapper.selectByPrimaryKey(orderId);
+        String commodityId = order.getCommodityId();
+        Commodity commodity = commodityMapper.selectByPrimaryKey(commodityId);
         int usageCount = commodityUsageRecordMapperExtra.selectOrderIdCount(orderId);
-        if(order.getTotalCount() <= usageCount){
+        if(commodity.getUsageCount() <= usageCount){
             order.setState(1);
             orderMapper.updateByPrimaryKeySelective(order);
             return false;
         }else{
-            if(order.getTotalCount() == usageCount + 1){
+            if(commodity.getUsageCount() == usageCount + 1){
                 order.setState(1);
                 orderMapper.updateByPrimaryKeySelective(order);
             }

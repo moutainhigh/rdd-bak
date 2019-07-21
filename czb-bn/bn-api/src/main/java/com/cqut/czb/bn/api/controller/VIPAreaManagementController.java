@@ -45,6 +45,6 @@ public class VIPAreaManagementController {
 
     @GetMapping("/getVipPriceAndNote")
     public JSONResult getVipPrice(@Param("area")String area){
-        return new JSONResult(vipAreaManagementService.getVipPrice(area));
+        return new JSONResult(vipAreaManagementService.getVipPriceAndNote(area));
     }
 }
