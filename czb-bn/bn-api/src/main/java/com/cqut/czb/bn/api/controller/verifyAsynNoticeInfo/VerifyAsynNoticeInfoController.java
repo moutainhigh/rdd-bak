@@ -111,7 +111,7 @@ public class VerifyAsynNoticeInfoController {
         response.setHeader("content-type", "text/html;charset=utf-8");
         try {
             System.out.println("充值vip购买成功");
-            response.getWriter().print(paymentRecordService.verifyBuyServiceAiLi(request));
+            response.getWriter().print(paymentRecordService.verifyVipRechargeAiLi(request));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,7 +127,7 @@ public class VerifyAsynNoticeInfoController {
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {
 			System.out.println("充值vip购买成功");
-			response.getWriter().print(paymentRecordService.verifyBuyServiceAiLi(request));
+			response.getWriter().print(paymentRecordService.rechargeVipOrderPayNotify(request));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

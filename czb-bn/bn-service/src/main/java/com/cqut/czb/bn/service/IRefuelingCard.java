@@ -22,6 +22,21 @@ public interface IRefuelingCard {
 	 */
 	Map AliBuyServicePayCallback(Object[] param);
 
+	/**
+	 * 购买服务支付成功后的处理(支付宝)
+	 * @param param
+	 * @return
+	 */
+	Map AliRechargeVipPayCallback(Object[] param);
+
+	/**
+	 * 购买服务支付成功后的处理(支付宝)
+	 * @param param
+	 * @return
+	 */
+	Map WeChatRechargeVipPayCallback(Object[] param);
+
+
     /**
      * 购买(或充值)油卡支付成功后的处理(微信)
      * @param param

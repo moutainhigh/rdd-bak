@@ -117,6 +117,51 @@ public class PaymentRecordService implements IPaymentRecordService {
 		return AlipayConfig.response_fail;
 	}
 
+	@Override
+	public String verifyVipRechargeAiLi(HttpServletRequest request) {
+
+		// 获取支付宝POST过来反馈信息
+		Map<String, String> params = new HashMap<String, String>();
+		Map requestParams = request.getParameterMap();
+		params=parseOrder(params,requestParams);
+		//是否被篡改的标识
+		boolean signVerfied = false;
+		try {
+			//检测支付订单是否被篡改
+			signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key,
+					AliPayConfig.charset, AliPayConfig.sign_type);
+			System.out.println("408 " + signVerfied);
+		} catch (AlipayApiException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (signVerfied) {
+//				支付账单是否一致
+				if (isCorrectDataAiHu(params)) {//交易成功
+					Object[] param = { params };
+					Map result = refuelingCard.AliRechargeVipPayCallback(param);//1为支付宝支付（用于拓展）
+					if (AlipayConfig.response_success.equals(result.get("success"))) {
+						return AlipayConfig.response_success;
+					} else if (AlipayConfig.response_fail.equals(result.get("fail"))) {
+						return AlipayConfig.response_fail;
+					} else
+						return null;
+				} else {//交易失败
+					Object[] param = { params };
+					refuelingCard.purchaseFailed(param);//油卡放回
+					return AlipayConfig.response_fail;
+				}
+			} else {
+				System.out.println("被篡改"+AlipayConfig.response_fail);
+				return AlipayConfig.response_fail;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("被篡改外"+AlipayConfig.response_fail);
+		return AlipayConfig.response_fail;
+	}
+
 
 	/**
 	 * 微信
@@ -134,6 +179,34 @@ public class PaymentRecordService implements IPaymentRecordService {
 					// 进行业务处理
 					Object[] param = { restmap };
 					Map<String, Integer> result = refuelingCard.WeChatPayCallback(param);
+					if (result.get("success") == 1) {
+						return getSuccess();
+					} else {
+						return AlipayConfig.response_fail;
+					}
+				} else {
+					return AlipayConfig.response_fail;
+				}
+			} else {
+				return AlipayConfig.response_fail;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return getSuccess();
+		}
+	}
+
+	public String rechargeVipOrderPayNotify(HttpServletRequest request) {
+		try {
+			ServletInputStream in = request.getInputStream();
+			String resxml = WeChatFileUtil.inputStream2String(in);
+			Map<String, Object> restmap = WeChatUtils.xml2Map(resxml);
+			if ("SUCCESS".equals(restmap.get("result_code"))) {
+				// 订单支付成功 业务处理
+				if (checkSign(restmap)) {
+					// 进行业务处理
+					Object[] param = { restmap };
+					Map<String, Integer> result = refuelingCard.WeChatRechargeVipPayCallback(param);
 					if (result.get("success") == 1) {
 						return getSuccess();
 					} else {
@@ -244,7 +317,7 @@ public class PaymentRecordService implements IPaymentRecordService {
 
 	//解析订单
 	@Override
-	public Map<String, String>  parseOrder(Map<String, String> params,Map requestParams){
+	public Map<String, String>  parseOrder(Map<String, String> params, Map requestParams){
 		//解读相应的信息
 		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
 			String name = (String) iter.next();

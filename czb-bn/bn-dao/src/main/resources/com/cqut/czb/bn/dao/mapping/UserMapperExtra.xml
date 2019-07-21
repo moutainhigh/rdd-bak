@@ -321,4 +321,12 @@
     </foreach>
   </update>
 
+  <update id="UpdateToVip" parameterType="java.lang.String">
+    update czb_user
+    <set >
+        is_vip= 1,
+        update_at = now()
+    </set>
+    where  user_id= #{userId,jdbcType=VARCHAR}
+  </update>
 </mapper>

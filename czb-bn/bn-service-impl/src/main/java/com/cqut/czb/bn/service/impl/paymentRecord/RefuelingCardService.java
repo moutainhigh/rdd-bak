@@ -52,6 +52,9 @@ public class RefuelingCardService implements IRefuelingCard {
     @Autowired
     OrderMapperExtra orderMapperExtra;
 
+    @Autowired
+    UserMapperExtra userMapperExtra;
+
     // 同一时间只允许一个线程访问购买油卡接口
     public synchronized Map AliPayCallback(Object[] param) {
         // 支付宝支付
@@ -78,6 +81,28 @@ public class RefuelingCardService implements IRefuelingCard {
             result.put("fail", AlipayConfig.response_fail);
             return result;
         }
+    }
+
+    @Override
+    public Map AliRechargeVipPayCallback(Object[] param) {
+        // 支付宝支付
+        Map<String, String> result = new HashMap<>();
+        Map<String, String> params = (HashMap<String, String>) param[0];
+        if (getAddVipOrderData(params) == 1) {//获取订单数据存入数据库(支付宝)
+            result.put("success", AlipayConfig.response_success);
+            return result;
+        } else {
+            result.put("fail", AlipayConfig.response_fail);
+            return result;
+        }
+    }
+
+    @Override
+    public Map WeChatRechargeVipPayCallback(Object[] param) {
+        Map<String, Object> restmap = (HashMap<String, Object>) param[0];
+        Map<String, Integer> result = new HashMap<>();
+        result.put("success", addVipOrderWeChat(restmap));//返回后进行判断
+        return result;
     }
 
     @Override
@@ -236,10 +261,134 @@ public class RefuelingCardService implements IRefuelingCard {
         consumptionRecord.setMoney(money);
         consumptionRecord.setType(Integer.valueOf(2));//0为油卡购买，1为油卡充值,2购买服务
         consumptionRecord.setUserId(ownerId);
-        consumptionRecord.setOriginalAmount(0.0);//油卡面额
+        consumptionRecord.setOriginalAmount(money);//油卡面额
         consumptionRecord.setPayMethod(1);//1为支付宝2为微信
         boolean insertInfo = consumptionRecordMapperExtra.insert(consumptionRecord) > 0;
         System.out.println("插入用户消费记录" + insertInfo);
+        //进行返佣
+        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
+        System.out.println("返佣"+beginFanYong);
+        return 1;
+    }
+
+    public synchronized int getAddVipOrderData(Map<String, String> params) {
+        String[] resDate = params.get("passback_params").split("\\^");
+        String[] temp;
+        String thirdOrderId = params.get("trade_no");
+        String orgId = "";//商家订单
+        double money = 0;
+        String ownerId = "";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println("商家订单orgId:" + orgId);
+            }
+            if ("money".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+                System.out.println("充值金额:money" + money);
+            }
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+                System.out.println("用户id:" + ownerId);
+            }
+        }
+        //更改用户状态
+        boolean kk= userMapperExtra.UpdateToVip(ownerId)>0;
+        System.out.println("更改用户为vip"+kk);
+
+
+        //查询是否为首次消费
+        List<ConsumptionRecord> consumptionRecordList = consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
+        if (consumptionRecordList.size() == 0) {
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = formatter.format(currentTime);
+            PartnerDTO partnerDTO = new PartnerDTO();
+            partnerDTO.setUserId(ownerId);
+            partnerDTO.setMonthTime(dateString);
+            boolean isSuccessful = infoSpreadService.addChildConsumer(partnerDTO);
+            System.out.println("插入消费人数" + isSuccessful);
+        }
+
+        //payType对应0为油卡购买，1为油卡充值,2为购买服务
+        //插入消费记录
+        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+        consumptionRecord.setRecordId(StringUtil.createId());
+        consumptionRecord.setLocalOrderId(orgId);//本地订单号
+        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+        consumptionRecord.setMoney(money);
+        consumptionRecord.setType(Integer.valueOf(2));//0为油卡购买，1为油卡充值,2购买服务
+        consumptionRecord.setUserId(ownerId);
+        consumptionRecord.setOriginalAmount(money);//油卡面额
+        consumptionRecord.setPayMethod(1);//1为支付宝2为微信
+        boolean insertInfo = consumptionRecordMapperExtra.insert(consumptionRecord) > 0;
+        System.out.println("插入用户消费记录" + insertInfo);
+        //进行返佣
+        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
+        System.out.println("返佣"+beginFanYong);
+        return 1;
+    }
+
+    public int addVipOrderWeChat(Map<String, Object> restmap) {
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        //商户订单号
+        String out_trade_no = restmap.get("out_trade_no").toString();
+        //微信交易订单号
+        String thirdOrderId = restmap.get("transaction_id").toString();
+        String[] temp;
+        String orgId = "";
+        double money = Double.valueOf(restmap.get("total_fee").toString());
+        money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+        String ownerId = "";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println(orgId);
+            }
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+                System.out.println("用户id:" + ownerId);
+            }
+        }
+
+        //更改用户状态
+        boolean kk= userMapperExtra.UpdateToVip(ownerId)>0;
+        System.out.println("更改用户为vip"+kk);
+
+        //查询是否为首次消费
+        List<ConsumptionRecord> consumptionRecordList = consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
+        if (consumptionRecordList.size() == 0) {
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = formatter.format(currentTime);
+            PartnerDTO partnerDTO = new PartnerDTO();
+            partnerDTO.setUserId(ownerId);
+            partnerDTO.setMonthTime(dateString);
+            boolean isSuccessful = infoSpreadService.addChildConsumer(partnerDTO);
+            System.out.println("插入消费人数" + isSuccessful);
+        }
+        //payType对应0为油卡购买，1为油卡充值,2为购买服务
+        //插入消费记录
+        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+        consumptionRecord.setRecordId(StringUtil.createId());
+        consumptionRecord.setLocalOrderId(orgId);//本地订单号
+        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+        consumptionRecord.setMoney(money);
+        consumptionRecord.setType(Integer.valueOf(2));//0为油卡购买，1为油卡充值,2购买服务
+        consumptionRecord.setUserId(ownerId);
+        consumptionRecord.setOriginalAmount(money);//油卡面额
+        consumptionRecord.setPayMethod(1);//1为支付宝2为微信
+        boolean insertInfo = consumptionRecordMapperExtra.insert(consumptionRecord) > 0;
+        System.out.println("插入用户消费记录" + insertInfo);
+
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
@@ -433,7 +582,7 @@ public class RefuelingCardService implements IRefuelingCard {
         consumptionRecord.setMoney(money);
         consumptionRecord.setType(Integer.valueOf(2));//0为油卡购买，1为油卡充值,2购买服务
         consumptionRecord.setUserId(ownerId);
-        consumptionRecord.setOriginalAmount(0.0);//油卡面额
+        consumptionRecord.setOriginalAmount(money);//油卡面额
         consumptionRecord.setPayMethod(1);//1为支付宝2为微信
         boolean insertInfo = consumptionRecordMapperExtra.insert(consumptionRecord) > 0;
         System.out.println("插入用户消费记录" + insertInfo);

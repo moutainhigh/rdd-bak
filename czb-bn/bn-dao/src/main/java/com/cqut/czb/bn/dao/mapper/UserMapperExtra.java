@@ -64,4 +64,9 @@ public interface UserMapperExtra {
      * @return
      */
     int ModifyContactInfo(PersonalCenterUserDTO personalCenterUserDTO);
+
+    /**
+     * 将用户身份改为vip
+     */
+    int UpdateToVip(@Param("userId") String userId);
 }
