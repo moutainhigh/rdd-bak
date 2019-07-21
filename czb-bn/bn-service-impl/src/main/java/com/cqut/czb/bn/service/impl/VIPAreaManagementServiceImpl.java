@@ -61,6 +61,7 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
 
     @Override
     public VipPriceAndNote getVipPriceAndNote(String area) {
+
         VipPriceAndNote vipPriceAndNote = new VipPriceAndNote();
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipPrice(area);
         vipPriceAndNote.setArea(vipAreaConfig.getArea());
