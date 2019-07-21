@@ -22,8 +22,10 @@
     FROM
 	czb_vip_area_config
 	LEFT JOIN czb_vip_recharge_records ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
-    WHERE
-	czb_vip_area_config.area like concat('%',#{area,jdbcType = VARCHAR},'%')
+	<if test="area != null">
+        WHERE
+        czb_vip_area_config.area like concat('%',#{area,jdbcType = VARCHAR},'%')
+    </if>
     GROUP BY
 	czb_vip_area_config.vip_area_config_id
   </select>
@@ -41,7 +43,15 @@
         select
         <include refid="Base_Column_List" />
         from czb_vip_area_config
-        where vip_area_config_id = #{area,jdbcType=VARCHAR}
+        where area = #{area,jdbcType=VARCHAR}
         AND vip_state = 1
+    </select>
+    <!--selectVipPrice-->
+    <select id="selectVipPrice" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vip_area_config
+        where area = #{area,jdbcType=VARCHAR}
+        AND vip_state
     </select>
 </mapper>

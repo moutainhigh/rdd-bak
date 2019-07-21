@@ -15,11 +15,17 @@ public class CommodityDTO {
 
     private String commodityImg;
 
+    private String savePath;
+
     private Double commodityPrice;
 
     private String classification;
 
     private Integer usageCount;
+
+    private String startTime;
+
+    private String endTime;
 
     private Date createAt;
 
@@ -73,6 +79,14 @@ public class CommodityDTO {
         this.commodityImg = commodityImg;
     }
 
+    public String getSavePath() {
+        return savePath;
+    }
+
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
+    }
+
     public Double getCommodityPrice() {
         return commodityPrice;
     }
@@ -95,6 +109,22 @@ public class CommodityDTO {
 
     public void setUsageCount(Integer usageCount) {
         this.usageCount = usageCount;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public Date getCreateAt() {

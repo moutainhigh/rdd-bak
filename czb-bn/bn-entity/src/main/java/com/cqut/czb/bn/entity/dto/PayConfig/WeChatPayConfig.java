@@ -29,6 +29,13 @@ public class WeChatPayConfig {
     //通知地址1(购买油卡的回调地址)
 	public static final String notify_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyPetrolInfoWeChat";
 
+	//购买服务
+	public static final String BuyService_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyServiceInfoWeChat";
+
+	//充值vip
+	public static final String RechargeVip_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyRechargeVipInfoWeChat";
+
+
 	//交易类型
 	public static final String trade_type = "APP";
 	

@@ -155,12 +155,27 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                 row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getContactNumber());
                 row.createCell(count).setCellType(CellType.STRING);
+                if (petrolDeliveryDTOS.get(i).getProvince()==null){
+                    petrolDeliveryDTOS.get(i).setProvince("");
+                }
+                if (petrolDeliveryDTOS.get(i).getCity()==null){
+                    petrolDeliveryDTOS.get(i).setCity("");
+                }
+                if(petrolDeliveryDTOS.get(i).getArea()==null){
+                    petrolDeliveryDTOS.get(i).setArea("");
+                }
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getProvince()+petrolDeliveryDTOS.get(i).getCity()+petrolDeliveryDTOS.get(i).getArea());
                 row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDetail());
                 row.createCell(count).setCellType(CellType.STRING);
+                if (petrolDeliveryDTOS.get(i).getDeliveryNum()==null){
+                    petrolDeliveryDTOS.get(i).setDeliveryNum("");
+                }
                 row.createCell(count++).setCellValue(""+petrolDeliveryDTOS.get(i).getDeliveryNum());
                 row.createCell(count).setCellType(CellType.STRING);
+                if (petrolDeliveryDTOS.get(i).getDeliveryCompany()==null){
+                    petrolDeliveryDTOS.get(i).setDeliveryCompany("");
+                }
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getDeliveryCompany());
             }
             return workbook;

@@ -106,6 +106,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
                 personalCenterUserDTO.setHaveVip(1);
             }
         }
+
         return personalCenterUserDTO;
     }
 

@@ -21,6 +21,13 @@ public class AliPayConfig {
 	//购买油卡充值url
 	public static String PetrolRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyPetrolRechargeInfoAiHu";
 
+	//购买服务url
+	public static String BuyService_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyServiceInfoAiHu";
+
+	//vip充值
+	public static String RechargeVip_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyRechargeVipInfoAiHu";
+
+
 	// 加密方式
 	public static String sign_type = "RSA2";
 	

@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.api.controller;
+package com.cqut.czb.bn.api.controller.appPayment;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;

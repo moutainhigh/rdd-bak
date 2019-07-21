@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.OrderMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.order.OrderDTO" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="comsumer_id" property="comsumerId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+        <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="selectOrderList" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" >
+            SELECT
+            a.id,
+            a.comsumer_id,
+            a.shop_id,
+            b.user_account,
+            c.shop_name,
+            a.actual_price,
+            a.create_at,
+            a.state
+            FROM
+                czb_order a
+            LEFT JOIN czb_user b ON a.comsumer_id = b.user_id
+            LEFT JOIN czb_shop c ON a.shop_id = c.shop_id
+            where
+                a.state!=-1
+                <if test="userAccount!=null and userAccount!=''">
+                  AND  b.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
+                </if>
+                <if test="shopName!=null and shopName!=''">
+                    AND c.shop_name LIKE CONCAT('%',#{shopName,jdbcType=VARCHAR},'%')
+                </if>
+                <if test="state!=null">
+                    AND a.state = #{state,jdbcType=INTEGER}
+                </if>
+                <if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
+                    AND a.create_at >= #{startTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="(startTime==null or startTime=='' ) and endTime!=null and endTime!=''">
+                    AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
+                    AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+                </if>
+    </select>
+    <update id="updateOrderState" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" >
+        update czb_order
+        set
+        state = #{state,jdbcType=INTEGER}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="selectOrderByShop" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" resultType="com.cqut.czb.bn.entity.dto.order.OrderDTO">
+        SELECT
+        a.id AS id,
+        a.comsumer_id AS comsumerId,
+        e.user_account AS userAccount,
+        f.shop_name AS shopName,
+        a.create_at AS createAt,
+        a.actual_price as actualPrice,
+        a.state as state,
+        GROUP_CONCAT(DISTINCT(CONCAT(d.info_title,':',b.content))) AS message,
+        a.total_count AS totalCount,
+        (SELECT
+        a.total_count-SUM(b.order_id)
+        FROM
+        czb_order a
+        LEFT JOIN czb_commodity_usage_record b ON a.id = b.order_id
+        WHERE a.shop_id = #{shopId,jdbcType=VARCHAR}
+        GROUP BY a.id) AS remainCount
+        FROM
+            czb_order a
+        LEFT JOIN czb_user_info_collected b ON a.id = b.order_id
+        LEFT JOIN czb_commodity_user_info_collection d ON b.info_id = d.info_id
+        LEFT JOIN czb_commodity_usage_record c ON a.id = c.order_id
+        LEFT JOIN czb_user e ON a.comsumer_id = e.user_id
+        LEFT JOIN czb_shop f ON a.shop_id = f.shop_id
+        WHERE
+        a.state!=-1
+        <if test="shopId!=null and shopId!=''">
+          AND  a.shop_id LIKE CONCAT('%',#{shopId,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="comsumerId!=null and comsumerId!=''">
+          AND a.comsumer_id LIKE CONCAT('%',#{comsumerId,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
+            AND a.create_at >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="(startTime==null or startTime=='' ) and endTime!=null and endTime!=''">
+            AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="state!=null">
+            AND a.state = #{state,jdbcType=INTEGER}
+        </if>
+        GROUP BY a.id
+    </select>
+
+    <select id="selectRemainService" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" resultType="com.cqut.czb.bn.entity.dto.order.OrderDTO">
+        SELECT
+        a.id,
+        a.total_count-SUM(b.order_id) AS remainCount
+        FROM
+            czb_order a
+        LEFT JOIN czb_commodity_usage_record b ON a.id = b.order_id
+        WHERE a.shop_id = #{shopId,jdbcType=VARCHAR}
+        GROUP BY a.id
+    </select>
+
+    <select id="selectConsumptionOfService" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" resultType="com.cqut.czb.bn.entity.dto.order.OrderDTO">
+        SELECT
+            a.id AS id,
+            e.shop_name AS shopName,
+            d.user_account AS userAccount,
+            a.third_order AS thirdOrder,
+            b.commodity_title AS commodityTitle,
+            c.create_at AS createAt
+        FROM
+            czb_order a
+        LEFT JOIN czb_commodity b ON a.commodity_id = b.commodity_id
+        LEFT JOIN czb_commodity_usage_record c ON a.id = c.order_id
+        LEFT JOIN czb_user d ON a.comsumer_id = d.user_id
+        LEFT JOIN czb_shop e ON a.shop_id = e.shop_id
+        WHERE a.shop_id = #{shopId,jdbcType=VARCHAR}
+        <if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
+            AND c.create_at >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="(startTime==null or startTime=='' ) and endTime!=null and endTime!=''">
+            AND c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="userAccount!=null and userAccount!=''">
+            AND  d.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="commodityTitle!=null and commodityTitle!=''">
+            AND  a.commodity_title LIKE CONCAT('%',#{commodityTitle,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="id!=null and id!=''">
+            AND  a.id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Order" >
+    insert into czb_order (id, comsumer_id, commodity_id,
+      shop_id, actual_price, third_order,
+      pay_method, state, total_count,
+      create_at, update_at)
+    values (#{id,jdbcType=VARCHAR}, #{comsumerId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR},
+      #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR},
+      #{payMethod,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{totalCount,jdbcType=INTEGER},
+      now(),now())
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Order" >
+    update czb_order
+    <set >
+      <if test="comsumerId != null" >
+        comsumer_id = #{comsumerId,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityId != null" >
+        commodity_id = #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="actualPrice != null" >
+        actual_price = #{actualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="thirdOrder != null" >
+        third_order = #{thirdOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="payMethod != null" >
+        pay_method = #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt = null" >
+        update_at =now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

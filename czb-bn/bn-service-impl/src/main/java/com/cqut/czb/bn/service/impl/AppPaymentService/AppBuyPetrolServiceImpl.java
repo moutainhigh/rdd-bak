@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl;
+package com.cqut.czb.bn.service.impl.AppPaymentService;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -40,33 +40,14 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         /**
          * 生成起调参数串——返回给app（支付宝的支付订单）
          */
-        String orderList = null;//用于保存起调参数,
         String orgId = WeChatUtils.getRandomStr();
         String nonceStrTemp = WeChatUtils.getRandomStr();
         // 设置参数
         SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,petrolInputDTO,petrol);
-        // 转为xml格式
-        String info = WeChatUtils.map2xml(parameters);
-        orderList = WeChatHttpUtil.httpsRequest(WeChatPayConfig.URL, "POST", info);
-        // 获取xml结果转换为jsonobject
-        Map<String, Object> result = new TreeMap<String, Object>();
-        result = WeChatUtils.xml2Map(orderList);
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(result);
-        // 生成调起支付sign
-        SortedMap<String, Object> signParam = new TreeMap<String, Object>();
-        signParam.put("appid", jsonObject.getString("appid"));
-        signParam.put("partnerid", jsonObject.getString("mch_id"));
-        signParam.put("prepayid", jsonObject.getString("prepay_id"));
-        signParam.put("package", "Sign=WXPay");
-        signParam.put("noncestr", nonceStrTemp);
-        String a = System.currentTimeMillis() + "";
-        signParam.put("timestamp", a.substring(0, 10));
-        signParam.put("sign", WeChatUtils.createSign(characterEncoding, signParam));
-        JSONObject orderString = (JSONObject) JSONObject.toJSON(signParam);
         //插入购买信息
         boolean insertPetrolSalesRecords= insertPetrolSalesRecords(petrol,petrolInputDTO,orgId);
         System.out.println("新增油卡购买或充值记录完毕"+insertPetrolSalesRecords);
-        return orderString;
+        return   WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
 
     @Override

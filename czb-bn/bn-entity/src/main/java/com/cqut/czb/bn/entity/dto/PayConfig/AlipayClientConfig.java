@@ -35,6 +35,11 @@ public class AlipayClientConfig {
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+		}else if(operationType=="3"){//"3"代表的是购买服务
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+			instance.setCallBackUrl(AliPayConfig.BuyService_url);
 		}
 		return instance;
 	}
