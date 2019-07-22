@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ServiceProviderManageMapperExtra" >
+    <select id="getServiceInfoData" parameterType="com.cqut.czb.bn.entity.dto.serviceProviderManage.ServiceProviderInputDTO" resultType="com.cqut.czb.bn.entity.dto.serviceProviderManage.ServiceProvider">
+        SELECT
+            big.amountHistory,
+            big.serviceId,
+            big.serviceName,
+            big.phone,
+            big.serviceAddress,
+            big.servicePeopleName,
+            SUM(ordersTwo.actual_price) amountMonth
+        FROM
+            (
+                SELECT
+                    shop.shop_id serviceId,
+                    shop.shop_name serviceName,
+                    users.user_name servicePeopleName,
+                    shop.shop_phone phone,
+                    shop.shop_address serviceAddress,
+                    sum(orders.actual_price) amountHistory
+                FROM
+                    czb_shop shop
+                LEFT JOIN czb_user users ON users.user_id = shop.user_id
+                LEFT JOIN czb_order orders ON orders.shop_id = shop.shop_id
+                AND orders.state = 1
+                GROUP BY
+                    serviceId
+            ) big
+        LEFT JOIN czb_order ordersTwo ON ordersTwo.shop_id = big.serviceId
+        AND date_format(ordersTwo.create_at, '%Y%m') = date_format(now(), '%Y%m')
+        AND ordersTwo.state = 1
+        GROUP BY
+            big.serviceId
+    </select>
+</mapper>

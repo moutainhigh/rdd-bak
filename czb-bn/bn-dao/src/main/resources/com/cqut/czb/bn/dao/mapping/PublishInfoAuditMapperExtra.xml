@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PublishInfoAuditMapperExtra">
+    <select id="getPublishTableData" parameterType="com.cqut.czb.bn.entity.dto.publishInfoAudit.PublishInfoId" resultType="com.cqut.czb.bn.entity.dto.publishInfoAudit.PublishInfo">
+        SELECT
+            commodity_id infoId,
+            commodity_title infoName,
+            commodity_info content,
+            czb_file.save_path img,
+            commodity_price price,
+            czb_commodity.create_at publishTime,
+            is_examine isExamine
+        FROM
+            czb_commodity
+            left join czb_file on czb_commodity.commodity_img = czb_file.file_id
+        <where>
+            <if test="infoName != null and infoName != ''">
+                AND commodity_title like concat('%', #{infoName}, '%')
+            </if>
+            <if test="publishTime != null and publishTime != ''">
+                AND date_format(czb_commodity.create_at, '%Y%m%d') = date_format(#{publishTime}, '%Y%m%d')
+            </if>
+            <if test="isExamine != null and isExamine != '' || isExamine == 0">
+                AND is_examine = #{isExamine}
+            </if>
+        </where>
+    </select>
+
+    <update id="changeIsExamine" parameterType="java.lang.String">
+        update czb_commodity
+        set is_examine = 1
+        WHERE
+        commodity_id = #{infoId}
+    </update>
+</mapper>
