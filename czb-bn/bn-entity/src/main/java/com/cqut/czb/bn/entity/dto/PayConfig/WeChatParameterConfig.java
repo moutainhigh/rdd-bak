@@ -1,12 +1,14 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
+import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.util.string.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,6 +18,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class WeChatParameterConfig {
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
 
     //统一获取签名,微信支付签名请求
     public static JSONObject getSign(SortedMap<String, Object> parameters, String nonceStrTemp){
@@ -53,8 +61,15 @@ public class WeChatParameterConfig {
         parameters.put("sign_type", WeChatPayConfig.sign_type);
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
-        BigInteger totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100))
-                .toBigInteger();
+        BigInteger totalFee;
+        if (1 == petrolInputDTO.getIsVip()){
+            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice() * petrol.getDiscount()).multiply(new BigDecimal(100))
+                    .toBigInteger();
+        }else{
+            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100))
+                    .toBigInteger();
+        }
+
         System.out.println(totalFee);
         parameters.put("total_fee", totalFee);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);

@@ -88,7 +88,7 @@ public class AppPersonalCenterController {
      * 获取User信息及企业信息
      */
     @RequestMapping(value = "/appGetUserEnterpriseInfo",method = RequestMethod.GET)
-    public JSONResult appGetUserEnterpriseInfo(@Param("area") String area, Principal principal){
+    public JSONResult appGetUserEnterpriseInfo(@Param("area") String area, Principal principal, String version){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(appPersonalCenterService.getUserEnterpriseInfo(user, area));
     }

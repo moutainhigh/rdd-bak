@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IDictService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,15 +24,14 @@ public class DictController {
     }
 
     @RequestMapping(value = "/selectAndroidInfo",method = RequestMethod.GET)
-    public JSONResult selectAndroidInfo(){
+    public JSONResult selectAndroidInfo(@Param("version")String version){
 
-        return new JSONResult(dictService.selectAndroidInfo());
+        return new JSONResult(dictService.selectAndroidInfo(version));
     }
 
     @RequestMapping(value = "/selectIOSInfo",method = RequestMethod.GET)
-    public JSONResult selectIOSInfo(){
-
-        return new JSONResult(dictService.selectIOSInfo());
+    public JSONResult selectIOSInfo(@Param("version")String version){
+        return new JSONResult(dictService.selectIOSInfo(version));
     }
 
     @RequestMapping(value = "/selectDictList",method = RequestMethod.GET)
