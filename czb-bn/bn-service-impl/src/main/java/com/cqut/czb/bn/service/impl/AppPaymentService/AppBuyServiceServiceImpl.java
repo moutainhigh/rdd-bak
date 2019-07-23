@@ -125,7 +125,7 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
         List<UserInfoCollected> userInfoCollectedList=  new ArrayList<UserInfoCollected>();
         //查出此产品的必填信息
         List<CommodityUserInfoCollectionDTO> commodityUserInfoCollectionDTOS= commodityUserInfoCollectionMapperExtra.selectInfoInput(commodityDTO.getCommodityId());
-        if(commodityUserInfoCollectionDTOS!=null){
+        if(commodityUserInfoCollectionDTOS.size()>0){
             JSONArray json = JSONArray.fromObject(str); // 首先把字符串转成 JSONArray  对象
             if(json.size()>0) {
                 for (int j = 0; j < commodityUserInfoCollectionDTOS.size(); j++) {
@@ -145,9 +145,9 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
                     userInfoCollectedList.add(userInfoCollected);
                 }
                 System.out.println("共有条"+userInfoCollectedList.size());
+                boolean isInsert=userInfoCollectedMapperExtra.insert(userInfoCollectedList)>0;
+                System.out.println("成功插入userInfoCollectedList"+isInsert);
             }
-            boolean isInsert=userInfoCollectedMapperExtra.insert(userInfoCollectedList)>0;
-            System.out.println("成功插入userInfoCollectedList"+isInsert);
             return true;
         }
         return true;
