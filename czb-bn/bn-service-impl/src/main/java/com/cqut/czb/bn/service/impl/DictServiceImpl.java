@@ -57,7 +57,7 @@ public class DictServiceImpl implements IDictService {
             }
         }
         Random random = new Random();
-        appInfoDTO.setIsUpdate(true);
+        appInfoDTO.setIsUpdate(false);
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         return appInfoDTO;
     }
@@ -83,7 +83,7 @@ public class DictServiceImpl implements IDictService {
         }
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
-        appInfoDTO.setIsUpdate(true);
+        appInfoDTO.setIsUpdate(false);
         return appInfoDTO;
     }
 
