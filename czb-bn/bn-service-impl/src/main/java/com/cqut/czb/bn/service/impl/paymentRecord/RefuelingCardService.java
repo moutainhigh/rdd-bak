@@ -55,6 +55,9 @@ public class RefuelingCardService implements IRefuelingCard {
     @Autowired
     UserMapperExtra userMapperExtra;
 
+    @Autowired
+    VipRechargeRecordsMapperExtra vipRechargeRecordsMapperExtra;
+
     // 同一时间只允许一个线程访问购买油卡接口
     public synchronized Map AliPayCallback(Object[] param) {
         // 支付宝支付
@@ -300,6 +303,17 @@ public class RefuelingCardService implements IRefuelingCard {
         boolean kk= userMapperExtra.UpdateToVip(ownerId)>0;
         System.out.println("更改用户为vip"+kk);
 
+        //插入VIP充值记录表
+        VipRechargeRecords vipRechargeRecords=new VipRechargeRecords();
+        vipRechargeRecords.setAmount(money);
+        vipRechargeRecords.setIsReceived(1);
+        vipRechargeRecords.setRechargeWay(2);//2为微信
+        vipRechargeRecords.setRecordId(orgId);
+        vipRechargeRecords.setThirdTradeNum(thirdOrderId);
+        vipRechargeRecords.setUserId(ownerId);
+        vipRechargeRecords.setVipAreaConfigId("11145212355");
+        boolean isRecharge=vipRechargeRecordsMapperExtra.insert(vipRechargeRecords)>0;
+        System.out.println("插入VIP充值记录表"+isRecharge);
 
         //查询是否为首次消费
         List<ConsumptionRecord> consumptionRecordList = consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
@@ -362,6 +376,18 @@ public class RefuelingCardService implements IRefuelingCard {
         //更改用户状态
         boolean kk= userMapperExtra.UpdateToVip(ownerId)>0;
         System.out.println("更改用户为vip"+kk);
+
+        //插入VIP充值记录表
+        VipRechargeRecords vipRechargeRecords=new VipRechargeRecords();
+        vipRechargeRecords.setAmount(money);
+        vipRechargeRecords.setIsReceived(1);
+        vipRechargeRecords.setRechargeWay(2);//2为微信
+        vipRechargeRecords.setRecordId(orgId);
+        vipRechargeRecords.setThirdTradeNum(thirdOrderId);
+        vipRechargeRecords.setUserId(ownerId);
+        vipRechargeRecords.setVipAreaConfigId("11145212355");
+        boolean isRecharge=vipRechargeRecordsMapperExtra.insert(vipRechargeRecords)>0;
+        System.out.println("插入VIP充值记录表"+isRecharge);
 
         //查询是否为首次消费
         List<ConsumptionRecord> consumptionRecordList = consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);

@@ -11,13 +11,11 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -36,12 +34,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     @Autowired
     private PetrolMapperExtra petrolMapperExtra;
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
-
     @Override
     public JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
 
@@ -51,14 +43,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         String orgId = WeChatUtils.getRandomStr();
         String nonceStrTemp = WeChatUtils.getRandomStr();
         // 设置参数
-        User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
-        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
-        if (vipAreaConfig != null && user.getIsVip() == 1){
-            petrolInputDTO.setIsVip(1);
-        }else {
-            petrolInputDTO.setIsVip(0);
-        }
-
         SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,petrolInputDTO,petrol);
         //插入购买信息
         boolean insertPetrolSalesRecords= insertPetrolSalesRecords(petrol,petrolInputDTO,orgId);
@@ -85,14 +69,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         //支付类型
         String payType =petrolInputDTO.getPayType();
         //支付的金额
-        Double money;
-        User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
-        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
-        if (vipAreaConfig != null && user.getIsVip() == 1){
-            money = petrol.getPetrolPrice() * petrol.getDiscount();
-        }else {
-            money = petrol.getPetrolPrice();
-        }
+        Double money = petrol.getPetrolPrice();
         //购买的油卡类型
         Integer petrolKind = petrol.getPetrolKind();
         //购买的油卡号
@@ -105,8 +82,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         }
 
         request.setBizModel(AliParameterConfig.getBizModel(orgId, payType,contractId ,money,
-                petrolKind, ownerId, petrolNum,
-                petrolInputDTO.getAddressId()));//支付订单
+                                                                             petrolKind, ownerId, petrolNum,
+                                                                            petrolInputDTO.getAddressId()));//支付订单
         request.setNotifyUrl(AliPayConfig.notify_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -191,9 +168,9 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 info.put("0",weChatPetrolBackInfoDTO);
                 return info;
             }else {
-                Map<String,Object> info=new HashMap<>();
-                info.put("-1","油卡申请失败，信息有误，无此法生成订单");
-                return info;
+                    Map<String,Object> info=new HashMap<>();
+                    info.put("-1","油卡申请失败，信息有误，无此法生成订单");
+                    return info;
             }
         }else if(petrolInputDTO.getPetrolKind()==1||petrolInputDTO.getPetrolKind()==2){
             System.out.println("购买中石油1或中石化2："+petrolInputDTO.getPetrolKind());
