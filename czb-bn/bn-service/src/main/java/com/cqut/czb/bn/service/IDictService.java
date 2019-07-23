@@ -14,9 +14,9 @@ public interface IDictService {
 
     List<Dict> selectCustomerServiceStaff();
 
-    AppInfoDTO selectAndroidInfo();
+    AppInfoDTO selectAndroidInfo(String version);
 
-    AppInfoDTO selectIOSInfo();
+    AppInfoDTO selectIOSInfo(String version);
 
     boolean updateDict(DictInputDTO dictInputDTO);
 

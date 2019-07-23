@@ -38,7 +38,7 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public AppInfoDTO selectAndroidInfo() {
+    public AppInfoDTO selectAndroidInfo(String version) {
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -57,12 +57,13 @@ public class DictServiceImpl implements IDictService {
             }
         }
         Random random = new Random();
+        appInfoDTO.setIsUpdate(true);
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         return appInfoDTO;
     }
 
     @Override
-    public AppInfoDTO selectIOSInfo() {
+    public AppInfoDTO selectIOSInfo(String version) {
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "ios";
@@ -82,6 +83,7 @@ public class DictServiceImpl implements IDictService {
         }
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
+        appInfoDTO.setIsUpdate(true);
         return appInfoDTO;
     }
 

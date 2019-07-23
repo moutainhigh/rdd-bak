@@ -8,6 +8,16 @@ public class AppInfoDTO {
 
     private String url;
 
+    private Boolean isUpdate;
+
+    public Boolean getIsUpdate() {
+        return isUpdate;
+    }
+
+    public void setIsUpdate(Boolean isUpdate) {
+        this.isUpdate = isUpdate;
+    }
+
     public String getVersion() {
         return version;
     }
