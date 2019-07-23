@@ -71,7 +71,7 @@ public class AliParameterConfig {
     /**
      * 转换为支付宝支付实体（充值VIP相关参数配置）
      */
-    public static AlipayTradeAppPayModel getBizModelVIP(String thirdOrder,double actualPrice,String ownerId) {
+    public static AlipayTradeAppPayModel getBizModelVIP(String vipAreaConfigId,String thirdOrder,double actualPrice,String ownerId) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody("vip充值");
         model.setSubject("vip充值");
@@ -80,16 +80,17 @@ public class AliParameterConfig {
         model.setTotalAmount(String.valueOf(actualPrice));
 //        model.setTotalAmount("0.01");
         model.setProductCode(AliPayConfig.product_code);
-        model.setPassbackParams(getPassBackParamsVIP(thirdOrder,actualPrice ,ownerId));
+        model.setPassbackParams(getPassBackParamsVIP(vipAreaConfigId,thirdOrder,actualPrice ,ownerId));
         return model;
     }
 
     //支付宝支付——订单格外数据（充值VIP相关参数配置）
-    public static String getPassBackParamsVIP(String thirdOrder,double actualPrice,String ownerId) {
+    public static String getPassBackParamsVIP(String vipAreaConfigId,String thirdOrder,double actualPrice,String ownerId) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", thirdOrder);
         pbp.put("money", actualPrice);
         pbp.put("ownerId", ownerId);
+        pbp.put("vipAreaConfigId", vipAreaConfigId);
         return StringUtil.transMapToStringOther(pbp);
     }
 

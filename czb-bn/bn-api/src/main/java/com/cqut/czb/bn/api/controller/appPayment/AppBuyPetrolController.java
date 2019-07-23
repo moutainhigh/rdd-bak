@@ -47,6 +47,7 @@ public class AppBuyPetrolController {
         petrolInputDTO.setUserAccount(user.getUserAccount());
         petrolInputDTO.setOwnerId(user.getUserId());
         petrolInputDTO.setPaymentMethod(1);//0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
+        petrolInputDTO.setIsVip(user.getIsVip());
         //检测是否有未完成的订单(若存在则将油卡放回，无则继续操作)
         PetrolCache.isContainsNotPay(user.getUserId());
         //检测今日是否已经购买了油卡或充值
@@ -92,6 +93,7 @@ public class AppBuyPetrolController {
         petrolInputDTO.setUserAccount(user.getUserAccount());
         petrolInputDTO.setOwnerId(user.getUserId());
         petrolInputDTO.setPaymentMethod(2);//0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
+        petrolInputDTO.setIsVip(user.getIsVip());
         //检测是否有未完成的订单(若存在则将油卡放回，无则继续操作)
         PetrolCache.isContainsNotPay(user.getUserId());
         //检测今日是否已经购买了油卡或充值
