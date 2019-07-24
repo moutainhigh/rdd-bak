@@ -1,11 +1,9 @@
 package com.cqut.czb.bn.service.impl.paymentRecord;
 
-import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
-import com.cqut.czb.bn.dao.mapper.IncomeLogMapperExtra;
-import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapperExtra;
-import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -33,6 +31,9 @@ public class FanYongServiceImpl implements FanYongService {
     @Autowired
     private DictMapperExtra dictMapperExtra;
 
+    @Autowired
+    private UserMapper userMapper;
+
     /**
      * 总体控制
      * 要给用户的userId,支付的金额
@@ -44,9 +45,22 @@ public class FanYongServiceImpl implements FanYongService {
         double fangyong1 = 0;//一级返佣比例
         double fangyong2 = 0;//二级返佣比例
         double fangyongRate = 0;//占总金额的比例
-        Dict dict1 = dictMapperExtra.selectDictByName("fangyong1");
-        Dict dict2 = dictMapperExtra.selectDictByName("fangyong2");
-        Dict dict3 = dictMapperExtra.selectDictByName("fangyong_rate");
+        int isVip=0;//是否为vip
+        Dict dict1=new Dict();
+        Dict dict2=new Dict();
+        Dict dict3=new Dict();
+        //查出是否为vip
+        User user=userMapper.selectByPrimaryKey(userId);
+        if(user!=null&&user.getIsVip()==1){
+            dict1 = dictMapperExtra.selectDictByName("fangyong1_vip");
+            dict2 = dictMapperExtra.selectDictByName("fangyong2_vip");
+            dict3 = dictMapperExtra.selectDictByName("fangyong_rate_vip");
+        }else {
+            dict1 = dictMapperExtra.selectDictByName("fangyong1");
+            dict2 = dictMapperExtra.selectDictByName("fangyong2");
+            dict3 = dictMapperExtra.selectDictByName("fangyong_rate");
+        }
+
         if (dict1 != null || dict1.getContent() != null) {
             fangyong1 = Double.valueOf(dict1.getContent());
             System.out.println("fangyong1：" + fangyong1);

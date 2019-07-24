@@ -11,11 +11,13 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppBuyPetrolService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,6 +35,12 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Autowired
     private PetrolMapperExtra petrolMapperExtra;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
 
     @Override
     public JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
@@ -69,7 +77,14 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         //支付类型
         String payType =petrolInputDTO.getPayType();
         //支付的金额
-        Double money = petrol.getPetrolPrice();
+        Double money;
+        User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
+        if (vipAreaConfig != null && user.getIsVip() == 1){
+            money = petrol.getPetrolPrice() * petrol.getDiscount();
+        }else {
+            money = petrol.getPetrolPrice();
+        }
         //购买的油卡类型
         Integer petrolKind = petrol.getPetrolKind();
         //购买的油卡号
