@@ -51,7 +51,7 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
         Double actualPrice=vipAreaConfig.getVipPrice();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelVIP(thirdOrder, actualPrice ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelVIP(vipAreaConfig.getVipAreaConfigId(),thirdOrder, actualPrice ,ownerId));//支付订单
         request.setNotifyUrl(AliPayConfig.RechargeVip_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute

@@ -22,4 +22,71 @@
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </select>
 
+  <select id="selectInfoByShop" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO" >
+    select
+    info_id as infoId, shop_id as shopId, commodity_id as commodityId,
+    info_title as infoTitle, info_content as infoContent, info_code as infoCode
+    from czb_commodity_user_info_collection
+    <where><if test="shopId!=null and shopId!=''">
+      shop_id = #{shopId,jdbcType=VARCHAR}
+    </if>
+      <if test="commodityId!=null and commodityId!=''">
+        AND commodity_id =#{commodityId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectInfo" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO"  >
+    select
+    info_id as infoId, shop_id as shopId, commodity_id as commodityId,
+    info_title as infoTitle, info_content as infoContent, info_code as infoCode
+    from czb_commodity_user_info_collection
+
+    where info_code in <foreach collection="array" item="item" index="index" separator=","  open="(" close=")">
+    #{item.infoCode,jdbcType = VARCHAR}
+  </foreach>
+  </select>
+
+  <insert id="insertInfo" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO" >
+  insert into czb_commodity_user_info_collection (info_id, shop_id, commodity_id,
+      info_title, info_content, info_code,
+      create_at, update_at)
+    values <foreach collection="array" item="item" index="index" separator=","> (#{item.infoId,jdbcType=VARCHAR}, #{item.shopId,jdbcType=VARCHAR}, #{item.commodityId,jdbcType=VARCHAR},
+      #{item.infoTitle,jdbcType=VARCHAR}, #{item.infoContent,jdbcType=VARCHAR}, #{item.infoCode,jdbcType=VARCHAR},
+      #{item.createAt,jdbcType=TIMESTAMP}, #{item.updateAt,jdbcType=TIMESTAMP})
+  </foreach>
+  </insert>
+
+
+
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from czb_commodity_user_info_collection
+    where info_id in <foreach collection="array" item="item" index="index" separator=",">
+    (
+    #{item,jdbcType = VARCHAR}
+    )
+  </foreach>
+  </delete>
+
+  <update id="updateInfo" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO" >
+    update czb_commodity_user_info_collection
+    set
+    info_title = CASE info_id <foreach collection="list" item="item" index="index"
+                                                             separator="" open="" close="end,">
+    when   #{item.infoId,jdbcType=VARCHAR} THEN  #{item.infoTitle,jdbcType=VARCHAR}
+  </foreach>
+    info_content = CASE info_id <foreach collection="list" item="item" index="index"
+                                                           separator="" open="" close="end,">
+    when   #{item.infoId,jdbcType=VARCHAR} THEN #{item.infoContent,jdbcType=VARCHAR}
+  </foreach>
+    info_code = CASE info_id <foreach collection="list" item="item" index="index"
+                                             separator="" open="" close="end">
+    when   #{item.infoId,jdbcType=VARCHAR} THEN #{item.infoCode,jdbcType=VARCHAR}
+  </foreach>
+    where info_id in <foreach collection="list" item="item" index="index"
+                                         separator="," open="(" close=")">
+    #{item.infoId,jdbcType=VARCHAR}
+  </foreach>
+  </update>
+
 </mapper>

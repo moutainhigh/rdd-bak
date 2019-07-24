@@ -38,7 +38,7 @@
            AND b.create_at &lt;= #{missionEndTime,jdbcType=TIMESTAMP}
        </if>
        <if test="missionStartTime!=null and missionStartTime!=''  and missionEndTime!=null and missionEndTime!='' " >
-           AND #{missionStartTime,jdbcType=TIMESTAMP} &lt;=b.create_at &lt;= #{missionEndTime,jdbcType=TIMESTAMP}
+           AND #{missionStartTime,jdbcType=TIMESTAMP} &lt;=b.create_at and  b.create_at &lt;= #{missionEndTime,jdbcType=TIMESTAMP}
        </if>
        GROUP BY
        a.user_id ORDER BY  SUM(b.money) DESC, MAX(b.create_at) DESC

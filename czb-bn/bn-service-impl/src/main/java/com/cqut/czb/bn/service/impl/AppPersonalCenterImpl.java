@@ -106,7 +106,11 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
                 personalCenterUserDTO.setHaveVip(1);
             }
         }
-
+        if(vipAreaConfig == null){
+            personalCenterUserDTO.setHaveVip(0);
+        }else{
+            personalCenterUserDTO.setHaveVip(1);
+        }
         return personalCenterUserDTO;
     }
 

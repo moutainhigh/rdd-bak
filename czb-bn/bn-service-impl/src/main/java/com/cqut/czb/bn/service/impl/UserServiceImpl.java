@@ -163,7 +163,10 @@ public class UserServiceImpl implements IUserService {
     public boolean changePartner(UserInputDTO userInputDTO) {
         IndicatorRecord indicatorRecord = indicatorRecordMapperExtra.selectIndicatorRecordInfo(userInputDTO.getUserId());
         boolean isUpdateIndicatorRecord =true;
-        if(null != indicatorRecord) {
+         if(0 == userInputDTO.getPartner()){
+            userInputDTO.setIsLoginPc(0);
+        }
+        else if(null != indicatorRecord) {
             indicatorRecord.setUpdateAt(new Date());
             indicatorRecord.setIndicatorBeginTime(DateUtil.getDateStart(userInputDTO.getMissionStartTime()));
             Calendar cal = Calendar.getInstance();
@@ -224,8 +227,6 @@ public class UserServiceImpl implements IUserService {
                 userInputDTO.setSuperiorUser("");
             }
             userInputDTO.setIsLoginPc(1);
-        } else if(0 == userInputDTO.getPartner()){
-            userInputDTO.setIsLoginPc(0);
         }
         
         if(isUpdateIndicatorRecord) {
