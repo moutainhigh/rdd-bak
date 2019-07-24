@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.Commodity;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommodityDTO {
     private String commodityId;
@@ -30,6 +31,12 @@ public class CommodityDTO {
     private Date createAt;
 
     private Date updateAt;
+
+    private String deleteIds; //被删除的采集信息id
+
+    private String infoIds; //采集信息的id
+
+    private String infos;   //商品信息中的用户采集信息，为二维数组，";"隔开为一维即条数，","隔开为二维即内容
 
     public String getCommodityId() {
         return commodityId;
@@ -141,5 +148,29 @@ public class CommodityDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getInfos() {
+        return infos;
+    }
+
+    public void setInfos(String infos) {
+        this.infos = infos;
+    }
+
+    public String getDeleteIds() {
+        return deleteIds;
+    }
+
+    public void setDeleteIds(String deleteIds) {
+        this.deleteIds = deleteIds;
+    }
+
+    public String getInfoIds() {
+        return infoIds;
+    }
+
+    public void setInfoIds(String infoIds) {
+        this.infoIds = infoIds;
     }
 }

@@ -110,6 +110,15 @@
 
 
 
+    <select id="selectShopId" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO">
+            SELECT
+                shop_id AS shopId
+            FROM
+                czb_shop
+            WHERE
+                user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
     <select id="selectCommodityByShop" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" resultType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO">
         SELECT
             commodity_id AS commodityId,
@@ -125,7 +134,7 @@
             a.create_at AS createAt,
             a.update_at AS updateAt
         FROM
-            czb_commodity
+            czb_commodity a
         LEFT JOIN czb_file b ON a.commodity_img = b.file_id
         WHERE
              shop_id = #{shopId,jdbcType=VARCHAR}
@@ -136,10 +145,122 @@
             AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="commodityPrice!=null">
             AND commodity_price = #{commodityPrice,jdbcType=DOUBLE}
         </if>
     </select>
+
+    <insert id="insertCommodity" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" >
+        insert into czb_commodity
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="commodityId != null" >
+                commodity_id,
+            </if>
+            <if test="shopId != null" >
+                shop_id,
+            </if>
+            <if test="commodityTitle != null" >
+                commodity_title,
+            </if>
+            <if test="commodityInfo != null" >
+                commodity_info,
+            </if>
+            <if test="discount != null" >
+                discount,
+            </if>
+            <if test="commodityImg != null" >
+                commodity_img,
+            </if>
+            <if test="commodityPrice != null" >
+                commodity_price,
+            </if>
+            <if test="classification != null" >
+                classification,
+            </if>
+            <if test="usageCount != null" >
+                usage_count,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="commodityId != null" >
+                #{commodityId,jdbcType=VARCHAR},
+            </if>
+            <if test="shopId != null" >
+                #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityTitle != null" >
+                #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityInfo != null" >
+                #{commodityInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null" >
+                #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityImg != null" >
+                #{commodityImg,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityPrice != null" >
+                #{commodityPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="classification != null" >
+                #{classification,jdbcType=VARCHAR},
+            </if>
+            <if test="usageCount != null" >
+                #{usageCount,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCommodity" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO" >
+        update czb_commodity
+        <set >
+            <if test="shopId != null" >
+                shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityTitle != null" >
+                commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityInfo != null" >
+                commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null" >
+                discount = #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityImg != null" >
+                commodity_img = #{commodityImg,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityPrice != null" >
+                commodity_price = #{commodityPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="classification != null" >
+                classification = #{classification,jdbcType=VARCHAR},
+            </if>
+            <if test="usageCount != null" >
+                usage_count = #{usageCount,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
+
 </mapper>

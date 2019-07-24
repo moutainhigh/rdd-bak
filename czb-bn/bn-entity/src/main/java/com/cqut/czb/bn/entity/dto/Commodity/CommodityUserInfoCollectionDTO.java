@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.Commodity;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommodityUserInfoCollectionDTO {
     private String infoId;
@@ -18,6 +19,7 @@ public class CommodityUserInfoCollectionDTO {
     private Date createAt;
 
     private Date updateAt;
+
 
     public String getInfoId() {
         return infoId;
@@ -82,4 +84,5 @@ public class CommodityUserInfoCollectionDTO {
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
     }
+
 }
