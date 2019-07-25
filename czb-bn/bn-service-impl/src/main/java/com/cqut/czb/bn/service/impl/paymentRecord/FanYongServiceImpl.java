@@ -5,7 +5,7 @@ import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
-import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
+import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

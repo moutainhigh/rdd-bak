@@ -3,8 +3,8 @@ package com.cqut.czb.bn.service.impl.paymentRecord;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
-import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
-import com.cqut.czb.bn.service.petrolRecharge.PetrolRecharge;
+import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
+import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -14,19 +14,14 @@ public class AliPayConfig {
 	//网关地址——支付网关
 	public static final  String gatewayUrl = "https://openapi.alipay.com/gateway.do";
 
-	//购买油卡的回调的url
-	public static String notify_url ="http://"+ UrlConfig.NOTIGY_URL+":8090/verifyAsyn/verifyBuyPetrolInfoAiHu";
-	//充值的回调的url
-	public static String recharge_url="http://"+ UrlConfig.NOTIGY_URL+":8090/personCenter/VIP/purchaseVIP";
-	//购买油卡充值url
-	public static String PetrolRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":8090/verifyAsyn/verifyPetrolRechargeInfoAiHu";
+	//购买油卡/充值（支付宝）
+	public static String PetrolRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyPetrolRechargeInfoAiHu";
 
 	//购买服务url
-	public static String BuyService_url="http://"+ UrlConfig.NOTIGY_URL+":8090/verifyAsyn/verifyBuyServiceInfoAiHu";
+	public static String BuyService_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyServiceInfoAiHu";
 
 	//vip充值
-	public static String RechargeVip_url="http://"+ UrlConfig.NOTIGY_URL+":8090/verifyAsyn/verifyRechargeVipInfoAiHu";
-
+	public static String RechargeVip_url="http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyRechargeVipInfoAiHu";
 
 	// 加密方式
 	public static String sign_type = "RSA2";
