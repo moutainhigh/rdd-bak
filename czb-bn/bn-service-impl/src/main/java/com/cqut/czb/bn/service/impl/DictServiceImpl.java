@@ -1,10 +1,12 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.AppInfoDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +24,9 @@ public class DictServiceImpl implements IDictService {
     @Autowired
     DictMapperExtra dictMapperExtra;
 
+    @Autowired
+    UserMapperExtra userMapperExtra;
+
     @Override
     public PageInfo<Dict> selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
@@ -38,7 +43,16 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public AppInfoDTO selectAndroidInfo(String version) {
+    public AppInfoDTO selectAndroidInfo(User user, String version) {
+
+
+        //更改版本
+        user.setVersionNum(version);
+        boolean i=userMapperExtra.UpdateVersion(user)>0;
+        System.out.println(i);
+
+
+
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -63,7 +77,11 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public AppInfoDTO selectIOSInfo(String version) {
+    public AppInfoDTO selectIOSInfo(User user,String version) {
+        //更改版本
+        user.setVersionNum(version);
+        userMapperExtra.UpdateVersion(user);
+
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "ios";
