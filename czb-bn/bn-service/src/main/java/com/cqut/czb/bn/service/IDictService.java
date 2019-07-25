@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.AppInfoDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
+import com.cqut.czb.bn.entity.entity.User;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public interface IDictService {
 
     List<Dict> selectCustomerServiceStaff();
 
-    AppInfoDTO selectAndroidInfo(String version);
+    AppInfoDTO selectAndroidInfo(User user, String version);
 
-    AppInfoDTO selectIOSInfo(String version);
+    AppInfoDTO selectIOSInfo(User user,String version);
 
     boolean updateDict(DictInputDTO dictInputDTO);
 

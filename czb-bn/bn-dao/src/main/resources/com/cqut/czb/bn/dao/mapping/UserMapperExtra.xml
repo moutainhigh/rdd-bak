@@ -155,7 +155,7 @@
             and u.create_at like concat('%',DATE_FORMAT(#{createAt,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
         </if>
         <if test="partner != null">
-          and u.partner = #{partner,jdbcType=INTEGER}
+            and u.partner = #{partner,jdbcType=INTEGER}
         </if>
         <if test="superiorUser != null and superiorUser != ''">
             and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
@@ -329,4 +329,15 @@
     </set>
     where  user_id= #{userId,jdbcType=VARCHAR}
   </update>
+
+  <update id="UpdateVersion" parameterType="com.cqut.czb.bn.entity.entity.User">
+    update czb_user
+    <set >
+      version_num=#{versionNum,jdbcType=VARCHAR},
+      update_at = now()
+    </set>
+    where  user_id= #{userId,jdbcType=VARCHAR}
+  </update>
+
+
 </mapper>

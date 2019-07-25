@@ -69,4 +69,9 @@ public interface UserMapperExtra {
      * 将用户身份改为vip
      */
     int UpdateToVip(@Param("userId") String userId);
+
+    /**
+     * 更改版本
+     */
+    int UpdateVersion(User user);
 }

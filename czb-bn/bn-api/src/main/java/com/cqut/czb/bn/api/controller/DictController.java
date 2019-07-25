@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IDictService;
 import org.apache.ibatis.annotations.Param;
@@ -10,12 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/dict")
 public class DictController {
 
     @Autowired
     IDictService dictService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @RequestMapping(value = "/selectCustomerServiceStaff",method = RequestMethod.GET)
     public JSONResult selectCustomerServiceStaff(){
@@ -24,14 +31,18 @@ public class DictController {
     }
 
     @RequestMapping(value = "/selectAndroidInfo",method = RequestMethod.GET)
-    public JSONResult selectAndroidInfo(@Param("version")String version){
+    public JSONResult selectAndroidInfo(Principal principal, @Param("version")String version){
+        User user = (User)redisUtils.get(principal.getName());
 
-        return new JSONResult(dictService.selectAndroidInfo(version));
+        return new JSONResult(dictService.selectAndroidInfo(user,version));
     }
 
     @RequestMapping(value = "/selectIOSInfo",method = RequestMethod.GET)
-    public JSONResult selectIOSInfo(@Param("version")String version){
-        return new JSONResult(dictService.selectIOSInfo(version));
+    public JSONResult selectIOSInfo(Principal principal,@Param("version")String version){
+
+        User user = (User)redisUtils.get(principal.getName());
+
+        return new JSONResult(dictService.selectIOSInfo(user,version));
     }
 
     @RequestMapping(value = "/selectDictList",method = RequestMethod.GET)
