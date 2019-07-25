@@ -49,6 +49,8 @@ public class User {
 
     private Integer isVip;
 
+    private String versionNum;
+
     public String getUserId() {
         return userId;
     }
@@ -231,5 +233,13 @@ public class User {
 
     public void setIsVip(Integer isVip) {
         this.isVip = isVip;
+    }
+
+    public String getVersionNum() {
+        return versionNum;
+    }
+
+    public void setVersionNum(String versionNum) {
+        this.versionNum = versionNum == null ? null : versionNum.trim();
     }
 }

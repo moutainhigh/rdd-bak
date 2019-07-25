@@ -25,12 +25,13 @@
     <result column="first_level_partner" property="firstLevelPartner" jdbcType="VARCHAR" />
     <result column="second_level_partner" property="secondLevelPartner" jdbcType="VARCHAR" />
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
+    <result column="version_num" property="versionNum" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted, 
     commission_level_one, commission_level_two, mission_start_time, mission_end_time, 
-    partner, old_superior, first_level_partner, second_level_partner, is_vip
+    partner, old_superior, first_level_partner, second_level_partner, is_vip, version_num
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -51,7 +52,7 @@
       commission_level_two, mission_start_time, 
       mission_end_time, partner, old_superior, 
       first_level_partner, second_level_partner, 
-      is_vip)
+      is_vip, version_num)
     values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
       #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
       #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
@@ -60,7 +61,7 @@
       #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP}, 
       #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR}, 
       #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR}, 
-      #{isVip,jdbcType=INTEGER})
+      #{isVip,jdbcType=INTEGER}, #{versionNum,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
     insert into czb_user
@@ -134,6 +135,9 @@
       <if test="isVip != null" >
         is_vip,
       </if>
+      <if test="versionNum != null" >
+        version_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -204,6 +208,9 @@
       </if>
       <if test="isVip != null" >
         #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="versionNum != null" >
+        #{versionNum,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -276,6 +283,9 @@
       <if test="isVip != null" >
         is_vip = #{isVip,jdbcType=INTEGER},
       </if>
+      <if test="versionNum != null" >
+        version_num = #{versionNum,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
@@ -302,7 +312,8 @@
       old_superior = #{oldSuperior,jdbcType=VARCHAR},
       first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
       second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
-      is_vip = #{isVip,jdbcType=INTEGER}
+      is_vip = #{isVip,jdbcType=INTEGER},
+      version_num = #{versionNum,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
 </mapper>
