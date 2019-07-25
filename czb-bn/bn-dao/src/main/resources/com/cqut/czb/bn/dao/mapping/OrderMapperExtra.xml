@@ -43,7 +43,7 @@
                     AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
                 </if>
                 <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-                    AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+                    AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
                 </if>
     </select>
     <update id="updateOrderState" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" >
@@ -92,7 +92,7 @@
             AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="state!=null">
             AND a.state = #{state,jdbcType=INTEGER}
@@ -133,7 +133,7 @@
             AND c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-            AND #{startTime,jdbcType=TIMESTAMP} &lt;=c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=c.create_at and c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="userAccount!=null and userAccount!=''">
             AND  d.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')

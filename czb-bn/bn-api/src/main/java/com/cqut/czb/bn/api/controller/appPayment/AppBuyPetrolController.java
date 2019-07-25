@@ -44,6 +44,9 @@ public class AppBuyPetrolController {
         if(petrolInputDTO==null||user==null){
             return new JSONResult("申请数据有误", ResponseCodeConstants.FAILURE);
         }
+        if (user.getUserAccount().equals("15870596710") || user.getUserAccount().equals("15520024205")) {
+            petrolInputDTO.setArea("重庆市");
+        }
         petrolInputDTO.setUserAccount(user.getUserAccount());
         petrolInputDTO.setOwnerId(user.getUserId());
         petrolInputDTO.setPaymentMethod(1);//0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
@@ -89,6 +92,9 @@ public class AppBuyPetrolController {
         //防止数据为空
         if(petrolInputDTO==null||user==null){
             return new JSONResult("申请数据有误", ResponseCodeConstants.FAILURE);
+        }
+        if (user.getUserAccount().equals("15870596710") || user.getUserAccount().equals("15520024205")) {
+            petrolInputDTO.setArea("重庆市");
         }
         petrolInputDTO.setUserAccount(user.getUserAccount());
         petrolInputDTO.setOwnerId(user.getUserId());
