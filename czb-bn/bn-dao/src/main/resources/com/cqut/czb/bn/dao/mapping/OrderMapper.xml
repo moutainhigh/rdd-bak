@@ -13,10 +13,11 @@
     <result column="total_count" property="totalCount" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="is_settlement" property="isSettlement" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, comsumer_id, commodity_id, shop_id, actual_price, third_order, pay_method, state, 
-    total_count, create_at, update_at
+    total_count, create_at, update_at, is_settlement
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -32,11 +33,13 @@
     insert into czb_order (id, comsumer_id, commodity_id, 
       shop_id, actual_price, third_order, 
       pay_method, state, total_count, 
-      create_at, update_at)
+      create_at, update_at, is_settlement
+      )
     values (#{id,jdbcType=VARCHAR}, #{comsumerId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
       #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, 
       #{payMethod,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{totalCount,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{isSettlement,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Order" >
     insert into czb_order
@@ -74,6 +77,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="isSettlement != null" >
+        is_settlement,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -108,6 +114,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSettlement != null" >
+        #{isSettlement,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -144,6 +153,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="isSettlement != null" >
+        is_settlement = #{isSettlement,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -158,7 +170,8 @@
       state = #{state,jdbcType=INTEGER},
       total_count = #{totalCount,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      is_settlement = #{isSettlement,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
