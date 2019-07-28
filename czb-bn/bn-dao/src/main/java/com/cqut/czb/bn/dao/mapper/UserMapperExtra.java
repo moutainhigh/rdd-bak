@@ -70,8 +70,4 @@ public interface UserMapperExtra {
      */
     int UpdateToVip(@Param("userId") String userId);
 
-    /**
-     * 更改版本
-     */
-    int UpdateVersion(User user);
 }

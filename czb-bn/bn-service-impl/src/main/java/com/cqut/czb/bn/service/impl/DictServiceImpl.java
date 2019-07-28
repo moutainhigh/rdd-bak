@@ -44,15 +44,6 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public AppInfoDTO selectAndroidInfo(User user, String version) {
-
-
-        //更改版本
-        user.setVersionNum(version);
-        boolean i=userMapperExtra.UpdateVersion(user)>0;
-        System.out.println(i);
-
-
-
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -78,9 +69,6 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public AppInfoDTO selectIOSInfo(User user,String version) {
-        //更改版本
-        user.setVersionNum(version);
-        userMapperExtra.UpdateVersion(user);
 
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();

@@ -10,10 +10,11 @@
     <result column="latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, login_time, device_type, system_version, longitude, latitude, create_at, 
-    update_at
+    update_at, user_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -28,10 +29,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info (record_id, login_time, device_type, 
       system_version, longitude, latitude, 
-      create_at, update_at)
+      create_at, update_at, user_id
+      )
     values (#{recordId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, 
       #{systemVersion,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info
@@ -60,6 +63,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -86,6 +92,9 @@
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
@@ -102,7 +111,7 @@
       </if>
       <if test="longitude != null" >
         longitude = #{longitude,jdbcType=VARCHAR},
-      </if>R
+      </if>
       <if test="latitude != null" >
         latitude = #{latitude,jdbcType=VARCHAR},
       </if>
@@ -111,6 +120,9 @@
       </if>
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
@@ -123,7 +135,8 @@
       longitude = #{longitude,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=VARCHAR}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>
