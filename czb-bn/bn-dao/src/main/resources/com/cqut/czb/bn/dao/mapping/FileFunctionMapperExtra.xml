@@ -12,7 +12,24 @@
             czb_file_function a
         LEFT JOIN czb_file b ON a.file_id = b.file_id
         WHERE
-            a.local_id = #{userId,jdbcType=VARCHAR}
+            a.local_id = #{shopId,jdbcType=VARCHAR}
             AND a.group_code = #{code,jdbcType=VARCHAR}
    </select>
+
+    <delete id="deleteByIds" parameterType="com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO" >
+        delete from czb_file_function
+      where id in <foreach collection="list" separator="," open="(" close=")" index="index" item="item">
+        #{item.id,jdbcType=VARCHAR}
+    </foreach>
+    </delete>
+
+    <insert id="insertFile" parameterType="com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO" >
+        insert into czb_file_function (id, group_code, file_id,
+        local_id, create_at, update_at
+        )
+        values (#{id,jdbcType=VARCHAR}, #{groupCode,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR},
+        #{localId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
 </mapper>

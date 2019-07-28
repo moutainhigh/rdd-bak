@@ -14,7 +14,7 @@
     </resultMap>
     <select id="selectShop" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
         select
-        shop_id, a.user_id, user_account, shop_name, shop_phone, shop_content, shop_address, a.create_at, a.update_at
+        shop_id, a.user_id, user_account,user_name, shop_name, shop_phone, shop_content, shop_address, a.create_at, a.update_at
         from czb_shop a
         LEFT JOIN  czb_user b ON a.user_id = b.user_id
         where a.user_id = #{userId,jdbcType=VARCHAR}
@@ -22,10 +22,7 @@
 
     <update id="updateShopInfo" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
             update czb_shop
-            <set >
-                <if test="userId != null" >
-                    user_id = #{userId,jdbcType=VARCHAR},
-                </if>
+            <set>
                 <if test="shopName != null" >
                     shop_name = #{shopName,jdbcType=VARCHAR},
                 </if>

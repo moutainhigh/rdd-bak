@@ -23,6 +23,12 @@
         delete from czb_file
         where file_id = #{fileId,jdbcType=VARCHAR}
     </delete>
+    <delete id="deleteByShop" parameterType="com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO" >
+        delete from czb_file
+        where file_id IN  <foreach collection="list" separator="," open="(" close=")" index="index" item="item">
+        #{item.fileId,jdbcType=VARCHAR}
+    </foreach>
+    </delete>
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.File" >
         insert into czb_file (file_id, file_name, uploader,
         save_path, create_at, update_at,

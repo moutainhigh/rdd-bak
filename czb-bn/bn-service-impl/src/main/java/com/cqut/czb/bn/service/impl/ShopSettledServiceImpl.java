@@ -48,15 +48,76 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         }
         ShopDTO shop = shopMapperExtra.selectShop(shopDTO);
         if (shop!=null) {
-            List<FileFunctionDTO> file = fileFunctionMapperExtra.selectFile(shopDTO);
-            shop.setFile(file);
+            shop.setCode(shopDTO.getCode());
+            List<FileFunctionDTO> file = fileFunctionMapperExtra.selectFile(shop);
+            shop.setFileList(file);
         }
         return shop;
 
     }
 
     @Override
-    public Boolean updateShopInfo(ShopDTO shopDTO) {
+    public Boolean updateShopInfo(ShopDTO shopDTO,MultipartFile file) {
+        if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
+            return null;
+        }
+        if (shopDTO.getDeleteId()!=null&&"".equals(shopDTO.getDeleteId())){
+            String[] ids = shopDTO.getDeleteId().split(",");
+            List<FileFunctionDTO> deleteFile = new ArrayList<>();
+            if (ids.length!=0&&ids!=null){
+                for (int i=0;i<ids.length;i++){
+                    FileFunctionDTO exp = new FileFunctionDTO();
+                    exp.setGroupCode(shopDTO.getCode());
+                    exp.setId(ids[i]);
+                    deleteFile.add(exp);
+                }
+            }
+            fileFunctionMapperExtra.deleteByIds(deleteFile);
+ //           fileMapperExtra.deleteByShop(deleteFile);
+        }
+        String address="";
+        try {
+            if (file!=null||!file.isEmpty()) {
+                address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        File file1 = setFile(file.getOriginalFilename(),address,shopDTO.getUserAccount(),new Date());
+        fileMapperExtra.insert(file1);
+        FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
+        fileFunctionDTO.setId(StringUtil.createId());
+        fileFunctionDTO.setFileId(file1.getFileId());
+        fileFunctionDTO.setGroupCode(shopDTO.getCode());
+        fileFunctionDTO.setLocalId(shopDTO.getShopId());
+        fileFunctionDTO.setSrc(file1.getSavePath());
+        fileFunctionDTO.setCreateAt(new Date());
+        fileFunctionDTO.setUpdateAt(new Date());
+        fileFunctionMapperExtra.insertFile(fileFunctionDTO);
+        shopDTO.setUpdateAt(new Date());
+        return shopMapperExtra.updateShopInfo(shopDTO)>0;
+    }
+
+    @Override
+    public Boolean updateShopInfoNoFile(ShopDTO shopDTO) {
+        if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
+            return null;
+        }
+        if (shopDTO.getDeleteId()!=null&&!"".equals(shopDTO.getDeleteId())){
+            String[] ids = shopDTO.getDeleteId().split(",");
+            List<FileFunctionDTO> deleteFile = new ArrayList<>();
+            if (ids.length!=0&&ids!=null){
+               for (int i=0;i<ids.length;i++){
+                   FileFunctionDTO exp = new FileFunctionDTO();
+                   exp.setGroupCode(shopDTO.getCode());
+                   exp.setId(ids[i]);
+                   deleteFile.add(exp);
+               }
+            }
+            fileFunctionMapperExtra.deleteByIds(deleteFile);
+    //        fileMapperExtra.deleteByShop(deleteFile);
+        }
+        shopDTO.setUpdateAt(new Date());
         return shopMapperExtra.updateShopInfo(shopDTO)>0;
     }
 
@@ -159,7 +220,22 @@ public class ShopSettledServiceImpl implements ShopSettledService {
 
     @Override
     public Boolean updateCommodity(CommodityDTO commodityDTO, MultipartFile file) {
-        return null;
+        commodityDTO.setUpdateAt(new Date());
+        String address="";
+        try {
+            if (file!=null||!file.isEmpty()) {
+                address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        File file1 = fileMapperExtra.selectByPrimaryKey(commodityDTO.getCommodityImg());
+        file1.setSavePath(address);
+        file1.setFileName(file.getOriginalFilename());
+        file1.setUploader(commodityDTO.getShopId());
+        file1.setUpdateAt(new Date());
+        fileMapperExtra.updateByPrimaryKey(file1);
+        return updateCommodityNoFile(commodityDTO);
     }
 
     @Override

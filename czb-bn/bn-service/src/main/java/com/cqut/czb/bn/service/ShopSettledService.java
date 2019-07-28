@@ -16,7 +16,9 @@ import java.util.List;
 public interface ShopSettledService {
     ShopDTO getShopInfo(ShopDTO shopDTO, User user);
 
-    Boolean updateShopInfo(ShopDTO shopDTO);
+    Boolean updateShopInfo(ShopDTO shopDTO,MultipartFile file);
+
+    Boolean updateShopInfoNoFile(ShopDTO shopDTO );
 
     PageInfo<CommodityDTO> getCommodity(CommodityDTO commdityDTO, PageDTO pageDTO, User user);
 

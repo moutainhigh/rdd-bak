@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.ShopSettledService;
 import com.cqut.czb.bn.util.RedisUtil;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,11 +43,24 @@ public class ShopSettledController {
     /**
      * 服务商编辑
      * @param shopDTO
+     * @param file
      * @return
      */
     @PostMapping("/updateShopInfo")
-    public JSONResult updateShopInfo(ShopDTO shopDTO){
-        return new JSONResult(shopSettledService.updateShopInfo(shopDTO));
+    public JSONResult updateShopInfo(ShopDTO shopDTO, @RequestParam("file") MultipartFile file){
+        System.out.println("" + file.getOriginalFilename());
+
+        return new JSONResult(shopSettledService.updateShopInfo(shopDTO,file));
+    }
+
+    /**
+     * 服务商编辑(无文件)
+     * @param shopDTO
+     * @return
+     */
+    @PostMapping("/updateShopInfoNoFile")
+    public JSONResult updateShopInfoNoFile(ShopDTO shopDTO){
+        return new JSONResult(shopSettledService.updateShopInfoNoFile(shopDTO));
     }
 
     /**
@@ -110,8 +124,8 @@ public class ShopSettledController {
      * @return
      */
     @PostMapping("updateCommodity")
-    public JSONResult updateCommodity(CommodityDTO commodityDTO, MultipartFile file,CommodityUserInfoCollectionDTO commodityUserInfoCollectionDTO){
-        return new JSONResult();
+    public JSONResult updateCommodity(CommodityDTO commodityDTO,@RequestParam("file") MultipartFile file){
+        return new JSONResult(shopSettledService.updateCommodity(commodityDTO,file));
     }
 
     /**
