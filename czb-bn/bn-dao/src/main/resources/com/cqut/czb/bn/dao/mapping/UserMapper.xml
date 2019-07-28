@@ -27,13 +27,13 @@
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
-    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted, 
-    commission_level_one, commission_level_two, mission_start_time, mission_end_time, 
+    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
+    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
+    commission_level_one, commission_level_two, mission_start_time, mission_end_time,
     partner, old_superior, first_level_partner, second_level_partner, is_vip
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_user
     where user_id = #{userId,jdbcType=VARCHAR}
@@ -43,23 +43,23 @@
     where user_id = #{userId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.User" >
-    insert into czb_user (user_id, user_account, user_psw, 
-      user_type, user_rank, is_identified, 
-      superior_user, is_login_pc, user_name, 
-      user_id_card, create_at, update_at, 
-      user_yun_id, is_deleted, commission_level_one, 
-      commission_level_two, mission_start_time, 
-      mission_end_time, partner, old_superior, 
-      first_level_partner, second_level_partner, 
+    insert into czb_user (user_id, user_account, user_psw,
+      user_type, user_rank, is_identified,
+      superior_user, is_login_pc, user_name,
+      user_id_card, create_at, update_at,
+      user_yun_id, is_deleted, commission_level_one,
+      commission_level_two, mission_start_time,
+      mission_end_time, partner, old_superior,
+      first_level_partner, second_level_partner,
       is_vip)
-    values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
-      #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
-      #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
-      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR}, 
-      #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP}, 
-      #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR}, 
-      #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR}, 
+    values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR},
+      #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER},
+      #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+      #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR},
+      #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP},
+      #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR},
+      #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR},
       #{isVip,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
