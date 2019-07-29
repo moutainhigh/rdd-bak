@@ -45,4 +45,78 @@
             </set>
             where shop_id = #{shopId,jdbcType=VARCHAR}
         </update>
+
+    <select id="selectShopManageDTO" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO" resultType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO">
+    SELECT
+        czb_shop.shop_id shopId,
+        czb_shop.user_id userId,
+        shop_name shopName,
+        user_name userName,
+        shop_phone shopPhone,
+        shop_address shopAddress,
+        SUM( CASE WHEN czb_order.is_settlement = 0 THEN 1 ELSE 0 END ) numberOfOutstandingAccounts,
+        SUM( CASE WHEN czb_order.is_settlement = 1 THEN czb_order.actual_price ELSE 0 END) totalHistoricalTransactions
+    FROM
+        czb_shop
+        LEFT JOIN czb_user ON czb_user.user_id = czb_shop.user_id
+        LEFT JOIN czb_order ON czb_order.shop_id = czb_shop.shop_id
+    where
+        state = 1
+        <if test="shopName != null and shopName != ''">
+        AND shop_name like concat('%',#{shopName,jdbcType = VARCHAR},'%')
+        </if>
+        <if test="userName != null and userName != ''">
+        AND user_name like concat('%',#{userName,jdbcType = VARCHAR},'%')
+        </if>
+    GROUP BY
+        czb_shop.shop_id
+    </select>
+
+    <select id="selectSettlementDTO" resultType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO">
+        SELECT
+        czb_order.id orderId,
+        czb_order.shop_id shopId,
+        czb_commodity.commodity_title commodityTitle,
+        actual_price actualPrice,
+        pay_method payMethod,
+        third_order thirdOrder,
+        czb_order.create_at createAt
+        FROM
+        czb_order
+        LEFT JOIN czb_commodity ON czb_order.commodity_id = czb_commodity.commodity_id
+        WHERE
+        czb_order.state = 1
+        AND czb_order.is_settlement = 0
+        <if test="shopId != null and shopId != ''">
+            AND czb_order.shop_id = #{shopId, jdbcType = VARCHAR}
+        </if>
+        <if test="startTime != null">
+            AND czb_order.create_at &gt;= #{startTime, jdbcType = TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            AND czb_order.create_at &lt;= #{endTime, jdbcType = TIMESTAMP}
+        </if>
+        <if test="commodityTitle != null and commodityTitle != ''">
+            AND czb_commodity.commodity_title LIKE concat('%', #{commodityTitle, jdbcType = VARCHAR} ,'%')
+        </if>
+        <if test="orderId != null and orderId != ''">
+            AND czb_order.id LIKE concat('%', #{orderId, jdbcType = VARCHAR} ,'%')
+        </if>
+    </select>
+    <update id="updateSettlementOrder" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO">
+        UPDATE
+            czb_order
+        SET czb_order.is_settlement = 1
+        where
+        czb_order.state = 1
+        <if test="shopId != null and shopId != ''">
+            AND czb_order.shop_id = #{shopId, jdbcType = VARCHAR}
+        </if>
+        <if test="commodityTitle != null and commodityTitle != ''">
+            AND czb_commodity.commodity_title LIKE concat('%', #{commodityTitle, jdbcType = VARCHAR} ,'%')
+        </if>
+        <if test="orderId != null and orderId != ''">
+            AND czb_order.id LIKE concat('%', #{orderId, jdbcType = VARCHAR} ,'%')
+        </if>
+    </update>
 </mapper>
