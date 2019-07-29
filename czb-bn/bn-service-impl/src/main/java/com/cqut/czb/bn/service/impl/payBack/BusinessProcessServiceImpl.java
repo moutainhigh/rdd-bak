@@ -1,9 +1,8 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
-import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -13,13 +12,11 @@ import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
-import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -312,7 +309,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
         //payType对应0为油卡购买，1为油卡充值,2为购买服务
         //插入消费记录
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "3", 1);
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "3", 2);
 
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
@@ -353,9 +350,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 System.out.println("商家订单orgId:" + orgId);
             }
             if ("payType".equals(temp[0])) {
-                System.out.println(temp[0] + ":" + temp[1]);
                 payType = temp[1];
-                System.out.println("payType:" + payType);
+                System.out.println(temp[0] + ":" + temp[1]);
             }
             if ("money".equals(temp[0])) {
                 money = Double.valueOf(temp[1]);
@@ -388,15 +384,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
             System.out.println("开始充值");
-            PetrolSalesRecords petrolSalesRecords = new PetrolSalesRecords();
-            petrolSalesRecords = petrolSalesRecordsMapperExtra.selectInfoByOrgId(orgId);
-            PetrolInputDTO petrolInputDTO = new PetrolInputDTO();
-            petrolInputDTO.setOwnerId(ownerId);
-            petrolInputDTO.setPetrolKind(petrolSalesRecords.getPetrolKind());
-            Petrol petrol1 = petrolMapperExtra.selectDifferentPetrol(petrolInputDTO);
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 1);
-
+            //插入消费记录
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
@@ -405,7 +395,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         } else if ("0".equals(payType)) {
             System.out.println("开始购买");
             //插入消费记录
-            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
+            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 1);
 
             boolean isChange = dataProcessService.changeInfo(thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
@@ -450,9 +440,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 System.out.println("油卡号petrolNum:" + petrolNum);
             }
             if ("payType".equals(temp[0])) {
-                System.out.println(temp[0] + ":" + temp[1]);
                 payType = temp[1];
-                System.out.println(payType);
+                System.out.println(temp[0] + ":" + temp[1]);
             }
             if ("ownerId".equals(temp[0])) {
                 ownerId = temp[1];

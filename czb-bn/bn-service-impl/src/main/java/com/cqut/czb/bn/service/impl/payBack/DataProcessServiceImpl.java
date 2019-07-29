@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
@@ -54,57 +54,7 @@ public class DataProcessServiceImpl implements DataProcessService {
     @Autowired
     VipRechargeRecordsMapperExtra vipRechargeRecordsMapperExtra;
 
-    //插入VIP充值记录表
-    @Override
-    public void insertRechargeOrder(double money, int payType, String orgId, String thirdOrderId, String ownerId, String vipAreaConfigId){
-        //查出此人属于哪个地区的vip
-        String area;
-
-        VipRechargeRecords vipRechargeRecords=new VipRechargeRecords();
-        vipRechargeRecords.setAmount(money);
-        vipRechargeRecords.setIsReceived(1);
-        vipRechargeRecords.setRechargeWay(payType);//2为微信
-        vipRechargeRecords.setRecordId(orgId);
-        vipRechargeRecords.setThirdTradeNum(thirdOrderId);
-        vipRechargeRecords.setUserId(ownerId);
-        vipRechargeRecords.setVipAreaConfigId(vipAreaConfigId);
-        boolean isRecharge=vipRechargeRecordsMapperExtra.insert(vipRechargeRecords)>0;
-        System.out.println("插入VIP充值记录表"+isRecharge);
-    }
-
-    //查询是否首次消费
-    @Override
-    public void isHaveConsumption(String ownerId){
-        List<ConsumptionRecord> consumptionRecordList = consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
-        if (consumptionRecordList.size() == 0) {
-            Date currentTime = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = formatter.format(currentTime);
-            PartnerDTO partnerDTO = new PartnerDTO();
-            partnerDTO.setUserId(ownerId);
-            partnerDTO.setMonthTime(dateString);
-            boolean isSuccessful = infoSpreadService.addChildConsumer(partnerDTO);
-            System.out.println("插入消费人数" + isSuccessful);
-        }
-    }
-
-    //插入消费记录,payType对应0为油卡购买，1为油卡充值,2为购买服务
-    @Override
-    public void insertConsumptionRecord(String orgId, String thirdOrderId, double money, String ownerId, String businessType, int payMethod) {
-        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
-        consumptionRecord.setRecordId(StringUtil.createId());
-        consumptionRecord.setLocalOrderId(orgId);//本地订单号
-        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
-        consumptionRecord.setMoney(money);
-        consumptionRecord.setType(Integer.valueOf(businessType));//0为油卡购买，1为油卡充值,2购买服务,3vip充值
-        consumptionRecord.setUserId(ownerId);
-        consumptionRecord.setOriginalAmount(money);//油卡面额
-        consumptionRecord.setPayMethod(payMethod);//1为支付宝2为微信
-        boolean insertInfo = consumptionRecordMapperExtra.insert(consumptionRecord) > 0;
-        System.out.println("插入用户消费记录" + insertInfo);
-    }
-
-    //解析订单数据用于处理（成功此块有点冗余）
+    //解析订单数据用于处理
     @Override
     public  PetrolSalesRecordsDTO getOrderdata(Map<String, String> params) {
         String[] resDate = params.get("passback_params").split("\\^");
@@ -163,7 +113,57 @@ public class DataProcessServiceImpl implements DataProcessService {
         return petrolSalesRecordsDTO;
     }
 
-    //油卡表——更改相应油卡的状态（用户的id，卡号）——更改
+    //插入VIP充值记录表
+    @Override
+    public void insertRechargeOrder(double money, int payType, String orgId, String thirdOrderId, String ownerId, String vipAreaConfigId){
+        //查出此人属于哪个地区的vip
+        String area;
+
+        VipRechargeRecords vipRechargeRecords=new VipRechargeRecords();
+        vipRechargeRecords.setAmount(money);
+        vipRechargeRecords.setIsReceived(1);
+        vipRechargeRecords.setRechargeWay(payType);//2为微信
+        vipRechargeRecords.setRecordId(orgId);
+        vipRechargeRecords.setThirdTradeNum(thirdOrderId);
+        vipRechargeRecords.setUserId(ownerId);
+        vipRechargeRecords.setVipAreaConfigId(vipAreaConfigId);
+        boolean isRecharge=vipRechargeRecordsMapperExtra.insert(vipRechargeRecords)>0;
+        System.out.println("插入VIP充值记录表"+isRecharge);
+    }
+
+    //查询是否首次消费
+    @Override
+    public void isHaveConsumption(String ownerId){
+        List<ConsumptionRecord> consumptionRecordList = consumptionRecordMapperExtra.selectByPrimaryKey(ownerId);
+        if (consumptionRecordList.size() == 0) {
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = formatter.format(currentTime);
+            PartnerDTO partnerDTO = new PartnerDTO();
+            partnerDTO.setUserId(ownerId);
+            partnerDTO.setMonthTime(dateString);
+            boolean isSuccessful = infoSpreadService.addChildConsumer(partnerDTO);
+            System.out.println("插入消费人数" + isSuccessful);
+        }
+    }
+
+    //插入消费记录（payType对应0为油卡购买，1为油卡充值,2为购买服务）
+    @Override
+    public void insertConsumptionRecord(String orgId, String thirdOrderId, double money, String ownerId, String businessType, int payMethod) {
+        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+        consumptionRecord.setRecordId(StringUtil.createId());
+        consumptionRecord.setLocalOrderId(orgId);//本地订单号
+        consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
+        consumptionRecord.setMoney(money);
+        consumptionRecord.setType(Integer.valueOf(businessType));//0为油卡购买，1为油卡充值,2购买服务,3vip充值
+        consumptionRecord.setUserId(ownerId);
+        consumptionRecord.setOriginalAmount(money);//油卡面额
+        consumptionRecord.setPayMethod(payMethod);//1为支付宝2为微信
+        boolean insertInfo = consumptionRecordMapperExtra.insert(consumptionRecord) > 0;
+        System.out.println("插入用户消费记录" + insertInfo);
+    }
+
+    //更改油卡状态
     @Override
     public boolean updatePetrol(Petrol petrol) {
         return petrolMapperExtra.updateByPrimaryKeySelective(petrol) > 0;
@@ -175,16 +175,22 @@ public class DataProcessServiceImpl implements DataProcessService {
         return petrolSalesRecordsMapperExtra.insert(petrolSalesRecords) > 0;
     }
 
-
     //进行所有的操作——相关表的增删改查（油卡表，新增购买记录表，收益变更记录表，用户收益信息表
     @Override
     public boolean changeInfo(String thirdOrderId, double money, String petrolNum, String ownerId, double actualPayment, String addressId, String orgId) {
-        //油卡表——更改相应油卡的状态（用户的id，卡号）——更改
+        //更改油卡状态
         //取出油卡
         Petrol petrol = PetrolCache.currentPetrolMap.get(petrolNum);
         if (petrol == null) {
-            System.out.println("油卡为空");
-            return false;
+            //查看是否放回主存PetrolCache.AllpetrolMap中
+            petrol=PetrolCache.AllpetrolMap.get(petrolNum);
+            if(petrol==null){
+                System.out.println("油卡为空");
+                return false;
+            }else {//主存中存在则再次放回缓存中
+                PetrolCache.currentPetrolMap.put(petrolNum,petrol);
+                PetrolCache.AllpetrolMap.remove(petrolNum);
+            }
         }
         petrol.setOwnerId(ownerId);
         petrol.setState(2);
