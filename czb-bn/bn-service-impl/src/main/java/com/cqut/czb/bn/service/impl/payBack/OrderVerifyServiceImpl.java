@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.service.impl.payBack;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;

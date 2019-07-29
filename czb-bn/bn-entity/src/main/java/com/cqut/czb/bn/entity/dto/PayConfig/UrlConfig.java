@@ -5,4 +5,6 @@ package com.cqut.czb.bn.entity.dto.PayConfig;
  */
 public class UrlConfig {
     public static final String NOTIGY_URL="47.110.9.136";
+
+    public static final String Port="8090";//端口号
 }
