@@ -1,11 +1,12 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
-import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.dao.mapper.LoginInfoMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.AppInfoDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
+import com.cqut.czb.bn.entity.entity.LoginInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -25,7 +27,7 @@ public class DictServiceImpl implements IDictService {
     DictMapperExtra dictMapperExtra;
 
     @Autowired
-    UserMapperExtra userMapperExtra;
+    LoginInfoMapperExtra loginInfoMapperExtra;
 
     @Override
     public PageInfo<Dict> selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO) {
@@ -44,6 +46,7 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public AppInfoDTO selectAndroidInfo(User user, String version) {
+
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -64,8 +67,45 @@ public class DictServiceImpl implements IDictService {
         Random random = new Random();
         appInfoDTO.setIsUpdate(false);
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
+        //记录用户登录信息
+        recordLoginInfo(name,user.getUserId(),version);
+
         return appInfoDTO;
     }
+
+    //记录用户登录信息
+    public void recordLoginInfo(String deviceType,String userId,String version){
+        //检查是否插入过信息
+        int num=0;
+        num=loginInfoMapperExtra.selectIsExist(userId,deviceType);
+        if(num>0){
+            //更改信息
+            LoginInfo loginInfo=new LoginInfo();
+            loginInfo.setDeviceType(deviceType);//登录设备类型
+            loginInfo.setLatitude("");//登录地点经度
+            loginInfo.setLongitude("");//登录地点的纬度
+            loginInfo.setLoginTime(new Date());//最近登录时间
+            loginInfo.setSystemVersion(version);//设备系统版本
+            loginInfo.setUserId(userId);//用户id
+            loginInfo.setUpdateAt(new Date());
+            loginInfoMapperExtra.updateByUserIdSelective(loginInfo);
+        }else {
+            //插入版本信息
+            LoginInfo loginInfo=new LoginInfo();
+            loginInfo.setRecordId(StringUtil.createId());
+            loginInfo.setDeviceType(deviceType);//登录设备类型
+            loginInfo.setLatitude("");//登录地点经度
+            loginInfo.setLongitude("");//登录地点的纬度
+            loginInfo.setLoginTime(new Date());//最近登录时间
+            loginInfo.setSystemVersion(version);//设备系统版本
+            loginInfo.setUserId(userId);//用户id
+            loginInfo.setUpdateAt(new Date());
+            loginInfo.setCreateAt(new Date());
+            loginInfoMapperExtra.insertSelective(loginInfo);
+        }
+
+    }
+
 
     @Override
     public AppInfoDTO selectIOSInfo(User user,String version) {
@@ -90,6 +130,9 @@ public class DictServiceImpl implements IDictService {
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         appInfoDTO.setIsUpdate(false);
+
+        //记录用户登录信息
+        recordLoginInfo(name,user.getUserId(),version);
         return appInfoDTO;
     }
 
