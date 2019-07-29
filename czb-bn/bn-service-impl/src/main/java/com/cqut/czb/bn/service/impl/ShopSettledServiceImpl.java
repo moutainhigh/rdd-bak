@@ -83,7 +83,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         }catch (Exception e){
             e.printStackTrace();
         }
-        File file1 = setFile(file.getOriginalFilename(),address,shopDTO.getUserAccount(),new Date());
+        File file1 = setFile(file.getOriginalFilename(),address,shopDTO.getUserId(),new Date());
         fileMapperExtra.insert(file1);
         FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
         fileFunctionDTO.setId(StringUtil.createId());

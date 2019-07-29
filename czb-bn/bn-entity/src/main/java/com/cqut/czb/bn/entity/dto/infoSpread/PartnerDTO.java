@@ -51,6 +51,10 @@ public class PartnerDTO {
 
     private String thirdOrderId; //第三方订单号
 
+    private String orderBy;  //排序属性
+
+    private String order;    //排序方式
+
     public String getUserId() {
         return userId;
     }
@@ -233,5 +237,21 @@ public class PartnerDTO {
 
     public void setThirdOrderId(String thirdOrderId) {
         this.thirdOrderId = thirdOrderId;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }

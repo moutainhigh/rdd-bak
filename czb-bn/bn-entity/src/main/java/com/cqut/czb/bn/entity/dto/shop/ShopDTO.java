@@ -16,6 +16,8 @@ public class ShopDTO {
 
     private String userAccount;
 
+    private String  userName;
+
     private String shopContent;
 
     private String shopAddress;
@@ -68,6 +70,14 @@ public class ShopDTO {
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getShopContent() {

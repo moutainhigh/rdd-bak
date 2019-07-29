@@ -5,6 +5,7 @@
         <id column="shop_id" property="shopId" jdbcType="VARCHAR" />
         <result column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
         <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
         <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR" />
         <result column="shop_content" property="shopContent" jdbcType="VARCHAR" />

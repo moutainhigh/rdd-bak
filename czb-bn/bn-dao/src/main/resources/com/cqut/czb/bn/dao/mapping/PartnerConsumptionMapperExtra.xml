@@ -41,7 +41,10 @@
            AND #{missionStartTime,jdbcType=TIMESTAMP} &lt;=b.create_at and  b.create_at &lt;= #{missionEndTime,jdbcType=TIMESTAMP}
        </if>
        GROUP BY
-       a.user_id ORDER BY  SUM(b.money) DESC, MAX(b.create_at) DESC
+       a.user_id
+       <if test="orderBy!=null and orderBy!=''">
+       ORDER BY  ${orderBy} ${order}
+       </if>
    </select>
 
     <select id="selectConsumptionCount" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
