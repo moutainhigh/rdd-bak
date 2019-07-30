@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.entity.Dict;
@@ -39,26 +39,37 @@ public class FanYongServiceImpl implements FanYongService {
      * 要给用户的userId,支付的金额
      */
     @Override
-    public boolean beginFanYong(String userId,double money, double actualPayment, String orgId) {
+    public boolean beginFanYong(int BusinessType,String area,String userId,double money, double actualPayment, String orgId) {
         String userIdUp1 = userMapperExtra.selectUserId(userId);//上级用户id
         String userIdUp2;//上上级用户id
         double fangyong1 = 0;//一级返佣比例
         double fangyong2 = 0;//二级返佣比例
         double fangyongRate = 0;//占总金额的比例
-        int isVip=0;//是否为vip
         Dict dict1=new Dict();
         Dict dict2=new Dict();
         Dict dict3=new Dict();
         //查出是否为vip
         User user=userMapper.selectByPrimaryKey(userId);
-        if(user!=null&&user.getIsVip()==1){
-            dict1 = dictMapperExtra.selectDictByName("fangyong1_vip");
-            dict2 = dictMapperExtra.selectDictByName("fangyong2_vip");
-            dict3 = dictMapperExtra.selectDictByName("fangyong_rate_vip");
-        }else {
-            dict1 = dictMapperExtra.selectDictByName("fangyong1");
-            dict2 = dictMapperExtra.selectDictByName("fangyong2");
-            dict3 = dictMapperExtra.selectDictByName("fangyong_rate");
+
+
+        if(BusinessType==1){
+            if(area.equals("重庆市")){
+                dict1 = dictMapperExtra.selectDictByName("fangyong1");
+                dict2 = dictMapperExtra.selectDictByName("fangyong2");
+                dict3 = dictMapperExtra.selectDictByName("fangyong_rate");
+            }else {
+                dict1 = dictMapperExtra.selectDictByName("notCQFY1");
+                dict2 = dictMapperExtra.selectDictByName("notCQFY2");
+                dict3 = dictMapperExtra.selectDictByName("notCQFY_rate");
+            }
+        }else if(BusinessType==2){//充值vip
+            dict1 = dictMapperExtra.selectDictByName("vipFY1");
+            dict2 = dictMapperExtra.selectDictByName("vipFY2");
+            dict3 = dictMapperExtra.selectDictByName("vip_rate");
+        }else if(BusinessType==3){
+            dict1 = dictMapperExtra.selectDictByName("serviceFY1");
+            dict2 = dictMapperExtra.selectDictByName("serviceFY2");
+            dict3 = dictMapperExtra.selectDictByName("service_rate");
         }
 
         if (dict1 != null || dict1.getContent() != null) {

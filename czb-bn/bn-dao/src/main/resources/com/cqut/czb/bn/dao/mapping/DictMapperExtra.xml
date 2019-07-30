@@ -28,7 +28,7 @@
     select
     <include refid="Base_Column_List" />
     from czb_dict
-    where name like concat('', #{name,jdbcType=VARCHAR}, '%')
+    where name =#{name,jdbcType=VARCHAR}
   </select>
 
   <select id="selectPetrolInfo" resultMap="BaseResultMap">

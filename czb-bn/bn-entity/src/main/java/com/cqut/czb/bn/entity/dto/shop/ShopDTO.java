@@ -16,13 +16,17 @@ public class ShopDTO {
 
     private String userAccount;
 
+    private String  userName;
+
     private String shopContent;
 
     private String shopAddress;
 
     private String code;  //特征码
 
-    private List<FileFunctionDTO> file;
+    private List<FileFunctionDTO> fileList;
+
+    private String deleteId;    //删除的图片
 
     private Date createAt;
 
@@ -68,6 +72,14 @@ public class ShopDTO {
         this.userAccount = userAccount;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getShopContent() {
         return shopContent;
     }
@@ -93,12 +105,12 @@ public class ShopDTO {
         this.code = code;
     }
 
-    public List<FileFunctionDTO> getFile() {
-        return file;
+    public String getDeleteId() {
+        return deleteId;
     }
 
-    public void setFile(List<FileFunctionDTO> file) {
-        this.file = file;
+    public void setDeleteId(String deleteId) {
+        this.deleteId = deleteId;
     }
 
     public Date getCreateAt() {
@@ -115,5 +127,13 @@ public class ShopDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public List<FileFunctionDTO> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<FileFunctionDTO> fileList) {
+        this.fileList = fileList;
     }
 }

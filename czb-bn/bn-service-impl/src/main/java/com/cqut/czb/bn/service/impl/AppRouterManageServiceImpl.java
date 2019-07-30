@@ -41,7 +41,7 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         if (file!=null||!file.isEmpty()) {
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
         }
-        File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
+        File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(),address,user.getUserId(),new Date());
         fileMapperExtra.insertSelective(file1);
         appRouter.setIconPathId(file1.getFileId());
         appRouter.setRouterId(StringUtil.createId());
@@ -67,6 +67,8 @@ public class AppRouterManageServiceImpl implements AppRouterManageService {
         appRouter.setUpdateAt(new Date());
         File file1 = fileMapperExtra.selectByPrimaryKey(appRouter.getIconPathId());
         file1.setSavePath(FileUploadUtil.putObject(file.getOriginalFilename(),file.getInputStream()));
+        file1.setFileName(file.getOriginalFilename());
+        file1.setUploader(user.getUserId());
         file1.setUpdateAt(new Date());
         fileMapperExtra.updateByPrimaryKeySelective(file1);
         return (appRouterMapperExtra.updateByPrimaryKeySelective(appRouter)>0);

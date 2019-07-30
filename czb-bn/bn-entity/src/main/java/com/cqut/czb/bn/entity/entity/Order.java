@@ -25,6 +25,8 @@ public class Order {
 
     private Date updateAt;
 
+    private String isSettlement;
+
     public String getId() {
         return id;
     }
@@ -111,5 +113,13 @@ public class Order {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(String isSettlement) {
+        this.isSettlement = isSettlement == null ? null : isSettlement.trim();
     }
 }

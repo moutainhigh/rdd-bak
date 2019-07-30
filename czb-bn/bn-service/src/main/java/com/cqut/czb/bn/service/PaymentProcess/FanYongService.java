@@ -13,6 +13,6 @@ public interface FanYongService {
      * @param actualPayment
      * @return
      */
-    boolean beginFanYong(String userId, double money, double actualPayment,String orgId);
+    boolean beginFanYong(int BusinessType,String area,String userId, double money, double actualPayment,String orgId);
 
 }

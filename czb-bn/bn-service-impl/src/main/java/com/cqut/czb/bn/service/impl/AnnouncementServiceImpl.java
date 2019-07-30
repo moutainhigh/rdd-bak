@@ -46,7 +46,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             announcement.setAnnouncementId(id);
             announcement.setIsShow(0);   //添加时默认不展示
 //            announcement.setUpdateAt(new Date());
-            File file1 = setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
+            File file1 = setFile(file.getOriginalFilename(),address,user.getUserId(),new Date());
             fileMapperExtra.insertSelective(file1);
             announcement.setImgFileId(file1.getFileId()); //更新文件存储后的id
             if (announcement.getUpdateAt()==null)
@@ -60,7 +60,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         if (file!=null||!file.isEmpty()) {
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
         }
-        File file1 = setFile(file.getOriginalFilename(),address,user.getUserName(),new Date());
+        File file1 = setFile(file.getOriginalFilename(),address,user.getUserId(),announcement.getCreateAt());
         file1.setFileId(announcement.getImgFileId());
         fileMapperExtra.updateByPrimaryKeySelective(file1);
         return (announcementMapperExtra.updateByPrimaryKeySelective(announcement)>0);

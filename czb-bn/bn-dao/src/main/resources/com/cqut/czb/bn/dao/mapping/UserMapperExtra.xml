@@ -330,14 +330,5 @@
     where  user_id= #{userId,jdbcType=VARCHAR}
   </update>
 
-  <update id="UpdateVersion" parameterType="com.cqut.czb.bn.entity.entity.User">
-    update czb_user
-    <set >
-      version_num=#{versionNum,jdbcType=VARCHAR},
-      update_at = now()
-    </set>
-    where  user_id= #{userId,jdbcType=VARCHAR}
-  </update>
-
 
 </mapper>

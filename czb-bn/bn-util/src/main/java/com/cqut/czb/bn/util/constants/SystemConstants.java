@@ -81,6 +81,11 @@ public class SystemConstants {
      */
     public static final String[] PARTNER_ASSESSMENT_EXCEL_HEAD = {"手机号码","合伙人类型","月目标推荐人数","月推荐人数","月目标首次消费人数","月新用户首次消费人数","状态","任务开始时间","任务结束时间"};
 
+    /**
+     * 导出商家结算Excel的头部
+     */
+    public static final String[] SETTLE_ORDER_EXCEL_HEAD = {"商品名称","订单号","商品价格","支付方式","第三方订单号","交易时间"};
+
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }

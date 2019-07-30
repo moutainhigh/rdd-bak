@@ -1,9 +1,8 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
-import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -13,13 +12,11 @@ import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
-import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -130,6 +127,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         double money = 0;
         String ownerId = "";
         String commodityId = "";
+        String area="";//地区
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -167,7 +165,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 1);
 
         //进行返佣
-        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
+        boolean beginFanYong= fanYongService.beginFanYong(3,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
         return 1;
     }
@@ -186,6 +184,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         double money = Double.valueOf(restmap.get("total_fee").toString());
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
         String ownerId = "";
+        String area="";//地区
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -208,7 +207,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 1);
 
         //进行返佣
-        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
+        boolean beginFanYong= fanYongService.beginFanYong(3,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
         return 1;
     }
@@ -224,6 +223,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         double money = 0;
         String ownerId = "";
         String vipAreaConfigId="";//地区vipId
+        String area="";//地区
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -260,8 +260,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "3", 1);
 
-        //进行返佣
-        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
+        //进行返佣 String BusinessType
+        boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
         return 1;
     }
@@ -281,6 +281,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
         String ownerId = "";
         String vipAreaConfigId="";//地区vipId
+        String area="";//地区
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -312,10 +313,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
         //payType对应0为油卡购买，1为油卡充值,2为购买服务
         //插入消费记录
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "3", 1);
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "3", 2);
 
         //进行返佣
-        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,money,orgId);
+        boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
         return 1;
     }
@@ -337,10 +338,16 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String ownerId = "";
         String addressId = "";
         double actualPayment = 0;
+        String area="";//地区
+
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
                 continue;
+            }
+            if ("area".equals(temp[0])) {//地区
+                System.out.println(temp[0] + temp[1]);
+                area=temp[1];
             }
             if ("trade_no".equals(temp[0])) {
                 System.out.println("该交易在支付宝系统中的交易流水号:" + temp[1]);
@@ -353,9 +360,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 System.out.println("商家订单orgId:" + orgId);
             }
             if ("payType".equals(temp[0])) {
-                System.out.println(temp[0] + ":" + temp[1]);
                 payType = temp[1];
-                System.out.println("payType:" + payType);
+                System.out.println(temp[0] + ":" + temp[1]);
             }
             if ("money".equals(temp[0])) {
                 money = Double.valueOf(temp[1]);
@@ -388,16 +394,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
             System.out.println("开始充值");
-            PetrolSalesRecords petrolSalesRecords = new PetrolSalesRecords();
-            petrolSalesRecords = petrolSalesRecordsMapperExtra.selectInfoByOrgId(orgId);
-            PetrolInputDTO petrolInputDTO = new PetrolInputDTO();
-            petrolInputDTO.setOwnerId(ownerId);
-            petrolInputDTO.setPetrolKind(petrolSalesRecords.getPetrolKind());
-            Petrol petrol1 = petrolMapperExtra.selectDifferentPetrol(petrolInputDTO);
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 1);
-
-            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
+            //插入消费记录
+            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
             else
@@ -405,9 +405,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         } else if ("0".equals(payType)) {
             System.out.println("开始购买");
             //插入消费记录
-            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
+            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 1);
 
-            boolean isChange = dataProcessService.changeInfo(thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
+            boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
             return dataProcessService.putBackPetrol(isChange,petrolNum);
         }
@@ -427,7 +427,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String thirdOrderId = restmap.get("transaction_id").toString();
         System.out.println(thirdOrderId);
         String[] temp;
-        String orgId = "";
+        String orgId = restmap.get("out_trade_no").toString();
         String payType = "";
         String petrolNum = "";
         double money = Double.valueOf(restmap.get("total_fee").toString());
@@ -436,23 +436,23 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String ownerId = "";
         double actualPayment = 0.00;//后面有变化
         String addressId = "";
+        String area="";//地区
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
                 continue;
             }
-            if ("orgId".equals(temp[0])) {
-                orgId = temp[1];
-                System.out.println(orgId);
+            if ("area".equals(temp[0])) {//地区
+                System.out.println(temp[0] + temp[1]);
+                area=temp[1];
             }
             if ("petrolNum".equals(temp[0])) {
                 petrolNum = temp[1];
                 System.out.println("油卡号petrolNum:" + petrolNum);
             }
             if ("payType".equals(temp[0])) {
-                System.out.println(temp[0] + ":" + temp[1]);
                 payType = temp[1];
-                System.out.println(payType);
+                System.out.println(temp[0] + ":" + temp[1]);
             }
             if ("ownerId".equals(temp[0])) {
                 ownerId = temp[1];
@@ -477,7 +477,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
 
-            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
+            boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
                 return 1;
             else
@@ -487,7 +487,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
             //此处插入购油的相关信息，油卡购买记录
-            boolean isChange = dataProcessService.changeInfo(thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
+            boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
             //判断是否放回油卡
             return dataProcessService.putBackPetrol(isChange,petrolNum);
         }

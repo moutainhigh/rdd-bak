@@ -79,12 +79,12 @@ public class AppHomePageController {
         if (user.getUserAccount().equals("15870596710") || user.getUserAccount().equals("15520024205")) {
             area = "重庆市";
         }
-        //暂留
-        User user1 = userMapper.selectByPrimaryKey(user.getUserId());
+//        //暂留
+//        User user1 = userMapper.selectByPrimaryKey(user.getUserId());
 
-        if (user1==null||user1.getVersionNum().equals("1.0.3")) {
-            return new JSONResult("暂无油卡", ResponseCodeConstants.FAILURE);
-        }
+//        if (user1==null||user1.getVersionNum().equals("1.0.3")) {
+//            return new JSONResult("暂无油卡", ResponseCodeConstants.FAILURE);
+//        }
         if(area==null)
             return new JSONResult("无法获取当前位置", ResponseCodeConstants.FAILURE);
         return new JSONResult(appHomePageService.selectPetrolZone(area));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.LoginInfoMapper" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.LoginInfoMapperExtra" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.LoginInfo" >
     <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
@@ -26,16 +26,6 @@
     delete from czb_user_login_info
     where record_id = #{recordId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
-    insert into czb_user_login_info (record_id, login_time, device_type, 
-      system_version, longitude, latitude, 
-      create_at, update_at, user_id
-      )
-    values (#{recordId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, 
-      #{systemVersion,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}
-      )
-  </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     insert into czb_user_login_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -97,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
+  <update id="updateByUserIdSelective" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
     update czb_user_login_info
     <set >
       <if test="loginTime != null" >
@@ -125,18 +115,22 @@
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
     </set>
-    where record_id = #{recordId,jdbcType=VARCHAR}
+    where
+    device_type = #{deviceType,jdbcType=VARCHAR}
+    and
+    user_id = #{userId,jdbcType=VARCHAR}
+
+
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.LoginInfo" >
-    update czb_user_login_info
-    set login_time = #{loginTime,jdbcType=TIMESTAMP},
-      device_type = #{deviceType,jdbcType=VARCHAR},
-      system_version = #{systemVersion,jdbcType=VARCHAR},
-      longitude = #{longitude,jdbcType=VARCHAR},
-      latitude = #{latitude,jdbcType=VARCHAR},
-      create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      user_id = #{userId,jdbcType=VARCHAR}
-    where record_id = #{recordId,jdbcType=VARCHAR}
-  </update>
+
+  <select id="selectIsExist" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select
+     count(*)
+    from
+     czb_user_login_info
+    where
+     device_type = #{deviceType,jdbcType=VARCHAR} and
+     user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

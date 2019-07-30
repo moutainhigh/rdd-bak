@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.cqut.czb.bn.dao.mapper.CommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.OrderMapperExtra;
+import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.order.OrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -18,6 +20,9 @@ public class OrderManageServiceImpl implements OrderManageService{
     @Autowired
     OrderMapperExtra orderMapperExtra;
 
+    @Autowired
+    CommodityMapperExtra commodityMapperExtra;
+
     @Override
     public PageInfo<OrderDTO> getOrderList(OrderDTO orderDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
@@ -31,14 +36,17 @@ public class OrderManageServiceImpl implements OrderManageService{
 
     @Override
     public PageInfo<OrderDTO> getOrderByShop(OrderDTO orderDTO, PageDTO pageDTO, User user) {
-        if ("".equals(orderDTO.getId())||orderDTO.getId()==null){
-            orderDTO.setShopId(user.getUserId());
+        if ("".equals(orderDTO.getShopId())||orderDTO.getShopId()==null){
+            CommodityDTO shopId = commodityMapperExtra.selectShopId(user.getUserId());
+            orderDTO.setShopId(shopId.getShopId());
         }
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         List<OrderDTO> orders = orderMapperExtra.selectOrderByShop(orderDTO);
         if(orders!=null&&orders.size()!=0) {
             for (int i = 0; i < orders.size(); i++) {
+                if (orders.get(i).getMessage()!=null&&orders.get(i).getMessage()!="") {
                     orders.get(i).setMessages(orders.get(i).getMessage().split(","));
+                }
             }
         }
         return new PageInfo<>(orders);
@@ -47,7 +55,8 @@ public class OrderManageServiceImpl implements OrderManageService{
     @Override
     public PageInfo<OrderDTO> getConsumptionOfService(OrderDTO orderDTO, PageDTO pageDTO, User user) {
         if ("".equals(orderDTO.getId())||orderDTO.getId()==null){
-            orderDTO.setShopId(user.getUserId());
+            CommodityDTO shopId = commodityMapperExtra.selectShopId(user.getUserId());
+            orderDTO.setShopId(shopId.getShopId());
         }
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         return new PageInfo<>(orderMapperExtra.selectConsumptionOfService(orderDTO));
