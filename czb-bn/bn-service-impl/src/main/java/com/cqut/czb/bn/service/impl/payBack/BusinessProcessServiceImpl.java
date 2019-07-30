@@ -427,7 +427,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String thirdOrderId = restmap.get("transaction_id").toString();
         System.out.println(thirdOrderId);
         String[] temp;
-        String orgId = "";
+        String orgId = restmap.get("out_trade_no").toString();
         String payType = "";
         String petrolNum = "";
         double money = Double.valueOf(restmap.get("total_fee").toString());
@@ -445,10 +445,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if ("area".equals(temp[0])) {//地区
                 System.out.println(temp[0] + temp[1]);
                 area=temp[1];
-            }
-            if ("orgId".equals(temp[0])) {
-                orgId = temp[1];
-                System.out.println(orgId);
             }
             if ("petrolNum".equals(temp[0])) {
                 petrolNum = temp[1];
