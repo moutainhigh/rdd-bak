@@ -82,7 +82,6 @@ public class WeChatParameterConfig {
      */
     public static String getAttach(String area,String orgId, String payType,String ownerId,String petrolNum,String addressId){
         Map<String, Object> pbp = new HashMap<>();
-        pbp.put("orgId", orgId);
         pbp.put("payType", payType);
         pbp.put("ownerId", ownerId);
         pbp.put("petrolNum", petrolNum);
