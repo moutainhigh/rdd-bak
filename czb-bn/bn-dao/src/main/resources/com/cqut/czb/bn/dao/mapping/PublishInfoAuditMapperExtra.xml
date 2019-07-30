@@ -8,7 +8,7 @@
             commodity_info content,
             czb_file.save_path img,
             commodity_price price,
-            czb_commodity.create_at publishTime,
+            date_format(czb_commodity.create_at, '%Y-%m-%d %H:%i:%s') publishTime,
             is_examine isExamine
         FROM
             czb_commodity
