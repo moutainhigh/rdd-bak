@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class AliParameterConfig {
     //支付宝支付——订单格外数据（油卡相关参数配置）
-    public static String getPassBackParams(String orgId, String payType,String contractId,
+    public static String getPassBackParams(String area,String orgId, String payType,String contractId,
                                     Double money, Integer petrolKind ,String ownerId,
                                     String petrolNum,String addressId) {
         Map<String, Object> pbp = new HashMap<>();
@@ -20,6 +20,7 @@ public class AliParameterConfig {
         pbp.put("petrolNum", petrolNum);
         pbp.put("addressId", addressId);
         pbp.put("contractId",contractId);
+        pbp.put("area",area);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -27,7 +28,7 @@ public class AliParameterConfig {
      * 转换为支付宝支付实体（油卡相关参数配置）
      * @return
      */
-    public static AlipayTradeAppPayModel getBizModel(String orgId, String payType, String contractId,
+    public static AlipayTradeAppPayModel getBizModel(String area,String orgId, String payType, String contractId,
                                                            double money, Integer petrolKind , String ownerId,
                                                            String petrolNum, String addressId) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
@@ -38,7 +39,7 @@ public class AliParameterConfig {
         model.setTotalAmount(String.valueOf(money));
 //        model.setTotalAmount("0.01");
         model.setProductCode(AliPayConfig.product_code);
-        model.setPassbackParams(getPassBackParams(orgId, payType,contractId, money,petrolKind,ownerId,petrolNum,addressId));
+        model.setPassbackParams(getPassBackParams(area,orgId, payType,contractId, money,petrolKind,ownerId,petrolNum,addressId));
         return model;
     }
 

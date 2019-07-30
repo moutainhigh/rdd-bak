@@ -177,7 +177,7 @@ public class DataProcessServiceImpl implements DataProcessService {
 
     //进行所有的操作——相关表的增删改查（油卡表，新增购买记录表，收益变更记录表，用户收益信息表
     @Override
-    public boolean changeInfo(String thirdOrderId, double money, String petrolNum, String ownerId, double actualPayment, String addressId, String orgId) {
+    public boolean changeInfo(String area,String thirdOrderId, double money, String petrolNum, String ownerId, double actualPayment, String addressId, String orgId) {
         //更改油卡状态
         //取出油卡
         Petrol petrol = PetrolCache.currentPetrolMap.get(petrolNum);
@@ -224,7 +224,7 @@ public class DataProcessServiceImpl implements DataProcessService {
             System.out.println("新增油卡邮寄记录" + isInsert);
         }
 
-        boolean beginFanYong = fanYongService.beginFanYong(ownerId, money, actualPayment, orgId);
+        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money, actualPayment, orgId);
 
         if (beginFanYong == true)
             return true;

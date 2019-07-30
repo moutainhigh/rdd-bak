@@ -67,7 +67,7 @@ public class WeChatParameterConfig {
         parameters.put("notify_url", WeChatPayConfig.notify_url);//通用一个接口（购买和充值）
         parameters.put("trade_type", WeChatPayConfig.trade_type);
         parameters.put("detail","微信支付购买油卡");//支付的类容备注
-        String attach=getAttach(
+        String attach=getAttach(petrolInputDTO.getArea(),
                 orgId,petrolInputDTO.getPayType(),
                 petrolInputDTO.getOwnerId(),
                 petrol.getPetrolNum(),petrolInputDTO.getAddressId());
@@ -80,13 +80,14 @@ public class WeChatParameterConfig {
     /**
      * 购买油卡，微信支付——订单格外数据（微信）
      */
-    public static String getAttach(String orgId, String payType,String ownerId,String petrolNum,String addressId){
+    public static String getAttach(String area,String orgId, String payType,String ownerId,String petrolNum,String addressId){
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
         pbp.put("payType", payType);
         pbp.put("ownerId", ownerId);
         pbp.put("petrolNum", petrolNum);
         pbp.put("addressId", addressId);
+        pbp.put("area", area);
         return StringUtil.transMapToStringOther(pbp);
     }
 
