@@ -28,7 +28,7 @@ public interface DataProcessService {
     //新增购买记录表——插入
     boolean insertPetrolSalesRecords(PetrolSalesRecords petrolSalesRecords);
 
-    boolean changeInfo(String thirdOrderId, double money, String petrolNum, String ownerId, double actualPayment, String addressId, String orgId);
+    boolean changeInfo(String area,String thirdOrderId, double money, String petrolNum, String ownerId, double actualPayment, String addressId, String orgId);
 
     //放回油卡
     int putBackPetrol(boolean isSucceed, String petrolNum);

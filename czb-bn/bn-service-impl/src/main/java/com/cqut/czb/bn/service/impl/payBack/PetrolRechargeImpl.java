@@ -21,7 +21,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
     FanYongService fanYongService;
 
     @Override
-    public boolean beginPetrolRecharge(String thirdOrderId,double money, String petrolNum,
+    public boolean beginPetrolRecharge(String area,String thirdOrderId,double money, String petrolNum,
                                        String ownerId, double actualPayment,String orgId)
     {
         //通过商家订单号查询充值信息
@@ -39,7 +39,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
 
         //开始返佣
         System.out.println("油卡充值开始返佣");
-        boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment,orgId);
+        boolean beginFanYong= fanYongService.beginFanYong(1,area,ownerId,money,actualPayment,orgId);
 
         if(beginFanYong==true)
             return true;

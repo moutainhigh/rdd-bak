@@ -78,6 +78,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         String payType =petrolInputDTO.getPayType();
         //支付的金额
         Double money;
+        //地区
+        String area=petrolInputDTO.getArea();
         User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
         if (vipAreaConfig != null && user.getIsVip() == 1){
@@ -92,7 +94,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         //购买人的id
         String ownerId = petrol.getOwnerId();
 
-        request.setBizModel(AliParameterConfig.getBizModel(orgId, payType,contractId ,money,
+        request.setBizModel(AliParameterConfig.getBizModel(area,orgId, payType,contractId ,money,
                                                                              petrolKind, ownerId, petrolNum,
                                                                             petrolInputDTO.getAddressId()));//支付订单
         request.setNotifyUrl(AliPayConfig.PetrolRecharge_url);//支付回调接口
