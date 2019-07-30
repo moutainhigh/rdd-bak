@@ -80,6 +80,7 @@ public class StringUtil {
                 orderNum = 1;
             }
         }
+        timesString = returnTimesString;
         return returnTimesString + "" + random.nextInt(10) + "" + random.nextInt(10);
     }
 
