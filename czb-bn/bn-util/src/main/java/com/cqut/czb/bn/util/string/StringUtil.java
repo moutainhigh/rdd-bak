@@ -10,6 +10,13 @@ public class StringUtil {
 
     private static final int DEFAULT_MAX_NUM = 100;
     private static Random random = new Random();
+
+    // 根据系统时间生成的字符串
+    private static String timesString = "";
+
+    // 每次生成id时，生成相同id后，此序列号+1
+    private static Integer orderNum = 1;
+
     /**
      * 将空的字符串转成空字符串，不是空字符串就返回原来值
      * 作者：谭勇
@@ -59,7 +66,21 @@ public class StringUtil {
      * 根据当前时间戳生成id
      * */
     public static String createId() {
-        return createMillisTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
+        String returnTimesString = createNanoTimeTimestamp();
+        // 如果时间字符串为空，则记录下来
+        if(timesString.equals("")){
+            timesString = returnTimesString;
+        } else{
+            // 如果返回的系统时间和上次的系统时间相同，则此时加上一个序列号，防止生成相同id
+            if(timesString.equals(returnTimesString)){
+                returnTimesString = returnTimesString + orderNum.toString();
+                orderNum++;
+            } else {
+                // 不同则将序列号重置为1
+                orderNum = 1;
+            }
+        }
+        return returnTimesString + "" + random.nextInt(10) + "" + random.nextInt(10);
     }
 
 

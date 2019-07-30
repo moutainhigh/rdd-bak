@@ -206,6 +206,6 @@ public class SubsidyManageServiceImpl implements SubsidyManageService {
     }
 
     public static String createId() {
-        return createMillisTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
+        return StringUtil.createId();
     }
 }
