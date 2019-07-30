@@ -23,6 +23,12 @@ public interface CommodityMapperExtra {
 
     CommodityDTO selectOneCommodity(BuyServiceDTO buyServiceDTO);
 
+    CommodityDTO selectShopId(@Param("userId") String userId);
+
     List<CommodityDTO> selectCommodityByShop(CommodityDTO commodityDTO);
+
+    int insertCommodity(CommodityDTO commodityDTO);
+
+    int updateCommodity(CommodityDTO commodityDTO);
 
 }

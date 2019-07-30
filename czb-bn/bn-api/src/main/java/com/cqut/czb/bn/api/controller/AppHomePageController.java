@@ -1,16 +1,20 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * 创建者：陈德强
@@ -26,6 +30,13 @@ public class AppHomePageController {
 
     @Autowired
     IDictService iDictService;
+
+    @Autowired
+    RedisUtils redisUtils;
+
+    @Autowired
+    UserMapper userMapper;
+
     /**
      * app广告展示
      * @return
@@ -61,7 +72,19 @@ public class AppHomePageController {
      * @return
      */
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
-    public JSONResult selectPetrol(@RequestParam(name="area") String area){
+    public JSONResult selectPetrol(Principal principal, @RequestParam(name="area") String area) {
+
+        User user = (User) redisUtils.get(principal.getName());
+
+        if (user.getUserAccount().equals("15870596710") || user.getUserAccount().equals("15520024205")) {
+            area = "重庆市";
+        }
+//        //暂留
+//        User user1 = userMapper.selectByPrimaryKey(user.getUserId());
+
+//        if (user1==null||user1.getVersionNum().equals("1.0.3")) {
+//            return new JSONResult("暂无油卡", ResponseCodeConstants.FAILURE);
+//        }
         if(area==null)
             return new JSONResult("无法获取当前位置", ResponseCodeConstants.FAILURE);
         return new JSONResult(appHomePageService.selectPetrolZone(area));

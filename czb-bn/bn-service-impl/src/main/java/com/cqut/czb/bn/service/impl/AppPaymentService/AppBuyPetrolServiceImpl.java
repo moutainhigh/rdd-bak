@@ -80,7 +80,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         Double money;
         User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
-        if (vipAreaConfig == null && user.getIsVip() == 1){
+        if (vipAreaConfig != null && user.getIsVip() == 1){
             money = petrol.getPetrolPrice() * petrol.getDiscount();
         }else {
             money = petrol.getPetrolPrice();
@@ -91,15 +91,11 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         String petrolNum = petrol.getPetrolNum();
         //购买人的id
         String ownerId = petrol.getOwnerId();
-        //对判断是否能生成订单
-        if (orgId == null || payType == null || money == null || petrolKind == null || ownerId == null || petrolNum == null) {
-            return "无法生成支付订单";
-        }
 
         request.setBizModel(AliParameterConfig.getBizModel(orgId, payType,contractId ,money,
                                                                              petrolKind, ownerId, petrolNum,
                                                                             petrolInputDTO.getAddressId()));//支付订单
-        request.setNotifyUrl(AliPayConfig.notify_url);//支付回调接口
+        request.setNotifyUrl(AliPayConfig.PetrolRecharge_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);

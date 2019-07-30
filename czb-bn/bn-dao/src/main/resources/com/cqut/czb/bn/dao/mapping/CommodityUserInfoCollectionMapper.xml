@@ -24,13 +24,22 @@
     delete from czb_commodity_user_info_collection
     where info_id = #{infoId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.CommodityUserInfoCollection" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO" >
     insert into czb_commodity_user_info_collection (info_id, shop_id, commodity_id, 
       info_title, info_content, info_code, 
       create_at, update_at)
-    values (#{infoId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
-      #{infoTitle,jdbcType=VARCHAR}, #{infoContent,jdbcType=VARCHAR}, #{infoCode,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+    values <foreach collection="array" item="item" index="index" separator=",">
+    (
+    #{item.info_id,jdbcType = VARCHAR},
+    #{item.shop_id,jdbcType = VARCHAR},
+    #{item.commodity_id,jdbcType = VARCHAR},
+    #{item.info_title,jdbcType = VARCHAR},
+    #{item.info_content,jdbcType = VARCHAR},
+    #{item.info_code,jdbcType = VARCHAR},
+    #{item.create_at,jdbcType = TIMESTAMP},
+    #{item.update_at,jdbcType = TIMESTAMP},
+    )
+  </foreach>
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.CommodityUserInfoCollection" >
     insert into czb_commodity_user_info_collection

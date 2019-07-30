@@ -24,7 +24,7 @@ public class AlipayClientConfig {
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
-			instance.setCallBackUrl(AliPayConfig.notify_url);
+			instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
 		} else if(operationType=="1"){//"1"代表的是充值vip
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,

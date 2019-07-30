@@ -10,4 +10,8 @@ public interface FileFunctionMapperExtra {
     List<FileFunctionDTO> selectFile(ShopDTO shopDTO);
 
     List<FileFunction> selectSrc(ShopDTO shopDTO);
+
+    int deleteByIds(List<FileFunctionDTO> list);
+
+    int insertFile(FileFunctionDTO fileFunctionDTO);
 }

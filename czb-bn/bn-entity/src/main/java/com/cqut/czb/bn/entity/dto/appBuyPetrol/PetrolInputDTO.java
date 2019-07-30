@@ -22,6 +22,16 @@ public class PetrolInputDTO {
 
     private String area;
 
+    private Integer isVip;
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
     public PetrolInputDTO() {
     }
 

@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.petrolRecharge;
+package com.cqut.czb.bn.service.PaymentProcess;
 
 public interface PetrolRecharge {
     /**

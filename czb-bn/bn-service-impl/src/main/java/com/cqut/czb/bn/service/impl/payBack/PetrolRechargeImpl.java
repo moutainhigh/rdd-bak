@@ -1,10 +1,10 @@
-package com.cqut.czb.bn.service.impl.paymentRecord;
+package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
-import com.cqut.czb.bn.service.petrolRecharge.FanYongService;
-import com.cqut.czb.bn.service.petrolRecharge.PetrolRecharge;
+import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
+import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         System.out.println("更改购买信息:"+update);
 
         //开始返佣
-        System.out.println("****油卡充值开始返佣****");
+        System.out.println("油卡充值开始返佣");
         boolean beginFanYong= fanYongService.beginFanYong(ownerId,money,actualPayment,orgId);
 
         if(beginFanYong==true)

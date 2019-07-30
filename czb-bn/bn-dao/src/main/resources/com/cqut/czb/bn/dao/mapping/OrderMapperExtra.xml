@@ -43,7 +43,7 @@
                     AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
                 </if>
                 <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-                    AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+                    AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
                 </if>
     </select>
     <update id="updateOrderState" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" >
@@ -55,6 +55,7 @@
     <select id="selectOrderByShop" parameterType="com.cqut.czb.bn.entity.dto.order.OrderDTO" resultType="com.cqut.czb.bn.entity.dto.order.OrderDTO">
         SELECT
         a.id AS id,
+        a.shop_id AS shopId,
         a.comsumer_id AS comsumerId,
         e.user_account AS userAccount,
         f.shop_name AS shopName,
@@ -64,12 +65,12 @@
         GROUP_CONCAT(DISTINCT(CONCAT(d.info_title,':',b.content))) AS message,
         a.total_count AS totalCount,
         (SELECT
-        a.total_count-SUM(b.order_id)
+        m.total_count-COUNT(n.order_id)
         FROM
-        czb_order a
-        LEFT JOIN czb_commodity_usage_record b ON a.id = b.order_id
-        WHERE a.shop_id = #{shopId,jdbcType=VARCHAR}
-        GROUP BY a.id) AS remainCount
+        czb_order m
+        LEFT JOIN czb_commodity_usage_record n ON m.id = n.order_id
+        WHERE m.id = a.id
+        GROUP BY m.id) AS remainCount
         FROM
             czb_order a
         LEFT JOIN czb_user_info_collected b ON a.id = b.order_id
@@ -80,10 +81,13 @@
         WHERE
         a.state!=-1
         <if test="shopId!=null and shopId!=''">
-          AND  a.shop_id LIKE CONCAT('%',#{shopId,jdbcType=VARCHAR},'%')
+          AND  a.shop_id = #{shopId,jdbcType=VARCHAR}
         </if>
         <if test="comsumerId!=null and comsumerId!=''">
-          AND a.comsumer_id LIKE CONCAT('%',#{comsumerId,jdbcType=VARCHAR},'%')
+          AND a.comsumer_id=#{comsumerId,jdbcType=VARCHAR}
+        </if>
+        <if test="commodityId!=null and commodityId!=''">
+            AND a.commodity_id=#{commodityId,jdbcType=VARCHAR}
         </if>
         <if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
             AND a.create_at >= #{startTime,jdbcType=TIMESTAMP}
@@ -92,10 +96,13 @@
             AND a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=a.create_at and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="state!=null">
             AND a.state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="userAccount!=null and userAccount!=''">
+            AND  e.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
         </if>
         GROUP BY a.id
     </select>
@@ -118,7 +125,8 @@
             d.user_account AS userAccount,
             a.third_order AS thirdOrder,
             b.commodity_title AS commodityTitle,
-            c.create_at AS createAt
+            c.create_at AS createAt,
+            a.total_count AS totalCount
         FROM
             czb_order a
         LEFT JOIN czb_commodity b ON a.commodity_id = b.commodity_id
@@ -133,7 +141,7 @@
             AND c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="startTime!=null and startTime!=''  and endTime!=null and endTime!='' " >
-            AND #{startTime,jdbcType=TIMESTAMP} &lt;=c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            AND #{startTime,jdbcType=TIMESTAMP} &lt;=c.create_at and c.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
         <if test="userAccount!=null and userAccount!=''">
             AND  d.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
@@ -142,8 +150,9 @@
             AND  a.commodity_title LIKE CONCAT('%',#{commodityTitle,jdbcType=VARCHAR},'%')
         </if>
         <if test="id!=null and id!=''">
-            AND  a.id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')
+            AND  a.id = #{id,jdbcType=VARCHAR}
         </if>
+        ORDER BY c.create_at DESC
     </select>
 
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Order" >

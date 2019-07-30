@@ -19,6 +19,8 @@ public class LoginInfo {
 
     private Date updateAt;
 
+    private String userId;
+
     public String getRecordId() {
         return recordId;
     }
@@ -81,5 +83,13 @@ public class LoginInfo {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 }

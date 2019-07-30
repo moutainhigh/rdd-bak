@@ -61,6 +61,18 @@
     </trim>
   </insert>
 
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VipRechargeRecords" >
+    insert into czb_vip_recharge_records (record_id, user_id, amount,
+      recharge_way, is_received, third_trade_num,
+      create_at, update_at, vip_area_config_id,
+      recharge_time)
+    values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE},
+      #{rechargeWay,jdbcType=INTEGER}, #{isReceived,jdbcType=INTEGER}, #{thirdTradeNum,jdbcType=VARCHAR},
+      now(), now(), #{vipAreaConfigId,jdbcType=VARCHAR},
+      now())
+  </insert>
+
+
   <select id="getVipRechargeRecord" parameterType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO" resultType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO">
     SELECT
     record_id recordId,
@@ -93,5 +105,9 @@
     <if test="rechargeWay != null and rechargeWay != ''">
     AND recharge_way = #{rechargeWay,jdbcType = INTEGER}
     </if>
+  </select>
+  <!--selectVipArea-->
+  <select id="selectVipArea" parameterType="java.lang.String" resultType="java.lang.String">
+
   </select>
 </mapper>

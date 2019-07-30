@@ -3,7 +3,6 @@ package com.cqut.czb.bn.entity.dto.PayConfig;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -53,8 +52,15 @@ public class WeChatParameterConfig {
         parameters.put("sign_type", WeChatPayConfig.sign_type);
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
-        BigInteger totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100))
-                .toBigInteger();
+        BigInteger totalFee;
+        if (petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1){
+            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
+                    .toBigInteger();
+        }else{
+            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
+                    .toBigInteger();
+        }
+
         System.out.println(totalFee);
         parameters.put("total_fee", totalFee);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
@@ -132,20 +138,21 @@ public class WeChatParameterConfig {
         parameters.put("total_fee", totalFee);
         parameters.put("notify_url", WeChatPayConfig.RechargeVip_url);//通用一个接口（购买和充值）
         parameters.put("detail","微信支付vip服务");//支付的类容备注
-        String attach=getAttachVip(orgId,userId,vipAreaConfig.getVipPrice());
+        String attach=getAttachVip(vipAreaConfig.getVipAreaConfigId(),orgId,userId,vipAreaConfig.getVipPrice());
         parameters.put("attach",attach);
         parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
         return parameters;
     }
 
     /**
-     * 微信支付——订单格外数据（购买服务）
+     * 微信支付——订单格外数据(充值vip）
      */
-    public static String getAttachVip(String orgId,String userId,double money){
+    public static String getAttachVip(String vipAreaConfigId ,String orgId,String userId,double money){
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
         pbp.put("ownerId", userId);
         pbp.put("money",money);
+        pbp.put("vipAreaConfigId",vipAreaConfigId);
         return StringUtil.transMapToStringOther(pbp);
     }
 

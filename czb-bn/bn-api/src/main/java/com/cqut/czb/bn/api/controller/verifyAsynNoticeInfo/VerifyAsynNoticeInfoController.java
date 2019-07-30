@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.api.controller.verifyAsynNoticeInfo;
 
-import com.cqut.czb.bn.service.IPaymentRecordService;
+import com.cqut.czb.bn.service.PaymentProcess.OrderVerifyService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @author 陈德强
@@ -19,23 +18,8 @@ import java.io.UnsupportedEncodingException;
 @RestController
 @RequestMapping("/verifyAsyn")
 public class VerifyAsynNoticeInfoController {
-	@Resource(name="paymentRecordService")
-	private IPaymentRecordService paymentRecordService;
-
-	/**
-	 * 油卡购买：验证异步通知信息(支付宝(爱虎))
-	 */
-	@RequestMapping(value="/verifyBuyPetrolInfoAiHu", method= RequestMethod.POST)
-	public synchronized void verifyBuyPetrolInfoAiHu(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        System.out.println("支付宝回调——购买接口");
-	    response.setCharacterEncoding("utf-8");
-		response.setHeader("content-type", "text/html;charset=utf-8");
-		try {
-			response.getWriter().print(paymentRecordService.verifyAsynNoticeInfoAiHu(request));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	@Resource(name= "orderVerifyServiceImpl")
+	private OrderVerifyService paymentRecordService;
 
 	/**
 	 * 油卡充值：验证异步通知信息(支付宝(爱虎))recharge
@@ -46,7 +30,7 @@ public class VerifyAsynNoticeInfoController {
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {
-			response.getWriter().print(paymentRecordService.verifyAsynNoticeInfoAiHu(request));
+			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"Petrol"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +38,7 @@ public class VerifyAsynNoticeInfoController {
 
 
 	/**
-	 * 验证异步通知信息(微信)(充值和购买的接口)
+	 * 充值和购买：验证异步通知信息(微信)
 	 */
 	@RequestMapping(value="/verifyBuyPetrolInfoWeChat", method=RequestMethod.POST)
 	public synchronized void verifyBuyPetrolInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
@@ -62,7 +46,7 @@ public class VerifyAsynNoticeInfoController {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/xml");
 		try {
-			response.getWriter().write(paymentRecordService.orderPayNotify(request));
+			response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"Petrol"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,14 +63,14 @@ public class VerifyAsynNoticeInfoController {
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {
 			System.out.println("购买服务购买成功");
-			response.getWriter().print(paymentRecordService.verifyBuyServiceAiLi(request));
+			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"Service"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 验证异步通知信息(微信)(购买服务)
+	 * 购买服务)：验证异步通知信息(微信)
 	 */
 	@RequestMapping(value="/verifyBuyServiceInfoWeChat", method=RequestMethod.POST)
 	public synchronized void verifyBuyServiceInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
@@ -94,7 +78,7 @@ public class VerifyAsynNoticeInfoController {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/xml");
 		try {
-			response.getWriter().write(paymentRecordService.buyServiceOrderPayNotify(request));
+			response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"Service"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -111,7 +95,7 @@ public class VerifyAsynNoticeInfoController {
         response.setHeader("content-type", "text/html;charset=utf-8");
         try {
             System.out.println("充值vip购买成功");
-            response.getWriter().print(paymentRecordService.verifyVipRechargeAiLi(request));
+            response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"vip"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,9 +111,10 @@ public class VerifyAsynNoticeInfoController {
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {
 			System.out.println("充值vip购买成功");
-			response.getWriter().print(paymentRecordService.rechargeVipOrderPayNotify(request));
+			response.getWriter().print(paymentRecordService.WeChatOrderPayNotify(request,"vip"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }

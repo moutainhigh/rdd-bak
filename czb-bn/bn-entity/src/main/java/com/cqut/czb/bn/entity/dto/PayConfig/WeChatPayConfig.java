@@ -27,13 +27,13 @@ public class WeChatPayConfig {
 	public static final String spbill_create_ip = UrlConfig.NOTIGY_URL;
 	
     //通知地址1(购买油卡的回调地址)
-	public static final String notify_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyPetrolInfoWeChat";
+	public static final String notify_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyPetrolInfoWeChat";
 
 	//购买服务
-	public static final String BuyService_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyBuyServiceInfoWeChat";
+	public static final String BuyService_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyServiceInfoWeChat";
 
 	//充值vip
-	public static final String RechargeVip_url = "http://"+ UrlConfig.NOTIGY_URL+":8899/verifyAsyn/verifyRechargeVipInfoWeChat";
+	public static final String RechargeVip_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyRechargeVipInfoWeChat";
 
 
 	//交易类型
