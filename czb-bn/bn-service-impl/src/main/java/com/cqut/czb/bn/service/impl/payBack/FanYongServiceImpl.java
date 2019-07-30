@@ -58,18 +58,18 @@ public class FanYongServiceImpl implements FanYongService {
                 dict2 = dictMapperExtra.selectDictByName("fangyong2");
                 dict3 = dictMapperExtra.selectDictByName("fangyong_rate");
             }else {
-                dict1 = dictMapperExtra.selectDictByName("notCQFY_rate");
-                dict2 = dictMapperExtra.selectDictByName("notCQFY1");
-                dict3 = dictMapperExtra.selectDictByName("notCQFY2");
+                dict1 = dictMapperExtra.selectDictByName("notCQFY1");
+                dict2 = dictMapperExtra.selectDictByName("notCQFY2");
+                dict3 = dictMapperExtra.selectDictByName("notCQFY_rate");
             }
         }else if(BusinessType==2){//充值vip
-            dict1 = dictMapperExtra.selectDictByName("vip_rate");
-            dict2 = dictMapperExtra.selectDictByName("vipFY1");
-            dict3 = dictMapperExtra.selectDictByName("vipFY2");
+            dict1 = dictMapperExtra.selectDictByName("vipFY1");
+            dict2 = dictMapperExtra.selectDictByName("vipFY2");
+            dict3 = dictMapperExtra.selectDictByName("vip_rate");
         }else if(BusinessType==3){
-            dict1 = dictMapperExtra.selectDictByName("service_rate");
-            dict2 = dictMapperExtra.selectDictByName("serviceFY1");
-            dict3 = dictMapperExtra.selectDictByName("serviceFY2");
+            dict1 = dictMapperExtra.selectDictByName("serviceFY1");
+            dict2 = dictMapperExtra.selectDictByName("serviceFY2");
+            dict3 = dictMapperExtra.selectDictByName("service_rate");
         }
 
         if (dict1 != null || dict1.getContent() != null) {
