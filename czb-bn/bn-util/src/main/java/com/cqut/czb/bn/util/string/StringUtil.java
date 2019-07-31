@@ -41,7 +41,7 @@ public class StringUtil {
 
 
     public static String createNanoTimeTimestamp() {
-        return String.valueOf(System.nanoTime());
+        return String.valueOf(System.currentTimeMillis());
     }
 
     public static String createNanoTimeId() {
@@ -73,14 +73,15 @@ public class StringUtil {
         } else{
             // 如果返回的系统时间和上次的系统时间相同，则此时加上一个序列号，防止生成相同id
             if(timesString.equals(returnTimesString)){
+                timesString = returnTimesString;
                 returnTimesString = returnTimesString + orderNum.toString();
                 orderNum++;
             } else {
+                timesString = returnTimesString;
                 // 不同则将序列号重置为1
                 orderNum = 1;
             }
         }
-        timesString = returnTimesString;
         return returnTimesString + "" + random.nextInt(10) + "" + random.nextInt(10);
     }
 
