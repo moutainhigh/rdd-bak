@@ -251,7 +251,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         System.out.println("更改用户为vip"+changeToVip);
 
         //插入VIP充值记录表
-        dataProcessService.insertRechargeOrder(money,2,orgId,thirdOrderId,ownerId,vipAreaConfigId);
+        dataProcessService.insertRechargeOrder(money,1,orgId,thirdOrderId,ownerId,vipAreaConfigId);
 
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);

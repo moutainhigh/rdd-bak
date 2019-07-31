@@ -115,14 +115,14 @@ public class DataProcessServiceImpl implements DataProcessService {
 
     //插入VIP充值记录表
     @Override
-    public void insertRechargeOrder(double money, int payType, String orgId, String thirdOrderId, String ownerId, String vipAreaConfigId){
+    public void insertRechargeOrder(double money, int payMethod, String orgId, String thirdOrderId, String ownerId, String vipAreaConfigId){
         //查出此人属于哪个地区的vip
         String area;
 
         VipRechargeRecords vipRechargeRecords=new VipRechargeRecords();
         vipRechargeRecords.setAmount(money);
         vipRechargeRecords.setIsReceived(1);
-        vipRechargeRecords.setRechargeWay(payType);//2为微信
+        vipRechargeRecords.setRechargeWay(payMethod);//2为微信
         vipRechargeRecords.setRecordId(orgId);
         vipRechargeRecords.setThirdTradeNum(thirdOrderId);
         vipRechargeRecords.setUserId(ownerId);
