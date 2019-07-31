@@ -41,7 +41,7 @@ public class StringUtil {
 
 
     public static String createNanoTimeTimestamp() {
-        return String.valueOf(System.currentTimeMillis());
+        return String.valueOf(System.nanoTime());
     }
 
     public static String createNanoTimeId() {
