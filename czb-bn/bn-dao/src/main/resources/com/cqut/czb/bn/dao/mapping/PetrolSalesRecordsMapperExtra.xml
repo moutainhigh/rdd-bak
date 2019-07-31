@@ -184,6 +184,8 @@ INNER JOIN (
         WHERE
         buyer_id = #{userId,jdbcType=VARCHAR}
         AND cpsr.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+        and
+        cpsr.state=1
         ORDER BY
         cpsr.update_at DESC
     </select>

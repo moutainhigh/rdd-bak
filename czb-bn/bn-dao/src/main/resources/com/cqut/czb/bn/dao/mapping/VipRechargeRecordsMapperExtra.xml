@@ -96,10 +96,10 @@
     <if test="endTime != null">
     AND recharge_time &lt;= #{endTime,jdbcType = TIMESTAMP}
     </if>
-    <if test="area != null">
+    <if test="area != null and area != ''">
     AND area LIKE concat('%',#{area,jdbcType = VARCHAR},'%')
     </if>
-    <if test="userAccount != null">
+    <if test="userAccount != null and userAccount != ''">
     AND czb_user.user_account LIKE concat('%',#{userAccount,jdbcType = VARCHAR},'%')
     </if>
     <if test="rechargeWay != null and rechargeWay != ''">

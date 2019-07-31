@@ -50,6 +50,12 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
          */
         String orgId = WeChatUtils.getRandomStr();
         String nonceStrTemp = WeChatUtils.getRandomStr();
+        User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
+        petrolInputDTO.setIsVip(user.getIsVip());
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
+        if(vipAreaConfig!=null){
+            petrolInputDTO.setIsHaveVip(1);
+        }
         // 设置参数
         SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,petrolInputDTO,petrol);
         //插入购买信息
@@ -82,8 +88,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         String area=petrolInputDTO.getArea();
         User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
-        if (vipAreaConfig != null && user.getIsVip() == 1){
-            money = petrol.getPetrolPrice() * petrol.getDiscount();
+        if (vipAreaConfig != null && user.getIsVip() == 1&&petrol.getDiscount()!=null){
+            money=BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(BigDecimal.valueOf(petrol.getDiscount())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
         }else {
             money = petrol.getPetrolPrice();
         }

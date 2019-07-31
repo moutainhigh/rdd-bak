@@ -204,7 +204,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
         //payType对应0为油卡购买，1为油卡充值,2为购买服务
         //插入消费记录
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 1);
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 2);
 
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(3,area,ownerId,money,money,orgId);
@@ -242,7 +242,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 System.out.println("用户id:" + ownerId);
             }
             if ("vipAreaConfigId".equals(temp[0])) {
-                ownerId = temp[1];
+                vipAreaConfigId = temp[1];
                 System.out.println("用户id:" + vipAreaConfigId);
             }
         }
@@ -251,7 +251,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         System.out.println("更改用户为vip"+changeToVip);
 
         //插入VIP充值记录表
-        dataProcessService.insertRechargeOrder(money,2,orgId,thirdOrderId,ownerId,vipAreaConfigId);
+        dataProcessService.insertRechargeOrder(money,1,orgId,thirdOrderId,ownerId,vipAreaConfigId);
 
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
@@ -391,11 +391,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
-        //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
+        //
         if ("2".equals(payType)) {
             System.out.println("开始充值");
             //插入消费记录
-            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 1);
+            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "1", 1);
             //插入消费记录
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true)
@@ -405,7 +405,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         } else if ("0".equals(payType)) {
             System.out.println("开始购买");
             //插入消费记录
-            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 1);
+            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "0", 1);
 
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
 

@@ -53,12 +53,11 @@ public class WeChatParameterConfig {
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
         BigInteger totalFee;
-        if (petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1){
+        if (petrolInputDTO.getIsHaveVip()!=null&&petrol.getDiscount()!=null&&petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1&&petrolInputDTO.getIsHaveVip()==1){
             totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
                     .toBigInteger();
         }else{
-            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
-                    .toBigInteger();
+            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
         }
 
         System.out.println(totalFee);

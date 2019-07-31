@@ -84,11 +84,7 @@ public class AppBuyPetrolController {
      */
     @RequestMapping(value = "/weChatToPayment", method = RequestMethod.POST)
     public synchronized JSONResult weChatToPayment(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO) {
-//      public JSONResult wechatToPayment(PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
-//        User user=new User();
-//        user.setUserAccount("15870596710");
-//        user.setUserId("155786053583269");
         //防止数据为空
         if(petrolInputDTO==null||user==null){
             return new JSONResult("申请数据有误", ResponseCodeConstants.FAILURE);
@@ -102,11 +98,6 @@ public class AppBuyPetrolController {
         petrolInputDTO.setIsVip(user.getIsVip());
         //检测是否有未完成的订单(若存在则将油卡放回，无则继续操作)
         PetrolCache.isContainsNotPay(user.getUserId());
-        //检测今日是否已经购买了油卡或充值
-//        boolean isTodayHadBuy=appBuyPetrolService.isTodayHadBuy(petrolInputDTO);
-//        if(isTodayHadBuy){//true
-//            return new JSONResult("今日已购买油卡或充值相应类型油卡，请明日再来", ResponseCodeConstants.FAILURE);
-//        }
         //处理购油或充值
         Map<String,Object> BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
         if(BuyPetrol==null){
