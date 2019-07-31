@@ -365,7 +365,7 @@ INNER JOIN (
 
     <select id="sumOfPetrolSaleMoney" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" >
         SELECT
-        sum(t3.petrol_price)
+        sum(t1.turnover_amount)
           FROM
         (
         SELECT
