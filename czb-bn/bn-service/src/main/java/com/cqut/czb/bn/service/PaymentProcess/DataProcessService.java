@@ -10,7 +10,7 @@ public interface DataProcessService {
 
 
     //插入VIP充值记录表
-    void insertRechargeOrder(double money, int payType, String orgId, String thirdOrderId, String ownerId, String vipAreaConfigId);
+    void insertRechargeOrder(double money, int payMethod, String orgId, String thirdOrderId, String ownerId, String vipAreaConfigId);
 
     //查询是否首次消费
     void isHaveConsumption(String ownerId);
