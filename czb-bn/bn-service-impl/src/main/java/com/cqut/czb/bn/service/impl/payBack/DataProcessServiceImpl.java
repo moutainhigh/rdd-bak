@@ -194,6 +194,7 @@ public class DataProcessServiceImpl implements DataProcessService {
         }
         petrol.setOwnerId(ownerId);
         petrol.setState(2);
+        petrol.setPetrolPrice(money);
         boolean updatePetrol = updatePetrol(petrol);
         System.out.println("更改油卡状态完毕" + updatePetrol);
 
