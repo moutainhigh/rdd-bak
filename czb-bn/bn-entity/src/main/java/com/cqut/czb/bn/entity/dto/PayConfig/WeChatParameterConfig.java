@@ -57,7 +57,7 @@ public class WeChatParameterConfig {
             totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
                     .toBigInteger();
         }else{
-            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).toBigInteger();
+            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100).toBigInteger();
         }
 
         System.out.println(totalFee);
