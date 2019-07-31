@@ -24,6 +24,16 @@ public class PetrolInputDTO {
 
     private Integer isVip;
 
+    private Integer isHaveVip;
+
+    public Integer getIsHaveVip() {
+        return isHaveVip;
+    }
+
+    public void setIsHaveVip(Integer isHaveVip) {
+        this.isHaveVip = isHaveVip;
+    }
+
     public Integer getIsVip() {
         return isVip;
     }

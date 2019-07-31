@@ -15,7 +15,7 @@ public interface DataProcessService {
     //查询是否首次消费
     void isHaveConsumption(String ownerId);
 
-    //payType对应0为油卡购买，1为油卡充值,2为购买服务
+    //payType对应0为油卡购买，1为油卡充值,2为购买服务,3充值vip
     //插入消费记录
     void insertConsumptionRecord(String orgId, String thirdOrderId, double money, String ownerId, String businessType, int payMethod);
 
