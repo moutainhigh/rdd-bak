@@ -5,12 +5,16 @@ import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
+import com.cqut.czb.bn.service.IDictService;
+import com.cqut.czb.bn.service.impl.DictServiceImpl;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,10 @@ public class AuthController {
 
     @Autowired
     AppHomePageService appHomePageService;
+
+    @Autowired
+    IDictService dictService;
+
     /**
      *  个人用户注册
      * */
@@ -49,6 +57,11 @@ public class AuthController {
             jsonResult.setData(true);
             return jsonResult;
         }
+    }
+
+    @RequestMapping(value = "/getDicByName",method = RequestMethod.GET)
+    public JSONResult getDicByName(DictInputDTO dictInputDTO){
+        return new JSONResult(dictService.getDicByName(dictInputDTO));
     }
 
     @RequestMapping(value ="/selectHomePageRouters",method = RequestMethod.GET)
