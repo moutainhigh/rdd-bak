@@ -39,8 +39,15 @@ public class UserInputDTO {
     private Date missionStartTime;
 
     private Date missionEndTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endTime;
 
     private Integer isLoginPc;
+
+    private Integer isVip;
 
     private String oldSuperior;
 
@@ -136,12 +143,36 @@ public class UserInputDTO {
         this.missionEndTime = missionEndTime;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
     public Integer getIsLoginPc() {
         return isLoginPc;
     }
 
     public void setIsLoginPc(Integer isLoginPc) {
         this.isLoginPc = isLoginPc;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
     }
 
     public String getOldSuperior() {
