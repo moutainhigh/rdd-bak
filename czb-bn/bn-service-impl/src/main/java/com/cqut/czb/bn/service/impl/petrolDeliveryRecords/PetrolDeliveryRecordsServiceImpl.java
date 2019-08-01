@@ -187,7 +187,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         List<PetrolDeliveryDTO> petrolDeliveryDTOList = null;
         Map<String, PetrolDeliveryDTO> petrolMap = new HashMap<>();
         petrolDeliveryDTOList = ImportPetrolDelivery.readExcel(file.getOriginalFilename(), inputStream);
-        System.out.println("99999999"+petrolDeliveryDTOList.get(0).getDeliveryState());
+
         /**
          * 按petrolNum为key 做到去重复的效果
          */
@@ -201,7 +201,6 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             petrolListNoRepeat.add(p);
         }
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
-//        System.out.println("countForInsert " + countForInsert);
         return countForInsert;
     }
 
