@@ -259,7 +259,7 @@
       <id column="user_id" property="userId" jdbcType="VARCHAR" />
       <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
       <result column="user_name" property="userName" jdbcType="VARCHAR" />
-      <result column="amount" property="amount" jdbcType="DOUBLE" />
+      <result column="amount" property="amount" jdbcType="DOUBLE"  />
       <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">
