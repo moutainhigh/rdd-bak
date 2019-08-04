@@ -77,28 +77,6 @@ public class AppConfigManageController {
         return new JSONResult(announcementService.getFileById(id));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 轮播图新增
      */

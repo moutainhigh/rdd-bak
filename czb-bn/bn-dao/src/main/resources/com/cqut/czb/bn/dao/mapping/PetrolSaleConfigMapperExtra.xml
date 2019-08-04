@@ -152,4 +152,8 @@
     </where>
   </update>
 
+  <select id="getAllArea" resultType="java.lang.String">
+    select distinct area  from czb_petrol_sale_config where sale_state =1
+  </select>
+
 </mapper>

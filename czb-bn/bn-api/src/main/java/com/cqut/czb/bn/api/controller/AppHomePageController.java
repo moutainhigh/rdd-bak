@@ -99,4 +99,12 @@ public class AppHomePageController {
     public JSONResult selectPetrolInfoDTO(){
         return new JSONResult(appHomePageService.selectPetrolInfoDTO());
     }
+
+    /**
+     * 获取油卡开放地区
+     */
+    @RequestMapping(value ="/selectAllArea",method = RequestMethod.GET)
+    public JSONResult selectAllArea(){
+        return new JSONResult(appHomePageService.selectArea());
+    }
 }

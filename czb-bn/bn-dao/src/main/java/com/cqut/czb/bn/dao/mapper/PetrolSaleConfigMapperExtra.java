@@ -26,4 +26,7 @@ public interface PetrolSaleConfigMapperExtra {
     List<PetrolSaleConfig>  getAreaConfigByArea(@Param("area") String area);
 
     int updateAreaConfig(@Param("list") List<PetrolSaleConfig>  list);
+
+    List<String> getAllArea();
+
 }

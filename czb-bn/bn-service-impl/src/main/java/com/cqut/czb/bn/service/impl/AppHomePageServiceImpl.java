@@ -12,6 +12,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 import com.cqut.czb.bn.entity.entity.ServicePlan;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
@@ -218,5 +219,10 @@ public class AppHomePageServiceImpl implements AppHomePageService {
             }
         }
         return petrolInfoDTOList;
+    }
+
+    @Override
+    public List<String> selectArea() {
+        return petrolSaleConfigMapperExtra.getAllArea();
     }
 }

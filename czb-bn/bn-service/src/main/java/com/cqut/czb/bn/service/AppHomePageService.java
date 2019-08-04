@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
+import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 import com.cqut.czb.bn.entity.entity.ServicePlan;
 
 import java.util.List;
@@ -56,5 +57,11 @@ public interface AppHomePageService {
     List<AppRouterDTO> selectHomePageRouters(AppRouterDTO appRouterDTO);
 
     List<PetrolInfoDTO> selectPetrolInfoDTO();
+
+
+    /**
+     * 获取所有的地区
+     */
+    List<String> selectArea();
 
 }
