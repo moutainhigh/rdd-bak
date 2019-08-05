@@ -65,7 +65,12 @@ public class DictServiceImpl implements IDictService {
             }
         }
         Random random = new Random();
-        appInfoDTO.setIsUpdate(false);
+
+        if("1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.5".equals(version) || version == null || version == ""){
+            appInfoDTO.setIsUpdate(true);
+        }else {
+            appInfoDTO.setIsUpdate(false);
+        }
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         //记录用户登录信息
         recordLoginInfo(name,user.getUserId(),version);
