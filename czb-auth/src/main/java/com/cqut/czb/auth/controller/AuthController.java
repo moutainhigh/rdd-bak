@@ -230,7 +230,7 @@ public class AuthController {
      * 游客登录直接插入验证码 Visitors to login
      */
     @PostMapping("/insertVCode")
-    public  JSONResult insertVCode(@Validated VerificationCodeDTO verificationCodeDTO){
+    public  JSONResult insertVCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
         //判断电话号码是否为空
         if(verificationCodeDTO==null&&verificationCodeDTO.getUserAccount()==null){
             return new JSONResult(false);
