@@ -205,6 +205,12 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
+    public Boolean insertVCode(VerificationCodeDTO verificationCodeDTO) {
+        verificationCodeDTO.setVerificationCodeId(StringUtil.createId());
+        return verificationCodeMapperExtra.insert(verificationCodeDTO) > 0;
+    }
+
+    @Override
     public boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO) {
         //判断信息是否为空
         if (verificationCodeDTO == null)
@@ -233,7 +239,6 @@ public class UserDetailServiceImpl implements UserDetailService {
     public boolean changePWD(User user, String oldPWD, String newPWD) {
         //检验密码是否一致。
         User checkUser = userMapperExtra.findUserByAccount(user.getUserAccount());//通过电话号码来查询
-        System.out.println(checkUser.getUserPsw());
         boolean isLike=bCryptPasswordEncoder.matches(oldPWD, checkUser.getUserPsw());
         if (!isLike) {
             System.out.println("错误");

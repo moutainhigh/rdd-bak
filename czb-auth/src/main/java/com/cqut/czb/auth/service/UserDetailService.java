@@ -18,6 +18,12 @@ public interface UserDetailService {
      */
     Boolean insertVerificationCode(String phone);
 
+
+    /**
+     * 插入游客登录验证码
+     */
+    Boolean insertVCode(VerificationCodeDTO verificationCodeDTO);
+
     /**
      * 查询出数据库中的验证码
      * @param verificationCodeDTO

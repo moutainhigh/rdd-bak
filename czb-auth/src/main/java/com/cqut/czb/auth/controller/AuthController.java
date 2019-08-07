@@ -226,5 +226,22 @@ public class AuthController {
     }
 
 
+    /**
+     * 游客登录直接插入验证码 Visitors to login
+     */
+    @PostMapping("/insertVCode")
+    public  JSONResult insertVCode(@Validated VerificationCodeDTO verificationCodeDTO){
+        //判断电话号码是否为空
+        if(verificationCodeDTO==null&&verificationCodeDTO.getUserAccount()==null){
+            return new JSONResult(false);
+        }
+        boolean sendVerificationCode = userDetailService.insertVCode(verificationCodeDTO);
+        if(sendVerificationCode) {
+            return new JSONResult(true);
+        } else {
+            return new JSONResult(false);
+        }
+    }
+
 }
 
