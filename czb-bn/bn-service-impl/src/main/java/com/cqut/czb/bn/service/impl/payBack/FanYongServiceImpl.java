@@ -85,7 +85,9 @@ public class FanYongServiceImpl implements FanYongService {
             System.out.println("fangyongRate：" + fangyongRate);
         }
 
-        if (userIdUp1 != null) {//可能存在没有上级用户
+        if(BusinessType==2){
+              VipFy( userIdUp1, fangyongRate, money, actualPayment, fangyong1, fangyong2,orgId);
+        }else if (userIdUp1 != null) {//可能存在没有上级用户
             //对上级用户的操作
             UserIncomeInfo oldUserIncomeInfoUp1 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp1);//查出原收益信息
             //对上级用户的(收益信息表，收益变更记录表)进行操作
@@ -101,6 +103,35 @@ public class FanYongServiceImpl implements FanYongService {
             }
         }
         return true;
+    }
+
+    /**
+     * vip返佣
+     */
+    public void  VipFy(String userId,double fangyongRate,double money,double actualPayment,double fangyong1,double fangyong2, String orgId){
+        User userUp=new User();
+        while(true){
+            User user=userMapper.selectByPrimaryKey(userId);
+            if(user!=null){
+                if (user.getIsVip() == 1) {
+                     userUp=user;
+                    //对上级用户的操作
+                    UserIncomeInfo oldUserIncomeInfoUp = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getUserId());//查出原收益信息
+                    //对上级用户的(收益信息表，收益变更记录表)进行操作
+                    changeUserIncomeInfo(userId,userUp.getUserId(), fangyongRate, oldUserIncomeInfoUp, money, actualPayment, userUp.getUserId(),1, fangyong1, orgId);
+                }else {
+                    if(user.getSuperiorUser()!=null&&!user.getSuperiorUser().equals("")) {
+                        userId=user.getSuperiorUser();
+                        continue;
+                    }else {
+                        return ;
+                    }
+                }
+            }else {
+                return ;
+            }
+        }
+
     }
 
     /**
