@@ -296,8 +296,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 System.out.println("用户id:" + ownerId);
             }
             if ("vipAreaConfigId".equals(temp[0])) {
-                ownerId = temp[1];
-                System.out.println("用户id:" + vipAreaConfigId);
+                vipAreaConfigId = temp[1];
+                System.out.println("地区id:" + vipAreaConfigId);
             }
         }
 
