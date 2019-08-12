@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.CzbVehicleCleanOrderMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
     <id column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="rider_id" property="riderId" jdbcType="VARCHAR" />
@@ -30,7 +30,7 @@
     delete from czb_vehicle_clean_order
     where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
     insert into czb_vehicle_clean_order (server_order_id, user_id, rider_id, 
       third_order, pay_status, actual_price, 
       vehicle_id, process_status, cancel_time, 
@@ -42,7 +42,7 @@
       #{cancelPersonId,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
     insert into czb_vehicle_clean_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serverOrderId != null" >
@@ -127,7 +127,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
     update czb_vehicle_clean_order
     <set >
       <if test="userId != null" >
@@ -169,7 +169,7 @@
     </set>
     where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
     update czb_vehicle_clean_order
     set user_id = #{userId,jdbcType=VARCHAR},
       rider_id = #{riderId,jdbcType=VARCHAR},

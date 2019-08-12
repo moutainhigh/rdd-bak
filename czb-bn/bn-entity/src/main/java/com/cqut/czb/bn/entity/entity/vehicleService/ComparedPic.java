@@ -1,8 +1,11 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
-public class CzbComparedPic {
+@Component
+public class ComparedPic {
     private String comparedPicId;
 
     private String serverOrderId;

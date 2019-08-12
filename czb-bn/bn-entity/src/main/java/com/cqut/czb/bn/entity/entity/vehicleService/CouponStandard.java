@@ -1,8 +1,11 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
-public class CzbCouponStandard {
+@Component
+public class CouponStandard {
     private String standardId;
 
     private String standardType;

@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.api.controller.vehicleServiceRiderManage;
+package com.cqut.czb.bn.api.controller.vehicleService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/service/rider")
 public class RiderManageController {
+
 }

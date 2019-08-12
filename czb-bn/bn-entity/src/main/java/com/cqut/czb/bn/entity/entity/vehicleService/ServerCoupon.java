@@ -1,8 +1,11 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
-public class CzbServerCoupon {
+@Component
+public class ServerCoupon {
     private String couponId;
 
     private Date destroyTime;

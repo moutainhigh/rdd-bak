@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.CzbComparedPicMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbComparedPic" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.ComparedPicMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.ComparedPic" >
     <id column="compared_pic_id" property="comparedPicId" jdbcType="VARCHAR" />
     <result column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
@@ -22,7 +22,7 @@
     delete from czb_compared_pic
     where compared_pic_id = #{comparedPicId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbComparedPic" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ComparedPic" >
     insert into czb_compared_pic (compared_pic_id, server_order_id, status, 
       file_id, create_at, update_at
       )
@@ -30,7 +30,7 @@
       #{fileId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbComparedPic" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ComparedPic" >
     insert into czb_compared_pic
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="comparedPicId != null" >
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbComparedPic" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ComparedPic" >
     update czb_compared_pic
     <set >
       <if test="serverOrderId != null" >
@@ -94,7 +94,7 @@
     </set>
     where compared_pic_id = #{comparedPicId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbComparedPic" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ComparedPic" >
     update czb_compared_pic
     set server_order_id = #{serverOrderId,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},

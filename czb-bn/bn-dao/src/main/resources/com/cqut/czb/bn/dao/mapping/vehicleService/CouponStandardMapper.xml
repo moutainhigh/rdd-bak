@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.CzbCouponStandardMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.CouponStandardMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     <id column="standard_id" property="standardId" jdbcType="VARCHAR" />
     <result column="standard_type" property="standardType" jdbcType="VARCHAR" />
     <result column="standard_value" property="standardValue" jdbcType="DOUBLE" />
@@ -24,7 +24,7 @@
     delete from czb_coupon_standard
     where standard_id = #{standardId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     insert into czb_coupon_standard (standard_id, standard_type, standard_value, 
       continue_days, standard_explain, create_at, 
       update_at)
@@ -32,7 +32,7 @@
       #{continueDays,jdbcType=INTEGER}, #{standardExplain,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     insert into czb_coupon_standard
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="standardId != null" >
@@ -81,7 +81,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     update czb_coupon_standard
     <set >
       <if test="standardType != null" >
@@ -105,7 +105,7 @@
     </set>
     where standard_id = #{standardId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     update czb_coupon_standard
     set standard_type = #{standardType,jdbcType=VARCHAR},
       standard_value = #{standardValue,jdbcType=DOUBLE},
