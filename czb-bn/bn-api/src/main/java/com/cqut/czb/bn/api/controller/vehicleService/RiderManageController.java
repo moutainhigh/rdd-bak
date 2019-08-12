@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
+import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.vehicleService.RiderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: lyk
@@ -10,7 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/service/rider")
+@RequestMapping("/service/rider")
 public class RiderManageController {
-
+    @Autowired
+    RiderService riderService;
+    @PostMapping("/selectRider")
+    public JSONResult selectByPrimaryKey(@RequestParam(name = "riderId") String riderId) {
+        return new JSONResult(riderService.selectByPrimaryKey(riderId));
+    }
 }
