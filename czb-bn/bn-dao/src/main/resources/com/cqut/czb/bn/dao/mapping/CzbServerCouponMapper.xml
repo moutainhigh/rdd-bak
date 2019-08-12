@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CzbServerCouponMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerCoupon">
+    <result column="coupon_id" jdbcType="VARCHAR" property="couponId" />
+    <result column="destroy_time" jdbcType="TIMESTAMP" property="destroyTime" />
+    <result column="coupon_standard" jdbcType="VARCHAR" property="couponStandard" />
+    <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerCoupon">
+    insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard, 
+      owner_id, status, create_at, 
+      update_at)
+    values (#{couponId,jdbcType=VARCHAR}, #{destroyTime,jdbcType=TIMESTAMP}, #{couponStandard,jdbcType=VARCHAR}, 
+      #{ownerId,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerCoupon">
+    insert into czb_server_coupon
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="couponId != null">
+        coupon_id,
+      </if>
+      <if test="destroyTime != null">
+        destroy_time,
+      </if>
+      <if test="couponStandard != null">
+        coupon_standard,
+      </if>
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="couponId != null">
+        #{couponId,jdbcType=VARCHAR},
+      </if>
+      <if test="destroyTime != null">
+        #{destroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couponStandard != null">
+        #{couponStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerCoupon">
+    <result column="coupon_id" jdbcType="VARCHAR" property="couponId" />
+    <result column="destroy_time" jdbcType="TIMESTAMP" property="destroyTime" />
+    <result column="coupon_standard" jdbcType="VARCHAR" property="couponStandard" />
+    <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerCoupon">
+    insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard, 
+      owner_id, status, create_at, 
+      update_at)
+    values (#{couponId,jdbcType=VARCHAR}, #{destroyTime,jdbcType=TIMESTAMP}, #{couponStandard,jdbcType=VARCHAR}, 
+      #{ownerId,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerCoupon">
+    insert into czb_server_coupon
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="couponId != null">
+        coupon_id,
+      </if>
+      <if test="destroyTime != null">
+        destroy_time,
+      </if>
+      <if test="couponStandard != null">
+        coupon_standard,
+      </if>
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="couponId != null">
+        #{couponId,jdbcType=VARCHAR},
+      </if>
+      <if test="destroyTime != null">
+        #{destroyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couponStandard != null">
+        #{couponStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

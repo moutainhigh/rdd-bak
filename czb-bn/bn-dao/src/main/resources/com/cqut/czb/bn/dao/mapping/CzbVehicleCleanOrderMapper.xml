@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CzbVehicleCleanOrderMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder">
+    <result column="server_order_id" jdbcType="VARCHAR" property="serverOrderId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="rider_id" jdbcType="VARCHAR" property="riderId" />
+    <result column="third_order" jdbcType="VARCHAR" property="thirdOrder" />
+    <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
+    <result column="actual_price" jdbcType="DOUBLE" property="actualPrice" />
+    <result column="vehicle_id" jdbcType="VARCHAR" property="vehicleId" />
+    <result column="process_status" jdbcType="TINYINT" property="processStatus" />
+    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+    <result column="cancel_person_id" jdbcType="VARCHAR" property="cancelPersonId" />
+    <result column="cancel_reason" jdbcType="VARCHAR" property="cancelReason" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder">
+    insert into czb_vehicle_clean_order (server_order_id, user_id, rider_id, 
+      third_order, pay_status, actual_price, 
+      vehicle_id, process_status, cancel_time, 
+      cancel_person_id, cancel_reason, create_at, 
+      update_at)
+    values (#{serverOrderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{riderId,jdbcType=VARCHAR}, 
+      #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=TINYINT}, #{actualPrice,jdbcType=DOUBLE}, 
+      #{vehicleId,jdbcType=VARCHAR}, #{processStatus,jdbcType=TINYINT}, #{cancelTime,jdbcType=TIMESTAMP}, 
+      #{cancelPersonId,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder">
+    insert into czb_vehicle_clean_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serverOrderId != null">
+        server_order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="riderId != null">
+        rider_id,
+      </if>
+      <if test="thirdOrder != null">
+        third_order,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="actualPrice != null">
+        actual_price,
+      </if>
+      <if test="vehicleId != null">
+        vehicle_id,
+      </if>
+      <if test="processStatus != null">
+        process_status,
+      </if>
+      <if test="cancelTime != null">
+        cancel_time,
+      </if>
+      <if test="cancelPersonId != null">
+        cancel_person_id,
+      </if>
+      <if test="cancelReason != null">
+        cancel_reason,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serverOrderId != null">
+        #{serverOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="riderId != null">
+        #{riderId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrder != null">
+        #{thirdOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="actualPrice != null">
+        #{actualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=VARCHAR},
+      </if>
+      <if test="processStatus != null">
+        #{processStatus,jdbcType=TINYINT},
+      </if>
+      <if test="cancelTime != null">
+        #{cancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cancelPersonId != null">
+        #{cancelPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelReason != null">
+        #{cancelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder">
+    <result column="server_order_id" jdbcType="VARCHAR" property="serverOrderId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="rider_id" jdbcType="VARCHAR" property="riderId" />
+    <result column="third_order" jdbcType="VARCHAR" property="thirdOrder" />
+    <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
+    <result column="actual_price" jdbcType="DOUBLE" property="actualPrice" />
+    <result column="vehicle_id" jdbcType="VARCHAR" property="vehicleId" />
+    <result column="process_status" jdbcType="TINYINT" property="processStatus" />
+    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+    <result column="cancel_person_id" jdbcType="VARCHAR" property="cancelPersonId" />
+    <result column="cancel_reason" jdbcType="VARCHAR" property="cancelReason" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder">
+    insert into czb_vehicle_clean_order (server_order_id, user_id, rider_id, 
+      third_order, pay_status, actual_price, 
+      vehicle_id, process_status, cancel_time, 
+      cancel_person_id, cancel_reason, create_at, 
+      update_at)
+    values (#{serverOrderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{riderId,jdbcType=VARCHAR}, 
+      #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=TINYINT}, #{actualPrice,jdbcType=DOUBLE}, 
+      #{vehicleId,jdbcType=VARCHAR}, #{processStatus,jdbcType=TINYINT}, #{cancelTime,jdbcType=TIMESTAMP}, 
+      #{cancelPersonId,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbVehicleCleanOrder">
+    insert into czb_vehicle_clean_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serverOrderId != null">
+        server_order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="riderId != null">
+        rider_id,
+      </if>
+      <if test="thirdOrder != null">
+        third_order,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="actualPrice != null">
+        actual_price,
+      </if>
+      <if test="vehicleId != null">
+        vehicle_id,
+      </if>
+      <if test="processStatus != null">
+        process_status,
+      </if>
+      <if test="cancelTime != null">
+        cancel_time,
+      </if>
+      <if test="cancelPersonId != null">
+        cancel_person_id,
+      </if>
+      <if test="cancelReason != null">
+        cancel_reason,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serverOrderId != null">
+        #{serverOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="riderId != null">
+        #{riderId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrder != null">
+        #{thirdOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="actualPrice != null">
+        #{actualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=VARCHAR},
+      </if>
+      <if test="processStatus != null">
+        #{processStatus,jdbcType=TINYINT},
+      </if>
+      <if test="cancelTime != null">
+        #{cancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cancelPersonId != null">
+        #{cancelPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelReason != null">
+        #{cancelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

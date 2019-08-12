@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CzbCleanRiderMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    <result column="rider_id" jdbcType="VARCHAR" property="riderId" />
+    <result column="rider_name" jdbcType="VARCHAR" property="riderName" />
+    <result column="contact_number" jdbcType="VARCHAR" property="contactNumber" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    insert into czb_clean_rider (rider_id, rider_name, contact_number, 
+      status, user_id, create_at, 
+      update_at)
+    values (#{riderId,jdbcType=VARCHAR}, #{riderName,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    insert into czb_clean_rider
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="riderId != null">
+        rider_id,
+      </if>
+      <if test="riderName != null">
+        rider_name,
+      </if>
+      <if test="contactNumber != null">
+        contact_number,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="riderId != null">
+        #{riderId,jdbcType=VARCHAR},
+      </if>
+      <if test="riderName != null">
+        #{riderName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    <result column="rider_id" jdbcType="VARCHAR" property="riderId" />
+    <result column="rider_name" jdbcType="VARCHAR" property="riderName" />
+    <result column="contact_number" jdbcType="VARCHAR" property="contactNumber" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    insert into czb_clean_rider (rider_id, rider_name, contact_number, 
+      status, user_id, create_at, 
+      update_at)
+    values (#{riderId,jdbcType=VARCHAR}, #{riderName,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    insert into czb_clean_rider
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="riderId != null">
+        rider_id,
+      </if>
+      <if test="riderName != null">
+        rider_name,
+      </if>
+      <if test="contactNumber != null">
+        contact_number,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="riderId != null">
+        #{riderId,jdbcType=VARCHAR},
+      </if>
+      <if test="riderName != null">
+        #{riderName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    <result column="rider_id" jdbcType="VARCHAR" property="riderId" />
+    <result column="rider_name" jdbcType="VARCHAR" property="riderName" />
+    <result column="contact_number" jdbcType="VARCHAR" property="contactNumber" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    insert into czb_clean_rider (rider_id, rider_name, contact_number, 
+      status, user_id, create_at, 
+      update_at)
+    values (#{riderId,jdbcType=VARCHAR}, #{riderName,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCleanRider">
+    insert into czb_clean_rider
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="riderId != null">
+        rider_id,
+      </if>
+      <if test="riderName != null">
+        rider_name,
+      </if>
+      <if test="contactNumber != null">
+        contact_number,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="riderId != null">
+        #{riderId,jdbcType=VARCHAR},
+      </if>
+      <if test="riderName != null">
+        #{riderName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

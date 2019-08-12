@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CzbCouponStandardMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard">
+    <result column="standard_id" jdbcType="VARCHAR" property="standardId" />
+    <result column="standard_type" jdbcType="VARCHAR" property="standardType" />
+    <result column="standard_value" jdbcType="DOUBLE" property="standardValue" />
+    <result column="continue_days" jdbcType="INTEGER" property="continueDays" />
+    <result column="standard_explain" jdbcType="VARCHAR" property="standardExplain" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard">
+    insert into czb_coupon_standard (standard_id, standard_type, standard_value, 
+      continue_days, standard_explain, create_at, 
+      update_at)
+    values (#{standardId,jdbcType=VARCHAR}, #{standardType,jdbcType=VARCHAR}, #{standardValue,jdbcType=DOUBLE}, 
+      #{continueDays,jdbcType=INTEGER}, #{standardExplain,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard">
+    insert into czb_coupon_standard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="standardId != null">
+        standard_id,
+      </if>
+      <if test="standardType != null">
+        standard_type,
+      </if>
+      <if test="standardValue != null">
+        standard_value,
+      </if>
+      <if test="continueDays != null">
+        continue_days,
+      </if>
+      <if test="standardExplain != null">
+        standard_explain,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="standardId != null">
+        #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardType != null">
+        #{standardType,jdbcType=VARCHAR},
+      </if>
+      <if test="standardValue != null">
+        #{standardValue,jdbcType=DOUBLE},
+      </if>
+      <if test="continueDays != null">
+        #{continueDays,jdbcType=INTEGER},
+      </if>
+      <if test="standardExplain != null">
+        #{standardExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard">
+    <result column="standard_id" jdbcType="VARCHAR" property="standardId" />
+    <result column="standard_type" jdbcType="VARCHAR" property="standardType" />
+    <result column="standard_value" jdbcType="DOUBLE" property="standardValue" />
+    <result column="continue_days" jdbcType="INTEGER" property="continueDays" />
+    <result column="standard_explain" jdbcType="VARCHAR" property="standardExplain" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard">
+    insert into czb_coupon_standard (standard_id, standard_type, standard_value, 
+      continue_days, standard_explain, create_at, 
+      update_at)
+    values (#{standardId,jdbcType=VARCHAR}, #{standardType,jdbcType=VARCHAR}, #{standardValue,jdbcType=DOUBLE}, 
+      #{continueDays,jdbcType=INTEGER}, #{standardExplain,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbCouponStandard">
+    insert into czb_coupon_standard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="standardId != null">
+        standard_id,
+      </if>
+      <if test="standardType != null">
+        standard_type,
+      </if>
+      <if test="standardValue != null">
+        standard_value,
+      </if>
+      <if test="continueDays != null">
+        continue_days,
+      </if>
+      <if test="standardExplain != null">
+        standard_explain,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="standardId != null">
+        #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardType != null">
+        #{standardType,jdbcType=VARCHAR},
+      </if>
+      <if test="standardValue != null">
+        #{standardValue,jdbcType=DOUBLE},
+      </if>
+      <if test="continueDays != null">
+        #{continueDays,jdbcType=INTEGER},
+      </if>
+      <if test="standardExplain != null">
+        #{standardExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

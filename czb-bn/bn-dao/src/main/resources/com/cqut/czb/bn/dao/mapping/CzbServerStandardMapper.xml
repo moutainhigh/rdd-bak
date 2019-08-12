@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CzbServerStandardMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerStandard">
+    <result column="server_id" jdbcType="VARCHAR" property="serverId" />
+    <result column="server_name" jdbcType="VARCHAR" property="serverName" />
+    <result column="server_type" jdbcType="VARCHAR" property="serverType" />
+    <result column="server_price" jdbcType="DOUBLE" property="serverPrice" />
+    <result column="server_explain" jdbcType="VARCHAR" property="serverExplain" />
+    <result column="server_discount" jdbcType="REAL" property="serverDiscount" />
+    <result column="server_vehicle_type" jdbcType="TINYINT" property="serverVehicleType" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerStandard">
+    insert into czb_server_standard (server_id, server_name, server_type, 
+      server_price, server_explain, server_discount, 
+      server_vehicle_type, create_at, update_at
+      )
+    values (#{serverId,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, #{serverType,jdbcType=VARCHAR}, 
+      #{serverPrice,jdbcType=DOUBLE}, #{serverExplain,jdbcType=VARCHAR}, #{serverDiscount,jdbcType=REAL}, 
+      #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerStandard">
+    insert into czb_server_standard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serverId != null">
+        server_id,
+      </if>
+      <if test="serverName != null">
+        server_name,
+      </if>
+      <if test="serverType != null">
+        server_type,
+      </if>
+      <if test="serverPrice != null">
+        server_price,
+      </if>
+      <if test="serverExplain != null">
+        server_explain,
+      </if>
+      <if test="serverDiscount != null">
+        server_discount,
+      </if>
+      <if test="serverVehicleType != null">
+        server_vehicle_type,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serverId != null">
+        #{serverId,jdbcType=VARCHAR},
+      </if>
+      <if test="serverName != null">
+        #{serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="serverType != null">
+        #{serverType,jdbcType=VARCHAR},
+      </if>
+      <if test="serverPrice != null">
+        #{serverPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="serverExplain != null">
+        #{serverExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="serverDiscount != null">
+        #{serverDiscount,jdbcType=REAL},
+      </if>
+      <if test="serverVehicleType != null">
+        #{serverVehicleType,jdbcType=TINYINT},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerStandard">
+    <result column="server_id" jdbcType="VARCHAR" property="serverId" />
+    <result column="server_name" jdbcType="VARCHAR" property="serverName" />
+    <result column="server_type" jdbcType="VARCHAR" property="serverType" />
+    <result column="server_price" jdbcType="DOUBLE" property="serverPrice" />
+    <result column="server_explain" jdbcType="VARCHAR" property="serverExplain" />
+    <result column="server_discount" jdbcType="REAL" property="serverDiscount" />
+    <result column="server_vehicle_type" jdbcType="TINYINT" property="serverVehicleType" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerStandard">
+    insert into czb_server_standard (server_id, server_name, server_type, 
+      server_price, server_explain, server_discount, 
+      server_vehicle_type, create_at, update_at
+      )
+    values (#{serverId,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, #{serverType,jdbcType=VARCHAR}, 
+      #{serverPrice,jdbcType=DOUBLE}, #{serverExplain,jdbcType=VARCHAR}, #{serverDiscount,jdbcType=REAL}, 
+      #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CzbServerStandard">
+    insert into czb_server_standard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serverId != null">
+        server_id,
+      </if>
+      <if test="serverName != null">
+        server_name,
+      </if>
+      <if test="serverType != null">
+        server_type,
+      </if>
+      <if test="serverPrice != null">
+        server_price,
+      </if>
+      <if test="serverExplain != null">
+        server_explain,
+      </if>
+      <if test="serverDiscount != null">
+        server_discount,
+      </if>
+      <if test="serverVehicleType != null">
+        server_vehicle_type,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serverId != null">
+        #{serverId,jdbcType=VARCHAR},
+      </if>
+      <if test="serverName != null">
+        #{serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="serverType != null">
+        #{serverType,jdbcType=VARCHAR},
+      </if>
+      <if test="serverPrice != null">
+        #{serverPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="serverExplain != null">
+        #{serverExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="serverDiscount != null">
+        #{serverDiscount,jdbcType=REAL},
+      </if>
+      <if test="serverVehicleType != null">
+        #{serverVehicleType,jdbcType=TINYINT},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>
