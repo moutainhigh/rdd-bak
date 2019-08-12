@@ -34,13 +34,16 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
     @Override
     public VipRechargeRecordDTO getVipRechargeRecordList(VipRechargeRecordListDTO vipRechargeRecordListDTO) {
         PageHelper.startPage(vipRechargeRecordListDTO.getCurrentPage(), vipRechargeRecordListDTO.getPageSize());
+
         VipRechargeRecordDTO vipRechargeRecordDTO = new VipRechargeRecordDTO();
-        List<VipRechargeRecordListDTO> vipRechargeRecordListDTOS = vipRechargeRecordsMapperExtra.getVipRechargeRecord(vipRechargeRecordListDTO);
-        vipRechargeRecordDTO.setVipRechargeRecordListDTOList(new PageInfo<>(vipRechargeRecordListDTOS));
+        vipRechargeRecordDTO.setVipRechargeRecordListDTOList(new PageInfo<>(vipRechargeRecordsMapperExtra.getVipRechargeRecord(vipRechargeRecordListDTO)));
+
         double totalAmount = 0;
+        List<VipRechargeRecordListDTO> vipRechargeRecordListDTOS = vipRechargeRecordsMapperExtra.getVipRechargeRecord(vipRechargeRecordListDTO);
         for(VipRechargeRecordListDTO vipRechargeRecordListDTO1 : vipRechargeRecordListDTOS){
             totalAmount += vipRechargeRecordListDTO1.getAmount();
         }
+        totalAmount = Math.round(totalAmount * 100) / 100.0;
         vipRechargeRecordDTO.setTotalAmount(totalAmount);
         return vipRechargeRecordDTO;
     }
