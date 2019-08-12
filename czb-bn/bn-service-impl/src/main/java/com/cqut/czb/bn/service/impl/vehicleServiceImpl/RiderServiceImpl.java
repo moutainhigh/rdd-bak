@@ -6,6 +6,8 @@ import com.cqut.czb.bn.service.vehicleService.RiderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author: lyk
  * @date: 8/12/2019
@@ -19,6 +21,11 @@ public class RiderServiceImpl implements RiderService {
     @Override
     public int deleteByPrimaryKey(String riderId) {
         return 0;
+    }
+
+    @Override
+    public List<CleanRider> selectAllRiders() {
+        return cleanRiderMapper.selectAllRiders();
     }
 
     @Override

@@ -13,6 +13,11 @@
   <sql id="Base_Column_List" >
     rider_id, rider_name, contact_number, status, user_id, create_at, update_at
   </sql>
+  <select id="selectAllRiders" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_clean_rider
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
