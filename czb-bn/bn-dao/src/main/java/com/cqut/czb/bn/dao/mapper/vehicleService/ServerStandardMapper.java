@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
-import com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard;
-import com.github.pagehelper.Page;
+import com.cqut.czb.bn.entity.entity.ServerStandard;
 
 public interface ServerStandardMapper {
     int deleteByPrimaryKey(String serverId);
@@ -15,6 +14,4 @@ public interface ServerStandardMapper {
     int updateByPrimaryKeySelective(ServerStandard record);
 
     int updateByPrimaryKey(ServerStandard record);
-
-    Page<ServerStandard> search(ServerStandard serverStandard);
 }
