@@ -1,9 +1,9 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
-import com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon;
+import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 
 import java.util.List;
 
 public interface ServerCouponMapperExtra {
-    List<ServerCoupon> selectByPrimaryKey(String ownerId);
+    List<ServerCouponDTO> selectByPrimaryKey(String ownerId);
 }

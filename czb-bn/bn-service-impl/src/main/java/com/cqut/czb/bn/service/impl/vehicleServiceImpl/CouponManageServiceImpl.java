@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
+import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon;
 import com.cqut.czb.bn.service.vehicleService.CouponManageService;
@@ -17,7 +18,7 @@ public class CouponManageServiceImpl implements CouponManageService {
     ServerCouponMapperExtra serverCouponMapperExtra;
 
     @Override
-    public List<ServerCoupon> getCouponList(User user) {
+    public List<ServerCouponDTO> getCouponList(User user) {
         return serverCouponMapperExtra.selectByPrimaryKey(user.getUserId());
     }
 }
