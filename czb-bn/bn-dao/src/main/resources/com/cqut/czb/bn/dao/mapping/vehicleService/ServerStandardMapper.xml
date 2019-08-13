@@ -28,20 +28,12 @@
     <include refid="Base_Column_List"/>
     from czb_server_standard
     <where>
-      <if test="serverId != null" >
-        server_id = #{serverId,jdbcType=VARCHAR}
-      </if>
-      <if test="serverName != null" >
-        AND
+      <if test="serverName != null and serverName != ''" >
         server_name like concat("%", #{serverName}, "%")
       </if>
-      <if test="serverVehicleType != null" >
+      <if test="serverVehicleType != null and serverVehicleType != '' || serverVehicleType == 0" >
         AND
         server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT}
-      </if>
-      <if test="createAt != null" >
-        AND
-        create_at = #{createAt,jdbcType=TIMESTAMP}
       </if>
     </where>
   </select>

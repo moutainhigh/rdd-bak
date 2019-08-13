@@ -27,8 +27,8 @@ public class CleanServerStandardController {
     }
 
     @PostMapping("/delete")
-    public JSONResult delete(@RequestBody @Param("id") String id) {
-        return service.delete(id);
+    public JSONResult delete(@Param("serverId") String serverId) {
+        return service.delete(serverId);
     }
 
     @PostMapping("/change")
