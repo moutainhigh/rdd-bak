@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.appCarWash;
 
-import java.util.Date;
-
 public class ServiceCommodityDTO {
 
     private String serverId;
@@ -20,6 +18,15 @@ public class ServiceCommodityDTO {
 
     private Byte serverVehicleType;
 
+    private String filePath;
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
     public String getServerId() {
         return serverId;
@@ -85,19 +92,4 @@ public class ServiceCommodityDTO {
         this.serverVehicleType = serverVehicleType;
     }
 
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
 }

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerStandardMapperExtra;
+import com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard;
 import com.cqut.czb.bn.service.AppCarWashService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class AppCarWashImpl implements AppCarWashService {
     ServerStandardMapperExtra serverStandardMapperExtra;
 
     @Override
-    public List<ServerStandard> SelectService() {
+    public List<ServiceCommodityDTO> SelectService() {
         return serverStandardMapperExtra.selectServiceInfo();
     }
 }
