@@ -23,6 +23,28 @@
     from czb_server_standard
     where server_id = #{serverId,jdbcType=VARCHAR}
   </select>
+  <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from czb_server_standard
+    <where>
+      <if test="serverId != null" >
+        server_id = #{serverId,jdbcType=VARCHAR}
+      </if>
+      <if test="serverName != null" >
+        AND
+        server_name like concat("%", #{serverName}, "%")
+      </if>
+      <if test="serverVehicleType != null" >
+        AND
+        server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT}
+      </if>
+      <if test="createAt != null" >
+        AND
+        create_at = #{createAt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_server_standard
     where server_id = #{serverId,jdbcType=VARCHAR}
@@ -34,7 +56,7 @@
       update_at)
     values (#{serverId,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, #{serverType,jdbcType=VARCHAR}, 
       #{serverPrice,jdbcType=DOUBLE}, #{vipPrice,jdbcType=DOUBLE}, #{serverExplain,jdbcType=VARCHAR}, 
-      #{serverDiscount,jdbcType=REAL}, #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{serverDiscount,jdbcType=REAL}, #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP},
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
