@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
 import com.cqut.czb.bn.entity.entity.ServicePlan;
+import com.cqut.czb.bn.entity.entity.User;
 
 import java.util.List;
 
@@ -22,6 +23,12 @@ public interface AppHomePageService {
      * @return
      */
     List<appAnnouncementDTO> selectAnnouncement(String locationCode);
+
+    /**
+     * selectVipUser
+     */
+    User selectVipUser(String userId);
+
 
     /**
      * 油价播报

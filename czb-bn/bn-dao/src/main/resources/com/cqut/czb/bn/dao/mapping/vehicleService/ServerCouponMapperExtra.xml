@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" >
+        <id column="coupon_id" property="couponId" jdbcType="VARCHAR" />
+        <result column="destroy_time" property="destroyTime" jdbcType="TIMESTAMP" />
+        <result column="coupon_standard" property="couponStandard" jdbcType="VARCHAR" />
+        <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+        <result column="standard_value" property="standardValue" jdbcType="DOUBLE" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        coupon_id, destroy_time,standard_value, coupon_standard, owner_id, status, a.create_at, a.update_at
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        FROM czb_server_coupon a
+        LEFT JOIN czb_coupon_standard b ON a.coupon_standard = b.standard_id
+        where owner_id = #{ownerId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_server_coupon
+        where coupon_id = #{couponId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
+        insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard,
+        owner_id, status, create_at,
+        update_at)
+        values (#{couponId,jdbcType=VARCHAR}, #{destroyTime,jdbcType=TIMESTAMP}, #{couponStandard,jdbcType=VARCHAR},
+        #{ownerId,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP},
+        #{updateAt,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
+        insert into czb_server_coupon
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="couponId != null" >
+                coupon_id,
+            </if>
+            <if test="destroyTime != null" >
+                destroy_time,
+            </if>
+            <if test="couponStandard != null" >
+                coupon_standard,
+            </if>
+            <if test="ownerId != null" >
+                owner_id,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="couponId != null" >
+                #{couponId,jdbcType=VARCHAR},
+            </if>
+            <if test="destroyTime != null" >
+                #{destroyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="couponStandard != null" >
+                #{couponStandard,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerId != null" >
+                #{ownerId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
+        update czb_server_coupon
+        <set >
+            <if test="destroyTime != null" >
+                destroy_time = #{destroyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="couponStandard != null" >
+                coupon_standard = #{couponStandard,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerId != null" >
+                owner_id = #{ownerId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where coupon_id = #{couponId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
+        update czb_server_coupon
+        set destroy_time = #{destroyTime,jdbcType=TIMESTAMP},
+        coupon_standard = #{couponStandard,jdbcType=VARCHAR},
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+        status = #{status,jdbcType=TINYINT},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where coupon_id = #{couponId,jdbcType=VARCHAR}
+    </update>
+</mapper>

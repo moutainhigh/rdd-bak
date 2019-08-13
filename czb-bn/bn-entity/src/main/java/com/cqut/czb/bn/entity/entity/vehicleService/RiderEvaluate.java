@@ -7,7 +7,7 @@ public class RiderEvaluate {
 
     private String evaluateRiderId;
 
-    private Float evaluateLevel;
+    private Integer evaluateLevel;
 
     private String evaluateMessage;
 
@@ -31,11 +31,11 @@ public class RiderEvaluate {
         this.evaluateRiderId = evaluateRiderId == null ? null : evaluateRiderId.trim();
     }
 
-    public Float getEvaluateLevel() {
+    public Integer getEvaluateLevel() {
         return evaluateLevel;
     }
 
-    public void setEvaluateLevel(Float evaluateLevel) {
+    public void setEvaluateLevel(Integer evaluateLevel) {
         this.evaluateLevel = evaluateLevel;
     }
 
