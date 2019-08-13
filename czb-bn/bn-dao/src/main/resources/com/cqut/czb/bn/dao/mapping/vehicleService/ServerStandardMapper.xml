@@ -6,6 +6,7 @@
     <result column="server_name" property="serverName" jdbcType="VARCHAR" />
     <result column="server_type" property="serverType" jdbcType="VARCHAR" />
     <result column="server_price" property="serverPrice" jdbcType="DOUBLE" />
+    <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
     <result column="server_explain" property="serverExplain" jdbcType="VARCHAR" />
     <result column="server_discount" property="serverDiscount" jdbcType="REAL" />
     <result column="server_vehicle_type" property="serverVehicleType" jdbcType="TINYINT" />
@@ -13,7 +14,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    server_id, server_name, server_type, server_price, server_explain, server_discount, 
+    server_id, server_name, server_type, server_price, vip_price, server_explain, server_discount, 
     server_vehicle_type, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -28,13 +29,13 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
     insert into czb_server_standard (server_id, server_name, server_type, 
-      server_price, server_explain, server_discount, 
-      server_vehicle_type, create_at, update_at
-      )
+      server_price, vip_price, server_explain, 
+      server_discount, server_vehicle_type, create_at, 
+      update_at)
     values (#{serverId,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, #{serverType,jdbcType=VARCHAR}, 
-      #{serverPrice,jdbcType=DOUBLE}, #{serverExplain,jdbcType=VARCHAR}, #{serverDiscount,jdbcType=REAL}, 
-      #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{serverPrice,jdbcType=DOUBLE}, #{vipPrice,jdbcType=DOUBLE}, #{serverExplain,jdbcType=VARCHAR}, 
+      #{serverDiscount,jdbcType=REAL}, #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
     insert into czb_server_standard
@@ -50,6 +51,9 @@
       </if>
       <if test="serverPrice != null" >
         server_price,
+      </if>
+      <if test="vipPrice != null" >
+        vip_price,
       </if>
       <if test="serverExplain != null" >
         server_explain,
@@ -80,6 +84,9 @@
       <if test="serverPrice != null" >
         #{serverPrice,jdbcType=DOUBLE},
       </if>
+      <if test="vipPrice != null" >
+        #{vipPrice,jdbcType=DOUBLE},
+      </if>
       <if test="serverExplain != null" >
         #{serverExplain,jdbcType=VARCHAR},
       </if>
@@ -109,6 +116,9 @@
       <if test="serverPrice != null" >
         server_price = #{serverPrice,jdbcType=DOUBLE},
       </if>
+      <if test="vipPrice != null" >
+        vip_price = #{vipPrice,jdbcType=DOUBLE},
+      </if>
       <if test="serverExplain != null" >
         server_explain = #{serverExplain,jdbcType=VARCHAR},
       </if>
@@ -132,6 +142,7 @@
     set server_name = #{serverName,jdbcType=VARCHAR},
       server_type = #{serverType,jdbcType=VARCHAR},
       server_price = #{serverPrice,jdbcType=DOUBLE},
+      vip_price = #{vipPrice,jdbcType=DOUBLE},
       server_explain = #{serverExplain,jdbcType=VARCHAR},
       server_discount = #{serverDiscount,jdbcType=REAL},
       server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT},
