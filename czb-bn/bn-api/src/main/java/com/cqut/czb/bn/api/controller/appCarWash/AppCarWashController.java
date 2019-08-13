@@ -23,7 +23,7 @@ public class AppCarWashController {
     /**
      * 信息录入
      */
-    @RequestMapping(value = "inputInServiceInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "/inputInServiceInfo",method = RequestMethod.GET)
     public JSONResult inputServiceInfo(){
         return null;
     }
@@ -32,7 +32,7 @@ public class AppCarWashController {
      * 获取信息录入已有信息
      * @return
      */
-    @RequestMapping(value = "getInputInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "/getInputInfo",method = RequestMethod.GET)
     public JSONResult getInputInfo(){
         return null;
     }
@@ -40,7 +40,7 @@ public class AppCarWashController {
     /**
      * 获取服务商品信息
      */
-    @RequestMapping(value = "getService",method = RequestMethod.GET)
+    @RequestMapping(value = "/getService",method = RequestMethod.GET)
     public JSONResult getService(){
         return  new  JSONResult(appCarWashService.SelectService());
     }
