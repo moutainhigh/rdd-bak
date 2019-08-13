@@ -103,6 +103,7 @@ create table czb_server_standard
    server_name          varchar(20),
    server_type          varchar(2),
    server_price         double(10,2),
+   vip_price         double(10,2),
    server_explain       varchar(60),
    server_discount      float(4),
    server_vehicle_type  tinyint,
@@ -130,5 +131,21 @@ create table czb_vehicle_clean_order
    create_at timestamp NULL DEFAULT NULL,
    update_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
    primary key (server_order_id)
+);
+
+drop table if exists czb_rider_evaluate;
+
+/*==============================================================*/
+/* Table: czb_rider_evaluate                                    */
+/*==============================================================*/
+create table czb_rider_evaluate
+(
+   evaluate_id          char(20) not null,
+   evaluate_rider_id    char(20),
+   evaluate_level       float,
+   evaluate_message     char(50),
+   create_at timestamp NULL DEFAULT NULL,
+   update_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+   primary key (evaluate_id)
 );
 
