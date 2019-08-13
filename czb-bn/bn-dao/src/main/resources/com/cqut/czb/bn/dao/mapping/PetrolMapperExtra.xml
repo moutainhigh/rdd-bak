@@ -91,10 +91,10 @@
 
   <select id="SelectPetrolPriceInfo" resultType="com.cqut.czb.bn.entity.dto.appHomePage.petrolInfoDTO">
      select
-     petrol_price as 'petrolPrice' ,petrol_denomination as 'petrolDenomination',`discount`
+     petrol_price as 'petrolPrice' ,petrol_denomination as 'petrolDenomination',`discount`,remark
      from czb_petrol
      WHERE petrol_kind=#{petrolKind} and  `state`=1 and area=#{area}
-     GROUP BY petrol_price,petrol_denomination,discount
+     GROUP BY petrol_price,petrol_denomination,discount,remark
      order by
      petrol_price desc
   </select>
