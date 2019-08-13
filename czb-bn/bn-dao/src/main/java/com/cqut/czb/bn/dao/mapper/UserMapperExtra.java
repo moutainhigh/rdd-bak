@@ -70,4 +70,9 @@ public interface UserMapperExtra {
      */
     int UpdateToVip(@Param("userId") String userId);
 
+    /**
+     * 递归查询最近的一个vip
+     */
+    User selectVipUser(@Param("userId") String userId);
+
 }

@@ -10,10 +10,7 @@ import com.cqut.czb.bn.entity.dto.appHomePage.petrolInfoDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
-import com.cqut.czb.bn.entity.entity.Dict;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSaleConfig;
-import com.cqut.czb.bn.entity.entity.ServicePlan;
+import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +61,12 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     DictMapperExtra dictMapperExtra;
 
     @Autowired
+    UserMapperExtra userMapperExtra;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
     PetrolPriceReportMapperExtra petrolPriceReportMapperExtra;
 
     @Override
@@ -73,6 +76,28 @@ public class AppHomePageServiceImpl implements AppHomePageService {
             return null;
         }
         return announcementMapperExtra.selectAnnouncement(locationCode);
+    }
+
+    @Override
+    public User selectVipUser(String userId) {
+
+        while(true){
+         User user=userMapper.selectByPrimaryKey(userId);
+         if(user!=null){
+             if (user.getIsVip() == 1) {
+                 return user;
+             }else {
+                 if(user.getSuperiorUser()!=null&&!user.getSuperiorUser().equals("")) {
+                     userId=user.getSuperiorUser();
+                     continue;
+                 }else {
+                     return null;
+                 }
+             }
+          }else {
+             return null;
+         }
+        }
     }
 
     @Override
