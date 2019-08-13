@@ -31,15 +31,7 @@ public class Petrol {
 
     private Double commission;
 
-    private long endTime;
-
-    public long getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
+    private String remark;
 
     public String getPetrolId() {
         return petrolId;
@@ -151,5 +143,13 @@ public class Petrol {
 
     public void setCommission(Double commission) {
         this.commission = commission;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

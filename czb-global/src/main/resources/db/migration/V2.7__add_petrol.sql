@@ -1,0 +1,1 @@
+alter table czb_petrol add remark varchar (255) character  set utf8 collate utf8_general_ci null default null COMMENT '油卡说明';
