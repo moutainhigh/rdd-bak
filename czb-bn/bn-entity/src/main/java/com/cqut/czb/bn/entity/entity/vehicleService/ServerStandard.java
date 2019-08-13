@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
+import com.cqut.czb.bn.util.string.StringUtil;
+
 import java.util.Date;
 
 public class ServerStandard {
@@ -22,6 +24,11 @@ public class ServerStandard {
     private Date createAt;
 
     private Date updateAt;
+
+    ServerStandard() {
+        this.setServerId(StringUtil.createId());
+        this.setCreateAt(new Date());
+    }
 
     public String getServerId() {
         return serverId;
