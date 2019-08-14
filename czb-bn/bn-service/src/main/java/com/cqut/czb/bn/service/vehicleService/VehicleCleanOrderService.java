@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.vehicleService;
 
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface VehicleCleanOrderService {
     Boolean cancelOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user);
 
     Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO);
+
+    Boolean evaluateRider(RiderEvaluate riderEvaluate,User user);
 }

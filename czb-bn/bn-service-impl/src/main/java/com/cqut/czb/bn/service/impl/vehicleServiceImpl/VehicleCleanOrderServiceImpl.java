@@ -12,6 +12,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -33,32 +34,27 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     @Override
     public Boolean cancelOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
         vehicleCleanOrderDTO.setCancelPersonId(user.getUserId());
-        if (vehicleCleanOrderDTO.getPayStatus()!=null){
         vehicleCleanOrderDTO.setPayStatus(2);
-        }
-        if (vehicleCleanOrderDTO.getProcessStatus()!=null) {
-            vehicleCleanOrderDTO.setProcessStatus(4);
-        }
+        vehicleCleanOrderDTO.setProcessStatus(4);
         vehicleCleanOrderDTO.setUpdateAt(new Date());
         return vehicleCleanOrderMapperExtra.updateOrderStateCancel(vehicleCleanOrderDTO)>0;
     }
 
     @Override
     public Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO) {
-        if (vehicleCleanOrderDTO.getPayStatus()!=null){
-            vehicleCleanOrderDTO.setPayStatus(1);
+         vehicleCleanOrderDTO.setPayStatus(1);
+         vehicleCleanOrderDTO.setProcessStatus(3);
+         vehicleCleanOrderDTO.setUpdateAt(new Date());
+        return vehicleCleanOrderMapperExtra.updateOrderStateComplete(vehicleCleanOrderDTO)>0;
+    }
+
+    @Override
+    public Boolean evaluateRider(RiderEvaluate riderEvaluate, User user) {
+        if (riderEvaluate.getEvaluateRiderId()==null||"".equals(riderEvaluate.getEvaluateRiderId())){
+            return null;
         }
-        if (vehicleCleanOrderDTO.getProcessStatus()!=null) {
-            vehicleCleanOrderDTO.setProcessStatus(3);
-        }
-        RiderEvaluate riderEvaluate = new RiderEvaluate();
         riderEvaluate.setEvaluateId(StringUtil.createId());
         riderEvaluate.setCreateAt(new Date());
-        riderEvaluate.setEvaluateLevel(vehicleCleanOrderDTO.getEvaluateLevel());
-        riderEvaluate.setEvaluateMessage(vehicleCleanOrderDTO.getEvaluateMessage());
-        riderEvaluate.setEvaluateRiderId(vehicleCleanOrderDTO.getRiderId());
-        riderEvaluateMapper.insert(riderEvaluate);
-        vehicleCleanOrderDTO.setUpdateAt(new Date());
-        return vehicleCleanOrderMapperExtra.updateOrderStateComplete(vehicleCleanOrderDTO)>0;
+        return  riderEvaluateMapper.insert(riderEvaluate)>0;
     }
 }
