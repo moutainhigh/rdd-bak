@@ -3,6 +3,7 @@ package com.cqut.czb.bn.api.controller.vehicleService;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vehicleService.VehicleCleanOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,16 @@ public class vehicleCleanOrderController {
     @PostMapping("/completeOrder")
     public JSONResult completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO){
         return new JSONResult(vehicleCleanOrderService.completeOrder(vehicleCleanOrderDTO));
+    }
+
+    /**
+     * 评价订单
+     * @param riderEvaluate
+     * @param principal
+     * @return
+     */
+    @PostMapping("/evaluateOrder")
+    public JSONResult evaluateOrder(RiderEvaluate riderEvaluate,Principal principal){
+        return new JSONResult(vehicleCleanOrderService.evaluateRider(riderEvaluate));
     }
 }
