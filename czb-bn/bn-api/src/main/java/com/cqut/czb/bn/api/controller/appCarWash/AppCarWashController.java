@@ -1,11 +1,13 @@
 package com.cqut.czb.bn.api.controller.appCarWash;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppCarWashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -33,8 +35,18 @@ public class AppCarWashController {
      * @return
      */
     @RequestMapping(value = "/getInputInfo",method = RequestMethod.GET)
-    public JSONResult getInputInfo(){
-        return null;
+    public JSONResult getInputInfo(Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(appCarWashService.selectCleanServerVehicle(user.getUserId()));
+    }
+
+    /**
+     * 获取单条服务信息
+     * @return
+     */
+    @RequestMapping(value = "/getOneServiceInfo",method = RequestMethod.GET)
+    public JSONResult getOneServiceInfo(@RequestParam("serverId") String serverId){
+        return new JSONResult(appCarWashService.selectOneService(serverId));
     }
 
     /**

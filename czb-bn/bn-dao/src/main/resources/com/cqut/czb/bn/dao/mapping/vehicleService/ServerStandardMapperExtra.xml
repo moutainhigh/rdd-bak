@@ -27,4 +27,15 @@
     WHERE
        czb_file.file_id=czb_server_standard.file_id
   </select>
+
+  <select id="selectOneService" resultType="com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO">
+    select
+       server_id as serverId, server_name as  serverName, server_type as  serverType, server_price as  serverPrice, vip_price as  vipPrice,
+       server_explain as  serverExplain, server_discount as  serverDiscount, server_vehicle_type as serverVehicleType, save_path as filePath
+    from
+       czb_server_standard ,czb_file
+    WHERE
+       czb_file.file_id=czb_server_standard.file_id and
+       server_id = #{serverId,jdbcType=VARCHAR}
+  </select>
 </mapper>
