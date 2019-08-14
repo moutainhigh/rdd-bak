@@ -18,5 +18,5 @@ public interface AppCarWashService {
      */
     CleanServerVehicle selectCleanServerVehicle(String userId);
 
-    ServiceCommodityDTO selectOneService(String serverId);
+    ServiceCommodityDTO selectOneService(String serviceId);
 }
