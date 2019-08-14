@@ -26,6 +26,11 @@ public class CouponManageController {
     @Autowired
     RedisUtils redisUtils;
 
+    /**
+     * app用户优惠券列表获取
+     * @param principal
+     * @return
+     */
     @GetMapping("/getCouponList")
     public JSONResult getCouponList(Principal principal){
         if (principal.getName()==null){
@@ -35,16 +40,32 @@ public class CouponManageController {
         return new JSONResult(couponManageService.getCouponList(user));
     }
 
+    /**
+     * 后台获取优惠券标准列表
+     * @param couponStandard
+     * @param pageDTO
+     * @return
+     */
     @GetMapping("/selectAllCoupon")
     public JSONResult selectAllCoupon(CouponStandard couponStandard,PageDTO pageDTO){
         return new JSONResult(couponManageService.getAllCoupon(couponStandard,pageDTO));
     }
 
+    /**
+     * 后台新增优惠券标准
+     * @param couponStandard
+     * @return
+     */
     @PostMapping("/insertCoupon")
     public JSONResult insertCoupon(CouponStandard couponStandard){
         return new JSONResult(couponManageService.insertCouponStandard(couponStandard));
     }
 
+    /**
+     * 后台修改优惠券
+     * @param couponStandard
+     * @return
+     */
     @PostMapping("/updateCoupon")
     public JSONResult updateCoupon(CouponStandard couponStandard){
         return new JSONResult();

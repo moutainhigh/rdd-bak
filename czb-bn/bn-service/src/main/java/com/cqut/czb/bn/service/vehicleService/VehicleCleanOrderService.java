@@ -16,5 +16,5 @@ public interface VehicleCleanOrderService {
 
     Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO);
 
-    Boolean evaluateRider(RiderEvaluate riderEvaluate);
+    Boolean evaluateRider(RiderEvaluate riderEvaluate,User user);
 }

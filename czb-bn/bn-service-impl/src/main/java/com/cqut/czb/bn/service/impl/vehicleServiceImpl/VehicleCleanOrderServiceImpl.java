@@ -12,6 +12,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,10 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     }
 
     @Override
-    public Boolean evaluateRider(RiderEvaluate riderEvaluate) {
+    public Boolean evaluateRider(RiderEvaluate riderEvaluate, User user) {
+        if (riderEvaluate.getEvaluateRiderId()==null||"".equals(riderEvaluate.getEvaluateRiderId())){
+            return null;
+        }
         riderEvaluate.setEvaluateId(StringUtil.createId());
         riderEvaluate.setCreateAt(new Date());
         return  riderEvaluateMapper.insert(riderEvaluate)>0;
