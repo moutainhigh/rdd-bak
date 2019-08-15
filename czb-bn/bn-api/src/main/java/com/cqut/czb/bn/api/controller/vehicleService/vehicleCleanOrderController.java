@@ -27,17 +27,26 @@ public class vehicleCleanOrderController {
     VehicleCleanOrderService vehicleCleanOrderService;
 
     /**
-     * 获取订单
+     * 获取历史全部订单
      * @param principal
      * @return
      */
     @GetMapping("/getVehicleCleanOrder")
-    public JSONResult getVehicleCleanOrder(Principal principal){
-        if (principal.getName()==null){
+    public JSONResult getVehicleCleanOrder(VehicleCleanOrderDTO cleanOrderDTO,Principal principal){
+        if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
-     return new JSONResult(vehicleCleanOrderService.getOrderList(user));
+     return new JSONResult(vehicleCleanOrderService.getOrderList(cleanOrderDTO,user));
+    }
+
+    @GetMapping("/getServicingOrder")
+    public JSONResult getServicingOrder(Principal principal) {
+        if (principal ==null || principal.getName()==null ){
+            return new JSONResult("token为空",500);
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(vehicleCleanOrderService.getServicingOrder(user));
     }
 
     /**
@@ -48,7 +57,7 @@ public class vehicleCleanOrderController {
      */
     @PostMapping("/cancelOrder")
     public JSONResult cancelOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO, Principal principal){
-        if (principal.getName()==null){
+        if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
@@ -73,7 +82,7 @@ public class vehicleCleanOrderController {
      */
     @PostMapping("/evaluateOrder")
     public JSONResult evaluateOrder(RiderEvaluate riderEvaluate,Principal principal){
-        if (principal.getName()==null){
+        if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());

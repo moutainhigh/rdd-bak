@@ -118,4 +118,13 @@
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where standard_id = #{standardId,jdbcType=VARCHAR}
     </update>
+    <select id="selectCouponStandardType" resultType="java.lang.String">
+        SELECT
+            standard_type
+        FROM
+            czb_coupon_standard
+        WHERE is_delete != 1
+        GROUP BY
+            standard_type
+    </select>
 </mapper>

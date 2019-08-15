@@ -25,10 +25,16 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     RiderEvaluateMapper riderEvaluateMapper;
 
     @Override
-    public List<VehicleCleanOrderDTO> getOrderList(User user) {
-        VehicleCleanOrderDTO vehicleCleanOrderDTO = new VehicleCleanOrderDTO();
+    public List<VehicleCleanOrderDTO> getOrderList(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
         vehicleCleanOrderDTO.setUserId(user.getUserId());
          return vehicleCleanOrderMapperExtra.selectById(vehicleCleanOrderDTO);
+    }
+
+    @Override
+    public VehicleCleanOrderDTO getServicingOrder(User user) {
+        VehicleCleanOrderDTO vehicleCleanOrderDTO = new VehicleCleanOrderDTO();
+        vehicleCleanOrderDTO.setUserId(user.getUserId());
+        return vehicleCleanOrderMapperExtra.selectByStatus(vehicleCleanOrderDTO);
     }
 
     @Override

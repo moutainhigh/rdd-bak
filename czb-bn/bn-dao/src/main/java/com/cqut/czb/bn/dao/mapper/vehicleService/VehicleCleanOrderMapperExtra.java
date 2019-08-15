@@ -11,6 +11,8 @@ public interface VehicleCleanOrderMapperExtra {
 
     List<VehicleCleanOrderDTO> selectById(VehicleCleanOrderDTO vehicleCleanOrderDTO);
 
+    VehicleCleanOrderDTO selectByStatus(VehicleCleanOrderDTO vehicleCleanOrderDTO);
+
     int updateOrderStateCancel(VehicleCleanOrderDTO vehicleCleanOrderDTO);
 
     int updateOrderStateComplete(VehicleCleanOrderDTO vehicleCleanOrderDTO);
