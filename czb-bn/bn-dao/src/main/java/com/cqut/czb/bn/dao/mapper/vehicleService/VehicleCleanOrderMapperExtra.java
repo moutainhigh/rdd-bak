@@ -1,7 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
+import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
-import com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +15,6 @@ public interface VehicleCleanOrderMapperExtra {
 
     int updateOrderStateComplete(VehicleCleanOrderDTO vehicleCleanOrderDTO);
 
-    int insert(VehicleCleanOrder record);
+    int insert(AppVehicleCleanOrderDTO record);
 
 }

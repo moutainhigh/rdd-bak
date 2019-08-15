@@ -23,6 +23,9 @@ public class CleanServerVehicleDTO {
     //车系
     private String vehicleSeries;
 
+    //服务地点
+    private String serviceLocation;
+
     //服务商品号
     private String service_id;
 
@@ -49,6 +52,14 @@ public class CleanServerVehicleDTO {
 
     public String getVehicleId() {
         return vehicleId;
+    }
+
+    public String getServiceLocation() {
+        return serviceLocation;
+    }
+
+    public void setServiceLocation(String serviceLocation) {
+        this.serviceLocation = serviceLocation;
     }
 
     public void setVehicleId(String vehicleId) {
