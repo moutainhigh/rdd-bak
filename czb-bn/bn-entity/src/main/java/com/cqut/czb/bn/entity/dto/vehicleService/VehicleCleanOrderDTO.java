@@ -1,7 +1,10 @@
 package com.cqut.czb.bn.entity.dto.vehicleService;
 
+import com.cqut.czb.bn.entity.entity.vehicleService.ComparedPic;
 import org.springframework.stereotype.Component;
 import java.util.Date;
+import java.util.List;
+
 @Component
 public class VehicleCleanOrderDTO {
         private String serverOrderId;
@@ -41,6 +44,8 @@ public class VehicleCleanOrderDTO {
         private String cancelReason;
 
         private String licenseNumber;
+
+        private List<ComparedPicDTO> OrderPic;
 
         private Integer evaluateLevel; //评价等级
 
@@ -194,7 +199,15 @@ public class VehicleCleanOrderDTO {
             this.cancelReason = cancelReason;
         }
 
-        public Integer getEvaluateLevel() {
+    public List<ComparedPicDTO> getOrderPic() {
+        return OrderPic;
+    }
+
+    public void setOrderPic(List<ComparedPicDTO> orderPic) {
+        OrderPic = orderPic;
+    }
+
+    public Integer getEvaluateLevel() {
             return evaluateLevel;
         }
 

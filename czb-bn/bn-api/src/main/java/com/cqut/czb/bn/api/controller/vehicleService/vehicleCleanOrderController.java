@@ -40,6 +40,11 @@ public class vehicleCleanOrderController {
      return new JSONResult(vehicleCleanOrderService.getOrderList(cleanOrderDTO,user));
     }
 
+    @GetMapping("/getOrderPic")
+    public JSONResult getOrderPic(VehicleCleanOrderDTO cleanOrderDTO){
+        return new JSONResult(vehicleCleanOrderService.getOrderPic(cleanOrderDTO));
+    }
+
     @GetMapping("/getServicingOrder")
     public JSONResult getServicingOrder(Principal principal) {
         if (principal ==null || principal.getName()==null ){

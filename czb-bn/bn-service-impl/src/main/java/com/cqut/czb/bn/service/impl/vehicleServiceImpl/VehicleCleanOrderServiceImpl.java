@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
+import com.cqut.czb.bn.dao.mapper.vehicleService.ComparedPicMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RiderEvaluateMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
@@ -23,11 +24,20 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     VehicleCleanOrderMapperExtra vehicleCleanOrderMapperExtra;
     @Autowired
     RiderEvaluateMapper riderEvaluateMapper;
+    @Autowired
+    ComparedPicMapperExtra comparedPicMapperExtra;
 
     @Override
     public List<VehicleCleanOrderDTO> getOrderList(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
         vehicleCleanOrderDTO.setUserId(user.getUserId());
          return vehicleCleanOrderMapperExtra.selectById(vehicleCleanOrderDTO);
+    }
+
+    @Override
+    public VehicleCleanOrderDTO getOrderPic(VehicleCleanOrderDTO cleanOrderDTO) {
+        VehicleCleanOrderDTO vehicleCleanOrderDTO = new VehicleCleanOrderDTO();
+        vehicleCleanOrderDTO.setOrderPic(comparedPicMapperExtra.selectByOrder(cleanOrderDTO.getServerOrderId()));
+        return vehicleCleanOrderDTO;
     }
 
     @Override
@@ -60,6 +70,7 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
             return null;
         }
         riderEvaluate.setEvaluateId(StringUtil.createId());
+        riderEvaluate.setEvaluateUserId(user.getUserId());
         riderEvaluate.setCreateAt(new Date());
         return  riderEvaluateMapper.insert(riderEvaluate)>0;
     }
