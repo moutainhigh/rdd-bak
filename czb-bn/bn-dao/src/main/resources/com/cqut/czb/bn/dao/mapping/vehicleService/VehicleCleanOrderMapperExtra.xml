@@ -23,6 +23,25 @@
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
+
+    <resultMap id="BaseResultMapOrderManage" type="com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO" >
+        <id column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
+        <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+        <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
+        <result column="process_status" property="processStatus" jdbcType="TINYINT" />
+        <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
+        <result column="cancel_reason" property="cancelReason" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="server_name" property="serverName" jdbcType="VARCHAR" />
+        <result column="user_name" property="firstName" jdbcType="VARCHAR" />
+        <result column="license_number" property="carNum" jdbcType="VARCHAR" />
+        <result column="vehicle_type" property="carType" jdbcType="VARCHAR" />
+        <result column="vehicle_series" property="carXi" jdbcType="VARCHAR" />
+        <result column="vehicle_color" property="color" jdbcType="VARCHAR" />
+        <result column="rider_name" property="riderName" jdbcType="VARCHAR" />
+        <result column="contact_number" property="riderPhone" jdbcType="VARCHAR" />
+    </resultMap>
+
     <sql id="Base_Column_List" >
         server_order_id, czb_vehicle_clean_order.user_id,user_account,czb_clean_server_vehicle.user_name,vehicle_color,vehicle_type,vehicle_series,rider_name,contact_number, czb_vehicle_clean_order.rider_id, third_order, pay_status, actual_price, czb_vehicle_clean_order.vehicle_id,license_number
         process_status, cancel_time, cancel_person_id, cancel_reason, czb_vehicle_clean_order.create_at, czb_vehicle_clean_order.update_at
@@ -213,4 +232,49 @@
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
     </update>
+
+    <select id="search" resultMap="BaseResultMapOrderManage" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO">
+        SELECT
+            orders.server_order_id,
+            servers.server_name,
+            vehicles.user_name ,
+            vehicles.license_number ,
+            vehicles.vehicle_type ,
+            vehicles.vehicle_series ,
+            vehicles.vehicle_color ,
+            riders.rider_name ,
+            riders.contact_number ,
+            orders.pay_status ,
+            orders.process_status ,
+            orders.actual_price ,
+            orders.cancel_time ,
+            orders.cancel_reason ,
+            orders.create_at
+        FROM
+            czb_vehicle_clean_order orders
+        LEFT JOIN czb_server_standard servers ON servers.server_id = orders.server_id
+        LEFT JOIN czb_clean_server_vehicle vehicles ON vehicles.vehicle_id = orders.vehicle_id
+        LEFT JOIN czb_clean_rider riders ON riders.rider_id = orders.rider_id
+        <where>
+            <if test="serverOrderId != null and serverOrderId != ''">
+                server_order_id = #{serverOrderId}
+            </if>
+            <if test="carNum != null and carNum != ''" >
+                AND
+                vehicles.license_number = #{carNum}
+            </if>
+            <if test="firstName != null and firstName != ''">
+                AND
+                vehicles.user_name = #{firstName}
+            </if>
+            <if test="riderPhone != null and riderPhone != ''">
+                AND
+                riders.contact_number like concat('%', #{riderPhone}, '%')
+            </if>
+            <if test="riderName != null and riderName != ''">
+                AND
+                riders.rider_name = #{riderName}
+            </if>
+        </where>
+    </select>
 </mapper>

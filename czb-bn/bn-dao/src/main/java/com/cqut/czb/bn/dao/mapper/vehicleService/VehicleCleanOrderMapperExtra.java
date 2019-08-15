@@ -2,6 +2,9 @@ package com.cqut.czb.bn.dao.mapper.vehicleService;
 
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
+import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
+import com.github.pagehelper.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,4 +22,8 @@ public interface VehicleCleanOrderMapperExtra {
 
     int insert(AppVehicleCleanOrderDTO record);
 
+    // 洗车订单管理页面查询
+    Page<VehicleOrderManageDTO> search(VehicleOrderManageDTO dto);
+
+    CleanRider getCleanRider(CleanRider rider);
 }
