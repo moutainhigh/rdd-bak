@@ -28,8 +28,19 @@ public class CouponManageServiceImpl implements CouponManageService {
     CouponStandardMapperExtra couponStandardMapperExtra;
 
     @Override
-    public List<ServerCouponDTO> getCouponList(User user) {
-        return serverCouponMapperExtra.selectByPrimaryKey(user.getUserId());
+    public List<ServerCouponDTO> getCouponList(ServerCouponDTO serverCouponDTO,User user) {
+        serverCouponDTO.setOwnerId(user.getUserId());
+        isExpire(serverCouponDTO);
+        return serverCouponMapperExtra.selectByPrimaryKey(serverCouponDTO);
+    }
+
+    //更新已过期的优惠券
+    public Boolean isExpire(ServerCouponDTO serverCouponDTO){
+        if (serverCouponDTO.getOwnerId()==null || "".equals(serverCouponDTO.getOwnerId())){
+            return null;
+        }
+        serverCouponDTO.setUpdateAt(new Date());
+        return serverCouponMapperExtra.updateExpire(serverCouponDTO)>0;
     }
 
     @Override
@@ -53,6 +64,7 @@ public class CouponManageServiceImpl implements CouponManageService {
 
     @Override
     public Boolean deleteCouponStandard(CouponStandard couponStandard) {
-        return couponStandardMapperExtra.deleteByPrimaryKey(couponStandard.getStandardId())>0;
+        couponStandard.setUpdateAt(new Date());
+        return couponStandardMapperExtra.updateByDelete(couponStandard)>0;
     }
 }

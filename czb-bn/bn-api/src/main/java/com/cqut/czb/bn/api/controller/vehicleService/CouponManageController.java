@@ -2,15 +2,13 @@ package com.cqut.czb.bn.api.controller.vehicleService;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vehicleService.CouponManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -32,12 +30,12 @@ public class CouponManageController {
      * @return
      */
     @GetMapping("/getCouponList")
-    public JSONResult getCouponList(Principal principal){
+    public JSONResult getCouponList(ServerCouponDTO serverCouponDTO, Principal principal){
         if (principal.getName()==null){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(couponManageService.getCouponList(user));
+        return new JSONResult(couponManageService.getCouponList(serverCouponDTO,user));
     }
 
     /**
@@ -68,6 +66,11 @@ public class CouponManageController {
      */
     @PostMapping("/updateCoupon")
     public JSONResult updateCoupon(CouponStandard couponStandard){
-        return new JSONResult();
+        return new JSONResult(couponManageService.updateCouponStandard(couponStandard));
+    }
+
+    @PostMapping("/deleteCoupon")
+    public JSONResult deleteCoupon(CouponStandard couponStandard) {
+        return new JSONResult(couponManageService.deleteCouponStandard(couponStandard));
     }
 }

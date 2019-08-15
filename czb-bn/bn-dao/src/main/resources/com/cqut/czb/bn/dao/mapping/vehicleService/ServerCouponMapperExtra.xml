@@ -14,7 +14,7 @@
     <sql id="Base_Column_List" >
         coupon_id, destroy_time,standard_value, coupon_standard, owner_id, status, a.create_at, a.update_at
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" >
         select
         <include refid="Base_Column_List" />
         FROM czb_server_coupon a
@@ -22,6 +22,9 @@
         <where>
             <if test="ownerId!=null and ownerId!=''">
                 owner_id = #{ownerId,jdbcType=VARCHAR}
+            </if>
+            <if test="status!=null">
+               AND status = #{status,jdbcType=TINYINT}
             </if>
         </where>
     </select>
@@ -110,14 +113,12 @@
         </set>
         where coupon_id = #{couponId,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
+    <update id="updateExpire" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" >
         update czb_server_coupon
-        set destroy_time = #{destroyTime,jdbcType=TIMESTAMP},
-        coupon_standard = #{couponStandard,jdbcType=VARCHAR},
-        owner_id = #{ownerId,jdbcType=VARCHAR},
-        status = #{status,jdbcType=TINYINT},
-        create_at = #{createAt,jdbcType=TIMESTAMP},
+        set
+        status = 2,
         update_at = #{updateAt,jdbcType=TIMESTAMP}
-        where coupon_id = #{couponId,jdbcType=VARCHAR}
+        where owner_id = #{ownerId,jdbcType=VARCHAR}
+        AND destroy_time &lt;= now() AND status !=1
     </update>
 </mapper>

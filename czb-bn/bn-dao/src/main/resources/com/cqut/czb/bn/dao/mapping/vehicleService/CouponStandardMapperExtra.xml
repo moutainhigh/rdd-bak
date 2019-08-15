@@ -18,14 +18,14 @@
         select
         <include refid="Base_Column_List" />
         from czb_coupon_standard
-        <where>
+        where
+        is_delete != 1
             <if test="standardId!=null and standardId!=''">
-                standard_id = #{standardId,jdbcType=VARCHAR}
+               AND standard_id = #{standardId,jdbcType=VARCHAR}
             </if>
             <if test="standardType!=null and standardType!=''">
                 AND standard_type = #{standardType,jdbcType=VARCHAR}
             </if>
-        </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_coupon_standard
@@ -112,13 +112,9 @@
         </set>
         where standard_id = #{standardId,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
+    <update id="updateByDelete" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
         update czb_coupon_standard
-        set standard_type = #{standardType,jdbcType=VARCHAR},
-        standard_value = #{standardValue,jdbcType=DOUBLE},
-        continue_days = #{continueDays,jdbcType=INTEGER},
-        standard_explain = #{standardExplain,jdbcType=VARCHAR},
-        create_at = #{createAt,jdbcType=TIMESTAMP},
+        set is_delete = 1,
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where standard_id = #{standardId,jdbcType=VARCHAR}
     </update>

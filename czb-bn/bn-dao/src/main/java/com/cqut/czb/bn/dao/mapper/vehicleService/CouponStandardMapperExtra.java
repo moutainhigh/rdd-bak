@@ -12,5 +12,5 @@ public interface CouponStandardMapperExtra {
 
     int updateByPrimaryKeySelective(CouponStandard couponStandard);
 
-    int deleteByPrimaryKey(String standardId);
+    int updateByDelete(CouponStandard couponStandard);
 }

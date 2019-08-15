@@ -6,5 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface ServerCouponMapperExtra {
-    List<ServerCouponDTO> selectByPrimaryKey(@Param("ownerId") String ownerId);
+    List<ServerCouponDTO> selectByPrimaryKey(ServerCouponDTO serverCouponDTO);
+
+    int updateExpire(ServerCouponDTO serverCouponDTO);
 }

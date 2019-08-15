@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public interface CouponManageService {
-    List<ServerCouponDTO> getCouponList(User user);
+    List<ServerCouponDTO> getCouponList(ServerCouponDTO serverCouponDTO,User user);
 
     PageInfo<CouponStandard> getAllCoupon(CouponStandard couponStandard,PageDTO pageDTO);
 
