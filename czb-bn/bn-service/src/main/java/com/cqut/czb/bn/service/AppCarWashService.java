@@ -8,7 +8,6 @@ import java.util.List;
 public interface AppCarWashService {
     /**
      * 查找服务
-     * @return
      */
     List<ServiceCommodityDTO> SelectService();
 
@@ -18,5 +17,8 @@ public interface AppCarWashService {
      */
     CleanServerVehicle selectCleanServerVehicle(String userId);
 
+    /**
+     * 获取一条服务信息
+     */
     ServiceCommodityDTO selectOneService(String serviceId);
 }

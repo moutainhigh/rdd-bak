@@ -1,8 +1,8 @@
-package com.cqut.czb.bn.entity.entity.vehicleService;
+package com.cqut.czb.bn.entity.dto.appBuyCarWashService;
 
 import java.util.Date;
 
-public class CleanServerVehicle {
+public class AppCleanServerVehicleDTO {
     private String vehicleId;
 
     private String userId;

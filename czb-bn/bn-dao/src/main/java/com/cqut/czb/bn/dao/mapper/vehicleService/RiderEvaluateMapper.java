@@ -14,4 +14,5 @@ public interface RiderEvaluateMapper {
     int updateByPrimaryKeySelective(RiderEvaluate record);
 
     int updateByPrimaryKey(RiderEvaluate record);
+
 }

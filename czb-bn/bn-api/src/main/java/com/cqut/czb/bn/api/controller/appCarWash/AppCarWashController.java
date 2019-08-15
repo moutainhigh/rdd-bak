@@ -23,14 +23,6 @@ public class AppCarWashController {
     AppCarWashService appCarWashService;
 
     /**
-     * 信息录入
-     */
-    @RequestMapping(value = "/inputInServiceInfo",method = RequestMethod.GET)
-    public JSONResult inputServiceInfo(){
-        return null;
-    }
-
-    /**
      * 获取信息录入已有信息
      * @return
      */

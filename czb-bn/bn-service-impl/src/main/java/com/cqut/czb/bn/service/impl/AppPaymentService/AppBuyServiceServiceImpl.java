@@ -66,7 +66,7 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
         String commodityId=commodityDTO.getCommodityId();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModel2(thirdOrder, actualPrice,commodityId ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelBuyService(thirdOrder, actualPrice,commodityId ,ownerId));//支付订单
         request.setNotifyUrl(AliPayConfig.BuyService_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
