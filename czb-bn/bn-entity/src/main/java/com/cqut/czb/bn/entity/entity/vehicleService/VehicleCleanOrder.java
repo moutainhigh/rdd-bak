@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-@Component
 public class VehicleCleanOrder {
     private String serverOrderId;
 
@@ -32,12 +29,14 @@ public class VehicleCleanOrder {
 
     private Date updateAt;
 
+    private String serverId;
+
     public String getServerOrderId() {
         return serverOrderId;
     }
 
     public void setServerOrderId(String serverOrderId) {
-        this.serverOrderId = serverOrderId;
+        this.serverOrderId = serverOrderId == null ? null : serverOrderId.trim();
     }
 
     public String getUserId() {
@@ -45,7 +44,7 @@ public class VehicleCleanOrder {
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getRiderId() {
@@ -53,7 +52,7 @@ public class VehicleCleanOrder {
     }
 
     public void setRiderId(String riderId) {
-        this.riderId = riderId;
+        this.riderId = riderId == null ? null : riderId.trim();
     }
 
     public String getThirdOrder() {
@@ -61,7 +60,7 @@ public class VehicleCleanOrder {
     }
 
     public void setThirdOrder(String thirdOrder) {
-        this.thirdOrder = thirdOrder;
+        this.thirdOrder = thirdOrder == null ? null : thirdOrder.trim();
     }
 
     public Byte getPayStatus() {
@@ -85,7 +84,7 @@ public class VehicleCleanOrder {
     }
 
     public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId;
+        this.vehicleId = vehicleId == null ? null : vehicleId.trim();
     }
 
     public Byte getProcessStatus() {
@@ -109,7 +108,7 @@ public class VehicleCleanOrder {
     }
 
     public void setCancelPersonId(String cancelPersonId) {
-        this.cancelPersonId = cancelPersonId;
+        this.cancelPersonId = cancelPersonId == null ? null : cancelPersonId.trim();
     }
 
     public String getCancelReason() {
@@ -117,7 +116,7 @@ public class VehicleCleanOrder {
     }
 
     public void setCancelReason(String cancelReason) {
-        this.cancelReason = cancelReason;
+        this.cancelReason = cancelReason == null ? null : cancelReason.trim();
     }
 
     public Date getCreateAt() {
@@ -134,5 +133,13 @@ public class VehicleCleanOrder {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId == null ? null : serverId.trim();
     }
 }

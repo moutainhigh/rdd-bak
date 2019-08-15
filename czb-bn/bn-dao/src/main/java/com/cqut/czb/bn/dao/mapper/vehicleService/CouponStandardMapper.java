@@ -1,9 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
 import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface CouponStandardMapper {
     int deleteByPrimaryKey(String standardId);
 

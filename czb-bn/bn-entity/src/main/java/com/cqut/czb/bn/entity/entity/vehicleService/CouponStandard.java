@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-@Component
 public class CouponStandard {
     private String standardId;
 
@@ -20,12 +17,14 @@ public class CouponStandard {
 
     private Date updateAt;
 
+    private Integer isDelete;
+
     public String getStandardId() {
         return standardId;
     }
 
     public void setStandardId(String standardId) {
-        this.standardId = standardId;
+        this.standardId = standardId == null ? null : standardId.trim();
     }
 
     public String getStandardType() {
@@ -33,7 +32,7 @@ public class CouponStandard {
     }
 
     public void setStandardType(String standardType) {
-        this.standardType = standardType;
+        this.standardType = standardType == null ? null : standardType.trim();
     }
 
     public Double getStandardValue() {
@@ -57,7 +56,7 @@ public class CouponStandard {
     }
 
     public void setStandardExplain(String standardExplain) {
-        this.standardExplain = standardExplain;
+        this.standardExplain = standardExplain == null ? null : standardExplain.trim();
     }
 
     public Date getCreateAt() {
@@ -74,5 +73,13 @@ public class CouponStandard {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 }

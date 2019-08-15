@@ -7,13 +7,15 @@ public class RiderEvaluate {
 
     private String evaluateRiderId;
 
-    private Integer evaluateLevel;
+    private Float evaluateLevel;
 
     private String evaluateMessage;
 
     private Date createAt;
 
     private Date updateAt;
+
+    private String evaluateUserId;
 
     public String getEvaluateId() {
         return evaluateId;
@@ -31,11 +33,11 @@ public class RiderEvaluate {
         this.evaluateRiderId = evaluateRiderId == null ? null : evaluateRiderId.trim();
     }
 
-    public Integer getEvaluateLevel() {
+    public Float getEvaluateLevel() {
         return evaluateLevel;
     }
 
-    public void setEvaluateLevel(Integer evaluateLevel) {
+    public void setEvaluateLevel(Float evaluateLevel) {
         this.evaluateLevel = evaluateLevel;
     }
 
@@ -61,5 +63,13 @@ public class RiderEvaluate {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getEvaluateUserId() {
+        return evaluateUserId;
+    }
+
+    public void setEvaluateUserId(String evaluateUserId) {
+        this.evaluateUserId = evaluateUserId == null ? null : evaluateUserId.trim();
     }
 }

@@ -11,10 +11,11 @@
     <result column="vehicle_series" property="vehicleSeries" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="service_location" property="serviceLocation" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     vehicle_id, user_id, user_name, license_number, vehicle_color, vehicle_type, vehicle_series, 
-    create_at, update_at
+    create_at, update_at, service_location
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -29,12 +30,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle" >
     insert into czb_clean_server_vehicle (vehicle_id, user_id, user_name, 
       license_number, vehicle_color, vehicle_type, 
-      vehicle_series, create_at, update_at
-      )
+      vehicle_series, create_at, update_at, 
+      service_location)
     values (#{vehicleId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
       #{licenseNumber,jdbcType=VARCHAR}, #{vehicleColor,jdbcType=VARCHAR}, #{vehicleType,jdbcType=TINYINT}, 
-      #{vehicleSeries,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{vehicleSeries,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{serviceLocation,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle" >
     insert into czb_clean_server_vehicle
@@ -66,6 +67,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="serviceLocation != null" >
+        service_location,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="vehicleId != null" >
@@ -94,6 +98,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceLocation != null" >
+        #{serviceLocation,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -124,6 +131,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="serviceLocation != null" >
+        service_location = #{serviceLocation,jdbcType=VARCHAR},
+      </if>
     </set>
     where vehicle_id = #{vehicleId,jdbcType=VARCHAR}
   </update>
@@ -136,7 +146,8 @@
       vehicle_type = #{vehicleType,jdbcType=TINYINT},
       vehicle_series = #{vehicleSeries,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      service_location = #{serviceLocation,jdbcType=VARCHAR}
     where vehicle_id = #{vehicleId,jdbcType=VARCHAR}
   </update>
 </mapper>

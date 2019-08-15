@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-@Component
 public class CleanServerVehicle {
     private String vehicleId;
 
@@ -24,12 +21,14 @@ public class CleanServerVehicle {
 
     private Date updateAt;
 
+    private String serviceLocation;
+
     public String getVehicleId() {
         return vehicleId;
     }
 
     public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId;
+        this.vehicleId = vehicleId == null ? null : vehicleId.trim();
     }
 
     public String getUserId() {
@@ -37,7 +36,7 @@ public class CleanServerVehicle {
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getUserName() {
@@ -45,7 +44,7 @@ public class CleanServerVehicle {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.userName = userName == null ? null : userName.trim();
     }
 
     public String getLicenseNumber() {
@@ -53,7 +52,7 @@ public class CleanServerVehicle {
     }
 
     public void setLicenseNumber(String licenseNumber) {
-        this.licenseNumber = licenseNumber;
+        this.licenseNumber = licenseNumber == null ? null : licenseNumber.trim();
     }
 
     public String getVehicleColor() {
@@ -61,7 +60,7 @@ public class CleanServerVehicle {
     }
 
     public void setVehicleColor(String vehicleColor) {
-        this.vehicleColor = vehicleColor;
+        this.vehicleColor = vehicleColor == null ? null : vehicleColor.trim();
     }
 
     public Byte getVehicleType() {
@@ -77,7 +76,7 @@ public class CleanServerVehicle {
     }
 
     public void setVehicleSeries(String vehicleSeries) {
-        this.vehicleSeries = vehicleSeries;
+        this.vehicleSeries = vehicleSeries == null ? null : vehicleSeries.trim();
     }
 
     public Date getCreateAt() {
@@ -94,5 +93,13 @@ public class CleanServerVehicle {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getServiceLocation() {
+        return serviceLocation;
+    }
+
+    public void setServiceLocation(String serviceLocation) {
+        this.serviceLocation = serviceLocation == null ? null : serviceLocation.trim();
     }
 }
