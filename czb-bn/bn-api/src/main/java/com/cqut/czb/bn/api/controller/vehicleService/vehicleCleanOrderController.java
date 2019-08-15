@@ -66,13 +66,17 @@ public class vehicleCleanOrderController {
     }
 
     /**
-     * 评价订单
+     * 评价订单（被评价骑手id不能为空 ）
      * @param riderEvaluate
      * @param principal
      * @return
      */
     @PostMapping("/evaluateOrder")
     public JSONResult evaluateOrder(RiderEvaluate riderEvaluate,Principal principal){
-        return new JSONResult(vehicleCleanOrderService.evaluateRider(riderEvaluate));
+        if (principal.getName()==null){
+            return new JSONResult("token为空",500);
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(vehicleCleanOrderService.evaluateRider(riderEvaluate,user));
     }
 }
