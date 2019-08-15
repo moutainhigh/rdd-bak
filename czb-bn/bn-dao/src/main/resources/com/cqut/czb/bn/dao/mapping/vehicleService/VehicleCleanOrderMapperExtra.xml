@@ -9,6 +9,7 @@
         <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
         <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
         <result column="vehicle_id" property="vehicleId" jdbcType="VARCHAR" />
+        <result column="license_number" property="licenseNumber" jdbcType="VARCHAR" />
         <result column="process_status" property="processStatus" jdbcType="TINYINT" />
         <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
         <result column="cancel_person_id" property="cancelPersonId" jdbcType="VARCHAR" />
@@ -17,24 +18,29 @@
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
     <sql id="Base_Column_List" >
-        server_order_id, user_id, rider_id, third_order, pay_status, actual_price, vehicle_id,
-        process_status, cancel_time, cancel_person_id, cancel_reason, create_at, update_at
+        server_order_id, czb_vehicle_clean_order.user_id, rider_id, third_order, pay_status, actual_price, czb_vehicle_clean_order.vehicle_id,license_number
+        process_status, cancel_time, cancel_person_id, cancel_reason, czb_vehicle_clean_order.create_at, czb_vehicle_clean_order.update_at
     </sql>
     <select id="selectById" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
         select
         <include refid="Base_Column_List" />
         from czb_vehicle_clean_order
-        where user_id = #{userId,jdbcType=VARCHAR}
+        LEFT JOIN czb_clean_server_vehicle ON czb_vehicle_clean_order.vehicle_id = czb_clean_server_vehicle.vehicle_id
+        where czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
+        <if test="serverOrderId!=null and serverOrderId!=''">
+            server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+        </if>
     </select>
 
     <select id="selectByStatus" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
         select
         <include refid="Base_Column_List" />
         from czb_vehicle_clean_order
-        where user_id = #{userId,jdbcType=VARCHAR}
+        LEFT JOIN czb_clean_server_vehicle ON czb_vehicle_clean_order.vehicle_id = czb_clean_server_vehicle.vehicle_id
+        where czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
         AND (process_status = 1 OR process_status = 0 )
         ORDER BY
-         create_at DESC LIMIT 0,1
+        czb_vehicle_clean_order.create_at DESC LIMIT 0,1
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
