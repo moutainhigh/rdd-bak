@@ -32,12 +32,12 @@ public class vehicleCleanOrderController {
      * @return
      */
     @GetMapping("/getVehicleCleanOrder")
-    public JSONResult getVehicleCleanOrder(Principal principal){
+    public JSONResult getVehicleCleanOrder(VehicleCleanOrderDTO cleanOrderDTO,Principal principal){
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
-     return new JSONResult(vehicleCleanOrderService.getOrderList(user));
+     return new JSONResult(vehicleCleanOrderService.getOrderList(cleanOrderDTO,user));
     }
 
     @GetMapping("/getServicingOrder")

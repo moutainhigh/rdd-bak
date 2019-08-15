@@ -8,7 +8,21 @@ public class VehicleCleanOrderDTO {
 
         private String userId;
 
+        private String userName;
+
         private String riderId;
+
+        private String riderName;
+
+        private String contactNumber;
+
+        private String vehicleType;
+
+        private String vehicleColor;
+
+        private String vehicleSeries;
+
+        private String userPhone;
 
         private String thirdOrder;
 
@@ -26,6 +40,8 @@ public class VehicleCleanOrderDTO {
 
         private String cancelReason;
 
+        private String licenseNumber;
+
         private Integer evaluateLevel; //评价等级
 
         private String evaluateMessage; //评价信息
@@ -42,17 +58,73 @@ public class VehicleCleanOrderDTO {
             this.serverOrderId = serverOrderId;
         }
 
-        public String getUserId() {
-            return userId;
+        public String getUserName() {
+            return userName;
         }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getRiderName() {
+            return riderName;
+        }
+
+        public void setRiderName(String riderName) {
+            this.riderName = riderName;
+        }
+
+        public String getContactNumber() {
+            return contactNumber;
+        }
+
+        public void setContactNumber(String contactNumber) {
+            this.contactNumber = contactNumber;
+        }
+
+        public String getVehicleType() {
+            return vehicleType;
+        }
+
+        public void setVehicleType(String vehicleType) {
+            this.vehicleType = vehicleType;
+        }
+
+        public String getVehicleColor() {
+            return vehicleColor;
+        }
+
+        public void setVehicleColor(String vehicleColor) {
+            this.vehicleColor = vehicleColor;
+        }
+
+        public String getVehicleSeries() {
+            return vehicleSeries;
+        }
+
+        public void setVehicleSeries(String vehicleSeries) {
+            this.vehicleSeries = vehicleSeries;
+        }
+
+        public String getUserId() {
+                return userId;
+            }
 
         public void setUserId(String userId) {
             this.userId = userId;
         }
 
-        public String getRiderId() {
-            return riderId;
+        public String getUserPhone() {
+            return userPhone;
         }
+
+        public void setUserPhone(String userPhone) {
+            this.userPhone = userPhone;
+        }
+
+        public String getRiderId() {
+                return riderId;
+            }
 
         public void setRiderId(String riderId) {
             this.riderId = riderId;
@@ -138,19 +210,27 @@ public class VehicleCleanOrderDTO {
             this.evaluateMessage = evaluateMessage;
         }
 
-        public Date getCreateAt() {
-                return createAt;
-            }
+        public String getLicenseNumber() {
+            return licenseNumber;
+        }
 
-            public void setCreateAt(Date createAt) {
+        public void setLicenseNumber(String licenseNumber) {
+            this.licenseNumber = licenseNumber;
+        }
+
+        public Date getCreateAt() {
+                    return createAt;
+                }
+
+        public void setCreateAt(Date createAt) {
                 this.createAt = createAt;
             }
 
-            public Date getUpdateAt() {
+        public Date getUpdateAt() {
                 return updateAt;
             }
 
-            public void setUpdateAt(Date updateAt) {
+        public void setUpdateAt(Date updateAt) {
                 this.updateAt = updateAt;
             }
         }
