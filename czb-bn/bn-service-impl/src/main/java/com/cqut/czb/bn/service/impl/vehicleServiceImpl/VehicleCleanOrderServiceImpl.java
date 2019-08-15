@@ -33,7 +33,9 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
 
     @Override
     public VehicleCleanOrderDTO getServicingOrder(User user) {
-        return null;
+        VehicleCleanOrderDTO vehicleCleanOrderDTO = new VehicleCleanOrderDTO();
+        vehicleCleanOrderDTO.setUserId(user.getUserId());
+        return vehicleCleanOrderMapperExtra.selectByStatus(vehicleCleanOrderDTO);
     }
 
     @Override

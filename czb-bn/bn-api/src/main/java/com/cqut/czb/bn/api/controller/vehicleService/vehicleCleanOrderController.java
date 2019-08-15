@@ -46,7 +46,7 @@ public class vehicleCleanOrderController {
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult();
+        return new JSONResult(vehicleCleanOrderService.getServicingOrder(user));
     }
 
     /**
