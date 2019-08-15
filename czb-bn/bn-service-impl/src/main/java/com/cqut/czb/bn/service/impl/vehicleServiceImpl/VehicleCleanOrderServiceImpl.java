@@ -32,6 +32,11 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     }
 
     @Override
+    public VehicleCleanOrderDTO getServicingOrder(User user) {
+        return null;
+    }
+
+    @Override
     public Boolean cancelOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
         vehicleCleanOrderDTO.setCancelPersonId(user.getUserId());
         vehicleCleanOrderDTO.setPayStatus(2);

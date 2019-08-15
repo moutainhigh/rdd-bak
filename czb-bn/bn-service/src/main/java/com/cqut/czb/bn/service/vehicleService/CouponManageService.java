@@ -21,4 +21,6 @@ public interface CouponManageService {
     Boolean updateCouponStandard(CouponStandard couponStandard);
 
     Boolean deleteCouponStandard(CouponStandard couponStandard);
+
+    List<String> getCouponType();
 }

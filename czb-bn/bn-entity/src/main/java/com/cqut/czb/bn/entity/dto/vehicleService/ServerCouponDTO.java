@@ -15,6 +15,8 @@ public class ServerCouponDTO {
 
     private Double standardValue;
 
+    private String standardExplain;
+
     private Date createAt;
 
     private Date updateAt;
@@ -65,6 +67,14 @@ public class ServerCouponDTO {
 
     public void setStandardValue(Double standardValue) {
         this.standardValue = standardValue;
+    }
+
+    public String getStandardExplain() {
+        return standardExplain;
+    }
+
+    public void setStandardExplain(String standardExplain) {
+        this.standardExplain = standardExplain;
     }
 
     public Date getCreateAt() {

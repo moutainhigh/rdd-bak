@@ -31,7 +31,7 @@ public class CouponManageController {
      */
     @GetMapping("/getCouponList")
     public JSONResult getCouponList(ServerCouponDTO serverCouponDTO, Principal principal){
-        if (principal.getName()==null){
+        if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
@@ -69,8 +69,18 @@ public class CouponManageController {
         return new JSONResult(couponManageService.updateCouponStandard(couponStandard));
     }
 
+    /**
+     * 根据id删除优惠券标准
+     * @param couponStandard
+     * @return
+     */
     @PostMapping("/deleteCoupon")
     public JSONResult deleteCoupon(CouponStandard couponStandard) {
         return new JSONResult(couponManageService.deleteCouponStandard(couponStandard));
+    }
+
+    @GetMapping("/getCouponType")
+    public JSONResult getCouponType(){
+        return new JSONResult(couponManageService.getCouponType());
     }
 }

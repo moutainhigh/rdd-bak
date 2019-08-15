@@ -67,4 +67,9 @@ public class CouponManageServiceImpl implements CouponManageService {
         couponStandard.setUpdateAt(new Date());
         return couponStandardMapperExtra.updateByDelete(couponStandard)>0;
     }
+
+    @Override
+    public List<String> getCouponType() {
+        return couponStandardMapperExtra.selectCouponStandardType();
+    }
 }

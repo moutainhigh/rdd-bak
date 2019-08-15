@@ -26,6 +26,17 @@
         from czb_vehicle_clean_order
         where user_id = #{userId,jdbcType=VARCHAR}
     </select>
+
+    <select id="selectByStatus" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vehicle_clean_order
+        where user_id = #{userId,jdbcType=VARCHAR}
+        AND (process_status = 1 OR process_status = 0 )
+        ORDER BY
+         create_at DESC LIMIT 0,1
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_vehicle_clean_order
         where server_order_id = #{serverOrderId,jdbcType=VARCHAR}

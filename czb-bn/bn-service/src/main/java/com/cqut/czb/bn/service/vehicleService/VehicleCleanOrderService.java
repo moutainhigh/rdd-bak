@@ -12,6 +12,8 @@ public interface VehicleCleanOrderService {
 
     List<VehicleCleanOrderDTO> getOrderList(User user);
 
+    VehicleCleanOrderDTO getServicingOrder(User user);
+
     Boolean cancelOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user);
 
     Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO);
