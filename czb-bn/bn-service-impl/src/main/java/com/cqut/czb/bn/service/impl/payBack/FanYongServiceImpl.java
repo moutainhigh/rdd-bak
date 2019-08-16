@@ -71,9 +71,9 @@ public class FanYongServiceImpl implements FanYongService {
             dict2 = dictMapperExtra.selectDictByName("serviceFY2");
             dict3 = dictMapperExtra.selectDictByName("service_rate");
         }else if(BusinessType==4){
-            dict1 = dictMapperExtra.selectDictByName("serviceFY1");
-            dict2 = dictMapperExtra.selectDictByName("serviceFY2");
-            dict3 = dictMapperExtra.selectDictByName("service_rate");
+            dict1 = dictMapperExtra.selectDictByName("CarWashFY1");
+            dict2 = dictMapperExtra.selectDictByName("CarWashFY2");
+            dict3 = dictMapperExtra.selectDictByName("CarWashFY_rate");
         }
 
         if (dict1 != null || dict1.getContent() != null) {

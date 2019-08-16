@@ -232,7 +232,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "4", 2);
 
         //进行返佣
-        boolean beginFanYong= fanYongService.beginFanYong(3,area,ownerId,money,money,orgId);
+        boolean beginFanYong= fanYongService.beginFanYong(4,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
         return 1;
     }
