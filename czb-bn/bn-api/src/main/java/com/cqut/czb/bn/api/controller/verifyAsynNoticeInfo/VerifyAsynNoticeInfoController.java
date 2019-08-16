@@ -127,7 +127,22 @@ public class VerifyAsynNoticeInfoController {
 		response.setHeader("content-type", "text/html;charset=utf-8");
 		try {
 			System.out.println("充值vip购买成功");
-			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"vip"));
+			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"CarWash"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 购买服务)：验证异步通知信息(微信)
+	 */
+	@RequestMapping(value="/verifyBuyCarWashInfoWeChat", method=RequestMethod.POST)
+	public synchronized void verifyBuyCarWashInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("微信购买服务成功回调");
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/xml");
+		try {
+			response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"CarWash"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

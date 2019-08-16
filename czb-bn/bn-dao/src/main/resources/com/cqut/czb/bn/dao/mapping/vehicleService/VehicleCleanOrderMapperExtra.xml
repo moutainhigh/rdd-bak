@@ -72,6 +72,14 @@
         czb_vehicle_clean_order.create_at DESC LIMIT 0,1
     </select>
 
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vehicle_clean_order
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_vehicle_clean_order
         where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
@@ -279,4 +287,51 @@
             </if>
         </where>
     </select>
+
+
+    <update id="updateMyBackOrder" parameterType="com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO" >
+        update czb_vehicle_clean_order
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="riderId != null" >
+                rider_id = #{riderId,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdOrder != null" >
+                third_order = #{thirdOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="payStatus != null" >
+                pay_status = #{payStatus,jdbcType=TINYINT},
+            </if>
+            <if test="actualPrice != null" >
+                actual_price = #{actualPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="vehicleId != null" >
+                vehicle_id = #{vehicleId,jdbcType=VARCHAR},
+            </if>
+            <if test="processStatus != null" >
+                process_status = #{processStatus,jdbcType=TINYINT},
+            </if>
+            <if test="cancelTime != null" >
+                cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cancelPersonId != null" >
+                cancel_person_id = #{cancelPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelReason != null" >
+                cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = now(),
+            </if>
+            <if test="serverId != null" >
+                server_id = #{serverId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </update>
 </mapper>

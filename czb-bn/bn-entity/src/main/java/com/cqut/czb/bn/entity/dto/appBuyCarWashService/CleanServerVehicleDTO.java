@@ -9,46 +9,54 @@ public class CleanServerVehicleDTO {
     private String userId;
 
     //车主名
-    private String userName;
+    private String userName="小明";
 
     //车牌号
-    private String licenseNumber;
+    private String licenseNumber="13131bbb";
 
     //车辆颜色
-    private String vehicleColor;
+    private String vehicleColor="黄色";
 
     //车型
     private int vehicleType;
 
     //车系
-    private String vehicleSeries;
+    private String vehicleSeries="比亚迪m6";
 
     //服务地点
-    private String serviceLocation;
+    private String serviceLocation="东城";
+
+    //电话号码
+    private String phone;
+
+
+
 
     //服务商品号
-    private String service_id;
+    private String serverId="1";
 
     //服务名
-    private String serverName;
+    private String serverName="轿车清洗";
 
     //服务类型
-    private String serverType;
+    private String serverType="1";
 
     //服务定价
-    private Double serverPrice;
-
-    //会员价(新增)
-    private Double vipPrice;
-
-    //服务说明
-    private String serverExplain;
-
-    //折扣
-    private Double serverDiscount;
+    private Double serverPrice=200.0;
 
     //车辆类型
-    private int serverVehicleType;
+    private int serverVehicleType=1;
+
+
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getVehicleId() {
         return vehicleId;
@@ -114,12 +122,12 @@ public class CleanServerVehicleDTO {
         this.vehicleSeries = vehicleSeries;
     }
 
-    public String getService_id() {
-        return service_id;
+    public String getServerId() {
+        return serverId;
     }
 
-    public void setService_id(String service_id) {
-        this.service_id = service_id;
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
     }
 
     public String getServerName() {
@@ -144,30 +152,6 @@ public class CleanServerVehicleDTO {
 
     public void setServerPrice(Double serverPrice) {
         this.serverPrice = serverPrice;
-    }
-
-    public Double getVipPrice() {
-        return vipPrice;
-    }
-
-    public void setVipPrice(Double vipPrice) {
-        this.vipPrice = vipPrice;
-    }
-
-    public String getServerExplain() {
-        return serverExplain;
-    }
-
-    public void setServerExplain(String serverExplain) {
-        this.serverExplain = serverExplain;
-    }
-
-    public Double getServerDiscount() {
-        return serverDiscount;
-    }
-
-    public void setServerDiscount(Double serverDiscount) {
-        this.serverDiscount = serverDiscount;
     }
 
     public int getServerVehicleType() {

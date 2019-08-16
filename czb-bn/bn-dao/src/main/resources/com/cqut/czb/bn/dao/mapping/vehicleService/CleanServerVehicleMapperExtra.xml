@@ -18,12 +18,12 @@
   </sql>
 
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppCleanServerVehicleDTO" >
-    insert into czb_clean_server_vehicle (vehicle_id, user_id, user_name, 
-      license_number, vehicle_color, vehicle_type, 
+      insert into czb_clean_server_vehicle (vehicle_id, user_id, user_name,
+      license_number, vehicle_color, vehicle_type,
       vehicle_series, create_at, update_at,service_location
       )
-    values (#{vehicleId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{licenseNumber,jdbcType=VARCHAR}, #{vehicleColor,jdbcType=VARCHAR}, #{vehicleType,jdbcType=TINYINT}, 
+      values (#{vehicleId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+      #{licenseNumber,jdbcType=VARCHAR}, #{vehicleColor,jdbcType=VARCHAR}, #{vehicleType,jdbcType=TINYINT},
       #{vehicleSeries,jdbcType=VARCHAR},now(), now(),#{serviceLocation,jdbcType=VARCHAR}
       )
   </insert>
@@ -33,6 +33,7 @@
     <include refid="Base_Column_List" />
     from czb_clean_server_vehicle
     where user_id = #{userId,jdbcType=VARCHAR}
+    limit 1
   </select>
 
 </mapper>

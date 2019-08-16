@@ -25,9 +25,19 @@ public class AppVehicleCleanOrderDTO {
 
     private String cancelReason;
 
+    private String serverId;
+
     private Date createAt;
 
     private Date updateAt;
+
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
 
     public String getServerOrderId() {
         return serverOrderId;

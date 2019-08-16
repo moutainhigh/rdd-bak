@@ -11,8 +11,8 @@ import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppCleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.CleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle;
 import com.cqut.czb.bn.service.AppBuyCarWashService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +47,10 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //支付金额
         Double actualPrice=cleanServerVehicleDTO.getServerPrice();
         //商品id
-        String commodityId=cleanServerVehicleDTO.getService_id();
+        String serviceId=cleanServerVehicleDTO.getServerId();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(thirdOrder, actualPrice,commodityId ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(thirdOrder, actualPrice,serviceId ,ownerId));//支付订单
         request.setNotifyUrl(AliPayConfig.BuyService_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -68,9 +68,15 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
      * 插入业务信息
      */
     public void InsertBusinessInfo(String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO){
+
         //服务车辆id
         String vehicleId=StringUtil.createId();
 
+        //查出是否有信息
+        AppVehicleCleanOrderDTO v=vehicleCleanOrderMapperExtra.selectByUserId(user.getUserId());
+        if(v!=null){
+            vehicleId=v.getVehicleId();
+        }
         //插入两表
         //洗车服务订单记录	czb_vehicle_clean_order 插入预支付订单
         AppVehicleCleanOrderDTO vehicleCO=new AppVehicleCleanOrderDTO();
@@ -83,6 +89,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //在下面VehicleId()
         vehicleCO.setVehicleId(vehicleId);
         vehicleCO.setProcessStatus((byte)0);
+        vehicleCO.setServerId(cleanServerVehicleDTO.getServerId());
 
         boolean K=vehicleCleanOrderMapperExtra.insert(vehicleCO)>0;
         System.out.println("插入洗车服务预支付订单"+K);
@@ -111,14 +118,11 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
             System.out.println("用户信息不全");
             return null;
         }
+        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+        String nonceStrTemp = WeChatUtils.getRandomStr();
+        // 设置参数
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(nonceStrTemp,orgId,user.getUserId(),cleanServerVehicleDTO.getServerPrice(),cleanServerVehicleDTO.getServerId());
 
-//        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-//        String nonceStrTemp = WeChatUtils.getRandomStr();
-//        // 设置参数
-//        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersService(nonceStrTemp,orgId,user.getUserId(),commodityDTO);
-//
-//        return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
-
-        return null;
+        return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
 }

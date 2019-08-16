@@ -155,7 +155,7 @@ public class DataProcessServiceImpl implements DataProcessService {
         consumptionRecord.setLocalOrderId(orgId);//本地订单号
         consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
         consumptionRecord.setMoney(money);
-        consumptionRecord.setType(Integer.valueOf(businessType));//0为油卡购买，1为油卡充值,2购买服务,3vip充值
+        consumptionRecord.setType(Integer.valueOf(businessType));//0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务
         consumptionRecord.setUserId(ownerId);
         consumptionRecord.setOriginalAmount(money);//油卡面额
         consumptionRecord.setPayMethod(payMethod);//1为支付宝2为微信
