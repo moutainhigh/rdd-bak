@@ -104,7 +104,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         cleanSV.setVehicleType((byte) cleanServerVehicleDTO.getVehicleType());
         cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
         cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
-
+        cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
         boolean j=cleanServerVehicleMapperExtra.insert(cleanSV)>0;
         System.out.println("插入车辆信息"+j);
     }

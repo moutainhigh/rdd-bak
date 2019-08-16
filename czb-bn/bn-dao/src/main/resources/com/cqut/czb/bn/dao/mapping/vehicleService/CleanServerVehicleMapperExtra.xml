@@ -9,22 +9,23 @@
     <result column="vehicle_color" property="vehicleColor" jdbcType="VARCHAR" />
     <result column="vehicle_type" property="vehicleType" jdbcType="TINYINT" />
     <result column="vehicle_series" property="vehicleSeries" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vehicle_id, user_id, user_name, license_number, vehicle_color, vehicle_type, vehicle_series, 
+    vehicle_id, user_id, user_name, license_number, vehicle_color, vehicle_type, vehicle_series, phone
     create_at, update_at
   </sql>
 
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppCleanServerVehicleDTO" >
       insert into czb_clean_server_vehicle (vehicle_id, user_id, user_name,
       license_number, vehicle_color, vehicle_type,
-      vehicle_series, create_at, update_at,service_location
+      vehicle_series, create_at, update_at,service_location,phone
       )
       values (#{vehicleId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
       #{licenseNumber,jdbcType=VARCHAR}, #{vehicleColor,jdbcType=VARCHAR}, #{vehicleType,jdbcType=TINYINT},
-      #{vehicleSeries,jdbcType=VARCHAR},now(), now(),#{serviceLocation,jdbcType=VARCHAR}
+      #{vehicleSeries,jdbcType=VARCHAR},now(), now(),#{serviceLocation,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR}
       )
   </insert>
 

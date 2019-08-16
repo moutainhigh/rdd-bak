@@ -25,6 +25,16 @@ public class AppCleanServerVehicleDTO {
 
     private String serviceLocation;
 
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public int getCount() {
         return count;
     }
