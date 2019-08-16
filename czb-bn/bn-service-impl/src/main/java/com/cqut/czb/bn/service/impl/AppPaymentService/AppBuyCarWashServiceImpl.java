@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.dto.appBuyCarWashService.CleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle;
 import com.cqut.czb.bn.service.AppBuyCarWashService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,11 +74,36 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         String vehicleId=StringUtil.createId();
 
         //查出是否有信息
-        AppVehicleCleanOrderDTO v=vehicleCleanOrderMapperExtra.selectByUserId(user.getUserId());
+        CleanServerVehicle v=cleanServerVehicleMapperExtra.selectCleanServerVehicle(user.getUserId());
         if(v!=null){
-            vehicleId=v.getVehicleId();
+            AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
+            cleanSV.setUserId(user.getUserId());
+            cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
+            cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
+            cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
+            cleanSV.setVehicleType((byte) cleanServerVehicleDTO.getVehicleType());
+            cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
+            cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
+            cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
+            boolean j=cleanServerVehicleMapperExtra.updateByUserId(cleanSV)>0;
+            System.out.println("更改车辆信息"+j);
+        }else {
+            //洗车服务车辆对象表	czb_clean_server_vehicle  录入备份信息
+            AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
+            cleanSV.setVehicleId(vehicleId);
+            cleanSV.setUserId(user.getUserId());
+            cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
+            cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
+            cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
+            cleanSV.setVehicleType((byte) cleanServerVehicleDTO.getVehicleType());
+            cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
+            cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
+            cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
+            boolean j=cleanServerVehicleMapperExtra.insert(cleanSV)>0;
+            System.out.println("插入车辆信息"+j);
         }
-        //插入两表
+
+
         //洗车服务订单记录	czb_vehicle_clean_order 插入预支付订单
         AppVehicleCleanOrderDTO vehicleCO=new AppVehicleCleanOrderDTO();
         vehicleCO.setServerOrderId(thirdOrder);
@@ -86,27 +112,12 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         vehicleCO.setPayStatus((byte)0);
         //前要注意下
         vehicleCO.setActualPrice(cleanServerVehicleDTO.getServerPrice());
-        //在下面VehicleId()
         vehicleCO.setVehicleId(vehicleId);
         vehicleCO.setProcessStatus((byte)0);
         vehicleCO.setServerId(cleanServerVehicleDTO.getServerId());
 
         boolean K=vehicleCleanOrderMapperExtra.insert(vehicleCO)>0;
         System.out.println("插入洗车服务预支付订单"+K);
-
-        //洗车服务车辆对象表	czb_clean_server_vehicle  录入备份信息
-        AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
-        cleanSV.setVehicleId(vehicleId);
-        cleanSV.setUserId(user.getUserId());
-        cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
-        cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
-        cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
-        cleanSV.setVehicleType((byte) cleanServerVehicleDTO.getVehicleType());
-        cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
-        cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
-        cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
-        boolean j=cleanServerVehicleMapperExtra.insert(cleanSV)>0;
-        System.out.println("插入车辆信息"+j);
     }
 
 

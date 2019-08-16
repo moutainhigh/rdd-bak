@@ -3,7 +3,6 @@ package com.cqut.czb.bn.entity.dto.appBuyCarWashService;
 import java.util.Date;
 
 public class AppCleanServerVehicleDTO {
-    private int count;
 
     private String vehicleId;
 
@@ -33,14 +32,6 @@ public class AppCleanServerVehicleDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public String getVehicleId() {

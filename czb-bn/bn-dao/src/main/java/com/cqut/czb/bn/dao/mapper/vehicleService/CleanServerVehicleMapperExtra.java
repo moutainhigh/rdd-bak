@@ -12,4 +12,5 @@ public interface CleanServerVehicleMapperExtra {
 
     CleanServerVehicle selectCleanServerVehicle(@Param("userId") String userId);
 
+    int updateByUserId(AppCleanServerVehicleDTO record);
 }

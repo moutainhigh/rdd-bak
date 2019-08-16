@@ -28,6 +28,39 @@
       #{vehicleSeries,jdbcType=VARCHAR},now(), now(),#{serviceLocation,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR}
       )
   </insert>
+    <update id="updateByUserId" parameterType="com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppCleanServerVehicleDTO">
+        update czb_clean_server_vehicle
+        <set >
+            <if test="userName != null" >
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                user_name = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="licenseNumber != null" >
+                license_number = #{licenseNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="vehicleColor != null" >
+                vehicle_color = #{vehicleColor,jdbcType=VARCHAR},
+            </if>
+            <if test="vehicleType != null" >
+                vehicle_type = #{vehicleType,jdbcType=TINYINT},
+            </if>
+            <if test="vehicleSeries != null" >
+                vehicle_series = #{vehicleSeries,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = now(),
+            </if>
+            <if test="serviceLocation != null" >
+                service_location = #{serviceLocation,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where #{userId,jdbcType=VARCHAR}
+    </update>
 
   <select id="selectCleanServerVehicle" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
