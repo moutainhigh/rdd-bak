@@ -52,7 +52,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //购买者id
         String ownerId = user.getUserId();
         request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(thirdOrder, actualPrice,serviceId ,ownerId));//支付订单
-        request.setNotifyUrl(AliPayConfig.BuyService_url);//支付回调接口
+        request.setNotifyUrl(AliPayConfig.BuyCarWash_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
@@ -134,6 +134,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         // 设置参数
         SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(nonceStrTemp,orgId,user.getUserId(),cleanServerVehicleDTO.getServerPrice(),cleanServerVehicleDTO.getServerId());
 
+        InsertBusinessInfo(orgId,user,cleanServerVehicleDTO);
         return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
 }

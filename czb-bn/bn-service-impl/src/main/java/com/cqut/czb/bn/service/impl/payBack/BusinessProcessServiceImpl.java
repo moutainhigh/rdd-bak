@@ -223,6 +223,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         boolean ve=vehicleCleanOrderMapperExtra.updateMyBackOrder(orderDTO)>0;
         System.out.println("更改洗车订单完毕"+ve);
 
+
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
