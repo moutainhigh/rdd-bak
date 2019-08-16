@@ -9,22 +9,22 @@ public class CleanServerVehicleDTO {
     private String userId;
 
     //车主名
-    private String userName="小明";
+    private String userName;
 
     //车牌号
-    private String licenseNumber="13131bbb";
+    private String licenseNumber;
 
     //车辆颜色
-    private String vehicleColor="黄色";
+    private String vehicleColor;
 
     //车型
     private int vehicleType;
 
     //车系
-    private String vehicleSeries="比亚迪m6";
+    private String vehicleSeries;
 
     //服务地点
-    private String serviceLocation="东城";
+    private String serviceLocation;
 
     //电话号码
     private String phone;
@@ -33,19 +33,19 @@ public class CleanServerVehicleDTO {
 
 
     //服务商品号
-    private String serverId="1";
+    private String serverId;
 
     //服务名
-    private String serverName="轿车清洗";
+    private String serverName;
 
     //服务类型
-    private String serverType="1";
+    private String serverType;
 
     //服务定价
-    private Double serverPrice=200.0;
+    private Double serverPrice;
 
     //车辆类型
-    private int serverVehicleType=1;
+    private int serverVehicleType;
 
 
 

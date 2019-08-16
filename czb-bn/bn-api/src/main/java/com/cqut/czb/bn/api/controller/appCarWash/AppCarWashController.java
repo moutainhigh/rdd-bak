@@ -49,4 +49,12 @@ public class AppCarWashController {
         return  new  JSONResult(appCarWashService.SelectService());
     }
 
+    /**
+     * 获取用户须知
+     */
+    @RequestMapping(value = "/getUserInstruction",method = RequestMethod.GET)
+    public JSONResult getUserInstruction(){
+        return new JSONResult(appCarWashService.getUserInstruction());
+    }
+
 }
