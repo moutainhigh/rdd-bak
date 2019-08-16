@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.RiderEvaluateMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.RiderEvaluateDTO" >
+        <id column="evaluate_id" property="evaluateId" jdbcType="CHAR" />
+        <result column="evaluate_rider_id" property="evaluateRiderId" jdbcType="CHAR" />
+        <result column="evaluate_level" property="evaluateLevel" jdbcType="REAL" />
+        <result column="evaluate_message" property="evaluateMessage" jdbcType="CHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="rider_name" property="riderName" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="evaluate_user_id" property="evaluateUserId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectRiderEvaluateList" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.RiderEvaluateDTO" >
+        SELECT
+            evaluate_id,
+            evaluate_rider_id,
+            evaluate_level,
+            evaluate_message,
+            rider_name,
+            a.create_at,
+            a.update_at,
+            evaluate_user_id,
+            c.user_account
+        FROM
+            czb_rider_evaluate a
+        LEFT JOIN czb_clean_rider b ON a.evaluate_rider_id = b.rider_id
+        LEFT JOIN czb_user c ON b.user_id = c.user_id
+        <where>
+            <if test="userAccount!=null and userAccount!=''">
+                AND user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="evaluateLevel!=null">
+                AND evaluate_level= #{evaluateLevel,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>
