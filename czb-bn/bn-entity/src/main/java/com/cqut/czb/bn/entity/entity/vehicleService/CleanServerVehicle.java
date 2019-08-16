@@ -15,6 +15,8 @@ public class CleanServerVehicle {
 
     private Byte vehicleType;
 
+    private String phone;
+
     private String vehicleSeries;
 
     private Date createAt;
@@ -22,6 +24,14 @@ public class CleanServerVehicle {
     private Date updateAt;
 
     private String serviceLocation;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getVehicleId() {
         return vehicleId;
