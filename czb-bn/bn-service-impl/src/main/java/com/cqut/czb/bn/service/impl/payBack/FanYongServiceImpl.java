@@ -51,7 +51,7 @@ public class FanYongServiceImpl implements FanYongService {
         //查出是否为vip
         User user=userMapper.selectByPrimaryKey(userId);
 
-
+        //1为油卡,2为充值vip，3为购买服务，4为洗车服务
         if(BusinessType==1){
             if(area.equals("重庆市")){
                 dict1 = dictMapperExtra.selectDictByName("fangyong1");
@@ -67,6 +67,10 @@ public class FanYongServiceImpl implements FanYongService {
             dict2 = dictMapperExtra.selectDictByName("vipFY2");
             dict3 = dictMapperExtra.selectDictByName("vip_rate");
         }else if(BusinessType==3){
+            dict1 = dictMapperExtra.selectDictByName("serviceFY1");
+            dict2 = dictMapperExtra.selectDictByName("serviceFY2");
+            dict3 = dictMapperExtra.selectDictByName("service_rate");
+        }else if(BusinessType==4){
             dict1 = dictMapperExtra.selectDictByName("serviceFY1");
             dict2 = dictMapperExtra.selectDictByName("serviceFY2");
             dict3 = dictMapperExtra.selectDictByName("service_rate");

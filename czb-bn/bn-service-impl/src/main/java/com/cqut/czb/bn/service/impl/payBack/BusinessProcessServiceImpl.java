@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
+import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -58,6 +60,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     VipRechargeRecordsMapperExtra vipRechargeRecordsMapperExtra;
 
+    @Autowired
+    VehicleCleanOrderMapperExtra vehicleCleanOrderMapperExtra;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
@@ -73,8 +78,13 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }
-        }else if(consumptionType.equals("vip")){//油卡充值
+        }else if(consumptionType.equals("vip")){//充值vip
             if (getAddVipOrderAli(params) == 1) {
+                result.put("success", AlipayConfig.response_success);
+                return result;
+            }
+        }else if(consumptionType.equals("CarWash")) {//洗车
+            if (getAddCarWashOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }
@@ -96,6 +106,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             result.put("success", addBuyServiceOrderWeChat(restmap));
         }else if(consumptionType.equals("vip")){
             result.put("success", addVipOrderWeChat(restmap));
+        }else if(consumptionType.equals("CarWash")){
+            result.put("success", addCarWashOrderWeChat(restmap));
         }
         return result;
     }
@@ -114,6 +126,114 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         PetrolCache.currentPetrolMap.remove(petrolSalesRecordsDTO.getPetrolNum());//移除
         PetrolCache.AllpetrolMap.put(petrol.getPetrolNum(), petrol);//放入
         System.out.println("购买失败删除后" + PetrolCache.AllpetrolMap + ":" + PetrolCache.currentPetrolMap);
+    }
+
+    /**
+     * 洗车服务（支付宝）
+     */
+    public int getAddCarWashOrderAli(Map<String, String> params) {
+        String[] resDate = params.get("passback_params").split("\\^");
+        String[] temp;
+        String thirdOrderId = params.get("trade_no");
+        //自己的订单号
+        String orgId = "";
+        double money = 0;
+        String ownerId = "";
+        String serverId = "";
+        String area="";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println("商家订单orgId:" + orgId);
+            }
+            if ("money".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+                System.out.println("充值金额:money" + money);
+            }
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+                System.out.println("用户id:" + ownerId);
+            }
+            if ("serverId".equals(temp[0])) {
+                serverId = temp[1];
+                System.out.println("用户id:" + ownerId);
+            }
+        }
+        //更改用户订单
+        AppVehicleCleanOrderDTO orderDTO=new AppVehicleCleanOrderDTO();
+        orderDTO.setServerOrderId(orgId);
+        orderDTO.setThirdOrder(thirdOrderId);
+        orderDTO.setPayStatus((byte)1);
+        orderDTO.setUpdateAt(new Date());
+        boolean ve=vehicleCleanOrderMapperExtra.updateMyBackOrder(orderDTO)>0;
+        System.out.println("更改洗车订单完毕"+ve);
+
+        //查询是否为首次消费
+        dataProcessService.isHaveConsumption(ownerId);
+
+        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务
+        //插入消费记录
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "4", 1);
+
+        //进行返佣
+        boolean beginFanYong= fanYongService.beginFanYong(4,area,ownerId,money,money,orgId);
+        System.out.println("返佣"+beginFanYong);
+        return 1;
+    }
+
+    /**
+     * 洗车服务（微信）
+     */
+    public int addCarWashOrderWeChat(Map<String, Object> restmap) {
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        //商户订单号
+        String out_trade_no = restmap.get("out_trade_no").toString();
+        //微信交易订单号
+        String thirdOrderId = restmap.get("transaction_id").toString();
+        String[] temp;
+        String orgId = "";
+        double money = Double.valueOf(restmap.get("total_fee").toString());
+        money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+        String ownerId = "";
+        String area="";//地区
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {
+                continue;
+            }
+            //商家订单
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+            }
+            //用户id
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+            }
+        }
+        //更改用户订单
+        AppVehicleCleanOrderDTO orderDTO=new AppVehicleCleanOrderDTO();
+        orderDTO.setServerOrderId(orgId);
+        orderDTO.setThirdOrder(thirdOrderId);
+        orderDTO.setPayStatus((byte)1);
+        orderDTO.setUpdateAt(new Date());
+        boolean ve=vehicleCleanOrderMapperExtra.updateMyBackOrder(orderDTO)>0;
+        System.out.println("更改洗车订单完毕"+ve);
+
+        //查询是否为首次消费
+        dataProcessService.isHaveConsumption(ownerId);
+
+        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务
+        //插入消费记录
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "4", 2);
+
+        //进行返佣
+        boolean beginFanYong= fanYongService.beginFanYong(3,area,ownerId,money,money,orgId);
+        System.out.println("返佣"+beginFanYong);
+        return 1;
     }
 
     /**
@@ -160,7 +280,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
-        //payType对应0为油卡购买，1为油卡充值,2为购买服务
+        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 1);
 
@@ -199,6 +319,14 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 System.out.println("用户id:" + ownerId);
             }
         }
+
+        //更改订单状态
+        Order order=new Order();
+        order.setThirdOrder(thirdOrderId);
+        order.setState(1);
+        boolean updateOrder=orderMapperExtra.updateByPrimaryKeySelective(order)>0;
+        System.out.println("更改订单成功"+updateOrder);
+
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
@@ -311,9 +439,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
-        //payType对应0为油卡购买，1为油卡充值,2为购买服务
+        //payType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务
         //插入消费记录
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "3", 2);
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 2);
 
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);

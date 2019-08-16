@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +27,8 @@ public interface VehicleCleanOrderMapperExtra {
     Page<VehicleOrderManageDTO> search(VehicleOrderManageDTO dto);
 
     CleanRider getCleanRider(CleanRider rider);
+    int updateMyBackOrder(AppVehicleCleanOrderDTO orderDTO);
+
+    AppVehicleCleanOrderDTO selectByUserId(@Param("userId") String userId);
+
 }

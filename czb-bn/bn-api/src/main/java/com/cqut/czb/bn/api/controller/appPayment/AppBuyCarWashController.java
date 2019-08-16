@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppBuyCarWashService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +27,12 @@ public class AppBuyCarWashController {
     AppBuyCarWashService appBuyCarWashService;
 
     @RequestMapping(value = "/AliBuyCarWash" ,method = RequestMethod.POST)
-    public JSONResult AliBuyCarWash(Principal principal, CleanServerVehicleDTO cleanServerVehicleDTO){
+    public JSONResult AliBuyCarWash(Principal principal,@RequestBody CleanServerVehicleDTO cleanServerVehicleDTO){
 
         User user = (User)redisUtils.get(principal.getName());
-
+//        User user=new User();
+//        user.setUserId("122122");
+//        cleanServerVehicleDTO.setUserId("2");
         String info =appBuyCarWashService.AliBuyCarWash(user,cleanServerVehicleDTO);
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
@@ -39,10 +42,12 @@ public class AppBuyCarWashController {
     }
 
     @RequestMapping(value = "/WeChatBuyCarWash" ,method = RequestMethod.POST)
-    public JSONResult WeChatBuyCarWash(Principal principal, CleanServerVehicleDTO cleanServerVehicleDTO){
+    public JSONResult WeChatBuyCarWash(Principal principal, @RequestBody CleanServerVehicleDTO cleanServerVehicleDTO){
 
         User user = (User)redisUtils.get(principal.getName());
-
+//        User user=new User();
+//        user.setUserId("122122");
+//        cleanServerVehicleDTO.setUserId("2");
         JSONObject info =appBuyCarWashService.WeChatBuyCarWash(user,cleanServerVehicleDTO);
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
