@@ -122,4 +122,26 @@
         where owner_id = #{ownerId,jdbcType=VARCHAR}
         AND destroy_time &lt;= now() AND status !=1
     </update>
+
+    <select id="selectCoupons" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appCarWash.conpons">
+        select
+        coupon_id as couponId,destroy_time as destroyTime,standard_type as standardType,
+        standard_value as standardValue,standard_explain as standardExplain ,standard_id as couponStandardId
+        from
+        czb_server_coupon,czb_coupon_standard
+       <where>
+           owner_id = #{userId,jdbcType=VARCHAR} and
+           standard_id=coupon_standard and
+           is_delete=0
+           AND
+           <![CDATA[destroy_time >= now()]]>
+           and
+           status=0
+           <if test="couponId !=null and couponId !=''">
+               and coupon_id=#{couponId,jdbcType=VARCHAR}
+           </if>
+       </where>
+    </select>
+
+
 </mapper>

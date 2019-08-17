@@ -57,4 +57,19 @@ public class AppCarWashController {
         return new JSONResult(appCarWashService.getUserInstruction());
     }
 
+    /**
+     * 获取优惠劵
+     */
+    @RequestMapping(value = "/getCoupons",method = RequestMethod.GET)
+    public JSONResult getCoupons(Principal principal,@RequestParam("couponId") String couponId)
+    {
+//        User user = (User) redisUtils.get(principal.getName());
+//        if(user==null&&couponId==null){
+//            return null;
+//        }
+        User user=new User();
+        user.setUserId("15310490895");
+        return new JSONResult(appCarWashService.getCoupons(user.getUserId(),couponId));
+    }
+
 }
