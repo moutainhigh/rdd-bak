@@ -3,6 +3,7 @@ package com.cqut.czb.bn.dao.mapper;
 import com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @auther nihao
  * @create 2019-07-18 19:23
  */
+@Repository
 public interface VipAreaConfigMapperExtra {
     List<VipAreaDTO> getVipAreaList(VipAreaDTO vipAreaDTO);
 
