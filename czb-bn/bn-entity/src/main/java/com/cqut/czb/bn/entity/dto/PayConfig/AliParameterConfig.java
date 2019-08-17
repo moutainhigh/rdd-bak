@@ -96,7 +96,7 @@ public class AliParameterConfig {
     /**
      * 转换为支付宝支付实体（购买洗车服务）
      */
-    public static AlipayTradeAppPayModel getBizModelBuyCarWash(String thirdOrder,double actualPrice,String serviceId ,String ownerId) {
+    public static AlipayTradeAppPayModel getBizModelBuyCarWash(String couponId,String thirdOrder,double actualPrice,String serviceId ,String ownerId) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody("洗车服务代理");
         model.setSubject("洗车服务代理");
@@ -104,17 +104,18 @@ public class AliParameterConfig {
         model.setTimeoutExpress(AliPayConfig.timeout_express);
         model.setTotalAmount(String.valueOf(actualPrice));
         model.setProductCode(AliPayConfig.product_code);
-        model.setPassbackParams(getPassBackParamsBuyCarWash(thirdOrder,actualPrice,serviceId ,ownerId));
+        model.setPassbackParams(getPassBackParamsBuyCarWash(couponId,thirdOrder,actualPrice,serviceId ,ownerId));
         return model;
     }
 
     //支付宝支付——订单格外数据（购买洗车服务）
-    public static String getPassBackParamsBuyCarWash(String thirdOrder,double actualPrice,String serviceId ,String ownerId) {
+    public static String getPassBackParamsBuyCarWash(String couponId,String thirdOrder,double actualPrice,String serviceId ,String ownerId) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", thirdOrder);
         pbp.put("money", actualPrice);
         pbp.put("serviceId", serviceId);
         pbp.put("ownerId", ownerId);
+        pbp.put("couponId",couponId);
         return StringUtil.transMapToStringOther(pbp);
     }
 

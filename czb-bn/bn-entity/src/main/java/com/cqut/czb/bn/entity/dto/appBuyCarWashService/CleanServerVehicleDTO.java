@@ -30,6 +30,8 @@ public class CleanServerVehicleDTO {
     private String phone;
 
 
+    //优惠劵id
+    private String couponId;
 
 
     //服务商品号
@@ -48,7 +50,13 @@ public class CleanServerVehicleDTO {
     private int serverVehicleType;
 
 
+    public String getCouponId() {
+        return couponId;
+    }
 
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
 
     public String getPhone() {
         return phone;

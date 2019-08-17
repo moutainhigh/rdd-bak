@@ -158,7 +158,7 @@ public class WeChatParameterConfig {
     /**
      * 购买服务
      */
-    public static SortedMap<String, Object> getParametersBuyCarWash(String nonceStrTemp, String orgId, String userId,double money,String serviceId) {
+    public static SortedMap<String, Object> getParametersBuyCarWash(String couponId,Double couponMoney,String nonceStrTemp, String orgId, String userId,double money,String serviceId) {
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters.put("appid", WeChatPayConfig.app_id);
         parameters.put("mch_id", WeChatPayConfig.mch_id);
@@ -167,24 +167,25 @@ public class WeChatParameterConfig {
         parameters.put("sign_type", WeChatPayConfig.sign_type);
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
-        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+        BigInteger totalFee = (BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(couponMoney))).multiply(new BigDecimal(100)).toBigInteger();
         parameters.put("total_fee", totalFee);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
         parameters.put("notify_url", WeChatPayConfig.BuyCarWash_url);//通用一个接口（购买和充值）
         parameters.put("trade_type", WeChatPayConfig.trade_type);
         parameters.put("detail","微信支付购买服务");//支付的类容备注
-        String attach=getAttachBuyCarWash(orgId,userId,serviceId,money);
+        String attach=getAttachBuyCarWash(couponId,orgId,userId,serviceId,money);
         parameters.put("attach",attach);
         parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
         return parameters;
     }
 
-    public static String getAttachBuyCarWash(String orgId,String userId,String serviceId,double money ){
+    public static String getAttachBuyCarWash(String couponId,String orgId,String userId,String serviceId,double money ){
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
         pbp.put("ownerId", userId);
         pbp.put("serviceId",serviceId);
         pbp.put("money",money);
+        pbp.put("couponId",couponId);
         return StringUtil.transMapToStringOther(pbp);
     }
 

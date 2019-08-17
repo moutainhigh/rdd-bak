@@ -6,11 +6,13 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanServerVehicleMapperExtra;
+import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppCleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.CleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
+import com.cqut.czb.bn.entity.dto.appCarWash.conpons;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle;
@@ -19,6 +21,8 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.UUID;
 
@@ -31,6 +35,9 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
     @Autowired
     CleanServerVehicleMapperExtra cleanServerVehicleMapperExtra;
 
+    @Autowired
+    ServerCouponMapperExtra serverCouponMapperExtra;
+
     @Override
     public String AliBuyCarWash(User user, CleanServerVehicleDTO cleanServerVehicleDTO) {
         //判空
@@ -38,6 +45,16 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
             System.out.println("用户信息不全");
             return null;
         }
+        Double couponMoney=0.0;
+
+        if(cleanServerVehicleDTO.getCouponId()!=null&&!cleanServerVehicleDTO.getCouponId().equals("")){
+            List<conpons> k=serverCouponMapperExtra.selectCoupons( user.getUserId(), cleanServerVehicleDTO.getCouponId());
+            if(k.size()>0){
+                couponMoney=k.get(0).getStandardValue();
+            }
+        }
+
+
         //生成起吊参数
         String orderString = null;//用于保存起调参数,
         AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("4");//"4"为购买洗车服务
@@ -46,12 +63,14 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
-        Double actualPrice=cleanServerVehicleDTO.getServerPrice();
+        Double actualPrice=BigDecimal.valueOf(cleanServerVehicleDTO.getServerPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
         //商品id
-        String serviceId=cleanServerVehicleDTO.getServerId();
+        String serviceId= cleanServerVehicleDTO.getServerId();
+        //优惠劵id
+        String couponId=cleanServerVehicleDTO.getCouponId();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(thirdOrder, actualPrice,serviceId ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(couponId,thirdOrder, actualPrice,serviceId ,ownerId));//支付订单
         request.setNotifyUrl(AliPayConfig.BuyCarWash_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -129,10 +148,18 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
             System.out.println("用户信息不全");
             return null;
         }
+        Double couponMoney=0.0;
+
+        if(cleanServerVehicleDTO.getCouponId()!=null&&!cleanServerVehicleDTO.getCouponId().equals("")){
+            List<conpons> k=serverCouponMapperExtra.selectCoupons( user.getUserId(), cleanServerVehicleDTO.getCouponId());
+            if(k.size()!=0){
+                couponMoney=k.get(0).getStandardValue();
+            }
+        }
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String nonceStrTemp = WeChatUtils.getRandomStr();
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(nonceStrTemp,orgId,user.getUserId(),cleanServerVehicleDTO.getServerPrice(),cleanServerVehicleDTO.getServerId());
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(cleanServerVehicleDTO.getCouponId(),couponMoney,nonceStrTemp,orgId,user.getUserId(),cleanServerVehicleDTO.getServerPrice(),cleanServerVehicleDTO.getServerId());
 
         InsertBusinessInfo(orgId,user,cleanServerVehicleDTO);
         return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
