@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
@@ -62,6 +63,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     @Autowired
     VehicleCleanOrderMapperExtra vehicleCleanOrderMapperExtra;
+
+    @Autowired
+    ServerCouponMapperExtra serverCouponMapperExtra;
 
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
@@ -140,6 +144,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         double money = 0;
         String ownerId = "";
         String serverId = "";
+        String couponId="";
         String area="";
         for (String data : resDate) {
             temp = data.split("\'");
@@ -160,9 +165,19 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
             if ("serverId".equals(temp[0])) {
                 serverId = temp[1];
-                System.out.println("用户id:" + ownerId);
+                System.out.println("产品id:" + serverId);
+            }
+            if ("couponId".equals(temp[0])) {
+                couponId = temp[1];
+                System.out.println("优惠劵id:" + couponId);
             }
         }
+        //更改优惠卷
+        if(!couponId.equals("")&&couponId!=null){
+            boolean k1=serverCouponMapperExtra.updateCoupons(couponId)>0;
+            System.out.println("更改优惠劵"+k1);
+        }
+
         //更改用户订单
         AppVehicleCleanOrderDTO orderDTO=new AppVehicleCleanOrderDTO();
         orderDTO.setServerOrderId(orgId);
@@ -199,6 +214,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         double money = Double.valueOf(restmap.get("total_fee").toString());
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
         String ownerId = "";
+        String couponId="";
         String area="";//地区
         for (String data : resDate) {
             temp = data.split("\'");
@@ -213,7 +229,17 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if ("ownerId".equals(temp[0])) {
                 ownerId = temp[1];
             }
+            if ("couponId".equals(temp[0])) {
+                couponId = temp[1];
+                System.out.println("优惠劵"+couponId);
+            }
         }
+        //更改优惠卷
+        if(!couponId.equals("")&&couponId!=null){
+            boolean k1=serverCouponMapperExtra.updateCoupons(couponId)>0;
+            System.out.println("更改优惠劵"+k1);
+        }
+
         //更改用户订单
         AppVehicleCleanOrderDTO orderDTO=new AppVehicleCleanOrderDTO();
         orderDTO.setServerOrderId(orgId);

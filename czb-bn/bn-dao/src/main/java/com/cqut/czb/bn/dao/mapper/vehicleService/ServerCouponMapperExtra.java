@@ -13,4 +13,6 @@ public interface ServerCouponMapperExtra {
 
     List<conpons> selectCoupons(@Param("userId") String userId, @Param("couponId") String couponId);
 
+    int updateCoupons(@Param("couponId") String couponId);
+
 }

@@ -123,6 +123,16 @@
         AND destroy_time &lt;= now() AND status !=1
     </update>
 
+
+    <update id="updateCoupons" parameterType="java.lang.String" >
+        update czb_server_coupon
+        set
+        status = 1,
+        update_at = now()
+        where
+        coupons_id=#{couponsId,jdbcType=VARCHAR}
+    </update>
+
     <select id="selectCoupons" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appCarWash.conpons">
         select
         coupon_id as couponId,destroy_time as destroyTime,standard_type as standardType,
