@@ -137,6 +137,7 @@
         select
         coupon_id as couponId,destroy_time as destroyTime,standard_type as standardType,
         standard_value as standardValue,standard_explain as standardExplain ,standard_id as couponStandardId
+        coupon_name as couponName
         from
         czb_server_coupon,czb_coupon_standard
        <where>

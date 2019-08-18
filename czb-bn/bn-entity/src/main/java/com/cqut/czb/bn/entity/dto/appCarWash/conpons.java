@@ -7,6 +7,9 @@ public class conpons {
     //优惠券ID
     private String couponId;
 
+    //优惠劵名称
+    private String couponName;
+
     //截止日期
     private Date destroyTime;
 
@@ -21,6 +24,14 @@ public class conpons {
 
     //说明
     private String standardExplain;
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
+    }
 
     public String getCouponId() {
         return couponId;
