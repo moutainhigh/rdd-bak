@@ -23,10 +23,20 @@ public class ServerStandard {
 
     private Date updateAt;
 
+    private String iconPath;
+
     private String fileId;
 
     public String getServerId() {
         return serverId;
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
     }
 
     public void setServerId(String serverId) {

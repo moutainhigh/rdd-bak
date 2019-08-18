@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.AnnouncementServiceImpl;
 import com.cqut.czb.bn.service.vehicleService.CleanServerStandardService;
 import com.cqut.czb.bn.util.file.FileUploadUtil;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -40,6 +41,8 @@ public class CleanServerStandardServiceImpl implements CleanServerStandardServic
             File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(),address,user.getUserId(),new Date());
             fileMapperExtra.insertSelective(file1);
             serverStandard.setFileId(file1.getFileId());
+            serverStandard.setServerId(StringUtil.createId());
+            serverStandard.setCreateAt(new Date());
             if(serverStandardMapper.insertSelective(serverStandard) > 0) {
                 return new JSONResult("新增洗车服务类型成功",200);
             } else {
@@ -52,7 +55,7 @@ public class CleanServerStandardServiceImpl implements CleanServerStandardServic
 
     @Override
     public JSONResult delete(String id) {
-        fileMapperExtra.deleteByPrimaryKey(serverStandardMapper.selectByPrimaryKey(id).getIconPathId());
+        fileMapperExtra.deleteByPrimaryKey(serverStandardMapper.selectByPrimaryKey(id).getFileId());
         if(serverStandardMapper.deleteByPrimaryKey(id) > 0) {
             return new JSONResult("删除洗车服务类型成功",200);
         } else {
@@ -64,7 +67,7 @@ public class CleanServerStandardServiceImpl implements CleanServerStandardServic
     public JSONResult change(ServerStandard serverStandard, MultipartFile file, User user) {
         try{
             if (file!=null||!file.isEmpty()) {
-                File file1 = fileMapperExtra.selectByPrimaryKey(serverStandard.getIconPathId());
+                File file1 = fileMapperExtra.selectByPrimaryKey(serverStandard.getFileId());
                 file1.setSavePath(FileUploadUtil.putObject(file.getOriginalFilename(),file.getInputStream()));
                 file1.setFileName(file.getOriginalFilename());
                 file1.setUploader(user.getUserId());
