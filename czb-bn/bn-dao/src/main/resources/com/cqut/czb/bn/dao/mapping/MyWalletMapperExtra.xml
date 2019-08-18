@@ -14,6 +14,12 @@
         WHERE info_id = #{infoId}
     </update>
 
+    <update id="increaseOtherMoney" parameterType="java.lang.String">
+        UPDATE czb_user_income_info
+        SET other_income = other_income + #{money}
+        WHERE info_id = #{infoId}
+    </update>
+
     <select id="getPsw" parameterType="java.lang.String" resultType="java.lang.String">
         select user_psw
         FROM czb_user

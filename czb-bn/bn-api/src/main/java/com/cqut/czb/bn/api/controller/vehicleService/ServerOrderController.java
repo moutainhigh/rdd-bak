@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.TuiKuanDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -51,5 +52,10 @@ public class ServerOrderController {
     @GetMapping("/search")
     public JSONResult search(VehicleOrderManageDTO manageDTO, PageDTO pageDTO) {
         return service.search(manageDTO, pageDTO);
+    }
+
+    @PostMapping("/tuiKuan")
+    public JSONResult tuiKuan(@RequestBody TuiKuanDTO tuiKuanDTO) {
+        return service.tuiKuan(tuiKuanDTO);
     }
 }

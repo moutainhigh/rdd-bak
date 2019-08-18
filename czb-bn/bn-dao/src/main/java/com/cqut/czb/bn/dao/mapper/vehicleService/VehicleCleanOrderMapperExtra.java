@@ -27,6 +27,9 @@ public interface VehicleCleanOrderMapperExtra {
     Page<VehicleOrderManageDTO> search(VehicleOrderManageDTO dto);
 
     CleanRider getCleanRider(CleanRider rider);
+
+    int updateRiderStatus(@Param("riderId") String riderId, @Param("status") String status);
+
     int updateMyBackOrder(AppVehicleCleanOrderDTO orderDTO);
 
     AppVehicleCleanOrderDTO selectByUserId(@Param("userId") String userId);
