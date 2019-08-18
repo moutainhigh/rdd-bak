@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
+import com.cqut.czb.bn.entity.dto.IssueCoupons.IssueCouponsDTO;
 import com.cqut.czb.bn.entity.dto.appCarWash.conpons;
 import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import org.apache.ibatis.annotations.Param;
@@ -15,4 +16,5 @@ public interface ServerCouponMapperExtra {
 
     int updateCoupons(@Param("couponId") String couponId);
 
+    List<IssueCouponsDTO> selectAllCouponsInfo();
 }

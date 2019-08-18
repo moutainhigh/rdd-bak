@@ -19,6 +19,8 @@ public class CouponStandard {
 
     private Integer isDelete;
 
+    private String couponName;
+
     public String getStandardId() {
         return standardId;
     }
@@ -81,5 +83,13 @@ public class CouponStandard {
 
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName == null ? null : couponName.trim();
     }
 }

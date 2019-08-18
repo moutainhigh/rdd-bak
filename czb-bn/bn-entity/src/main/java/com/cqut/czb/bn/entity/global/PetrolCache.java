@@ -143,12 +143,14 @@ public class PetrolCache {
         String area = petrolInputDTO.getArea();
 //        String area = "河北省";
         String ownerId = petrolInputDTO.getOwnerId();
+        String remark=petrolInputDTO.getRemark();
         Petrol petrol = new Petrol(); //当前遍历的油卡值
         Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Petrol> entry = it.next();
             petrol = entry.getValue();//当前遍历的油卡值
-            if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice && petrol.getArea().equals(area)) {
+            if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
+                    petrol.getArea().equals(area) &&petrol.getRemark().equals(remark)) {
                 petrol.setOwnerId(ownerId);
                 //当前时间加十分钟
                 long currentTime = System.currentTimeMillis() + 120 * 1000;

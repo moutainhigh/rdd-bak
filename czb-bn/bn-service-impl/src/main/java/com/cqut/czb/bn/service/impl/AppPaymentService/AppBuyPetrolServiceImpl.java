@@ -88,7 +88,10 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         String area=petrolInputDTO.getArea();
         User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
-        if (vipAreaConfig != null && user.getIsVip() == 1&&petrol.getDiscount()!=null){
+        if(user==null){
+            return null;
+        }
+        if (vipAreaConfig != null && user!=null&& user.getIsVip() == 1&&petrol.getDiscount()!=null){
             money=BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(BigDecimal.valueOf(petrol.getDiscount())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
         }else {
             money = petrol.getPetrolPrice();

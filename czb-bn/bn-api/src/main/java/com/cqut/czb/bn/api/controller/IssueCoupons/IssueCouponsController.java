@@ -3,6 +3,7 @@ package com.cqut.czb.bn.api.controller.IssueCoupons;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.IssueCouponsService.IssueCouponsService;
 import com.cqut.czb.bn.util.RedisUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,13 @@ public class IssueCouponsController {
     @Autowired
     RedisUtils redisUtils;
 
+    @Autowired
+    IssueCouponsService issueCouponsService;
+
     @RequestMapping(value = "/getInputInfo",method = RequestMethod.GET)
     public JSONResult getInputInfo(Principal principal){
         User user = (User) redisUtils.get(principal.getName());
-        return null;
+        return new JSONResult(issueCouponsService.selectCoupons());
     }
 
 

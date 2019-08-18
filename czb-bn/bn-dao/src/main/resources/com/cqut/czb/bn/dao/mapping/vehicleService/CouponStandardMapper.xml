@@ -10,10 +10,11 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="coupon_name" property="couponName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     standard_id, standard_type, standard_value, continue_days, standard_explain, create_at, 
-    update_at, is_delete
+    update_at, is_delete, coupon_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -28,10 +29,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     insert into czb_coupon_standard (standard_id, standard_type, standard_value, 
       continue_days, standard_explain, create_at, 
-      update_at, is_delete)
+      update_at, is_delete, coupon_name
+      )
     values (#{standardId,jdbcType=VARCHAR}, #{standardType,jdbcType=VARCHAR}, #{standardValue,jdbcType=DOUBLE}, 
       #{continueDays,jdbcType=INTEGER}, #{standardExplain,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER})
+      #{updateAt,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER}, #{couponName,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard" >
     insert into czb_coupon_standard
@@ -60,6 +63,9 @@
       <if test="isDelete != null" >
         is_delete,
       </if>
+      <if test="couponName != null" >
+        coupon_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="standardId != null" >
@@ -85,6 +91,9 @@
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="couponName != null" >
+        #{couponName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -112,6 +121,9 @@
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
+      <if test="couponName != null" >
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
     </set>
     where standard_id = #{standardId,jdbcType=VARCHAR}
   </update>
@@ -123,7 +135,8 @@
       standard_explain = #{standardExplain,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=INTEGER}
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      coupon_name = #{couponName,jdbcType=VARCHAR}
     where standard_id = #{standardId,jdbcType=VARCHAR}
   </update>
 </mapper>
