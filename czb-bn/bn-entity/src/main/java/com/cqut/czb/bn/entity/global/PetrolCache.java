@@ -149,8 +149,15 @@ public class PetrolCache {
         while (it.hasNext()) {
             Map.Entry<String, Petrol> entry = it.next();
             petrol = entry.getValue();//当前遍历的油卡值
-            if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
-                    petrol.getArea().equals(area) &&petrol.getRemark().equals(remark)) {
+            boolean choice=false;
+            if(remark==null||remark.equals("")){
+                choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
+                        petrol.getArea().equals(area) &&petrol.getRemark()==null;
+            }else {
+                choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
+                        petrol.getArea().equals(area) &&petrol.getRemark().equals(remark);
+            }
+            if (choice) {
                 petrol.setOwnerId(ownerId);
                 //当前时间加十分钟
                 long currentTime = System.currentTimeMillis() + 120 * 1000;
