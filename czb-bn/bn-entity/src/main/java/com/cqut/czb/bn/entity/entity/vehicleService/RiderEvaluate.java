@@ -17,6 +17,16 @@ public class RiderEvaluate {
 
     private String evaluateUserId;
 
+    private String serverOrderId;
+
+    public String getServerOrderId() {
+        return serverOrderId;
+    }
+
+    public void setServerOrderId(String serverOrderId) {
+        this.serverOrderId = serverOrderId;
+    }
+
     public String getEvaluateId() {
         return evaluateId;
     }

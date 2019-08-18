@@ -9,13 +9,14 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="evaluate_user_id" property="evaluateUserId" jdbcType="VARCHAR" />
+    <result column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    evaluate_id, evaluate_rider_id, evaluate_level, evaluate_message, create_at, update_at, 
-    evaluate_user_id
+    evaluate_id, evaluate_rider_id, evaluate_level, evaluate_message, create_at, update_at,
+    evaluate_user_id, server_order_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_rider_evaluate
     where evaluate_id = #{evaluateId,jdbcType=CHAR}
@@ -25,12 +26,12 @@
     where evaluate_id = #{evaluateId,jdbcType=CHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
-    insert into czb_rider_evaluate (evaluate_id, evaluate_rider_id, evaluate_level, 
-      evaluate_message, create_at, update_at, 
-      evaluate_user_id)
-    values (#{evaluateId,jdbcType=CHAR}, #{evaluateRiderId,jdbcType=CHAR}, #{evaluateLevel,jdbcType=REAL}, 
-      #{evaluateMessage,jdbcType=CHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{evaluateUserId,jdbcType=VARCHAR})
+    insert into czb_rider_evaluate (evaluate_id, evaluate_rider_id, evaluate_level,
+      evaluate_message, create_at, update_at,
+      evaluate_user_id, server_order_id)
+    values (#{evaluateId,jdbcType=CHAR}, #{evaluateRiderId,jdbcType=CHAR}, #{evaluateLevel,jdbcType=REAL},
+      #{evaluateMessage,jdbcType=CHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+      #{evaluateUserId,jdbcType=VARCHAR}, #{serverOrderId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
     insert into czb_rider_evaluate
@@ -56,6 +57,9 @@
       <if test="evaluateUserId != null" >
         evaluate_user_id,
       </if>
+      <if test="serverOrderId != null" >
+        server_order_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="evaluateId != null" >
@@ -78,6 +82,9 @@
       </if>
       <if test="evaluateUserId != null" >
         #{evaluateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="serverOrderId != null" >
+        #{serverOrderId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -102,6 +109,9 @@
       <if test="evaluateUserId != null" >
         evaluate_user_id = #{evaluateUserId,jdbcType=VARCHAR},
       </if>
+      <if test="serverOrderId != null" >
+        server_order_id = #{serverOrderId,jdbcType=VARCHAR},
+      </if>
     </set>
     where evaluate_id = #{evaluateId,jdbcType=CHAR}
   </update>
@@ -112,7 +122,8 @@
       evaluate_message = #{evaluateMessage,jdbcType=CHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      evaluate_user_id = #{evaluateUserId,jdbcType=VARCHAR}
+      evaluate_user_id = #{evaluateUserId,jdbcType=VARCHAR},
+      server_order_id = #{serverOrderId,jdbcType=VARCHAR}
     where evaluate_id = #{evaluateId,jdbcType=CHAR}
   </update>
 </mapper>

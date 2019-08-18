@@ -15,8 +15,6 @@ public class CleanServerVehicle {
 
     private Byte vehicleType;
 
-    private String phone;
-
     private String vehicleSeries;
 
     private Date createAt;
@@ -25,20 +23,14 @@ public class CleanServerVehicle {
 
     private String serviceLocation;
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    private String phone;
 
     public String getVehicleId() {
         return vehicleId;
     }
 
     public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId == null ? null : vehicleId.trim();
+        this.vehicleId = vehicleId;
     }
 
     public String getUserId() {
@@ -46,7 +38,7 @@ public class CleanServerVehicle {
     }
 
     public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -54,7 +46,7 @@ public class CleanServerVehicle {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+        this.userName = userName;
     }
 
     public String getLicenseNumber() {
@@ -62,7 +54,7 @@ public class CleanServerVehicle {
     }
 
     public void setLicenseNumber(String licenseNumber) {
-        this.licenseNumber = licenseNumber == null ? null : licenseNumber.trim();
+        this.licenseNumber = licenseNumber;
     }
 
     public String getVehicleColor() {
@@ -70,7 +62,7 @@ public class CleanServerVehicle {
     }
 
     public void setVehicleColor(String vehicleColor) {
-        this.vehicleColor = vehicleColor == null ? null : vehicleColor.trim();
+        this.vehicleColor = vehicleColor;
     }
 
     public Byte getVehicleType() {
@@ -86,7 +78,7 @@ public class CleanServerVehicle {
     }
 
     public void setVehicleSeries(String vehicleSeries) {
-        this.vehicleSeries = vehicleSeries == null ? null : vehicleSeries.trim();
+        this.vehicleSeries = vehicleSeries;
     }
 
     public Date getCreateAt() {
@@ -110,6 +102,14 @@ public class CleanServerVehicle {
     }
 
     public void setServiceLocation(String serviceLocation) {
-        this.serviceLocation = serviceLocation == null ? null : serviceLocation.trim();
+        this.serviceLocation = serviceLocation;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

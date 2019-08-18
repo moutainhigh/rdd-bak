@@ -31,12 +31,14 @@ public class VehicleCleanOrder {
 
     private String serverId;
 
+    private Integer payMethod;
+
     public String getServerOrderId() {
         return serverOrderId;
     }
 
     public void setServerOrderId(String serverOrderId) {
-        this.serverOrderId = serverOrderId == null ? null : serverOrderId.trim();
+        this.serverOrderId = serverOrderId;
     }
 
     public String getUserId() {
@@ -44,7 +46,7 @@ public class VehicleCleanOrder {
     }
 
     public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+        this.userId = userId;
     }
 
     public String getRiderId() {
@@ -52,7 +54,7 @@ public class VehicleCleanOrder {
     }
 
     public void setRiderId(String riderId) {
-        this.riderId = riderId == null ? null : riderId.trim();
+        this.riderId = riderId;
     }
 
     public String getThirdOrder() {
@@ -60,7 +62,7 @@ public class VehicleCleanOrder {
     }
 
     public void setThirdOrder(String thirdOrder) {
-        this.thirdOrder = thirdOrder == null ? null : thirdOrder.trim();
+        this.thirdOrder = thirdOrder;
     }
 
     public Byte getPayStatus() {
@@ -84,7 +86,7 @@ public class VehicleCleanOrder {
     }
 
     public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId == null ? null : vehicleId.trim();
+        this.vehicleId = vehicleId;
     }
 
     public Byte getProcessStatus() {
@@ -108,7 +110,7 @@ public class VehicleCleanOrder {
     }
 
     public void setCancelPersonId(String cancelPersonId) {
-        this.cancelPersonId = cancelPersonId == null ? null : cancelPersonId.trim();
+        this.cancelPersonId = cancelPersonId;
     }
 
     public String getCancelReason() {
@@ -116,7 +118,7 @@ public class VehicleCleanOrder {
     }
 
     public void setCancelReason(String cancelReason) {
-        this.cancelReason = cancelReason == null ? null : cancelReason.trim();
+        this.cancelReason = cancelReason;
     }
 
     public Date getCreateAt() {
@@ -140,6 +142,14 @@ public class VehicleCleanOrder {
     }
 
     public void setServerId(String serverId) {
-        this.serverId = serverId == null ? null : serverId.trim();
+        this.serverId = serverId;
+    }
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
     }
 }
