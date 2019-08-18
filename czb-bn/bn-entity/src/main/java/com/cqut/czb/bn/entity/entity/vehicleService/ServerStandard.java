@@ -1,5 +1,9 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
+import com.cqut.czb.bn.util.string.StringUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class ServerStandard {
@@ -23,7 +27,32 @@ public class ServerStandard {
 
     private Date updateAt;
 
+    private String iconPathId;
+
+    private String iconPath;
+
     private String fileId;
+
+    public ServerStandard() {
+        this.setServerId(StringUtil.createId());
+        this.setCreateAt(new Date());
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+
+    public String getIconPathId() {
+        return iconPathId;
+    }
+
+    public void setIconPathId(String iconPathId) {
+        this.iconPathId = iconPathId;
+    }
 
     public String getServerId() {
         return serverId;

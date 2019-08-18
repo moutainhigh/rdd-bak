@@ -3,7 +3,6 @@ package com.cqut.czb.bn.dao.mapper.vehicleService;
 import com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard;
 import com.github.pagehelper.Page;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Component
 public interface ServerStandardMapper {
