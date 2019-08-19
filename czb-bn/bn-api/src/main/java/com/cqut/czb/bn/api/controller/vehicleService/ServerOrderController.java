@@ -79,7 +79,7 @@ public class ServerOrderController {
     }
 
     @PostMapping("/uploadImage")
-    public JSONResult uploadImage(@Param("serverOrderId") String status, @Param("serverOrderId") String serverOrderId, Principal principal, @RequestParam("file")MultipartFile file) {
+    public JSONResult uploadImage(@Param("status") String status, @Param("serverOrderId") String serverOrderId, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
         return service.uploadImage(status, serverOrderId ,user.getUserId(), file);
     }

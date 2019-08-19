@@ -99,7 +99,6 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         cleanOrder.setServerOrderId(cleanOrderDTO.getServerOrderId());
         Byte status = 2;
         cleanOrder.setProcessStatus(status);
-        cleanOrder.setRiderId("");
         if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
             mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
             return new JSONResult("完成订单成功", 200);
@@ -126,7 +125,6 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         cleanOrderDTO.setServerOrderId(tuiKuanDTO.getServerOrderId());
         Byte status = 4;
         cleanOrderDTO.setProcessStatus(status);
-        cleanOrderDTO.setRiderId("");
         mapper.updateByPrimaryKeySelective(cleanOrderDTO);
         if (tuiKuanDTO.getRiderId() != null && !tuiKuanDTO.getRiderId().equals("")) {
             mapperExtra.updateRiderStatus(tuiKuanDTO.getRiderId(), "0");
