@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
+import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapper;
@@ -7,26 +8,39 @@ import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.BalanceAndInfoIdDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.ImageInfoDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.TuiKuanDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
+import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
 import com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.impl.AnnouncementServiceImpl;
 import com.cqut.czb.bn.service.vehicleService.ServerOrderService;
+import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Transactional
 @Service
 public class ServerOrderServiceImpl implements ServerOrderService {
+    @Autowired
+    FileMapperExtra fileMapperExtra;
+
     @Autowired
     VehicleCleanOrderMapperExtra mapperExtra;
 
@@ -35,6 +49,9 @@ public class ServerOrderServiceImpl implements ServerOrderService {
 
     @Autowired
     private MyWalletMapperExtra myWalletMapper;
+
+    @Autowired
+    AnnouncementServiceImpl announcementServiceImpl;
 
     @Override
     public JSONResult distribute(VehicleOrderManageDTO manageDTO) {
@@ -104,6 +121,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
     @Override
     public JSONResult tuiKuan(TuiKuanDTO tuiKuanDTO) {
 
+        // 完成修改订单状态和骑手状态
         VehicleCleanOrder cleanOrderDTO = new VehicleCleanOrder();
         cleanOrderDTO.setServerOrderId(tuiKuanDTO.getServerOrderId());
         Byte status = 4;
@@ -114,8 +132,10 @@ public class ServerOrderServiceImpl implements ServerOrderService {
             mapperExtra.updateRiderStatus(tuiKuanDTO.getRiderId(), "0");
         }
 
+        // 获取用户余额和收益信息id
         BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(tuiKuanDTO.getUserId());
 
+        // 订单金额 - 扣款金额相减 = 实际退款金额
         BigDecimal bigDecimal = (new BigDecimal(tuiKuanDTO.getAmountMoney().toString())).subtract(new BigDecimal(tuiKuanDTO.getMoney().toString()));
 
         // 设置退款记录基本信息
@@ -147,5 +167,46 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         PageInfo<VehicleOrderManageDTO> orderInfoList = new PageInfo<>(orderList);
 
         return new JSONResult("查询成功", 200, orderInfoList);
+    }
+
+    @Override
+    public JSONResult getUrls(String serverOrderId) {
+        // 获得某个订单的洗车前后urls
+        List<ImageInfoDTO> beforeUrls = mapperExtra.getUrls(serverOrderId, "0");
+        List<ImageInfoDTO> afterUrls = mapperExtra.getUrls(serverOrderId, "1");
+        JSONObject json = new JSONObject();
+        json.put("beforeUrls", beforeUrls);
+        json.put("afterUrls", afterUrls);
+
+        return new JSONResult("查询url成功", 200, json);
+    }
+
+    @Override
+    public JSONResult deleteImage(String fileId, String type) {
+        fileMapperExtra.deleteByPrimaryKey(fileId);
+        if (mapperExtra.deleteImageRelation(fileId) > 0) {
+            return new JSONResult("删除成功", 200);
+        } else {
+            return new JSONResult("删除失败", 500);
+        }
+    }
+
+    @Override
+    public JSONResult uploadImage(String status, String serverOrderId, String userId, MultipartFile file) {
+        String address = "";
+        try{
+            if (file!=null||!file.isEmpty()) {
+                address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            }
+            File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(), address, userId, new Date());
+            fileMapperExtra.insertSelective(file1);
+            if (mapperExtra.insertImageRelation(serverOrderId, file1.getFileId(), StringUtil.createId(), status) > 0) {
+                return new JSONResult("上传图片成功", 200);
+            } else {
+                return new JSONResult("上传图片失败", 500);
+            }
+        } catch(Exception e) {
+            return new JSONResult("图片上传失败",500);
+        }
     }
 }

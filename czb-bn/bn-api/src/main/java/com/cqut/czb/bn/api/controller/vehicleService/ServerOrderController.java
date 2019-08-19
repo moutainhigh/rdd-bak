@@ -1,14 +1,20 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.TuiKuanDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
+import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vehicleService.ServerOrderService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 
 /**
  * auth：tsh
@@ -21,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 public class ServerOrderController {
     @Autowired
     ServerOrderService service;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @PostMapping("/distribute")
     public JSONResult distribute(@RequestBody VehicleOrderManageDTO manageDTO) {
@@ -57,5 +66,21 @@ public class ServerOrderController {
     @PostMapping("/tuiKuan")
     public JSONResult tuiKuan(@RequestBody TuiKuanDTO tuiKuanDTO) {
         return service.tuiKuan(tuiKuanDTO);
+    }
+
+    @GetMapping("/getUrls")
+    public JSONResult getUrls(@Param("serverOrderId") String serverOrderId) {
+        return service.getUrls(serverOrderId);
+    }
+
+    @PostMapping("/deleteImage")
+    public JSONResult deleteImage(@Param("fileId") String fileId, @Param("type") String type) {
+        return service.deleteImage(fileId, type);
+    }
+
+    @PostMapping("/uploadImage")
+    public JSONResult uploadImage(@Param("serverOrderId") String status, @Param("serverOrderId") String serverOrderId, Principal principal, @RequestParam("file")MultipartFile file) {
+        User user = (User)redisUtils.get(principal.getName());
+        return service.uploadImage(status, serverOrderId ,user.getUserId(), file);
     }
 }

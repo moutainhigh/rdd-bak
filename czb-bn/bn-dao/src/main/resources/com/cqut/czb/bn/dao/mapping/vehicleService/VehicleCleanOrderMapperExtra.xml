@@ -354,4 +354,40 @@
         </set>
         where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
     </update>
+    <!--查找洗车前或洗车后id-->
+    <select id="getUrls" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.vehicleService.ImageInfoDTO">
+        SELECT
+            file.save_path path,
+            file.file_id fileId
+        FROM
+            czb_file file
+        LEFT JOIN czb_compared_pic pic ON pic.server_order_id = #{serverOrderId}
+        AND pic. STATUS = #{status}
+        WHERE
+            file.file_id = pic.file_id
+    </select>
+
+    <delete id="deleteImageRelation" parameterType="java.lang.String">
+        delete from czb_compared_pic
+        where file_id = #{fileId}
+    </delete>
+
+    <insert id="insertImageRelation" parameterType="java.lang.String">
+        insert into czb_compared_pic
+        (
+        compared_pic_id,
+        server_order_id,
+        file_id,
+        status,
+        create_at
+        )
+        VALUES
+        (
+        #{relationId},
+        #{serverOrderId},
+        #{fileId},
+        #{status},
+        CURRENT_TIMESTAMP
+        )
+    </insert>
 </mapper>
