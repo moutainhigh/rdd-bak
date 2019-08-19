@@ -10,6 +10,7 @@
     <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
     <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
@@ -19,7 +20,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area, owner_id, petrol_type, create_at, update_at, commission
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission,remark
   </sql>
   <select id="getPetrolList" resultMap="BaseResultMap" resultType="com.cqut.czb.bn.entity.entity.Petrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
     select <include refid="Base_Column_List"/> from czb_petrol
@@ -54,7 +55,7 @@
   <insert id="insertPetrolList" parameterType="java.util.List">
     insert into czb_petrol (petrol_id, petrol_num, petrol_psw,
     petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area,
+    state, discount, area,remark,
     petrol_type, create_at) values
     <foreach collection="list" item="item" index="index" separator=",">
       (
@@ -67,6 +68,7 @@
       #{item.state,jdbcType = INTEGER},
       #{item.discount,jdbcType = DOUBLE},
       #{item.area,jdbcType = VARCHAR},
+      #{item.remark,jdbcType = VARCHAR},
       #{item.petrolType,jdbcType = INTEGER},
       NOW()
       )
@@ -175,7 +177,8 @@
     FROM czb_petrol
     WHERE czb_petrol.state=2 AND
     czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR} AND
-    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    petrol_kind=#{petrolKind,jdbcType=INTEGER} and
+    remark=#{remark,jdbcType=VARCHAR}
     order by
     create_at desc
     limit 1

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
 public class CleanRider {
     private String riderId;
 
@@ -19,6 +18,9 @@ public class CleanRider {
     private Date createAt;
 
     private Date updateAt;
+
+    public CleanRider() {
+    }
 
     public String getRiderId() {
         return riderId;

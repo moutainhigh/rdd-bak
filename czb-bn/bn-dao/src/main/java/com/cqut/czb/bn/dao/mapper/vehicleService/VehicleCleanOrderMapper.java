@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
 import com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface VehicleCleanOrderMapper {
     int deleteByPrimaryKey(String serverOrderId);
 

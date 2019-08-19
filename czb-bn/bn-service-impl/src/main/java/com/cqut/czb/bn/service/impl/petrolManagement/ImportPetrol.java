@@ -117,6 +117,7 @@ public class ImportPetrol {
         petrol.setArea(getStringValue(xssfRow.getCell(5)));
         petrol.setPetrolType(Integer.parseInt(getStringValue(xssfRow.getCell(6))));
         petrol.setDiscount(Double.parseDouble(getStringValue(xssfRow.getCell(7))));
+        petrol.setRemark(getStringValue(xssfRow.getCell(8)));
         petrol.setState(0);
         return petrol;
     }
@@ -182,6 +183,7 @@ public class ImportPetrol {
         petrol.setArea(getStringValue(hssfRow.getCell(5)));
         petrol.setPetrolType(Integer.parseInt(getStringValue(hssfRow.getCell(6))));
         petrol.setDiscount(Double.parseDouble(getStringValue(hssfRow.getCell(7))));
+        petrol.setRemark(getStringValue(hssfRow.getCell(8)));
         petrol.setState(0);
         return petrol;
     }
