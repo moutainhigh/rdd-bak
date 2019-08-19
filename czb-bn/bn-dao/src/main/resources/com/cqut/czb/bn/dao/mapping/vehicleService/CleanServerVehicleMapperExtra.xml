@@ -14,7 +14,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vehicle_id, user_id, user_name, license_number, vehicle_color, vehicle_type, vehicle_series, phone
+    vehicle_id, user_id, user_name, license_number, vehicle_color, vehicle_type, vehicle_series, phone,
     create_at, update_at
   </sql>
 

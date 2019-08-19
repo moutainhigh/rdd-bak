@@ -13,6 +13,8 @@ public class ServerCouponDTO {
 
     private Integer status;
 
+    private String couponName;
+
     private Double standardValue;
 
     private String standardExplain;
@@ -59,6 +61,14 @@ public class ServerCouponDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 
     public Double getStandardValue() {

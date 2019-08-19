@@ -85,7 +85,7 @@ INNER JOIN (
         and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
       </if>
     </where>
-) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.transaction_time desc
+) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.create_at desc
   </select>
 
     <!--个人中心油卡信息查看-->

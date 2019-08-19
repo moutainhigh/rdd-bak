@@ -27,6 +27,8 @@ dependencies {
     compile project(":czb-bn:bn-service")
     compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.3.49.ALL'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.12.RELEASE'
+    compile group: 'com.github.fernandospr', name: 'javapns-jdk16', version: '2.2.1'
+
 }
 
 tasks.withType(JavaCompile){

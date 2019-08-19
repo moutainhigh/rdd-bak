@@ -309,20 +309,23 @@
   </select>
 
   <update id="updatePartnerState">
-    <foreach collection="userList" index="index" item="item" separator=";" open="" close="" >
     update czb_user
     <set>
       <if test="first != null">
         first_level_partner = #{first,jdbcType=VARCHAR},
       </if>
       <if test="second != null">
-        second_level_partner = #{second,jdbcType=VARCHAR},
+        second_level_partner = #{second,jdbcType=VARCHAR}
       </if>
     </set>
     <where>
-      user_id = #{item.userId, jdbcType=VARCHAR}
+      <if test="userList!=null and userList.get(0)!=null">
+        user_id in
+        <foreach collection="userList" index="index" item="item" separator="," open="(" close=")" >
+          #{item.userId, jdbcType=VARCHAR}
+        </foreach>
+      </if>
     </where>
-    </foreach>
   </update>
 
   <update id="UpdateToVip" parameterType="java.lang.String">

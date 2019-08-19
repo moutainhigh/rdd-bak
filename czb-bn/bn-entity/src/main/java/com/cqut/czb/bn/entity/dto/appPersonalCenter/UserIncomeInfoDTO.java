@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.appPersonalCenter;
 
+import java.util.Date;
+
 /**
  * 创建人：陈德强
  * 创建时间：21019/4/22
@@ -26,6 +28,10 @@ public class UserIncomeInfoDTO {
     private Double blance;//余额
 
     private Double withdrawed;
+
+    private Double refundMoney; //退还金额
+
+    private Date updateAt;
 
     public Double getWithdrawed() {
         return withdrawed;
@@ -105,5 +111,21 @@ public class UserIncomeInfoDTO {
 
     public void setOtherIncome(Double otherIncome) {
         this.otherIncome = otherIncome;
+    }
+
+    public Double getRefundMoney() {
+        return refundMoney;
+    }
+
+    public void setRefundMoney(Double refundMoney) {
+        this.refundMoney = refundMoney;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

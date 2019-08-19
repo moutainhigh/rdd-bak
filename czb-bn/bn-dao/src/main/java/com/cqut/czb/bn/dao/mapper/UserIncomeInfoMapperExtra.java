@@ -20,5 +20,7 @@ public interface UserIncomeInfoMapperExtra {
 
     UserIncomeInfo selectOneUserIncomeInfo(String userId);
 
+    int updateOtherIncome(UserIncomeInfoDTO userIncomeInfoDTO);
+
 
 }

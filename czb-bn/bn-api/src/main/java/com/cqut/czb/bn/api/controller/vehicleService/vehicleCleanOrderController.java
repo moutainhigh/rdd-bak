@@ -7,10 +7,7 @@ import com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vehicleService.VehicleCleanOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -40,11 +37,21 @@ public class vehicleCleanOrderController {
      return new JSONResult(vehicleCleanOrderService.getOrderList(cleanOrderDTO,user));
     }
 
+    /**
+     * 获取订单的图片
+     * @param cleanOrderDTO
+     * @return
+     */
     @GetMapping("/getOrderPic")
     public JSONResult getOrderPic(VehicleCleanOrderDTO cleanOrderDTO){
         return new JSONResult(vehicleCleanOrderService.getOrderPic(cleanOrderDTO));
     }
 
+    /**
+     * 获取正在服务的订单
+     * @param principal
+     * @return
+     */
     @GetMapping("/getServicingOrder")
     public JSONResult getServicingOrder(Principal principal) {
         if (principal ==null || principal.getName()==null ){
@@ -61,7 +68,7 @@ public class vehicleCleanOrderController {
      * @return
      */
     @PostMapping("/cancelOrder")
-    public JSONResult cancelOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO, Principal principal){
+    public JSONResult cancelOrder(@RequestBody VehicleCleanOrderDTO vehicleCleanOrderDTO, Principal principal){
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
@@ -75,7 +82,7 @@ public class vehicleCleanOrderController {
      * @return
      */
     @PostMapping("/completeOrder")
-    public JSONResult completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO){
+    public JSONResult completeOrder(@RequestBody VehicleCleanOrderDTO vehicleCleanOrderDTO){
         return new JSONResult(vehicleCleanOrderService.completeOrder(vehicleCleanOrderDTO));
     }
 
@@ -86,7 +93,7 @@ public class vehicleCleanOrderController {
      * @return
      */
     @PostMapping("/evaluateOrder")
-    public JSONResult evaluateOrder(RiderEvaluate riderEvaluate,Principal principal){
+    public JSONResult evaluateOrder(@RequestBody RiderEvaluate riderEvaluate,Principal principal){
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
