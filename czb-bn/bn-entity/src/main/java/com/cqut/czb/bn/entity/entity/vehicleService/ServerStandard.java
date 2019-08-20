@@ -15,7 +15,7 @@ public class ServerStandard {
 
     private String serverExplain;
 
-    private Float serverDiscount;
+    private Double serverDiscount;
 
     private Byte serverVehicleType;
 
@@ -83,11 +83,11 @@ public class ServerStandard {
         this.serverExplain = serverExplain == null ? null : serverExplain.trim();
     }
 
-    public Float getServerDiscount() {
+    public Double getServerDiscount() {
         return serverDiscount;
     }
 
-    public void setServerDiscount(Float serverDiscount) {
+    public void setServerDiscount(Double serverDiscount) {
         this.serverDiscount = serverDiscount;
     }
 

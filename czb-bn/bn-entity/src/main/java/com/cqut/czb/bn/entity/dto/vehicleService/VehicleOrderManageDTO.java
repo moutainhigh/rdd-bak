@@ -32,6 +32,9 @@ public class VehicleOrderManageDTO {
     // 洗车服务id
     private String serverId;
 
+    // 车主电话
+    private String phone;
+
     // 客户姓氏
     private String firstName;
 
@@ -57,6 +60,14 @@ public class VehicleOrderManageDTO {
     private String serverName;
 
     VehicleOrderManageDTO() {}
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getServerOrderId() {
         return serverOrderId;
