@@ -1,16 +1,12 @@
-package com.cqut.czb.bn.service.vehicleService;
+package com.cqut.czb.bn.dao.mapper.vehicleService;
 
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author: lyk
- * @date: 8/12/2019
- */
-@Component
-public interface RiderService {
+@Repository
+public interface CleanRiderMapperExtra {
     boolean deleteByPrimaryKey(String riderId);
 
     List<CleanRider> selectAllRiders();
