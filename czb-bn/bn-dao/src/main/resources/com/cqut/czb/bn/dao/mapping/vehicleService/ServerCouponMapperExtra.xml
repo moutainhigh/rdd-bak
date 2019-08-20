@@ -7,20 +7,25 @@
         <result column="coupon_standard" property="couponStandard" jdbcType="VARCHAR" />
         <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
         <result column="standard_explain" property="standardExplain" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="standard_type" property="standardType" jdbcType="VARCHAR" />
         <result column="standard_value" property="standardValue" jdbcType="DOUBLE" />
         <result column="status" property="status" jdbcType="TINYINT" />
         <result column="coupon_name" property="couponName" jdbcType="TINYINT" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
-    <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
         coupon_id, destroy_time,standard_value,standard_explain,coupon_standard, owner_id, status,coupon_name, a.create_at, a.update_at
+    <sql id="Base_Column_List" >
+        coupon_id, destroy_time,standard_value,standard_explain,coupon_standard,standard_type,owner_id, status,coupon_name,user_account, a.create_at, a.update_at
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" >
         select
         <include refid="Base_Column_List" />
         FROM czb_server_coupon a
         LEFT JOIN czb_coupon_standard b ON a.coupon_standard = b.standard_id
+        LEFT JOIN czb_user c ON  a.owner_id = c.user_id
         <where>
             <if test="ownerId!=null and ownerId!=''">
                 owner_id = #{ownerId,jdbcType=VARCHAR}
@@ -28,13 +33,22 @@
             <if test="status!=null">
                AND status = #{status,jdbcType=TINYINT}
             </if>
+            <if test="standardType!=null and standardType!=''">
+                AND coupon_standard = #{standardType,jdbcType=VARCHAR}
+            </if>
+            <if test="userAccount!=null and userAccount!=''">
+                AND user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%' )
+            </if>
+            <if test="destroyTime!=null">
+                AND destroy_time &lt;= #{destroyTime,jdbcType=TIMESTAMP}
+            </if>
         </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_server_coupon
         where coupon_id = #{couponId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO" >
         insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard,
         owner_id, status, create_at,
         update_at)
@@ -42,54 +56,20 @@
         #{ownerId,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP},
         #{updateAt,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
-        insert into czb_server_coupon
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="couponId != null" >
-                coupon_id,
-            </if>
-            <if test="destroyTime != null" >
-                destroy_time,
-            </if>
-            <if test="couponStandard != null" >
-                coupon_standard,
-            </if>
-            <if test="ownerId != null" >
-                owner_id,
-            </if>
-            <if test="status != null" >
-                status,
-            </if>
-            <if test="createAt != null" >
-                create_at,
-            </if>
-            <if test="updateAt != null" >
-                update_at,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="couponId != null" >
-                #{couponId,jdbcType=VARCHAR},
-            </if>
-            <if test="destroyTime != null" >
-                #{destroyTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="couponStandard != null" >
-                #{couponStandard,jdbcType=VARCHAR},
-            </if>
-            <if test="ownerId != null" >
-                #{ownerId,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null" >
-                #{status,jdbcType=TINYINT},
-            </if>
-            <if test="createAt != null" >
-                #{createAt,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateAt != null" >
-                #{updateAt,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
+
+    <insert id="insertByList" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO" >
+        insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard,
+        owner_id, status, create_at
+        )
+        values <foreach collection="list" item="item" index="index" separator=",">
+        (
+        #{item.couponId,jdbcType=VARCHAR},
+        #{item.destroyTime,jdbcType=TIMESTAMP},
+        #{item.couponStandard,jdbcType=VARCHAR},
+        #{item.ownerId,jdbcType=VARCHAR},
+        #{item.status,jdbcType=TINYINT},
+          now()
+        ) </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon" >
         update czb_server_coupon
@@ -120,8 +100,11 @@
         set
         status = 2,
         update_at = #{updateAt,jdbcType=TIMESTAMP}
-        where owner_id = #{ownerId,jdbcType=VARCHAR}
-        AND destroy_time &lt;= now() AND status !=1
+        where
+        destroy_time &lt;= now() AND status =0
+        <if test="ownerId!=null and ownerId!=''">
+          AND  owner_id = #{ownerId,jdbcType=VARCHAR}
+        </if>
     </update>
 
 
@@ -134,25 +117,38 @@
         coupon_id=#{couponId,jdbcType=VARCHAR}
     </update>
 
-    <select id="selectCoupons" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appCarWash.conpons">
+    <select id="selectCoupons" parameterType="java.lang.String"
+            resultType="com.cqut.czb.bn.entity.dto.appCarWash.conpons">
         select
         coupon_id as couponId,destroy_time as destroyTime,standard_type as standardType,
         standard_value as standardValue,standard_explain as standardExplain ,standard_id as couponStandardId,
         coupon_name as couponName
         from
         czb_server_coupon,czb_coupon_standard
-       <where>
-           owner_id = #{userId,jdbcType=VARCHAR} and
-           standard_id=coupon_standard and
-           is_delete=0
-           AND
-           <![CDATA[destroy_time >= now()]]>
-           and
-           status=0
-           <if test="couponId !=null and couponId !=''">
-               and coupon_id=#{couponId,jdbcType=VARCHAR}
-           </if>
-       </where>
+        <where>
+            owner_id = #{userId,jdbcType=VARCHAR} and
+            standard_id=coupon_standard and
+            is_delete=0
+            AND
+            <![CDATA[destroy_time >= now()]]>
+            and
+            status=0
+            <if test="couponId !=null and couponId !=''">
+                and coupon_id=#{couponId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllCouponsInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.IssueCoupons.IssueCouponsDTO">
+       select
+        standard_id AS standardId,standard_type AS standardType,standard_value AS standardValue,
+        continue_days as continueDays,standard_explain AS standardExplain,cs.create_at AS createAt,
+        cs.update_at AS updateAt,coupon_name AS couponName,
+        coupon_id AS couponId,destroy_time as destroyTime,owner_id as ownerId,status
+        from
+        czb_server_coupon as sc,czb_coupon_standard as cs
+        WHERE
+        sc.coupon_standard=cs.standard_id
     </select>
 
 </mapper>
