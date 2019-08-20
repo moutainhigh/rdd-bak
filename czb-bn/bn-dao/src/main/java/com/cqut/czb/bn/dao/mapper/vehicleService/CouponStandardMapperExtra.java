@@ -14,5 +14,5 @@ public interface CouponStandardMapperExtra {
 
     int updateByDelete(CouponStandard couponStandard);
 
-    List<String> selectCouponStandardType();
+    List<CouponStandard> selectCouponStandardType();
 }

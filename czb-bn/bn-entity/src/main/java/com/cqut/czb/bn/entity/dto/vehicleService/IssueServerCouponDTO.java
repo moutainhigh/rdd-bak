@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class ServerCouponDTO {
+public class IssueServerCouponDTO {
     private String couponId;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date destroyTime;
@@ -16,6 +16,10 @@ public class ServerCouponDTO {
     private String standardType;
 
     private Integer status;
+
+    private Integer type;
+
+    private Integer partner;
 
     private String couponName;
 
@@ -77,6 +81,14 @@ public class ServerCouponDTO {
         this.status = status;
     }
 
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Integer partner) {
+        this.partner = partner;
+    }
+
     public String getCouponName() {
         return couponName;
     }
@@ -123,5 +135,13 @@ public class ServerCouponDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

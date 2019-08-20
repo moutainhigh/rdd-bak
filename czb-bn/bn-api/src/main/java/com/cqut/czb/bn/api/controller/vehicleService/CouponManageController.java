@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.vehicleService;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
@@ -30,12 +31,22 @@ public class CouponManageController {
      * @return
      */
     @GetMapping("/getCouponList")
-    public JSONResult getCouponList(ServerCouponDTO serverCouponDTO, Principal principal){
+    public JSONResult getCouponListApp(ServerCouponDTO serverCouponDTO, Principal principal){
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(couponManageService.getCouponList(serverCouponDTO,user));
+    }
+
+    /**
+     * /后台优惠券列表获取
+     * @param serverCouponDTO
+     * @return
+     */
+    @GetMapping("/getCouponListPc")
+    public JSONResult getCouponListPc(ServerCouponDTO serverCouponDTO,PageDTO pageDTO){
+        return new JSONResult(couponManageService.getCouponByUser(serverCouponDTO,pageDTO));
     }
 
     /**
@@ -60,7 +71,7 @@ public class CouponManageController {
     }
 
     /**
-     * 后台修改优惠券
+     * 后台修改优惠券标准
      * @param couponStandard
      * @return
      */
@@ -79,8 +90,22 @@ public class CouponManageController {
         return new JSONResult(couponManageService.deleteCouponStandard(couponStandard));
     }
 
+    /**
+     * 得到优惠券标准的所有类型
+     * @return
+     */
     @GetMapping("/getCouponType")
     public JSONResult getCouponType(){
         return new JSONResult(couponManageService.getCouponType());
+    }
+
+    /**
+     * 发放优惠券
+     * @param issueServerCouponDTO
+     * @return
+     */
+    @PostMapping("issueCoupon")
+    public JSONResult issueCoupon(IssueServerCouponDTO issueServerCouponDTO){
+        return new JSONResult(couponManageService.issueCoupon(issueServerCouponDTO));
     }
 }

@@ -118,13 +118,13 @@
         update_at = #{updateAt,jdbcType=TIMESTAMP}
         where standard_id = #{standardId,jdbcType=VARCHAR}
     </update>
-    <select id="selectCouponStandardType" resultType="java.lang.String">
+    <select id="selectCouponStandardType" resultType="com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard">
         SELECT
-            standard_type
+           standard_id AS standardId,standard_type AS standardType
         FROM
             czb_coupon_standard
         WHERE is_delete != 1
         GROUP BY
-            standard_type
+            standard_id
     </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.vehicleService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
@@ -22,5 +23,9 @@ public interface CouponManageService {
 
     Boolean deleteCouponStandard(CouponStandard couponStandard);
 
-    List<String> getCouponType();
+    List<CouponStandard> getCouponType();
+
+    PageInfo<ServerCouponDTO> getCouponByUser(ServerCouponDTO serverCouponDTO,PageDTO pageDTO);
+
+    Boolean issueCoupon(IssueServerCouponDTO issueServerCouponDTO);
 }
