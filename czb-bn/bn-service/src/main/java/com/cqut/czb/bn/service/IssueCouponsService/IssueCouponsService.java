@@ -9,5 +9,5 @@ public interface IssueCouponsService {
     /**
      * 获取所有优惠劵
      */
-    List<IssueCouponsDTO> selectCoupons();
+    List<IssueCouponsDTO> selectCoupons(IssueCouponsDTO issueCouponsDTO);
 }

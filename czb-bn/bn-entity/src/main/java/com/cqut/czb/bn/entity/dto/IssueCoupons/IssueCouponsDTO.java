@@ -27,8 +27,6 @@ public class IssueCouponsDTO {
 
     private Date destroyTime;
 
-    private String couponStandard;
-
     private String ownerId;
 
     private int status;
@@ -111,14 +109,6 @@ public class IssueCouponsDTO {
 
     public void setDestroyTime(Date destroyTime) {
         this.destroyTime = destroyTime;
-    }
-
-    public String getCouponStandard() {
-        return couponStandard;
-    }
-
-    public void setCouponStandard(String couponStandard) {
-        this.couponStandard = couponStandard;
     }
 
     public String getOwnerId() {

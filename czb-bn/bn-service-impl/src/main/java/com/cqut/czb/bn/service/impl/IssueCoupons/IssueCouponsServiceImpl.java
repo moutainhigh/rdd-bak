@@ -15,8 +15,8 @@ public class IssueCouponsServiceImpl implements IssueCouponsService {
     ServerCouponMapperExtra serverCouponMapperExtra;
 
     @Override
-    public List<IssueCouponsDTO> selectCoupons() {
-        return null;
+    public List<IssueCouponsDTO> selectCoupons(IssueCouponsDTO issueCouponsDTO) {
+        return serverCouponMapperExtra.selectAllCouponsInfo(issueCouponsDTO);
     }
 
 

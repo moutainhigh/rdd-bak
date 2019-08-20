@@ -16,5 +16,5 @@ public interface ServerCouponMapperExtra {
 
     int updateCoupons(@Param("couponId") String couponId);
 
-    List<IssueCouponsDTO> selectAllCouponsInfo();
+    List<IssueCouponsDTO> selectAllCouponsInfo(IssueCouponsDTO issueCouponsDTO);
 }
