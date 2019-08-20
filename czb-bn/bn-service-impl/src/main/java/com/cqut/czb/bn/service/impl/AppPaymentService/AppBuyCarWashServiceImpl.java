@@ -107,6 +107,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //查出是否有信息
         CleanServerVehicle v=cleanServerVehicleMapperExtra.selectCleanServerVehicle(user.getUserId());
         if(v!=null){
+            vehicleId=v.getVehicleId();
             AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
             cleanSV.setUserId(user.getUserId());
             cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
