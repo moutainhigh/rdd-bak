@@ -179,11 +179,11 @@ public class WeChatParameterConfig {
         return parameters;
     }
 
-    public static String getAttachBuyCarWash(String couponId,String orgId,String userId,String serviceId,double money ){
+    public static String getAttachBuyCarWash(String couponId,String orgId,String userId,String serverId,double money ){
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
         pbp.put("ownerId", userId);
-        pbp.put("serviceId",serviceId);
+        pbp.put("serverId",serverId);
         pbp.put("money",money);
         pbp.put("couponId",couponId);
         return StringUtil.transMapToStringOther(pbp);

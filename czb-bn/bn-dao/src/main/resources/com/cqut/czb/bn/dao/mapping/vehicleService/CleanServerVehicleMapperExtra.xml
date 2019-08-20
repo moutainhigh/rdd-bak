@@ -35,7 +35,7 @@
                 user_name = #{userName,jdbcType=VARCHAR},
             </if>
             <if test="phone != null" >
-                user_name = #{phone,jdbcType=VARCHAR},
+                phone = #{phone,jdbcType=VARCHAR},
             </if>
             <if test="licenseNumber != null" >
                 license_number = #{licenseNumber,jdbcType=VARCHAR},
@@ -59,7 +59,7 @@
                 service_location = #{serviceLocation,jdbcType=VARCHAR},
             </if>
         </set>
-        where #{userId,jdbcType=VARCHAR}
+        where user_id=#{userId,jdbcType=VARCHAR}
     </update>
 
   <select id="selectCleanServerVehicle" resultMap="BaseResultMap" parameterType="java.lang.String" >

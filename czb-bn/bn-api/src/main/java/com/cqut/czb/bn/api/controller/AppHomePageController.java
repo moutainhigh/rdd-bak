@@ -74,11 +74,11 @@ public class AppHomePageController {
     @RequestMapping(value = "/selectPetrolZone",method = RequestMethod.GET)
     public JSONResult selectPetrol(Principal principal, @RequestParam(name="area") String area) {
 
-        User user = (User) redisUtils.get(principal.getName());
+//        User user = (User) redisUtils.get(principal.getName());
 
-        if (user.getUserAccount().equals("15870596710") || user.getUserAccount().equals("15520024205")) {
-            area = "重庆市";
-        }
+//        if (user.getUserAccount().equals("15870596710") || user.getUserAccount().equals("15520024205")) {
+//            area = "重庆市";
+//        }；
         if(area==null)
             return new JSONResult("无法获取当前位置", ResponseCodeConstants.FAILURE);
         return new JSONResult(appHomePageService.selectPetrolZone(area));

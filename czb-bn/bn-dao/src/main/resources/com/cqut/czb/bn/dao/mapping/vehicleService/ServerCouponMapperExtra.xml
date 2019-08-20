@@ -131,13 +131,13 @@
         status = 1,
         update_at = now()
         where
-        coupons_id=#{couponsId,jdbcType=VARCHAR}
+        coupon_id=#{couponId,jdbcType=VARCHAR}
     </update>
 
     <select id="selectCoupons" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appCarWash.conpons">
         select
         coupon_id as couponId,destroy_time as destroyTime,standard_type as standardType,
-        standard_value as standardValue,standard_explain as standardExplain ,standard_id as couponStandardId
+        standard_value as standardValue,standard_explain as standardExplain ,standard_id as couponStandardId,
         coupon_name as couponName
         from
         czb_server_coupon,czb_coupon_standard
@@ -154,13 +154,5 @@
            </if>
        </where>
     </select>
-
-    <!--<select id="selectAllCouponsInfo" resultType="com.cqut.czb.bn.entity.dto.IssueCoupons.IssueCouponsDTO">-->
-        <!--select-->
-        <!--standard_id, standard_type, standard_value, continue_days, standard_explain, create_at,-->
-    <!--update_at, is_delete, coupon_name, coupon_id, destroy_time,standard_value,standard_explain,-->
-    <!--coupon_standard, owner_id, status-->
-        <!--from-->
-    <!--</select>-->
 
 </mapper>

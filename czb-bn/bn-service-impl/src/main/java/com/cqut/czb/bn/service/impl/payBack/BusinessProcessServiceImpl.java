@@ -157,7 +157,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
             if ("money".equals(temp[0])) {
                 money = Double.valueOf(temp[1]);
-                System.out.println("充值金额:money" + money);
+                System.out.println("支付金额:money" + money);
             }
             if ("ownerId".equals(temp[0])) {
                 ownerId = temp[1];
@@ -184,6 +184,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         orderDTO.setThirdOrder(thirdOrderId);
         orderDTO.setPayStatus((byte)1);
         orderDTO.setUpdateAt(new Date());
+        orderDTO.setServerId(serverId);
+        orderDTO.setActualPrice(money);
         boolean ve=vehicleCleanOrderMapperExtra.updateMyBackOrder(orderDTO)>0;
         System.out.println("更改洗车订单完毕"+ve);
 

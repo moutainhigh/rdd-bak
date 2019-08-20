@@ -11,6 +11,8 @@ public class ServerStandard {
 
     private Double serverPrice;
 
+    private Double currentPrice;
+
     private Double vipPrice;
 
     private String serverExplain;
@@ -26,6 +28,14 @@ public class ServerStandard {
     private String iconPath;
 
     private String fileId;
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
 
     public String getServerId() {
         return serverId;

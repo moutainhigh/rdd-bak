@@ -17,9 +17,6 @@ public class CleanServerVehicleDTO {
     //车辆颜色
     private String vehicleColor;
 
-    //车型
-    private int vehicleType;
-
     //车系
     private String vehicleSeries;
 
@@ -29,26 +26,11 @@ public class CleanServerVehicleDTO {
     //电话号码
     private String phone;
 
-
     //优惠劵id
     private String couponId;
 
-
     //服务商品号
     private String serverId;
-
-    //服务名
-    private String serverName;
-
-    //服务类型
-    private String serverType;
-
-    //服务定价
-    private Double serverPrice;
-
-    //车辆类型
-    private int serverVehicleType;
-
 
     public String getCouponId() {
         return couponId;
@@ -114,14 +96,6 @@ public class CleanServerVehicleDTO {
         this.vehicleColor = vehicleColor;
     }
 
-    public int getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(int vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
     public String getVehicleSeries() {
         return vehicleSeries;
     }
@@ -138,35 +112,4 @@ public class CleanServerVehicleDTO {
         this.serverId = serverId;
     }
 
-    public String getServerName() {
-        return serverName;
-    }
-
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
-    }
-
-    public String getServerType() {
-        return serverType;
-    }
-
-    public void setServerType(String serverType) {
-        this.serverType = serverType;
-    }
-
-    public Double getServerPrice() {
-        return serverPrice;
-    }
-
-    public void setServerPrice(Double serverPrice) {
-        this.serverPrice = serverPrice;
-    }
-
-    public int getServerVehicleType() {
-        return serverVehicleType;
-    }
-
-    public void setServerVehicleType(int serverVehicleType) {
-        this.serverVehicleType = serverVehicleType;
-    }
 }

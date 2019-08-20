@@ -20,6 +20,16 @@ public class ServiceCommodityDTO {
 
     private String filePath;
 
+    private Double currentPrice;
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     public String getFilePath() {
         return filePath;
     }

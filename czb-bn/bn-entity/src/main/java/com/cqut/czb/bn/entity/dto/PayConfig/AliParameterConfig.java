@@ -109,11 +109,11 @@ public class AliParameterConfig {
     }
 
     //支付宝支付——订单格外数据（购买洗车服务）
-    public static String getPassBackParamsBuyCarWash(String couponId,String thirdOrder,double actualPrice,String serviceId ,String ownerId) {
+    public static String getPassBackParamsBuyCarWash(String couponId,String thirdOrder,double actualPrice,String serverId ,String ownerId) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", thirdOrder);
         pbp.put("money", actualPrice);
-        pbp.put("serviceId", serviceId);
+        pbp.put("serverId", serverId);
         pbp.put("ownerId", ownerId);
         pbp.put("couponId",couponId);
         return StringUtil.transMapToStringOther(pbp);

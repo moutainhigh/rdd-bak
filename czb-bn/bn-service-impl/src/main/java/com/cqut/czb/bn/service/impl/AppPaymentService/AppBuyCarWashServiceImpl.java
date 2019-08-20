@@ -12,11 +12,13 @@ import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppCleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.CleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
+import com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO;
 import com.cqut.czb.bn.entity.dto.appCarWash.conpons;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle;
 import com.cqut.czb.bn.service.AppBuyCarWashService;
+import com.cqut.czb.bn.service.AppCarWashService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,9 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
     @Autowired
     ServerCouponMapperExtra serverCouponMapperExtra;
 
+    @Autowired
+    AppCarWashService appCarWashService;
+
     @Override
     public String AliBuyCarWash(User user, CleanServerVehicleDTO cleanServerVehicleDTO) {
         //判空
@@ -54,8 +59,15 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
             }
         }
 
+        //查出产品的信息
+        ServiceCommodityDTO commodity= appCarWashService.selectOneService(cleanServerVehicleDTO.getServerId());
 
-        //生成起吊参数
+        if(commodity==null){
+            System.out.println("没有此类商品");
+            return null;
+        }
+
+     //生成起吊参数
         String orderString = null;//用于保存起调参数,
         AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("4");//"4"为购买洗车服务
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
@@ -63,7 +75,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
-        Double actualPrice=BigDecimal.valueOf(cleanServerVehicleDTO.getServerPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
+        Double actualPrice=BigDecimal.valueOf(commodity.getCurrentPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
         //商品id
         String serviceId= cleanServerVehicleDTO.getServerId();
         //优惠劵id
@@ -79,7 +91,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        InsertBusinessInfo(thirdOrder,user,cleanServerVehicleDTO);
+        InsertBusinessInfo(thirdOrder,user,cleanServerVehicleDTO,commodity);
 
         return orderString;
     }
@@ -87,7 +99,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
     /**
      * 插入业务信息
      */
-    public void InsertBusinessInfo(String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO){
+    public void InsertBusinessInfo(String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO,ServiceCommodityDTO serviceCommodityDTO){
 
         //服务车辆id
         String vehicleId=StringUtil.createId();
@@ -100,7 +112,6 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
             cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
             cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
             cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
-            cleanSV.setVehicleType((byte) cleanServerVehicleDTO.getVehicleType());
             cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
             cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
             cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
@@ -114,7 +125,6 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
             cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
             cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
             cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
-            cleanSV.setVehicleType((byte) cleanServerVehicleDTO.getVehicleType());
             cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
             cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
             cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
@@ -130,7 +140,6 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //骑手没有放入
         vehicleCO.setPayStatus((byte)0);
         //前要注意下
-        vehicleCO.setActualPrice(cleanServerVehicleDTO.getServerPrice());
         vehicleCO.setVehicleId(vehicleId);
         vehicleCO.setProcessStatus((byte)0);
         vehicleCO.setServerId(cleanServerVehicleDTO.getServerId());
@@ -156,12 +165,21 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
                 couponMoney=k.get(0).getStandardValue();
             }
         }
+
+        //查出产品的信息
+        ServiceCommodityDTO commodity= appCarWashService.selectOneService(cleanServerVehicleDTO.getServerId());
+
+        if(commodity==null){
+            System.out.println("没有此类商品");
+            return null;
+        }
+
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String nonceStrTemp = WeChatUtils.getRandomStr();
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(cleanServerVehicleDTO.getCouponId(),couponMoney,nonceStrTemp,orgId,user.getUserId(),cleanServerVehicleDTO.getServerPrice(),cleanServerVehicleDTO.getServerId());
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(cleanServerVehicleDTO.getCouponId(),couponMoney,nonceStrTemp,orgId,user.getUserId(),commodity.getCurrentPrice(),cleanServerVehicleDTO.getServerId());
 
-        InsertBusinessInfo(orgId,user,cleanServerVehicleDTO);
+        InsertBusinessInfo(orgId,user,cleanServerVehicleDTO,commodity);
         return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
 }
