@@ -33,8 +33,8 @@
 	t3.petrol_price petrolPrice,
 	t3.petrol_denomination petrolDenomination,
 	t3.petrol_kind petrolKind,
-	t3.petrol_num petrolNum
-
+	t3.petrol_num petrolNum,
+    t1.create_at createAt
 FROM
 	(
 		SELECT
