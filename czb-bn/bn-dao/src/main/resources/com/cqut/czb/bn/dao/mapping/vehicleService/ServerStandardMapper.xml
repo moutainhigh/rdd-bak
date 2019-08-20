@@ -151,7 +151,7 @@
         server_explain = #{serverExplain,jdbcType=VARCHAR},
       </if>
       <if test="serverDiscount != null" >
-        server_discount = #{serverDiscount,jdbcType=REAL},
+        server_discount = #{serverDiscount,jdbcType=DOUBLE},
       </if>
       <if test="serverVehicleType != null" >
         server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT},

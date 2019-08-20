@@ -89,7 +89,7 @@
         rider.rider_id riderId,
         rider.`status`
         from czb_clean_rider rider
-        where rider_name = #{riderName}  and contact_number = #{contactNumber} AND status = 0
+        where rider_name = #{riderName}  and contact_number = #{contactNumber}
     </select>
 
     <update id="updateRiderStatus" parameterType="java.lang.String">
@@ -270,6 +270,7 @@
             vehicles.vehicle_type ,
             vehicles.vehicle_series ,
             vehicles.vehicle_color ,
+            vehicles.phone phone,
             riders.rider_name ,
             riders.rider_id riderId,
             riders.contact_number ,
@@ -291,7 +292,7 @@
             </if>
             <if test="carNum != null and carNum != ''" >
                 AND
-                vehicles.license_number = #{carNum}
+                vehicles.license_number like concat('%', #{carNum}, '%')
             </if>
             <if test="firstName != null and firstName != ''">
                 AND
@@ -304,6 +305,10 @@
             <if test="riderName != null and riderName != ''">
                 AND
                 riders.rider_name = #{riderName}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND
+                vehicles.phone like concat('%', #{phone}, '%')
             </if>
         </where>
     </select>

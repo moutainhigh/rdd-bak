@@ -74,7 +74,7 @@ public class CleanServerStandardServiceImpl implements CleanServerStandardServic
                 file1.setUpdateAt(new Date());
                 fileMapperExtra.updateByPrimaryKeySelective(file1);
             }
-            if(serverStandardMapper.updateByPrimaryKeySelective(serverStandard) > 0) {
+            if(serverStandardMapper.updateByPrimaryKey(serverStandard) > 0) {
                 return new JSONResult("修改洗车服务类型成功",200);
             } else {
                 return new JSONResult("修改洗车服务类型失败", 500);
@@ -87,7 +87,7 @@ public class CleanServerStandardServiceImpl implements CleanServerStandardServic
 
     @Override
     public JSONResult changeWithoutImage(ServerStandard serverStandard) {
-        if(serverStandardMapper.updateByPrimaryKeySelective(serverStandard) > 0) {
+        if(serverStandardMapper.updateByPrimaryKey(serverStandard) > 0) {
             return new JSONResult("修改洗车服务类型成功",200);
         } else {
             return new JSONResult("修改洗车服务类型失败", 500);
