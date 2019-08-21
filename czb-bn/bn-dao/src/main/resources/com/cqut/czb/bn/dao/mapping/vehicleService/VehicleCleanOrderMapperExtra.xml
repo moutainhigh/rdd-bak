@@ -62,6 +62,7 @@
            AND server_order_id = #{serverOrderId,jdbcType=VARCHAR}
         </if>
         </where>
+        ORDER BY czb_vehicle_clean_order.create_at DESC
     </select>
 
     <select id="selectByStatus" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >

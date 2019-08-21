@@ -1,11 +1,10 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
+
 import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
-import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
-import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
+import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
@@ -13,16 +12,17 @@ import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.cqut.czb.bn.service.vehicleService.RiderService;
 import com.cqut.czb.bn.util.string.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import javapns.devices.Device;
 import javapns.devices.implementations.basic.BasicDevice;
 import javapns.notification.AppleNotificationServerBasicImpl;
 import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,8 @@ public class RiderServiceImpl implements RiderService {
     @Autowired
     RemotePushMapperExtra remotePushMapperExtra;
     @Autowired
+    RemotePushNoticeMapperExtra remotePushNoticeMapperExtra;
+    @Autowired
     AppRouterMapper appRouterMapper;
 
     @Override
@@ -50,13 +52,6 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public List<CleanRider> selectAllRiders() {
-        RemotePushNotice remotePushNotice = new RemotePushNotice();
-        remotePushNotice.setAppRouterId("2621789139268636");
-        remotePushNotice.setDeviceId("1");
-        remotePushNotice.setNoticeContent("徐皓东接单啦");
-        User user = new User();
-        user.setUserId("155930101061936");
-        sendMesToApp(remotePushNotice,user);
         return cleanRiderMapper.selectAllRiders();
     }
 
@@ -71,8 +66,14 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
-    public List<CleanRider> getRider(CleanRider record) {
-        return cleanRiderMapper.getRider(record);
+    public PageInfo<CleanRider> getRider(Integer pageSize, Integer currentPage, CleanRider record) {
+
+        PageHelper.startPage(currentPage, pageSize);
+
+        List<CleanRider> list = cleanRiderMapper.getRider(record);
+
+        PageInfo<CleanRider> page = new PageInfo<>(list);
+        return page;
     }
 
     @Override
@@ -102,11 +103,12 @@ public class RiderServiceImpl implements RiderService {
         return cleanRiderMapper.updateByPrimaryKey(record);
     }
 
-    public void  sendMesToApp(RemotePushNotice remotePushNotice, User user){
+    public void  sendMesToApp(String  noticeId, User user){
 //    public static void  main(String[] args){
         RemotePush remotePush = remotePushMapperExtra.selectByUser(user.getUserId());
 ////        "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
         String deviceToken = remotePush.getDeviceToken();
+        RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
         String  alert  =remotePushNotice.getNoticeContent();//push的内容
 //        String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
 //        String  alert  ="有骑手接单了";//push的内容

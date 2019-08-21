@@ -11,6 +11,6 @@ public class MessageLog {
 
     public static final String AUTO_REGISTE_FAID= "默认注册用户失败";
 
-    public static final String AUTO_REGISTE_SUCCESS= "默认注册用户失败";
+    public static final String AUTO_REGISTE_SUCCESS= "添加成功，骑手默认密码为000000";
 
 }

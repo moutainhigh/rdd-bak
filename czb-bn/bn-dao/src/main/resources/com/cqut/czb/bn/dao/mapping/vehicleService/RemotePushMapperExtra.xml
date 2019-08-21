@@ -24,10 +24,10 @@
     </delete>
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePush" >
         insert into czb_remote_push (device_id, user_id, device_token,
-        device_type, create_at, update_at
+        device_type, create_at
         )
         values (#{deviceId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{deviceToken,jdbcType=VARCHAR},
-        #{deviceType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+        #{deviceType,jdbcType=INTEGER}, now()
         )
     </insert>
 
