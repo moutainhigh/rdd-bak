@@ -84,8 +84,8 @@ public class RiderManageController {
      * @return
      */
     @GetMapping("/getRider")
-    public JSONResult getRider(CleanRider cleanRider) {
-        return new JSONResult(riderService.getRider(cleanRider));
+    public JSONResult getRider(@RequestParam(name = "pageSize") Integer pageSize, @RequestParam(name = "currentPage") Integer currentPage, CleanRider cleanRider) {
+        return new JSONResult(riderService.getRider(pageSize, currentPage, cleanRider));
     }
 
     /**

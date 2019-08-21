@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.vehicleService;
 
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface RiderService {
 
     List<CleanRider> selectByName(String riderName);
 
-    List<CleanRider> getRider(CleanRider record);
+    PageInfo<CleanRider> getRider(Integer pageSize, Integer currentPage, CleanRider record);
 
     boolean insert(CleanRider record);
 
