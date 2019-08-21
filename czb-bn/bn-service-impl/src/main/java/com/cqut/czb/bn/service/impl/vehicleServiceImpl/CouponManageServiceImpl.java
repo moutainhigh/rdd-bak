@@ -17,6 +17,7 @@ import com.cqut.czb.bn.service.vehicleService.CouponManageService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +93,15 @@ public class CouponManageServiceImpl implements CouponManageService {
         if (issueServerCouponDTO==null||issueServerCouponDTO.getType()==null){
             return false;
         }
+        CouponStandard search = new CouponStandard();      //计算过期时间
+        search.setStandardId(issueServerCouponDTO.getStandardType());
+        List<CouponStandard> couponStandard = couponStandardMapperExtra.selectByPrimaryKey(search);
+        if (couponStandard==null||couponStandard.size()==0||couponStandard.get(0).getContinueDays()==null){
+            return false;
+        }else {
+            Date now = new Date();
+            issueServerCouponDTO.setDestroyTime(DateUtils.addDays(now, couponStandard.get(0).getContinueDays()));
+        }
         if (issueServerCouponDTO.getType()==0){   //如果是单个发放
             issueServerCouponDTO.setCouponId(StringUtil.createId());
             User user = userMapperExtra.findUserByAccount(issueServerCouponDTO.getUserAccount());
@@ -108,7 +118,7 @@ public class CouponManageServiceImpl implements CouponManageService {
         } else if (issueServerCouponDTO.getType()==1){   //如果是批量发放
             UserInputDTO input = new UserInputDTO();
             input.setPartner(issueServerCouponDTO.getPartner());
-            List<UserDTO> userDTOList = userMapperExtra.selectByPartner(input);
+            List<User> userDTOList = userMapperExtra.selectByPartner(input);
             if (userDTOList!=null&&userDTOList.size()!=0) {  //如果有发放目标
                 List<IssueServerCouponDTO> insert = new ArrayList<>();
                 for (int i = 0; i < userDTOList.size(); i++) {

@@ -15,8 +15,6 @@
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
-    <sql id="Base_Column_List">
-        coupon_id, destroy_time,standard_value,standard_explain,coupon_standard, owner_id, status,coupon_name, a.create_at, a.update_at
     <sql id="Base_Column_List" >
         coupon_id, destroy_time,standard_value,standard_explain,coupon_standard,standard_type,owner_id, status,coupon_name,user_account, a.create_at, a.update_at
     </sql>

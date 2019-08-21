@@ -1,8 +1,16 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
+import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
+import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
+import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
+import com.cqut.czb.bn.entity.entity.AppRouter;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
+import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
+import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.cqut.czb.bn.service.vehicleService.RiderService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +38,10 @@ public class RiderServiceImpl implements RiderService {
 
     @Autowired
     CleanRiderMapperExtra cleanRiderMapper;
+    @Autowired
+    RemotePushMapperExtra remotePushMapperExtra;
+    @Autowired
+    AppRouterMapper appRouterMapper;
 
     @Override
     public boolean deleteByPrimaryKey(String riderId) {
@@ -38,6 +50,13 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public List<CleanRider> selectAllRiders() {
+        RemotePushNotice remotePushNotice = new RemotePushNotice();
+        remotePushNotice.setAppRouterId("2621789139268636");
+        remotePushNotice.setDeviceId("1");
+        remotePushNotice.setNoticeContent("徐皓东接单啦");
+        User user = new User();
+        user.setUserId("155930101061936");
+        sendMesToApp(remotePushNotice,user);
         return cleanRiderMapper.selectAllRiders();
     }
 
@@ -78,12 +97,14 @@ public class RiderServiceImpl implements RiderService {
         return cleanRiderMapper.updateByPrimaryKey(record);
     }
 
-
-    public void  sendMesToApp(){
+    public void  sendMesToApp(RemotePushNotice remotePushNotice, User user){
 //    public static void  main(String[] args){
-        String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
-        String name = "徐皓东";
-        String  alert  =name+ "接单了！请注意查看";//push的内容
+        RemotePush remotePush = remotePushMapperExtra.selectByUser(user.getUserId());
+////        "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
+        String deviceToken = remotePush.getDeviceToken();
+        String  alert  =remotePushNotice.getNoticeContent();//push的内容
+//        String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
+//        String  alert  ="有骑手接单了";//push的内容
         int badge = 1;//图标小红圈的数值
         String sound = "default";//铃音
 
@@ -96,6 +117,8 @@ public class RiderServiceImpl implements RiderService {
         try
         {
             PushNotificationPayload payLoad = new PushNotificationPayload();
+            AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
+            payLoad.addCustomDictionary("appRouter",appRouter);
             payLoad.addAlert(alert); // 消息内容
             payLoad.addBadge(badge); // iphone应用图标上小红圈上的数值
 //            payLoad.addCustomDictionary();
@@ -109,7 +132,6 @@ public class RiderServiceImpl implements RiderService {
             pushManager.initializeConnection(new AppleNotificationServerBasicImpl(certificatePath, certificatePassword, false));
             List<PushedNotification> notifications = new ArrayList<PushedNotification>();
 
-            System.out.println("dadsadsadadada");
             // 发送push消息
             if (sendCount)
             {
@@ -117,7 +139,6 @@ public class RiderServiceImpl implements RiderService {
                 device.setToken(tokens.get(0));
                 PushedNotification notification = pushManager.sendNotification(device, payLoad, true);
                 notifications.add(notification);
-                System.out.println("发生");
             }
             else
             {
@@ -131,7 +152,7 @@ public class RiderServiceImpl implements RiderService {
             pushManager.stopConnection();
         }
         catch (Exception e)
-        {    System.out.println("AAAAAAAAAAAAAAAAAAAAAA");
+        {
             e.printStackTrace();
         }
     };

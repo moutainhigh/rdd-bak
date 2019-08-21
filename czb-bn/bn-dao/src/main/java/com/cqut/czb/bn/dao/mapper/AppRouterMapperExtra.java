@@ -21,4 +21,6 @@ public interface AppRouterMapperExtra {
 
     List<AppRouterDTO> selectAppRouters(AppRouterDTO appRouter);
 
+    AppRouterDTO selectAppRouterById(String routerId);
+
 }

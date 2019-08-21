@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.RemotePush" >
+        <id column="device_id" property="deviceId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="device_token" property="deviceToken" jdbcType="VARCHAR" />
+        <result column="device_type" property="deviceType" jdbcType="INTEGER" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        device_id, user_id, device_token, device_type, create_at, update_at
+    </sql>
+    <select id="selectByUser" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_remote_push
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_remote_push
+        where device_id = #{deviceId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePush" >
+        insert into czb_remote_push (device_id, user_id, device_token,
+        device_type, create_at, update_at
+        )
+        values (#{deviceId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{deviceToken,jdbcType=VARCHAR},
+        #{deviceType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePush" >
+        update czb_remote_push
+        set user_id = #{userId,jdbcType=VARCHAR},
+        device_token = #{deviceToken,jdbcType=VARCHAR},
+        device_type = #{deviceType,jdbcType=INTEGER},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where device_id = #{deviceId,jdbcType=VARCHAR}
+    </update>
+</mapper>
