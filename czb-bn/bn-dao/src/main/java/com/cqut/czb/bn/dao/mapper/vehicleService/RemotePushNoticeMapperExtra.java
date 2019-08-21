@@ -12,6 +12,8 @@ public interface RemotePushNoticeMapperExtra {
 
     Page<RemotePushNotice> selectByPrimaryKey(RemotePushNotice record);
 
+    RemotePushNotice selectById(String noticeId);
+
     int updateByPrimaryKeySelective(RemotePushNotice record);
 
     int updateByPrimaryKey(RemotePushNotice record);

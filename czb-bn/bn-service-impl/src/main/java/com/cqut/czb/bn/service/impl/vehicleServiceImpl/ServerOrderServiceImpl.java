@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.dto.vehicleService.TuiKuanDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
 import com.cqut.czb.bn.entity.entity.File;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
 import com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -52,6 +53,8 @@ public class ServerOrderServiceImpl implements ServerOrderService {
 
     @Autowired
     AnnouncementServiceImpl announcementServiceImpl;
+    @Autowired
+    RiderServiceImpl riderServiceImpl;
 
     @Override
     public JSONResult distribute(VehicleOrderManageDTO manageDTO) {
@@ -80,6 +83,9 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                 if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
                     // 分配骑手成功后，改变骑手状态
                     if (mapperExtra.updateRiderStatus(cleanRider.getRiderId(), "1") > 0) {
+                        User user = new User();
+                        user.setUserId(manageDTO.getUserId());
+                        riderServiceImpl.sendMesToApp("8708831135559901",user);
                         return new JSONResult("分配骑手成功", 200);
                     } else {
                         return new JSONResult("分配骑手成功,但改变骑手状态失败", 200);
@@ -101,6 +107,9 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         cleanOrder.setProcessStatus(status);
         if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
             mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
+            User user = new User();
+            user.setUserId(cleanOrderDTO.getUserId());
+            riderServiceImpl.sendMesToApp("688008757855812",user);
             return new JSONResult("完成订单成功", 200);
         } else {
             return new JSONResult("完成订单失败", 200);
