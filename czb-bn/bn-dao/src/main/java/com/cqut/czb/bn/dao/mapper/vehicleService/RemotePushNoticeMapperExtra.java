@@ -2,7 +2,9 @@ package com.cqut.czb.bn.dao.mapper.vehicleService;
 
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.github.pagehelper.Page;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface RemotePushNoticeMapperExtra {
     int deleteByPrimaryKey(String noticeId);
 

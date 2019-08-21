@@ -5,9 +5,11 @@ import com.cqut.czb.bn.entity.dto.appCarWash.conpons;
 import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ServerCouponMapperExtra {
     int insert(IssueServerCouponDTO issueServerCouponDTO);
 
