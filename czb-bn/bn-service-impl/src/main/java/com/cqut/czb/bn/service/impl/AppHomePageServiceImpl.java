@@ -181,6 +181,10 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     public List<petrolInfoDTO> calculatePrice(List<petrolInfoDTO> petrolInfoDTO1, String fangyong1, String fangyong2){
         if(petrolInfoDTO1!=null) {
             for (int j = 0; j < petrolInfoDTO1.size(); j++) {
+                //如果为空则设置为通用
+                if(petrolInfoDTO1.get(j).getRemark()==null||"".equals(petrolInfoDTO1.get(j).getRemark())){
+                    petrolInfoDTO1.get(j).setRemark("通用");
+                }
                 petrolInfoDTO1.get(j).setFangyong1(fangyong1);
                 petrolInfoDTO1.get(j).setFangyong2(fangyong2);
                 //算出vip价格

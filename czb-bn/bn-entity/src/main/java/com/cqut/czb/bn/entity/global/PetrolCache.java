@@ -93,8 +93,6 @@ public class PetrolCache {
                 it.remove();//使用迭代器的remove()方法删除元素
             }
         }
-
-
     }
 
     /**
@@ -150,14 +148,14 @@ public class PetrolCache {
             Map.Entry<String, Petrol> entry = it.next();
             petrol = entry.getValue();//当前遍历的油卡值
             boolean choice=false;
-//            if(remark==null||remark.equals("")){
-//                choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
-//                        petrol.getArea().equals(area) &&petrol.getRemark()==null;
-//            }else {
-//                choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
-//                        petrol.getArea().equals(area) &&petrol.getRemark().equals(remark);
-//            }
-            if (petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice && petrol.getArea().equals(area)) {
+            if(remark==null||"".equals(remark)||"通用".equals(remark)){
+                choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
+                        petrol.getArea().equals(area) &&petrol.getRemark()==null;
+            }else {
+                choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
+                        petrol.getArea().equals(area) &&remark.equals(petrol.getRemark());
+            }
+            if (choice) {
                 petrol.setOwnerId(ownerId);
                 //当前时间加十分钟
                 long currentTime = System.currentTimeMillis() + 120 * 1000;

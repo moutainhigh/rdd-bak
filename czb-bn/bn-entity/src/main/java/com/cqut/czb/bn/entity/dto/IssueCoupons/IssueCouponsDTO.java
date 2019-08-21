@@ -21,6 +21,8 @@ public class IssueCouponsDTO {
 
     private String couponName;
 
+    private String phone;
+
     //ServerCoupon
 
     private String couponId;
@@ -30,6 +32,14 @@ public class IssueCouponsDTO {
     private String ownerId;
 
     private int status;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getStandardId() {
         return standardId;
