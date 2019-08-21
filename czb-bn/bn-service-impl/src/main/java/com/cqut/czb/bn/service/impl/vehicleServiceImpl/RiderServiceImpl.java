@@ -71,6 +71,11 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
+    public List<CleanRider> getRider(CleanRider record) {
+        return cleanRiderMapper.getRider(record);
+    }
+
+    @Override
     public boolean insert(CleanRider record) {
         record.setRiderId(StringUtil.createId());
         return cleanRiderMapper.insert(record);

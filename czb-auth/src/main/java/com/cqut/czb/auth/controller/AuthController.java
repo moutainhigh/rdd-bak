@@ -233,7 +233,7 @@ public class AuthController {
     @PostMapping("/insertVCode")
     public  JSONResult insertVCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
         //判断电话号码是否为空
-        if(verificationCodeDTO==null&&verificationCodeDTO.getUserAccount()==null){
+        if(verificationCodeDTO == null || verificationCodeDTO.getUserAccount() == null){
             return new JSONResult(false);
         }
         boolean sendVerificationCode = userDetailService.insertVCode(verificationCodeDTO);

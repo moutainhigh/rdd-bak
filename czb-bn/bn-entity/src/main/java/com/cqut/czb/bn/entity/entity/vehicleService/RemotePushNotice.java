@@ -5,11 +5,9 @@ import java.util.Date;
 public class RemotePushNotice {
     private String noticeId;
 
-    private String deviceId;
-
     private String noticeContent;
 
-    private Integer noticeType;
+    private String noticeTitle;
 
     private String appRouterId;
 
@@ -27,14 +25,6 @@ public class RemotePushNotice {
         this.noticeId = noticeId == null ? null : noticeId.trim();
     }
 
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId == null ? null : deviceId.trim();
-    }
-
     public String getNoticeContent() {
         return noticeContent;
     }
@@ -43,12 +33,12 @@ public class RemotePushNotice {
         this.noticeContent = noticeContent == null ? null : noticeContent.trim();
     }
 
-    public Integer getNoticeType() {
-        return noticeType;
+    public String getNoticeTitle() {
+        return noticeTitle;
     }
 
-    public void setNoticeType(Integer noticeType) {
-        this.noticeType = noticeType;
+    public void setNoticeTitle(String noticeTitle) {
+        this.noticeTitle = noticeTitle == null ? null : noticeTitle.trim();
     }
 
     public String getAppRouterId() {
