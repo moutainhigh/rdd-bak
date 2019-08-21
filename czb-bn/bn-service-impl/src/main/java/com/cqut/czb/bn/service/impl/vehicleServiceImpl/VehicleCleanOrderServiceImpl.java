@@ -123,7 +123,6 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
 
     @Override
     public Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO) {
-         vehicleCleanOrderDTO.setPayStatus(1);
          vehicleCleanOrderDTO.setProcessStatus(3);
          vehicleCleanOrderDTO.setUpdateAt(new Date());
         return vehicleCleanOrderMapperExtra.updateOrderStateComplete(vehicleCleanOrderDTO)>0;

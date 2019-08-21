@@ -52,6 +52,11 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
+    public List<CleanRider> getRider(CleanRider record) {
+        return cleanRiderMapper.getRider(record);
+    }
+
+    @Override
     public boolean insert(CleanRider record) {
         record.setRiderId(StringUtil.createId());
         return cleanRiderMapper.insert(record);
@@ -78,16 +83,19 @@ public class RiderServiceImpl implements RiderService {
         return cleanRiderMapper.updateByPrimaryKey(record);
     }
 
+
     public void  sendMesToApp(){
-        String deviceToken = "ca481af1307b2c8e15e123cb00e0be845b56ff55a76f5d673702db576984b0db";
-        String  alert  = "收到通知了";//push的内容
-        int badge = 3;//图标小红圈的数值
+//    public static void  main(String[] args){
+        String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
+        String name = "徐皓东";
+        String  alert  =name+ "接单了！请注意查看";//push的内容
+        int badge = 1;//图标小红圈的数值
         String sound = "default";//铃音
 
         List<String> tokens = new ArrayList<String>();
         tokens.add(deviceToken);
-        String certificatePath = "czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\certificate.p12";
-        String certificatePassword = "1347929462xhd";//此处注意导出的证书密码不能为空因为空密码会报错
+        String certificatePath = "czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
+        String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
         boolean sendCount = true;
 
         try
@@ -95,6 +103,7 @@ public class RiderServiceImpl implements RiderService {
             PushNotificationPayload payLoad = new PushNotificationPayload();
             payLoad.addAlert(alert); // 消息内容
             payLoad.addBadge(badge); // iphone应用图标上小红圈上的数值
+//            payLoad.addCustomDictionary();
 
             if (!StringUtils.isBlank(sound))
             {

@@ -33,6 +33,16 @@
     where user_account = #{account,jdbcType=VARCHAR}
     and is_deleted = 0
   </select>
+
+  <select id="selectByPartner" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
+    select
+    *
+    from czb_user
+    where partner = #{partner,jdbcType=VARCHAR}
+    and is_deleted = 0
+  </select>
+
+
   <resultMap id="dtoResultMap" type="com.cqut.czb.bn.entity.dto.user.UserDTO">
     <id column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />

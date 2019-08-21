@@ -15,6 +15,8 @@ public interface CleanRiderMapperExtra {
 
     List<CleanRider> selectByName(String riderName);
 
+    List<CleanRider> getRider(CleanRider record);
+
     boolean insert(CleanRider record);
 
     boolean insertSelective(CleanRider record);

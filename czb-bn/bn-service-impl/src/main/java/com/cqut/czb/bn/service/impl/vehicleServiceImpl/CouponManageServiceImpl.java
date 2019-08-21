@@ -1,10 +1,14 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CouponStandardMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CouponStandardMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
@@ -16,6 +20,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +31,8 @@ public class CouponManageServiceImpl implements CouponManageService {
     ServerCouponMapperExtra serverCouponMapperExtra;
     @Autowired
     CouponStandardMapperExtra couponStandardMapperExtra;
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     @Override
     public List<ServerCouponDTO> getCouponList(ServerCouponDTO serverCouponDTO,User user) {
@@ -36,9 +43,9 @@ public class CouponManageServiceImpl implements CouponManageService {
 
     //更新已过期的优惠券
     public Boolean isExpire(ServerCouponDTO serverCouponDTO){
-        if (serverCouponDTO.getOwnerId()==null || "".equals(serverCouponDTO.getOwnerId())){
-            return null;
-        }
+//        if (serverCouponDTO.getOwnerId()==null || "".equals(serverCouponDTO.getOwnerId())){
+//            return null;
+//        }
         serverCouponDTO.setUpdateAt(new Date());
         return serverCouponMapperExtra.updateExpire(serverCouponDTO)>0;
     }
@@ -69,7 +76,57 @@ public class CouponManageServiceImpl implements CouponManageService {
     }
 
     @Override
-    public List<String> getCouponType() {
+    public List<CouponStandard> getCouponType() {
         return couponStandardMapperExtra.selectCouponStandardType();
+    }
+
+    @Override
+    public PageInfo<ServerCouponDTO> getCouponByUser(ServerCouponDTO serverCouponDTO,PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        isExpire(serverCouponDTO);
+        return new PageInfo<>(serverCouponMapperExtra.selectByPrimaryKey(serverCouponDTO));
+    }
+
+    @Override
+    public Boolean issueCoupon(IssueServerCouponDTO issueServerCouponDTO) {
+        if (issueServerCouponDTO==null||issueServerCouponDTO.getType()==null){
+            return false;
+        }
+        if (issueServerCouponDTO.getType()==0){   //如果是单个发放
+            issueServerCouponDTO.setCouponId(StringUtil.createId());
+            User user = userMapperExtra.findUserByAccount(issueServerCouponDTO.getUserAccount());
+            if (user==null||user.getUserId()==null||"".equals(user.getUserId())){
+                return false;
+            }else {
+                issueServerCouponDTO.setOwnerId(user.getUserId());
+            }
+            issueServerCouponDTO.setCouponStandard(issueServerCouponDTO.getStandardType());
+            issueServerCouponDTO.setStatus(0);
+            issueServerCouponDTO.setCreateAt(new Date());
+            issueServerCouponDTO.setUpdateAt(new Date());
+            return serverCouponMapperExtra.insert(issueServerCouponDTO)>0;
+        } else if (issueServerCouponDTO.getType()==1){   //如果是批量发放
+            UserInputDTO input = new UserInputDTO();
+            input.setPartner(issueServerCouponDTO.getPartner());
+            List<UserDTO> userDTOList = userMapperExtra.selectByPartner(input);
+            if (userDTOList!=null&&userDTOList.size()!=0) {  //如果有发放目标
+                List<IssueServerCouponDTO> insert = new ArrayList<>();
+                for (int i = 0; i < userDTOList.size(); i++) {
+                    IssueServerCouponDTO exp = new IssueServerCouponDTO();
+                    exp.setOwnerId(userDTOList.get(i).getUserId());
+                    exp.setCouponId(StringUtil.createId());
+                    exp.setCouponStandard(issueServerCouponDTO.getStandardType());
+                    exp.setDestroyTime(issueServerCouponDTO.getDestroyTime());
+                    exp.setStatus(0);
+                    insert.add(exp);
+                }
+                Boolean isInsert = serverCouponMapperExtra.insertByList(insert) > 0;
+                return isInsert;
+            }else {
+                return null;
+            }
+        }else {
+            return false;
+        }
     }
 }
