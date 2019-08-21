@@ -74,12 +74,12 @@ public class RiderManageController {
     }
 
     @PostMapping("/updateById")
-    public JSONResult updateByPrimaryKeySelective(@RequestParam(name = "password") String password, CleanRider cleanRider) {
+    public JSONResult updateByPrimaryKeySelective(CleanRider cleanRider) {
         return new JSONResult(riderService.updateByPrimaryKeySelective(cleanRider));
     }
 
     /**
-     * 统一接口
+     * 统一查询接口
      * @param cleanRider
      * @return
      */
@@ -102,6 +102,7 @@ public class RiderManageController {
 
     /**
      * 初始化personal
+     *
      * @param cleanRider
      * @return
      */
@@ -118,6 +119,8 @@ public class RiderManageController {
 
     /**
      * 为当前电话号码设置默认验证码
+     *
+     * 值为 000000
      * @param cleanRider
      * @return
      */
