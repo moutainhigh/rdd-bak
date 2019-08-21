@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapper" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
     <id column="notice_id" property="noticeId" jdbcType="VARCHAR" />
     <result column="notice_content" property="noticeContent" jdbcType="VARCHAR" />
@@ -11,25 +11,30 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    notice_id, notice_content, notice_title, app_router_id, deadline, create_at, update_at
+    notice_id, notice_content, notice_title, app_router_id, deadline, create_at,
+    update_at
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
+    select
     <include refid="Base_Column_List" />
     from czb_remote_push_notice
-    where notice_id = #{noticeId,jdbcType=VARCHAR}
+      <where>
+        <if test="noticeTitle != null">
+          notice_title like concat('%', #{noticeTitle}, '%')
+        </if>
+      </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_remote_push_notice
     where notice_id = #{noticeId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
-    insert into czb_remote_push_notice (notice_id, notice_content, notice_title, 
-      app_router_id, deadline, create_at, 
-      update_at)
-    values (#{noticeId,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, 
-      #{appRouterId,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+    insert into czb_remote_push_notice (notice_id, notice_content,
+      notice_title, app_router_id, deadline,
+      create_at)
+    values (#{noticeId,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR},
+      #{noticeTitle,jdbcType=VARCHAR}, #{appRouterId,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP},
+      CURRENT_TIMESTAMP)
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
     insert into czb_remote_push_notice
