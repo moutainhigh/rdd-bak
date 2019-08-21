@@ -1,15 +1,16 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
+import com.github.pagehelper.Page;
 
-public interface RemotePushNoticeMapper {
+public interface RemotePushNoticeMapperExtra {
     int deleteByPrimaryKey(String noticeId);
 
     int insert(RemotePushNotice record);
 
     int insertSelective(RemotePushNotice record);
 
-    RemotePushNotice selectByPrimaryKey(String noticeId);
+    Page<RemotePushNotice> selectByPrimaryKey(RemotePushNotice record);
 
     int updateByPrimaryKeySelective(RemotePushNotice record);
 
