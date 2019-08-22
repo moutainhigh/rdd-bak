@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
+import com.cqut.czb.bn.service.vehicleService.RiderService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,9 @@ public class AppHomePageController {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    RiderService riderService;
 
     /**
      * app广告展示
