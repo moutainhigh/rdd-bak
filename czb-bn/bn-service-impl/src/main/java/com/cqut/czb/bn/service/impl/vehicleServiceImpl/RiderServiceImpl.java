@@ -70,6 +70,10 @@ public class RiderServiceImpl implements RiderService {
 
         PageHelper.startPage(currentPage, pageSize);
 
+        if ("" == record.getRiderId() || record.getRiderId() == null) {
+            record.setRiderId(null);
+        }
+
         List<CleanRider> list = cleanRiderMapper.getRider(record);
 
         PageInfo<CleanRider> page = new PageInfo<>(list);
