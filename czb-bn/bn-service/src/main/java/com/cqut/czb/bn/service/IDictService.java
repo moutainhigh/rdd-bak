@@ -17,7 +17,7 @@ public interface IDictService {
 
     AppInfoDTO selectAndroidInfo(User user, String version);
 
-    AppInfoDTO selectIOSInfo(User user,String version);
+    AppInfoDTO selectIOSInfo(User user,String version,String DeviceToken);
 
     boolean updateDict(DictInputDTO dictInputDTO);
 
