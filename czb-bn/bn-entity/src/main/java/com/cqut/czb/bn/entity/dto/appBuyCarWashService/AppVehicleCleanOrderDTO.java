@@ -31,6 +31,76 @@ public class AppVehicleCleanOrderDTO {
 
     private Date updateAt;
 
+    private Integer payMethod;
+
+    private String userName;
+
+    private String licenseNumber;
+
+    private String vehicleColor;
+
+    private String vehicleSeries;
+
+    private String serviceLocation;
+
+    private String phone;
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public String getVehicleColor() {
+        return vehicleColor;
+    }
+
+    public void setVehicleColor(String vehicleColor) {
+        this.vehicleColor = vehicleColor;
+    }
+
+    public String getVehicleSeries() {
+        return vehicleSeries;
+    }
+
+    public void setVehicleSeries(String vehicleSeries) {
+        this.vehicleSeries = vehicleSeries;
+    }
+
+    public String getServiceLocation() {
+        return serviceLocation;
+    }
+
+    public void setServiceLocation(String serviceLocation) {
+        this.serviceLocation = serviceLocation;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getServerId() {
         return serverId;
     }
