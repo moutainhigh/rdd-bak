@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RemotePushMapperExtra {
 
+    int insert(RemotePush remotePush);
+
     RemotePush selectByUser(String userId);
 }
