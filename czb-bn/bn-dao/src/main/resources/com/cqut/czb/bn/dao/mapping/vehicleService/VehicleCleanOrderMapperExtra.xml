@@ -9,7 +9,6 @@
         <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
         <result column="vehicle_color" property="vehicleColor" jdbcType="VARCHAR" />
         <result column="vehicle_series" property="vehicleSeries" jdbcType="VARCHAR" />
-        <result column="vehicle_type" property="vehicleType" jdbcType="VARCHAR" />
         <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
         <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
         <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
@@ -17,6 +16,7 @@
         <result column="user_account" property="userPhone" jdbcType="VARCHAR" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />
         <result column="license_number" property="licenseNumber" jdbcType="VARCHAR" />
+        <result column="customer_service_phone" property="customerServicePhone" jdbcType="VARCHAR" />
         <result column="process_status" property="processStatus" jdbcType="TINYINT" />
         <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
         <result column="cancel_person_id" property="cancelPersonId" jdbcType="VARCHAR" />
@@ -44,15 +44,14 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        server_order_id, czb_vehicle_clean_order.user_id,user_account,czb_clean_server_vehicle.user_name,vehicle_color,vehicle_type,vehicle_series,rider_name,contact_number, czb_vehicle_clean_order.rider_id, third_order, pay_status, actual_price, czb_vehicle_clean_order.vehicle_id,license_number,
-        process_status, cancel_time, cancel_person_id, cancel_reason, czb_vehicle_clean_order.create_at, czb_vehicle_clean_order.update_at
+        server_order_id, czb_vehicle_clean_order.user_id,user_account,czb_vehicle_clean_order.user_name,vehicle_color,vehicle_series,rider_name,contact_number, czb_vehicle_clean_order.rider_id, third_order, pay_status, actual_price, czb_vehicle_clean_order.vehicle_id,license_number,
+        process_status, cancel_time, cancel_person_id, cancel_reason,(SELECT content FROM czb_dict WHERE `name`= 'customerServicePhone' ) customer_service_phone,  czb_vehicle_clean_order.create_at, czb_vehicle_clean_order.update_at
     </sql>
     <select id="selectById" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
         select
         <include refid="Base_Column_List" />
         from czb_vehicle_clean_order
         LEFT JOIN czb_user ON czb_vehicle_clean_order.user_id = czb_user.user_id
-        LEFT JOIN czb_clean_server_vehicle ON czb_vehicle_clean_order.vehicle_id = czb_clean_server_vehicle.vehicle_id
         LEFT JOIN czb_clean_rider ON czb_vehicle_clean_order.rider_id = czb_clean_rider.rider_id
         <where>
         <if test="userId!=null and userId!=''">
@@ -70,7 +69,6 @@
         <include refid="Base_Column_List" />
         from czb_vehicle_clean_order
         LEFT JOIN czb_user ON czb_vehicle_clean_order.user_id = czb_user.user_id
-        LEFT JOIN czb_clean_server_vehicle ON czb_vehicle_clean_order.vehicle_id = czb_clean_server_vehicle.vehicle_id
         LEFT JOIN czb_clean_rider ON czb_vehicle_clean_order.rider_id = czb_clean_rider.rider_id
         where czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
         AND (process_status = 1 OR process_status = 0 or process_status = 2)
@@ -109,13 +107,16 @@
         third_order, pay_status, actual_price,
         vehicle_id, process_status, cancel_time,
         cancel_person_id, cancel_reason, create_at,
-        update_at,server_id)
+        update_at,server_id,pay_method,user_name,license_number,
+        vehicle_color,vehicle_series,service_location,phone)
         values (#{serverOrderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{riderId,jdbcType=VARCHAR},
         #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=TINYINT}, #{actualPrice,jdbcType=DOUBLE},
         #{vehicleId,jdbcType=VARCHAR}, #{processStatus,jdbcType=TINYINT}, #{cancelTime,jdbcType=TIMESTAMP},
         #{cancelPersonId,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, now(),
-        now(),#{serverId,jdbcType=TIMESTAMP})
+        now(),#{serverId,jdbcType=VARCHAR},#{payMethod,jdbcType=TINYINT},#{userName,jdbcType=VARCHAR},#{licenseNumber,jdbcType=VARCHAR},
+        #{vehicleColor,jdbcType=VARCHAR},#{vehicleSeries,jdbcType=VARCHAR},#{serviceLocation,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR})
     </insert>
+
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
         insert into czb_vehicle_clean_order
         <trim prefix="(" suffix=")" suffixOverrides="," >

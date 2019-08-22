@@ -91,65 +91,10 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        InsertBusinessInfo(thirdOrder,user,cleanServerVehicleDTO,commodity);
+        InsertBusinessInfo(1,thirdOrder,user,cleanServerVehicleDTO,commodity);//payMethod 1为支付宝，2为微信
 
         return orderString;
     }
-
-    /**
-     * 插入业务信息
-     */
-    public void InsertBusinessInfo(String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO,ServiceCommodityDTO serviceCommodityDTO){
-
-        //服务车辆id
-        String vehicleId=StringUtil.createId();
-
-        //查出是否有信息
-        CleanServerVehicle v=cleanServerVehicleMapperExtra.selectCleanServerVehicle(user.getUserId());
-        if(v!=null){
-            vehicleId=v.getVehicleId();
-            AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
-            cleanSV.setUserId(user.getUserId());
-            cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
-            cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
-            cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
-            cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
-            cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
-            cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
-            boolean j=cleanServerVehicleMapperExtra.updateByUserId(cleanSV)>0;
-            System.out.println("更改车辆信息"+j);
-        }else {
-            //洗车服务车辆对象表	czb_clean_server_vehicle  录入备份信息
-            AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
-            cleanSV.setVehicleId(vehicleId);
-            cleanSV.setUserId(user.getUserId());
-            cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
-            cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
-            cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
-            cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
-            cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
-            cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
-            boolean j=cleanServerVehicleMapperExtra.insert(cleanSV)>0;
-            System.out.println("插入车辆信息"+j);
-        }
-
-
-        //洗车服务订单记录	czb_vehicle_clean_order 插入预支付订单
-        AppVehicleCleanOrderDTO vehicleCO=new AppVehicleCleanOrderDTO();
-        vehicleCO.setServerOrderId(thirdOrder);
-        vehicleCO.setUserId(user.getUserId());
-        //骑手没有放入
-        vehicleCO.setPayStatus((byte)0);
-        //前要注意下
-        vehicleCO.setVehicleId(vehicleId);
-        vehicleCO.setProcessStatus((byte)0);
-        vehicleCO.setServerId(cleanServerVehicleDTO.getServerId());
-
-        boolean K=vehicleCleanOrderMapperExtra.insert(vehicleCO)>0;
-        System.out.println("插入洗车服务预支付订单"+K);
-    }
-
-
 
     @Override
     public JSONObject WeChatBuyCarWash(User user, CleanServerVehicleDTO cleanServerVehicleDTO) {
@@ -180,7 +125,69 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         // 设置参数
         SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(cleanServerVehicleDTO.getCouponId(),couponMoney,nonceStrTemp,orgId,user.getUserId(),commodity.getCurrentPrice(),cleanServerVehicleDTO.getServerId());
 
-        InsertBusinessInfo(orgId,user,cleanServerVehicleDTO,commodity);
+        InsertBusinessInfo(2,orgId,user,cleanServerVehicleDTO,commodity);
         return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
+
+    /**
+     * 插入业务信息
+     */
+    public void InsertBusinessInfo(int payMethod,String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO,ServiceCommodityDTO serviceCommodityDTO){
+
+        //服务车辆id
+        String vehicleId=StringUtil.createId();
+
+        //查出是否有信息
+        CleanServerVehicle v=cleanServerVehicleMapperExtra.selectCleanServerVehicle(user.getUserId());
+        //洗车服务车辆对象表	czb_clean_server_vehicle  录入备份信息
+        AppCleanServerVehicleDTO cleanSV=new AppCleanServerVehicleDTO();
+        if(v!=null){
+            vehicleId=v.getVehicleId();
+            cleanSV.setUserId(user.getUserId());
+            cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
+            cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
+            cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
+            cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
+            cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
+            cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
+            boolean j=cleanServerVehicleMapperExtra.updateByUserId(cleanSV)>0;
+            System.out.println("更改车辆信息"+j);
+        }else {
+            cleanSV.setVehicleId(vehicleId);
+            cleanSV.setUserId(user.getUserId());
+            cleanSV.setUserName(cleanServerVehicleDTO.getUserName());
+            cleanSV.setLicenseNumber(cleanServerVehicleDTO.getLicenseNumber());
+            cleanSV.setVehicleColor(cleanServerVehicleDTO.getVehicleColor());
+            cleanSV.setVehicleSeries(cleanServerVehicleDTO.getVehicleSeries());
+            cleanSV.setServiceLocation(cleanServerVehicleDTO.getServiceLocation());
+            cleanSV.setPhone(cleanServerVehicleDTO.getPhone());
+            boolean j=cleanServerVehicleMapperExtra.insert(cleanSV)>0;
+            System.out.println("插入车辆信息"+j);
+        }
+
+
+        //洗车服务订单记录	czb_vehicle_clean_order 插入预支付订单
+        AppVehicleCleanOrderDTO vehicleCO=new AppVehicleCleanOrderDTO();
+        vehicleCO.setServerOrderId(thirdOrder);
+        vehicleCO.setUserId(user.getUserId());
+        //骑手没有放入
+        vehicleCO.setPayStatus((byte)0);
+        //前要注意下
+        vehicleCO.setVehicleId(vehicleId);
+        vehicleCO.setProcessStatus((byte)0);
+
+        vehicleCO.setServerId(cleanServerVehicleDTO.getServerId());
+        vehicleCO.setPayMethod(payMethod);
+        vehicleCO.setPhone(cleanSV.getPhone());
+        vehicleCO.setUserName(cleanSV.getUserName());
+        vehicleCO.setLicenseNumber(cleanSV.getLicenseNumber());
+        vehicleCO.setVehicleColor(cleanSV.getVehicleColor());
+        vehicleCO.setServiceLocation(cleanSV.getServiceLocation());
+        vehicleCO.setVehicleSeries(cleanSV.getVehicleSeries());
+        boolean K=vehicleCleanOrderMapperExtra.insert(vehicleCO)>0;
+        System.out.println("插入洗车服务预支付订单"+K);
+    }
+
 }
+
+
