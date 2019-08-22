@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity;
+package com.cqut.czb.bn.entity.dto;
 
 /**
  * @Description
