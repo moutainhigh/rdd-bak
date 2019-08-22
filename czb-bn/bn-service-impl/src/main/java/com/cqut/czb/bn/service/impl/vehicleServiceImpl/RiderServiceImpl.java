@@ -110,6 +110,9 @@ public class RiderServiceImpl implements RiderService {
 
     public void  sendMesToApp(String  noticeId, String userId){
         RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
+        if (remotePush.getDeviceType()!=2){
+            return;
+        }
 ////    "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
         String deviceToken = remotePush.getDeviceToken();
         RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
