@@ -109,13 +109,16 @@
         third_order, pay_status, actual_price,
         vehicle_id, process_status, cancel_time,
         cancel_person_id, cancel_reason, create_at,
-        update_at,server_id)
+        update_at,server_id,pay_method,user_name,license_number,
+        vehicle_color,vehicle_series,service_location,phone)
         values (#{serverOrderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{riderId,jdbcType=VARCHAR},
         #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=TINYINT}, #{actualPrice,jdbcType=DOUBLE},
         #{vehicleId,jdbcType=VARCHAR}, #{processStatus,jdbcType=TINYINT}, #{cancelTime,jdbcType=TIMESTAMP},
         #{cancelPersonId,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, now(),
-        now(),#{serverId,jdbcType=TIMESTAMP})
+        now(),#{serverId,jdbcType=VARCHAR},#{payMethod,jdbcType=TINYINT},#{userName,jdbcType=VARCHAR},#{licenseNumber,jdbcType=VARCHAR},
+        #{vehicleColor,jdbcType=VARCHAR},#{vehicleSeries,jdbcType=VARCHAR},#{serviceLocation,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR})
     </insert>
+
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
         insert into czb_vehicle_clean_order
         <trim prefix="(" suffix=")" suffixOverrides="," >

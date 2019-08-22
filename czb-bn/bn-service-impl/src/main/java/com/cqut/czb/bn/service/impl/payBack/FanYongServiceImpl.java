@@ -48,11 +48,13 @@ public class FanYongServiceImpl implements FanYongService {
         Dict dict1=new Dict();
         Dict dict2=new Dict();
         Dict dict3=new Dict();
+        String FyRemark="";
         //查出是否为vip
         User user=userMapper.selectByPrimaryKey(userId);
 
         //1为油卡,2为充值vip，3为购买服务，4为洗车服务
         if(BusinessType==1){
+            FyRemark="购油返佣";
             if(area.equals("重庆市")){
                 dict1 = dictMapperExtra.selectDictByName("fangyong1");
                 dict2 = dictMapperExtra.selectDictByName("fangyong2");
@@ -63,14 +65,17 @@ public class FanYongServiceImpl implements FanYongService {
                 dict3 = dictMapperExtra.selectDictByName("notCQFY_rate");
             }
         }else if(BusinessType==2){//充值vip
+            FyRemark="充值vip返佣";
             dict1 = dictMapperExtra.selectDictByName("vipFY1");
             dict2 = dictMapperExtra.selectDictByName("vipFY2");
             dict3 = dictMapperExtra.selectDictByName("vip_rate");
-        }else if(BusinessType==3){
+        }else if(BusinessType==3){//3为购买服务
+            FyRemark="购买服务返佣";
             dict1 = dictMapperExtra.selectDictByName("serviceFY1");
             dict2 = dictMapperExtra.selectDictByName("serviceFY2");
             dict3 = dictMapperExtra.selectDictByName("service_rate");
-        }else if(BusinessType==4){
+        }else if(BusinessType==4){//4为洗车服务
+            FyRemark="洗车服务返佣";
             dict1 = dictMapperExtra.selectDictByName("CarWashFY1");
             dict2 = dictMapperExtra.selectDictByName("CarWashFY2");
             dict3 = dictMapperExtra.selectDictByName("CarWashFY_rate");
@@ -91,14 +96,14 @@ public class FanYongServiceImpl implements FanYongService {
 
         if(BusinessType==2){
              if(userIdUp1!=null)
-              VipFy(userId, userIdUp1, fangyongRate, money, actualPayment, fangyong1, fangyong2,orgId);
+              VipFy(FyRemark,userId, userIdUp1, fangyongRate, money, actualPayment, fangyong1, fangyong2,orgId);
              System.out.println("插入vip返佣完毕");
              return true;
         }else if (userIdUp1 != null) {//可能存在没有上级用户155888601787524
             //对上级用户的操作
             UserIncomeInfo oldUserIncomeInfoUp1 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp1);//查出原收益信息
             //对上级用户的(收益信息表，收益变更记录表)进行操作
-            changeUserIncomeInfo(userId,userIdUp1, fangyongRate, oldUserIncomeInfoUp1, money, actualPayment, userIdUp1, 1, fangyong1, orgId);
+            changeUserIncomeInfo(FyRemark,userId,userIdUp1, fangyongRate, oldUserIncomeInfoUp1, money, actualPayment, userIdUp1, 1, fangyong1, orgId);
 
             userIdUp2 = userMapperExtra.selectUserId(userIdUp1);
             if (userIdUp2 != null)//可能存在没有上上级用户
@@ -106,7 +111,7 @@ public class FanYongServiceImpl implements FanYongService {
                 //对上上级用户的操作
                 UserIncomeInfo oldUserIncomeInfoUp2 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp2);//查出原收益信息
                 //对上上级用户的收益信息表，收益变更记录表进行操作
-                changeUserIncomeInfo(userId,userIdUp2,fangyongRate,oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2, orgId);
+                changeUserIncomeInfo(FyRemark,userId,userIdUp2,fangyongRate,oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2, orgId);
             }
         }
         return true;
@@ -115,7 +120,7 @@ public class FanYongServiceImpl implements FanYongService {
     /**
      * vip返佣
      */
-    public void  VipFy(String sourId,String userId,double fangyongRate,double money,double actualPayment,double fangyong1,double fangyong2, String orgId){
+    public void  VipFy(String FyRemark,String sourId,String userId,double fangyongRate,double money,double actualPayment,double fangyong1,double fangyong2, String orgId){
 
         while(true){
             User user=userMapper.selectByPrimaryKey(userId);
@@ -124,7 +129,7 @@ public class FanYongServiceImpl implements FanYongService {
                     //对上级用户的操作
                     UserIncomeInfo oldUserIncomeInfoUp = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getUserId());//查出原收益信息
                     //对上级用户的(收益信息表，收益变更记录表)进行操作
-                    changeUserIncomeInfo(sourId,user.getUserId(), fangyongRate, oldUserIncomeInfoUp, money, actualPayment, user.getUserId(),1, fangyong1, orgId);
+                    changeUserIncomeInfo(FyRemark,sourId,user.getUserId(), fangyongRate, oldUserIncomeInfoUp, money, actualPayment, user.getUserId(),1, fangyong1, orgId);
                     return;
                 }else {
                     if(user.getSuperiorUser()!=null&&!user.getSuperiorUser().equals("")) {
@@ -145,7 +150,7 @@ public class FanYongServiceImpl implements FanYongService {
      * 共用方法——处理用户收益信息表
      * k为第几级：0为本人，1为上级，2为上上级
      */
-    boolean changeUserIncomeInfo( String commissionSourceUser,String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId) {
+    boolean changeUserIncomeInfo(String FyRemark, String commissionSourceUser,String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId) {
         String uuid = StringUtil.createId();//新生成的id号（可能要用）
         boolean ischangeUserIncomeInfo;
         //amount为变更金额
@@ -164,7 +169,7 @@ public class FanYongServiceImpl implements FanYongService {
             userIncomeInfo1.setOtherIncome(0.00);
             ischangeUserIncomeInfo = userIncomeInfoMapperExtra.insert(userIncomeInfo1) > 0;//进行新增
             System.out.println("新增用户收益信息表完毕" + k + ischangeUserIncomeInfo);
-            boolean insertIncomeLog = insertIncomeLog(k ,commissionSourceUser,commissionGotUser,uuid,amount,type,userIncomeInfo1, orgId);
+            boolean insertIncomeLog = insertIncomeLog(FyRemark,k ,commissionSourceUser,commissionGotUser,uuid,amount,type,userIncomeInfo1, orgId);
             return insertIncomeLog;
         } else {
             //用户收益信息表——更改
@@ -176,7 +181,7 @@ public class FanYongServiceImpl implements FanYongService {
                     userIncomeInfo.setShareIncome(0.00);
                 ischangeUserIncomeInfo = userIncomeInfoMapperExtra.updateByPrimaryKeySelective(userIncomeInfo) > 0;//进行修改
                 System.out.println("更改用户收益信息表完毕" + ischangeUserIncomeInfo);
-                boolean insertIncomeLog = insertIncomeLog(k,commissionSourceUser,commissionGotUser,userIncomeInfo.getInfoId(), amount,type,userIncomeInfo, orgId);
+                boolean insertIncomeLog = insertIncomeLog(FyRemark,k,commissionSourceUser,commissionGotUser,userIncomeInfo.getInfoId(), amount,type,userIncomeInfo, orgId);
                 if (ischangeUserIncomeInfo == true && insertIncomeLog == true)
                     return true;
                 else {
@@ -191,7 +196,7 @@ public class FanYongServiceImpl implements FanYongService {
      * 新增收益变更记录表
      * type: 0 返佣，1 提现，2 消费，3 推荐，4 其他
      */
-    boolean insertIncomeLog(int commissionLevel, String commissionSourceUser,String commissionGotUser,String uuid, double amount, int type, UserIncomeInfo olduserIncomeInfo,String orgId) {
+    boolean insertIncomeLog(String FyRemark,int commissionLevel, String commissionSourceUser,String commissionGotUser,String uuid, double amount, int type, UserIncomeInfo olduserIncomeInfo,String orgId) {
         //收益变更记录表——插入
         IncomeLog incomeLog = new IncomeLog();
         incomeLog.setCommissionLevel(commissionLevel);
@@ -225,16 +230,8 @@ public class FanYongServiceImpl implements FanYongService {
         }
         incomeLog.setInfoId(uuid);
         incomeLog.setSouseId(orgId);//变更来源
-        if(type==0)
-            incomeLog.setRemark("返佣");
-        else if(type==1)
-            incomeLog.setRemark("提现");
-        else if(type==2)
-            incomeLog.setRemark("消费");
-        else if(type==3)
-            incomeLog.setRemark("推荐");
-        else if(type==4)
-            incomeLog.setRemark("其他");
+        incomeLog.setRemark(FyRemark);
+        System.out.println("返佣说明"+FyRemark);
         boolean insertIncomeLog = incomeLogMapperExtra.insert(incomeLog) > 0;
         System.out.println("新增收益变更记录表完毕" + insertIncomeLog);
         if (insertIncomeLog)
