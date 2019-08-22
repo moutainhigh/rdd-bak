@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
