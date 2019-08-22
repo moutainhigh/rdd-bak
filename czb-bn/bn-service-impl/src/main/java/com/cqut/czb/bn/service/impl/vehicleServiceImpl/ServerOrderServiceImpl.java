@@ -2,7 +2,6 @@ package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
-import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
@@ -30,9 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +82,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                     if (mapperExtra.updateRiderStatus(cleanRider.getRiderId(), "1") > 0) {
                         User user = new User();
                         user.setUserId(manageDTO.getUserId());
-                        riderServiceImpl.sendMesToApp("8708831135559901",user);
+                        riderServiceImpl.sendMesToApp("8708831135559901",user.getUserId());
                         return new JSONResult("分配骑手成功", 200);
                     } else {
                         return new JSONResult("分配骑手成功,但改变骑手状态失败", 200);
@@ -109,7 +106,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
             mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
             User user = new User();
             user.setUserId(cleanOrderDTO.getUserId());
-            riderServiceImpl.sendMesToApp("688008757855812",user);
+            riderServiceImpl.sendMesToApp("688008757855812",user.getUserId());
             return new JSONResult("完成订单成功", 200);
         } else {
             return new JSONResult("完成订单失败", 200);

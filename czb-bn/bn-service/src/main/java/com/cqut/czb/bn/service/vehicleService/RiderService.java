@@ -31,4 +31,6 @@ public interface RiderService {
     boolean updateByPrimaryKeySelective(CleanRider record);
 
     boolean updateByPrimaryKey(CleanRider record);
+
+    void sendMesToApp(String noticeId, String userId);
 }
