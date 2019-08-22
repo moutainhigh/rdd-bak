@@ -1,14 +1,11 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapper;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IDictService;
-import com.cqut.czb.bn.service.vehicleService.RemotePushService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +24,6 @@ public class DictController {
     @Autowired
     RedisUtils redisUtils;
 
-    @Autowired
-    RemotePushService remotePushService;
-
     @RequestMapping(value = "/selectCustomerServiceStaff",method = RequestMethod.GET)
     public JSONResult selectCustomerServiceStaff(){
 
@@ -47,13 +41,7 @@ public class DictController {
     @RequestMapping(value = "/selectIOSInfo",method = RequestMethod.GET)
     public JSONResult selectIOSInfo(Principal principal,@Param("version")String version, @Param("DeviceToken")String DeviceToken){
         User user = (User)redisUtils.get(principal.getName());
-        if (DeviceToken!=null&&!"".equals(DeviceToken)){
-            remotePushService.insertToken(DeviceToken,user,2);
-        }
-
-
-
-        return new JSONResult(dictService.selectIOSInfo(user,version));
+        return new JSONResult(dictService.selectIOSInfo(user,version, DeviceToken));
     }
 
     @RequestMapping(value = "/selectDictList",method = RequestMethod.GET)

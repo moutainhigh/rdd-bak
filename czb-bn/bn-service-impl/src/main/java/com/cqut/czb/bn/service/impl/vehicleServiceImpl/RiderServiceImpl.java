@@ -5,8 +5,8 @@ import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
+import com.cqut.czb.bn.entity.IOSPushDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
-import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
@@ -20,6 +20,7 @@ import javapns.notification.AppleNotificationServerBasicImpl;
 import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,33 +108,32 @@ public class RiderServiceImpl implements RiderService {
         return cleanRiderMapper.updateByPrimaryKey(record);
     }
 
-    public void  sendMesToApp(String  noticeId, User user){
-//    public static void  main(String[] args){
-        RemotePush remotePush = remotePushMapperExtra.selectByUser(user.getUserId());
-////        "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
+    public void  sendMesToApp(String  noticeId, String userId){
+        RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
+////    "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
         String deviceToken = remotePush.getDeviceToken();
         RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
         String  alert  =remotePushNotice.getNoticeContent();//push的内容
-//        String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
-//        String  alert  ="有骑手接单了";//push的内容
+//      String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
+//      String  alert  ="有骑手接单了";//push的内容
         int badge = 1;//图标小红圈的数值
         String sound = "default";//铃音
-
         List<String> tokens = new ArrayList<String>();
         tokens.add(deviceToken);
-        String certificatePath = "czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
+        String certificatePath = "czb-bn//bn-util//src//main//java//com//cqut//czb//bn//util//certificate//iosPush.p12";
         String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
         boolean sendCount = true;
-
         try
         {
             PushNotificationPayload payLoad = new PushNotificationPayload();
             AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
-            payLoad.addCustomDictionary("appRouter",appRouter);
+            IOSPushDTO iosPushDTO  = new IOSPushDTO();
+            iosPushDTO.setIosPath(appRouter.getIosPath());
+            iosPushDTO.setMenuName(appRouter.getMenuName());
+            iosPushDTO.setPathType(appRouter.getPathType());
+            payLoad.addCustomDictionary("appRouter",JSONObject.fromObject(iosPushDTO));
             payLoad.addAlert(alert); // 消息内容
             payLoad.addBadge(badge); // iphone应用图标上小红圈上的数值
-//            payLoad.addCustomDictionary();
-
             if (!StringUtils.isBlank(sound))
             {
                 payLoad.addSound(sound);//铃音

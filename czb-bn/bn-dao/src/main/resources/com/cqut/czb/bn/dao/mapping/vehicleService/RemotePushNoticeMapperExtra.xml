@@ -30,9 +30,7 @@
     <include refid="Base_Column_List" />
     from czb_remote_push_notice
     <where>
-      <if test="noticeId != null and noticeId!=''">
-        notice_id =#{noticeId,jdbcType=VARCHAR}
-      </if>
+        notice_id = #{noticeId,jdbcType=VARCHAR}
     </where>
   </select>
 
