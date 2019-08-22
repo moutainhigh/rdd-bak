@@ -8,6 +8,7 @@
 	shop_name shopName,
 	shop_address shopAddress,
 	commodity_title commodityTitle,
+	is_pay isPay,
 	commodity_price commodityPrice,
 	usage_count usageCount,
 	usage_count - count(czb_commodity_usage_record.order_id) surplusCount,
@@ -33,7 +34,7 @@
         select
         commodity_id as commodityId, shop_id as shopId, commodity_title as commodityTitle, commodity_info as commodityInfo,
         discount as discount, save_path as commodityImg,commodity_price as commodityPrice, classification as classification,
-        usage_count as usageCount, czb_commodity.create_at as createAt, czb_commodity.update_at as updateAt
+        usage_count as usageCount,czb_commodity.is_pay AS isPay,czb_commodity.create_at as createAt, czb_commodity.update_at as updateAt
         from czb_commodity,czb_file
         <where>
             <if test="classification!=null and classification!=''">
@@ -131,6 +132,7 @@
             commodity_price AS commodityPrice,
             classification AS classification,
             usage_count AS usageCount,
+            is_pay AS isPay,
             a.create_at AS createAt,
             a.update_at AS updateAt
         FROM
