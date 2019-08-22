@@ -25,6 +25,10 @@ public class Commodity {
 
     private Date updateAt;
 
+    private Byte isExamine;
+
+    private Integer isPay;
+
     public String getCommodityId() {
         return commodityId;
     }
@@ -111,5 +115,21 @@ public class Commodity {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Byte getIsExamine() {
+        return isExamine;
+    }
+
+    public void setIsExamine(Byte isExamine) {
+        this.isExamine = isExamine;
+    }
+
+    public Integer getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(Integer isPay) {
+        this.isPay = isPay;
     }
 }
