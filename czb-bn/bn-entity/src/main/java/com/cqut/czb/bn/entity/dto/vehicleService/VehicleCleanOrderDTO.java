@@ -47,6 +47,8 @@ public class VehicleCleanOrderDTO {
 
         private List<ComparedPicDTO> OrderPic;
 
+        private String customerServicePhone;
+
         private Integer evaluateLevel; //评价等级
 
         private String evaluateMessage; //评价信息
@@ -199,17 +201,17 @@ public class VehicleCleanOrderDTO {
             this.cancelReason = cancelReason;
         }
 
-    public List<ComparedPicDTO> getOrderPic() {
-        return OrderPic;
-    }
-
-    public void setOrderPic(List<ComparedPicDTO> orderPic) {
-        OrderPic = orderPic;
-    }
-
-    public Integer getEvaluateLevel() {
-            return evaluateLevel;
+        public List<ComparedPicDTO> getOrderPic() {
+            return OrderPic;
         }
+
+        public void setOrderPic(List<ComparedPicDTO> orderPic) {
+            OrderPic = orderPic;
+        }
+
+        public Integer getEvaluateLevel() {
+                return evaluateLevel;
+            }
 
         public void setEvaluateLevel(Integer evaluateLevel) {
             this.evaluateLevel = evaluateLevel;
@@ -231,9 +233,17 @@ public class VehicleCleanOrderDTO {
             this.licenseNumber = licenseNumber;
         }
 
+        public String getCustomerServicePhone() {
+            return customerServicePhone;
+        }
+
+        public void setCustomerServicePhone(String customerServicePhone) {
+            this.customerServicePhone = customerServicePhone;
+        }
+
         public Date getCreateAt() {
-                    return createAt;
-                }
+                        return createAt;
+                    }
 
         public void setCreateAt(Date createAt) {
                 this.createAt = createAt;
