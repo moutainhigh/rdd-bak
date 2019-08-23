@@ -15,6 +15,8 @@ import java.util.List;
 public interface CouponManageService {
     List<ServerCouponDTO> getCouponList(ServerCouponDTO serverCouponDTO,User user);
 
+    List<ServerCouponDTO> getUseCouponList(ServerCouponDTO serverCouponDTO,User user);
+
     PageInfo<CouponStandard> getAllCoupon(CouponStandard couponStandard,PageDTO pageDTO);
 
     Boolean insertCouponStandard(CouponStandard couponStandard);

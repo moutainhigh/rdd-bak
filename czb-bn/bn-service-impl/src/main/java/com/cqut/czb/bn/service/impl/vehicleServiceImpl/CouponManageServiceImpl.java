@@ -39,6 +39,13 @@ public class CouponManageServiceImpl implements CouponManageService {
     public List<ServerCouponDTO> getCouponList(ServerCouponDTO serverCouponDTO,User user) {
         serverCouponDTO.setOwnerId(user.getUserId());
         isExpire(serverCouponDTO);
+        List<ServerCouponDTO> serverCouponDTOList = serverCouponMapperExtra.selectByPrimaryKey(serverCouponDTO);
+        return serverCouponDTOList;
+    }
+
+    public List<ServerCouponDTO> getUseCouponList(ServerCouponDTO serverCouponDTO,User user) {
+        serverCouponDTO.setOwnerId(user.getUserId());
+        isExpire(serverCouponDTO);
         List<ServerCouponDTO> serverCouponDTOList = serverCouponMapperExtra.appSelectByGroup(serverCouponDTO);
         if (serverCouponDTOList!=null && serverCouponDTOList.size()!=0) {
             for (int i = 0; i < serverCouponDTOList.size(); i++) {

@@ -40,6 +40,20 @@ public class CouponManageController {
     }
 
     /**
+     * app用户可使用的优惠券列表获取
+     * @param principal
+     * @return
+     */
+    @GetMapping("/getUseCouponList")
+    public JSONResult getUseCouponList(ServerCouponDTO serverCouponDTO, Principal principal){
+        if (principal ==null || principal.getName()==null ){
+            return new JSONResult("token为空",500);
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(couponManageService.getUseCouponList(serverCouponDTO,user));
+    }
+
+    /**
      * /后台优惠券列表获取
      * @param serverCouponDTO
      * @return
