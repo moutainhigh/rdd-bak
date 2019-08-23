@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra">
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO">
-        <id column="coupon_id" property="couponId" jdbcType="VARCHAR"/>
-        <result column="destroy_time" property="destroyTime" jdbcType="TIMESTAMP"/>
-        <result column="coupon_standard" property="couponStandard" jdbcType="VARCHAR"/>
-        <result column="owner_id" property="ownerId" jdbcType="VARCHAR"/>
-        <result column="standard_explain" property="standardExplain" jdbcType="VARCHAR"/>
-        <result column="standard_value" property="standardValue" jdbcType="DOUBLE"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="coupon_name" property="couponName" jdbcType="TINYINT"/>
-        <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
-        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" >
+        <id column="coupon_id" property="couponId" jdbcType="VARCHAR" />
+        <result column="destroy_time" property="destroyTime" jdbcType="TIMESTAMP" />
+        <result column="coupon_standard" property="couponStandard" jdbcType="VARCHAR" />
+        <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+        <result column="standard_explain" property="standardExplain" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="standard_type" property="standardType" jdbcType="VARCHAR" />
+        <result column="standard_value" property="standardValue" jdbcType="DOUBLE" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="coupon_name" property="couponName" jdbcType="TINYINT" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
-    <sql id="Base_Column_List">
-        coupon_id, destroy_time,standard_value,standard_explain,coupon_standard, owner_id, status,coupon_name, a.create_at, a.update_at
+    <sql id="Base_Column_List" >
+        coupon_id, destroy_time,standard_value,standard_explain,coupon_standard,standard_type,owner_id, status,coupon_name,user_account, a.create_at, a.update_at
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
-            parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" >
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         FROM czb_server_coupon a
         LEFT JOIN czb_coupon_standard b ON a.coupon_standard = b.standard_id
+        LEFT JOIN czb_user c ON  a.owner_id = c.user_id
         <where>
             <if test="ownerId!=null and ownerId!=''">
                 owner_id = #{ownerId,jdbcType=VARCHAR}
@@ -29,8 +31,45 @@
             <if test="status!=null">
                 AND status = #{status,jdbcType=TINYINT}
             </if>
+            <if test="standardType!=null and standardType!=''">
+                AND coupon_standard = #{standardType,jdbcType=VARCHAR}
+            </if>
+            <if test="userAccount!=null and userAccount!=''">
+                AND user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%' )
+            </if>
+            <if test="destroyTime!=null">
+                AND destroy_time &lt;= #{destroyTime,jdbcType=TIMESTAMP}
+            </if>
         </where>
     </select>
+
+    <select id="appSelectByGroup" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" resultType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO">
+        SELECT
+            coupon_standard AS couponStandard,
+            destroy_time as destroyTime,
+            COUNT(*) AS count,
+            group_concat(coupon_id) AS couponId,
+            standard_explain AS standardExplain,
+	        standard_value standardValue,
+	        `status` status,
+	        owner_id ownerId,
+            standard_type standardType
+
+        FROM
+        	czb_server_coupon csc
+        LEFT JOIN czb_coupon_standard ccs ON csc.coupon_standard = ccs.standard_id
+        WHERE
+            `status` = 0
+        <if test="ownerId!=null and ownerId!=''">
+          AND  owner_id = #{ownerId,jdbcType=VARCHAR}
+        </if>
+        GROUP BY
+            coupon_standard,
+            destroy_time,
+            owner_id
+        HAVING group_concat(coupon_id) is not null
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from czb_server_coupon
         where coupon_id = #{couponId,jdbcType=VARCHAR}

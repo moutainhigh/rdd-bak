@@ -17,6 +17,8 @@ public class ServerCouponDTO {
 
     private Integer status;
 
+    private Integer count;   //同一类型优惠券数量
+
     private String couponName;
 
     private String userAccount;
@@ -75,6 +77,14 @@ public class ServerCouponDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public String getCouponName() {

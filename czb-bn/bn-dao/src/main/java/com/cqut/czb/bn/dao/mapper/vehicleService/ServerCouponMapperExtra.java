@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.IssueCoupons.IssueCouponsDTO;
 import com.cqut.czb.bn.entity.dto.appCarWash.conpons;
 import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
+import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,8 @@ public interface ServerCouponMapperExtra {
     int insertByList(List<IssueServerCouponDTO> list);
 
     List<ServerCouponDTO> selectByPrimaryKey(ServerCouponDTO serverCouponDTO);
+
+    List<ServerCouponDTO> appSelectByGroup(ServerCouponDTO serverCouponDTO);
 
     int updateExpire(ServerCouponDTO serverCouponDTO);
 

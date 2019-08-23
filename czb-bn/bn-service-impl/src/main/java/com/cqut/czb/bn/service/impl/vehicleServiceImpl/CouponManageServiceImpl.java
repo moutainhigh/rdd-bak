@@ -39,7 +39,13 @@ public class CouponManageServiceImpl implements CouponManageService {
     public List<ServerCouponDTO> getCouponList(ServerCouponDTO serverCouponDTO,User user) {
         serverCouponDTO.setOwnerId(user.getUserId());
         isExpire(serverCouponDTO);
-        return serverCouponMapperExtra.selectByPrimaryKey(serverCouponDTO);
+        List<ServerCouponDTO> serverCouponDTOList = serverCouponMapperExtra.appSelectByGroup(serverCouponDTO);
+        if (serverCouponDTOList!=null && serverCouponDTOList.size()!=0) {
+            for (int i = 0; i < serverCouponDTOList.size(); i++) {
+                serverCouponDTOList.get(i).setCouponId(serverCouponDTOList.get(i).getCouponId().split(",")[0]);
+            }
+        }
+        return serverCouponDTOList;
     }
 
     //更新已过期的优惠券
