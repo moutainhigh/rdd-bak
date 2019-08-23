@@ -181,7 +181,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
                 return null;
             }
         }
-        if (!"".equals(commodityDTO.getInfos())){
+        if (commodityDTO.getInfos()!=null &&!"".equals(commodityDTO.getInfos())){
             String[] infos = commodityDTO.getInfos().split(";");
             String[][] mes =new String[infos.length][3];
             CommodityUserInfoCollectionDTO[] info = new CommodityUserInfoCollectionDTO[infos.length];
@@ -247,7 +247,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
             delecteCount = deleted.length;
             commodityUserInfoCollectionMapperExtra.deleteInfo(deleted);
         }
-        if (commodityDTO.getInfoIds()!=null||"".equals(commodityDTO.getInfoIds())){
+        if (commodityDTO.getInfoIds()!=null&&!"".equals(commodityDTO.getInfoIds())){
             String[] ids = commodityDTO.getInfoIds().split(",");
             if (commodityDTO.getInfos()!=null||"".equals(commodityDTO.getInfos())) {
                 String[] infos = commodityDTO.getInfos().split(";");  //解析信息收集数组
