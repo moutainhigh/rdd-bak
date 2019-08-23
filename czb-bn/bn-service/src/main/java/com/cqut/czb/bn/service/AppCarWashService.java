@@ -28,7 +28,7 @@ public interface AppCarWashService {
     /**
      * 用户须知
      */
-    Dict getUserInstruction();
+    List<Dict> getUserInstruction();
 
     /**
      * 获取优惠劵

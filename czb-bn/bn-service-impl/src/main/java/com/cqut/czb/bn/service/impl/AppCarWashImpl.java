@@ -14,6 +14,7 @@ import com.cqut.czb.bn.service.AppCarWashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,8 +48,13 @@ public class AppCarWashImpl implements AppCarWashService {
     }
 
     @Override
-    public Dict getUserInstruction() {
-        return dictMapperExtra.selectDictByName("infoToUser");
+    public List<Dict> getUserInstruction() {
+        List<Dict> list = new ArrayList<>();
+        Dict infoToUser = dictMapperExtra.selectDictByName("infoToUser");
+        Dict carWashingRules = dictMapperExtra.selectDictByName("carWashingRules");
+        list.add(infoToUser);
+        list.add(carWashingRules);
+        return list;
     }
 
     @Override
