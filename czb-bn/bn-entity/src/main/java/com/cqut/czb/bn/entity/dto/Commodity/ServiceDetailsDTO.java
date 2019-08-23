@@ -30,6 +30,8 @@ public class ServiceDetailsDTO {
 
     private String shopAddress;
 
+    private Integer isPay;
+
     public String getShopId() {
         return shopId;
     }
@@ -140,5 +142,13 @@ public class ServiceDetailsDTO {
 
     public void setUsageCount(Integer usageCount) {
         this.usageCount = usageCount;
+    }
+
+    public Integer getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(Integer isPay) {
+        this.isPay = isPay;
     }
 }
