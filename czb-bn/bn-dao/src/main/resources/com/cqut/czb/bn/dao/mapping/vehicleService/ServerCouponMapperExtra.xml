@@ -46,7 +46,7 @@
     <select id="appSelectByGroup" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO" resultType="com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO">
         SELECT
             coupon_standard AS couponStandard,
-            destroy_time as destroyTime,
+            DATE_FORMAT(destroy_time,'%Y-%m-%d') as destroyTime,
             COUNT(*) AS count,
             group_concat(coupon_id) AS couponId,
             standard_explain AS standardExplain,
@@ -65,7 +65,7 @@
         </if>
         GROUP BY
             coupon_standard,
-            destroy_time,
+            DATE_FORMAT(destroy_time,'%Y-%m-%d'),
             owner_id
         HAVING group_concat(coupon_id) is not null
     </select>
