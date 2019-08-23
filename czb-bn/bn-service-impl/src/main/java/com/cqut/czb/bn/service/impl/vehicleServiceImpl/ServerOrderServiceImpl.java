@@ -50,6 +50,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
 
     @Autowired
     AnnouncementServiceImpl announcementServiceImpl;
+
     @Autowired
     RiderServiceImpl riderServiceImpl;
 
@@ -82,7 +83,9 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                     if (mapperExtra.updateRiderStatus(cleanRider.getRiderId(), "1") > 0) {
                         User user = new User();
                         user.setUserId(manageDTO.getUserId());
-                        riderServiceImpl.sendMesToApp("8708831135559901",user.getUserId());
+                        MessageThread messageThread = new MessageThread("8708831135559901",user.getUserId());
+                        Thread thread = new Thread(messageThread);
+                        thread.start();
                         return new JSONResult("分配骑手成功", 200);
                     } else {
                         return new JSONResult("分配骑手成功,但改变骑手状态失败", 200);
@@ -106,7 +109,9 @@ public class ServerOrderServiceImpl implements ServerOrderService {
             mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
             User user = new User();
             user.setUserId(cleanOrderDTO.getUserId());
-            riderServiceImpl.sendMesToApp("688008757855812",user.getUserId());
+            MessageThread messageThread = new MessageThread("688008757855812",user.getUserId());
+            Thread thread = new Thread(messageThread);
+            thread.start();
             return new JSONResult("完成订单成功", 200);
         } else {
             return new JSONResult("完成订单失败", 200);
