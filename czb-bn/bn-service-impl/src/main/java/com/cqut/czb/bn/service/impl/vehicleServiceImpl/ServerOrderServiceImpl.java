@@ -174,6 +174,12 @@ public class ServerOrderServiceImpl implements ServerOrderService {
     }
 
     @Override
+    public JSONResult getRiders() {
+        List<CleanRider> cleanRiders = mapperExtra.getCleanRiders();
+        return new JSONResult("获取空闲骑手成功", 200, cleanRiders);
+    }
+
+    @Override
     public JSONResult getUrls(String serverOrderId) {
         // 获得某个订单的洗车前后urls
         List<ImageInfoDTO> beforeUrls = mapperExtra.getUrls(serverOrderId, "0");

@@ -63,6 +63,11 @@ public class ServerOrderController {
         return service.search(manageDTO, pageDTO);
     }
 
+    @GetMapping("/getRiders")
+    public JSONResult getRiders() {
+        return service.getRiders();
+    }
+
     @PostMapping("/tuiKuan")
     public JSONResult tuiKuan(@RequestBody TuiKuanDTO tuiKuanDTO) {
         return service.tuiKuan(tuiKuanDTO);
