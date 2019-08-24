@@ -17,10 +17,15 @@ import javapns.notification.PushedNotification;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
+@Component
+@ComponentScan
 public class MessageThread implements Runnable {
     String noticeId;
 
@@ -35,11 +40,53 @@ public class MessageThread implements Runnable {
     @Autowired
     AppRouterMapper appRouterMapper;
 
-    MessageThread(String noticeId, String userId) {
+    public String getNoticeId() {
+        return noticeId;
+    }
+
+    public void setNoticeId(String noticeId) {
         this.noticeId = noticeId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    public CleanRiderMapperExtra getCleanRiderMapper() {
+        return cleanRiderMapper;
+    }
+
+    public void setCleanRiderMapper(CleanRiderMapperExtra cleanRiderMapper) {
+        this.cleanRiderMapper = cleanRiderMapper;
+    }
+
+    public RemotePushMapperExtra getRemotePushMapperExtra() {
+        return remotePushMapperExtra;
+    }
+
+    public void setRemotePushMapperExtra(RemotePushMapperExtra remotePushMapperExtra) {
+        this.remotePushMapperExtra = remotePushMapperExtra;
+    }
+
+    public RemotePushNoticeMapperExtra getRemotePushNoticeMapperExtra() {
+        return remotePushNoticeMapperExtra;
+    }
+
+    public void setRemotePushNoticeMapperExtra(RemotePushNoticeMapperExtra remotePushNoticeMapperExtra) {
+        this.remotePushNoticeMapperExtra = remotePushNoticeMapperExtra;
+    }
+
+    public AppRouterMapper getAppRouterMapper() {
+        return appRouterMapper;
+    }
+
+    public void setAppRouterMapper(AppRouterMapper appRouterMapper) {
+        this.appRouterMapper = appRouterMapper;
+    }
 
     @Override
     public void run() {
