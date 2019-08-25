@@ -59,7 +59,29 @@ public class VehicleOrderManageDTO {
     // 服务名称
     private String serverName;
 
+    // 服务地点
+    private String location;
+
+    // 支付方式
+    private Integer payMethod;
+
     VehicleOrderManageDTO() {}
+
+    public String getLocation() {
+        return location;
+    }
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String getPhone() {
         return phone;

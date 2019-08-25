@@ -40,6 +40,8 @@
         <result column="vehicle_series" property="carXi" jdbcType="VARCHAR" />
         <result column="vehicle_color" property="color" jdbcType="VARCHAR" />
         <result column="rider_name" property="riderName" jdbcType="VARCHAR" />
+        <result column="service_location" property="location" jdbcType="VARCHAR" />
+        <result column="pay_method" property="payMethod" jdbcType="TINYINT" />
         <result column="contact_number" property="riderPhone" jdbcType="VARCHAR" />
     </resultMap>
 
@@ -90,6 +92,16 @@
         rider.`status`
         from czb_clean_rider rider
         where rider_name = #{riderName}  and contact_number = #{contactNumber}
+    </select>
+
+    <select id="getCleanRiders" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider" resultType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider">
+        SELECT
+        rider.rider_id riderId,
+        rider.`status`,
+        rider.rider_name riderName,
+        rider.contact_number contactNumber
+        from czb_clean_rider rider
+        where status = 0
     </select>
 
     <update id="updateRiderStatus" parameterType="java.lang.String">
@@ -267,12 +279,14 @@
         SELECT
             orders.server_order_id,
             servers.server_name,
-            vehicles.user_name ,
-            vehicles.license_number ,
+            orders.user_name ,
+            orders.license_number ,
+            orders.vehicle_series ,
+            orders.vehicle_color ,
+            orders.phone phone,
+            orders.service_location,
+            orders.pay_method,
             vehicles.vehicle_type ,
-            vehicles.vehicle_series ,
-            vehicles.vehicle_color ,
-            vehicles.phone phone,
             riders.rider_name ,
             riders.rider_id riderId,
             riders.contact_number ,
@@ -308,11 +322,16 @@
                 AND
                 riders.rider_name = #{riderName}
             </if>
+            <if test="processStatus != null and processStatus != '' || processStatus == 0 ">
+                AND
+                orders.process_status = #{processStatus}
+            </if>
             <if test="phone != null and phone != ''">
                 AND
                 vehicles.phone like concat('%', #{phone}, '%')
             </if>
         </where>
+        order by orders.create_at desc
     </select>
 
 

@@ -1,9 +1,9 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
+import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
-import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapper;
-import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
+import com.cqut.czb.bn.dao.mapper.vehicleService.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.BalanceAndInfoIdDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
@@ -50,8 +50,18 @@ public class ServerOrderServiceImpl implements ServerOrderService {
 
     @Autowired
     AnnouncementServiceImpl announcementServiceImpl;
+
     @Autowired
     RiderServiceImpl riderServiceImpl;
+
+    @Autowired
+    CleanRiderMapperExtra cleanRiderMapper;
+    @Autowired
+    RemotePushMapperExtra remotePushMapperExtra;
+    @Autowired
+    RemotePushNoticeMapperExtra remotePushNoticeMapperExtra;
+    @Autowired
+    AppRouterMapper appRouterMapper;
 
     @Override
     public JSONResult distribute(VehicleOrderManageDTO manageDTO) {
@@ -82,7 +92,15 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                     if (mapperExtra.updateRiderStatus(cleanRider.getRiderId(), "1") > 0) {
                         User user = new User();
                         user.setUserId(manageDTO.getUserId());
-                        riderServiceImpl.sendMesToApp("8708831135559901",user.getUserId());
+                        MessageThread messageThread = new MessageThread();
+                        messageThread.setNoticeId("8708831135559901");
+                        messageThread.setUserId(user.getUserId());
+                        messageThread.setCleanRiderMapper(cleanRiderMapper);
+                        messageThread.setAppRouterMapper(appRouterMapper);
+                        messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+                        messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                        Thread thread = new Thread(messageThread);
+                        thread.start();
                         return new JSONResult("分配骑手成功", 200);
                     } else {
                         return new JSONResult("分配骑手成功,但改变骑手状态失败", 200);
@@ -106,7 +124,15 @@ public class ServerOrderServiceImpl implements ServerOrderService {
             mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
             User user = new User();
             user.setUserId(cleanOrderDTO.getUserId());
-            riderServiceImpl.sendMesToApp("688008757855812",user.getUserId());
+            MessageThread messageThread = new MessageThread();
+            messageThread.setNoticeId("688008757855812");
+            messageThread.setUserId(user.getUserId());
+            Thread thread = new Thread(messageThread);
+            messageThread.setCleanRiderMapper(cleanRiderMapper);
+            messageThread.setAppRouterMapper(appRouterMapper);
+            messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+            messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+            thread.start();
             return new JSONResult("完成订单成功", 200);
         } else {
             return new JSONResult("完成订单失败", 200);
@@ -171,6 +197,12 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         PageInfo<VehicleOrderManageDTO> orderInfoList = new PageInfo<>(orderList);
 
         return new JSONResult("查询成功", 200, orderInfoList);
+    }
+
+    @Override
+    public JSONResult getRiders() {
+        List<CleanRider> cleanRiders = mapperExtra.getCleanRiders();
+        return new JSONResult("获取空闲骑手成功", 200, cleanRiders);
     }
 
     @Override

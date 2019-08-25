@@ -15,7 +15,7 @@
           msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR}
           AND
 		  czb_msg_record.create_at>UNIX_TIMESTAMP()
-		  ORDER BY msg_state ASC,msg_type ASC,czb_msg_model.create_at DESC
+		  ORDER BY czb_msg_model.create_at DESC,msg_state ASC,msg_type ASC
   </select>
 
     <select id="selectMsgNum" resultType="java.lang.Integer" parameterType="java.lang.String" >
