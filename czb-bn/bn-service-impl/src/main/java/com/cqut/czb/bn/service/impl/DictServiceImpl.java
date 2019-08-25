@@ -12,13 +12,11 @@ import com.cqut.czb.bn.entity.entity.LoginInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.service.IDictService;
-import com.cqut.czb.bn.service.vehicleService.RemotePushService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.tools.jstat.Token;
 
 import java.util.ArrayList;
 import java.util.Date;

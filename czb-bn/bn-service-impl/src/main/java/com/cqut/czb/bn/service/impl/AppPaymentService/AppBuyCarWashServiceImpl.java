@@ -75,7 +75,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
-        Double actualPrice=BigDecimal.valueOf(commodity.getCurrentPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
+        double actualPrice=BigDecimal.valueOf(commodity.getCurrentPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
         //商品id
         String serviceId= cleanServerVehicleDTO.getServerId();
         //优惠劵id
@@ -91,7 +91,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        InsertBusinessInfo(1,thirdOrder,user,cleanServerVehicleDTO,commodity);//payMethod 1为支付宝，2为微信
+        InsertBusinessInfo(actualPrice,1,thirdOrder,user,cleanServerVehicleDTO,commodity);//payMethod 1为支付宝，2为微信
 
         return orderString;
     }
@@ -122,17 +122,18 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
 
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String nonceStrTemp = WeChatUtils.getRandomStr();
+        double money=BigDecimal.valueOf(commodity.getCurrentPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
         // 设置参数
         SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersBuyCarWash(cleanServerVehicleDTO.getCouponId(),couponMoney,nonceStrTemp,orgId,user.getUserId(),commodity.getCurrentPrice(),cleanServerVehicleDTO.getServerId());
 
-        InsertBusinessInfo(2,orgId,user,cleanServerVehicleDTO,commodity);
+        InsertBusinessInfo(money,2,orgId,user,cleanServerVehicleDTO,commodity);
         return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
 
     /**
      * 插入业务信息
      */
-    public void InsertBusinessInfo(int payMethod,String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO,ServiceCommodityDTO serviceCommodityDTO){
+    public void InsertBusinessInfo(double money,int payMethod,String thirdOrder,User user,CleanServerVehicleDTO cleanServerVehicleDTO,ServiceCommodityDTO serviceCommodityDTO){
 
         //服务车辆id
         String vehicleId=StringUtil.createId();
@@ -175,6 +176,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         //前要注意下
         vehicleCO.setVehicleId(vehicleId);
         vehicleCO.setProcessStatus((byte)0);
+        vehicleCO.setActualPrice(money);
 
         vehicleCO.setServerId(cleanServerVehicleDTO.getServerId());
         vehicleCO.setPayMethod(payMethod);

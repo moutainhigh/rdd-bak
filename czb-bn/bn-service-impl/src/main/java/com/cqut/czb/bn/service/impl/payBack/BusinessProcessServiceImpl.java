@@ -215,6 +215,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String orgId = "";
         double money = Double.valueOf(restmap.get("total_fee").toString());
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+        System.out.println("weixin支付:"+money);
         String ownerId = "";
         String couponId="";
         String area="";//地区
@@ -248,6 +249,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         orderDTO.setThirdOrder(thirdOrderId);
         orderDTO.setPayStatus((byte)1);
         orderDTO.setUpdateAt(new Date());
+        orderDTO.setActualPrice(money);
         boolean ve=vehicleCleanOrderMapperExtra.updateMyBackOrder(orderDTO)>0;
         System.out.println("更改洗车订单完毕"+ve);
 
