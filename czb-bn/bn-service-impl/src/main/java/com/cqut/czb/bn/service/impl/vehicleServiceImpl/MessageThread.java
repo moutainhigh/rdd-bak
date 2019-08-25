@@ -4,7 +4,7 @@ import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
-import com.cqut.czb.bn.entity.dto.IOSPushDTO;
+import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
@@ -27,9 +27,9 @@ import java.util.List;
 @Component
 @ComponentScan
 public class MessageThread implements Runnable {
-    String noticeId;
+    static String noticeId;
 
-    String userId;
+    static String userId;
 
     @Autowired
     CleanRiderMapperExtra cleanRiderMapper;
@@ -104,19 +104,19 @@ public class MessageThread implements Runnable {
             String sound = "default";//铃音
             List<String> tokens = new ArrayList<String>();
             tokens.add(deviceToken);
-            String certificatePath = "czb-bn//bn-util//src//main//java//com//cqut//czb//bn//util//certificate//iosPush.p12";
+            String certificatePath = "iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
             try
             {
                 PushNotificationPayload payLoad = new PushNotificationPayload();
                 AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
-                IOSPushDTO iosPushDTO  = new IOSPushDTO();
-                iosPushDTO.setIosPath(appRouter.getIosPath());
-                iosPushDTO.setMenuName(appRouter.getMenuName());
-                iosPushDTO.setPathType(appRouter.getPathType());
-                iosPushDTO.setTitle(remotePushNotice.getNoticeContent());
-                payLoad.addCustomDictionary("appRouter", JSONObject.fromObject(iosPushDTO));
+                PushDTO pushDTO = new PushDTO();
+                pushDTO.setIosPath(appRouter.getIosPath());
+                pushDTO.setMenuName(appRouter.getMenuName());
+                pushDTO.setPathType(appRouter.getPathType());
+                pushDTO.setTitle(remotePushNotice.getNoticeContent());
+                payLoad.addCustomDictionary("appRouter", JSONObject.fromObject(pushDTO));
                 payLoad.addAlert(alert); // 消息内容
                 payLoad.addBadge(badge); // iphone应用图标上小红圈上的数值
                 if (!StringUtils.isBlank(sound))

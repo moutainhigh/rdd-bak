@@ -133,6 +133,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
             messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
             messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
             thread.start();
+//            riderServiceImpl.sendMesToApp("688008757855812",user.getUserId());
             return new JSONResult("完成订单成功", 200);
         } else {
             return new JSONResult("完成订单失败", 200);

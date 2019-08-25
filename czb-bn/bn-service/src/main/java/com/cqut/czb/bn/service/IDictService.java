@@ -15,7 +15,7 @@ public interface IDictService {
 
     List<Dict> selectCustomerServiceStaff();
 
-    AppInfoDTO selectAndroidInfo(User user, String version);
+    AppInfoDTO selectAndroidInfo(User user, String version,String DeviceToken);
 
     AppInfoDTO selectIOSInfo(User user,String version,String DeviceToken);
 
