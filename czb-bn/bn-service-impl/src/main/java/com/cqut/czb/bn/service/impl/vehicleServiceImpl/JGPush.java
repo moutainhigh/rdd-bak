@@ -12,6 +12,7 @@ import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
 import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
+import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PushDTO;
@@ -24,7 +25,10 @@ import jdk.nashorn.internal.parser.JSONParser;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class JGPush {
+public class JGPush implements Runnable{
+
+    @Autowired
+    CleanRiderMapperExtra cleanRiderMapper;
     @Autowired
     RemotePushMapperExtra remotePushMapperExtra;
     @Autowired
@@ -32,11 +36,64 @@ public class JGPush {
     @Autowired
     AppRouterMapper appRouterMapper;
 
-   private static String APPKEY = "4787e6a31c6915fc3b855c85";
-   private static String MASTERSECRET = "ed0252a2472f0df86e351c65";
+    static String noticeId;
+
+    static String userId;
+
+    private static String APPKEY = "4787e6a31c6915fc3b855c85";
+
+    private static String MASTERSECRET = "ed0252a2472f0df86e351c65";
+
+    public String getNoticeId() {
+        return noticeId;
+    }
+
+    public void setNoticeId(String noticeId) {
+        this.noticeId = noticeId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public CleanRiderMapperExtra getCleanRiderMapper() {
+        return cleanRiderMapper;
+    }
+
+    public void setCleanRiderMapper(CleanRiderMapperExtra cleanRiderMapper) {
+        this.cleanRiderMapper = cleanRiderMapper;
+    }
+
+    public RemotePushMapperExtra getRemotePushMapperExtra() {
+        return remotePushMapperExtra;
+    }
+
+    public void setRemotePushMapperExtra(RemotePushMapperExtra remotePushMapperExtra) {
+        this.remotePushMapperExtra = remotePushMapperExtra;
+    }
+
+    public RemotePushNoticeMapperExtra getRemotePushNoticeMapperExtra() {
+        return remotePushNoticeMapperExtra;
+    }
+
+    public void setRemotePushNoticeMapperExtra(RemotePushNoticeMapperExtra remotePushNoticeMapperExtra) {
+        this.remotePushNoticeMapperExtra = remotePushNoticeMapperExtra;
+    }
+
+    public AppRouterMapper getAppRouterMapper() {
+        return appRouterMapper;
+    }
+
+    public void setAppRouterMapper(AppRouterMapper appRouterMapper) {
+        this.appRouterMapper = appRouterMapper;
+    }
 
 
-    public void JGSendMessage(String noticeId,String userId){
+    public void run(){
         RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
         RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
         AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());

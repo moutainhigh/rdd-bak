@@ -312,7 +312,7 @@
             </if>
             <if test="firstName != null and firstName != ''">
                 AND
-                vehicles.user_name = #{firstName}
+                vehicles.user_name like concat ('%',#{firstName},'%')
             </if>
             <if test="riderPhone != null and riderPhone != ''">
                 AND

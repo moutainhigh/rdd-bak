@@ -14,6 +14,7 @@ import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
+import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.AnnouncementServiceImpl;
@@ -90,17 +91,34 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                 if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
                     // 分配骑手成功后，改变骑手状态
                     if (mapperExtra.updateRiderStatus(cleanRider.getRiderId(), "1") > 0) {
-                        User user = new User();
-                        user.setUserId(manageDTO.getUserId());
-                        MessageThread messageThread = new MessageThread();
-                        messageThread.setNoticeId("8708831135559901");
-                        messageThread.setUserId(user.getUserId());
-                        messageThread.setCleanRiderMapper(cleanRiderMapper);
-                        messageThread.setAppRouterMapper(appRouterMapper);
-                        messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
-                        messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
-                        Thread thread = new Thread(messageThread);
-                        thread.start();
+                        RemotePush remotePush = remotePushMapperExtra.selectByUser(manageDTO.getUserId());
+                        if (remotePush!=null&&remotePush.getDeviceType()!=null){
+                            if (remotePush.getDeviceType()==1){
+                                User user = new User();
+                                user.setUserId(manageDTO.getUserId());
+                                JGPush jgPush = new JGPush();
+                                jgPush.setNoticeId("8708831135559901");
+                                jgPush.setUserId(user.getUserId());
+                                jgPush.setCleanRiderMapper(cleanRiderMapper);
+                                jgPush.setAppRouterMapper(appRouterMapper);
+                                jgPush.setRemotePushMapperExtra(remotePushMapperExtra);
+                                jgPush.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                                Thread thread = new Thread(jgPush);
+                                thread.start();
+                            }else {
+                                User user = new User();
+                                user.setUserId(manageDTO.getUserId());
+                                MessageThread messageThread = new MessageThread();
+                                messageThread.setNoticeId("8708831135559901");
+                                messageThread.setUserId(user.getUserId());
+                                messageThread.setCleanRiderMapper(cleanRiderMapper);
+                                messageThread.setAppRouterMapper(appRouterMapper);
+                                messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+                                messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                                Thread thread = new Thread(messageThread);
+                                thread.start();
+                            }
+                        }
                         return new JSONResult("分配骑手成功", 200);
                     } else {
                         return new JSONResult("分配骑手成功,但改变骑手状态失败", 200);
@@ -121,18 +139,34 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         Byte status = 2;
         cleanOrder.setProcessStatus(status);
         if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
-            mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
-            User user = new User();
-            user.setUserId(cleanOrderDTO.getUserId());
-            MessageThread messageThread = new MessageThread();
-            messageThread.setNoticeId("688008757855812");
-            messageThread.setUserId(user.getUserId());
-            Thread thread = new Thread(messageThread);
-            messageThread.setCleanRiderMapper(cleanRiderMapper);
-            messageThread.setAppRouterMapper(appRouterMapper);
-            messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
-            messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
-            thread.start();
+            RemotePush remotePush = remotePushMapperExtra.selectByUser(cleanOrderDTO.getUserId());
+            if (remotePush!=null&&remotePush.getDeviceType()!=null){
+                if (remotePush.getDeviceType()==1){
+                    User user = new User();
+                    user.setUserId(cleanOrderDTO.getUserId());
+                    JGPush jgPush = new JGPush();
+                    jgPush.setNoticeId("8708831135559901");
+                    jgPush.setUserId(user.getUserId());
+                    jgPush.setCleanRiderMapper(cleanRiderMapper);
+                    jgPush.setAppRouterMapper(appRouterMapper);
+                    jgPush.setRemotePushMapperExtra(remotePushMapperExtra);
+                    jgPush.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                    Thread thread = new Thread(jgPush);
+                    thread.start();
+                }else {
+                    User user = new User();
+                    user.setUserId(cleanOrderDTO.getUserId());
+                    MessageThread messageThread = new MessageThread();
+                    messageThread.setNoticeId("8708831135559901");
+                    messageThread.setUserId(user.getUserId());
+                    messageThread.setCleanRiderMapper(cleanRiderMapper);
+                    messageThread.setAppRouterMapper(appRouterMapper);
+                    messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+                    messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                    Thread thread = new Thread(messageThread);
+                    thread.start();
+                }
+            }
 //            riderServiceImpl.sendMesToApp("688008757855812",user.getUserId());
             return new JSONResult("完成订单成功", 200);
         } else {
