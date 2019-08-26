@@ -5,12 +5,14 @@ package com.cqut.czb.bn.entity.dto;
  * @auther nihao
  * @create 2019-08-22 16:41
  */
-public class IOSPushDTO {
+public class PushDTO {
     private Integer pathType;
 
     private String menuName;
 
     private String iosPath;
+
+    private String androidPath;
 
     private String title;
 
@@ -20,6 +22,14 @@ public class IOSPushDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAndroidPath() {
+        return androidPath;
+    }
+
+    public void setAndroidPath(String androidPath) {
+        this.androidPath = androidPath;
     }
 
     public Integer getPathType() {

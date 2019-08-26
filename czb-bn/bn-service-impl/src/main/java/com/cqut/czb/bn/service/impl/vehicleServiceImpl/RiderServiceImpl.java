@@ -5,7 +5,7 @@ import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
-import com.cqut.czb.bn.entity.dto.IOSPushDTO;
+import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
@@ -108,6 +108,7 @@ public class RiderServiceImpl implements RiderService {
         return cleanRiderMapper.updateByPrimaryKey(record);
     }
 
+//    public static void main(String[] args){
     public void  sendMesToApp(String  noticeId, String userId){
         RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
         if (remotePush.getDeviceType()!=2){
@@ -130,12 +131,12 @@ public class RiderServiceImpl implements RiderService {
         {
             PushNotificationPayload payLoad = new PushNotificationPayload();
             AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
-            IOSPushDTO iosPushDTO  = new IOSPushDTO();
-            iosPushDTO.setIosPath(appRouter.getIosPath());
-            iosPushDTO.setMenuName(appRouter.getMenuName());
-            iosPushDTO.setPathType(appRouter.getPathType());
-            iosPushDTO.setTitle(remotePushNotice.getNoticeContent());
-            payLoad.addCustomDictionary("appRouter",JSONObject.fromObject(iosPushDTO));
+            PushDTO pushDTO = new PushDTO();
+            pushDTO.setIosPath(appRouter.getIosPath());
+            pushDTO.setMenuName(appRouter.getMenuName());
+            pushDTO.setPathType(appRouter.getPathType());
+            pushDTO.setTitle(remotePushNotice.getNoticeContent());
+            payLoad.addCustomDictionary("appRouter",JSONObject.fromObject(pushDTO));
             payLoad.addAlert(alert); // 消息内容
             payLoad.addBadge(badge); // iphone应用图标上小红圈上的数值
             if (!StringUtils.isBlank(sound))

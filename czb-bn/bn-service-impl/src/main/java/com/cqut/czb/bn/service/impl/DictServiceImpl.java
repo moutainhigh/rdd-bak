@@ -12,13 +12,11 @@ import com.cqut.czb.bn.entity.entity.LoginInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.service.IDictService;
-import com.cqut.czb.bn.service.vehicleService.RemotePushService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.tools.jstat.Token;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,8 +57,8 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public AppInfoDTO selectAndroidInfo(User user, String version) {
-
+    public AppInfoDTO selectAndroidInfo(User user, String version,String DeviceToken) {
+        dealDeviceToken(user.getUserId(), DeviceToken,2);
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -130,7 +128,7 @@ public class DictServiceImpl implements IDictService {
     public AppInfoDTO selectIOSInfo(User user,String version, String DeviceToken) {
 
         //处理IOSDeviceToken
-        dealDeviceToken(user.getUserId(), DeviceToken);
+        dealDeviceToken(user.getUserId(), DeviceToken,2);
 
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
@@ -164,7 +162,7 @@ public class DictServiceImpl implements IDictService {
         return appInfoDTO;
     }
 
-    public void dealDeviceToken(String userId, String DeviceToken){
+    public void dealDeviceToken(String userId, String DeviceToken,Integer type){
         RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
         if ( remotePush != null ){
             if (DeviceToken != null || DeviceToken != ""){
@@ -177,7 +175,11 @@ public class DictServiceImpl implements IDictService {
             RemotePush model = new RemotePush();
             model.setDeviceId(StringUtil.createId());
             model.setDeviceToken(DeviceToken);
-            model.setDeviceType(2);
+            if (type==1){
+                model.setDeviceType(1);
+            }else {
+                model.setDeviceType(2);
+            }
             model.setUserId(userId);
             model.setCreateAt(new Date());
             model.setUpdateAt(new Date());

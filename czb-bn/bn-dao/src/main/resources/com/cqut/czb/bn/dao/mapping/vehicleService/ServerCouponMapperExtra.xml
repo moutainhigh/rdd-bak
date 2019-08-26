@@ -74,7 +74,7 @@
         delete from czb_server_coupon
         where coupon_id = #{couponId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon">
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO">
         insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard,
         owner_id, status, create_at,
         update_at)
@@ -160,8 +160,10 @@
         set
         status = 2,
         update_at = #{updateAt,jdbcType=TIMESTAMP}
-        where owner_id = #{ownerId,jdbcType=VARCHAR}
-        AND destroy_time &lt;= now() AND status !=1
+        where destroy_time &lt;= now() AND status !=1
+        <if test="ownerId=null and ownerId!=''">
+            AND  owner_id = #{ownerId,jdbcType=VARCHAR}
+        </if>
     </update>
 
 

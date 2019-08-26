@@ -18,6 +18,8 @@ public interface ServerOrderService {
 
     JSONResult search(VehicleOrderManageDTO dto, PageDTO pageDTO);
 
+    JSONResult getRiders();
+
     JSONResult getUrls(String serverOrderId);
 
     JSONResult deleteImage(String fileId, String type);

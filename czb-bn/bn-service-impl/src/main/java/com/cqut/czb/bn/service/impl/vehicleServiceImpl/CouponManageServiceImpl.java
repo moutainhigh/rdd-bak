@@ -21,6 +21,8 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -112,8 +114,20 @@ public class CouponManageServiceImpl implements CouponManageService {
         if (couponStandard==null||couponStandard.size()==0||couponStandard.get(0).getContinueDays()==null){
             return false;
         }else {
-            Date now = new Date();
-            issueServerCouponDTO.setDestroyTime(DateUtils.addDays(now, couponStandard.get(0).getContinueDays()));
+            try {
+                DateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                Date day=new Date();
+                String str=format.format(day);
+                Date now=format.parse(str);
+                long curMilliNow = now.getTime();
+                int dayMis=1000*60*60*24;//一天的毫秒
+                long resultMis=curMilliNow+(dayMis-1000);
+                Date startTime = new Date(resultMis);
+                issueServerCouponDTO.setDestroyTime(DateUtils.addDays(startTime, couponStandard.get(0).getContinueDays()));
+            }catch (Exception e){
+              e.printStackTrace();
+            }
+
         }
         if (issueServerCouponDTO.getType()==0){   //如果是单个发放
             issueServerCouponDTO.setCouponId(StringUtil.createId());

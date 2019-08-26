@@ -31,6 +31,8 @@ public interface VehicleCleanOrderMapperExtra {
     // 洗车订单管理获取骑手信息
     CleanRider getCleanRider(CleanRider rider);
 
+    List<CleanRider> getCleanRiders();
+
     // 洗车订单管理，更改骑手状态
     int updateRiderStatus(@Param("riderId") String riderId, @Param("status") String status);
 

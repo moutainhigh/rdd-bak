@@ -28,7 +28,8 @@ dependencies {
     compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '3.3.49.ALL'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.12.RELEASE'
     compile group: 'com.github.fernandospr', name: 'javapns-jdk16', version: '2.2.1'
-
+    compile group: 'cn.jpush.api', name: 'jpush-client', version: '3.2.17'
+    compile group: 'cn.jpush.api', name: 'jiguang-common', version: '1.1.1'
 }
 
 tasks.withType(JavaCompile){
