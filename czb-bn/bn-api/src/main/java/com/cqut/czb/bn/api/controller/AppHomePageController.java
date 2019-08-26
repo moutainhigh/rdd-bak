@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
+import com.cqut.czb.bn.entity.dto.IOSHomeTabDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -9,13 +10,13 @@ import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.service.vehicleService.RiderService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 创建者：陈德强
@@ -50,7 +51,41 @@ public class AppHomePageController {
         if(locationCode==null&&locationCode.equals("")){
             locationCode="homePage";
         }
+        riderService.sendMesToApp("688008757855812", "155930101061936");
         return new JSONResult(appHomePageService.selectAnnouncement(locationCode));
+    }
+
+    /**
+     * 控制IOS的Home展示
+     */
+    @GetMapping("/getHomeTab")
+    public JSONResult getHomeTab(){
+        List<IOSHomeTabDTO> list = new ArrayList();
+        IOSHomeTabDTO iosHomeTabDTO1 = new IOSHomeTabDTO();
+        iosHomeTabDTO1.setTabName("首页");
+        iosHomeTabDTO1.setImage("首页灰");
+        iosHomeTabDTO1.setSelectedImage("首页");
+        iosHomeTabDTO1.setIdentifierName("homepage");
+        IOSHomeTabDTO iosHomeTabDTO2 = new IOSHomeTabDTO();
+        iosHomeTabDTO2.setTabName("洗车专区");
+        iosHomeTabDTO2.setImage("洗车灰");
+        iosHomeTabDTO2.setSelectedImage("洗车");
+        iosHomeTabDTO2.setIdentifierName("WashHome");
+        IOSHomeTabDTO iosHomeTabDTO3 = new IOSHomeTabDTO();
+        iosHomeTabDTO3.setTabName("消息中心");
+        iosHomeTabDTO3.setImage("消息中心灰");
+        iosHomeTabDTO3.setSelectedImage("消息中心");
+        iosHomeTabDTO3.setIdentifierName("MessageNav");
+        IOSHomeTabDTO iosHomeTabDTO4 = new IOSHomeTabDTO();
+        iosHomeTabDTO4.setTabName("个人中心");
+        iosHomeTabDTO4.setImage("个人中心灰");
+        iosHomeTabDTO4.setSelectedImage("个人中心");
+        iosHomeTabDTO4.setIdentifierName("personNav");
+        list.add(iosHomeTabDTO1);
+//        list.add(iosHomeTabDTO2);
+        list.add(iosHomeTabDTO3);
+        list.add(iosHomeTabDTO4);
+        return new JSONResult(list);
     }
 
     /**
