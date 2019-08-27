@@ -98,7 +98,8 @@ public class JGPush implements Runnable{
         RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
         AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
         PushDTO pushDTO = new PushDTO();
-        pushDTO.setIosPath(appRouter.getIosPath());
+        pushDTO.setIosPath("");     //当前只有android用此通知，如ios也用则判断
+        pushDTO.setAndroidPath(appRouter.getAndroidPath());
         pushDTO.setMenuName(appRouter.getMenuName());
         pushDTO.setPathType(appRouter.getPathType());
         pushDTO.setTitle(remotePushNotice.getNoticeContent());

@@ -139,13 +139,14 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         Byte status = 2;
         cleanOrder.setProcessStatus(status);
         if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
+            mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
             RemotePush remotePush = remotePushMapperExtra.selectByUser(cleanOrderDTO.getUserId());
             if (remotePush!=null&&remotePush.getDeviceType()!=null){
                 if (remotePush.getDeviceType()==1){
                     User user = new User();
                     user.setUserId(cleanOrderDTO.getUserId());
                     JGPush jgPush = new JGPush();
-                    jgPush.setNoticeId("8708831135559901");
+                    jgPush.setNoticeId("688008757855812");
                     jgPush.setUserId(user.getUserId());
                     jgPush.setCleanRiderMapper(cleanRiderMapper);
                     jgPush.setAppRouterMapper(appRouterMapper);
@@ -157,7 +158,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                     User user = new User();
                     user.setUserId(cleanOrderDTO.getUserId());
                     MessageThread messageThread = new MessageThread();
-                    messageThread.setNoticeId("8708831135559901");
+                    messageThread.setNoticeId("688008757855812");
                     messageThread.setUserId(user.getUserId());
                     messageThread.setCleanRiderMapper(cleanRiderMapper);
                     messageThread.setAppRouterMapper(appRouterMapper);

@@ -82,6 +82,15 @@
         #{ownerId,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP},
         #{updateAt,jdbcType=TIMESTAMP})
     </insert>
+
+    <insert id="insertByList" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO">
+        insert into czb_server_coupon (coupon_id, destroy_time, coupon_standard,
+        owner_id, status, create_at,
+        update_at)
+        values <foreach collection="list" item="item" index="index"  separator=",">(#{item.couponId,jdbcType=VARCHAR}, #{item.destroyTime,jdbcType=TIMESTAMP}, #{item.couponStandard,jdbcType=VARCHAR},
+        #{item.ownerId,jdbcType=VARCHAR}, #{item.status,jdbcType=TINYINT}, now(),
+        now())</foreach>
+    </insert>
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerCoupon">
         insert into czb_server_coupon
         <trim prefix="(" suffix=")" suffixOverrides=",">
