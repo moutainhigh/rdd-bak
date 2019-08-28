@@ -19,6 +19,8 @@ public class Shop {
 
     private Date updateAt;
 
+    private Integer audit;
+
     public String getShopId() {
         return shopId;
     }
@@ -81,5 +83,13 @@ public class Shop {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Integer audit) {
+        this.audit = audit;
     }
 }

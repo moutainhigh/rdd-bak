@@ -9,15 +9,11 @@
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="audit" property="audit" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    rider_id, rider_name, contact_number, status, user_id, create_at, update_at
+    rider_id, rider_name, contact_number, status, user_id, create_at, update_at, audit
   </sql>
-  <select id="selectAllRiders" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List" />
-    from czb_clean_rider
-  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -31,10 +27,10 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider" >
     insert into czb_clean_rider (rider_id, rider_name, contact_number, 
       status, user_id, create_at, 
-      update_at)
+      update_at, audit)
     values (#{riderId,jdbcType=VARCHAR}, #{riderName,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{updateAt,jdbcType=TIMESTAMP}, #{audit,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider" >
     insert into czb_clean_rider
@@ -60,6 +56,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="audit != null" >
+        audit,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="riderId != null" >
@@ -82,6 +81,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="audit != null" >
+        #{audit,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -106,6 +108,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="audit != null" >
+        audit = #{audit,jdbcType=INTEGER},
+      </if>
     </set>
     where rider_id = #{riderId,jdbcType=VARCHAR}
   </update>
@@ -116,7 +121,8 @@
       status = #{status,jdbcType=TINYINT},
       user_id = #{userId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      audit = #{audit,jdbcType=INTEGER}
     where rider_id = #{riderId,jdbcType=VARCHAR}
   </update>
 </mapper>

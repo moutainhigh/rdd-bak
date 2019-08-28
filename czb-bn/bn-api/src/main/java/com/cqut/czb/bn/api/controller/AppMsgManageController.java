@@ -35,7 +35,7 @@ public class AppMsgManageController {
     public JSONResult getMsgNum(Principal principal) {
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();
-//        user.setUserId("156225046615657");
+//        user.setUserId("155937282021834");
         return new JSONResult(appMessageManageService.getMsgNum(user));
     }
 

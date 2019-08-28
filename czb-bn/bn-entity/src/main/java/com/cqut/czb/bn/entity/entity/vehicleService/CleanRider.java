@@ -1,8 +1,5 @@
 package com.cqut.czb.bn.entity.entity.vehicleService;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
 public class CleanRider {
@@ -20,15 +17,14 @@ public class CleanRider {
 
     private Date updateAt;
 
-    public CleanRider() {
-    }
+    private Integer audit;
 
     public String getRiderId() {
         return riderId;
     }
 
     public void setRiderId(String riderId) {
-        this.riderId = riderId;
+        this.riderId = riderId == null ? null : riderId.trim();
     }
 
     public String getRiderName() {
@@ -36,7 +32,7 @@ public class CleanRider {
     }
 
     public void setRiderName(String riderName) {
-        this.riderName = riderName;
+        this.riderName = riderName == null ? null : riderName.trim();
     }
 
     public String getContactNumber() {
@@ -44,7 +40,7 @@ public class CleanRider {
     }
 
     public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
+        this.contactNumber = contactNumber == null ? null : contactNumber.trim();
     }
 
     public Byte getStatus() {
@@ -60,7 +56,7 @@ public class CleanRider {
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public Date getCreateAt() {
@@ -77,5 +73,13 @@ public class CleanRider {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Integer audit) {
+        this.audit = audit;
     }
 }
