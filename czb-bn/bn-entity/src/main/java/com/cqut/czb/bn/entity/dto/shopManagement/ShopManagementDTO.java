@@ -48,6 +48,8 @@ public class ShopManagementDTO extends PageDTO {
      */
     private Integer numberOfOutstandingAccounts;
 
+    private Integer audit;
+
     public String getUserId() {
         return userId;
     }
@@ -110,5 +112,13 @@ public class ShopManagementDTO extends PageDTO {
 
     public void setTotalHistoricalTransactions(Double totalHistoricalTransactions) {
         this.totalHistoricalTransactions = totalHistoricalTransactions;
+    }
+
+    public Integer getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Integer audit) {
+        this.audit = audit;
     }
 }

@@ -28,6 +28,8 @@ public class ShopDTO {
 
     private String deleteId;    //删除的图片
 
+    private Integer audit;  //审核状态
+
     private Date createAt;
 
     private Date updateAt;
@@ -111,6 +113,14 @@ public class ShopDTO {
 
     public void setDeleteId(String deleteId) {
         this.deleteId = deleteId;
+    }
+
+    public Integer getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Integer audit) {
+        this.audit = audit;
     }
 
     public Date getCreateAt() {

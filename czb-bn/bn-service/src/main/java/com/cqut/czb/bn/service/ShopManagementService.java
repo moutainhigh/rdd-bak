@@ -25,4 +25,6 @@ public interface ShopManagementService {
     SettlementPageDTO getSettlement(SettlementDTO settlementDTO);
 
     String settleOrder(HttpServletResponse response, HttpServletRequest request, SettlementDTO settlementDTO);
+
+    Boolean auditShop(ShopManagementDTO shopManagementDTO);
 }

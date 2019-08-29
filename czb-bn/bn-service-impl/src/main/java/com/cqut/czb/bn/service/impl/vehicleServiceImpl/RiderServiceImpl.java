@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -100,7 +101,8 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public boolean updateByPrimaryKeySelective(CleanRider record) {
-        return cleanRiderMapper.updateByPrimaryKeySelective(record);
+        record.setUpdateAt(new Date());
+        return cleanRiderMapper.updateByPrimaryKeySelective(record)>0;
     }
 
     @Override

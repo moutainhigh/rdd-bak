@@ -11,7 +11,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    rider_id, rider_name, contact_number, status, user_id, create_at, update_at
+    rider_id, rider_name, contact_number, status, user_id,audit, create_at, update_at
   </sql>
 
   <select id="selectAllRiders" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -125,23 +125,26 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider" >
     update czb_clean_rider
     <set >
-      <if test="riderName != null" >
+      <if test="riderName != null and riderName !=''" >
         rider_name = #{riderName,jdbcType=VARCHAR},
       </if>
-      <if test="contactNumber != null" >
+      <if test="contactNumber != null and contactNumber!= ''" >
         contact_number = #{contactNumber,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="userId != null" >
+      <if test="userId != null and userId != ''" >
         user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="audit != null" >
+        audit = #{audit,jdbcType=INTEGER},
       </if>
       <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updateAt != null" >
-        update_at = #{updateAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
       </if>
     </set>
     where rider_id = #{riderId,jdbcType=VARCHAR}
@@ -156,4 +159,5 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where rider_id = #{riderId,jdbcType=VARCHAR}
   </update>
+
 </mapper>
