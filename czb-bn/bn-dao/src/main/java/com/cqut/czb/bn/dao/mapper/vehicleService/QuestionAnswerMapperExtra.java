@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface QuestionAnswerMapperExtra {
     List<QuestionAnswerDTO> selectQuestionAnswerByType(Integer type);
+
+    QuestionAnswerDTO selectByPrimaryKey(String questionId);
 }

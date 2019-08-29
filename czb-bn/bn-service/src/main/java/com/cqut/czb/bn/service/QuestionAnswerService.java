@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface QuestionAnswerService {
     List<QuestionAnswerDTO> getQuestionAnswerListByType(Integer type);
+
+    QuestionAnswerDTO getQuestionAnswerById(String questionId);
 }

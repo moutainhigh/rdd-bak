@@ -24,4 +24,9 @@ public class QuestionAnswerController {
     public JSONResult getQuestionAnswerByType(Integer type){
         return new JSONResult(questionAnswerService.getQuestionAnswerListByType(type));
     }
+
+    @GetMapping("/getQuestionAnswerById")
+    public JSONResult getgetQuestionAnswerById(String questionId){
+        return new JSONResult(questionAnswerService.getQuestionAnswerById(questionId));
+    }
 }
