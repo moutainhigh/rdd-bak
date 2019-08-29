@@ -11,7 +11,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    rider_id, rider_name, contact_number, status, user_id, create_at, update_at
+    rider_id, rider_name, contact_number, status, user_id,audit, create_at, update_at
   </sql>
 
   <select id="selectAllRiders" resultMap="BaseResultMap" parameterType="java.lang.String" >
