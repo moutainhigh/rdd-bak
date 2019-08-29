@@ -99,6 +99,11 @@ public class ShopManagementServiceImpl implements ShopManagementService {
         }
     }
 
+    @Override
+    public Boolean auditShop(ShopManagementDTO shopManagementDTO) {
+        return shopMapperExtra.updateShopAudit(shopManagementDTO)>0;
+    }
+
     public static Workbook getSettlementDTOListWorkBook(List<SettlementDTO> settlementDTOS, double totalUnsettledAmoun){
         String[] settlementDTOSExcelHead = SystemConstants.SETTLE_ORDER_EXCEL_HEAD;
         Workbook workbook = new SXSSFWorkbook(settlementDTOS.size());

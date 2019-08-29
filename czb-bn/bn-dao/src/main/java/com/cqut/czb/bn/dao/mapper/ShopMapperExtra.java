@@ -18,4 +18,8 @@ public interface ShopMapperExtra {
     List<SettlementDTO> selectSettlementDTO(SettlementDTO settlementDTO);
 
     int updateSettlementOrder(SettlementDTO settlementDTO);
+
+    int insert(ShopDTO shopDTO);
+
+    int updateShopAudit(ShopManagementDTO shopManagementDTO);
 }

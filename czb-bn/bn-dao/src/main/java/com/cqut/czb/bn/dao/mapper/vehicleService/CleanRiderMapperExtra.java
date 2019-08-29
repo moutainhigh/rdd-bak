@@ -23,7 +23,8 @@ public interface CleanRiderMapperExtra {
 
     CleanRider selectByPrimaryKey(String riderId);
 
-    boolean updateByPrimaryKeySelective(CleanRider record);
+    int updateByPrimaryKeySelective(CleanRider record);
 
     boolean updateByPrimaryKey(CleanRider record);
+
 }

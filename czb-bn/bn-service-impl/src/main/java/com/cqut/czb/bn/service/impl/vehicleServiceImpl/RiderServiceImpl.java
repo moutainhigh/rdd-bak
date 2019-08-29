@@ -100,7 +100,7 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public boolean updateByPrimaryKeySelective(CleanRider record) {
-        return cleanRiderMapper.updateByPrimaryKeySelective(record);
+        return cleanRiderMapper.updateByPrimaryKeySelective(record)>0;
     }
 
     @Override
