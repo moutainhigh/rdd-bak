@@ -36,7 +36,7 @@ public class QuestionAnswerController {
     }
 
     @GetMapping("/getSimilarQuestionLabel")
-    public JSONResult getSimilarQuestionLabel(){
+    public JSONResult getSimilarQuestionLabel(Integer type, String questionLabel){
         return null;
     }
 }
