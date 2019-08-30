@@ -20,6 +20,16 @@ public class QuestionAnswerDTO {
 
     private Date updateAt;
 
+    private String questionLabel;
+
+    public String getQuestionLabel() {
+        return questionLabel;
+    }
+
+    public void setQuestionLabel(String questionLabel) {
+        this.questionLabel = questionLabel;
+    }
+
     public String getQuestionId() {
         return questionId;
     }

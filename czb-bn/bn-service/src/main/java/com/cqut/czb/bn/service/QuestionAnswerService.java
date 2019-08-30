@@ -13,4 +13,8 @@ public interface QuestionAnswerService {
     List<QuestionAnswerDTO> getQuestionAnswerListByType(Integer type);
 
     QuestionAnswerDTO getQuestionAnswerById(String questionId);
+
+    List<String> getQuestionLabelListByType(Integer type);
+
+    List<QuestionAnswerDTO> getSimilarQuestionLabel(Integer type,String questionLabel);
 }
