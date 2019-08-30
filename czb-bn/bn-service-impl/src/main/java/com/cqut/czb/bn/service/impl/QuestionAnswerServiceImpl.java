@@ -33,4 +33,9 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
     public List<String> getQuestionLabelListByType(Integer type) {
         return questionAnswerMapperExtra.selectQuestionLabelListByType(type);
     }
+
+    @Override
+    public List<QuestionAnswerDTO> getSimilarQuestionLabel(Integer type, String questionLabel) {
+        return questionAnswerMapperExtra.selectSimilarQuestionLabel(type, questionLabel);
+    }
 }

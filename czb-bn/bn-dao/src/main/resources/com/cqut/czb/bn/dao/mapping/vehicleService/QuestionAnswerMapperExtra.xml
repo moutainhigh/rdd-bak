@@ -111,7 +111,7 @@
     <where>
       and question_type = #{type,jdbcType=INTEGER}
     </where>
-    order BY create_at DESC
+    order BY question_label,create_at DESC
   </select>
 
     <select id="selectQuestionLabelListByType" resultType="java.lang.String" parameterType="java.lang.Integer">
@@ -121,5 +121,23 @@
 	    ( SELECT IFNULL( question_label, '所有' ) AS label FROM czb_question_answer WHERE question_label IS NOT NULL AND question_label != '' GROUP BY question_label WITH ROLLUP ) AS A
         ORDER BY
 	      FIELD( '所有', label ) DESC
+    </select>
+
+    <select id="selectSimilarQuestionLabel" resultMap="BaseResultMap">
+        SELECT
+            question_id,
+            question_content,
+            answer_content,
+            question_type,
+            create_at,
+            update_at,
+            question_label
+        FROM
+            czb_question_answer
+        <where>
+            question_type = #{type, jdbcType = INTEGER}
+            AND question_label LIKE CONCAT( '%', #{questionLabel, jdbcType = VARCHAR}, '%' )
+        </where>
+            LIMIT 3
     </select>
 </mapper>
