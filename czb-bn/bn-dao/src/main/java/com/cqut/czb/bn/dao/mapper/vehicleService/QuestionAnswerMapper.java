@@ -14,4 +14,5 @@ public interface QuestionAnswerMapper {
     int updateByPrimaryKeySelective(QuestionAnswer record);
 
     int updateByPrimaryKey(QuestionAnswer record);
+
 }

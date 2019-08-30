@@ -8,9 +8,11 @@
     <result column="question_type" property="questionType" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="question_label" property="questionLabel" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    question_id, question_content, answer_content, question_type, create_at, update_at
+    question_id, question_content, answer_content, question_type, create_at, update_at, 
+    question_label
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,11 +26,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.QuestionAnswer" >
     insert into czb_question_answer (question_id, question_content, answer_content, 
-      question_type, create_at, update_at
-      )
+      question_type, create_at, update_at, 
+      question_label)
     values (#{questionId,jdbcType=VARCHAR}, #{questionContent,jdbcType=VARCHAR}, #{answerContent,jdbcType=VARCHAR}, 
-      #{questionType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{questionType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{questionLabel,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.QuestionAnswer" >
     insert into czb_question_answer
@@ -51,6 +53,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="questionLabel != null" >
+        question_label,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="questionId != null" >
@@ -70,6 +75,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="questionLabel != null" >
+        #{questionLabel,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +99,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="questionLabel != null" >
+        question_label = #{questionLabel,jdbcType=VARCHAR},
+      </if>
     </set>
     where question_id = #{questionId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +111,8 @@
       answer_content = #{answerContent,jdbcType=VARCHAR},
       question_type = #{questionType,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      question_label = #{questionLabel,jdbcType=VARCHAR}
     where question_id = #{questionId,jdbcType=VARCHAR}
   </update>
 </mapper>

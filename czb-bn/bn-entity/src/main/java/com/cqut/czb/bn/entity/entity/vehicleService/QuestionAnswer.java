@@ -15,6 +15,8 @@ public class QuestionAnswer {
 
     private Date updateAt;
 
+    private String questionLabel;
+
     public String getQuestionId() {
         return questionId;
     }
@@ -61,5 +63,13 @@ public class QuestionAnswer {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getQuestionLabel() {
+        return questionLabel;
+    }
+
+    public void setQuestionLabel(String questionLabel) {
+        this.questionLabel = questionLabel == null ? null : questionLabel.trim();
     }
 }
