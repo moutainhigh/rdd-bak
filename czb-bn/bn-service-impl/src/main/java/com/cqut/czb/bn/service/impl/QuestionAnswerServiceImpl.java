@@ -28,4 +28,9 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
     public QuestionAnswerDTO getQuestionAnswerById(String questionId) {
         return questionAnswerMapperExtra.selectByPrimaryKey(questionId);
     }
+
+    @Override
+    public List<String> getQuestionLabelListByType(Integer type) {
+        return questionAnswerMapperExtra.selectQuestionLabelListByType(type);
+    }
 }

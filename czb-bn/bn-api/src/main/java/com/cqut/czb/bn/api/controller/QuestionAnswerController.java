@@ -29,4 +29,14 @@ public class QuestionAnswerController {
     public JSONResult getgetQuestionAnswerById(String questionId){
         return new JSONResult(questionAnswerService.getQuestionAnswerById(questionId));
     }
+
+    @GetMapping("/getQuestionLabelListByType")
+    public JSONResult getQuestionLabelListByType(Integer type){
+        return new JSONResult(questionAnswerService.getQuestionLabelListByType(type));
+    }
+
+    @GetMapping("/getSimilarQuestionLabel")
+    public JSONResult getSimilarQuestionLabel(){
+        return null;
+    }
 }

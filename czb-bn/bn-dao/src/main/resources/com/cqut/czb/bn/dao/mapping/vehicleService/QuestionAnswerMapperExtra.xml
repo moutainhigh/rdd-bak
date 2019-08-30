@@ -111,4 +111,13 @@
     </where>
     order BY create_at DESC
   </select>
+
+    <select id="selectQuestionLabelListByType" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT
+	        A.label
+        FROM
+	      ( SELECT IFNULL( question_label, '所有' ) AS label FROM czb_question_answer GROUP BY question_label WITH ROLLUP ) AS A
+        ORDER BY
+	        FIELD( '所有', label ) DESC
+    </select>
 </mapper>

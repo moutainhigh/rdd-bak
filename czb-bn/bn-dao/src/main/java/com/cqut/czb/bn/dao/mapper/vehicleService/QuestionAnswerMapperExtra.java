@@ -13,4 +13,6 @@ public interface QuestionAnswerMapperExtra {
     List<QuestionAnswerDTO> selectQuestionAnswerByType(Integer type);
 
     QuestionAnswerDTO selectByPrimaryKey(String questionId);
+
+    List<String> selectQuestionLabelListByType(Integer type);
 }
