@@ -65,6 +65,16 @@ public class VehicleOrderManageDTO {
     // 支付方式
     private Integer payMethod;
 
+    private String couponId;
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
     VehicleOrderManageDTO() {}
 
     public String getLocation() {
