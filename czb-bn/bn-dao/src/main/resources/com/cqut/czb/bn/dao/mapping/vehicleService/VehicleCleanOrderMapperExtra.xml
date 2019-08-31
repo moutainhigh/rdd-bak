@@ -377,6 +377,9 @@
             <if test="serverId != null" >
                 server_id = #{serverId,jdbcType=VARCHAR},
             </if>
+            <if test="couponId !=null">
+                coupon_id = #{serverId,jdbcType=VARCHAR},
+            </if>
         </set>
         where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
     </update>

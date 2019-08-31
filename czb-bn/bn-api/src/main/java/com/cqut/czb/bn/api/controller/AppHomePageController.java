@@ -81,7 +81,7 @@ public class AppHomePageController {
         iosHomeTabDTO4.setSelectedImage("个人中心");
         iosHomeTabDTO4.setIdentifierName("personNav");
         list.add(iosHomeTabDTO1);
-//        list.add(iosHomeTabDTO2);
+        list.add(iosHomeTabDTO2);
         list.add(iosHomeTabDTO3);
         list.add(iosHomeTabDTO4);
         return new JSONResult(list);
