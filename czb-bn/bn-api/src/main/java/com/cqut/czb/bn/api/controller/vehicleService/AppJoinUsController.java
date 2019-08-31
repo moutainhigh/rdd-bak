@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vehicleService.AppJoinUsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class AppJoinUsController {
     RedisUtils redisUtils;
 
     @PostMapping("/toBecomeRider")
-    public JSONResult toBecomeRider(CleanRider cleanRider, Principal principal){
+    public JSONResult toBecomeRider(@RequestBody CleanRider cleanRider, Principal principal){
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
@@ -32,7 +33,7 @@ public class AppJoinUsController {
     }
 
     @PostMapping("/toBecomeShop")
-    public JSONResult toBecomeShop(ShopDTO shopDTO, Principal principal){
+    public JSONResult toBecomeShop(@RequestBody ShopDTO shopDTO, Principal principal){
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
