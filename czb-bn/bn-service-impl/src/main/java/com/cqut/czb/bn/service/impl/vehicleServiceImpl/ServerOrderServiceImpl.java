@@ -198,6 +198,11 @@ public class ServerOrderServiceImpl implements ServerOrderService {
             mapperExtra.updateRiderStatus(tuiKuanDTO.getRiderId(), "0");
         }
 
+        // 如果有优惠券，则改变优惠券状态
+        if(tuiKuanDTO.getCouponId() != null) {
+            mapperExtra.updateCouponStatus(tuiKuanDTO.getCouponId());
+        }
+
         // 获取用户余额和收益信息id
         BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(tuiKuanDTO.getUserId());
 

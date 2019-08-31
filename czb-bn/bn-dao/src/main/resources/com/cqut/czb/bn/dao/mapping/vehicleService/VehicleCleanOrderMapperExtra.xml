@@ -44,6 +44,7 @@
         <result column="service_location" property="location" jdbcType="VARCHAR" />
         <result column="pay_method" property="payMethod" jdbcType="TINYINT" />
         <result column="contact_number" property="riderPhone" jdbcType="VARCHAR" />
+        <result column="coupon_id" property="couponId" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
@@ -297,7 +298,8 @@
             orders.actual_price ,
             orders.cancel_time ,
             orders.cancel_reason ,
-            orders.create_at
+            orders.create_at,
+            orders.coupon_id
         FROM
             czb_vehicle_clean_order orders
         LEFT JOIN czb_server_standard servers ON servers.server_id = orders.server_id
@@ -419,5 +421,13 @@
         #{status},
         CURRENT_TIMESTAMP
         )
+        )
     </insert>
+
+    <update id="updateCouponStatus" parameterType="java.lang.String">
+        UPDATE czb_server_coupon
+        SET `status` = 0
+        WHERE
+        coupon_id = #{couponId}
+    </update>
 </mapper>
