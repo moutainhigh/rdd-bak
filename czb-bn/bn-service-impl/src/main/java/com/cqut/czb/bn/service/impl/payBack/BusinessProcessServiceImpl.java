@@ -253,6 +253,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         orderDTO.setPayStatus((byte)1);
         orderDTO.setUpdateAt(new Date());
         orderDTO.setActualPrice(money);
+        if(!couponId.equals("")&&couponId!=null){
+            orderDTO.setCouponId(couponId);
+        }
         boolean ve=vehicleCleanOrderMapperExtra.updateMyBackOrder(orderDTO)>0;
         System.out.println("更改洗车订单完毕"+ve);
 
