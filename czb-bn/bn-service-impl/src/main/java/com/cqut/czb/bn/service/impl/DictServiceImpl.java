@@ -58,7 +58,9 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public AppInfoDTO selectAndroidInfo(User user, String version,String DeviceToken) {
-        dealDeviceToken(user.getUserId(), DeviceToken,2);
+        if(DeviceToken != null) {
+            dealDeviceToken(user.getUserId(), DeviceToken, 1);
+        }
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -128,8 +130,9 @@ public class DictServiceImpl implements IDictService {
     public AppInfoDTO selectIOSInfo(User user,String version, String DeviceToken) {
 
         //处理IOSDeviceToken
-        dealDeviceToken(user.getUserId(), DeviceToken,2);
-
+        if(DeviceToken != null) {
+            dealDeviceToken(user.getUserId(), DeviceToken, 2);
+        }
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "ios";
