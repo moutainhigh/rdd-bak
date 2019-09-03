@@ -2,12 +2,15 @@ package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.IncomeLogMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.*;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
+import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
 import com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate;
 import com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder;
 import com.cqut.czb.bn.service.vehicleService.VehicleCleanOrderService;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Transactional
@@ -35,6 +39,12 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     IncomeLogMapperExtra incomeLogMapperExtra;
     @Autowired
     ServerCouponMapperExtra serverCouponMapperExtra;
+    @Autowired
+    UserMapperExtra userMapperExtra;
+    @Autowired
+    CouponManageServiceImpl couponManageServiceImpl;
+    @Autowired
+    CouponStandardMapperExtra couponStandardMapperExtra;
 
     @Override
     public List<VehicleCleanOrderDTO> getOrderList(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
@@ -123,7 +133,8 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     }
 
     @Override
-    public Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO) {
+    public Boolean completeOrder(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
+        couponManageServiceImpl.issueCouponToPartner(user);
          vehicleCleanOrderDTO.setProcessStatus(3);
          vehicleCleanOrderDTO.setUpdateAt(new Date());
         return vehicleCleanOrderMapperExtra.updateOrderStateComplete(vehicleCleanOrderDTO)>0;

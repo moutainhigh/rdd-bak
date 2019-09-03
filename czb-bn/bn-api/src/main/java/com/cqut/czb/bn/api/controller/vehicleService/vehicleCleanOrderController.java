@@ -82,8 +82,12 @@ public class vehicleCleanOrderController {
      * @return
      */
     @PostMapping("/completeOrder")
-    public JSONResult completeOrder(@RequestBody VehicleCleanOrderDTO vehicleCleanOrderDTO){
-        return new JSONResult(vehicleCleanOrderService.completeOrder(vehicleCleanOrderDTO));
+    public JSONResult completeOrder(@RequestBody VehicleCleanOrderDTO vehicleCleanOrderDTO, Principal principal){
+        if (principal ==null || principal.getName()==null ){
+            return new JSONResult("token为空",500);
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(vehicleCleanOrderService.completeOrder(vehicleCleanOrderDTO,user));
     }
 
     /**

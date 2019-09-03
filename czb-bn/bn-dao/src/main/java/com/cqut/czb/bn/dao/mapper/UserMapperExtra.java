@@ -13,6 +13,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserMapperExtra {
+    User selectByPrimaryKey(String userId);
+
     User findUserByAccount(String account);
 
     UserDTO findUserDTOByAccount(String account);
