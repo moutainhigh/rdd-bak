@@ -199,9 +199,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "4", 1);
 
-        //进行返佣
-        boolean beginFanYong= fanYongService.beginWashCarFanYong(ownerId);
-        System.out.println("返佣"+beginFanYong);
+//        //进行返佣
+//        boolean beginFanYong= fanYongService.beginWashCarFanYong(ownerId);
+//        System.out.println("返佣"+beginFanYong);
         return 1;
     }
 
@@ -267,9 +267,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "4", 2);
 
-        //进行返佣
-        boolean beginFanYong= fanYongService.beginWashCarFanYong(ownerId);
-        System.out.println("返佣"+beginFanYong);
+//        //进行返佣
+//        boolean beginFanYong= fanYongService.beginWashCarFanYong(ownerId);
+//        System.out.println("返佣"+beginFanYong);
         return 1;
     }
 
