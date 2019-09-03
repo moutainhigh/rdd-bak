@@ -103,6 +103,51 @@ public class CouponManageServiceImpl implements CouponManageService {
         return new PageInfo<>(serverCouponMapperExtra.selectByPrimaryKey(serverCouponDTO));
     }
 
+    //计算优惠券过期时间
+    public Date compute(Integer continueDay) {
+        Date destroyTime = null;
+        try {
+            DateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+            Date day=new Date();
+            String str=format.format(day);
+            Date now=format.parse(str);
+            long curMilliNow = now.getTime();
+            int dayMis=1000*60*60*24;//一天的毫秒
+            long resultMis=curMilliNow+(dayMis-1000);
+            Date startTime = new Date(resultMis);
+            destroyTime = DateUtils.addDays(startTime, continueDay);   //将过期时间变成一天的最后一毫秒
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return destroyTime;
+    }
+
+    //给推荐人发三张优惠券
+    public Boolean issueCouponToPartner(User user) {
+        User partner = userMapperExtra.selectByPrimaryKey(user.getUserId());
+        if (partner!=null&&partner.getSuperiorUser()!=null&&partner.getSuperiorUser()!=""){
+            List<IssueServerCouponDTO> insert = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                IssueServerCouponDTO exp = new IssueServerCouponDTO();
+                exp.setOwnerId(partner.getSuperiorUser());
+                exp.setCouponId(StringUtil.createId());
+                exp.setCouponStandard(String.valueOf(i+1));
+                CouponStandard search = new CouponStandard();      //计算过期时间
+                search.setStandardId(String.valueOf(i+1));
+                List<CouponStandard> couponStandard = couponStandardMapperExtra.selectByPrimaryKey(search);
+                if (couponStandard==null||couponStandard.size()==0||couponStandard.get(0).getContinueDays()==null){
+                    return false;
+                }else {
+                    exp.setDestroyTime(compute(couponStandard.get(0).getContinueDays()));
+                }
+                exp.setStatus(0);
+                insert.add(exp);
+            }
+            return serverCouponMapperExtra.insertByList(insert)>0;
+        }
+       return false;
+    }
+
     @Override
     public Boolean issueCoupon(IssueServerCouponDTO issueServerCouponDTO) {
         if (issueServerCouponDTO==null||issueServerCouponDTO.getType()==null){
@@ -114,20 +159,7 @@ public class CouponManageServiceImpl implements CouponManageService {
         if (couponStandard==null||couponStandard.size()==0||couponStandard.get(0).getContinueDays()==null){
             return false;
         }else {
-            try {
-                DateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-                Date day=new Date();
-                String str=format.format(day);
-                Date now=format.parse(str);
-                long curMilliNow = now.getTime();
-                int dayMis=1000*60*60*24;//一天的毫秒
-                long resultMis=curMilliNow+(dayMis-1000);
-                Date startTime = new Date(resultMis);
-                issueServerCouponDTO.setDestroyTime(DateUtils.addDays(startTime, couponStandard.get(0).getContinueDays()));
-            }catch (Exception e){
-              e.printStackTrace();
-            }
-
+            issueServerCouponDTO.setDestroyTime(compute(couponStandard.get(0).getContinueDays()));
         }
         if (issueServerCouponDTO.getType()==0){   //如果是单个发放
             issueServerCouponDTO.setCouponId(StringUtil.createId());
