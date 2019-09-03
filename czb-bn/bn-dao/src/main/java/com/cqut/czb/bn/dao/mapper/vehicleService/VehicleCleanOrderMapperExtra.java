@@ -43,6 +43,9 @@ public interface VehicleCleanOrderMapperExtra {
     // 洗车订单管理，删除图片关系表
     int deleteImageRelation(@Param("fileId") String fileId);
 
+    // 优惠券状态修改
+    int updateCouponStatus(@Param("couponId") String couponId);
+
     // 插入图片订单关系
     int insertImageRelation(@Param("serverOrderId") String serverOrderId, @Param("fileId") String fileId, @Param("relationId") String relationId, @Param("status") String status);
 

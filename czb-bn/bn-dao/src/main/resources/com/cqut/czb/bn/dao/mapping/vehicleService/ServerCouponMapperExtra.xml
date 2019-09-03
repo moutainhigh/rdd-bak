@@ -175,6 +175,14 @@
         </if>
     </update>
 
+    <update id="updateCouponToNotUse" parameterType="java.lang.String">
+        update czb_server_coupon
+        set
+        status = 0,
+        update_at = now()
+        where
+        coupon_id=#{couponId,jdbcType=VARCHAR}
+    </update>
 
     <update id="updateCoupons" parameterType="java.lang.String">
         update czb_server_coupon

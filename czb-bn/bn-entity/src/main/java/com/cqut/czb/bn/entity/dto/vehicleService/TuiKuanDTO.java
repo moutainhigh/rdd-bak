@@ -11,6 +11,16 @@ public class TuiKuanDTO {
 
     private String riderId;
 
+    private String couponId;
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
     public String getRiderId() {
         return riderId;
     }

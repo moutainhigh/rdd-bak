@@ -2,10 +2,7 @@ package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.IncomeLogMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserIncomeInfoMapperExtra;
-import com.cqut.czb.bn.dao.mapper.vehicleService.ComparedPicMapperExtra;
-import com.cqut.czb.bn.dao.mapper.vehicleService.RiderEvaluateMapper;
-import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapper;
-import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
+import com.cqut.czb.bn.dao.mapper.vehicleService.*;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
@@ -36,6 +33,8 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
     UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
     @Autowired
     IncomeLogMapperExtra incomeLogMapperExtra;
+    @Autowired
+    ServerCouponMapperExtra serverCouponMapperExtra;
 
     @Override
     public List<VehicleCleanOrderDTO> getOrderList(VehicleCleanOrderDTO vehicleCleanOrderDTO,User user) {
@@ -71,6 +70,7 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
         if (isCancel) {
             List<VehicleCleanOrderDTO> vehicleCleanOrderDTOList = vehicleCleanOrderMapperExtra.selectById(vehicleCleanOrderDTO);
             if (vehicleCleanOrderDTOList!=null&&vehicleCleanOrderDTOList.size()!=0) {  //判断是否有此订单
+                boolean updateCoupon =  serverCouponMapperExtra.updateCouponToNotUse(vehicleCleanOrderDTOList.get(0).getCouponId())>0;
                 UserIncomeInfoDTO userIncomeInfo = userIncomeInfoMapperExtra.selectUserIncomeInfo(vehicleCleanOrderDTOList.get(0).getUserId());
                 Boolean isRefund = false;
                 String id = StringUtil.createId();

@@ -45,6 +45,16 @@ public class AppVehicleCleanOrderDTO {
 
     private String phone;
 
+    private String couponId ;
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
     public Integer getPayMethod() {
         return payMethod;
     }
