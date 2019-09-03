@@ -150,7 +150,7 @@ public class DictServiceImpl implements IDictService {
         }
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
-        if("1.0.0".equals(version) || "1.0.1".equals(version)){
+        if("1.0.0".equals(version) || "1.0.1".equals(version) || "1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.2".equals(version)){
             appInfoDTO.setIsUpdate(true);
         }else {
             appInfoDTO.setIsUpdate(false);
