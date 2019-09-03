@@ -15,4 +15,8 @@ public interface FanYongService {
      */
     boolean beginFanYong(int BusinessType,String area,String userId, double money, double actualPayment,String orgId);
 
+    /**
+     * 洗车服务返佣操作
+     */
+    boolean beginWashCarFanYong(String userId);
 }

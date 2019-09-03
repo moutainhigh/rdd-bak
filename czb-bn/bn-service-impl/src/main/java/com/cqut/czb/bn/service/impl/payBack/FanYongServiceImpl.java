@@ -1,11 +1,13 @@
 package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
+import com.cqut.czb.bn.service.vehicleService.CouponManageService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,9 @@ public class FanYongServiceImpl implements FanYongService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CouponManageService couponManageService;
 
     /**
      * 总体控制
@@ -112,6 +117,27 @@ public class FanYongServiceImpl implements FanYongService {
                 UserIncomeInfo oldUserIncomeInfoUp2 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp2);//查出原收益信息
                 //对上上级用户的收益信息表，收益变更记录表进行操作
                 changeUserIncomeInfo(FyRemark,userId,userIdUp2,fangyongRate,oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2, orgId);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean beginWashCarFanYong(String userId) {
+
+        String userIdUp1 = userMapperExtra.selectUserId(userId);//上级用户id
+        if(userIdUp1!=null&&!"".equals(userIdUp1))
+        {
+            User user=userMapper.selectByPrimaryKey(userIdUp1);
+            if(user!=null){
+                for(int i=1;i<=3;i++){
+                    IssueServerCouponDTO ISCDTO =new IssueServerCouponDTO();
+                    ISCDTO.setStandardType(i+"");
+                    ISCDTO.setType(0);
+                    ISCDTO.setUserAccount(user.getUserAccount());
+                    boolean k= couponManageService.issueCoupon(ISCDTO);
+                    System.out.println("发放优惠劵 "+i+" "+k);
+                }
             }
         }
         return true;
