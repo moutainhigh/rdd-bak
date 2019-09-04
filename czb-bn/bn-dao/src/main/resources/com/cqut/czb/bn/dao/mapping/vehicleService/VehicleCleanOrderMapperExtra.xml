@@ -307,7 +307,7 @@
         LEFT JOIN czb_clean_rider riders ON riders.rider_id = orders.rider_id
         <where>
             <if test="serverOrderId != null and serverOrderId != ''">
-                server_order_id = #{serverOrderId}
+                server_order_id like concat('%', #{serverOrderId}, '%')
             </if>
             <if test="carNum != null and carNum != ''" >
                 AND
@@ -323,7 +323,7 @@
             </if>
             <if test="riderName != null and riderName != ''">
                 AND
-                riders.rider_name = #{riderName}
+                riders.rider_name  like concat('%', #{riderName}, '%')
             </if>
             <if test="processStatus != null and processStatus != '' || processStatus == 0 ">
                 AND
