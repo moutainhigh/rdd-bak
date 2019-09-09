@@ -205,4 +205,26 @@
     ORDER BY i.create_at DESC
   </select>
 
+  <!--后台管理-提现记录-->
+  <select id="getLogData" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" resultType="com.cqut.czb.bn.entity.entity.IncomeLog">
+    SELECT
+        log.amount,
+        log.before_change_income beforeChangeIncome,
+        log.remark,
+        log.souse_id souseId,
+        log.create_at createAt,
+        log.withdraw_to withdrawTo,
+        log.withdraw_name withdrawName
+    FROM
+        czb_income_log log
+    WHERE
+        log.type = 1
+        <if test="withdrawTo != null and withdrawTo != ''">
+           AND withdraw_to like concat('%', #{withdrawTo},'%')
+        </if>
+        <if test="withdrawName != null and withdrawName != ''">
+          AND withdraw_name LIKE concat('%', #{withdrawName},'%')
+        </if>
+    ORDER  BY createAt DESC
+  </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
+import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface IncomeLogMapperExtra {
 
     List<MyIncomeLogDTO>  selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO);
 
+    Page<IncomeLog> getLogData(IncomeLog incomeLog);
 }
