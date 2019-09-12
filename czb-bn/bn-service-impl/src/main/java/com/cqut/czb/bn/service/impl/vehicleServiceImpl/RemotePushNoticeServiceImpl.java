@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticeDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vehicleService.RemotePushNoticeService;
@@ -22,7 +23,7 @@ public class RemotePushNoticeServiceImpl implements RemotePushNoticeService {
     @Override
     public JSONResult search(RemotePushNotice notice, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        Page<RemotePushNotice> notices = mapper.selectByPrimaryKey(notice);
+        Page<RemotePushNoticesDTO> notices = mapper.selectByPrimaryKey(notice);
         return new JSONResult("查询成功", 200, new PageInfo(notices));
     }
 

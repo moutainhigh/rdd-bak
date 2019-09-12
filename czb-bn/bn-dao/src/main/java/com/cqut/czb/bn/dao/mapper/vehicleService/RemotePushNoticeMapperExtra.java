@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
+import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.github.pagehelper.Page;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,7 @@ public interface RemotePushNoticeMapperExtra {
 
     int insertSelective(RemotePushNotice record);
 
-    Page<RemotePushNotice> selectByPrimaryKey(RemotePushNotice record);
+    Page<RemotePushNoticesDTO> selectByPrimaryKey(RemotePushNotice record);
 
     RemotePushNotice selectById(String noticeId);
 
