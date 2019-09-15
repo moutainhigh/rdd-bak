@@ -37,7 +37,12 @@
     from czb_server_standard
     left join czb_file file on file.file_id = czb_server_standard.file_id
     <where>
+      <if test="serverId != null and serverId != ''" >
+        AND
+        server_id = #{serverId}
+      </if>
       <if test="serverName != null and serverName != ''" >
+        AND
         server_name like concat("%", #{serverName}, "%")
       </if>
       <if test="serverVehicleType != null and serverVehicleType != '' || serverVehicleType == 0" >
