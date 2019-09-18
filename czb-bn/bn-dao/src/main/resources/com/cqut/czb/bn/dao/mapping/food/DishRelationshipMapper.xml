@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishRelationshipMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.food.DishRelationship" >
+    <id column="dish_relationship_id" property="dishRelationshipId" jdbcType="VARCHAR" />
+    <result column="set_meal_id" property="setMealId" jdbcType="VARCHAR" />
+    <result column="single_product_id" property="singleProductId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dish_relationship_id, set_meal_id, single_product_id, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_dish_relationship
+    where dish_relationship_id = #{dishRelationshipId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_dish_relationship
+    where dish_relationship_id = #{dishRelationshipId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.DishRelationship" >
+    insert into czb_dish_relationship (dish_relationship_id, set_meal_id, single_product_id, 
+      create_at, update_at)
+    values (#{dishRelationshipId,jdbcType=VARCHAR}, #{setMealId,jdbcType=VARCHAR}, #{singleProductId,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.DishRelationship" >
+    insert into czb_dish_relationship
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dishRelationshipId != null" >
+        dish_relationship_id,
+      </if>
+      <if test="setMealId != null" >
+        set_meal_id,
+      </if>
+      <if test="singleProductId != null" >
+        single_product_id,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dishRelationshipId != null" >
+        #{dishRelationshipId,jdbcType=VARCHAR},
+      </if>
+      <if test="setMealId != null" >
+        #{setMealId,jdbcType=VARCHAR},
+      </if>
+      <if test="singleProductId != null" >
+        #{singleProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.DishRelationship" >
+    update czb_dish_relationship
+    <set >
+      <if test="setMealId != null" >
+        set_meal_id = #{setMealId,jdbcType=VARCHAR},
+      </if>
+      <if test="singleProductId != null" >
+        single_product_id = #{singleProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dish_relationship_id = #{dishRelationshipId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.food.DishRelationship" >
+    update czb_dish_relationship
+    set set_meal_id = #{setMealId,jdbcType=VARCHAR},
+      single_product_id = #{singleProductId,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where dish_relationship_id = #{dishRelationshipId,jdbcType=VARCHAR}
+  </update>
+</mapper>
