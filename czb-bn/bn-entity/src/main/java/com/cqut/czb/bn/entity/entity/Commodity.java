@@ -29,6 +29,16 @@ public class Commodity {
 
     private Integer isPay;
 
+    private Integer commmodityType;
+
+    private Double longitude;
+
+    private Double latitude;
+
+    private Date startingTimeBusiness;
+
+    private Date endTimeBusiness;
+
     public String getCommodityId() {
         return commodityId;
     }
@@ -131,5 +141,45 @@ public class Commodity {
 
     public void setIsPay(Integer isPay) {
         this.isPay = isPay;
+    }
+
+    public Integer getCommmodityType() {
+        return commmodityType;
+    }
+
+    public void setCommmodityType(Integer commmodityType) {
+        this.commmodityType = commmodityType;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Date getStartingTimeBusiness() {
+        return startingTimeBusiness;
+    }
+
+    public void setStartingTimeBusiness(Date startingTimeBusiness) {
+        this.startingTimeBusiness = startingTimeBusiness;
+    }
+
+    public Date getEndTimeBusiness() {
+        return endTimeBusiness;
+    }
+
+    public void setEndTimeBusiness(Date endTimeBusiness) {
+        this.endTimeBusiness = endTimeBusiness;
     }
 }
