@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticeDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -32,5 +33,15 @@ public class RemotePushNoticeController {
     @PostMapping("delete")
     public JSONResult delete(@RequestBody RemotePushNoticeDTO notice) {
         return service.delete(notice);
+    }
+
+    @GetMapping("getRemotePushNoticeType")
+    public JSONResult getRemotePushNoticeType(RemotePushNotice notice) {
+        return new JSONResult(service.getRemotePushNoticeType(notice)) ;
+    }
+
+    @PostMapping("addPush")
+    public JSONResult addPush(@RequestBody PushDTO pushDTO) {
+        return new JSONResult(service.addPush(pushDTO));
     }
 }

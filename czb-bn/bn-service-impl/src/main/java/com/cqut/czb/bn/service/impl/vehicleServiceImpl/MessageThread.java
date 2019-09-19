@@ -5,9 +5,11 @@ import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PushDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
+import javapns.Push;
 import javapns.devices.Device;
 import javapns.devices.implementations.basic.BasicDevice;
 import javapns.notification.AppleNotificationServerBasicImpl;
@@ -30,6 +32,8 @@ public class MessageThread implements Runnable {
     static String noticeId;
 
     static String userId;
+
+    static Integer type=2;
 
     @Autowired
     CleanRiderMapperExtra cleanRiderMapper;
@@ -54,6 +58,14 @@ public class MessageThread implements Runnable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public static Integer getType() {
+        return type;
+    }
+
+    public static void setType(Integer type) {
+        MessageThread.type = type;
     }
 
     public CleanRiderMapperExtra getCleanRiderMapper() {
@@ -90,16 +102,16 @@ public class MessageThread implements Runnable {
 
     @Override
     public void run() {
+        String deviceToken = "";
+        if (type==2) {
             RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
-            if (remotePush.getDeviceType()!=2){
+            if (remotePush.getDeviceType() != 2 && remotePush.getDeviceType() != 3) {
                 return;
             }
-////    "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
-            String deviceToken = remotePush.getDeviceToken();
-            RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
+             deviceToken = remotePush.getDeviceToken();
+            }
+            RemotePushNoticesDTO remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
             String  alert  = remotePushNotice.getNoticeContent();//push的内容
-//      String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
-//      String  alert  ="有骑手接单了";//push的内容
             int badge = 1;//图标小红圈的数值
             String sound = "default";//铃音
             List<String> tokens = new ArrayList<String>();
@@ -107,6 +119,9 @@ public class MessageThread implements Runnable {
             String certificatePath = "iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
+            if (type==3){
+                sendCount = false;
+            }
             try
             {
                 PushNotificationPayload payLoad = new PushNotificationPayload();
@@ -139,10 +154,18 @@ public class MessageThread implements Runnable {
                 else
                 {
                     List<Device> device = new ArrayList<Device>();
-                    for (String token : tokens)
-                    {
-                        device.add(new BasicDevice(token));
+                    RemotePush exp = new RemotePush();
+                    exp.setDeviceType(2);
+                    List<RemotePush> remotePushes = remotePushMapperExtra.selectByPlatform(exp);
+                    for (RemotePush expRemotePush : remotePushes){
+                        if (expRemotePush.getDeviceToken()!=null&&!"".equals(expRemotePush.getDeviceToken())){
+                            device.add(new BasicDevice(expRemotePush.getDeviceToken()));
+                        }
                     }
+//                    for (String token : tokens)
+//                    {
+//                        device.add(new BasicDevice(token));
+//                    }
                     notifications = pushManager.sendNotifications(payLoad, device);
                 }
                 pushManager.stopConnection();

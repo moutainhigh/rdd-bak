@@ -29,7 +29,8 @@
 
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    <include refid="Base_Column_List" />
+    notice_id, notice_content, notice_title, app_router_id, deadline, create_at,
+    update_at
     from czb_remote_push_notice
     <where>
         notice_id = #{noticeId,jdbcType=VARCHAR}

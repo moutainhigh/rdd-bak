@@ -6,6 +6,7 @@ import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PushDTO;
+import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanRider;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
@@ -118,7 +119,7 @@ public class RiderServiceImpl implements RiderService {
         }
 ////    "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817"
         String deviceToken = remotePush.getDeviceToken();
-        RemotePushNotice remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
+        RemotePushNoticesDTO remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
         String  alert  = remotePushNotice.getNoticeContent();//push的内容
 //      String deviceToken = "768878996dc4f6fee4b367a24d609a0208088abcce88a4b86259b12a494b0817";
 //      String  alert  ="有骑手接单了";//push的内容

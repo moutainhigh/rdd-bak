@@ -146,6 +146,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                     User user = new User();
                     user.setUserId(cleanOrderDTO.getUserId());
                     JGPush jgPush = new JGPush();
+                    jgPush.setType(1);
                     jgPush.setNoticeId("688008757855812");
                     jgPush.setUserId(user.getUserId());
                     jgPush.setCleanRiderMapper(cleanRiderMapper);
@@ -154,7 +155,7 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                     jgPush.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
                     Thread thread = new Thread(jgPush);
                     thread.start();
-                }else {
+                }else if (remotePush.getDeviceType()==2){
                     User user = new User();
                     user.setUserId(cleanOrderDTO.getUserId());
                     MessageThread messageThread = new MessageThread();

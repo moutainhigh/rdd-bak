@@ -13,6 +13,7 @@ public class SaleInfoOutputDTO {
     private String area;//地区
     private String turnoverAmount;
     private Date createAt;
+    private String remark;
 
     public String getTurnoverAmount() {
         return turnoverAmount;
@@ -92,5 +93,13 @@ public class SaleInfoOutputDTO {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

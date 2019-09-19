@@ -19,6 +19,16 @@
         where user_id = #{userId,jdbcType=VARCHAR}
         limit 1
     </select>
+    <select id="selectByPlatform" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePush" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_remote_push
+        <where>
+            <if test="deviceType!=null">
+                device_type = #{deviceType,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_remote_push
         where device_id = #{deviceId,jdbcType=VARCHAR}

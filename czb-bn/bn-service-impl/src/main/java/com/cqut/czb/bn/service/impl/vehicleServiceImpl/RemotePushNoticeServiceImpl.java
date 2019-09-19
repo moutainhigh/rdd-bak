@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service.impl.vehicleServiceImpl;
 
-import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapper;
+import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
+import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticeDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
@@ -19,6 +21,10 @@ import org.springframework.stereotype.Service;
 public class RemotePushNoticeServiceImpl implements RemotePushNoticeService {
     @Autowired
     RemotePushNoticeMapperExtra mapper;
+    @Autowired
+    RemotePushMapperExtra remotePushMapperExtra;
+    @Autowired
+    AppRouterMapper appRouterMapper;
 
     @Override
     public JSONResult search(RemotePushNotice notice, PageDTO pageDTO) {
@@ -53,5 +59,43 @@ public class RemotePushNoticeServiceImpl implements RemotePushNoticeService {
         } else {
             return new JSONResult("删除失败", 500);
         }
+    }
+
+    @Override
+    public Page<RemotePushNoticesDTO> getRemotePushNoticeType(RemotePushNotice notice) {
+        Page<RemotePushNoticesDTO> remotePushNotices = mapper.selectByPrimaryKey(notice);
+        return remotePushNotices;
+    }
+
+    @Override
+    public boolean addPush(PushDTO pushDTO) {
+        if (pushDTO.getPathType()==null){
+            return false;
+        } else if (pushDTO.getPathType()==1){
+            try {
+                JGPush jgPush = new JGPush();
+                jgPush.setType(3);
+                jgPush.setNoticeId(pushDTO.getTitle());
+                jgPush.setAppRouterMapper(appRouterMapper);
+                jgPush.setRemotePushMapperExtra(remotePushMapperExtra);
+                jgPush.setRemotePushNoticeMapperExtra(mapper);
+                Thread thread = new Thread(jgPush);
+                thread.start();
+                return true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else if (pushDTO.getPathType()==2) {
+            MessageThread messageThread = new MessageThread();
+            messageThread.setType(3);
+            messageThread.setNoticeId(pushDTO.getTitle());
+            messageThread.setAppRouterMapper(appRouterMapper);
+            messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+            messageThread.setRemotePushNoticeMapperExtra(mapper);
+            Thread thread = new Thread(messageThread);
+            thread.start();
+            return true;
+        }
+        return false;
     }
 }

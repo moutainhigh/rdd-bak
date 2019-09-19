@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.vehicleService;
 
+import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticeDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
 import com.github.pagehelper.Page;
@@ -15,7 +16,7 @@ public interface RemotePushNoticeMapperExtra {
 
     Page<RemotePushNoticesDTO> selectByPrimaryKey(RemotePushNotice record);
 
-    RemotePushNotice selectById(String noticeId);
+    RemotePushNoticesDTO selectById(String noticeId);
 
     int updateByPrimaryKeySelective(RemotePushNotice record);
 

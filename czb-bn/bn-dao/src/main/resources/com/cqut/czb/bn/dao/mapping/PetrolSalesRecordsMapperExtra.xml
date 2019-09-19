@@ -34,7 +34,8 @@
 	t3.petrol_denomination petrolDenomination,
 	t3.petrol_kind petrolKind,
 	t3.petrol_num petrolNum,
-    t1.create_at createAt
+    t1.create_at createAt,
+    t3.remark remark
 FROM
 	(
 		SELECT

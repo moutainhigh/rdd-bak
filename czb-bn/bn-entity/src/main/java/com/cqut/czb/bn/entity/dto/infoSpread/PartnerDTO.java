@@ -55,6 +55,10 @@ public class PartnerDTO {
 
     private String order;    //排序方式
 
+    private Integer isVip;   //是否Vip
+
+    private Integer vipCount;  //下级vip数量
+
     public String getUserId() {
         return userId;
     }
@@ -253,5 +257,21 @@ public class PartnerDTO {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
+    public Integer getVipCount() {
+        return vipCount;
+    }
+
+    public void setVipCount(Integer vipCount) {
+        this.vipCount = vipCount;
     }
 }

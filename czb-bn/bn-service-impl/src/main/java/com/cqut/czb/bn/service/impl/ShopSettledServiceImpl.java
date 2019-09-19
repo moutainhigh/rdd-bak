@@ -61,7 +61,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
             return null;
         }
-        if (shopDTO.getDeleteId()!=null&&"".equals(shopDTO.getDeleteId())){
+        if (shopDTO.getDeleteId() != null && !"".equals(shopDTO.getDeleteId())){
             String[] ids = shopDTO.getDeleteId().split(",");
             List<FileFunctionDTO> deleteFile = new ArrayList<>();
             if (ids.length!=0&&ids!=null){
