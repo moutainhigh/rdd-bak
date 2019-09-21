@@ -1,36 +1,220 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.food.Dish" >
-    <id column="dish_id" property="dishId" jdbcType="VARCHAR" />
-    <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
-    <result column="dish_name" property="dishName" jdbcType="VARCHAR" />
-    <result column="dish_type" property="dishType" jdbcType="INTEGER" />
-    <result column="supply_time" property="supplyTime" jdbcType="VARCHAR" />
-    <result column="is_sale" property="isSale" jdbcType="INTEGER" />
-    <result column="label" property="label" jdbcType="VARCHAR" />
-    <result column="original_price" property="originalPrice" jdbcType="DOUBLE" />
-    <result column="current_price" property="currentPrice" jdbcType="DOUBLE" />
-    <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
-    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
-    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishMapper">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.food.Dish">
+    <id column="dish_id" jdbcType="VARCHAR" property="dishId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="dish_type" jdbcType="INTEGER" property="dishType" />
+    <result column="supply_time" jdbcType="VARCHAR" property="supplyTime" />
+    <result column="is_sale" jdbcType="INTEGER" property="isSale" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="original_price" jdbcType="DOUBLE" property="originalPrice" />
+    <result column="current_price" jdbcType="DOUBLE" property="currentPrice" />
+    <result column="vip_price" jdbcType="DOUBLE" property="vipPrice" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    dish_id, commodity_id, dish_name, dish_type, supply_time, is_sale, label, original_price, 
+  <sql id="Base_Column_List">
+    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price, 
     current_price, vip_price, file_id, create_at, update_at
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from czb_dish
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from czb_dish
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.Dish" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
+    insert into czb_dish (dish_id, shop_id, dish_name, 
+      dish_type, supply_time, is_sale, 
+      label, original_price, current_price, 
+      vip_price, file_id, create_at, 
+      update_at)
+    values (#{dishId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{dishName,jdbcType=VARCHAR}, 
+      #{dishType,jdbcType=INTEGER}, #{supplyTime,jdbcType=VARCHAR}, #{isSale,jdbcType=INTEGER}, 
+      #{label,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE}, 
+      #{vipPrice,jdbcType=DOUBLE}, #{fileId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
+    insert into czb_dish
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
+        dish_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="dishName != null">
+        dish_name,
+      </if>
+      <if test="dishType != null">
+        dish_type,
+      </if>
+      <if test="supplyTime != null">
+        supply_time,
+      </if>
+      <if test="isSale != null">
+        is_sale,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="originalPrice != null">
+        original_price,
+      </if>
+      <if test="currentPrice != null">
+        current_price,
+      </if>
+      <if test="vipPrice != null">
+        vip_price,
+      </if>
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
+        #{dishId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="dishName != null">
+        #{dishName,jdbcType=VARCHAR},
+      </if>
+      <if test="dishType != null">
+        #{dishType,jdbcType=INTEGER},
+      </if>
+      <if test="supplyTime != null">
+        #{supplyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isSale != null">
+        #{isSale,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null">
+        #{originalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null">
+        #{currentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vipPrice != null">
+        #{vipPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
+    update czb_dish
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="dishName != null">
+        dish_name = #{dishName,jdbcType=VARCHAR},
+      </if>
+      <if test="dishType != null">
+        dish_type = #{dishType,jdbcType=INTEGER},
+      </if>
+      <if test="supplyTime != null">
+        supply_time = #{supplyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isSale != null">
+        is_sale = #{isSale,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null">
+        original_price = #{originalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null">
+        current_price = #{currentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vipPrice != null">
+        vip_price = #{vipPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null">
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
+    update czb_dish
+    set shop_id = #{shopId,jdbcType=VARCHAR},
+      dish_name = #{dishName,jdbcType=VARCHAR},
+      dish_type = #{dishType,jdbcType=INTEGER},
+      supply_time = #{supplyTime,jdbcType=VARCHAR},
+      is_sale = #{isSale,jdbcType=INTEGER},
+      label = #{label,jdbcType=VARCHAR},
+      original_price = #{originalPrice,jdbcType=DOUBLE},
+      current_price = #{currentPrice,jdbcType=DOUBLE},
+      vip_price = #{vipPrice,jdbcType=DOUBLE},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </update>
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.food.Dish">
+    <id column="dish_id" jdbcType="VARCHAR" property="dishId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="dish_type" jdbcType="INTEGER" property="dishType" />
+    <result column="supply_time" jdbcType="VARCHAR" property="supplyTime" />
+    <result column="is_sale" jdbcType="INTEGER" property="isSale" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="original_price" jdbcType="DOUBLE" property="originalPrice" />
+    <result column="current_price" jdbcType="DOUBLE" property="currentPrice" />
+    <result column="vip_price" jdbcType="DOUBLE" property="vipPrice" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dish_id, commodity_id, dish_name, dish_type, supply_time, is_sale, label, original_price, 
+    current_price, vip_price, file_id, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from czb_dish
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from czb_dish
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
     insert into czb_dish (dish_id, commodity_id, dish_name, 
       dish_type, supply_time, is_sale, 
       label, original_price, current_price, 
@@ -42,134 +226,134 @@
       #{vipPrice,jdbcType=DOUBLE}, #{fileId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
     insert into czb_dish
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="dishId != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
         dish_id,
       </if>
-      <if test="commodityId != null" >
+      <if test="commodityId != null">
         commodity_id,
       </if>
-      <if test="dishName != null" >
+      <if test="dishName != null">
         dish_name,
       </if>
-      <if test="dishType != null" >
+      <if test="dishType != null">
         dish_type,
       </if>
-      <if test="supplyTime != null" >
+      <if test="supplyTime != null">
         supply_time,
       </if>
-      <if test="isSale != null" >
+      <if test="isSale != null">
         is_sale,
       </if>
-      <if test="label != null" >
+      <if test="label != null">
         label,
       </if>
-      <if test="originalPrice != null" >
+      <if test="originalPrice != null">
         original_price,
       </if>
-      <if test="currentPrice != null" >
+      <if test="currentPrice != null">
         current_price,
       </if>
-      <if test="vipPrice != null" >
+      <if test="vipPrice != null">
         vip_price,
       </if>
-      <if test="fileId != null" >
+      <if test="fileId != null">
         file_id,
       </if>
-      <if test="createAt != null" >
+      <if test="createAt != null">
         create_at,
       </if>
-      <if test="updateAt != null" >
+      <if test="updateAt != null">
         update_at,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="dishId != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
         #{dishId,jdbcType=VARCHAR},
       </if>
-      <if test="commodityId != null" >
+      <if test="commodityId != null">
         #{commodityId,jdbcType=VARCHAR},
       </if>
-      <if test="dishName != null" >
+      <if test="dishName != null">
         #{dishName,jdbcType=VARCHAR},
       </if>
-      <if test="dishType != null" >
+      <if test="dishType != null">
         #{dishType,jdbcType=INTEGER},
       </if>
-      <if test="supplyTime != null" >
+      <if test="supplyTime != null">
         #{supplyTime,jdbcType=VARCHAR},
       </if>
-      <if test="isSale != null" >
+      <if test="isSale != null">
         #{isSale,jdbcType=INTEGER},
       </if>
-      <if test="label != null" >
+      <if test="label != null">
         #{label,jdbcType=VARCHAR},
       </if>
-      <if test="originalPrice != null" >
+      <if test="originalPrice != null">
         #{originalPrice,jdbcType=DOUBLE},
       </if>
-      <if test="currentPrice != null" >
+      <if test="currentPrice != null">
         #{currentPrice,jdbcType=DOUBLE},
       </if>
-      <if test="vipPrice != null" >
+      <if test="vipPrice != null">
         #{vipPrice,jdbcType=DOUBLE},
       </if>
-      <if test="fileId != null" >
+      <if test="fileId != null">
         #{fileId,jdbcType=VARCHAR},
       </if>
-      <if test="createAt != null" >
+      <if test="createAt != null">
         #{createAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null" >
+      <if test="updateAt != null">
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
     update czb_dish
-    <set >
-      <if test="commodityId != null" >
+    <set>
+      <if test="commodityId != null">
         commodity_id = #{commodityId,jdbcType=VARCHAR},
       </if>
-      <if test="dishName != null" >
+      <if test="dishName != null">
         dish_name = #{dishName,jdbcType=VARCHAR},
       </if>
-      <if test="dishType != null" >
+      <if test="dishType != null">
         dish_type = #{dishType,jdbcType=INTEGER},
       </if>
-      <if test="supplyTime != null" >
+      <if test="supplyTime != null">
         supply_time = #{supplyTime,jdbcType=VARCHAR},
       </if>
-      <if test="isSale != null" >
+      <if test="isSale != null">
         is_sale = #{isSale,jdbcType=INTEGER},
       </if>
-      <if test="label != null" >
+      <if test="label != null">
         label = #{label,jdbcType=VARCHAR},
       </if>
-      <if test="originalPrice != null" >
+      <if test="originalPrice != null">
         original_price = #{originalPrice,jdbcType=DOUBLE},
       </if>
-      <if test="currentPrice != null" >
+      <if test="currentPrice != null">
         current_price = #{currentPrice,jdbcType=DOUBLE},
       </if>
-      <if test="vipPrice != null" >
+      <if test="vipPrice != null">
         vip_price = #{vipPrice,jdbcType=DOUBLE},
       </if>
-      <if test="fileId != null" >
+      <if test="fileId != null">
         file_id = #{fileId,jdbcType=VARCHAR},
       </if>
-      <if test="createAt != null" >
+      <if test="createAt != null">
         create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null" >
+      <if test="updateAt != null">
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.food.Dish" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
     update czb_dish
     set commodity_id = #{commodityId,jdbcType=VARCHAR},
       dish_name = #{dishName,jdbcType=VARCHAR},

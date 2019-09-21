@@ -5,7 +5,7 @@ import java.util.Date;
 public class Dish {
     private String dishId;
 
-    private String commodityId;
+    private String shopId;
 
     private String dishName;
 
@@ -37,12 +37,12 @@ public class Dish {
         this.dishId = dishId == null ? null : dishId.trim();
     }
 
-    public String getCommodityId() {
-        return commodityId;
+    public String getShopId() {
+        return shopId;
     }
 
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId == null ? null : commodityId.trim();
+    public void setShopId(String shopId) {
+        this.shopId = shopId == null ? null : shopId.trim();
     }
 
     public String getDishName() {
