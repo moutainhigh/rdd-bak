@@ -8,7 +8,7 @@ public class UrlConfig {
 //
 //    public static final String Port="8090";//端口号
 
-    public static final String NOTIGY_URL="106.91.18.38";
+    public static final String NOTIGY_URL="106.91.21.44";
 
     public static final String Port="8899";//端口号
 }

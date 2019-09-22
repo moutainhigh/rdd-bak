@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.food.dishOrderMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.food.dishOrder" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.food.DishOrder" >
     <id column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
     <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
     <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
     <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
@@ -14,10 +13,11 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="dish_id" property="dishId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    order_id, user_id, commodity_id, shop_id, actual_price, third_order, pay_status, 
-    pey_method, dining_status, remark, create_at, update_at
+    order_id, user_id, shop_id, actual_price, third_order, pay_status, pey_method, dining_status, 
+    remark, create_at, update_at, dish_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -29,19 +29,19 @@
     delete from czb_dish_order
     where order_id = #{orderId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.dishOrder" >
-    insert into czb_dish_order (order_id, user_id, commodity_id, 
-      shop_id, actual_price, third_order, 
-      pay_status, pey_method, dining_status, 
-      remark, create_at, update_at
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.DishOrder" >
+    insert into czb_dish_order (order_id, user_id, shop_id, 
+      actual_price, third_order, pay_status, 
+      pey_method, dining_status, remark, 
+      create_at, update_at, dish_id
       )
-    values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
-      #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, 
-      #{payStatus,jdbcType=INTEGER}, #{peyMethod,jdbcType=INTEGER}, #{diningStatus,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+    values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, 
+      #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=INTEGER}, 
+      #{peyMethod,jdbcType=INTEGER}, #{diningStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{dishId,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.dishOrder" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.DishOrder" >
     insert into czb_dish_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -49,9 +49,6 @@
       </if>
       <if test="userId != null" >
         user_id,
-      </if>
-      <if test="commodityId != null" >
-        commodity_id,
       </if>
       <if test="shopId != null" >
         shop_id,
@@ -80,6 +77,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="dishId != null" >
+        dish_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -87,9 +87,6 @@
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="commodityId != null" >
-        #{commodityId,jdbcType=VARCHAR},
       </if>
       <if test="shopId != null" >
         #{shopId,jdbcType=VARCHAR},
@@ -118,16 +115,16 @@
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="dishId != null" >
+        #{dishId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.dishOrder" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.DishOrder" >
     update czb_dish_order
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="commodityId != null" >
-        commodity_id = #{commodityId,jdbcType=VARCHAR},
       </if>
       <if test="shopId != null" >
         shop_id = #{shopId,jdbcType=VARCHAR},
@@ -156,13 +153,15 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="dishId != null" >
+        dish_id = #{dishId,jdbcType=VARCHAR},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.food.dishOrder" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.food.DishOrder" >
     update czb_dish_order
     set user_id = #{userId,jdbcType=VARCHAR},
-      commodity_id = #{commodityId,jdbcType=VARCHAR},
       shop_id = #{shopId,jdbcType=VARCHAR},
       actual_price = #{actualPrice,jdbcType=DOUBLE},
       third_order = #{thirdOrder,jdbcType=VARCHAR},
@@ -171,7 +170,8 @@
       dining_status = #{diningStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      dish_id = #{dishId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>

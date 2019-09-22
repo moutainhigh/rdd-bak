@@ -29,6 +29,8 @@ public class Dish {
 
     private Date updateAt;
 
+    private Integer isRecommend;
+
     public String getDishId() {
         return dishId;
     }
@@ -131,5 +133,13 @@ public class Dish {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getIsRecommend() {
+        return isRecommend;
+    }
+
+    public void setIsRecommend(Integer isRecommend) {
+        this.isRecommend = isRecommend;
     }
 }

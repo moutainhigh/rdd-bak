@@ -2,12 +2,10 @@ package com.cqut.czb.bn.entity.entity.food;
 
 import java.util.Date;
 
-public class dishOrder {
+public class DishOrder {
     private String orderId;
 
     private String userId;
-
-    private String commodityId;
 
     private String shopId;
 
@@ -27,6 +25,8 @@ public class dishOrder {
 
     private Date updateAt;
 
+    private String dishId;
+
     public String getOrderId() {
         return orderId;
     }
@@ -41,14 +41,6 @@ public class dishOrder {
 
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
-    }
-
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId == null ? null : commodityId.trim();
     }
 
     public String getShopId() {
@@ -121,5 +113,13 @@ public class dishOrder {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(String dishId) {
+        this.dishId = dishId == null ? null : dishId.trim();
     }
 }
