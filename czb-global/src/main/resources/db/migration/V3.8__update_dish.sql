@@ -1,0 +1,1 @@
+alter table czb_dish add is_recommend INTEGER( 1 ) DEFAULT 0 COMMENT '是否推荐';
