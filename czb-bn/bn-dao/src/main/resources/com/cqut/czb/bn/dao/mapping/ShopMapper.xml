@@ -11,10 +11,17 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="audit" property="audit" jdbcType="INTEGER" />
+    <result column="shop_type" property="shopType" jdbcType="INTEGER" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />
+    <result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />
+    <result column="shop_img" property="shopImg" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     shop_id, user_id, shop_name, shop_phone, shop_content, shop_address, create_at, update_at, 
-    audit
+    audit, shop_type, longitude, latitude, starting_time_business, end_time_business, 
+    shop_img
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -29,12 +36,16 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
     insert into czb_shop (shop_id, user_id, shop_name, 
       shop_phone, shop_content, shop_address, 
-      create_at, update_at, audit
-      )
+      create_at, update_at, audit, 
+      shop_type, longitude, latitude, 
+      starting_time_business, end_time_business, 
+      shop_img)
     values (#{shopId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
       #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{audit,jdbcType=INTEGER}
-      )
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{audit,jdbcType=INTEGER}, 
+      #{shopType,jdbcType=INTEGER}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, 
+      #{startingTimeBusiness,jdbcType=TIMESTAMP}, #{endTimeBusiness,jdbcType=TIMESTAMP}, 
+      #{shopImg,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
     insert into czb_shop
@@ -66,6 +77,24 @@
       <if test="audit != null" >
         audit,
       </if>
+      <if test="shopType != null" >
+        shop_type,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="startingTimeBusiness != null" >
+        starting_time_business,
+      </if>
+      <if test="endTimeBusiness != null" >
+        end_time_business,
+      </if>
+      <if test="shopImg != null" >
+        shop_img,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="shopId != null" >
@@ -94,6 +123,24 @@
       </if>
       <if test="audit != null" >
         #{audit,jdbcType=INTEGER},
+      </if>
+      <if test="shopType != null" >
+        #{shopType,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="startingTimeBusiness != null" >
+        #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTimeBusiness != null" >
+        #{endTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopImg != null" >
+        #{shopImg,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -124,6 +171,24 @@
       <if test="audit != null" >
         audit = #{audit,jdbcType=INTEGER},
       </if>
+      <if test="shopType != null" >
+        shop_type = #{shopType,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="startingTimeBusiness != null" >
+        starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTimeBusiness != null" >
+        end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopImg != null" >
+        shop_img = #{shopImg,jdbcType=VARCHAR},
+      </if>
     </set>
     where shop_id = #{shopId,jdbcType=VARCHAR}
   </update>
@@ -136,7 +201,13 @@
       shop_address = #{shopAddress,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      audit = #{audit,jdbcType=INTEGER}
+      audit = #{audit,jdbcType=INTEGER},
+      shop_type = #{shopType,jdbcType=INTEGER},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+      shop_img = #{shopImg,jdbcType=VARCHAR}
     where shop_id = #{shopId,jdbcType=VARCHAR}
   </update>
 </mapper>
