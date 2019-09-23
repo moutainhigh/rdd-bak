@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishMapperExtra">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO">
+        <id column="dish_id" jdbcType="VARCHAR" property="dishId" />
+        <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+        <result column="dish_type" jdbcType="INTEGER" property="dishType" />
+        <result column="supply_time" jdbcType="VARCHAR" property="supplyTime" />
+        <result column="save_path" jdbcType="VARCHAR" property="savePath" />
+        <result column="is_sale" jdbcType="INTEGER" property="isSale" />
+        <result column="label" jdbcType="VARCHAR" property="label" />
+        <result column="original_price" jdbcType="DOUBLE" property="originalPrice" />
+        <result column="current_price" jdbcType="DOUBLE" property="currentPrice" />
+        <result column="vip_price" jdbcType="DOUBLE" property="vipPrice" />
+        <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+        <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+        <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price,
+        current_price, vip_price, file_id, create_at, update_at
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from czb_dish
+        where dish_id = #{dishId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectRecommendList" resultMap="BaseResultMap">
+        SELECT
+            cd.dish_id,
+            cd.shop_id,
+            shop_name,
+            save_path,
+            dish_name,
+            dish_type,
+            supply_time,
+            is_sale,
+            label,
+            original_price,
+            current_price,
+            vip_price,
+            SUM(cdo.dish_id)
+        FROM
+            czb_dish cd
+        LEFT JOIN czb_shop cs ON cs.shop_id = cd.shop_id
+        LEFT JOIN czb_file cf ON cd.file_id = cf.file_id
+        LEFT JOIN czb_dish_order cdo ON cd.dish_id = cdo.dish_id
+        WHERE
+            is_recommend = 1
+        GROUP BY cd.dish_id
+        order BY 	SUM(cdo.dish_id) DESC
+        LIMIT 6
+            </select>
+
+    <select id="selectDishShop"  resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            czb_shop
+        WHERE
+            czb_shop.shop_type = 2
+    </select>
+
+</mapper>
