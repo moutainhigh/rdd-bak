@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishOrderMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
+        <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
+        <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
+        <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+        <result column="pey_method" property="peyMethod" jdbcType="INTEGER" />
+        <result column="dining_status" property="diningStatus" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        order_id, user_id,shop_id, actual_price, third_order, pay_status,
+        pey_method, dining_status, remark, create_at, update_at
+    </sql>
+    <select id="selectOrderByUser" resultType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO"  >
+        SELECT
+            cdo.order_id AS orderId,
+            cdo.user_id AS userId,
+            user_account AS userAccount,
+            cdo.shop_id AS shopId,
+            shop_name AS shopName,
+            actual_price as actualPrice,
+            third_order AS thirdOrder,
+            pay_status AS payStatus,
+            pey_method AS peyMethod,
+            dining_status AS diningStatus,
+            remark as remark,
+            cdo.create_at as createAt,
+            cdo.update_at AS updateAt,
+            GROUP_CONCAT(CONCAT_WS('X',cd.dish_name,cod.dish_count)) AS content
+        FROM
+            czb_dish_order cdo
+        LEFT JOIN czb_shop cs ON cdo.shop_id = cs.shop_id
+        LEFT JOIN czb_order_dishes cod ON cdo.order_id = cod.order_id
+        LEFT JOIN czb_dish cd ON cod.dish_id = cd.dish_id
+        LEFT JOIN czb_user cu ON cdo.user_id = cu.user_id
+        WHERE cdo.user_id = #{userId,jdbcType=VARCHAR}
+        GROUP BY cdo.order_id
+    </select>
+    <select id="selectOrderDetails" resultType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DetailsOrderDTO" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
+        select
+            order_id AS orderId,
+            cdo.user_id AS userId,
+            user_account AS userAccount,
+            cdo.shop_id AS shopId,
+            shop_name AS shopName,
+            actual_price as actualPrice,
+            third_order AS thirdOrder,
+            pay_status AS payStatus,
+            pey_method AS peyMethod,
+            dining_status AS diningStatus,
+            remark as remark,
+            cdo.create_at as createAt,
+            cdo.update_at AS updateAt
+         FROM
+            czb_dish_order cdo
+        LEFT JOIN czb_shop cs ON cdo.shop_id = cs.shop_id
+        LEFT JOIN czb_user cu ON cdo.user_id = cu.user_id
+        WHERE cdo.order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>
