@@ -1,0 +1,1 @@
+alter table czb_order_dishes add dish_count INTEGER( 10 ) DEFAULT 0 COMMENT '菜品数量';
