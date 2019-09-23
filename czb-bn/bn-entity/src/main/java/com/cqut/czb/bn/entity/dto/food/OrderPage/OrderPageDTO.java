@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto.food.OrderFoodDTO;
+package com.cqut.czb.bn.entity.dto.food.OrderPage;
 
 import java.util.Date;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 商店信息,
  */
-public class OrderShopDTO {
+public class OrderPageDTO {
 
     private String shopId;
 
