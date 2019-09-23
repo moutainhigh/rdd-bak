@@ -7,11 +7,7 @@ public class OrderToRecommendDTO {
 
     private String dishName;
 
-    private Integer dishType;
-
     private String supplyTime;
-
-    private String label;
 
     private Double originalPrice;
 
@@ -45,28 +41,12 @@ public class OrderToRecommendDTO {
         this.dishName = dishName;
     }
 
-    public Integer getDishType() {
-        return dishType;
-    }
-
-    public void setDishType(Integer dishType) {
-        this.dishType = dishType;
-    }
-
     public String getSupplyTime() {
         return supplyTime;
     }
 
     public void setSupplyTime(String supplyTime) {
         this.supplyTime = supplyTime;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Double getOriginalPrice() {

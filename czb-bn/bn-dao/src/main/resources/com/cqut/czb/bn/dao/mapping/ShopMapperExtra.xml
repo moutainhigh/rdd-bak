@@ -162,9 +162,12 @@
     </select>
 
     <select id="selectImg" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT file_id as shopImg from czb_file_function ,czb_shop
+        SELECT  save_path as shopImg
+        from czb_file_function ,czb_shop,czb_file
         WHERE
         shop_id=local_id
+        AND
+        czb_file.file_id=czb_file_function.file_id
         AND
         shop_id=#{shopId, jdbcType = VARCHAR}
     </select>
