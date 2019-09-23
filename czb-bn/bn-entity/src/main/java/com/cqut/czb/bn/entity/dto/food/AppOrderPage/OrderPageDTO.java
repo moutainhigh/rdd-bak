@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.entity.dto.food.OrderPage;
+package com.cqut.czb.bn.entity.dto.food.AppOrderPage;
 
 import java.util.Date;
 import java.util.List;
