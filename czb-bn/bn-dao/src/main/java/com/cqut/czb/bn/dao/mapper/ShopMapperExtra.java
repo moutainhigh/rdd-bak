@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
-import com.cqut.czb.bn.entity.dto.food.OrderPage.OrderPageDTO;
+import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageDTO;
 import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO;

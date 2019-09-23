@@ -148,7 +148,7 @@
 
     <!--查出点餐页面的餐店信息selectOrderShopInfo-->
     <select id="selectOrderShopInfo" parameterType="java.lang.String"
-            resultType="com.cqut.czb.bn.entity.dto.food.OrderPage.OrderPageDTO">
+            resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageDTO">
         SELECT
          shop_id AS shopId, user_id AS userId, shop_name AS shopName, shop_phone AS shopPhone, shop_content AS shopContent,
          shop_address AS shopAddress,audit, shop_type AS shopType, longitude, latitude,
@@ -162,9 +162,12 @@
     </select>
 
     <select id="selectImg" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT file_id as shopImg from czb_file_function ,czb_shop
+        SELECT  save_path as shopImg
+        from czb_file_function ,czb_shop,czb_file
         WHERE
         shop_id=local_id
+        AND
+        czb_file.file_id=czb_file_function.file_id
         AND
         shop_id=#{shopId, jdbcType = VARCHAR}
     </select>

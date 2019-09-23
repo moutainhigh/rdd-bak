@@ -1,6 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishMapperExtra">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishMapperExtra" >
+  <!--陈德强：查询推荐的商品-->
+  <select id="selectRecommend" resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderToRecommendDTO" parameterType="java.lang.String" >
+    SELECT
+            dish_id AS dishId, shop_id AS shopId, dish_name AS dishName,
+            supply_time AS supplyTime , original_price AS originalPrice,
+            current_price AS currentPrice, vip_price as  vipPrice, save_path AS imgPath
+    FROM
+            czb_dish,czb_file
+    WHERE
+            czb_file.file_id=czb_dish.file_id
+            AND
+            shop_id=#{shopId,jdbcType=VARCHAR}
+            and
+            is_recommend=1
+  </select>
+
+  <!--陈德强：级联查询：不用的类型的套餐单品-->
+  <!--油卡专区级联查询-->
+  <resultMap type="com.cqut.czb.bn.entity.dto.food.AppOrderPage.AllDishDTO" id="DishResult">
+    <result property="label" column="label"/>
+    <collection property="dishDTOS" column="{label=label, shopId=shop_id}" javaType="list" select="SelectDishInfo"/>
+  </resultMap>
+
+  <select id="selectAllDish" resultMap="DishResult">
+    SELECT
+            shop_id,label
+    FROM
+            czb_dish
+    WHERE
+            shop_id=#{shopId,jdbcType=VARCHAR}
+            and
+            is_sale=1
+    group by label
+  </select>
+
+  <select id="SelectDishInfo" resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.DishDTO">
+    SELECT
+            dish_id AS dishId, shop_id AS shopId, dish_name AS dishName, dish_type AS dishType,
+            supply_time AS supplyTime,label , original_price AS originalPrice,
+            current_price AS currentPrice, vip_price as  vipPrice, save_path AS imgPath
+    FROM
+            czb_dish,czb_file
+    WHERE
+            czb_file.file_id=czb_dish.file_id
+            AND
+            shop_id=#{shopId,jdbcType=VARCHAR}
+            and
+            label=#{label}
+            and
+            is_recommend=1
+            and
+            is_sale=1
+  </select>
+
     <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO">
         <id column="dish_id" jdbcType="VARCHAR" property="dishId" />
         <result column="shop_id" jdbcType="VARCHAR" property="shopId" />

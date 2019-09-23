@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.ws.Action;
-
-
 /**
  * app 点餐页面
  */
@@ -21,17 +18,25 @@ public class AppOrderPageController {
     @Autowired
     AppOrderPageService appOrderPageService;
 
-
+//  获取商家的信息
     @GetMapping(value = "/getShopInfo")
     public JSONResult getShopInfo(@RequestParam(value = "shopId") String shopId){
         return new JSONResult(appOrderPageService.selectOrderShopInfo(shopId));
     }
 
+//    获取推荐的餐品
     @GetMapping(value = "/getRecommendation")
     public JSONResult getRecommendation(@RequestParam(value = "shopId") String shopId){
-
-        return null;
+        return new JSONResult(appOrderPageService.selectRecommend(shopId));
     }
+
+//    获取所有的商品
+    @GetMapping(value = "/getAllDish")
+    public JSONResult getAllDish(@RequestParam(value = "shopId") String shopId){
+        return new JSONResult(appOrderPageService.selectAllDish(shopId));
+    }
+
+
 
 
 }

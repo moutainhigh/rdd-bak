@@ -1,8 +1,12 @@
-package com.cqut.czb.bn.entity.dto.food.OrderPage;
+package com.cqut.czb.bn.entity.dto.food.AppOrderPage;
 
 import java.util.Date;
 
-public class OrderToRecommendDTO {
+/**
+ * 商品展示点餐页面
+ */
+public class DishDTO {
+
     private String dishId;
 
     private String shopId;
@@ -13,8 +17,6 @@ public class OrderToRecommendDTO {
 
     private String supplyTime;
 
-    private Integer isSale;
-
     private String label;
 
     private Double originalPrice;
@@ -23,9 +25,15 @@ public class OrderToRecommendDTO {
 
     private Double vipPrice;
 
-    private String fileId;
+    private String imgPath;
 
-    private Integer isRecommend;
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 
     public String getDishId() {
         return dishId;
@@ -67,14 +75,6 @@ public class OrderToRecommendDTO {
         this.supplyTime = supplyTime;
     }
 
-    public Integer getIsSale() {
-        return isSale;
-    }
-
-    public void setIsSale(Integer isSale) {
-        this.isSale = isSale;
-    }
-
     public String getLabel() {
         return label;
     }
@@ -105,21 +105,5 @@ public class OrderToRecommendDTO {
 
     public void setVipPrice(Double vipPrice) {
         this.vipPrice = vipPrice;
-    }
-
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
-
-    public Integer getIsRecommend() {
-        return isRecommend;
-    }
-
-    public void setIsRecommend(Integer isRecommend) {
-        this.isRecommend = isRecommend;
     }
 }
