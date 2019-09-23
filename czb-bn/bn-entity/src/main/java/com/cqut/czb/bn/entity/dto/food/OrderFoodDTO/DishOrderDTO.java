@@ -13,6 +13,8 @@ public class DishOrderDTO {
 
     private String shopName;
 
+    private String savePath;
+
     private Double actualPrice;
 
     private String thirdOrder;
@@ -69,6 +71,14 @@ public class DishOrderDTO {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
+    }
+
+    public String getSavePath() {
+        return savePath;
+    }
+
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
     }
 
     public Double getActualPrice() {

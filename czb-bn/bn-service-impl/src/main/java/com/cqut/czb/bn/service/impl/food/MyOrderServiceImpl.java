@@ -27,6 +27,11 @@ public class MyOrderServiceImpl implements MyOrderService {
     public DetailsOrderDTO getOrderDetails(DishOrderDTO dishOrderDTO) {
         DetailsOrderDTO detailsOrder = dishOrderMapperExtra.selectOrderDetails(dishOrderDTO);
         detailsOrder.setDishes(orderDishesMapperExtra.selectDishInOrder(detailsOrder.getOrderId()));
+        for (OrderDishDTO orderDishDTO : detailsOrder.getDishes()){
+            orderDishDTO.setCurrentPrice(orderDishDTO.getOriginalPrice()*orderDishDTO.getDishCount());
+            orderDishDTO.setOriginalPrice(orderDishDTO.getCurrentPrice()*orderDishDTO.getDishCount());
+            orderDishDTO.setVipPrice(orderDishDTO.getVipPrice()*orderDishDTO.getDishCount());
+        }
         return detailsOrder;
     }
 }

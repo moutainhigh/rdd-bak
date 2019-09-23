@@ -25,6 +25,7 @@
                 order_id as orderId,
                 cod.dish_id as dishId,
                 dish_name AS dishName,
+                dish_count AS dishCount,
                 current_price AS currentPrice,
                 original_price AS originalPrice,
                 vip_price AS vipPrice,

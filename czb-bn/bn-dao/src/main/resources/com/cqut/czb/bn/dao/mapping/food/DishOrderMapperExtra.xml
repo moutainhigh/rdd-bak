@@ -31,13 +31,15 @@
             pay_status AS payStatus,
             pey_method AS peyMethod,
             dining_status AS diningStatus,
-            remark as remark,
+            cdo.remark as remark,
+            cf.save_path AS savePath,
             cdo.create_at as createAt,
             cdo.update_at AS updateAt,
             GROUP_CONCAT(CONCAT_WS('X',cd.dish_name,cod.dish_count)) AS content
         FROM
             czb_dish_order cdo
         LEFT JOIN czb_shop cs ON cdo.shop_id = cs.shop_id
+        LEFT JOIN czb_file cf ON cs.shop_img = cf.file_id
         LEFT JOIN czb_order_dishes cod ON cdo.order_id = cod.order_id
         LEFT JOIN czb_dish cd ON cod.dish_id = cd.dish_id
         LEFT JOIN czb_user cu ON cdo.user_id = cu.user_id

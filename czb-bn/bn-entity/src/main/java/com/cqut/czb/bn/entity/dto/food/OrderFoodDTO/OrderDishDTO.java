@@ -11,6 +11,8 @@ public class OrderDishDTO {
 
     private String dishName;
 
+    private Integer dishCount;
+
     private Integer dishType;
 
     private Double currentPrice;
@@ -61,6 +63,14 @@ public class OrderDishDTO {
 
     public void setDishName(String dishName) {
         this.dishName = dishName;
+    }
+
+    public Integer getDishCount() {
+        return dishCount;
+    }
+
+    public void setDishCount(Integer dishCount) {
+        this.dishCount = dishCount;
     }
 
     public Double getCurrentPrice() {
