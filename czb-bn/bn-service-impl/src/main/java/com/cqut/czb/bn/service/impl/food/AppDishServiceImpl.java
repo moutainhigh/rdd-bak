@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.food;
 
 import com.cqut.czb.bn.dao.mapper.food.DishMapperExtra;
+import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO;
 import com.cqut.czb.bn.entity.entity.Shop;
 import com.cqut.czb.bn.entity.entity.food.Dish;
@@ -16,7 +17,7 @@ public class AppDishServiceImpl implements AppDishService {
 
 
     @Override
-    public List<Dish> getRecommendDishList() {
+    public List<DishDTO> getRecommendDishList() {
         return dishMapperExtra.selectRecommendDish();
     }
 
