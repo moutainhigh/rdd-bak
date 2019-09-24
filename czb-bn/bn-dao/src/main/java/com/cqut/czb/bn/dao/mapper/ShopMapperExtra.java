@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
-import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageDTO;
+import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageShopDTO;
 import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO;
@@ -25,7 +25,7 @@ public interface ShopMapperExtra {
 
     int updateShopAudit(ShopManagementDTO shopManagementDTO);
 
-    OrderPageDTO selectOrderShopInfo(@Param("shopId") String shopId);
+    OrderPageShopDTO selectOrderShopInfo(@Param("shopId") String shopId);
 
     List<String> selectImg(@Param("shopId") String shopId);
 }

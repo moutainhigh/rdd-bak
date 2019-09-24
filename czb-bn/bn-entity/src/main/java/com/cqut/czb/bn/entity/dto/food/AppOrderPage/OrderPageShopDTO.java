@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 商店信息,
  */
-public class OrderPageDTO {
+public class OrderPageShopDTO {
 
     private String shopId;
 
@@ -35,6 +35,16 @@ public class OrderPageDTO {
     private String shopImg;
 
     private List<String> topImg;
+
+    private String Distance;
+
+    public String getDistance() {
+        return Distance;
+    }
+
+    public void setDistance(String distance) {
+        Distance = distance;
+    }
 
     public String getShopId() {
         return shopId;

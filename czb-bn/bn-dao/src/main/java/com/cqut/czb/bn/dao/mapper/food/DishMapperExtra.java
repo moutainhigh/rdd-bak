@@ -14,8 +14,9 @@ public interface DishMapperExtra {
 
     List<Shop> selectDishShop(Shop shop);
 
-    List<OrderToRecommendDTO>  selectRecommend(@Param("shopId") String shopId);
+    List<OrderToRecommendDTO>  selectRecommend(@Param("shopId") String shopId,@Param("weekDay") String weekDay);
 
-    List<AllDishDTO> selectAllDish(@Param("shopId") String shopId);
+    List<AllDishDTO> selectAllDish(@Param("shopId") String shopId,@Param("weekDay") String weekDay);
+
     List<DishShopDTO> selectDishShop(DishShopDTO shop);
 }

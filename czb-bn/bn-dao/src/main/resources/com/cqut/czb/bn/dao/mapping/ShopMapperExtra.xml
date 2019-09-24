@@ -148,7 +148,7 @@
 
     <!--查出点餐页面的餐店信息selectOrderShopInfo-->
     <select id="selectOrderShopInfo" parameterType="java.lang.String"
-            resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageDTO">
+            resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageShopDTO">
         SELECT
          shop_id AS shopId, user_id AS userId, shop_name AS shopName, shop_phone AS shopPhone, shop_content AS shopContent,
          shop_address AS shopAddress,audit, shop_type AS shopType, longitude, latitude,

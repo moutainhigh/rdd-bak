@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.food.AppOrderPage;
 
+import com.cqut.czb.bn.entity.dto.food.AppOrderPage.InputOrderPageDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.food.AppOrderPageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class AppOrderPageController {
 
 //  获取商家的信息
     @GetMapping(value = "/getShopInfo")
-    public JSONResult getShopInfo(@RequestParam(value = "shopId") String shopId){
-        return new JSONResult(appOrderPageService.selectOrderShopInfo(shopId));
+    public JSONResult getShopInfo(InputOrderPageDTO inputOrderPageDTO){
+        return new JSONResult(appOrderPageService.selectOrderShopInfo(inputOrderPageDTO));
     }
 
 //    获取推荐的餐品

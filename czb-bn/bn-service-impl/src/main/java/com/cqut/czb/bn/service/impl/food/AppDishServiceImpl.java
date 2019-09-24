@@ -63,6 +63,7 @@ public class AppDishServiceImpl implements AppDishService {
        dishShopDTOS.set(i,dishShopDTO) ;
         quickSort(dishShopDTOS,left, i-1);//继续处理左边的，这里是一个递归的过程
         quickSort(dishShopDTOS,i+1, right);//继续处理右边的 ，这里是一个递归的过程
+       return null;
     }
 
 }
