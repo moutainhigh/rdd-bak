@@ -3,8 +3,7 @@ package com.cqut.czb.bn.service.impl.food;
 import com.cqut.czb.bn.dao.mapper.food.DishMapperExtra;
 import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO;
-import com.cqut.czb.bn.entity.entity.Shop;
-import com.cqut.czb.bn.entity.entity.food.Dish;
+import com.cqut.czb.bn.entity.dto.food.foodHomePage.InputRecommendDishDTO;
 import com.cqut.czb.bn.service.food.AppDishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ public class AppDishServiceImpl implements AppDishService {
 
 
     @Override
-    public List<DishDTO> getRecommendDishList() {
-        return dishMapperExtra.selectRecommendDish();
+    public List<DishDTO> getRecommendDishList(InputRecommendDishDTO inputRecommendDishDTO) {
+        return dishMapperExtra.selectRecommendDish(inputRecommendDishDTO);
     }
 
     @Override

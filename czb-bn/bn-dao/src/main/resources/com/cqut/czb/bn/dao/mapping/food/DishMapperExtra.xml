@@ -87,7 +87,7 @@
         from czb_dish
         where dish_id = #{dishId,jdbcType=VARCHAR}
     </select>
-    <select id="selectRecommendDish" resultMap="BaseResultMap">
+    <select id="selectRecommendDish" parameterType="com.cqut.czb.bn.entity.dto.food.foodHomePage.InputRecommendDishDTO" resultMap="BaseResultMap">
         SELECT
             cd.dish_id,
             cd.shop_id,
@@ -113,7 +113,9 @@
             is_recommend = 1
         GROUP BY cd.dish_id
         order BY 	SUM(cdo.dish_id) DESC
-        LIMIT 6
+        <if test="isAll!=1">
+            LIMIT 6
+        </if>
             </select>
 
     <select id="selectDishShop" parameterType="com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO" resultType="com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO">
