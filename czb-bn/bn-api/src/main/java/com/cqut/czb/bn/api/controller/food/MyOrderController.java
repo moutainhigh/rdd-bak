@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-@RequestMapping("/api/food")
+@RequestMapping("/api/foodOrder")
 @RestController
 public class MyOrderController {
 

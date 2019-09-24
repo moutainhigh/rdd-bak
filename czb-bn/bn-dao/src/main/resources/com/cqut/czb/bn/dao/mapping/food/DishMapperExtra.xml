@@ -68,6 +68,7 @@
         <result column="supply_time" jdbcType="VARCHAR" property="supplyTime" />
         <result column="save_path" jdbcType="VARCHAR" property="savePath" />
         <result column="is_sale" jdbcType="INTEGER" property="isSale" />
+        <result column="sale_count" jdbcType="INTEGER" property="saleCount" />
         <result column="label" jdbcType="VARCHAR" property="label" />
         <result column="original_price" jdbcType="DOUBLE" property="originalPrice" />
         <result column="current_price" jdbcType="DOUBLE" property="currentPrice" />
@@ -86,7 +87,7 @@
         from czb_dish
         where dish_id = #{dishId,jdbcType=VARCHAR}
     </select>
-    <select id="selectRecommendList" resultMap="BaseResultMap">
+    <select id="selectRecommendDish" resultMap="BaseResultMap">
         SELECT
             cd.dish_id,
             cd.shop_id,
@@ -100,7 +101,9 @@
             original_price,
             current_price,
             vip_price,
-            SUM(cdo.dish_id)
+            SUM(cdo.dish_id) AS sale_count,
+            cd.create_at,
+            cd.update_at
         FROM
             czb_dish cd
         LEFT JOIN czb_shop cs ON cs.shop_id = cd.shop_id
@@ -113,7 +116,7 @@
         LIMIT 6
             </select>
 
-    <select id="selectDishShop"  resultType="com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO">
+    <select id="selectDishShop" parameterType="com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO" resultType="com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO">
         SELECT
         cs.shop_id AS shopId,
         cs.user_id AS userId,
@@ -138,14 +141,14 @@
         POW(
         SIN(
         (
-        22.53462 * 3.1415926 / 180 - latitude * PI() / 180
+        #{longitude,jdbcType=DOUBLE} * 3.1415926 / 180 - latitude * PI() / 180
         ) / 2
         ),
         2
-        ) + COS(22.53462 * 3.1415926 / 180) * COS(latitude * PI() / 180) * POW(
+        ) + COS(#{longitude,jdbcType=DOUBLE} * 3.1415926 / 180) * COS(latitude * PI() / 180) * POW(
         SIN(
         (
-        113.9602 * 3.1415926 / 180 - longitude * PI() / 180
+        #{latitude,jdbcType=DOUBLE} * 3.1415926 / 180 - longitude * PI() / 180
         ) / 2
         ),
         2
@@ -161,10 +164,10 @@
         WHERE
         shop_type = 2
         GROUP BY cs.shop_id
-        <if test="sortType=1">
+        <if test="sortType==1">
             ORDER BY  distance
         </if>
-        <if test="sortType=2">
+        <if test="sortType==2">
             ORDER BY saleCount
         </if>
     </select>

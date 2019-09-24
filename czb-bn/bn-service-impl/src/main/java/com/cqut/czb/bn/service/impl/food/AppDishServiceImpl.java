@@ -23,16 +23,19 @@ public class AppDishServiceImpl implements AppDishService {
     @Override
     public List<DishShopDTO> getAllDishShop(DishShopDTO shop) {
         List<DishShopDTO> dishShopDTOS = dishMapperExtra.selectDishShop(shop);
-        if (shop.getSortType()==0){
-            for (DishShopDTO dishShopDTO : dishShopDTOS){
-                if (dishShopDTO.getSaleCount()!=null&&dishShopDTO.getDistance()!=null){
-                    dishShopDTO.setSortValue(dishShopDTO.getDistance()*0.3+dishShopDTO.getSaleCount()*0.7);
-                }else {
-                    dishShopDTO.setSortValue(0.0);
-                }
+        if (dishShopDTOS!=null && dishShopDTOS.size()!=0){
+            if (shop.getSortType()==0){
+                for (DishShopDTO dishShopDTO : dishShopDTOS){
+                    if (dishShopDTO.getSaleCount()!=null&&dishShopDTO.getDistance()!=null){
+                        //对排序值进行处理，目前为距离：销量 = 3：7
+                        dishShopDTO.setSortValue(dishShopDTO.getDistance()*0.3+dishShopDTO.getSaleCount()*0.7);
+                    }else {
+                        dishShopDTO.setSortValue(0.0);
+                    }
 
+                }
+                quickSort(dishShopDTOS,0,dishShopDTOS.size()-1);
             }
-            quickSort(dishShopDTOS,0,dishShopDTOS.size()-1);
         }
         return dishShopDTOS;
     }
@@ -59,10 +62,12 @@ public class AppDishServiceImpl implements AppDishService {
             }
         }
         //最终将基准数归位
-       dishShopDTOS.set(left,dishShopDTOS.get(i)) ;
-       dishShopDTOS.set(i,dishShopDTO) ;
-        quickSort(dishShopDTOS,left, i-1);//继续处理左边的，这里是一个递归的过程
-        quickSort(dishShopDTOS,i+1, right);//继续处理右边的 ，这里是一个递归的过程
+        if (dishShopDTO.getSortValue()!=null){  //如果上方进行了排序
+            dishShopDTOS.set(left,dishShopDTOS.get(i)) ;
+            dishShopDTOS.set(i,dishShopDTO) ;
+            quickSort(dishShopDTOS,left, i-1);//继续处理左边的，这里是一个递归的过程
+            quickSort(dishShopDTOS,i+1, right);//继续处理右边的 ，这里是一个递归的过程
+        }
        return dishShopDTOS;
     }
 
