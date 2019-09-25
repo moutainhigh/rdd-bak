@@ -26,6 +26,9 @@ public class AliPayConfig {
 	//购买洗车服务
 	public static String BuyCarWash_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyCarWashInfoAiHu";
 
+	//点餐
+	public static String BuyDish_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyDishInfoAiHu";
+
 	// 加密方式
 	public static String sign_type = "RSA2";
 	

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.food;
 
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.AllDishDTO;
+import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderNum;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderToRecommendDTO;
 import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.InputRecommendDishDTO;
@@ -21,4 +22,7 @@ public interface DishMapperExtra {
     List<AllDishDTO> selectAllDish(@Param("shopId") String shopId,@Param("weekDay") String weekDay);
 
     List<DishShopDTO> selectDishShop(DishShopDTO shop);
+
+    //多个id查询商品信息
+    List<DishDTO> selectOrderDish(List<OrderNum> list);
 }

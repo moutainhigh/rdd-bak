@@ -15,6 +15,16 @@ public class OrderDishes {
 
     private Date updateAt;
 
+    private Integer dishCount;
+
+    public Integer getDishCount() {
+        return dishCount;
+    }
+
+    public void setDishCount(Integer dishCount) {
+        this.dishCount = dishCount;
+    }
+
     public String getOrderDishesId() {
         return orderDishesId;
     }

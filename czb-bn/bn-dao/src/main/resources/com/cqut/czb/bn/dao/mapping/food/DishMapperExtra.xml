@@ -174,4 +174,17 @@
         </if>
     </select>
 
+    <select id="selectOrderDish" parameterType="java.util.List" resultMap="BaseResultMap">
+         select
+        <include refid="Base_Column_List" />
+        from czb_dish
+        where
+        dish_id in
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.dishId}
+        </foreach>
+    </select>
+
+
 </mapper>

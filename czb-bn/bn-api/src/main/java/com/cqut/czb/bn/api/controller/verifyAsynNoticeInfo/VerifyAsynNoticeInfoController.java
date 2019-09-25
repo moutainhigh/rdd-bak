@@ -147,4 +147,32 @@ public class VerifyAsynNoticeInfoController {
 			e.printStackTrace();
 		}
 	}
+
+	/*
+	  点餐：支付宝
+	 */
+	@RequestMapping(value="/verifyBuyDishInfoAiHu", method= RequestMethod.POST)
+	public synchronized void verifyBuyDishInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		try {
+			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"Dish"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+		点餐：微信
+	 */
+	@RequestMapping(value="/verifyBuyDishInfoWeChat", method=RequestMethod.POST)
+	public synchronized void verifyBuyDishInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/xml");
+		try {
+			response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"Dish"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -39,4 +39,19 @@
         WHERE order_id = #{orderId,jdbcType=VARCHAR}
     </select>
 
+
+    <!--insertList插入多条数据-->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into
+            czb_order_dishes (order_dishes_id, dish_count,order_id, dish_id,dish_type, create_at, update_at)
+        values
+        <foreach collection="list" item="model" index="index" separator=",">
+            (
+            #{model.orderDishesId,jdbcType=VARCHAR},#{model.dishCount,jdbcType=INTEGER}, #{model.orderId,jdbcType=VARCHAR}, #{model.dishId,jdbcType=VARCHAR},
+            #{model.dishType,jdbcType=INTEGER}, #{model.createAt,jdbcType=TIMESTAMP}, #{model.updateAt,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+
 </mapper>

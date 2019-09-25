@@ -156,7 +156,7 @@ public class WeChatParameterConfig {
     }
 
     /**
-     * 购买服务
+     * 购买洗车服务
      */
     public static SortedMap<String, Object> getParametersBuyCarWash(String couponId,Double couponMoney,String nonceStrTemp, String orgId, String userId,double money,String serviceId) {
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
@@ -186,6 +186,38 @@ public class WeChatParameterConfig {
         pbp.put("serverId",serverId);
         pbp.put("money",money);
         pbp.put("couponId",couponId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     *  点餐
+     */
+    public static SortedMap<String, Object> getParametersBuyDish(String nonceStrTemp, String orgId, String userId,double money) {
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters.put("appid", WeChatPayConfig.app_id);
+        parameters.put("mch_id", WeChatPayConfig.mch_id);
+        parameters.put("device_info", WeChatPayConfig.device_info);
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("sign_type", WeChatPayConfig.sign_type);
+        parameters.put("body", WeChatPayConfig.body);
+        parameters.put("out_trade_no", orgId);
+        BigInteger totalFee = (BigDecimal.valueOf(money).multiply(new BigDecimal(100))).toBigInteger();
+        parameters.put("total_fee", totalFee);
+        parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
+        parameters.put("notify_url", WeChatPayConfig.BuyDish_url);//点餐
+        parameters.put("trade_type", WeChatPayConfig.trade_type);
+        parameters.put("detail","微信支付点餐");//支付的类容备注
+        String attach=getAttachBuyDish(orgId,userId,money);
+        parameters.put("attach",attach);
+        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
+        return parameters;
+    }
+
+    public static String getAttachBuyDish(String orgId,String userId,double money ){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
         return StringUtil.transMapToStringOther(pbp);
     }
 

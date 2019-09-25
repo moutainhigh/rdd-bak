@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.AppPaymentService;
+package com.cqut.czb.bn.service.impl.AppPaymentServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -14,10 +14,9 @@ import com.cqut.czb.bn.entity.dto.appBuyCarWashService.CleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO;
 import com.cqut.czb.bn.entity.dto.appCarWash.conpons;
-import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CleanServerVehicle;
-import com.cqut.czb.bn.service.AppBuyCarWashService;
+import com.cqut.czb.bn.service.appPaymentService.AppBuyCarWashService;
 import com.cqut.czb.bn.service.AppCarWashService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -108,6 +108,7 @@ public class AliParameterConfig {
         return model;
     }
 
+
     //支付宝支付——订单格外数据（购买洗车服务）
     public static String getPassBackParamsBuyCarWash(String couponId,String thirdOrder,double actualPrice,String serverId ,String ownerId) {
         Map<String, Object> pbp = new HashMap<>();
@@ -119,4 +120,26 @@ public class AliParameterConfig {
         return StringUtil.transMapToStringOther(pbp);
     }
 
+    /**
+     * 转换为支付宝支付实体（点餐）
+     */
+    public static AlipayTradeAppPayModel getBizModelBuyDish(String thirdOrder,double actualPrice ,String ownerId) {
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody("点餐服务代理");
+        model.setSubject("点餐服务代理");
+        model.setOutTradeNo(thirdOrder);
+        model.setTimeoutExpress(AliPayConfig.timeout_express);
+        model.setTotalAmount(String.valueOf(actualPrice));
+        model.setProductCode(AliPayConfig.product_code);
+        model.setPassbackParams(getPassBackParamsBuyDish(thirdOrder,actualPrice ,ownerId));
+        return model;
+    }
+    //支付宝支付——订单格外数据（点餐）
+    public static String getPassBackParamsBuyDish(String thirdOrder,double actualPrice ,String ownerId) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", thirdOrder);
+        pbp.put("money", actualPrice);
+        pbp.put("ownerId", ownerId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
 }
