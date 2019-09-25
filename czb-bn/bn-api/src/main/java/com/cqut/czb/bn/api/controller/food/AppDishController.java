@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.food;
 
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.InputRecommendDishDTO;
+import com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.food.AppDishService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,10 @@ public class AppDishController {
     @GetMapping("getAllDishShopList")
     public JSONResult getAllDishShopList(DishShopDTO shop) {
         return new JSONResult(appDishService.getAllDishShop(shop));
+    }
+
+    @GetMapping("searchDishShopByName")
+    public JSONResult searchDishShopByName(SearchInputDTO searchInputDTO) {
+        return new JSONResult(appDishService.searchDishShop(searchInputDTO));
     }
 }

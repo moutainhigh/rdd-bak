@@ -187,4 +187,122 @@
     </select>
 
 
+
+    <!--尝试将两个查询用collection合为一个-->
+    <resultMap id="selectDishShopMap" type="com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchDishShopDTO">
+        <id column="shop_id" jdbcType="VARCHAR" property="shopId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+        <result column="dish_type" jdbcType="INTEGER" property="dishType" />
+        <result column="supply_time" jdbcType="VARCHAR" property="supplyTime" />
+        <result column="save_path" jdbcType="VARCHAR" property="savePath" />
+        <result column="is_sale" jdbcType="INTEGER" property="isSale" />
+        <result column="sale_count" jdbcType="INTEGER" property="saleCount" />
+        <result column="label" jdbcType="VARCHAR" property="label" />
+        <result column="original_price" jdbcType="DOUBLE" property="originalPrice" />
+        <result column="current_price" jdbcType="DOUBLE" property="currentPrice" />
+        <result column="vip_price" jdbcType="DOUBLE" property="vipPrice" />
+        <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+        <result column="sale_count" jdbcType="VARCHAR" property="saleCount" />
+        <result column="distance" jdbcType="DOUBLE" property="distance" />
+        <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+        <result column="latitude" jdbcType="DOUBLE" property="latitude" />
+        <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+        <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    </resultMap>
+
+    <resultMap id="selectDishMap" type="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO" >
+        <id column="dish_id" property="dishId" jdbcType="VARCHAR" />
+        <result column="dish_name" property="dishName" jdbcType="VARCHAR" />
+        <result column="dish_type" property="dishType" jdbcType="INTEGER" />
+        <result column="supply_time" property="supplyTime" jdbcType="VARCHAR" />
+        <result column="is_sale" property="isSale" jdbcType="INTEGER" />
+        <result column="label" property="label" jdbcType="VARCHAR" />
+        <result column="original_price" property="originalPrice" jdbcType="DOUBLE" />
+        <result column="current_price" property="currentPrice" jdbcType="DOUBLE" />
+        <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
+        <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="selectDishByName" parameterType="com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchInputDTO" resultMap="selectDishMap">
+        SELECT
+        	dish_id,
+            dish_name,
+            dish_type,
+            supply_time,
+            is_sale,
+            label,
+            original_price,
+            current_price,
+            vip_price,
+            file_id,
+            create_at,
+            update_at,
+            is_recommend
+           FROM
+        czb_dish
+        WHERE
+         shop_id = #{shopId,jdbcType=VARCHAR} AND dish_name LIKE CONCAT('%',#{shopDishName,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="selectDishShopByName" parameterType="com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchInputDTO" resultMap="selectDishShopMap">
+        SELECT
+        cs.shop_id ,
+        cs.user_id ,
+        shop_name ,
+        shop_phone ,
+        shop_content ,
+        shop_address ,
+        cs.create_at ,
+        cs.update_at ,
+        audit ,
+        shop_type ,
+        longitude ,
+        latitude ,
+        starting_time_business ,
+        end_time_business ,
+        shop_img ,
+        save_path ,
+        count(cdo.shop_id) AS sale_count,
+        ROUND(
+        6371.393 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{longitude,jdbcType=DOUBLE} * 3.1415926 / 180 - latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(#{longitude,jdbcType=DOUBLE} * 3.1415926 / 180) * COS(latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{latitude,jdbcType=DOUBLE} * 3.1415926 / 180 - longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ),
+        2
+        ) AS distance
+        FROM
+        czb_shop cs
+        LEFT JOIN czb_file cf ON cs.shop_img = cf.file_id
+        LEFT JOIN czb_dish_order cdo ON (cs.shop_id = cdo.shop_id AND date_format(cdo.create_at,'%Y-%m') = date_format(NOW(),'%Y-%m'))
+        LEFT JOIN czb_dish cd ON cs.shop_id = cd.shop_id
+        WHERE
+        shop_type = 2 and audit = 1 AND (cs.shop_name LIKE CONCAT('%',#{shopDishName,jdbcType=VARCHAR},'%') OR cd.dish_name LIKE CONCAT('%',#{shopDishName,jdbcType=VARCHAR},'%') )
+        GROUP BY cs.shop_id
+        <if test="sortType==1">
+            ORDER BY  distance ASC
+        </if>
+        <if test="sortType==2">
+            ORDER BY saleCount DESC
+        </if>
+    </select>
+
 </mapper>
