@@ -10,4 +10,6 @@ public interface DishOrderMapperExtra {
     List<DishOrderDTO> selectOrderByUser(String id);
 
     DetailsOrderDTO selectOrderDetails(DishOrderDTO dishOrderDTO);
+
+    int updateDishOrderById(DishOrderDTO dishOrderDTO);
 }
