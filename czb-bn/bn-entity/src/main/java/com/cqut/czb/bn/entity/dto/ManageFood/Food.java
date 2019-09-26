@@ -33,6 +33,16 @@ public class Food {
 
     private Date updateAt;
 
+    private String dishIds;
+
+    public String getDishIds() {
+        return dishIds;
+    }
+
+    public void setDishIds(String dishIds) {
+        this.dishIds = dishIds;
+    }
+
     public String getDishId() {
         return dishId;
     }
