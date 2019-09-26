@@ -8,9 +8,10 @@
     <result column="dish_type" property="dishType" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="dish_count" property="dishCount" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    order_dishes_id, order_id, dish_id, dish_type, create_at, update_at
+    order_dishes_id, order_id, dish_id, dish_type, create_at, update_at, dish_count
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,11 +25,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.food.OrderDishes" >
     insert into czb_order_dishes (order_dishes_id, order_id, dish_id, 
-      dish_type, create_at, update_at
-      )
+      dish_type, create_at, update_at, 
+      dish_count)
     values (#{orderDishesId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{dishId,jdbcType=VARCHAR}, 
-      #{dishType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{dishType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{dishCount,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.OrderDishes" >
     insert into czb_order_dishes
@@ -51,6 +52,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="dishCount != null" >
+        dish_count,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderDishesId != null" >
@@ -70,6 +74,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishCount != null" >
+        #{dishCount,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -91,6 +98,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="dishCount != null" >
+        dish_count = #{dishCount,jdbcType=INTEGER},
+      </if>
     </set>
     where order_dishes_id = #{orderDishesId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +110,8 @@
       dish_id = #{dishId,jdbcType=VARCHAR},
       dish_type = #{dishType,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      dish_count = #{dishCount,jdbcType=INTEGER}
     where order_dishes_id = #{orderDishesId,jdbcType=VARCHAR}
   </update>
 </mapper>

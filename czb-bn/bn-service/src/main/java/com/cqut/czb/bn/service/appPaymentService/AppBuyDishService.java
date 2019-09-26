@@ -5,10 +5,12 @@ import com.cqut.czb.bn.entity.dto.appBuyCarWashService.CleanServerVehicleDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.InputDishDTO;
 import com.cqut.czb.bn.entity.entity.User;
 
+import java.util.Map;
+
 public interface AppBuyDishService {
 
-    String AliBuyDish(User user, InputDishDTO inputDishDTO);
+    Map  AliBuyDish(User user, InputDishDTO inputDishDTO);
 
-    JSONObject WeChatBuyDish(User user,InputDishDTO inputDishDTO);
+    Map  WeChatBuyDish(User user,InputDishDTO inputDishDTO);
 
 }

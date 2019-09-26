@@ -39,7 +39,7 @@ public class AppBuyDishServiceImpl implements AppBuyDishService {
 
 
     @Override
-    public String AliBuyDish(User user, InputDishDTO inputDishDTO) {
+    public Map AliBuyDish(User user, InputDishDTO inputDishDTO) {
         //解析订单
         List<OrderNum> list= ParseJSON.parseJSONWithJSONObject(inputDishDTO.getDishInfo());
         if(list==null){
@@ -122,11 +122,14 @@ public class AppBuyDishServiceImpl implements AppBuyDishService {
         int OrderDishes=orderDishesMapperExtra.insertList(orderDisheslist);
         System.out.println("插入关系表："+OrderDishes);
 
-        return orderString;
+        Map map=new HashMap();
+        map.put("orderString",orderString);
+        map.put("orderId",thirdOrder);
+        return map;
     }
 
     @Override
-    public JSONObject WeChatBuyDish(User user, InputDishDTO inputDishDTO) {
+    public Map<String, Object> WeChatBuyDish(User user, InputDishDTO inputDishDTO) {
         //解析订单
         List<OrderNum> list= ParseJSON.parseJSONWithJSONObject(inputDishDTO.getDishInfo());
         if(list==null){
@@ -191,8 +194,10 @@ public class AppBuyDishServiceImpl implements AppBuyDishService {
         }
         int OrderDishes=orderDishesMapperExtra.insertList(orderDisheslist);
         System.out.println("插入关系表："+OrderDishes);
-
-        return  WeChatParameterConfig.getSign( parameters, nonceStrTemp);
+        Map map=new HashMap();
+        map.put("orderString",WeChatParameterConfig.getSign( parameters, nonceStrTemp));
+        map.put("orderId",orgId);
+        return  map;
     }
 }
 

@@ -21,4 +21,7 @@ public interface ManageSystemFoodService {
 
     // 查询
     JSONResult search(Food food, PageDTO pageDTO);
+
+    //
+    JSONResult getSetInfo(Food food);
 }
