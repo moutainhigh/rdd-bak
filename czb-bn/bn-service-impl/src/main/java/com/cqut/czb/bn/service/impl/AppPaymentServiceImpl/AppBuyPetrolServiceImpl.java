@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.AppPaymentService;
+package com.cqut.czb.bn.service.impl.AppPaymentServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -9,19 +9,15 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
-import com.cqut.czb.bn.service.AppBuyPetrolService;
+import com.cqut.czb.bn.service.appPaymentService.AppBuyPetrolService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.*;
 

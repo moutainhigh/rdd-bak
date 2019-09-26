@@ -2,12 +2,11 @@ package com.cqut.czb.bn.api.controller.appPayment;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.appBuyService.BuyServiceDTO;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
-import com.cqut.czb.bn.service.AppBuyServiceService;
-import com.cqut.czb.bn.service.AppRechargeVipService;
+import com.cqut.czb.bn.service.appPaymentService.AppBuyServiceService;
+import com.cqut.czb.bn.service.appPaymentService.AppRechargeVipService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

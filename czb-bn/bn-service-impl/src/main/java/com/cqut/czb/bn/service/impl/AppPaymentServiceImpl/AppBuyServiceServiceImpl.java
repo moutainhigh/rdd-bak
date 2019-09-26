@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.AppPaymentService;
+package com.cqut.czb.bn.service.impl.AppPaymentServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -13,15 +13,12 @@ import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appBuyService.BuyServiceDTO;
-import com.cqut.czb.bn.entity.entity.Commodity;
 import com.cqut.czb.bn.entity.entity.Order;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserInfoCollected;
-import com.cqut.czb.bn.service.AppBuyServiceService;
-import com.cqut.czb.bn.util.RedisUtil;
+import com.cqut.czb.bn.service.appPaymentService.AppBuyServiceService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONArray;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

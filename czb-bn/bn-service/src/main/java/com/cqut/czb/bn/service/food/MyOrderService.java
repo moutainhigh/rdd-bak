@@ -10,4 +10,6 @@ public interface MyOrderService {
     List<DishOrderDTO> getAllMyOrderList(User user);
 
     DetailsOrderDTO getOrderDetails(DishOrderDTO dishOrderDTO);
+
+    Boolean cancelDishOrder(DishOrderDTO dishOrderDTO);
 }

@@ -45,6 +45,11 @@ public class AlipayClientConfig {
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.BuyCarWash_url);
+		}else if(operationType.equals("5")){//"5"代表的是点餐
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+			instance.setCallBackUrl(AliPayConfig.BuyDish_url);
 		}
 		return instance;
 	}

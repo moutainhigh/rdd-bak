@@ -3,8 +3,9 @@ package com.cqut.czb.bn.service.impl.food;
 import com.cqut.czb.bn.dao.mapper.food.DishMapperExtra;
 import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO;
-import com.cqut.czb.bn.entity.entity.Shop;
-import com.cqut.czb.bn.entity.entity.food.Dish;
+import com.cqut.czb.bn.entity.dto.food.foodHomePage.InputRecommendDishDTO;
+import com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchDishShopDTO;
+import com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchInputDTO;
 import com.cqut.czb.bn.service.food.AppDishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class AppDishServiceImpl implements AppDishService {
 
 
     @Override
-    public List<DishDTO> getRecommendDishList() {
-        return dishMapperExtra.selectRecommendDish();
+    public List<DishDTO> getRecommendDishList(InputRecommendDishDTO inputRecommendDishDTO) {
+        return dishMapperExtra.selectRecommendDish(inputRecommendDishDTO);
     }
 
     @Override
@@ -41,7 +42,17 @@ public class AppDishServiceImpl implements AppDishService {
         return dishShopDTOS;
     }
 
-   public List<DishShopDTO> quickSort(List<DishShopDTO> dishShopDTOS,int left, int right) {
+    @Override
+    public List<SearchDishShopDTO> searchDishShop(SearchInputDTO searchInputDTO) {
+        List<SearchDishShopDTO> searchDishShopDTOS = dishMapperExtra.selectDishShopByName(searchInputDTO);
+        for (SearchDishShopDTO searchDishShopDTO : searchDishShopDTOS){
+            searchInputDTO.setShopId(searchDishShopDTO.getShopId());
+            searchDishShopDTO.setSearchDishes(dishMapperExtra.selectDishByName(searchInputDTO));
+        }
+        return searchDishShopDTOS;
+    }
+
+    public List<DishShopDTO> quickSort(List<DishShopDTO> dishShopDTOS,int left, int right) {
         int i, j;
         Double temp;
         DishShopDTO dishShopDTO=new DishShopDTO();

@@ -31,6 +31,8 @@ public class DishDTO {
 
     private String fileId;
 
+    private Integer isRecommend;
+
     private Date createAt;
 
     private Date updateAt;
@@ -161,5 +163,13 @@ public class DishDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getIsRecommend() {
+        return isRecommend;
+    }
+
+    public void setIsRecommend(Integer isRecommend) {
+        this.isRecommend = isRecommend;
     }
 }

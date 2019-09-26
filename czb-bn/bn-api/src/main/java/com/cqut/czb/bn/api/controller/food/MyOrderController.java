@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.food.MyOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,11 @@ public class MyOrderController {
     @GetMapping("getOrderDetails")
     public JSONResult getOrderDetails(DishOrderDTO dishOrder){
         return new JSONResult(myOrderService.getOrderDetails(dishOrder));
+    }
+
+    @PostMapping("cancelDishOrder")
+    public JSONResult cancelDishOrder(DishOrderDTO dishOrderDTO) {
+        return new JSONResult(myOrderService.cancelDishOrder(dishOrderDTO));
     }
 
 }

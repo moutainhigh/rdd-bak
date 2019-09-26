@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service;
+package com.cqut.czb.bn.service.appPaymentService;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;

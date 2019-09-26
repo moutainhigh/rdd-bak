@@ -69,4 +69,17 @@
     </select>
 
 
+    <update id="updateDishOrderById" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
+        update czb_dish_order
+        <set >
+            <if test="payStatus != null" >
+                dining_status = #{diningStatus,jdbcType=INTEGER},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=VARCHAR} AND pay_status = 1
+    </update>
+
 </mapper>

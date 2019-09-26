@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.AppPaymentService;
+package com.cqut.czb.bn.service.impl.AppPaymentServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -10,7 +10,7 @@ import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
-import com.cqut.czb.bn.service.AppRechargeVipService;
+import com.cqut.czb.bn.service.appPaymentService.AppRechargeVipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -35,7 +35,11 @@ public class WeChatPayConfig {
 	//充值vip
 	public static final String RechargeVip_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyRechargeVipInfoWeChat";
 
+	//洗车
 	public static final String BuyCarWash_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyCarWashInfoWeChat";
+
+	//点餐
+	public static final String BuyDish_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyDishInfoWeChat";
 
 	//交易类型
 	public static final String trade_type = "APP";
