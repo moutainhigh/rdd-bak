@@ -26,6 +26,8 @@ public class PersonalCenterUserDTO {
 
     private Integer haveVip;
 
+    private String roleName;  //新增，用户的角色
+
     public Integer getHaveVip() {
         return haveVip;
     }
@@ -106,4 +108,11 @@ public class PersonalCenterUserDTO {
         this.userName = userName == null ? null : userName.trim();
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }

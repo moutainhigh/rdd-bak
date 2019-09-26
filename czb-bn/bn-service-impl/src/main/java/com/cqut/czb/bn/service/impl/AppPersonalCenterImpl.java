@@ -1,13 +1,11 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.*;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.*;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Autowired
     private IncomeLogMapperExtra incomeLogMapperExtra;
+
+    @Autowired
+    UserRoleMapperExtra userRoleMapperExtra;
 
     @Autowired
     private VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
@@ -91,8 +92,14 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             return null;
         }
         User user1 = userMapper.selectByPrimaryKey(user.getUserId());
+        UserRoleDTO userRole = new UserRoleDTO();
+        userRole.setUserId(user.getUserId());
+        List<UserRoleDTO> userRoles = userRoleMapperExtra.selectUserRoleName(userRole); //查询用户角色信息
         PersonalCenterUserDTO personalCenterUserDTO=userMapperExtra.GetUserEnterpriseInfo(user.getUserId());
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (userRoles!=null && userRoles.size()!=0 && userRoles.get(0).getRoleName()!=null){  //加入用户角色信息
+            personalCenterUserDTO.setRoleName(userRoles.get(0).getRoleName());
+        }
         if(personalCenterUserDTO==null){
             personalCenterUserDTO = new PersonalCenterUserDTO();
             personalCenterUserDTO.setUserName(user1.getUserName());
