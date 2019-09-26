@@ -17,6 +17,16 @@ public class OrderToRecommendDTO {
 
     private String imgPath;
 
+    private String dishContent;
+
+    public String getDishContent() {
+        return dishContent;
+    }
+
+    public void setDishContent(String dishContent) {
+        this.dishContent = dishContent;
+    }
+
     public String getDishId() {
         return dishId;
     }
