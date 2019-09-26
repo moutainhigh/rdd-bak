@@ -42,13 +42,67 @@
       </if>
     </where>
   </select>
+  <select id="getSetInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.ManageFood.SetInfo">
+      SELECT
+          relationId,
+          set_meal_id setMealId,
+          relaSingleId singleId,
+          dish.dish_name dishName,
+          original_price originalPrice,
+          current_price currentPrice,
+          vip_price vipPrice
+      FROM
+          czb_dish dish,
+          (
+              SELECT
+                  rela.single_product_id AS relaSingleId,
+                  dish_relationship_id relationId,
+                  set_meal_id
+              FROM
+                  czb_dish_relationship rela
+              WHERE
+                  rela.set_meal_id = #{setMealId}
+          ) relation
+      WHERE
+          relation.relaSingleId = dish.dish_id;
+  </select>
+  <insert id="insertSets" parameterType="java.util.List">
+    insert into czb_dish_relationship
+    (
+      dish_relationship_id,
+      set_meal_id,
+      single_product_id,
+      create_at
+    )
+    VALUES
+    <foreach collection="list" item="item" separator="," index="index">
+      (
+      #{item.relationId},
+      #{item.setMealId},
+      #{item.singleId},
+      CURRENT_TIMESTAMP
+      )
+    </foreach>
+  </insert>
+  <delete id="deleteList" parameterType="java.util.List">
+    delete from czb_dish_relationship
+    where dish_relationship_id in
+    <foreach collection="list" item="item" open="(" separator="," index="index" close=")">
+      #{item.relationId}
+    </foreach>
+  </delete>
+  <select id="getShopId" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT shop_id
+    from czb_shop
+    where user_id = #{userId}
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from czb_dish
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="delete" parameterType="java.lang.String">
     delete from czb_dish
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </delete>
@@ -137,7 +191,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish">
+  <update id="edit" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
     update czb_dish
     <set>
       <if test="shopId != null">

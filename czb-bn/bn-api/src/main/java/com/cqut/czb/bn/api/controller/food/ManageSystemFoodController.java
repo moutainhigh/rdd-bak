@@ -53,4 +53,9 @@ public class ManageSystemFoodController {
     public JSONResult search(Food food, PageDTO pageDTO) {
         return service.search(food, pageDTO);
     }
+
+    @GetMapping("/getSetInfo")
+    public JSONResult getSetInfo(Food food) {
+        return service.getSetInfo(food);
+    }
 }
