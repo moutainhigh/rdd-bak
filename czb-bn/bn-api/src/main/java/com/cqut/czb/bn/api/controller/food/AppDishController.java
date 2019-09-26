@@ -17,17 +17,17 @@ public class AppDishController {
     @Autowired
     AppDishService appDishService;
 
-    @GetMapping("getRecommendDishesList")
+    @GetMapping("/getRecommendDishesList")
     public JSONResult getRecommendDishesList(InputRecommendDishDTO inputRecommendDishDTO) {
         return new JSONResult(appDishService.getRecommendDishList(inputRecommendDishDTO));
     }
 
-    @GetMapping("getAllDishShopList")
+    @GetMapping("/getAllDishShopList")
     public JSONResult getAllDishShopList(DishShopDTO shop) {
         return new JSONResult(appDishService.getAllDishShop(shop));
     }
 
-    @GetMapping("searchDishShopByName")
+    @GetMapping("/searchDishShopByName")
     public JSONResult searchDishShopByName(SearchInputDTO searchInputDTO) {
         return new JSONResult(appDishService.searchDishShop(searchInputDTO));
     }

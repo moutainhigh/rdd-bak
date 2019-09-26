@@ -43,7 +43,7 @@
         LEFT JOIN czb_order_dishes cod ON cdo.order_id = cod.order_id
         LEFT JOIN czb_dish cd ON cod.dish_id = cd.dish_id
         LEFT JOIN czb_user cu ON cdo.user_id = cu.user_id
-        WHERE cdo.user_id = #{userId,jdbcType=VARCHAR}
+        WHERE cdo.user_id = #{userId,jdbcType=VARCHAR} AND pay_status = 1
         GROUP BY cdo.order_id
     </select>
     <select id="selectOrderDetails" resultType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DetailsOrderDTO" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
@@ -68,18 +68,43 @@
         WHERE cdo.order_id = #{orderId,jdbcType=VARCHAR}
     </select>
 
+    <select id="selectShopByUser" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.Shop">
+        SELECT
+             shop_id AS shopId,
+             user_id AS userId,
+             shop_name AS shopName
+             FROM czb_shop
+             WHERE user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
 
     <update id="updateDishOrderById" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
         update czb_dish_order
         <set >
-            <if test="payStatus != null" >
+            <if test="diningStatus != null" >
                 dining_status = #{diningStatus,jdbcType=INTEGER},
             </if>
             <if test="updateAt != null" >
                 update_at = #{updateAt,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where order_id = #{orderId,jdbcType=VARCHAR} AND pay_status = 1
+        where order_id = #{orderId,jdbcType=VARCHAR} AND pay_status = 1 AND dining_status=1
+    </update>
+
+    <update id="updateDishOrderByShop" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
+        update czb_dish_order
+        <set >
+            <if test="diningStatus != null" >
+                dining_status = #{diningStatus,jdbcType=INTEGER},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=VARCHAR}
+            AND  dining_status=1
+            AND pay_status = 1
+            AND shop_id = #{shopId,jdbcType=VARCHAR}
     </update>
 
 </mapper>
