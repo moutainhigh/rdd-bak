@@ -306,4 +306,23 @@
         </if>
     </select>
 
+
+    <select id="selectDishs" parameterType="java.util.List" resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderToRecommendDTO">
+        select
+            distinct
+            dish_id AS dishId, shop_id AS shopId, dish_name AS dishName, dish_type AS dishType,
+            supply_time AS supplyTime,label , original_price AS originalPrice,
+            current_price AS currentPrice, vip_price as  vipPrice, save_path AS imgPath, dish_content as dishContent
+        FROM
+            czb_dish,czb_file
+        where
+        czb_file.file_id=czb_dish.file_id
+        and
+        dish_id in
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.dishId}
+        </foreach>
+    </select>
+
 </mapper>

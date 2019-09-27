@@ -37,6 +37,11 @@ public class AppOrderPageController {
         return new JSONResult(appOrderPageService.selectAllDish(shopId));
     }
 
+//    通过商品id获取
+    @GetMapping(value = "/getDishs")
+    public JSONResult getDishs(@RequestParam(value = "dishInfo") String dishInfo){
+        return new JSONResult(appOrderPageService.selectDishInfo(dishInfo));
+    }
 
 
 

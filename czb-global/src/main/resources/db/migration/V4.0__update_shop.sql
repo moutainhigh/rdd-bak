@@ -1,0 +1,1 @@
+alter table czb_shop add is_recommend INTEGER( 1 ) DEFAULT 0 COMMENT '0、不推荐；1、推荐';
