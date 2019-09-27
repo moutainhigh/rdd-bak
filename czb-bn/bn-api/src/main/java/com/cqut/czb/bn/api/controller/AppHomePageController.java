@@ -66,7 +66,7 @@ public class AppHomePageController {
         iosHomeTabDTO1.setSelectedImage("首页");
         iosHomeTabDTO1.setIdentifierName("homepage");
         IOSHomeTabDTO iosHomeTabDTO2 = new IOSHomeTabDTO();
-        iosHomeTabDTO2.setTabName("洗车专区");
+        iosHomeTabDTO2.setTabName("养车专区");
         iosHomeTabDTO2.setImage("洗车灰");
         iosHomeTabDTO2.setSelectedImage("洗车");
         iosHomeTabDTO2.setIdentifierName("WashHome");
