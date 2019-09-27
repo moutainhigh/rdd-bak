@@ -176,9 +176,13 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
            }
         }
 
-        mapper.deleteList(deleteList);
+        if(deleteList.size() != 0) {
+            mapper.deleteList(deleteList);
+        }
 
-        mapper.insertSets(insertList);
+        if(insertList.size() != 0) {
+            mapper.insertSets(insertList);
+        }
         return true;
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.WebOrderMapperExtra">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="dish_id" jdbcType="VARCHAR" property="dishId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="actual_price" jdbcType="DOUBLE" property="actualPrice" />
+    <result column="third_order" jdbcType="VARCHAR" property="thirdOrder" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="pey_method" jdbcType="INTEGER" property="peyMethod" />
+    <result column="dining_status" jdbcType="INTEGER" property="diningStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+
+  <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
+    SELECT
+    order_id, user_id, dish_id, shop_id, actual_price, third_order, pay_status, pey_method,
+    dining_status, remark, create_at, update_at
+    from czb_dish_order
+    <where>
+      <if test="orderId != null and orderId != ''" >
+        AND
+        order_id like concat("%", #{orderId}, "%")
+      </if>
+      <if test="diningStatus != null and diningStatus != '' || diningStatus == 0" >
+        AND
+        dining_status = #{diningStatus}
+      </if>
+    </where>
+  </select>
+
+  <update id="sureOrder" parameterType="java.lang.String">
+    update czb_dish_order
+    set dining_status = 2
+    where order_id = #{orderId}
+  </update>
+
+  <update id="cancelOrder" parameterType="java.lang.String">
+    update czb_dish_order
+    set dining_status = -1
+    where order_id = #{orderId}
+  </update>
+</mapper>
