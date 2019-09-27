@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.food.AppOrderPage.AllDishDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.InputOrderPageDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageShopDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderToRecommendDTO;
+import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface AppOrderPageService {
     List<OrderToRecommendDTO> selectRecommend(String shopId);
 
     List<AllDishDTO> selectAllDish(String shopId);
+
+    List<OrderToRecommendDTO> selectDishInfo(String dishInfo);
+
 }

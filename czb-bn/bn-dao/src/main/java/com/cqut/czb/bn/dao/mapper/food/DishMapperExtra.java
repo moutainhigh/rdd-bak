@@ -31,4 +31,7 @@ public interface DishMapperExtra {
 
     //多个id查询商品信息
     List<DishDTO> selectOrderDish(List<OrderNum> list);
+
+    //查询商品信息
+    List<OrderToRecommendDTO> selectDishs(List<OrderNum> list);
 }
