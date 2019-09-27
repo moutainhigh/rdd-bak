@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/AppBuyDish")
@@ -32,7 +33,8 @@ public class AppBuyDishController {
 //        User user=new User();
 //        user.setUserId("454654555");
 //        inputDishDTO.setDishInfo(dishInfo);
-        String info =appBuyDishService.AliBuyDish(user,inputDishDTO);
+        Map info =appBuyDishService.AliBuyDish(user,inputDishDTO);
+
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
         }else {
@@ -43,7 +45,7 @@ public class AppBuyDishController {
     @RequestMapping(value = "/WeChatBuyDish" ,method = RequestMethod.POST)
     public JSONResult WeChatBuyDish(Principal principal,@RequestBody InputDishDTO inputDishDTO){
         User user = (User)redisUtils.get(principal.getName());
-        JSONObject info =appBuyDishService.WeChatBuyDish(user,inputDishDTO);
+        Map info =appBuyDishService.WeChatBuyDish(user,inputDishDTO);
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
         }else {

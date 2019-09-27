@@ -31,6 +31,8 @@ public class Dish {
 
     private Integer isRecommend;
 
+    private String dishContent;
+
     public String getDishId() {
         return dishId;
     }
@@ -141,5 +143,13 @@ public class Dish {
 
     public void setIsRecommend(Integer isRecommend) {
         this.isRecommend = isRecommend;
+    }
+
+    public String getDishContent() {
+        return dishContent;
+    }
+
+    public void setDishContent(String dishContent) {
+        this.dishContent = dishContent == null ? null : dishContent.trim();
     }
 }

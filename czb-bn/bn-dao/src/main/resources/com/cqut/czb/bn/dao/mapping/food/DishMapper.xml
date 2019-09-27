@@ -16,10 +16,11 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
+    <result column="dish_content" property="dishContent" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price, 
-    current_price, vip_price, file_id, create_at, update_at, is_recommend
+    current_price, vip_price, file_id, create_at, update_at, is_recommend, dish_content
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -36,12 +37,14 @@
       dish_type, supply_time, is_sale, 
       label, original_price, current_price, 
       vip_price, file_id, create_at, 
-      update_at, is_recommend)
+      update_at, is_recommend, dish_content
+      )
     values (#{dishId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{dishName,jdbcType=VARCHAR}, 
       #{dishType,jdbcType=INTEGER}, #{supplyTime,jdbcType=VARCHAR}, #{isSale,jdbcType=INTEGER}, 
       #{label,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE}, 
       #{vipPrice,jdbcType=DOUBLE}, #{fileId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{isRecommend,jdbcType=INTEGER})
+      #{updateAt,jdbcType=TIMESTAMP}, #{isRecommend,jdbcType=INTEGER}, #{dishContent,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish" >
     insert into czb_dish
@@ -88,6 +91,9 @@
       <if test="isRecommend != null" >
         is_recommend,
       </if>
+      <if test="dishContent != null" >
+        dish_content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="dishId != null" >
@@ -131,6 +137,9 @@
       </if>
       <if test="isRecommend != null" >
         #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="dishContent != null" >
+        #{dishContent,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -176,6 +185,9 @@
       <if test="isRecommend != null" >
         is_recommend = #{isRecommend,jdbcType=INTEGER},
       </if>
+      <if test="dishContent != null" >
+        dish_content = #{dishContent,jdbcType=VARCHAR},
+      </if>
     </set>
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </update>
@@ -193,7 +205,8 @@
       file_id = #{fileId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      is_recommend = #{isRecommend,jdbcType=INTEGER}
+      is_recommend = #{isRecommend,jdbcType=INTEGER},
+      dish_content = #{dishContent,jdbcType=VARCHAR}
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </update>
 </mapper>

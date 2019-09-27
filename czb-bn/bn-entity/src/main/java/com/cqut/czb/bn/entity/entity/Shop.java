@@ -33,6 +33,8 @@ public class Shop {
 
     private String shopImg;
 
+    private Integer orderWriteOff;
+
     public String getShopId() {
         return shopId;
     }
@@ -151,5 +153,13 @@ public class Shop {
 
     public void setShopImg(String shopImg) {
         this.shopImg = shopImg == null ? null : shopImg.trim();
+    }
+
+    public Integer getOrderWriteOff() {
+        return orderWriteOff;
+    }
+
+    public void setOrderWriteOff(Integer orderWriteOff) {
+        this.orderWriteOff = orderWriteOff;
     }
 }

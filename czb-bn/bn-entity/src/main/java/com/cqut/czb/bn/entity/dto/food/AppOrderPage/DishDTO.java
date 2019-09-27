@@ -27,6 +27,16 @@ public class DishDTO {
 
     private String imgPath;
 
+    private String dishContent;
+
+    public String getDishContent() {
+        return dishContent;
+    }
+
+    public void setDishContent(String dishContent) {
+        this.dishContent = dishContent;
+    }
+
     public String getImgPath() {
         return imgPath;
     }

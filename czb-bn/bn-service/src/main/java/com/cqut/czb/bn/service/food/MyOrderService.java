@@ -12,4 +12,6 @@ public interface MyOrderService {
     DetailsOrderDTO getOrderDetails(DishOrderDTO dishOrderDTO);
 
     Boolean cancelDishOrder(DishOrderDTO dishOrderDTO);
+
+    Boolean confirmOrder(User user,String orderTime,String orderId);
 }

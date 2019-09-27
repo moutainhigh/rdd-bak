@@ -15,6 +15,8 @@ import java.util.List;
 public class AppDishServiceImpl implements AppDishService {
     @Autowired
     DishMapperExtra dishMapperExtra;
+    @Autowired
+    MyOrderServiceImpl myOrderService;
 
 
     @Override
@@ -34,11 +36,29 @@ public class AppDishServiceImpl implements AppDishService {
                     }else {
                         dishShopDTO.setSortValue(0.0);
                     }
-
+                    //换算距离单位
+                    if(dishShopDTO.getDistance()!=null) {
+                        if (dishShopDTO.getDistance() < 1000) {
+                            dishShopDTO.setDistanceWithUnit(dishShopDTO.getDistance().toString() + "m");
+                        } else {
+                            dishShopDTO.setDistanceWithUnit(myOrderService.mul(dishShopDTO.getDistance(), 0.001) + "km");
+                        }
+                    }else {
+                        dishShopDTO.setDistanceWithUnit(null);
+                    }
                 }
-                quickSort(dishShopDTOS,0,dishShopDTOS.size()-1);
+                quickSort(dishShopDTOS,0,dishShopDTOS.size()-1);  //对结果按排序值进行快速排序
+            }else {
+                for (DishShopDTO dishShopDTO : dishShopDTOS) {
+                    if (dishShopDTO.getDistance() < 1000) {
+                        dishShopDTO.setDistanceWithUnit(dishShopDTO.getDistance().toString() + "m");
+                    } else {
+                        dishShopDTO.setDistanceWithUnit(myOrderService.mul(dishShopDTO.getDistance(), 0.001) + "km");
+                    }
+                }
             }
         }
+
         return dishShopDTOS;
     }
 
