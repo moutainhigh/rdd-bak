@@ -16,6 +16,7 @@
     <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
     <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
     <result column="save_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
   </resultMap>
   <sql id="Base_Column_List">
     dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price,
@@ -23,7 +24,7 @@
   </sql>
   <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
     SELECT
-    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label,
+    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, dish_content,
     original_price, file.save_path, current_price, vip_price, dish.file_id, dish.create_at, dish.update_at
     from czb_dish dish
     left join czb_file file on file.file_id = dish.file_id
@@ -148,6 +149,9 @@
       <if test="updateAt != null">
         update_at,
       </if>
+      <if test="dishContent != null">
+        dish_content
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="dishId != null">
@@ -189,6 +193,9 @@
       <if test="updateAt != null">
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="dishContent != null">
+        #{dishContent}
+      </if>
     </trim>
   </insert>
   <update id="edit" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
@@ -229,6 +236,9 @@
       </if>
       <if test="updateAt != null">
         update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishContent != null">
+        dish_content = #{dishContent},
       </if>
     </set>
     where dish_id = #{dishId,jdbcType=VARCHAR}
