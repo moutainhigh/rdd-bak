@@ -35,6 +35,8 @@ public class Shop {
 
     private Integer orderWriteOff;
 
+    private Integer isRecommend;
+
     public String getShopId() {
         return shopId;
     }
@@ -161,5 +163,13 @@ public class Shop {
 
     public void setOrderWriteOff(Integer orderWriteOff) {
         this.orderWriteOff = orderWriteOff;
+    }
+
+    public Integer getIsRecommend() {
+        return isRecommend;
+    }
+
+    public void setIsRecommend(Integer isRecommend) {
+        this.isRecommend = isRecommend;
     }
 }
