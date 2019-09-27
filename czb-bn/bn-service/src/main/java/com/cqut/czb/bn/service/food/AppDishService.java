@@ -9,7 +9,7 @@ import com.cqut.czb.bn.entity.dto.food.foodHomePage.SearchInputDTO;
 import java.util.List;
 
 public interface AppDishService {
-    List<DishDTO> getRecommendDishList(InputRecommendDishDTO inputRecommendDishDTO);
+    List<SearchDishShopDTO> getRecommendDishList(InputRecommendDishDTO inputRecommendDishDTO);
 
     List<DishShopDTO> getAllDishShop(DishShopDTO shop);
 

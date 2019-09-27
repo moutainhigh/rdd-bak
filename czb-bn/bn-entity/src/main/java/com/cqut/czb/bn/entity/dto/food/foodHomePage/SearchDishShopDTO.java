@@ -34,6 +34,8 @@ public class SearchDishShopDTO {
 
     private Double distance;  //距离
 
+    private String distanceWithUnit;  //换算为km与m的距离
+
     private Double longitude; //(app传入)
 
     private Double latitude;  //(app传入)
@@ -158,6 +160,14 @@ public class SearchDishShopDTO {
 
     public void setDistance(Double distance) {
         this.distance = distance;
+    }
+
+    public String getDistanceWithUnit() {
+        return distanceWithUnit;
+    }
+
+    public void setDistanceWithUnit(String distanceWithUnit) {
+        this.distanceWithUnit = distanceWithUnit;
     }
 
     public Double getLongitude() {
