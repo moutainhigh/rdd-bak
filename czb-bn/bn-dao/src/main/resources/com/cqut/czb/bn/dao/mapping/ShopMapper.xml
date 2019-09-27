@@ -213,7 +213,7 @@
       </if>
     </set>
     where shop_id = #{shopId,jdbcType=VARCHAR}
-  </update>]
+  </update>
 
 
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
