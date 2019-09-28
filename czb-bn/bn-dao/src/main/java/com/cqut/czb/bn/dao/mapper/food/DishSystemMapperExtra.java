@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper.food;
 
 import com.cqut.czb.bn.entity.dto.ManageFood.Food;
 import com.cqut.czb.bn.entity.dto.ManageFood.SetInfo;
+import com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo;
 import com.cqut.czb.bn.entity.entity.Shop;
 import com.cqut.czb.bn.entity.entity.food.Dish;
 import com.github.pagehelper.Page;
@@ -25,4 +26,7 @@ public interface DishSystemMapperExtra {
     int insertSets(@Param("list") List<SetInfo> list);
 
     int deleteList(@Param("list") List<SetInfo> list);
+
+    // 获得商店
+    Page<ShopInfo> getShops();
 }

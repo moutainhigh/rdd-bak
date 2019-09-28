@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.food.WebOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodAllInfo;
 import com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.food.WebOrderService.WebOrderService;
 import com.github.pagehelper.Page;
@@ -23,7 +24,8 @@ public class WebOrderServiceImpl implements WebOrderService{
 
 
     @Override
-    public JSONResult search(FoodOrder foodOrder, PageDTO pageDTO) {
+    public JSONResult search(FoodOrder foodOrder, PageDTO pageDTO, User user) {
+        foodOrder.setShopId(dishSystemMapperExtra.getShopId(user.getUserId()));
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         Page<FoodOrder> foodOrders = mapperExtra.search(foodOrder);
 

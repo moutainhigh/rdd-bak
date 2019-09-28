@@ -50,12 +50,21 @@ public class ManageSystemFoodController {
     }
 
     @GetMapping("/search")
-    public JSONResult search(Food food, PageDTO pageDTO) {
-        return service.search(food, pageDTO);
+    public JSONResult search(Food food, PageDTO pageDTO, Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        if( null == user) {
+            return new JSONResult("没有权限");
+        }
+        return service.search(food, pageDTO, user);
     }
 
     @GetMapping("/getSetInfo")
     public JSONResult getSetInfo(Food food) {
         return service.getSetInfo(food);
+    }
+
+    @GetMapping("/getShops")
+    public JSONResult getShops(PageDTO pageDTO) {
+        return service.getShops(pageDTO);
     }
 }
