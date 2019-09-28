@@ -20,8 +20,11 @@ public interface ManageSystemFoodService {
     JSONResult changeWithoutImage(Food food);
 
     // 查询
-    JSONResult search(Food food, PageDTO pageDTO);
+    JSONResult search(Food food, PageDTO pageDTO, User user);
 
     //
     JSONResult getSetInfo(Food food);
+
+    //获得商店信息
+    JSONResult getShops(PageDTO pageDTO);
 }

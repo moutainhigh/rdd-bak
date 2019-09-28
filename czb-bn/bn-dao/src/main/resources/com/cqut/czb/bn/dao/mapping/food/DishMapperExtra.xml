@@ -55,8 +55,6 @@
             and
             label=#{label}
             and
-            is_recommend=1
-            and
             is_sale=1
   </select>
 

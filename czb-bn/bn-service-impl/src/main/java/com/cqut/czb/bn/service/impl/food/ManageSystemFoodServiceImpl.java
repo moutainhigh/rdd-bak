@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.dao.mapper.food.DishSystemMapperExtra;
 import com.cqut.czb.bn.entity.dto.ManageFood.Food;
 import com.cqut.czb.bn.entity.dto.ManageFood.SetInfo;
+import com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.User;
@@ -35,7 +36,6 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
     @Override
     public JSONResult add(Food food, MultipartFile file, User user) {
 
-        String shopId = mapper.getShopId(user.getUserId());
         String address = "";
         try{
             if (file!=null||!file.isEmpty()) {
@@ -44,6 +44,14 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
             File file1 = announcementServiceImpl.setFile(file.getOriginalFilename(),address,user.getUserId(),new Date());
             fileMapperExtra.insertSelective(file1);
             food.setFileId(file1.getFileId());
+
+            String shopId = "";
+            if(null == food.getShopId() || food.getShopId().equals("")) {
+                shopId = mapper.getShopId(user.getUserId());
+            } else {
+                shopId = food.getShopId();
+            }
+
             String time = food.getSupplyTime().replace(",", "");
 
             Integer[] times = new Integer[time.length()];
@@ -93,6 +101,13 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
             setAddOrEdit(food);
         }
 
+        String shopId = "";
+        if(null == food.getShopId() || food.getShopId().equals("")) {
+            shopId = mapper.getShopId(user.getUserId());
+        } else {
+            shopId = food.getShopId();
+        }
+
         try{
             if (file!=null||!file.isEmpty()) {
                 File file1 = fileMapperExtra.selectByPrimaryKey(food.getFileId());
@@ -127,7 +142,10 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
     }
 
     @Override
-    public JSONResult search(Food food, PageDTO pageDTO) {
+    public JSONResult search(Food food, PageDTO pageDTO, User user) {
+        if(food.getShopId().equals("") || null == food.getShopId()) {
+            food.setShopId(mapper.getShopId(user.getUserId()));
+        }
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         Page<Food> standardPageInfo = mapper.search(food);
 
@@ -137,6 +155,13 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
     @Override
     public JSONResult getSetInfo(Food food) {
         return new JSONResult(mapper.getSetInfo(food.getDishId()));
+    }
+
+    @Override
+    public JSONResult getShops(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        Page<ShopInfo> infos = mapper.getShops();
+        return new JSONResult("获取美食商店成功", 200, new PageInfo(infos));
     }
 
     private boolean setAddOrEdit(Food food) {
