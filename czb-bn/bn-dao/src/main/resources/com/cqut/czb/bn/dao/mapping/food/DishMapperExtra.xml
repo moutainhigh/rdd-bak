@@ -123,12 +123,14 @@
         original_price,
         current_price,
         vip_price,
-        file_id,
-        create_at,
-        update_at,
+        cd.file_id,
+        save_path,
+        cd.create_at,
+        cd.update_at,
         is_recommend
         FROM
-        czb_dish
+        czb_dish cd
+        LEFT JOIN czb_file cf ON cd.file_id = cf.file_id
         WHERE
         shop_id = #{shopId,jdbcType=VARCHAR} AND is_recommend = 1
     </select>
@@ -239,6 +241,7 @@
         <result column="current_price" property="currentPrice" jdbcType="DOUBLE" />
         <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
         <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+        <result column="save_path" property="savePath" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
         <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
