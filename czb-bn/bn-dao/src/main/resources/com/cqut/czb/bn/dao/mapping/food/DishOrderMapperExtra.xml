@@ -45,6 +45,7 @@
         LEFT JOIN czb_user cu ON cdo.user_id = cu.user_id
         WHERE cdo.user_id = #{userId,jdbcType=VARCHAR} AND pay_status = 1
         GROUP BY cdo.order_id
+        ORDER BY createAt DESC
     </select>
     <select id="selectOrderDetails" resultType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DetailsOrderDTO" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
         select

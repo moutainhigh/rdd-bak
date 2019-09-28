@@ -15,7 +15,7 @@ import com.cqut.czb.bn.entity.entity.food.Dish;
 import java.util.List;
 
 public interface DishMapperExtra {
-    List<DishDTO> selectRecommendDish(InputRecommendDishDTO inputRecommendDishDTO);
+    List<SearchDishShopDTO> selectRecommendDishShop(InputRecommendDishDTO inputRecommendDishDTO);
 
     List<Shop> selectDishShop(Shop shop);
 
@@ -31,4 +31,7 @@ public interface DishMapperExtra {
 
     //多个id查询商品信息
     List<DishDTO> selectOrderDish(List<OrderNum> list);
+
+    //查询商品信息
+    List<OrderToRecommendDTO> selectDishs(List<OrderNum> list);
 }

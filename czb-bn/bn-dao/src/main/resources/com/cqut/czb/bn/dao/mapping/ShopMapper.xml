@@ -1,208 +1,222 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cqut.czb.bn.dao.mapper.ShopMapper">
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Shop">
-    <id column="shop_id" jdbcType="VARCHAR" property="shopId" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
-    <result column="shop_phone" jdbcType="VARCHAR" property="shopPhone" />
-    <result column="shop_content" jdbcType="VARCHAR" property="shopContent" />
-    <result column="shop_address" jdbcType="VARCHAR" property="shopAddress" />
-    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
-    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
-    <result column="audit" jdbcType="INTEGER" property="audit" />
-    <result column="shop_type" jdbcType="INTEGER" property="shopType" />
-    <result column="longitude" jdbcType="DOUBLE" property="longitude" />
-    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
-    <result column="starting_time_business" jdbcType="TIMESTAMP" property="startingTimeBusiness" />
-    <result column="end_time_business" jdbcType="TIMESTAMP" property="endTimeBusiness" />
-    <result column="shop_img" jdbcType="VARCHAR" property="shopImg" />
-    <result column="order_write_off" jdbcType="INTEGER" property="orderWriteOff" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ShopMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.Shop" >
+    <id column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR" />
+    <result column="shop_content" property="shopContent" jdbcType="VARCHAR" />
+    <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="audit" property="audit" jdbcType="INTEGER" />
+    <result column="shop_type" property="shopType" jdbcType="INTEGER" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />
+    <result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />
+    <result column="shop_img" property="shopImg" jdbcType="VARCHAR" />
+    <result column="order_write_off" property="orderWriteOff" jdbcType="INTEGER" />
+    <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     shop_id, user_id, shop_name, shop_phone, shop_content, shop_address, create_at, update_at, 
     audit, shop_type, longitude, latitude, starting_time_business, end_time_business, 
-    shop_img, order_write_off
+    shop_img, order_write_off, is_recommend
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from czb_shop
     where shop_id = #{shopId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_shop
     where shop_id = #{shopId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Shop">
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
     insert into czb_shop (shop_id, user_id, shop_name, 
       shop_phone, shop_content, shop_address, 
       create_at, update_at, audit, 
       shop_type, longitude, latitude, 
       starting_time_business, end_time_business, 
-      shop_img, order_write_off)
+      shop_img, order_write_off, is_recommend
+      )
     values (#{shopId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
       #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, 
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{audit,jdbcType=INTEGER}, 
       #{shopType,jdbcType=INTEGER}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, 
       #{startingTimeBusiness,jdbcType=TIMESTAMP}, #{endTimeBusiness,jdbcType=TIMESTAMP}, 
-      #{shopImg,jdbcType=VARCHAR}, #{orderWriteOff,jdbcType=INTEGER})
+      #{shopImg,jdbcType=VARCHAR}, #{orderWriteOff,jdbcType=INTEGER}, #{isRecommend,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Shop">
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
     insert into czb_shop
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
         shop_id,
       </if>
-      <if test="userId != null">
+      <if test="userId != null" >
         user_id,
       </if>
-      <if test="shopName != null">
+      <if test="shopName != null" >
         shop_name,
       </if>
-      <if test="shopPhone != null">
+      <if test="shopPhone != null" >
         shop_phone,
       </if>
-      <if test="shopContent != null">
+      <if test="shopContent != null" >
         shop_content,
       </if>
-      <if test="shopAddress != null">
+      <if test="shopAddress != null" >
         shop_address,
       </if>
-      <if test="createAt != null">
+      <if test="createAt != null" >
         create_at,
       </if>
-      <if test="updateAt != null">
+      <if test="updateAt != null" >
         update_at,
       </if>
-      <if test="audit != null">
+      <if test="audit != null" >
         audit,
       </if>
-      <if test="shopType != null">
+      <if test="shopType != null" >
         shop_type,
       </if>
-      <if test="longitude != null">
+      <if test="longitude != null" >
         longitude,
       </if>
-      <if test="latitude != null">
+      <if test="latitude != null" >
         latitude,
       </if>
-      <if test="startingTimeBusiness != null">
+      <if test="startingTimeBusiness != null" >
         starting_time_business,
       </if>
-      <if test="endTimeBusiness != null">
+      <if test="endTimeBusiness != null" >
         end_time_business,
       </if>
-      <if test="shopImg != null">
+      <if test="shopImg != null" >
         shop_img,
       </if>
-      <if test="orderWriteOff != null">
+      <if test="orderWriteOff != null" >
         order_write_off,
       </if>
+      <if test="isRecommend != null" >
+        is_recommend,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
         #{shopId,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null">
+      <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="shopName != null">
+      <if test="shopName != null" >
         #{shopName,jdbcType=VARCHAR},
       </if>
-      <if test="shopPhone != null">
+      <if test="shopPhone != null" >
         #{shopPhone,jdbcType=VARCHAR},
       </if>
-      <if test="shopContent != null">
+      <if test="shopContent != null" >
         #{shopContent,jdbcType=VARCHAR},
       </if>
-      <if test="shopAddress != null">
+      <if test="shopAddress != null" >
         #{shopAddress,jdbcType=VARCHAR},
       </if>
-      <if test="createAt != null">
+      <if test="createAt != null" >
         #{createAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null">
+      <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="audit != null">
+      <if test="audit != null" >
         #{audit,jdbcType=INTEGER},
       </if>
-      <if test="shopType != null">
+      <if test="shopType != null" >
         #{shopType,jdbcType=INTEGER},
       </if>
-      <if test="longitude != null">
+      <if test="longitude != null" >
         #{longitude,jdbcType=DOUBLE},
       </if>
-      <if test="latitude != null">
+      <if test="latitude != null" >
         #{latitude,jdbcType=DOUBLE},
       </if>
-      <if test="startingTimeBusiness != null">
+      <if test="startingTimeBusiness != null" >
         #{startingTimeBusiness,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTimeBusiness != null">
+      <if test="endTimeBusiness != null" >
         #{endTimeBusiness,jdbcType=TIMESTAMP},
       </if>
-      <if test="shopImg != null">
+      <if test="shopImg != null" >
         #{shopImg,jdbcType=VARCHAR},
       </if>
-      <if test="orderWriteOff != null">
+      <if test="orderWriteOff != null" >
         #{orderWriteOff,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null" >
+        #{isRecommend,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Shop">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
     update czb_shop
-    <set>
-      <if test="userId != null">
+    <set >
+      <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="shopName != null">
+      <if test="shopName != null" >
         shop_name = #{shopName,jdbcType=VARCHAR},
       </if>
-      <if test="shopPhone != null">
+      <if test="shopPhone != null" >
         shop_phone = #{shopPhone,jdbcType=VARCHAR},
       </if>
-      <if test="shopContent != null">
+      <if test="shopContent != null" >
         shop_content = #{shopContent,jdbcType=VARCHAR},
       </if>
-      <if test="shopAddress != null">
+      <if test="shopAddress != null" >
         shop_address = #{shopAddress,jdbcType=VARCHAR},
       </if>
-      <if test="createAt != null">
+      <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null">
+      <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="audit != null">
+      <if test="audit != null" >
         audit = #{audit,jdbcType=INTEGER},
       </if>
-      <if test="shopType != null">
+      <if test="shopType != null" >
         shop_type = #{shopType,jdbcType=INTEGER},
       </if>
-      <if test="longitude != null">
+      <if test="longitude != null" >
         longitude = #{longitude,jdbcType=DOUBLE},
       </if>
-      <if test="latitude != null">
+      <if test="latitude != null" >
         latitude = #{latitude,jdbcType=DOUBLE},
       </if>
-      <if test="startingTimeBusiness != null">
+      <if test="startingTimeBusiness != null" >
         starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTimeBusiness != null">
+      <if test="endTimeBusiness != null" >
         end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
       </if>
-      <if test="shopImg != null">
+      <if test="shopImg != null" >
         shop_img = #{shopImg,jdbcType=VARCHAR},
       </if>
-      <if test="orderWriteOff != null">
+      <if test="orderWriteOff != null" >
         order_write_off = #{orderWriteOff,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null" >
+        is_recommend = #{isRecommend,jdbcType=INTEGER},
       </if>
     </set>
     where shop_id = #{shopId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Shop">
+
+
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.Shop" >
     update czb_shop
     set user_id = #{userId,jdbcType=VARCHAR},
       shop_name = #{shopName,jdbcType=VARCHAR},
@@ -218,7 +232,8 @@
       starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
       end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
       shop_img = #{shopImg,jdbcType=VARCHAR},
-      order_write_off = #{orderWriteOff,jdbcType=INTEGER}
+      order_write_off = #{orderWriteOff,jdbcType=INTEGER},
+      is_recommend = #{isRecommend,jdbcType=INTEGER}
     where shop_id = #{shopId,jdbcType=VARCHAR}
   </update>
 </mapper>
