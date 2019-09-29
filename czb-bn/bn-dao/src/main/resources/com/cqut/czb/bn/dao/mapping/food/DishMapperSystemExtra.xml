@@ -261,5 +261,6 @@
     SELECT shop_id as shopId, shop_name as shopName, shop_address as shopAddress, shop_phone as shopPhone, file.save_path as shopPath
     FROM czb_shop shop
     LEFT  JOIN czb_file file on file.file_id = shop.shop_img
+    where shop_type = 2
   </select>
 </mapper>
