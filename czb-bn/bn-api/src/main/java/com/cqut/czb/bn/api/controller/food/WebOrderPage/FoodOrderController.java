@@ -23,17 +23,36 @@ public class FoodOrderController {
     @Autowired
     RedisUtils redisUtils;
 
+    /**
+     * 查询
+     * @param foodOrder
+     * @param pageDTO
+     * @param principal
+     * @return
+     */
     @GetMapping("/search")
     public JSONResult search(FoodOrder foodOrder, PageDTO pageDTO, Principal principal) {
         User user = (User) redisUtils.get(principal.getName());
+        if(null == user || null == user.getUserId())
+            return new JSONResult("没有权限");
         return service.search(foodOrder, pageDTO, user);
     }
 
+    /**
+     * 完成订单
+     * @param orderId
+     * @return
+     */
     @GetMapping("/sureOrder")
     public JSONResult sureOrder(@Param("orderId") String orderId) {
         return service.sureOrder(orderId);
     }
 
+    /**
+     * 取消订单
+     * @param orderId
+     * @return
+     */
     @GetMapping("/cancelOrder")
     public JSONResult cancelOrder(@Param("orderId") String orderId) {
         return service.cancelOrder(orderId);
