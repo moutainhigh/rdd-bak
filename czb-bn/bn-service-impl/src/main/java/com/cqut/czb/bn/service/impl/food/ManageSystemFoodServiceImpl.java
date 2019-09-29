@@ -33,11 +33,19 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
     @Autowired
     AnnouncementServiceImpl announcementServiceImpl;
 
+    /**
+     * 新增菜品
+     * @param food
+     * @param file
+     * @param user
+     * @return
+     */
     @Override
     public JSONResult add(Food food, MultipartFile file, User user) {
 
         String address = "";
         try{
+            //菜品图片处理
             if (file!=null||!file.isEmpty()) {
                 address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
             }
@@ -45,6 +53,7 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
             fileMapperExtra.insertSelective(file1);
             food.setFileId(file1.getFileId());
 
+            //是否有商店id，是否商店id为""，这里是区分菜品管理页面是否为管理员模式
             String shopId = "";
             if(null == food.getShopId() || food.getShopId().equals("")) {
                 shopId = mapper.getShopId(user.getUserId());
@@ -54,6 +63,7 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
 
             String time = food.getSupplyTime().replace(",", "");
 
+            //将供应时间排序
             Integer[] times = new Integer[time.length()];
             for(int i = 0; i < time.length(); i++) {
                 times[i] = (int) time.charAt(i) - 48;
@@ -64,6 +74,8 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
                 timeResult = timeResult + times[i].toString() + ",";
             }
             timeResult = timeResult.substring(0, timeResult.length() - 1);
+
+            //设置菜品相关信息
             food.setShopId(shopId);
             food.setSupplyTime(timeResult);
             food.setDishId(StringUtil.createId());
@@ -74,6 +86,7 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
                 setAddOrEdit(food);
             }
 
+            // 插入菜品
             if(mapper.insert(food) > 0) {
                 return new JSONResult("新增美食菜品成功",200);
             } else {
@@ -84,9 +97,16 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
         }
     }
 
+    /**
+     * 删除菜品
+     * @param food
+     * @return
+     */
     @Override
     public JSONResult delete(Food food) {
+        //先删除图片文件
         fileMapperExtra.deleteByPrimaryKey(food.getFileId());
+        //再删除菜品
         if(mapper.delete(food.getDishId()) > 0) {
             return new JSONResult("删除美食菜品成功",200);
         } else {
@@ -94,6 +114,13 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
         }
     }
 
+    /**
+     * 有图编辑菜品
+     * @param food
+     * @param file
+     * @param user
+     * @return
+     */
     @Override
     public JSONResult change(Food food, MultipartFile file, User user) {
         // 如果是套餐，则插入套餐关系
@@ -101,6 +128,7 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
             setAddOrEdit(food);
         }
 
+        //是否有商店id，是否商店id为""，这里是区分菜品管理页面是否为管理员模式
         String shopId = "";
         if(null == food.getShopId() || food.getShopId().equals("")) {
             shopId = mapper.getShopId(user.getUserId());
@@ -128,6 +156,11 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
         }
     }
 
+    /**
+     * 无图编辑菜品
+     * @param food
+     * @return
+     */
     @Override
     public JSONResult changeWithoutImage(Food food) {
         // 如果是套餐，则插入套餐关系
@@ -141,22 +174,41 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
             return new JSONResult("修改美食菜品型失败", 500);
     }
 
+    /**
+     * 查询与编辑获取
+     * @param food
+     * @param pageDTO
+     * @param user
+     * @return
+     */
     @Override
     public JSONResult search(Food food, PageDTO pageDTO, User user) {
+        //是否有商店id，是否商店id为""，这里是区分菜品管理页面是否为管理员模式
         if(food.getShopId().equals("") || null == food.getShopId()) {
             food.setShopId(mapper.getShopId(user.getUserId()));
         }
+
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         Page<Food> standardPageInfo = mapper.search(food);
 
         return new JSONResult("查询美食菜品类型成功", 200, new PageInfo<>(standardPageInfo));
     }
 
+    /**
+     * 获取套餐信息
+     * @param food
+     * @return
+     */
     @Override
     public JSONResult getSetInfo(Food food) {
         return new JSONResult(mapper.getSetInfo(food.getDishId()));
     }
 
+    /**
+     * 获取美食商店
+     * @param pageDTO
+     * @return
+     */
     @Override
     public JSONResult getShops(PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
@@ -164,6 +216,11 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
         return new JSONResult("获取美食商店成功", 200, new PageInfo(infos));
     }
 
+    /**
+     * 新增编辑时，是否修改了套餐
+     * @param food
+     * @return
+     */
     private boolean setAddOrEdit(Food food) {
         List<SetInfo> setInfoList = mapper.getSetInfo(food.getDishId());
 
@@ -188,11 +245,11 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
                    isExist = true;
                }
            }
-           if(!isExist) {
+           if(!isExist) { // 有删除的则加入删除list
                SetInfo set = new SetInfo();
                set.setRelationId(oneSet.getRelationId());
                deleteList.add(set);
-           } else {
+           } else { // 不是删除的，则比较是否是已有的
                for(int j = 0; j < insertList.size(); j++) {
                    if(insertList.get(j).getSingleId().equals(oneSet.getSingleId())) {
                        insertList.remove(j);
@@ -201,10 +258,12 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
            }
         }
 
+        //先删除前端取消的套餐
         if(deleteList.size() != 0) {
             mapper.deleteList(deleteList);
         }
 
+        //再插入新增的套餐菜品
         if(insertList.size() != 0) {
             mapper.insertSets(insertList);
         }

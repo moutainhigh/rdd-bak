@@ -31,9 +31,19 @@ public class FoodOrder {
 
     private String dishId;
 
+    private String dishName;
+
     private Food food;
 
     private List<SetInfo> sets;
+
+    public String getDishName() {
+        return dishName;
+    }
+
+    public void setDishName(String dishName) {
+        this.dishName = dishName;
+    }
 
     public String getOrderId() {
         return orderId;

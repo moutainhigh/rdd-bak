@@ -23,6 +23,13 @@ public class WebOrderServiceImpl implements WebOrderService{
     DishSystemMapperExtra dishSystemMapperExtra;
 
 
+    /**
+     * 查询
+     * @param foodOrder
+     * @param pageDTO
+     * @param user
+     * @return
+     */
     @Override
     public JSONResult search(FoodOrder foodOrder, PageDTO pageDTO, User user) {
         foodOrder.setShopId(dishSystemMapperExtra.getShopId(user.getUserId()));
@@ -32,6 +39,11 @@ public class WebOrderServiceImpl implements WebOrderService{
         return new JSONResult("查询数据成功", 200, new PageInfo(foodOrders));
     }
 
+    /**
+     * 完成订单
+     * @param orderId
+     * @return
+     */
     @Override
     public JSONResult sureOrder(String orderId) {
         if(mapperExtra.sureOrder(orderId) > 0) {
@@ -41,6 +53,11 @@ public class WebOrderServiceImpl implements WebOrderService{
         }
     }
 
+    /**
+     * 取消订单
+     * @param orderId
+     * @return
+     */
     @Override
     public JSONResult cancelOrder(String orderId) {
         if(mapperExtra.cancelOrder(orderId) > 0) {

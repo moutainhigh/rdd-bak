@@ -14,13 +14,15 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
     <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="dish_name" jdbcType="VARCHARn" property="dishName" />
   </resultMap>
 
   <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
     SELECT
-    order_id, user_id, dish_id, shop_id, actual_price, third_order, pay_status, pey_method,
-    dining_status, remark, create_at, update_at
-    from czb_dish_order
+    order_id, user_id, orders.dish_id, orders.shop_id, actual_price, third_order, pay_status, pey_method,
+    dining_status, remark, orders.create_at, orders.update_at, dish.dish_name
+    from czb_dish_order orders
+    LEFT  JOIN czb_dish dish on orders.dish_id = dish.dish_id
     <where>
       <if test="orderId != null and orderId != ''" >
         AND
@@ -32,9 +34,10 @@
       </if>
         <if test="true">
             AND
-            shop_id = #{shopId}
+          orders.shop_id = #{shopId}
         </if>
     </where>
+    order BY orders.create_at DESC
   </select>
 
   <update id="sureOrder" parameterType="java.lang.String">
