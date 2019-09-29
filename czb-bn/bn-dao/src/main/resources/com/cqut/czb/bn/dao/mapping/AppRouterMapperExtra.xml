@@ -187,4 +187,18 @@
         is_show=1
         ORDER BY `order` ASC
     </select>
+
+    <select id="selectAppRouterBycode" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO" >
+        select
+        is_vip_path isVipPath,
+        path_type as pathType , menu_name as menuName,
+        android_path as androidPath, ios_path as iosPath, `order`, user_type as userType,file_name as fileName,save_path as savePath,remark
+        from czb_app_router car
+        LEFT JOIN czb_file cf ON car.icon_path_id = cf.file_id
+        where
+        menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR} and
+        is_show=1
+        ORDER BY `order` ASC
+    </select>
+
 </mapper>

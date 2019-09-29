@@ -10,14 +10,27 @@
         <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR"/>
         <result column="shop_content" property="shopContent" jdbcType="VARCHAR"/>
         <result column="shop_address" property="shopAddress" jdbcType="VARCHAR"/>
+        <result column="save_path" property="savePath" jdbcType="VARCHAR"/>
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
+        <result column="audit" property="audit" jdbcType="INTEGER" />
+        <result column="shop_type" property="shopType" jdbcType="INTEGER" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />
+        <result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />
+        <result column="shop_img" property="shopImg" jdbcType="VARCHAR" />
+        <result column="order_write_off" property="orderWriteOff" jdbcType="INTEGER" />
+        <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
     </resultMap>
     <select id="selectShop" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
         select
-        shop_id, a.user_id, user_account,user_name, shop_name, shop_phone, shop_content, shop_address, a.create_at, a.update_at
+        shop_id, a.user_id, user_account,user_name, shop_name,save_path, shop_phone, shop_content, shop_address, a.create_at, a.update_at,
+    a.audit, shop_type, a.longitude, a.latitude, starting_time_business, end_time_business,
+    shop_img, order_write_off, a.is_recommend
         from czb_shop a
         LEFT JOIN  czb_user b ON a.user_id = b.user_id
+        LEFT JOIN czb_file cf ON a.shop_img = cf.file_id
         where a.user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
@@ -35,6 +48,30 @@
             </if>
             <if test="shopAddress != null">
                 shop_address = #{shopAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="shopType != null" >
+                shop_type = #{shopType,jdbcType=INTEGER},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude,jdbcType=DOUBLE},
+            </if>
+            <if test="startingTimeBusiness != null" >
+                starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTimeBusiness != null" >
+                end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shopImg != null" >
+                shop_img = #{shopImg,jdbcType=VARCHAR},
+            </if>
+            <if test="orderWriteOff != null" >
+                order_write_off = #{orderWriteOff,jdbcType=INTEGER},
+            </if>
+            <if test="isRecommend != null" >
+                is_recommend = #{isRecommend,jdbcType=INTEGER},
             </if>
             <if test="createAt != null">
                 create_at = #{createAt,jdbcType=TIMESTAMP},

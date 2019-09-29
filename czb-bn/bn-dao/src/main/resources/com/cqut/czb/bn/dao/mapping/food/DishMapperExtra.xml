@@ -114,6 +114,7 @@
         SELECT
         dish_id,
         dish_name,
+        shop_id,
         dish_type,
         supply_time,
         is_sale,
@@ -232,6 +233,7 @@
         <id column="dish_id" property="dishId" jdbcType="VARCHAR" />
         <result column="dish_name" property="dishName" jdbcType="VARCHAR" />
         <result column="dish_type" property="dishType" jdbcType="INTEGER" />
+        <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
         <result column="supply_time" property="supplyTime" jdbcType="VARCHAR" />
         <result column="is_sale" property="isSale" jdbcType="INTEGER" />
         <result column="label" property="label" jdbcType="VARCHAR" />
@@ -315,6 +317,18 @@
                  separator="," close=")">
             #{item.dishId}
         </foreach>
+    </select>
+
+    <select id="findTodayFood" resultType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO" >
+        SELECT
+            shop_name AS shopName,
+            dish_name AS dishName,
+            save_path as savePath
+        FROM
+            czb_shop cs
+        LEFT JOIN czb_dish cd ON cs.shop_id = cd.shop_id
+        LEFT JOIN czb_file cf ON cd.file_id = cf.file_id
+        WHERE cs.is_recommend = 1 AND cd.is_recommend = 1
     </select>
 
 </mapper>
