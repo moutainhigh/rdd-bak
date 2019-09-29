@@ -14,7 +14,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
     <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
-    <result column="dish_name" jdbcType="VARCHARn" property="dishName" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
   </resultMap>
 
   <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
