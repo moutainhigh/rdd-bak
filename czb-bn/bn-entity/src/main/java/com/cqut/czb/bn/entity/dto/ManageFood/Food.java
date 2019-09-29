@@ -35,6 +35,16 @@ public class Food {
 
     private String dishIds;
 
+    private Integer isRecommend;
+
+    public Integer getIsRecommend() {
+        return isRecommend;
+    }
+
+    public void setIsRecommend(Integer isRecommend) {
+        this.isRecommend = isRecommend;
+    }
+
     public String getDishIds() {
         return dishIds;
     }

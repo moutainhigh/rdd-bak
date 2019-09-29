@@ -17,6 +17,7 @@
     <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
     <result column="save_path" jdbcType="VARCHAR" property="filePath" />
     <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
+    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
   </resultMap>
   <sql id="Base_Column_List">
     dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price,
@@ -24,7 +25,7 @@
   </sql>
   <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
     SELECT
-    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, dish_content,
+    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, dish_content, is_recommend,
     original_price, file.save_path, current_price, vip_price, dish.file_id, dish.create_at, dish.update_at
     from czb_dish dish
     left join czb_file file on file.file_id = dish.file_id
@@ -154,7 +155,10 @@
         update_at,
       </if>
       <if test="dishContent != null">
-        dish_content
+        dish_content,
+      </if>
+      <if test="isRecommend != null">
+        is_recommend,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -198,7 +202,10 @@
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
       <if test="dishContent != null">
-        #{dishContent}
+        #{dishContent},
+      </if>
+      <if test="isRecommend != null">
+        #{isRecommend},
       </if>
     </trim>
   </insert>
@@ -243,6 +250,9 @@
       </if>
       <if test="dishContent != null">
         dish_content = #{dishContent},
+      </if>
+      <if test="isRecommend != null">
+        is_recommend = #{isRecommend},
       </if>
     </set>
     where dish_id = #{dishId,jdbcType=VARCHAR}
