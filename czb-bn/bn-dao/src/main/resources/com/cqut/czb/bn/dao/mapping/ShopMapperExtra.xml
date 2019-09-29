@@ -40,6 +40,9 @@
             <if test="shopName != null">
                 shop_name = #{shopName,jdbcType=VARCHAR},
             </if>
+            <if test="isPay != null">
+                is_pay = #{isPay,jdbcType=INTEGER},
+            </if>
             <if test="shopPhone != null">
                 shop_phone = #{shopPhone,jdbcType=VARCHAR},
             </if>
@@ -95,11 +98,11 @@
 
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
         insert into czb_shop (shop_id, user_id, shop_name,
-        shop_phone, shop_content, shop_address,
+        shop_phone, shop_content, shop_address,is_pay,
         create_at, update_at, audit
         )
         values (#{shopId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR},
-        #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR},
+        #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR},#{isPay,jdbcType=INTEGER},
       now(),now(), #{audit,jdbcType=INTEGER}
         )
     </insert>
