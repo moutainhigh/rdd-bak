@@ -19,6 +19,8 @@ public interface DishMapperExtra {
 
     List<Shop> selectDishShop(Shop shop);
 
+    List<DishDTO> findTodayFood();
+
     List<SearchDishShopDTO> selectDishShopByName(SearchInputDTO searchInputDTO);
 
     List<DishDTO> selectDishByName(SearchInputDTO searchInputDTO);
