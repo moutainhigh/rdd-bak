@@ -129,6 +129,7 @@ public class AppDishServiceImpl implements AppDishService {
         if(left > right)
             return null;
         temp = dishShopDTOS.get(left).getSortValue(); //temp中存的就是基准数
+        DishShopDTO tempValue = dishShopDTOS.get(left);
         i = left;
         j = right;
         while(i != j) { //顺序很重要，要先从右边开始找
@@ -142,11 +143,12 @@ public class AppDishServiceImpl implements AppDishService {
                 dishShopDTOS.set(i,dishShopDTOS.get(j)) ;
                 dishShopDTOS.set(j,dishShopDTO) ;
             }
+
         }
         //最终将基准数归位
         if (dishShopDTO.getSortValue()!=null){  //如果上方进行了排序
-            dishShopDTOS.set(left,dishShopDTOS.get(i)) ;
-            dishShopDTOS.set(i,dishShopDTO) ;
+            dishShopDTOS.set(left,dishShopDTOS.get(i));
+            dishShopDTOS.set(i,tempValue);
             quickSortBySortValue(dishShopDTOS,left, i-1);//继续处理左边的，这里是一个递归的过程
             quickSortBySortValue(dishShopDTOS,i+1, right);//继续处理右边的 ，这里是一个递归的过程
         }
@@ -160,6 +162,7 @@ public class AppDishServiceImpl implements AppDishService {
         if(left > right)
             return null;
         temp = dishShopDTOS.get(left).getDistance(); //temp中存的就是基准数
+        DishShopDTO tempValue = dishShopDTOS.get(left);
         i = left;
         j = right;
         while(i != j) { //顺序很重要，要先从右边开始找
@@ -176,8 +179,8 @@ public class AppDishServiceImpl implements AppDishService {
         }
         //最终将基准数归位
         if (dishShopDTO.getDistance()!=null){  //如果上方进行了排序
-            dishShopDTOS.set(left,dishShopDTOS.get(i)) ;
-            dishShopDTOS.set(i,dishShopDTO) ;
+            dishShopDTOS.set(left,dishShopDTOS.get(i));
+            dishShopDTOS.set(i,tempValue);
             quickSortByDistance(dishShopDTOS,left, i-1);//继续处理左边的，这里是一个递归的过程
             quickSortByDistance(dishShopDTOS,i+1, right);//继续处理右边的 ，这里是一个递归的过程
         }
