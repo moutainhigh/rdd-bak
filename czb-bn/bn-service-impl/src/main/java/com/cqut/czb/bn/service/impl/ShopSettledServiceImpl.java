@@ -43,7 +43,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
 
     @Override
     public ShopDTO getShopInfo(ShopDTO shopDTO, User user) {
-        if (shopDTO.getUserId()==null||"".equals(shopDTO.getUserId())){
+        if (shopDTO.getUserId()==null || "".equals(shopDTO.getUserId())){
             shopDTO.setUserId(user.getUserId());
         }
         ShopDTO shop = shopMapperExtra.selectShop(shopDTO);
@@ -51,6 +51,16 @@ public class ShopSettledServiceImpl implements ShopSettledService {
             shop.setCode(shopDTO.getCode());
             List<FileFunctionDTO> file = fileFunctionMapperExtra.selectFile(shop);
             shop.setFileList(file);
+        } else {
+            ShopDTO newShop = new ShopDTO();
+            newShop.setShopId(StringUtil.createId());
+            newShop.setUserId(user.getUserId());
+            newShop.setCreateAt(new Date());
+            newShop.setAudit(0);
+            newShop.setIsRecommend(0);
+            newShop.setOrderWriteOff(0);
+            shopMapperExtra.insert(newShop);
+            shop = shopMapperExtra.selectShop(shopDTO);
         }
         return shop;
 
@@ -100,6 +110,9 @@ public class ShopSettledServiceImpl implements ShopSettledService {
             fileFunctionMapperExtra.insertFile(fileFunctionDTO);
         }else if (shopDTO.getIsLabelImg()){
 //            fileMapperExtra.deleteByPrimaryKey(shopDTO.getShopImg());
+            if (shopDTO.getShopImg()!=null){
+                fileMapperExtra.deleteByPrimaryKey(shopDTO.getShopImg());
+            }
             shopDTO.setShopImg(file1.getFileId());
         }
         shopDTO.setUpdateAt(new Date());
