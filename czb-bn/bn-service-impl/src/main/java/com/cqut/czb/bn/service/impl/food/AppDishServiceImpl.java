@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.food;
 
 import com.cqut.czb.bn.dao.mapper.food.DishMapperExtra;
+import com.cqut.czb.bn.entity.dto.food.AppOrderPage.DamaiDay;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.DistanceMeter;
 import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishDTO;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO;
@@ -11,6 +12,8 @@ import com.cqut.czb.bn.service.food.AppDishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Service
 public class AppDishServiceImpl implements AppDishService {
@@ -22,9 +25,29 @@ public class AppDishServiceImpl implements AppDishService {
 
     @Override
     public List<SearchDishShopDTO> getRecommendDishList(InputRecommendDishDTO inputRecommendDishDTO) {
+        //获取今天星期几
+        String weekDay= DamaiDay.getDamaiDay(new Date());
         List<SearchDishShopDTO> recommendShops = dishMapperExtra.selectRecommendDishShop(inputRecommendDishDTO);
+
         if (recommendShops!=null && recommendShops.size()!=0){
+
+            List<SearchDishShopDTO> deleteShopDTOS=new ArrayList<>();
             for (SearchDishShopDTO recommendShop : recommendShops){
+
+                if(recommendShop.getSearchDishes().size()==0||recommendShop.getSearchDishes()==null){
+                    deleteShopDTOS.add(recommendShop);
+                    continue;
+                }
+
+                //筛查不是今日销售
+                List<DishDTO> deleteDishs = new ArrayList<>();
+                for (DishDTO dishDTO : recommendShop.getSearchDishes()){
+                    if(!dishDTO.getSupplyTime().contains(weekDay)){
+                            deleteDishs.add(dishDTO);
+                    }
+                }
+                recommendShop.getSearchDishes().removeAll(deleteDishs);
+
                 if (inputRecommendDishDTO.getLatitude()!=null && inputRecommendDishDTO.getLongitude()!=null && recommendShop.getLatitude() != null && recommendShop.getLongitude() != null) {
                     recommendShop.setDistance(DistanceMeter.InputDistance(inputRecommendDishDTO.getLongitude(),inputRecommendDishDTO.getLatitude(),recommendShop.getLongitude(),recommendShop.getLatitude()));
                 }else {
@@ -42,6 +65,7 @@ public class AppDishServiceImpl implements AppDishService {
                     recommendShop.setDistanceWithUnit(null);
                 }
             }
+            recommendShops.removeAll(deleteShopDTOS);
         }
 
         return recommendShops;

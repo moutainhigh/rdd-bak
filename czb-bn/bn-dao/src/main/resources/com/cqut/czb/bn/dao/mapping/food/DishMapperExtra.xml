@@ -17,6 +17,8 @@
             and
             is_recommend=1
             and
+            is_sale=1
+            and
             supply_time like CONCAT('%',#{weekDay,jdbcType=VARCHAR},'%')
   </select>
 
@@ -105,7 +107,9 @@
         LEFT JOIN czb_file cf ON cs.shop_img = cf.file_id
         LEFT JOIN czb_dish_order cdo ON (cs.shop_id = cdo.shop_id AND date_format(cdo.create_at,'%Y-%m') = date_format(NOW(),'%Y-%m') and pay_status = 1)
         WHERE
-            is_recommend = 1 AND audit = 1
+            is_recommend = 1
+            AND
+            audit = 1
         GROUP BY cs.shop_id
         order BY 	SUM(cdo.dish_id) DESC
             </select>
@@ -131,7 +135,11 @@
         czb_dish cd
         LEFT JOIN czb_file cf ON cd.file_id = cf.file_id
         WHERE
-        shop_id = #{shopId,jdbcType=VARCHAR} AND is_recommend = 1
+        shop_id = #{shopId,jdbcType=VARCHAR}
+        AND
+        is_recommend = 1
+        and
+        is_sale=1
     </select>
 
 

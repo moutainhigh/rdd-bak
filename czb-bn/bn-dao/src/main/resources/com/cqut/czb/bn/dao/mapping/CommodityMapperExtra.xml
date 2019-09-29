@@ -191,6 +191,9 @@
             <if test="updateAt != null" >
                 update_at,
             </if>
+            <if test="isPay != null" >
+                is_pay
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -226,6 +229,9 @@
             <if test="updateAt != null" >
                 #{updateAt,jdbcType=TIMESTAMP},
             </if>
+            <if test="isPay != null" >
+               #{isPay,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
@@ -234,6 +240,9 @@
         <set >
             <if test="shopId != null" >
                 shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="isPay != null" >
+                is_pay = #{isPay,jdbcType=INTEGER},
             </if>
             <if test="commodityTitle != null" >
                 commodity_title = #{commodityTitle,jdbcType=VARCHAR},

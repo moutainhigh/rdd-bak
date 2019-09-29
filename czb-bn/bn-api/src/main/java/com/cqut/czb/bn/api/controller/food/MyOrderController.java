@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.food;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.ConfirmOrderDTO;
 import com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
@@ -36,16 +37,21 @@ public class MyOrderController {
     }
 
     @PostMapping("/cancelDishOrder")
-    public JSONResult cancelDishOrder(DishOrderDTO dishOrderDTO) {
+    public JSONResult cancelDishOrder(@RequestBody DishOrderDTO dishOrderDTO) {
         return new JSONResult(myOrderService.cancelDishOrder(dishOrderDTO));
     }
 
     @PostMapping("/confirmOrder")
-    public JSONResult confirmOrder(Principal principal, @Param("orderTime") String orderTime, @Param("orderId")String orderId) {
+    public JSONResult confirmOrder(Principal principal, @RequestBody ConfirmOrderDTO confirmOrderDTO) {
         if (principal ==null || principal.getName()==null ){
             return new JSONResult("token为空",500);
         }
         User user = (User)redisUtils.get(principal.getName());
+        if(confirmOrderDTO==null){
+            return new JSONResult("数据为空",500);
+        }
+        String orderTime=confirmOrderDTO.getOrderTime();
+        String orderId=confirmOrderDTO.getOrderId();
         return new JSONResult(myOrderService.confirmOrder(user,orderTime,orderId));
     }
 }

@@ -24,8 +24,6 @@ public class ShopDTO {
 
     private String shopAddress;
 
-    private Integer isPay;
-
     private String savePath;  //商铺的标志图片路径
 
     private String code;  //特征码
@@ -133,14 +131,6 @@ public class ShopDTO {
 
     public void setSavePath(String savePath) {
         this.savePath = savePath;
-    }
-
-    public Integer getIsPay() {
-        return isPay;
-    }
-
-    public void setIsPay(Integer isPay) {
-        this.isPay = isPay;
     }
 
     public Boolean getLabelImg() {

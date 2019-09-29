@@ -11,9 +11,11 @@ import org.apache.ibatis.annotations.Param;
 import com.cqut.czb.bn.entity.dto.food.foodHomePage.DishShopDTO;
 import com.cqut.czb.bn.entity.entity.Shop;
 import com.cqut.czb.bn.entity.entity.food.Dish;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public interface DishMapperExtra {
     List<SearchDishShopDTO> selectRecommendDishShop(InputRecommendDishDTO inputRecommendDishDTO);
 
