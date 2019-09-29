@@ -61,6 +61,9 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
             return null;
         }
+        if (shopDTO.getIsLabelImg()==null){
+            return false;
+        }
         if (shopDTO.getDeleteId() != null && !"".equals(shopDTO.getDeleteId())){
             String[] ids = shopDTO.getDeleteId().split(",");
             List<FileFunctionDTO> deleteFile = new ArrayList<>();
@@ -73,7 +76,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
                 }
             }
             fileFunctionMapperExtra.deleteByIds(deleteFile);
- //           fileMapperExtra.deleteByShop(deleteFile);
+ //           fileMapperExtra.deleteByShop(deleteFile);   //可能有图片的复用
         }
         String address="";
         try {
@@ -85,15 +88,20 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         }
         File file1 = setFile(file.getOriginalFilename(),address,shopDTO.getUserId(),new Date());
         fileMapperExtra.insert(file1);
-        FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
-        fileFunctionDTO.setId(StringUtil.createId());
-        fileFunctionDTO.setFileId(file1.getFileId());
-        fileFunctionDTO.setGroupCode(shopDTO.getCode());
-        fileFunctionDTO.setLocalId(shopDTO.getShopId());
-        fileFunctionDTO.setSrc(file1.getSavePath());
-        fileFunctionDTO.setCreateAt(new Date());
-        fileFunctionDTO.setUpdateAt(new Date());
-        fileFunctionMapperExtra.insertFile(fileFunctionDTO);
+        if (shopDTO.getIsLabelImg()==0){
+            FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
+            fileFunctionDTO.setId(StringUtil.createId());
+            fileFunctionDTO.setFileId(file1.getFileId());
+            fileFunctionDTO.setGroupCode(shopDTO.getCode());
+            fileFunctionDTO.setLocalId(shopDTO.getShopId());
+            fileFunctionDTO.setSrc(file1.getSavePath());
+            fileFunctionDTO.setCreateAt(new Date());
+            fileFunctionDTO.setUpdateAt(new Date());
+            fileFunctionMapperExtra.insertFile(fileFunctionDTO);
+        }else if (shopDTO.getIsLabelImg()==1){
+//            fileMapperExtra.deleteByPrimaryKey(shopDTO.getShopImg());
+            shopDTO.setShopImg(file1.getFileId());
+        }
         shopDTO.setUpdateAt(new Date());
         return shopMapperExtra.updateShopInfo(shopDTO)>0;
     }
