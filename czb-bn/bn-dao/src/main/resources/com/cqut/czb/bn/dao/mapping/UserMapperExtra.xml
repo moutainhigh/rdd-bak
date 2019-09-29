@@ -83,12 +83,22 @@
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
   </resultMap>
   <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >
+  select
+  cu.*, cr.role_id
+  from czb_user cu
+  left join czb_user_role cur on cu.user_id = cur.user_id
+  left join czb_role cr on cr.role_id = cur.role_id
+  where user_account = #{account,jdbcType=VARCHAR}
+  and is_deleted = 0
+</select>
+
+  <select id="findUserDTOById" resultMap="dtoResultMap" parameterType="java.lang.String" >
     select
     cu.*, cr.role_id
     from czb_user cu
     left join czb_user_role cur on cu.user_id = cur.user_id
     left join czb_role cr on cr.role_id = cur.role_id
-    where user_account = #{account,jdbcType=VARCHAR}
+    where cu.user_id = #{id,jdbcType=VARCHAR}
     and is_deleted = 0
   </select>
   <update id="updateUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >

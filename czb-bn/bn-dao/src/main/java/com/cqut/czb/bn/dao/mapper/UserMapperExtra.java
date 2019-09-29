@@ -19,6 +19,8 @@ public interface UserMapperExtra {
 
     UserDTO findUserDTOByAccount(String account);
 
+    UserDTO findUserDTOById(String id);
+
     Boolean checkAccount(@Param("account") String account);
 
     int deleteUser(UserIdDTO userIdDTO);

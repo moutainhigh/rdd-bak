@@ -88,7 +88,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         }
         File file1 = setFile(file.getOriginalFilename(),address,shopDTO.getUserId(),new Date());
         fileMapperExtra.insert(file1);
-        if (shopDTO.getIsLabelImg()==0){
+        if (!shopDTO.getIsLabelImg()){
             FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
             fileFunctionDTO.setId(StringUtil.createId());
             fileFunctionDTO.setFileId(file1.getFileId());
@@ -98,7 +98,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
             fileFunctionDTO.setCreateAt(new Date());
             fileFunctionDTO.setUpdateAt(new Date());
             fileFunctionMapperExtra.insertFile(fileFunctionDTO);
-        }else if (shopDTO.getIsLabelImg()==1){
+        }else if (shopDTO.getIsLabelImg()){
 //            fileMapperExtra.deleteByPrimaryKey(shopDTO.getShopImg());
             shopDTO.setShopImg(file1.getFileId());
         }

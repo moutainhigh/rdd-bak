@@ -32,7 +32,7 @@ public class ShopDTO {
 
     private String deleteId;    //删除的图片
 
-    private Integer isLabelImg;  //是否为店铺的标签图片 0 否 1 是
+    private Boolean isLabelImg;  //是否为店铺的标签图片
 
     private Integer audit;  //审核状态
 
@@ -149,12 +149,12 @@ public class ShopDTO {
         this.deleteId = deleteId;
     }
 
-    public Integer getIsLabelImg() {
+    public Boolean getIsLabelImg() {
         return isLabelImg;
     }
 
-    public void setIsLabelImg(Integer isLabelImg) {
-        this.isLabelImg = isLabelImg;
+    public void setIsLabelImg(Boolean labelImg) {
+        isLabelImg = labelImg;
     }
 
     public Integer getAudit() {

@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.cqut.czb.auth.config.AuthConfig;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
@@ -10,6 +12,7 @@ import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.IndicatorRecord;
+import com.cqut.czb.bn.entity.entity.Role;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IUserService;
@@ -46,6 +49,8 @@ public class UserServiceImpl implements IUserService {
     private final IndicatorRecordMapper indicatorRecordMapper;
 
     private final RedisUtil redisUtil;
+    @Autowired
+    RedisUtils redisUtils;
 
     @Autowired
     public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil) {
@@ -66,6 +71,7 @@ public class UserServiceImpl implements IUserService {
         List<UserRole> userRoleList = userRoleMapperExtra.slectUserRoleList(userRole);
         boolean isDelete = true;
         if(userRoleList.size() > 0) {
+
             isDelete = userRoleMapperExtra.deleteUserRoles(userRoleList) > 0;
         }
         if(isDelete) {
@@ -114,6 +120,32 @@ public class UserServiceImpl implements IUserService {
                 deleteList.remove(temp);
             }
             if(insertList.size() > 0) {
+                for (UserRole userRole1 : insertList){
+                    if (userRole1.getRoleId() != null){
+                        RoleInputDTO exp = new RoleInputDTO();
+                        exp.setRoleId(userRole1.getRoleId());
+                        List<RoleDTO> roleList = roleMapperExtra.selectRole(exp);
+                        if (roleList!=null && roleList.size()!=0) {
+                            if ("服务商".equals(roleList.get(0).getRoleName())){
+                                UserInputDTO user = new UserInputDTO();
+                                user.setUserId(userInputDTO.getUserId());
+                                user.setIsLoginPc(1);
+                                userMapperExtra.updateUser(user);
+                            }else {
+                                UserInputDTO user = new UserInputDTO();
+                                user.setIsLoginPc(0);
+                                userMapperExtra.updateUser(user);
+                            }
+                            UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
+
+                            if(redisUtils.hasKey(user.getUserAccount())) {
+                                redisUtils.remove(user.getUserAccount());
+                                redisUtils.put(user.getUserAccount(), user);
+                            }
+
+                        }
+                    }
+                }
                 isInsert = userRoleMapperExtra.insertUserRoles(insertList) > 0;
             }
         }
