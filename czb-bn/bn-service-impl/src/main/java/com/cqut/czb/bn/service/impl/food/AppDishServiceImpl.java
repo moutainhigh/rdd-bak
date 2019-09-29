@@ -33,8 +33,10 @@ public class AppDishServiceImpl implements AppDishService {
                 if(recommendShop.getDistance() != null) {
                     if (recommendShop.getDistance() < 1000) {
                         recommendShop.setDistanceWithUnit(recommendShop.getDistance().toString() + "m");
-                    } else {
+                    } else if(recommendShop.getDistance()<50000 &&recommendShop.getDistance()>1000){
                         recommendShop.setDistanceWithUnit(myOrderService.mul(recommendShop.getDistance(), 0.001) + "km");
+                    }else if (recommendShop.getDistance()>50000) {
+                        recommendShop.setDistanceWithUnit("50+km");
                     }
                 }else {
                     recommendShop.setDistanceWithUnit(null);
@@ -65,8 +67,10 @@ public class AppDishServiceImpl implements AppDishService {
                     if(dishShopDTO.getDistance()!=null) {
                         if (dishShopDTO.getDistance() < 1000) {
                             dishShopDTO.setDistanceWithUnit(dishShopDTO.getDistance().toString() + "m");
-                        } else {
+                        } else if(dishShopDTO.getDistance()<50000 &&dishShopDTO.getDistance()>1000){
                             dishShopDTO.setDistanceWithUnit(myOrderService.mul(dishShopDTO.getDistance(), 0.001) + "km");
+                        }else if (dishShopDTO.getDistance()>50000) {
+                            dishShopDTO.setDistanceWithUnit("50+km");
                         }
                     }else {
                         dishShopDTO.setDistanceWithUnit(null);

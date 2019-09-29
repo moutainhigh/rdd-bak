@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.entity.dto.shop;
 
 import com.cqut.czb.bn.entity.entity.FileFunction;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -40,8 +42,12 @@ public class ShopDTO {
 
     private Double latitude;
 
+    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "HH:mm:ss")
     private Date startingTimeBusiness;
 
+    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "HH:mm:ss")
     private Date endTimeBusiness;
 
     private String shopImg;
