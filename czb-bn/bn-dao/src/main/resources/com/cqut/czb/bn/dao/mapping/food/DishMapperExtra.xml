@@ -107,7 +107,7 @@
         LEFT JOIN czb_file cf ON cs.shop_img = cf.file_id
         LEFT JOIN czb_dish_order cdo ON (cs.shop_id = cdo.shop_id AND date_format(cdo.create_at,'%Y-%m') = date_format(NOW(),'%Y-%m') and pay_status = 1)
         WHERE
-            is_recommend = 1
+            is_recommend = 1 AND shop_type = 2
             AND
             audit = 1
         GROUP BY cs.shop_id
