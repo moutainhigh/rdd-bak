@@ -26,6 +26,7 @@
        czb_server_standard ,czb_file
     WHERE
        czb_file.file_id=czb_server_standard.file_id
+    ORDER BY czb_server_standard.create_at DESC
   </select>
 
   <select id="selectOneService" resultType="com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO">
