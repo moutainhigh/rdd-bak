@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.service.impl;
 
-import com.cqut.czb.auth.config.AuthConfig;
-import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
@@ -49,8 +47,6 @@ public class UserServiceImpl implements IUserService {
     private final IndicatorRecordMapper indicatorRecordMapper;
 
     private final RedisUtil redisUtil;
-    @Autowired
-    RedisUtils redisUtils;
 
     @Autowired
     public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil) {
@@ -138,9 +134,9 @@ public class UserServiceImpl implements IUserService {
                             }
                             UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
 
-                            if(redisUtils.hasKey(user.getUserAccount())) {
-                                redisUtils.remove(user.getUserAccount());
-                                redisUtils.put(user.getUserAccount(), user);
+                            if(redisUtil.hasKey(user.getUserAccount())) {
+                                redisUtil.remove(user.getUserAccount());
+                                redisUtil.put(user.getUserAccount(), user);
                             }
 
                         }
