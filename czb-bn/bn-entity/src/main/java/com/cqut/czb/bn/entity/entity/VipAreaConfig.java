@@ -15,6 +15,12 @@ public class VipAreaConfig {
 
     private Date updateAt;
 
+    private Double fyRate;
+
+    private Double fyOne;
+
+    private Double fyTwo;
+
     public String getVipAreaConfigId() {
         return vipAreaConfigId;
     }
@@ -61,5 +67,29 @@ public class VipAreaConfig {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getFyRate() {
+        return fyRate;
+    }
+
+    public void setFyRate(Double fyRate) {
+        this.fyRate = fyRate;
+    }
+
+    public Double getFyOne() {
+        return fyOne;
+    }
+
+    public void setFyOne(Double fyOne) {
+        this.fyOne = fyOne;
+    }
+
+    public Double getFyTwo() {
+        return fyTwo;
+    }
+
+    public void setFyTwo(Double fyTwo) {
+        this.fyTwo = fyTwo;
     }
 }
