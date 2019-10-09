@@ -732,7 +732,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 content.put("petrolKind","中石化");
                 content.put("petrolPrice",petrol.getPetrolPrice().toString());
             }
-            serverOrderService.sendMessage("155930101061936","589478606469609864",content);
+//            serverOrderService.sendMessage("155930101061936","589478606469609864",content);
 
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
 

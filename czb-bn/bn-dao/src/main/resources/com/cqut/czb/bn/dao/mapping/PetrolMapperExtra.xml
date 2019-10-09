@@ -207,7 +207,7 @@
     <include refid="Base_Column_List" />
     FROM czb_petrol
     WHERE
-    czb_petrol.petrol_num=#{petrolNum,jdbcType=VARCHAR} AND
+    czb_petrol.petrol_num=#{petrolNum,jdbcType=VARCHAR}
     limit 1
   </select>
 

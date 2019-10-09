@@ -126,8 +126,10 @@ public class MessageThread implements Runnable {
             RemotePushNoticesDTO remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
             if (!content.isEmpty()){
                 for (Map.Entry<String, String> exp:content.entrySet()) {
-                  if (remotePushNotice.getNoticeContent()!=null) {
+                   if (remotePushNotice!=null) {
                       remotePushNotice.setNoticeContent(remotePushNotice.getNoticeContent().replace("${"+exp.getKey()+"}",exp.getValue()));
+                  }else {
+                      return ;
                   }
                 }
             }
@@ -136,8 +138,8 @@ public class MessageThread implements Runnable {
             String sound = "default";//铃音
             List<String> tokens = new ArrayList<String>();
             tokens.add(deviceToken);
-            String certificatePath = "iosPush.p12";
-//            String certificatePath = "E:\\czb-master\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
+//            String certificatePath = "iosPush.p12";
+            String certificatePath = "E:\\czb-master\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
             if (type==3){
