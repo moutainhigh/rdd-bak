@@ -36,6 +36,9 @@ public class AppPicServiceImpl implements AppPicService{
         try {
             Object newClass = springUtil.getBean(code+"ServiceImpl");
             AppRouterDTO result = (AppRouterDTO) newClass.getClass().getMethod("getPic",AppRouterDTO.class).invoke(newClass,appRouterDTO);
+            if (result==null || result.getSavePath()==null){
+                return null;
+            }
             list.add(result);
 
         }catch (Exception e){

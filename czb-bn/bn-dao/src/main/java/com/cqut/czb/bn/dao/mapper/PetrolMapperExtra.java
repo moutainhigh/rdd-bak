@@ -55,4 +55,6 @@ public interface PetrolMapperExtra {
 
     String sumOfPetrolMoney(GetPetrolListInputDTO getPetrolListInputDTO);
 
+    Petrol selectPetrolByNum(String petrolNum);
+
 }

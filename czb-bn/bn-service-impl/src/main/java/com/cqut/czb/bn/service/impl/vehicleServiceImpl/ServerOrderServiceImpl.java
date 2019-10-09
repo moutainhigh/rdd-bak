@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service
@@ -140,39 +141,47 @@ public class ServerOrderServiceImpl implements ServerOrderService {
         cleanOrder.setProcessStatus(status);
         if (mapper.updateByPrimaryKeySelective(cleanOrder) > 0) {
             mapperExtra.updateRiderStatus(cleanOrderDTO.getRiderId(), "0");
-            RemotePush remotePush = remotePushMapperExtra.selectByUser(cleanOrderDTO.getUserId());
-            if (remotePush!=null&&remotePush.getDeviceType()!=null){
-                if (remotePush.getDeviceType()==1){
-                    User user = new User();
-                    user.setUserId(cleanOrderDTO.getUserId());
-                    JGPush jgPush = new JGPush();
-                    jgPush.setType(1);
-                    jgPush.setNoticeId("688008757855812");
-                    jgPush.setUserId(user.getUserId());
-                    jgPush.setCleanRiderMapper(cleanRiderMapper);
-                    jgPush.setAppRouterMapper(appRouterMapper);
-                    jgPush.setRemotePushMapperExtra(remotePushMapperExtra);
-                    jgPush.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
-                    Thread thread = new Thread(jgPush);
-                    thread.start();
-                }else if (remotePush.getDeviceType()==2){
-                    User user = new User();
-                    user.setUserId(cleanOrderDTO.getUserId());
-                    MessageThread messageThread = new MessageThread();
-                    messageThread.setNoticeId("688008757855812");
-                    messageThread.setUserId(user.getUserId());
-                    messageThread.setCleanRiderMapper(cleanRiderMapper);
-                    messageThread.setAppRouterMapper(appRouterMapper);
-                    messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
-                    messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
-                    Thread thread = new Thread(messageThread);
-                    thread.start();
-                }
-            }
+            sendMessage(cleanOrderDTO.getUserId(),"688008757855812",null);
 //            riderServiceImpl.sendMesToApp("688008757855812",user.getUserId());
             return new JSONResult("完成订单成功", 200);
         } else {
             return new JSONResult("完成订单失败", 200);
+        }
+    }
+
+    public void sendMessage(String userId, String noticeId, Map<String,String> insertContent){
+        RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
+        if (remotePush!=null&&remotePush.getDeviceType()!=null){
+            if (remotePush.getDeviceType()==1){
+                User user = new User();
+                user.setUserId(userId);
+                JGPush jgPush = new JGPush();
+                jgPush.setType(1);
+//                jgPush.setNoticeId("688008757855812");
+                jgPush.setNoticeId(noticeId);
+                jgPush.setUserId(user.getUserId());
+                jgPush.setCleanRiderMapper(cleanRiderMapper);
+                jgPush.setAppRouterMapper(appRouterMapper);
+                jgPush.setRemotePushMapperExtra(remotePushMapperExtra);
+                jgPush.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                Thread thread = new Thread(jgPush);
+                thread.start();
+            }else if (remotePush.getDeviceType()==2){
+                User user = new User();
+                user.setUserId(userId);
+                MessageThread messageThread = new MessageThread();
+                if (insertContent!=null) {
+                   MessageThread.content = insertContent;
+                }
+                messageThread.setNoticeId(noticeId);
+                messageThread.setUserId(user.getUserId());
+                messageThread.setCleanRiderMapper(cleanRiderMapper);
+                messageThread.setAppRouterMapper(appRouterMapper);
+                messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+                messageThread.setRemotePushNoticeMapperExtra(remotePushNoticeMapperExtra);
+                Thread thread = new Thread(messageThread);
+                thread.start();
+            }
         }
     }
 

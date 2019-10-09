@@ -7,6 +7,7 @@ import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -17,6 +18,7 @@ import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +73,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     @Autowired
     DishOrderMapper dishOrderMapper;
+
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
 
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
@@ -538,6 +543,12 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣 String BusinessType
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
+        //发送购买成功推送给特定用户
+        Map<String,String> content = new HashMap<>();
+        UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);
+        content.put("userAccount",userDTO.getUserAccount());
+        content.put("area",area);
+        serverOrderService.sendMessage("155930101061936","589488759910421661",content);
         return 1;
     }
 
@@ -593,6 +604,12 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
+        //发送购买成功推送给特定用户
+        Map<String,String> content = new HashMap<>();
+        UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);
+        content.put("userAccount",userDTO.getUserAccount());
+        content.put("area",area);
+        serverOrderService.sendMessage("155930101061936","589488759910421661",content);
         return 1;
     }
 
@@ -673,14 +690,41 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "1", 1);
             //插入消费记录
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
-            if (beginPetrolRecharge == true)
+            if (beginPetrolRecharge == true){
+                //发送购买成功推送给特定用户
+                Map<String,String> content = new HashMap<>();
+                Petrol petrol = petrolMapperExtra.selectPetrolByNum(petrolNum);
+                UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);
+                content.put("userAccount",userDTO.getUserAccount());
+                if (petrol!=null && petrol.getPetrolKind()==1){
+                    content.put("petrolKind","中石油");
+                    content.put("petrolPrice",petrol.getPetrolPrice().toString());
+                }else if (petrol!=null && petrol.getPetrolKind()==2) {
+                    content.put("petrolKind","中石化");
+                    content.put("petrolPrice",petrol.getPetrolPrice().toString());
+                }
+                serverOrderService.sendMessage("155930101061936","589854661255911652",content);
                 return 1;
+            }
             else
                 return 2;
         } else if ("0".equals(payType)) {
             System.out.println("开始购买");
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "0", 1);
+            //发送购买成功推送给特定用户
+            Map<String,String> content = new HashMap<>();
+            Petrol petrol = petrolMapperExtra.selectPetrolByNum(petrolNum);
+            UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);
+            content.put("userAccount",userDTO.getUserAccount());
+            if (petrol!=null && petrol.getPetrolKind()==1){
+                content.put("petrolKind","中石油");
+                content.put("petrolPrice",petrol.getPetrolPrice().toString());
+            }else if (petrol!=null && petrol.getPetrolKind()==2) {
+                content.put("petrolKind","中石化");
+                content.put("petrolPrice",petrol.getPetrolPrice().toString());
+            }
+            serverOrderService.sendMessage("155930101061936","589478606469609864",content);
 
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
@@ -753,8 +797,22 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
 
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
-            if (beginPetrolRecharge == true)
+            if (beginPetrolRecharge == true){
+                //发送购买成功推送给特定用户
+                Map<String,String> content = new HashMap<>();
+                Petrol petrol = petrolMapperExtra.selectPetrolByNum(petrolNum);
+                UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);
+                content.put("userAccount",userDTO.getUserAccount());
+                if (petrol!=null && petrol.getPetrolKind()==1){
+                    content.put("petrolKind","中石油");
+                    content.put("petrolPrice",petrol.getPetrolPrice().toString());
+                }else if (petrol!=null && petrol.getPetrolKind()==2) {
+                    content.put("petrolKind","中石化");
+                    content.put("petrolPrice",petrol.getPetrolPrice().toString());
+                }
+                serverOrderService.sendMessage("155930101061936","589854661255911652",content);
                 return 1;
+            }
             else
                 return 2;
         } else if ("0".equals(payType)) {
@@ -762,10 +820,27 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
             //此处插入购油的相关信息，油卡购买记录
+
+            //发送购买成功推送给特定用户
+            Map<String,String> content = new HashMap<>();
+            Petrol petrol = petrolMapperExtra.selectPetrolByNum(petrolNum);
+            UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);
+            content.put("userAccount",userDTO.getUserAccount());
+            if (petrol!=null && petrol.getPetrolKind()==1){
+                content.put("petrolKind","中石油");
+                content.put("petrolPrice",petrol.getPetrolPrice().toString());
+            }else if (petrol!=null && petrol.getPetrolKind()==2) {
+                content.put("petrolKind","中石化");
+                content.put("petrolPrice",petrol.getPetrolPrice().toString());
+            }
+            serverOrderService.sendMessage("155930101061936","589478606469609864",content);
+
+
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
             //判断是否放回油卡
             return dataProcessService.putBackPetrol(isChange,petrolNum);
         }
+
         return 1;
     }
 

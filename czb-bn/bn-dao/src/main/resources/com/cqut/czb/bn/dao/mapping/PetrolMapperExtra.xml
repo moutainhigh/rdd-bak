@@ -184,6 +184,15 @@
     limit 1
   </select>
 
+  <select id="selectPetrolByNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE
+    czb_petrol.petrol_num=#{petrolNum,jdbcType=VARCHAR} AND
+    limit 1
+  </select>
+
   <!--油卡开售禁售-->
   <!--改变油卡状态-->
   <update id="changePetrolState" parameterType="java.lang.String">

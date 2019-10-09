@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -124,6 +126,8 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
             return null;
         }
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = df.format(shopDTO.getStartingTimeBusiness());
         if (shopDTO.getDeleteId()!=null&&!"".equals(shopDTO.getDeleteId())){
             String[] ids = shopDTO.getDeleteId().split(",");
             List<FileFunctionDTO> deleteFile = new ArrayList<>();

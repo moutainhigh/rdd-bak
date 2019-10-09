@@ -1,6 +1,9 @@
 package com.cqut.czb.bn.entity.dto.shopManagement;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 /**
  * @Description
@@ -49,6 +52,10 @@ public class ShopManagementDTO extends PageDTO {
     private Integer numberOfOutstandingAccounts;
 
     private Integer audit;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date updateAt;
 
     public String getUserId() {
         return userId;
@@ -120,5 +127,21 @@ public class ShopManagementDTO extends PageDTO {
 
     public void setAudit(Integer audit) {
         this.audit = audit;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

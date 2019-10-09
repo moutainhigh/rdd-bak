@@ -7,11 +7,14 @@ import com.cqut.czb.bn.entity.dto.vehicleService.ServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.CouponStandard;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.service.vehicleService.CouponManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 洗车优惠券管理
@@ -24,6 +27,8 @@ public class CouponManageController {
     CouponManageService couponManageService;
     @Autowired
     RedisUtils redisUtils;
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
 
     /**
      * app用户优惠券列表获取

@@ -24,7 +24,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 @Component
 @ComponentScan
@@ -32,6 +35,8 @@ public class MessageThread implements Runnable {
     static String noticeId;
 
     static String userId;
+    
+    static Map<String,String> content = new HashMap<>();
 
     static Integer type=2;
 
@@ -66,6 +71,14 @@ public class MessageThread implements Runnable {
 
     public static void setType(Integer type) {
         MessageThread.type = type;
+    }
+
+    public static Map<String, String> getContent() {
+        return content;
+    }
+
+    public static void setContent(Map<String, String> content) {
+        MessageThread.content = content;
     }
 
     public CleanRiderMapperExtra getCleanRiderMapper() {
@@ -111,12 +124,20 @@ public class MessageThread implements Runnable {
              deviceToken = remotePush.getDeviceToken();
             }
             RemotePushNoticesDTO remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
+            if (!content.isEmpty()){
+                for (Map.Entry<String, String> exp:content.entrySet()) {
+                  if (remotePushNotice.getNoticeContent()!=null) {
+                      remotePushNotice.setNoticeContent(remotePushNotice.getNoticeContent().replace("${"+exp.getKey()+"}",exp.getValue()));
+                  }
+                }
+            }
             String  alert  = remotePushNotice.getNoticeContent();//push的内容
             int badge = 1;//图标小红圈的数值
             String sound = "default";//铃音
             List<String> tokens = new ArrayList<String>();
             tokens.add(deviceToken);
             String certificatePath = "iosPush.p12";
+//            String certificatePath = "E:\\czb-master\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
             if (type==3){
@@ -125,11 +146,15 @@ public class MessageThread implements Runnable {
             try
             {
                 PushNotificationPayload payLoad = new PushNotificationPayload();
-                AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
                 PushDTO pushDTO = new PushDTO();
-                pushDTO.setIosPath(appRouter.getIosPath());
-                pushDTO.setMenuName(appRouter.getMenuName());
-                pushDTO.setPathType(appRouter.getPathType());
+                if (remotePushNotice.getAppRouterId()!=null){
+                    AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
+                    if (appRouter!=null && appRouter.getRouterId()!=null) {
+                        pushDTO.setIosPath(appRouter.getIosPath());
+                        pushDTO.setMenuName(appRouter.getMenuName());
+                        pushDTO.setPathType(appRouter.getPathType());
+                    }
+                }
                 pushDTO.setTitle(remotePushNotice.getNoticeContent());
                 payLoad.addCustomDictionary("appRouter", JSONObject.fromObject(pushDTO));
                 payLoad.addAlert(alert); // 消息内容

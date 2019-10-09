@@ -117,7 +117,9 @@
         SUM( CASE WHEN czb_order.is_settlement = 0 AND czb_order.state = 1 THEN 1 ELSE 0 END )
         numberOfOutstandingAccounts,
         SUM( CASE WHEN czb_order.is_settlement = 1 AND czb_order.state = 1 THEN czb_order.actual_price ELSE 0 END)
-        totalHistoricalTransactions
+        totalHistoricalTransactions,
+        czb_shop.create_at createAt,
+        czb_shop.update_at updateAt
         FROM
         czb_shop
         LEFT JOIN czb_user ON czb_user.user_id = czb_shop.user_id
