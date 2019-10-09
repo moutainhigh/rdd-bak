@@ -22,6 +22,24 @@
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
     state, discount, area, owner_id, petrol_type, create_at, update_at, commission,remark
   </sql>
+
+  <select id="selectUserPetrol" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolPriceDTO">
+   select
+      DISTINCT petrol_kind as petrolKind,remark
+     from czb_petrol
+        where
+        owner_id=#{userId,jdbcType=VARCHAR} and
+        area=#{area,jdbcType=VARCHAR} and
+        state=2 and
+        petrol_kind=1 or
+        owner_id=#{userId,jdbcType=VARCHAR} and
+        area=#{area,jdbcType=VARCHAR} and
+        state=2 and
+        petrol_kind=2
+    ORDER BY petrol_kind
+  </select>
+
+
   <select id="getPetrolList" resultMap="BaseResultMap" resultType="com.cqut.czb.bn.entity.entity.Petrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
     select <include refid="Base_Column_List"/> from czb_petrol
     <where>

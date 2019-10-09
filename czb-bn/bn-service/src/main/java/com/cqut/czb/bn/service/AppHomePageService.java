@@ -50,6 +50,8 @@ public interface AppHomePageService {
      */
     List<PetrolZoneDTO> selectPetrolZone(String area);
 
+    List<PetrolZoneDTO> getPetrolZone(User user,String area);
+
     /**
      * 获取未售出的油卡
      * @return

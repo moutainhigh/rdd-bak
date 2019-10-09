@@ -4,10 +4,7 @@ package com.cqut.czb.bn.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.dao.mapper.*;
-import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
-import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
-import com.cqut.czb.bn.entity.dto.appHomePage.petrolInfoDTO;
-import com.cqut.czb.bn.entity.dto.appHomePage.petrolPriceReportDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.*;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
@@ -114,6 +111,75 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         return servicePlanMapperExtra.selectServicePlan();
     }
 
+
+    public List<PetrolZoneDTO> getPetrolZone(User user,String area){
+        //判断用户买了哪些卡
+        List<PetrolPriceDTO> petrolPriceDTOs=petrolMapperExtra.selectUserPetrol(user.getUserId(),area);
+        //获取字典信息
+        Dict dict=dictMapperExtra.selectDictByName("petrolPrice");
+        //解析价格
+        JSONObject json = JSON.parseObject(dict.getContent());
+
+        for(int i=0;i<petrolPriceDTOs.size();i++){
+            //根据他的卡的是哪种油再取对应油的价格
+            String remark=petrolPriceDTOs.get(i).getRemark();
+            if(remark==null||remark.equals("")){
+                remark="通用";
+                petrolPriceDTOs.get(i).setRemark("通用");
+            }
+            //取价格
+            String content=(String) json.get(remark);
+            if(content==null){
+                return null;
+            }
+            //分解价格
+            String[] result1 = content.split(",");
+            //取出折扣
+            petrolPriceDTOs.get(i).setDiscount(Double.parseDouble(result1[4]));
+            //取出价格，放入list
+            List<Double> price=new ArrayList<>();
+            for(int j=0;j<result1.length-1;j++){
+                price.add(Double.valueOf(result1[j]));
+            }
+            petrolPriceDTOs.get(i).setPrice(price);
+        }
+
+        //查出所有的油卡
+        List<PetrolZoneDTO> petrolZoneDTOList=selectPetrolZone(area);
+
+        //更改油卡内容
+        if(petrolPriceDTOs!=null){//不为空则表示买过卡
+            //无需要考虑汽油还是柴油
+            for(int i=0;i<petrolPriceDTOs.size();i++){
+                //根据价格直接覆盖
+                for(int j=0;j<petrolZoneDTOList.size();j++){
+                    //将中石油，中石化价格覆盖(如果油卡的类型一样)
+                    if(petrolZoneDTOList.get(j).getPetrolKind().equals(petrolPriceDTOs.get(i).getPetrolKind())){
+                        List<petrolInfoDTO> petrolInfoDTOS=new ArrayList<>();
+                        for(int k=0;k<4;k++){
+                            //插入油卡信息
+                            petrolInfoDTO petrolInfo=new petrolInfoDTO();
+                            petrolInfo.setRemark(petrolPriceDTOs.get(i).getRemark());
+                            petrolInfo.setFYmoney1(0);
+                            petrolInfo.setFangyong1("0");
+                            petrolInfo.setFangyong2("0");
+                            petrolInfo.setPetrolPrice(petrolPriceDTOs.get(i).getPrice().get(k));
+                            petrolInfo.setDiscount(petrolPriceDTOs.get(i).getDiscount());
+                            petrolInfo.setPetrolDenomination(petrolPriceDTOs.get(i).getPrice().get(k));
+                            BigDecimal money=BigDecimal.valueOf(petrolPriceDTOs.get(i).getDiscount()).multiply(new BigDecimal(petrolPriceDTOs.get(i).getPrice().get(k)));
+                            double fee=money.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            petrolInfo.setVipPrice(fee);
+                            petrolZoneDTOList.get(j).getPetrolPriceInfo().add(petrolInfo);
+                        }
+//                        petrolZoneDTOList.get(j).setPetrolPriceInfo(petrolInfoDTOS);
+                    }
+                }
+            }
+        }
+        return petrolZoneDTOList;
+    }
+
+
     @Override
     public List<PetrolZoneDTO> selectPetrolZone(String area) {
 
@@ -188,9 +254,12 @@ public class AppHomePageServiceImpl implements AppHomePageService {
                 petrolInfoDTO1.get(j).setFangyong1(fangyong1);
                 petrolInfoDTO1.get(j).setFangyong2(fangyong2);
                 //算出vip价格
-                double vipFee = BigDecimal.valueOf(petrolInfoDTO1.get(j).getDiscount()).multiply(new BigDecimal(petrolInfoDTO1.get(j).getPetrolPrice()))
-                        .doubleValue();
-                petrolInfoDTO1.get(j).setVipPrice(vipFee);
+                if(petrolInfoDTO1.get(j).getDiscount()==0){
+                    petrolInfoDTO1.get(j).setDiscount(1.0);
+                }
+                BigDecimal vipFee = BigDecimal.valueOf(petrolInfoDTO1.get(j).getDiscount()).multiply(new BigDecimal(petrolInfoDTO1.get(j).getPetrolPrice()));
+                double money= vipFee.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                petrolInfoDTO1.get(j).setVipPrice(money);
                 if(fangyong1!=null)
                 {
                     //算出一级返佣的钱

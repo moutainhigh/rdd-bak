@@ -88,6 +88,9 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
             return null;
         }
         if (vipAreaConfig != null && user!=null&& user.getIsVip() == 1&&petrol.getDiscount()!=null){
+            if(petrol.getDiscount()==0){
+                petrol.setDiscount(1.0);
+            }
             money=BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(BigDecimal.valueOf(petrol.getDiscount())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
         }else {
             money = petrol.getPetrolPrice();
