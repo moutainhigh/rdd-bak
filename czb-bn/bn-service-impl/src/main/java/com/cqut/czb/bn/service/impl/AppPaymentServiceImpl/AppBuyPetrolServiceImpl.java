@@ -8,10 +8,12 @@ import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInfo;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
+import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.appPaymentService.AppBuyPetrolService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     @Autowired
     private VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
 
+    @Autowired
+    AppHomePageService appHomePageService;
+
     @Override
     public JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
 
@@ -52,24 +57,31 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         if(vipAreaConfig!=null){
             petrolInputDTO.setIsHaveVip(1);
         }
+        petrolInputDTO.setPetrolPrice(backMoney(petrol,petrolInputDTO));
         // 设置参数
         SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,petrolInputDTO,petrol);
-        //插入购买信息
+        //插入购买信息o
         boolean insertPetrolSalesRecords= insertPetrolSalesRecords(petrol,petrolInputDTO,orgId);
         System.out.println("新增油卡购买或充值记录完毕"+insertPetrolSalesRecords);
         return   WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
     public double backMoney(Petrol petrol, PetrolInputDTO petrolInputDTO){
+        double discount=1;
         Double money=0.0;
+        if(petrolInputDTO.getPayType().equals("2")){//查出充值的折扣
+            discount=appHomePageService.getDisCount(petrol.getRemark());
+        }else {
+            discount=petrol.getDiscount();
+        }
         User user = userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(petrolInputDTO.getArea());
-        if (vipAreaConfig != null && user!=null&& user.getIsVip() == 1&&petrol.getDiscount()!=null){
-            if(petrol.getDiscount()==0){
-                petrol.setDiscount(1.0);
-            }
-            money=BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(BigDecimal.valueOf(petrol.getDiscount())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        if (vipAreaConfig != null && user!=null&& user.getIsVip() == 1){
+           if(discount==0){
+               discount=1;
+           }
+            money=BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(BigDecimal.valueOf(discount)).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
         }else {
-            money = petrol.getPetrolPrice();
+            money = petrolInputDTO.getPetrolPrice();
         }
         return money;
     }
@@ -179,16 +191,18 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 Map<String,Object> info=new HashMap<>();
                 AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                 petrolBackInfoDTO.setPaymentOrder(buyPetrol);
-                petrol.setPetrolPrice(backMoney( petrol,petrolInputDTO));
-                petrolBackInfoDTO.setPetrol(petrol);
+                Petrol petrol1=PetrolInfo.getNewPetrol(petrol);
+                petrol1.setPetrolPrice(backMoney( petrol,petrolInputDTO));
+                petrolBackInfoDTO.setPetrol(petrol1);
                 info.put("0",petrolBackInfoDTO);
                 return info;
             }else if(WeChatPayOrder!=null){
                 Map<String,Object> info=new HashMap<>();
                 WeChatPetrolBackInfoDTO weChatPetrolBackInfoDTO=new WeChatPetrolBackInfoDTO();
                 weChatPetrolBackInfoDTO.setWeChatPaymentOrder(WeChatPayOrder);
-                petrol.setPetrolPrice(backMoney( petrol,petrolInputDTO));
-                weChatPetrolBackInfoDTO.setPetrol(petrol);
+                Petrol petrol1=PetrolInfo.getNewPetrol(petrol);
+                petrol1.setPetrolPrice(petrolInputDTO.getPetrolPrice());
+                weChatPetrolBackInfoDTO.setPetrol(petrol1);
                 info.put("0",weChatPetrolBackInfoDTO);
                 return info;
             }else {
@@ -222,16 +236,18 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                     Map<String,Object> info=new HashMap<>();
                     AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                     petrolBackInfoDTO.setPaymentOrder(buyPetrol);
-                    petrol2.setPetrolPrice(backMoney( petrol2,petrolInputDTO));
-                    petrolBackInfoDTO.setPetrol(petrol2);
+                    Petrol petrol=PetrolInfo.getNewPetrol(petrol2);
+                    petrol.setPetrolPrice(backMoney( petrol2,petrolInputDTO));
+                    petrolBackInfoDTO.setPetrol(petrol);
                     info.put("0",petrolBackInfoDTO);
                     return info;
                 }else if(WeChatPayOrder!=null){
                     Map<String,Object> info=new HashMap<>();
                     WeChatPetrolBackInfoDTO weChatPetrolBackInfoDTO=new WeChatPetrolBackInfoDTO();
                     weChatPetrolBackInfoDTO.setWeChatPaymentOrder(WeChatPayOrder);
-                    petrol2.setPetrolPrice(backMoney( petrol2,petrolInputDTO));
-                    weChatPetrolBackInfoDTO.setPetrol(petrol2);
+                    Petrol petrol=PetrolInfo.getNewPetrol(petrol2);
+                    petrol.setPetrolPrice(petrolInputDTO.getPetrolPrice());
+                    weChatPetrolBackInfoDTO.setPetrol(petrol);
                     info.put("0",weChatPetrolBackInfoDTO);
                     return info;
                 }else {
@@ -253,16 +269,18 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                     Map<String,Object> info=new HashMap<>();
                     AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                     petrolBackInfoDTO.setPaymentOrder(buyPetrol);
-                    petrol1.setPetrolPrice(backMoney( petrol1,petrolInputDTO));
-                    petrolBackInfoDTO.setPetrol(petrol1);
+                    Petrol newPetrol=PetrolInfo.getNewPetrol(petrol1);
+                    newPetrol.setPetrolPrice(backMoney( petrol1,petrolInputDTO));
+                    petrolBackInfoDTO.setPetrol(newPetrol);
                     info.put("2",petrolBackInfoDTO);
                     return info;
                 }else if(WeChatPayOrder!=null){
                     Map<String,Object> info=new HashMap<>();
                     WeChatPetrolBackInfoDTO weChatPetrolBackInfoDTO=new WeChatPetrolBackInfoDTO();
                     weChatPetrolBackInfoDTO.setWeChatPaymentOrder(WeChatPayOrder);
-                    petrol1.setPetrolPrice(backMoney( petrol1,petrolInputDTO));
-                    weChatPetrolBackInfoDTO.setPetrol(petrol1);
+                    Petrol newPetrol=PetrolInfo.getNewPetrol(petrol1);
+                    newPetrol.setPetrolPrice(petrolInputDTO.getPetrolPrice());
+                    weChatPetrolBackInfoDTO.setPetrol(newPetrol);
                     info.put("0",weChatPetrolBackInfoDTO);
                     return info;
                 }else {
