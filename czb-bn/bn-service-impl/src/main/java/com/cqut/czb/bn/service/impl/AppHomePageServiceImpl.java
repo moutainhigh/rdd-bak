@@ -169,9 +169,10 @@ public class AppHomePageServiceImpl implements AppHomePageService {
                             BigDecimal money=BigDecimal.valueOf(petrolPriceDTOs.get(i).getDiscount()).multiply(new BigDecimal(petrolPriceDTOs.get(i).getPrice().get(k)));
                             double fee=money.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                             petrolInfo.setVipPrice(fee);
-                            petrolZoneDTOList.get(j).getPetrolPriceInfo().add(petrolInfo);
+                            petrolInfoDTOS.add(petrolInfo);
+//                            petrolZoneDTOList.get(j).getPetrolPriceInfo().add(petrolInfo);
                         }
-//                        petrolZoneDTOList.get(j).setPetrolPriceInfo(petrolInfoDTOS);
+                        petrolZoneDTOList.get(j).setPetrolPriceInfo(petrolInfoDTOS);
                     }
                 }
             }
