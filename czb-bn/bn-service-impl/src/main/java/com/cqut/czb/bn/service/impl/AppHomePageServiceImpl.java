@@ -111,6 +111,27 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         return servicePlanMapperExtra.selectServicePlan();
     }
 
+    //获取充值折扣
+    public double getDisCount(String petrolRemark){
+        //获取字典信息
+        Dict dict=dictMapperExtra.selectDictByName("petrolPrice");
+        //解析价格
+        JSONObject json = JSON.parseObject(dict.getContent());
+            //根据他的卡的是哪种油再取对应油的价格
+        if(petrolRemark==null||petrolRemark.equals("")){
+            petrolRemark="通用";
+        }
+        //取价格
+        String content=(String) json.get(petrolRemark);
+        if(content==null){
+            return 1;
+        }
+        //分解价格
+        String[] result1 = content.split(",");
+        //取出折扣
+        return Double.parseDouble(result1[result1.length-1]);
+    }
+
 
     public List<PetrolZoneDTO> getPetrolZone(User user,String area){
         //判断用户买了哪些卡
@@ -135,7 +156,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
             //分解价格
             String[] result1 = content.split(",");
             //取出折扣
-            petrolPriceDTOs.get(i).setDiscount(Double.parseDouble(result1[4]));
+            petrolPriceDTOs.get(i).setDiscount(Double.parseDouble(result1[result1.length-1]));
             //取出价格，放入list
             List<Double> price=new ArrayList<>();
             for(int j=0;j<result1.length-1;j++){
@@ -156,7 +177,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
                     //将中石油，中石化价格覆盖(如果油卡的类型一样)
                     if(petrolZoneDTOList.get(j).getPetrolKind().equals(petrolPriceDTOs.get(i).getPetrolKind())){
                         List<petrolInfoDTO> petrolInfoDTOS=new ArrayList<>();
-                        for(int k=0;k<4;k++){
+                        for(int k=0;k<petrolPriceDTOs.get(i).getPrice().size();k++){
                             //插入油卡信息
                             petrolInfoDTO petrolInfo=new petrolInfoDTO();
                             petrolInfo.setRemark(petrolPriceDTOs.get(i).getRemark());

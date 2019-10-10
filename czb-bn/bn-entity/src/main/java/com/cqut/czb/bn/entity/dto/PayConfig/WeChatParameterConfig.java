@@ -53,13 +53,13 @@ public class WeChatParameterConfig {
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
         BigInteger totalFee;
-        if (petrolInputDTO.getIsHaveVip()!=null&&petrol.getDiscount()!=null&&petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1&&petrolInputDTO.getIsHaveVip()==1){
-            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
-                    .toBigInteger();
-        }else{
-            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
-        }
-
+//        if (petrolInputDTO.getIsHaveVip()!=null&&petrol.getDiscount()!=null&&petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1&&petrolInputDTO.getIsHaveVip()==1){
+//            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
+//                    .toBigInteger();
+//        }else{
+//            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
+//        }
+        totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
         System.out.println(totalFee);
         parameters.put("total_fee", totalFee);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
