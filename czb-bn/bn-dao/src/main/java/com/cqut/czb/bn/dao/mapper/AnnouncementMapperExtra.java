@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
+import com.cqut.czb.bn.entity.entity.AppRouter;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -22,4 +24,6 @@ public interface AnnouncementMapperExtra {
     int updateByPrimaryKey(Announcement record);
 
     List<appAnnouncementDTO> selectAnnouncement(@Param("locationCode") String locationCode);
+
+    AppRouterDTO selectPic(String locationCode);
 }
