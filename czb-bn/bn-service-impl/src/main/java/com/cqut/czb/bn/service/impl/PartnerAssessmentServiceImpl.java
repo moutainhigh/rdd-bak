@@ -104,7 +104,9 @@ public class PartnerAssessmentServiceImpl implements com.cqut.czb.bn.service.Ind
             for(IndicatorRecordDTO indicatorRecordDTO : list){
                 indicatorRecordDTO.setRecordId(StringUtil.createId());
             }
-            indicatorRecordMapperExtra.insertIndicatorRecordList(list);
+            if(list.size() > 0){
+                indicatorRecordMapperExtra.insertIndicatorRecordList(list);
+            }
             return i > 0;
         }else{
             return false;
