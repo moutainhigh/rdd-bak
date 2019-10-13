@@ -23,7 +23,7 @@
             <if test="standardId!=null and standardId!=''">
                AND standard_id = #{standardId,jdbcType=VARCHAR}
             </if>
-            <if test="standardType!=null and standardType!=''">
+            <if test="standardType!=null and standardType!='' and standardType != '全部'">
                 AND standard_type = #{standardType,jdbcType=VARCHAR}
             </if>
     </select>

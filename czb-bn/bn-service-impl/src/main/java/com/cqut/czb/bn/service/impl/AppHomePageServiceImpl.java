@@ -75,7 +75,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         return announcementMapperExtra.selectAnnouncement(locationCode);
     }
 
-    public AppRouterDTO getPic() {
+    public AppRouterDTO getPic(AppRouterDTO appRouterDTO) {
         String code = "homePageAd";    //code也可改为由参数传入取得
         AppRouterDTO appRouter = new AppRouterDTO();
         appRouter.setMenuIdentityCode(code);
