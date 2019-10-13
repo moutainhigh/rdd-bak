@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service.impl.food;
 
 import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.food.AppPicService;
 import com.cqut.czb.bn.service.impl.AppHomePageServiceImpl;
@@ -29,12 +31,21 @@ public class AppPicServiceImpl implements AppPicService{
     AppRouterMapperExtra appRouterMapperExtra;
     @Autowired
     SpringUtil springUtil;
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     @Override
     public List<AppRouterDTO> getPic(AppRouterDTO appRouterDTO, String code, String userId, String area, HashMap<String, T> name) {
+        Dict dict = dictMapperExtra.selectDictByName("appHomePageRouter");
+        String dictValue = "";
+        if (dict!=null && dict.getContent()!=null){
+             dictValue = dict.getContent();
+        }else {
+            return null;
+        }
         List<AppRouterDTO> list = new ArrayList<>();
         try {
-            Object newClass = springUtil.getBean(code+"ServiceImpl");
+            Object newClass = springUtil.getBean(dictValue+"ServiceImpl");
             AppRouterDTO result = (AppRouterDTO) newClass.getClass().getMethod("getPic",AppRouterDTO.class).invoke(newClass,appRouterDTO);
             if (result==null || result.getSavePath()==null){
                 return null;
