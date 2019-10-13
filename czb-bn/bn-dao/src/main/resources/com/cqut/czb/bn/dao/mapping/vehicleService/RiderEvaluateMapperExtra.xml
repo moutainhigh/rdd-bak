@@ -32,7 +32,7 @@
             <if test="userAccount!=null and userAccount!=''">
                 AND user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
             </if>
-            <if test="evaluateLevel!=null">
+            <if test="evaluateLevel!=null and evaluateLevel != -1">
                 AND evaluate_level= #{evaluateLevel,jdbcType=INTEGER}
             </if>
         </where>
