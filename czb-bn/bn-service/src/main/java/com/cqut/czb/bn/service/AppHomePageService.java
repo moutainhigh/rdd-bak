@@ -43,12 +43,16 @@ public interface AppHomePageService {
      */
     List<ServicePlan> selectServicePlan();
 
+    double getDisCount(String petrolRemark);
+
     /**
      * 获取油卡专区
      * @param area
      * @return
      */
     List<PetrolZoneDTO> selectPetrolZone(String area);
+
+    List<PetrolZoneDTO> getPetrolZone(User user,String area);
 
     /**
      * 获取未售出的油卡

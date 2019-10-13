@@ -21,4 +21,6 @@ public interface VipAreaConfigMapperExtra {
     VipAreaConfig selectVipPrice(@Param("area") String area);
 
     VipAreaConfig selectVipAreaConfigByArea(String area);
+
+    VipAreaConfig selectVipPriceById(@Param("vipAreaConfigId") String vipAreaConfigId);
 }

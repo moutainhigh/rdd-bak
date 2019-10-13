@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
-    <id column="vip_area_config_id" property="vipAreaConfigId" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="vip_state" property="vipState" jdbcType="INTEGER" />
-    <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
-    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    vip_area_config_id, area, vip_state, vip_price, create_at, update_at
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
+        <id column="vip_area_config_id" property="vipAreaConfigId" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="vip_state" property="vipState" jdbcType="INTEGER" />
+        <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="fy_rate" property="fyRate" jdbcType="DOUBLE" />
+        <result column="fy_one" property="fyOne" jdbcType="DOUBLE" />
+        <result column="fy_two" property="fyTwo" jdbcType="DOUBLE" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    vip_area_config_id, area, vip_state, vip_price, create_at, update_at, fy_rate, fy_one,
+    fy_two
   </sql>
   <select id="getVipAreaList" parameterType="com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO" resultType="com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO">
     SELECT
@@ -52,6 +56,14 @@
         <include refid="Base_Column_List" />
         from czb_vip_area_config
         where area = #{area,jdbcType=VARCHAR}
+        AND vip_state = 1
+    </select>
+
+    <select id="selectVipPriceById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vip_area_config
+        where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
         AND vip_state = 1
     </select>
 </mapper>

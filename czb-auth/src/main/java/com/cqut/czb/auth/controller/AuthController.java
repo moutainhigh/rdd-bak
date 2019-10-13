@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.service.impl.DictServiceImpl;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 该类是注册的api接口，密码使用BCryptPasswordEncoder加密
@@ -40,6 +43,9 @@ public class AuthController {
     @Autowired
     IDictService dictService;
 
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
+
     /**
      *  个人用户注册
      * */
@@ -53,6 +59,9 @@ public class AuthController {
             jsonResult.setData(false);
             return jsonResult;
         } else {
+            Map<String,String> content = new HashMap<>();
+            content.put("userAccount",personalUserDTO.getUserAccount());
+            serverOrderService.sendMessage("155930101061936","589400087460259249",content);
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
             jsonResult.setData(true);

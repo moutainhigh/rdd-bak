@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.appHomePage.PetrolPriceDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
@@ -54,5 +55,9 @@ public interface PetrolMapperExtra {
     int notSaleAllPetrol();
 
     String sumOfPetrolMoney(GetPetrolListInputDTO getPetrolListInputDTO);
+
+    List<PetrolPriceDTO> selectUserPetrol(@Param("userId") String userId, @Param("area") String area);
+
+    Petrol selectPetrolByNum(String petrolNum);
 
 }

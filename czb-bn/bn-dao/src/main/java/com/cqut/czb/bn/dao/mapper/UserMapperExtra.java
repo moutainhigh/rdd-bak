@@ -79,6 +79,6 @@ public interface UserMapperExtra {
     /**
      * 递归查询最近的一个vip
      */
-    User selectVipUser(@Param("userId") String userId);
+    String selectVipUser(@Param("userId") String userId);
 
 }

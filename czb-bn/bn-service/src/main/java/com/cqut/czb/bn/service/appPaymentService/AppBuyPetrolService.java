@@ -25,6 +25,8 @@ public interface AppBuyPetrolService {
      */
     JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO);
 
+    double backMoney(Petrol petrol, PetrolInputDTO petrolInputDTO);
+
     /**
      * 判断今日是否购买了油卡
      * @param petrolInputDTO

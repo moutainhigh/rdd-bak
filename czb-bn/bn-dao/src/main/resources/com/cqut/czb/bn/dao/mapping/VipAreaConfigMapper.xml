@@ -8,9 +8,13 @@
     <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="fy_rate" property="fyRate" jdbcType="DOUBLE" />
+    <result column="fy_one" property="fyOne" jdbcType="DOUBLE" />
+    <result column="fy_two" property="fyTwo" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vip_area_config_id, area, vip_state, vip_price, create_at, update_at
+    vip_area_config_id, area, vip_state, vip_price, create_at, update_at, fy_rate, fy_one, 
+    fy_two
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,11 +28,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
     insert into czb_vip_area_config (vip_area_config_id, area, vip_state, 
-      vip_price, create_at, update_at
-      )
+      vip_price, create_at, update_at, 
+      fy_rate, fy_one, fy_two)
     values (#{vipAreaConfigId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{vipState,jdbcType=INTEGER}, 
-      #{vipPrice,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{vipPrice,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{fyRate,jdbcType=DOUBLE}, #{fyOne,jdbcType=DOUBLE}, #{fyTwo,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
     insert into czb_vip_area_config
@@ -51,6 +55,15 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="fyRate != null" >
+        fy_rate,
+      </if>
+      <if test="fyOne != null" >
+        fy_one,
+      </if>
+      <if test="fyTwo != null" >
+        fy_two,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="vipAreaConfigId != null" >
@@ -70,6 +83,15 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fyRate != null" >
+        #{fyRate,jdbcType=DOUBLE},
+      </if>
+      <if test="fyOne != null" >
+        #{fyOne,jdbcType=DOUBLE},
+      </if>
+      <if test="fyTwo != null" >
+        #{fyTwo,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -91,6 +113,15 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="fyRate != null" >
+        fy_rate = #{fyRate,jdbcType=DOUBLE},
+      </if>
+      <if test="fyOne != null" >
+        fy_one = #{fyOne,jdbcType=DOUBLE},
+      </if>
+      <if test="fyTwo != null" >
+        fy_two = #{fyTwo,jdbcType=DOUBLE},
+      </if>
     </set>
     where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +131,10 @@
       vip_state = #{vipState,jdbcType=INTEGER},
       vip_price = #{vipPrice,jdbcType=DOUBLE},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      fy_rate = #{fyRate,jdbcType=DOUBLE},
+      fy_one = #{fyOne,jdbcType=DOUBLE},
+      fy_two = #{fyTwo,jdbcType=DOUBLE}
     where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
   </update>
 </mapper>

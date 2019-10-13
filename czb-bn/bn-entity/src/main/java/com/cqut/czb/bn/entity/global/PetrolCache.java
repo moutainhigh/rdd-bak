@@ -151,6 +151,10 @@ public class PetrolCache {
             if(remark==null||"".equals(remark)||"通用".equals(remark)){
                 choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
                         petrol.getArea().equals(area) &&petrol.getRemark()==null;
+                if(choice==false){
+                    choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
+                            petrol.getArea().equals(area) &&petrol.getRemark().equals("通用");
+                }
             }else {
                 choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
                         petrol.getArea().equals(area) &&remark.equals(petrol.getRemark());
