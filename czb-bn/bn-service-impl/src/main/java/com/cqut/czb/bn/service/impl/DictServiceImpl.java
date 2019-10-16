@@ -171,6 +171,7 @@ public class DictServiceImpl implements IDictService {
             if (DeviceToken != null || DeviceToken != ""){
                 if ( !DeviceToken.equals(remotePush.getDeviceToken()) ){
                     remotePush.setDeviceToken(DeviceToken);
+                    remotePush.setDeviceType(type);
                     remotePushMapper.updateByPrimaryKey(remotePush);
                 }
             }

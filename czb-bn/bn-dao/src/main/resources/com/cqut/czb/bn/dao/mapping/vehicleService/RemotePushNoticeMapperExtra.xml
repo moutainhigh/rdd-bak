@@ -22,7 +22,10 @@
     left join czb_app_router router on router.router_id = notice.app_router_id
       <where>
         <if test="noticeTitle != null">
-          notice_title like concat('%', #{noticeTitle}, '%')
+          and notice_title like concat('%', #{noticeTitle}, '%')
+        </if>
+        <if test="noticeId != null">
+          and notice_id like concat('%', #{noticeId}, '%')
         </if>
       </where>
   </select>

@@ -292,13 +292,17 @@ public class UserServiceImpl implements IUserService {
                 }
             }
             if(userMapperExtra.updateUser(userInputDTO) > 0) {
-                user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
-                redisUtil.put(user.getUserAccount(), user);
+                UserDTO userDTO = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
+                if(redisUtil.hasKey(user.getUserAccount())) {
+                    redisUtil.remove(user.getUserAccount());
+                    redisUtil.put(user.getUserAccount(), userDTO);
+                }
             }
             return true;
         } else {
             return false;
         }
+
     }
 
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {

@@ -16,7 +16,7 @@ import java.security.Principal;
 /**
  * auth: tsh
  * module: 后台管理-洗车服务类型管理模块
- * time: 2019.8.13
+ * time: 2019.10.3
  * version: 1
  */
 @CrossOrigin
@@ -29,28 +29,58 @@ public class CleanServerStandardController {
     @Autowired
     RedisUtils redisUtils;
 
+    /**
+     * 新增服务
+     * @param serverStandard
+     * @param principal
+     * @param file
+     * @return
+     */
     @PostMapping("/add")
     public JSONResult add(ServerStandard serverStandard, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
         return service.add(serverStandard, file, user);
     }
 
+    /**
+     * 删除服务
+     * @param serverId
+     * @return
+     */
     @PostMapping("/delete")
     public JSONResult delete(@Param("serverId") String serverId) {
         return service.delete(serverId);
     }
 
+    /**
+     * 编辑服务
+     * @param serverStandard
+     * @param principal
+     * @param file
+     * @return
+     */
     @PostMapping("/change")
     public JSONResult change(ServerStandard serverStandard, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
         return service.change(serverStandard, file, user);
     }
 
+    /**
+     * 无图片编辑
+     * @param serverStandard
+     * @return
+     */
     @PostMapping("/changeWithoutImage")
     public JSONResult changeWithoutImage(@RequestBody ServerStandard serverStandard) {
         return service.changeWithoutImage(serverStandard);
     }
 
+    /**
+     * 查询
+     * @param serverStandard
+     * @param pageDTO
+     * @return
+     */
     @GetMapping("/search")
     public JSONResult search(ServerStandard serverStandard, PageDTO pageDTO) {
         return service.search(serverStandard, pageDTO);
