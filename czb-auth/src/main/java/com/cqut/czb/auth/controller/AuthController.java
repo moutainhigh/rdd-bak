@@ -14,6 +14,7 @@ import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.service.impl.DictServiceImpl;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
+import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class AuthController {
         } else {
             Map<String,String> content = new HashMap<>();
             content.put("userAccount",personalUserDTO.getUserAccount());
-            serverOrderService.sendMessage("155930101061936","589400087460259249",content);
+            serverOrderService.sendMessage(MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.REGISTER.getNoticeId(),content);
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
             jsonResult.setData(true);
