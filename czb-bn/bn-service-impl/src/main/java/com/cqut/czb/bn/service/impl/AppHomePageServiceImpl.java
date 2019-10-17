@@ -354,6 +354,15 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<String> selectArea() {
+        Dict isSelectAreaDict = dictMapperExtra.selectDictByName("is_select_area");
+        if (isSelectAreaDict != null){
+            String isSelectArea = isSelectAreaDict.getContent();
+            if("true".equals(isSelectArea)){
+                return petrolSaleConfigMapperExtra.getAllArea();
+            }else{
+                return null;
+            }
+        }
         return petrolSaleConfigMapperExtra.getAllArea();
     }
 }
