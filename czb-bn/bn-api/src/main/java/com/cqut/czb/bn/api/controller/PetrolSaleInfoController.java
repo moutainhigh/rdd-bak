@@ -1,8 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
-import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
-import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -12,15 +10,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/petrolSaleInfo")
@@ -46,7 +39,7 @@ public class PetrolSaleInfoController {
 
     @RequestMapping(value ="/recharge",method = RequestMethod.POST)
     public JSONResult recharge(@RequestBody PetrolRechargeInputDTO inputDTO ){
-        return new JSONResult(petrolRechargeService.recharge(inputDTO.getRecordId()));
+        return new JSONResult(petrolRechargeService.recharge(inputDTO));
     }
 
     @GetMapping("/exportRecords")
