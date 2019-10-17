@@ -43,7 +43,7 @@ public class WeChatParameterConfig {
     /**
      * 购买油卡（微信）
      */
-    public static SortedMap<String, Object> getParameters(String nonceStrTemp,String orgId, PetrolInputDTO petrolInputDTO, Petrol petrol) {
+    public static SortedMap<String, Object> getParameters(String nonceStrTemp,String orgId, double money, PetrolInputDTO petrolInputDTO, Petrol petrol) {
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters.put("appid", WeChatPayConfig.app_id);
         parameters.put("mch_id", WeChatPayConfig.mch_id);
@@ -53,13 +53,7 @@ public class WeChatParameterConfig {
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
         BigInteger totalFee;
-//        if (petrolInputDTO.getIsHaveVip()!=null&&petrol.getDiscount()!=null&&petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1&&petrolInputDTO.getIsHaveVip()==1){
-//            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
-//                    .toBigInteger();
-//        }else{
-//            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
-//        }
-        totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
+        totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
         System.out.println(totalFee);
         parameters.put("total_fee", totalFee);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
