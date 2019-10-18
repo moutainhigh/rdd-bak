@@ -122,6 +122,7 @@
                 mission.mission_id = #{account}
             </if>
         </where>
+        order by createAt DESC
     </select>
 
     <insert id="inserLog" parameterType="java.util.List">
