@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
@@ -162,9 +163,13 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         return petrolListNoRepeatForDB;
     }
 
-    private Boolean changePetrolNum(PetrolRechargeInputDTO record){
+    public JSONResult changePetrolNum(PetrolRechargeInputDTO record){
+        boolean isSuccess = false;
         if(record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "")
-            return petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
-        return false;
+             isSuccess= petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
+        if(isSuccess)
+            return new JSONResult("修改成功",200);
+        else
+            return new JSONResult("修改失敗",500);
     }
 }

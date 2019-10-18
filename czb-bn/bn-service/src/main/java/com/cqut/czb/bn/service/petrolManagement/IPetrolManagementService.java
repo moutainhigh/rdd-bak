@@ -2,9 +2,11 @@ package com.cqut.czb.bn.service.petrolManagement;
 
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
 import java.io.InputStream;
@@ -23,5 +25,7 @@ public interface IPetrolManagementService {
     String getPetrolMoneyCount(GetPetrolListInputDTO inputDTO);
 
     String getPetrolSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO);
+
+    JSONResult changePetrolNum(PetrolRechargeInputDTO inputDTO);
 
 }

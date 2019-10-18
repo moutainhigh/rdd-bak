@@ -37,6 +37,7 @@
     t1.petrol_kind petrolKind,
     t1.petrol_num petrolNum,
     t1.create_at createAt,
+    t1.record_type recordType,
     t3.remark remark
 FROM
 	(
@@ -64,6 +65,9 @@ FROM
               <if test="petrolKind != null and petrolKind != '' ">
                 and records.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
               </if>
+                <if test="recordType == 0 || recordType != null">
+                    and records.record_type = #{recordType}
+                </if>
               and state = 1
         </where>
 	) AS t1

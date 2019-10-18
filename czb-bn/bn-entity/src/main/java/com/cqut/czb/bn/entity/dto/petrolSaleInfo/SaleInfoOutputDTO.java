@@ -14,6 +14,15 @@ public class SaleInfoOutputDTO {
     private String turnoverAmount;
     private Date createAt;
     private String remark;
+    private Integer recordType; // 是否第一次购买
+
+    public Integer getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(Integer recordType) {
+        this.recordType = recordType;
+    }
 
     public String getTurnoverAmount() {
         return turnoverAmount;

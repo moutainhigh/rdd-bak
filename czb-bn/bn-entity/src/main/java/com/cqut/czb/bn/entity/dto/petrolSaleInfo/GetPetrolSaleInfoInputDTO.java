@@ -19,6 +19,15 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     private Date startTime;
     @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+    private Integer recordType;
+
+    public Integer getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(Integer recordType) {
+        this.recordType = recordType;
+    }
 
     public Date getStartTime() {
         return startTime;

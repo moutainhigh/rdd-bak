@@ -31,9 +31,13 @@ public class PetrolSaleInfoController {
         return new JSONResult(dataWithCountOutputDTO);
     }
 
+    @RequestMapping(value = "/changePetrolNum",method = RequestMethod.GET)
+    public JSONResult changePetrolNum(PetrolRechargeInputDTO inputDTO){
+        return petrolManagementService.changePetrolNum(inputDTO);
+    }
+
     @RequestMapping(value = "/getPetrolRechargeList",method = RequestMethod.GET)
     public JSONResult getPetrolRechargeList(PetrolRechargeInputDTO inputDTO){
-
         return new JSONResult(petrolRechargeService.getPetrolRechargeList(inputDTO));
     }
 
