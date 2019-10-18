@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.VIPRechargeRecord;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -20,15 +21,16 @@ public class VipRechargeRecordListDTO extends PageDTO {
 
     private String area;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date rechargeTime;
 
     private String userAccount;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
     public String getRecordId() {
