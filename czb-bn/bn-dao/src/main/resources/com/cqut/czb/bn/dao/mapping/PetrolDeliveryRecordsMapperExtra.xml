@@ -68,6 +68,7 @@
                and #{endTime,jdbcType=VARCHAR}>=a.create_at
            </if>
        </where>
+        order by   a.create_at desc
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_petrol_delivery_records
