@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
@@ -159,5 +160,11 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             }
         }
         return petrolListNoRepeatForDB;
+    }
+
+    private Boolean changePetrolNum(PetrolRechargeInputDTO record){
+        if(record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "")
+            return petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
+        return false;
     }
 }
