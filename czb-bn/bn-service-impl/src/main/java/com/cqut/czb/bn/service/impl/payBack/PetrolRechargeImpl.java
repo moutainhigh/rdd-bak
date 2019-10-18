@@ -35,6 +35,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
         petrolSalesRecords.setState(1);
         petrolSalesRecords.setTurnoverAmount(money);
+        petrolSalesRecords.setCurrentPrice(money);//售价
         boolean update=petrolSalesRecordsMapperExtra.updateByPrimaryKeySelective(petrolSalesRecords)>0;
         System.out.println("更改购买信息:"+update);
 

@@ -73,12 +73,14 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Override
     public List<Petrol> getGTSoldPetrolForUser(String userId) {
-        return petrolSalesRecordsMapperExtra.getGTSoldPetrolForUser(userId);
+        List<Petrol> list=petrolSalesRecordsMapperExtra.getGTSoldPetrolForUser(userId);
+        return list;
     }
 
     @Override
     public List<AppPetrolSaleInfoOutputDTO> getPhysicalCardRechargeRecords(String userId, String petrolKind) {
-        return petrolSalesRecordsMapperExtra.getPhysicalCardsForUser(userId,petrolKind);
+        List<AppPetrolSaleInfoOutputDTO> list=petrolSalesRecordsMapperExtra.getPhysicalCardsForUser(userId,petrolKind);
+        return list;
     }
 
     @Override

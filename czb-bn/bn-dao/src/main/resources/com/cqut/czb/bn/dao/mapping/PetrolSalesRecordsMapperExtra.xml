@@ -17,11 +17,13 @@
         <result column="record_type" property="recordType" jdbcType="INTEGER" />
         <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
         <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+        <result column="denomination" property="denomination" jdbcType="DOUBLE" />
+        <result column="current_price" property="currentPrice" jdbcType="DOUBLE" />
     </resultMap>
     <sql id="Base_Column_List" >
     record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount,
     transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type,
-    is_recharged, petrol_kind
+    is_recharged, petrol_kind, denomination, current_price
   </sql>
   <select id="getPetrolSaleInfoList" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO">
     SELECT
@@ -30,10 +32,10 @@
 	t1.payment_method paymentMethod,
     t1.turnover_amount turnoverAmount,
 	t3.area area,
-	t3.petrol_price petrolPrice,
-	t3.petrol_denomination petrolDenomination,
-	t3.petrol_kind petrolKind,
-	t3.petrol_num petrolNum,
+    t1.current_price petrolPrice,
+    t1.denomination petrolDenomination,
+    t1.petrol_kind petrolKind,
+    t1.petrol_num petrolNum,
     t1.create_at createAt,
     t3.remark remark
 FROM
@@ -43,14 +45,26 @@ FROM
 		FROM
 			czb_petrol_sales_records AS records
 		<where>
-          <if test="paymentMethod != null and paymentMethod != ''">
-            and records.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
-          </if>
-          <if test="startTime != null and endTime != null">
-            and records.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
-            and records.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
-          </if>
-            and state = 1
+              <if test="paymentMethod != null and paymentMethod != ''">
+                and records.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
+              </if>
+              <if test="startTime != null and endTime != null">
+                and records.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and records.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+              </if>
+              <if test="petrolNum != null and petrolNum != ''">
+                AND records.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+              </if>
+              <if test="petrolPrice != null and petrolPrice != ''">
+                AND records.current_price =#{petrolPrice,jdbcType = DOUBLE}
+              </if>
+              <if test="petrolDenomination != null and petrolDenomination != '' ">
+                AND records.denomination = #{petrolDenomination,jdbcType = DOUBLE}
+              </if>
+              <if test="petrolKind != null and petrolKind != '' ">
+                and records.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+              </if>
+              and state = 1
         </where>
 	) AS t1
     INNER JOIN (
@@ -73,18 +87,6 @@ INNER JOIN (
     <where>
       <if test="area != null and area !=''">
         AND petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="petrolNum != null and petrolNum != ''">
-        AND petrol.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="petrolPrice != null and petrolPrice != ''">
-        AND petrol.petrol_price =#{petrolPrice,jdbcType = DOUBLE}
-      </if>
-      <if test="petrolDenomination != null and petrolDenomination != '' ">
-        AND petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
-      </if>
-      <if test="petrolKind != null and petrolKind != '' ">
-        and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
       </if>
     </where>
 ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.create_at desc
@@ -151,9 +153,8 @@ INNER JOIN (
         <result column="record_type" property="recordType" jdbcType="INTEGER" />
         <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
         <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
-        <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
-        <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
-
+        <result column="current_price" property="petrolPrice" jdbcType="DOUBLE" />
+        <result column="denomination" property="petrolDenomination" jdbcType="DOUBLE" />
     </resultMap>
     <sql id="physicalCardRecord" >
     record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount,
@@ -178,8 +179,8 @@ INNER JOIN (
         record_type,
         is_recharged,
         cpsr.petrol_kind,
-        petrol_price,
-        petrol_denomination
+        current_price,
+        denomination
         FROM
         czb_petrol_sales_records AS cpsr
         INNER JOIN czb_petrol AS cp USING (petrol_id)
@@ -197,14 +198,13 @@ INNER JOIN (
       payment_method, third_order_id, turnover_amount,
       transaction_time, petrol_id, state,
       contract_id, create_at, update_at,
-      record_type, is_recharged, petrol_kind
-      )
+      record_type, is_recharged, petrol_kind,denomination,current_price)
     values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR},
       #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR}, #{turnoverAmount,jdbcType=DOUBLE},
       now(), #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
       #{contractId,jdbcType=VARCHAR}, now(), now(),
-      #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER}
-      )
+      #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER},
+      #{denomination,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE})
   </insert>
     <!--充值管理列表获取-->
     <resultMap id="getPetrolRechargeMap" type="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO">
@@ -286,6 +286,22 @@ INNER JOIN (
         where is_recharged = 0
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
+
+    <update id="updatePetrolNum" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO">
+        UPDATE czb_petrol_sales_records
+          LEFT JOIN czb_petrol_delivery_records
+            ON czb_petrol_sales_records.petrol_num = czb_petrol_delivery_records.petrol_num
+          LEFT JOIN czb_petrol
+            ON czb_petrol_sales_records.petrol_num = czb_petrol.petrol_num
+          SET czb_petrol_delivery_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
+            czb_petrol.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
+            czb_petrol_sales_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR}
+          WHERE
+	        czb_petrol.petrol_kind = 1
+	        AND czb_petrol.state = 2
+	        AND czb_petrol.petrol_num = #{petrolNum, jdbcType = VARCHAR}
+    </update>
+
     <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
         SELECT
         <include refid="Base_Column_List"/>
@@ -360,6 +376,12 @@ INNER JOIN (
             <if test="petrolKind != null" >
                 petrol_kind = #{petrolKind,jdbcType=INTEGER},
             </if>
+            <if test="denomination != null" >
+                denomination = #{denomination,jdbcType=DOUBLE},
+            </if>
+            <if test="currentPrice != null" >
+                current_price = #{currentPrice,jdbcType=DOUBLE},
+            </if>
         </set>
         where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
@@ -380,6 +402,18 @@ INNER JOIN (
             </if>
             <if test="transactionTime != null">
                 and records.transaction_time like concat('%',DATE_FORMAT(#{transactionTime,jdbcType=TIMESTAMP},'%Y-%m-%d')  ,'%')
+            </if>
+            <if test="petrolNum != null and petrolNum != ''">
+                AND records.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="petrolPrice != null and petrolPrice != ''">
+                AND records.current_price =#{petrolPrice,jdbcType = DOUBLE}
+            </if>
+            <if test="petrolDenomination != null and petrolDenomination != '' ">
+                AND records.denomination = #{petrolDenomination,jdbcType = DOUBLE}
+            </if>
+            <if test="petrolKind != null and petrolKind != '' ">
+                and records.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
             </if>
               and state = 1
         </where>
@@ -404,18 +438,6 @@ INNER JOIN (
         <where>
             <if test="area != null and area !=''">
                 AND petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
-            </if>
-            <if test="petrolNum != null and petrolNum != ''">
-                AND petrol.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
-            </if>
-            <if test="petrolPrice != null and petrolPrice != ''">
-                AND petrol.petrol_price =#{petrolPrice,jdbcType = DOUBLE}
-            </if>
-            <if test="petrolDenomination != null and petrolDenomination != '' ">
-                AND petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
-            </if>
-            <if test="petrolKind != null and petrolKind != '' ">
-                and petrol.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
             </if>
         </where>
         ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.transaction_time desc

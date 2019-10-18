@@ -138,8 +138,8 @@ public class MessageThread implements Runnable {
             String sound = "default";//铃音
             List<String> tokens = new ArrayList<String>();
             tokens.add(deviceToken);
-//            String certificatePath = "iosPush.p12";
-            String certificatePath = "E:\\czb-master\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
+            String certificatePath = "iosPush.p12";
+//            String certificatePath = "E:\\czb-master\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
             if (type==3){
@@ -169,7 +169,7 @@ public class MessageThread implements Runnable {
                 //true：表示的是产品发布推送服务 false：表示的是产品测试推送服务
                 pushManager.initializeConnection(new AppleNotificationServerBasicImpl(certificatePath, certificatePassword, false));
                 List<PushedNotification> notifications = new ArrayList<PushedNotification>();
-
+                System.out.println("发送push消息");
                 // 发送push消息
                 if (sendCount)
                 {

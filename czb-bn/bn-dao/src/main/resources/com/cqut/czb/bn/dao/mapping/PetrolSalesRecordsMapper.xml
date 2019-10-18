@@ -17,11 +17,13 @@
     <result column="record_type" property="recordType" jdbcType="INTEGER" />
     <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
     <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+    <result column="denomination" property="denomination" jdbcType="DOUBLE" />
+    <result column="current_price" property="currentPrice" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, petrol_num, buyer_id, payment_method, third_order_id, turnover_amount, 
     transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type, 
-    is_recharged, petrol_kind
+    is_recharged, petrol_kind, denomination, current_price
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -29,6 +31,27 @@
     from czb_petrol_sales_records
     where record_id = #{recordId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_petrol_sales_records
+    where state=1
+  </select>
+
+  <update id="updateMenus" parameterType="java.util.List">
+    update czb_petrol_sales_records
+    <set >
+      <if test="denomination != null" >
+        denomination = #{denomination,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null" >
+        current_price = #{currentPrice,jdbcType=DOUBLE}
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_petrol_sales_records
     where record_id = #{recordId,jdbcType=VARCHAR}
@@ -38,14 +61,14 @@
       payment_method, third_order_id, turnover_amount, 
       transaction_time, petrol_id, state, 
       contract_id, create_at, update_at, 
-      record_type, is_recharged, petrol_kind
-      )
+      record_type, is_recharged, petrol_kind, 
+      denomination, current_price)
     values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
       #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR}, #{turnoverAmount,jdbcType=DOUBLE}, 
       #{transactionTime,jdbcType=TIMESTAMP}, #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
       #{contractId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER}
-      )
+      #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER}, 
+      #{denomination,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
     insert into czb_petrol_sales_records
@@ -95,6 +118,12 @@
       <if test="petrolKind != null" >
         petrol_kind,
       </if>
+      <if test="denomination != null" >
+        denomination,
+      </if>
+      <if test="currentPrice != null" >
+        current_price,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -141,6 +170,12 @@
       </if>
       <if test="petrolKind != null" >
         #{petrolKind,jdbcType=INTEGER},
+      </if>
+      <if test="denomination != null" >
+        #{denomination,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null" >
+        #{currentPrice,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -189,6 +224,12 @@
       <if test="petrolKind != null" >
         petrol_kind = #{petrolKind,jdbcType=INTEGER},
       </if>
+      <if test="denomination != null" >
+        denomination = #{denomination,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null" >
+        current_price = #{currentPrice,jdbcType=DOUBLE},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -207,7 +248,9 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP},
       record_type = #{recordType,jdbcType=INTEGER},
       is_recharged = #{isRecharged,jdbcType=INTEGER},
-      petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      petrol_kind = #{petrolKind,jdbcType=INTEGER},
+      denomination = #{denomination,jdbcType=DOUBLE},
+      current_price = #{currentPrice,jdbcType=DOUBLE}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>

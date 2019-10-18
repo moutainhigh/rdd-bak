@@ -33,6 +33,10 @@ public class PetrolSalesRecords {
 
     private Integer petrolKind;
 
+    private Double denomination;
+
+    private Double currentPrice;
+
     public String getRecordId() {
         return recordId;
     }
@@ -151,5 +155,21 @@ public class PetrolSalesRecords {
 
     public void setPetrolKind(Integer petrolKind) {
         this.petrolKind = petrolKind;
+    }
+
+    public Double getDenomination() {
+        return denomination;
+    }
+
+    public void setDenomination(Double denomination) {
+        this.denomination = denomination;
+    }
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
     }
 }

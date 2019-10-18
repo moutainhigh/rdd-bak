@@ -80,7 +80,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         AppRouterDTO appRouter = new AppRouterDTO();
         appRouter.setMenuIdentityCode(code);
         List<AppRouterDTO> list = appRouterMapperExtra.selectAppRouterBycode(appRouter);
-        if (list!=null){
+        if (list!=null && list.size()>0){
             return list.get(0);
         }
         return null;
