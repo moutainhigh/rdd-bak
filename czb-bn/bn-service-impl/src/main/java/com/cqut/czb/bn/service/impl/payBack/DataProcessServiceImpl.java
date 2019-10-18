@@ -209,6 +209,7 @@ public class DataProcessServiceImpl implements DataProcessService {
         petrolSalesRecords.setState(1);
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
         petrolSalesRecords.setTurnoverAmount(money);
+        petrolSalesRecords.setCurrentPrice(money);//售价
         if (petrol.getPetrolKind() == 0) {
             petrolSalesRecords.setIsRecharged(-1);
         }

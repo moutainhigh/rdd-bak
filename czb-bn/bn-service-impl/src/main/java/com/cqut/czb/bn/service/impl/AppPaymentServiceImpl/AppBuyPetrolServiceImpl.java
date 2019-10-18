@@ -57,12 +57,13 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         if(vipAreaConfig!=null){
             petrolInputDTO.setIsHaveVip(1);
         }
-        petrolInputDTO.setPetrolPrice(backMoney(petrol,petrolInputDTO));
+        double money=backMoney(petrol,petrolInputDTO);
         // 设置参数
-        SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,petrolInputDTO,petrol);
+        SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,money,petrolInputDTO,petrol);
         //插入购买信息o
         boolean insertPetrolSalesRecords= insertPetrolSalesRecords(petrol,petrolInputDTO,orgId);
         System.out.println("新增油卡购买或充值记录完毕"+insertPetrolSalesRecords);
+        petrolInputDTO.setPetrolPrice(money);//返回实际支付金额
         return   WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
     public double backMoney(Petrol petrol, PetrolInputDTO petrolInputDTO){
@@ -304,8 +305,10 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         petrolSalesRecords.setPetrolNum(petrol.getPetrolNum());//卡号
         petrolSalesRecords.setRecordId(orgId);
         petrolSalesRecords.setState(0);//1为已支付
-        petrolSalesRecords.setTurnoverAmount(petrol.getPetrolPrice());
+        petrolSalesRecords.setTurnoverAmount(petrolInputDTO.getPetrolPrice());
         petrolSalesRecords.setPetrolKind(petrol.getPetrolKind());
+        petrolSalesRecords.setCurrentPrice(petrolInputDTO.getPetrolPrice());//售价
+        petrolSalesRecords.setDenomination(petrolInputDTO.getPetrolPrice());//面额
         if(petrolInputDTO.getPayType()=="0"){//0为普通购买
             petrolSalesRecords.setRecordType(0);
         }else {
