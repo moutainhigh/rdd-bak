@@ -45,6 +45,11 @@ public class PetrolDeliveryRecordsController {
         return new JSONResult(petrolDeliveryRecordsService.selectPetrolDelivery(deliveryInput,pageDTO));
     }
 
+    @PostMapping("/deleteRecord")
+    public JSONResult deleteRecord(@RequestBody DeliveryInput deliveryInput){
+        return new JSONResult(petrolDeliveryRecordsService.deleteByPrimaryKey(deliveryInput.getRecordId()));
+    }
+
     /**
      * 确认收货（批量）
      * @param deliveryInput

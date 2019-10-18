@@ -16,6 +16,8 @@ public class DeliveryInput {
 
     private String deliveryNum;
 
+    private String contactNumber;
+
     private String deliveryCompany;
 //    //京东物流查询专用
 //    private String customerName;
@@ -31,6 +33,14 @@ public class DeliveryInput {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
 
     public String getRecordId() {
         return recordId;
