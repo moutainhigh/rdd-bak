@@ -41,6 +41,11 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
     }
 
     @Override
+    public Boolean deleteByPrimaryKey(String recordId) {
+        return petrolDeliveryRecordsMapperExtra.deleteByPrimaryKey(recordId)>0;
+    }
+
+    @Override
     public Boolean updatePetrolDelivery(DeliveryInput deliveryInput) {
         if (deliveryInput.getDeliveryNum()!=null&&deliveryInput.getDeliveryNum()!=""&&deliveryInput.getDeliveryCompany()!=null&&deliveryInput.getDeliveryCompany()!=""){
             deliveryInput.setDeliveryState(1);

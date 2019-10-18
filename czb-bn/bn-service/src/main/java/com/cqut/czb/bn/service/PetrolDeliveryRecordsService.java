@@ -13,6 +13,8 @@ public interface PetrolDeliveryRecordsService {
 
     PageInfo<PetrolDeliveryDTO> selectPetrolDelivery(DeliveryInput deliveryInput, PageDTO pageDTO);
 
+    Boolean deleteByPrimaryKey(String recordId);
+
     Boolean updatePetrolDelivery(DeliveryInput deliveryInput);
 
     String selectLogistics(DeliveryInput deliveryInput);
