@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  * 创建人：陈德强
@@ -365,4 +367,30 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         }
         return petrolSaleConfigMapperExtra.getAllArea();
     }
+
+    @Override
+    public List<PetrolStock> getPetrolStock(String area) {
+        if(area == null){
+            return null;
+        }
+        List<PetrolStock> petrolStocks = petrolMapperExtra.selectPetrolStock(area);
+        Dict petrolStockSwitchDict = dictMapperExtra.selectDictByName("petrolStockSwitch");
+        if(petrolStockSwitchDict != null){
+            String body = petrolStockSwitchDict.getContent();
+            Gson gson=new Gson();
+            //序列化
+            PetrolStockSwitch petrolStockSwitch= gson.fromJson(body,PetrolStockSwitch.class);
+            if(petrolStockSwitch.getUseFakeData()){
+                for(PetrolStock petrolStock : petrolStocks){
+                    petrolStock.setShowMessage("今日库存剩余：" + petrolStockSwitch.getFakeTotal());
+                }
+                return petrolStocks;
+            }
+        }
+        for(PetrolStock petrolStock : petrolStocks){
+            petrolStock.setShowMessage("今日库存剩余：" + petrolStock.getTotal());
+        }
+        return petrolStocks;
+    }
+
 }

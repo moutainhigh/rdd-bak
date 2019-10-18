@@ -11,6 +11,7 @@ import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.service.vehicleService.RiderService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import io.swagger.models.Model;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -146,5 +147,13 @@ public class AppHomePageController {
     @RequestMapping(value ="/selectAllArea",method = RequestMethod.GET)
     public JSONResult selectAllArea(){
         return new JSONResult(appHomePageService.selectArea());
+    }
+
+    /**
+     * APP油卡库存获取
+     */
+    @GetMapping("/getPetrolStock")
+    public JSONResult getPetrolStock(@Param("area")String area){
+        return new JSONResult(appHomePageService.getPetrolStock(area));
     }
 }
