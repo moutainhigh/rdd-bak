@@ -24,15 +24,15 @@ public class DeliveryInput {
 
     private String ids;
 
-//    private String startTime;
+    private String startTime;
+
+    private String endTime;
+
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date startTime;
 //
-//    private String endTime;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date endTime;
 
     public String getContactNumber() {
         return contactNumber;
@@ -122,19 +122,20 @@ public class DeliveryInput {
 //        this.endTime = endTime;
 //    }
 
-    public Date getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 }
