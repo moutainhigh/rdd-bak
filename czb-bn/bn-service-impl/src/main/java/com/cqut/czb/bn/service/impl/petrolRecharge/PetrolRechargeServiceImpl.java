@@ -29,7 +29,11 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
     @Override
     public boolean recharge(PetrolRechargeInputDTO record) {
-        return petrolSalesRecordsMapperExtra.recharge(record.getRecordId())>0;
+        boolean isRecharge = petrolSalesRecordsMapperExtra.recharge(record.getRecordId())>0;
+        if(isRecharge && record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != ""){
+            petrolSalesRecordsMapperExtra.updatePetrolNum(record);
+        }
+        return isRecharge;
     }
 
     @Override
