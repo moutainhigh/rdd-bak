@@ -4,8 +4,10 @@ import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapper;
 import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
 import com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO;
+import com.cqut.czb.bn.entity.dto.VipArea.VipChangeType;
 import com.cqut.czb.bn.entity.dto.VipArea.VipPriceAndNote;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.VIPAreaManagementService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description
@@ -46,6 +49,25 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
         }catch (Exception e){
             return false;
         }
+    }
+
+    @Override
+    public JSONResult closeAll(VipChangeType type) {
+        VipAreaDTO vipAreaDTO = new VipAreaDTO();
+        List<VipAreaDTO> vipAreaDTOList =  vipAreaConfigMapperExtra.getVipAreaList(vipAreaDTO);
+
+        boolean changeAll = false;
+
+        if(type.getType() == 0) {
+            changeAll = vipAreaConfigMapperExtra.closeAll(vipAreaDTOList) > 0;
+        } else {
+            changeAll = vipAreaConfigMapperExtra.openAll(vipAreaDTOList) > 0;
+        }
+
+        if(changeAll)
+            return new JSONResult("打开/关闭全地区vip成功", 200);
+        else
+            return new JSONResult("打开/关闭全地区vip失败", 500);
     }
 
     @Override

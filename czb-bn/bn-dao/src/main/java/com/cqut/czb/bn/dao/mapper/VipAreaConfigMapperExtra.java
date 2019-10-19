@@ -23,4 +23,8 @@ public interface VipAreaConfigMapperExtra {
     VipAreaConfig selectVipAreaConfigByArea(String area);
 
     VipAreaConfig selectVipPriceById(@Param("vipAreaConfigId") String vipAreaConfigId);
+
+    int closeAll(@Param("list") List<VipAreaDTO> vipAreaDTOList);
+
+    int openAll(@Param("list") List<VipAreaDTO> vipAreaDTOList);
 }

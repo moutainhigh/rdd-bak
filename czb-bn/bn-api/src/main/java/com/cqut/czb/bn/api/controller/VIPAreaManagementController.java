@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO;
+import com.cqut.czb.bn.entity.dto.VipArea.VipChangeType;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.VIPAreaManagementService;
@@ -31,6 +32,11 @@ public class VIPAreaManagementController {
     @PostMapping("/addVipArea")
     public  JSONResult addVipArea(VipAreaDTO vipAreaDTO){
         return new JSONResult(vipAreaManagementService.addVipArea(vipAreaDTO));
+    }
+
+    @PostMapping("/closeAll")
+    public  JSONResult closeAll(VipChangeType type){
+        return vipAreaManagementService.closeAll(type);
     }
 
     @PostMapping("/editVipArea")
