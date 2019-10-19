@@ -20,6 +20,15 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     private Integer recordType;
+    private String thirdOrderId;
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
+    }
 
     public Integer getRecordType() {
         return recordType;

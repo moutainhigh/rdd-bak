@@ -15,6 +15,15 @@ public class SaleInfoOutputDTO {
     private Date createAt;
     private String remark;
     private Integer recordType; // 是否第一次购买
+    private String thirdOrderId;
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
+    }
 
     public Integer getRecordType() {
         return recordType;
