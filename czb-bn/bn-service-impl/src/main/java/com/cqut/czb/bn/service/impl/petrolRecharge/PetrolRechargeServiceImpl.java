@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.petrolRecharge;
 
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
 import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
@@ -32,8 +33,15 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         boolean isRecharge = petrolSalesRecordsMapperExtra.recharge(record.getRecordId())>0;
         if(isRecharge && record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != ""){
             petrolSalesRecordsMapperExtra.updatePetrolNum(record);
+            PhoneCode phoneCode = new PhoneCode();
+            if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getUpdatePetrolNum(), record.getPetrolDenomination()))){
+                System.out.print("充值油卡发送成功");
+            }
         }
-
+        PhoneCode phoneCode = new PhoneCode();
+        if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getPetrolNum(), record.getPetrolDenomination()))){
+            System.out.print("充值油卡发送成功");
+        }
         return isRecharge;
     }
 
