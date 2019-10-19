@@ -242,7 +242,9 @@ INNER JOIN (
         create_at,
         update_at,
         payment_method,
-        petrol_kind
+        petrol_kind,
+        denomination AS petrol_denomination,
+        current_price AS petrol_price
         FROM
         czb_petrol_sales_records
         <where>
@@ -276,9 +278,7 @@ INNER JOIN (
         ) AS t_user ON t_user.user_id = t_cpsr.buyer_id
         INNER JOIN (
         SELECT
-        petrol_id,
-        petrol_denomination,
-        petrol_price
+        petrol_id
         FROM
         czb_petrol
         ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
