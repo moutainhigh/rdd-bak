@@ -99,7 +99,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             result = petrolMapperExtra.saleAllPetrol();
         }else {
             String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"3");
+            result = petrolMapperExtra.changePetrolState(ids,"1");
         }
 
         appHomePageService.selectAllPetrol();
@@ -113,7 +113,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             result = petrolMapperExtra.notSaleAllPetrol();
         }else {
             String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"-1");
+            result = petrolMapperExtra.changePetrolState(ids,"3");
         }
 
         appHomePageService.selectAllPetrol();
