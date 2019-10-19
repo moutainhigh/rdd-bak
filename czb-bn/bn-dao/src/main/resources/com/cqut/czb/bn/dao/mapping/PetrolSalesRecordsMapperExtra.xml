@@ -38,7 +38,8 @@
     t1.petrol_num petrolNum,
     t1.create_at createAt,
     t1.record_type recordType,
-    t3.remark remark
+    t3.remark remark,
+    t1.third_order_id thirdOrderId
 FROM
 	(
 		SELECT
@@ -65,9 +66,12 @@ FROM
               <if test="petrolKind != null and petrolKind != '' ">
                 and records.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
               </if>
-                <if test="recordType == 0 || recordType != null">
-                    and records.record_type = #{recordType}
-                </if>
+              <if test="recordType == 0 || recordType != null">
+                and records.record_type = #{recordType}
+              </if>
+              <if test="thirdOrderId != null and thirdOrderId != '' ">
+                and records.third_order_id like concat('%',#{thirdOrderId, jdbcType=VARCHAR},'%')
+              </if>
               and state = 1
         </where>
 	) AS t1
