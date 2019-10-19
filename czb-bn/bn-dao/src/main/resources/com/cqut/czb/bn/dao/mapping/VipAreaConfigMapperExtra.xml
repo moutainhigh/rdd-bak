@@ -66,4 +66,22 @@
         where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
         AND vip_state = 1
     </select>
+
+    <update id="closeAll" parameterType="java.util.List">
+        update czb_vip_area_config vip
+        set vip_state = 0
+        where vip.vip_area_config_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+             #{item.vipAreaConfigId}
+        </foreach>
+    </update>
+
+    <update id="openAll" parameterType="java.util.List">
+        update czb_vip_area_config vip
+        set vip_state = 1
+        where vip.vip_area_config_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.vipAreaConfigId}
+        </foreach>
+    </update>
 </mapper>
