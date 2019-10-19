@@ -34,10 +34,13 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         if(isRecharge && record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != ""){
             petrolSalesRecordsMapperExtra.updatePetrolNum(record);
             PhoneCode phoneCode = new PhoneCode();
-
-            if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getPetrolNum(), record.getPetrolDenomination()))){
+            if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getUpdatePetrolNum(), record.getPetrolDenomination()))){
                 System.out.print("充值油卡发送成功");
             }
+        }
+        PhoneCode phoneCode = new PhoneCode();
+        if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getPetrolNum(), record.getPetrolDenomination()))){
+            System.out.print("充值油卡发送成功");
         }
         return isRecharge;
     }
