@@ -8,6 +8,15 @@ public class PetrolStock {
     private Integer total;
     private Integer petrolType;
     private String showMessage;
+    private Integer petrolKind;
+
+    public Integer getPetrolKind() {
+        return petrolKind;
+    }
+
+    public void setPetrolKind(Integer petrolKind) {
+        this.petrolKind = petrolKind;
+    }
 
     public Integer getTotal() {
         return total;

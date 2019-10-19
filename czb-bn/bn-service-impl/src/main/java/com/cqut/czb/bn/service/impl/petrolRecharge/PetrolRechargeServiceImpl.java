@@ -33,6 +33,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         if(isRecharge && record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != ""){
             petrolSalesRecordsMapperExtra.updatePetrolNum(record);
         }
+
         return isRecharge;
     }
 

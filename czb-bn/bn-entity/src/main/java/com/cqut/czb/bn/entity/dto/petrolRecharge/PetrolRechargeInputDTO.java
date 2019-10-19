@@ -8,6 +8,7 @@ public class PetrolRechargeInputDTO extends PageDTO {
     private String petrolKind;
     private String recordId;
     private String updatePetrolNum;
+    private double petrolDenomination;
 
     public String getUpdatePetrolNum() {
         return updatePetrolNum;

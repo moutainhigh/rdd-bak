@@ -281,7 +281,7 @@
 
   <select id="selectPetrolStock" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolStock">
     SELECT
-        czb_petrol.petrol_type petrolType,
+        czb_petrol.petrol_kind petrolKind,
         count( * ) total
     FROM
         czb_petrol
@@ -289,9 +289,9 @@
         czb_petrol.state = 1
         and area = #{area, jdbcType = VARCHAR}
     GROUP BY
-        czb_petrol.petrol_type
+        czb_petrol.petrol_kind
     ORDER BY
-        czb_petrol.petrol_type
+        czb_petrol.petrol_kind
   </select>
 
 </mapper>
