@@ -35,10 +35,10 @@ public class PhoneCode {
         return vcode;
     }
 
-//        public static   void main(String[] args) {
-//        String phone = "15310490895"; //此处可输入你的手机号码进行测试
-//        new PhoneCode().getPhonemsg(phone,"6666");
-//    }
+    public static   void main(String[] args) {
+        String phone = "15870596710"; //此处可输入你的手机号码进行测试
+        new PhoneCode().getRechargeMessage(phone,"6666",500);
+    }
 
     /**
      * 阿里云短信服务配置
