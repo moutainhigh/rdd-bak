@@ -201,7 +201,8 @@
     WHERE
     user_id = #{userId,jdbcType=VARCHAR} AND
     i.info_id=u.info_id AND
-    i.type=#{type,jdbcType=INTEGER}
+    i.type=#{type,jdbcType=INTEGER} and
+    i.amount!=0
     ORDER BY i.create_at DESC
   </select>
 
