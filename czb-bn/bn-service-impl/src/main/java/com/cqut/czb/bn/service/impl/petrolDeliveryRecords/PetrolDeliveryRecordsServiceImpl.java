@@ -31,8 +31,7 @@ import java.util.Map;
 @Transactional
 public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsService {
 
-    @Autowired
-    PhoneCode phoneCode;
+
 
     @Autowired
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
@@ -58,6 +57,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         }
         Boolean updateDeliveryRecord = petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0;
         if(updateDeliveryRecord){
+            PhoneCode phoneCode = new PhoneCode();
             DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
             phoneCode.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), messageDTO.getDeliveryNum());
         }
