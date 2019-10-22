@@ -6,6 +6,12 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface PartnerMapperExtra {
+    //普通合伙人查询下级
+    PartnerDTO selectSubVipSecond(PartnerDTO partnerDTO);
+    //事业合伙人查询下级
+    PartnerDTO selectSubVipFirst(PartnerDTO partnerDTO);
+    //事业合伙人查询被普通合伙人分走的下级
+    PartnerDTO selectSubVipThird(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectAllPartnerManage(PartnerDTO partnerDTO);
 

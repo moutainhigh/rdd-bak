@@ -77,7 +77,7 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
         if (vehicleCleanOrderDTO1 == null || vehicleCleanOrderDTO1.getServerOrderId()==null){
             return false;
         }
-
+        List<VehicleCleanOrderDTO> vehicleCleanOrderDTOList = vehicleCleanOrderMapperExtra.selectById(vehicleCleanOrderDTO);
         vehicleCleanOrderDTO.setCancelPersonId(user.getUserId());
         vehicleCleanOrderDTO.setUserId(user.getUserId());
         vehicleCleanOrderDTO.setPayStatus(2);
@@ -85,7 +85,6 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
         vehicleCleanOrderDTO.setUpdateAt(new Date());
         boolean isCancel =  vehicleCleanOrderMapperExtra.updateOrderStateCancel(vehicleCleanOrderDTO)>0;
         if (isCancel) {
-            List<VehicleCleanOrderDTO> vehicleCleanOrderDTOList = vehicleCleanOrderMapperExtra.selectById(vehicleCleanOrderDTO);
             if (vehicleCleanOrderDTOList!=null&&vehicleCleanOrderDTOList.size()!=0) {  //判断是否有此订单
                 boolean updateCoupon =  serverCouponMapperExtra.updateCouponToNotUse(vehicleCleanOrderDTOList.get(0).getCouponId())>0;
                 UserIncomeInfoDTO userIncomeInfo = userIncomeInfoMapperExtra.selectUserIncomeInfo(vehicleCleanOrderDTOList.get(0).getUserId());

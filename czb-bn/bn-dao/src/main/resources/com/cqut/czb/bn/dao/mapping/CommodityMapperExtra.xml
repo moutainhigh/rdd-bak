@@ -26,7 +26,7 @@
 	AND
 	czb_order.state = #{state,jdbcType=INTEGER}
     GROUP BY
-	czb_order.id
+	czb_order.id and czb_order.is_pay = 1
 	ORDER BY czb_order.create_at DESC
   </select>
 
