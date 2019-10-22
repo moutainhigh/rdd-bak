@@ -2,7 +2,9 @@ package com.cqut.czb.bn.service.impl.petrolDeliveryRecords;
 
 import com.cqut.czb.bn.dao.mapper.PetrolDeliveryRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryMessageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -29,6 +31,8 @@ import java.util.Map;
 @Transactional
 public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsService {
 
+    @Autowired
+    PhoneCode phoneCode;
 
     @Autowired
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
@@ -52,7 +56,12 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         }else {
             deliveryInput.setDeliveryState(0);
         }
-        return (petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0);
+        Boolean updateDeliveryRecord = petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0;
+        if(updateDeliveryRecord){
+            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
+            phoneCode.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), messageDTO.getDeliveryNum());
+        }
+        return updateDeliveryRecord;
     }
 
     @Override

@@ -18,4 +18,8 @@ public class VcodeConfig {
     final static String TemplateCode = "SMS_166325722";
 
     final static String RechargeCode = "SMS_175542774";
+
+    final static String DeliveryCode = "SMS_175539137";
+
+
 }
