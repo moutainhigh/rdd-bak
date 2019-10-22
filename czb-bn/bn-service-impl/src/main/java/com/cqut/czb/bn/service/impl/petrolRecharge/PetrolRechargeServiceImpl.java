@@ -73,7 +73,6 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         for (int i = 0 ; i<list.size(); i++){
             int count = 0;
             row = sheet.createRow(i+1);
-            row.createCell(count++).setCellValue(list.get(i).getUserName());
             row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
             if ("1".equals(list.get(i).getPetrolKind())){
                 row.createCell(count++).setCellValue("中石油");
@@ -86,8 +85,11 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
             row.createCell(count++).setCellValue(list.get(i).getUserPhone());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getPurchaseTime()));
-            if ("0".equals(list.get(i).getBuyWay()))
-            row.createCell(count++).setCellValue("支付宝");
+            if ("1".equals(list.get(i).getBuyWay())) {
+                row.createCell(count++).setCellValue("支付宝");
+            }else if ("2".equals(list.get(i).getBuyWay())){
+                row.createCell(count++).setCellValue("微信");
+            }
         }
         return workbook;
     }

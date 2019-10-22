@@ -85,6 +85,14 @@ public class VehicleCleanOrder {
         this.payStatus = payStatus;
     }
 
+    public Byte getProcessStatus() {
+        return processStatus;
+    }
+
+    public void setProcessStatus(Byte processStatus) {
+        this.processStatus = processStatus;
+    }
+
     public Double getActualPrice() {
         return actualPrice;
     }
@@ -99,14 +107,6 @@ public class VehicleCleanOrder {
 
     public void setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId == null ? null : vehicleId.trim();
-    }
-
-    public Byte getProcessStatus() {
-        return processStatus;
-    }
-
-    public void setProcessStatus(Byte processStatus) {
-        this.processStatus = processStatus;
     }
 
     public Date getCancelTime() {

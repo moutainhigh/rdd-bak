@@ -24,6 +24,7 @@
     from czb_dish_order orders
     LEFT  JOIN czb_dish dish on orders.dish_id = dish.dish_id
     <where>
+      orders.pay_status != 0
       <if test="orderId != null and orderId != ''" >
         AND
         order_id like concat("%", #{orderId}, "%")
@@ -49,6 +50,7 @@
   <update id="cancelOrder" parameterType="java.lang.String">
     update czb_dish_order
     set dining_status = -1
-    where order_id = #{orderId}
+    pay_status = -1
+    where order_id = #{orderId} AND pay_status = 1
   </update>
 </mapper>

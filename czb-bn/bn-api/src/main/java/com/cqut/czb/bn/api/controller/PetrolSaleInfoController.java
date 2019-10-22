@@ -46,7 +46,7 @@ public class PetrolSaleInfoController {
         return new JSONResult(petrolRechargeService.recharge(inputDTO));
     }
 
-    @GetMapping("/exportRecords")
+    @PostMapping("/exportRecords")
     public JSONResult exportRechargeRecord(HttpServletResponse response,
                                            PetrolRechargeInputDTO inputDTO) {
 

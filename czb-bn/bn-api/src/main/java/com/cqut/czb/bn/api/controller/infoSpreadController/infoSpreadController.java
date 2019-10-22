@@ -33,8 +33,21 @@ public class infoSpreadController {
      */
     @GetMapping("/getPartnerInfo")
     public JSONResult getPartnerInfo(PartnerDTO partnerDTO, Principal principal){
+        if (principal==null || principal.getName()==null){
+            return new JSONResult("登录信息过期",500);
+        }
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(infoSpreadService.getPartnerInfo(partnerDTO,user));
+    }
+
+    @GetMapping("/getVipInfo")
+    public JSONResult getVipInfo(PartnerDTO partnerDTO, Principal principal){
+        if (principal==null || principal.getName()==null){
+            return new JSONResult("登录信息过期",500);
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult();
+
     }
 
     /**

@@ -58,12 +58,18 @@ public class ServerOrderServiceImpl implements ServerOrderService {
 
     @Autowired
     CleanRiderMapperExtra cleanRiderMapper;
+
     @Autowired
     RemotePushMapperExtra remotePushMapperExtra;
+
     @Autowired
     RemotePushNoticeMapperExtra remotePushNoticeMapperExtra;
+
     @Autowired
     AppRouterMapper appRouterMapper;
+
+    @Autowired
+    VehicleCleanOrderMapperExtra vehicleCleanOrderMapperExtra;
 
     @Override
     public JSONResult distribute(VehicleOrderManageDTO manageDTO) {
@@ -197,6 +203,12 @@ public class ServerOrderServiceImpl implements ServerOrderService {
      */
     @Override
     public JSONResult tuiKuan(TuiKuanDTO tuiKuanDTO) {
+
+        VehicleCleanOrderDTO vehicleCleanOrderDTO = vehicleCleanOrderMapperExtra.selectByServerOrderId(tuiKuanDTO.getServerOrderId());
+
+        if (vehicleCleanOrderDTO == null || vehicleCleanOrderDTO.getServerOrderId()==null){
+            return new JSONResult("退款失败",500);
+        }
 
         // 完成修改订单状态和骑手状态
         VehicleCleanOrder cleanOrderDTO = new VehicleCleanOrder();
