@@ -58,14 +58,28 @@
         LEFT JOIN czb_user ON czb_vehicle_clean_order.user_id = czb_user.user_id
         LEFT JOIN czb_clean_rider ON czb_vehicle_clean_order.rider_id = czb_clean_rider.rider_id
         <where>
+            czb_vehicle_clean_order.pay_status = 1
         <if test="userId!=null and userId!=''">
-            czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
+           AND czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
         </if>
         <if test="serverOrderId!=null and serverOrderId!=''">
            AND server_order_id = #{serverOrderId,jdbcType=VARCHAR}
         </if>
         </where>
         ORDER BY czb_vehicle_clean_order.create_at DESC
+    </select>
+
+    <select id="selectByServerOrderId" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        SELECT
+            server_order_id,
+            pay_status,
+            process_status
+        FROM
+            czb_vehicle_clean_order
+        WHERE
+            pay_status = 1
+        AND process_status = 0
+        AND server_order_id = #{serverOrderId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectByStatus" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
@@ -306,8 +320,9 @@
         LEFT JOIN czb_clean_server_vehicle vehicles ON vehicles.vehicle_id = orders.vehicle_id
         LEFT JOIN czb_clean_rider riders ON riders.rider_id = orders.rider_id
         <where>
+            orders.pay_status != 0
             <if test="serverOrderId != null and serverOrderId != ''">
-                server_order_id like concat('%', #{serverOrderId}, '%')
+               AND server_order_id like concat('%', #{serverOrderId}, '%')
             </if>
             <if test="carNum != null and carNum != ''" >
                 AND

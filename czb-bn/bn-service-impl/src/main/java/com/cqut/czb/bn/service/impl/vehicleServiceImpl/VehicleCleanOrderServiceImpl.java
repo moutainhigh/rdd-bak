@@ -71,6 +71,13 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
         if (vehicleCleanOrderDTO==null||vehicleCleanOrderDTO.getServerOrderId()==null||"".equals(vehicleCleanOrderDTO.getServerOrderId())){
             return null;
         }
+
+        VehicleCleanOrderDTO vehicleCleanOrderDTO1 = vehicleCleanOrderMapperExtra.selectByServerOrderId(vehicleCleanOrderDTO.getServerOrderId());
+
+        if (vehicleCleanOrderDTO1 == null || vehicleCleanOrderDTO1.getServerOrderId()==null){
+            return false;
+        }
+
         vehicleCleanOrderDTO.setCancelPersonId(user.getUserId());
         vehicleCleanOrderDTO.setUserId(user.getUserId());
         vehicleCleanOrderDTO.setPayStatus(2);

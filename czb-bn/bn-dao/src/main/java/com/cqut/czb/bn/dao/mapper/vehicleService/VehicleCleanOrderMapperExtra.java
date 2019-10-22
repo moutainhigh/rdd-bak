@@ -15,6 +15,8 @@ import java.util.List;
 @Repository
 public interface VehicleCleanOrderMapperExtra {
 
+    VehicleCleanOrderDTO selectByServerOrderId(String serverOrderId);
+
     List<VehicleCleanOrderDTO> selectById(VehicleCleanOrderDTO vehicleCleanOrderDTO);
 
     VehicleCleanOrderDTO selectByStatus(VehicleCleanOrderDTO vehicleCleanOrderDTO);

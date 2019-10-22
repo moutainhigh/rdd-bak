@@ -10,6 +10,8 @@ import java.util.List;
 public interface DishOrderMapperExtra {
     List<DishOrderDTO> selectOrderByUser(String id);
 
+    DishOrderDTO selectByOrderId(String orderId);
+
     DetailsOrderDTO selectOrderDetails(DishOrderDTO dishOrderDTO);
 
     int updateDishOrderById(DishOrderDTO dishOrderDTO);

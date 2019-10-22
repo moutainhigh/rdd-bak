@@ -367,6 +367,42 @@
         AND DATE_FORMAT(b.indicator_begin_time,'%Y-%m') = DATE_FORMAT(#{monthTime,jdbcType=TIMESTAMP},'%Y-%m')
     </select>
 
+    <select id="selectSubVipSecond" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+            COUNT(cvrr.user_id) AS vipAddCount
+        FROM
+            czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        WHERE
+            cu.is_vip = 1
+        AND DATE_FORMAT(NOW(),'%Y-%m') = DATE_FORMAT(cvrr.create_at,'%Y-%m')
+        AND cu.second_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectSubVipFirst" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+        COUNT(cvrr.user_id) AS vipAddCount
+        FROM
+        czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        WHERE
+        cu.is_vip = 1 AND cu.second_level_partner is null
+        AND DATE_FORMAT(NOW(),'%Y-%m') = DATE_FORMAT(cvrr.create_at,'%Y-%m')
+        AND cu.first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectSubVipThird" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+        COUNT(cvrr.user_id) AS vipAddCount
+        FROM
+        czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        WHERE
+        cu.is_vip = 1 AND cu.second_level_partner is not null
+        AND DATE_FORMAT(NOW(),'%Y-%m') = DATE_FORMAT(cvrr.create_at,'%Y-%m')
+        AND cu.first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
     <select id="selectMyTotalChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
          SELECT
             a.user_account AS userAccount,

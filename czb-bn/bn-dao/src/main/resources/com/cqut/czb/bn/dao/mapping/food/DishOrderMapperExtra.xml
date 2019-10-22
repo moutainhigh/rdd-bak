@@ -47,6 +47,22 @@
         GROUP BY cdo.order_id
         ORDER BY createAt DESC
     </select>
+
+    <select id="selectByOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+          cdo.order_id,
+          cdo.pay_status,
+          cdo.dining_status
+        FROM
+            czb_dish_order cdo
+        LEFT JOIN czb_shop s ON cdo.shop_id = s.shop_id
+        WHERE
+            s.order_write_off = 1
+        AND cdo.pay_status = 1
+        AND cdo.dining_status = 1
+        AND cdo.order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+
     <select id="selectOrderDetails" resultType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DetailsOrderDTO" parameterType="com.cqut.czb.bn.entity.dto.food.OrderFoodDTO.DishOrderDTO" >
         select
             order_id AS orderId,
