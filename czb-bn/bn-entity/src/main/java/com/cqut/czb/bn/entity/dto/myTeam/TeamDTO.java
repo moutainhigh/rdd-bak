@@ -13,7 +13,17 @@ public class TeamDTO {
 
     private Double amount;
 
-//    private List<TeamDTO> teamDTOList;
+    private Integer isVip;
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
+    //    private List<TeamDTO> teamDTOList;
 
     public String getUserId() {
         return userId;

@@ -294,12 +294,13 @@
       <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
       <result column="user_name" property="userName" jdbcType="VARCHAR" />
       <result column="amount" property="amount" jdbcType="DOUBLE" />
-      <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
+    <result column="is_vip" property="isVip" jdbcType="INTEGER" />
+    <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">
-    select user_id, user_account, user_name, sum(amount) as 'amount'
+    select user_id, user_account, user_name, sum(amount) as 'amount',is_vip
     from
-    (select cu.user_id, user_account, user_name, info_id, cu.create_at
+    (select cu.user_id, user_account, user_name, info_id, cu.create_at,is_vip
         from czb_user cu
         left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
         where

@@ -174,11 +174,12 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<TeamDTO> selectTeam(String userId) {
         List<TeamDTO> teamDTOList = userMapperExtra.selectTeam(userId);
-        for(int i = 0; i < teamDTOList.size(); i++) {
-            teamDTOList.get(i).setUserAccount(
-                    teamDTOList.get(i).getUserAccount().replaceAll(
-                            "(\\d{3})\\d{4}(\\d{4})","$1****$2"));
-        }
+//        for(int i = 0; i < teamDTOList.size(); i++) {
+//            teamDTOList.get(i).setUserAccount(
+////                    teamDTOList.get(i).getUserAccount().replaceAll(
+////                            "(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+//                    teamDTOList.get(i).setUserAccount();
+//        }
         return teamDTOList;
     }
 
