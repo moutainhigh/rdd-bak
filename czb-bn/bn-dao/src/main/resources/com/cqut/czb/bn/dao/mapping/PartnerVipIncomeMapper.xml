@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PartnerVipIncomeMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+    <id column="partner_vip_income_id" property="partnerVipIncomeId" jdbcType="VARCHAR" />
+    <result column="partner_id" property="partnerId" jdbcType="VARCHAR" />
+    <result column="partner_type" property="partnerType" jdbcType="INTEGER" />
+    <result column="is_settle" property="isSettle" jdbcType="INTEGER" />
+    <result column="vip_add_count" property="vipAddCount" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="vip_add_income" property="vipAddIncome" jdbcType="DOUBLE" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    partner_vip_income_id, partner_id, partner_type, is_settle, vip_add_count, start_time, 
+    end_time, vip_add_income, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_partner_vip_income
+    where partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_partner_vip_income
+    where partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+    insert into czb_partner_vip_income (partner_vip_income_id, partner_id, partner_type, 
+      is_settle, vip_add_count, start_time, 
+      end_time, vip_add_income, create_at, 
+      update_at)
+    values (#{partnerVipIncomeId,jdbcType=VARCHAR}, #{partnerId,jdbcType=VARCHAR}, #{partnerType,jdbcType=INTEGER}, 
+      #{isSettle,jdbcType=INTEGER}, #{vipAddCount,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{vipAddIncome,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+    insert into czb_partner_vip_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="partnerVipIncomeId != null" >
+        partner_vip_income_id,
+      </if>
+      <if test="partnerId != null" >
+        partner_id,
+      </if>
+      <if test="partnerType != null" >
+        partner_type,
+      </if>
+      <if test="isSettle != null" >
+        is_settle,
+      </if>
+      <if test="vipAddCount != null" >
+        vip_add_count,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="vipAddIncome != null" >
+        vip_add_income,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="partnerVipIncomeId != null" >
+        #{partnerVipIncomeId,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerId != null" >
+        #{partnerId,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerType != null" >
+        #{partnerType,jdbcType=INTEGER},
+      </if>
+      <if test="isSettle != null" >
+        #{isSettle,jdbcType=INTEGER},
+      </if>
+      <if test="vipAddCount != null" >
+        #{vipAddCount,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vipAddIncome != null" >
+        #{vipAddIncome,jdbcType=DOUBLE},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+    update czb_partner_vip_income
+    <set >
+      <if test="partnerId != null" >
+        partner_id = #{partnerId,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerType != null" >
+        partner_type = #{partnerType,jdbcType=INTEGER},
+      </if>
+      <if test="isSettle != null" >
+        is_settle = #{isSettle,jdbcType=INTEGER},
+      </if>
+      <if test="vipAddCount != null" >
+        vip_add_count = #{vipAddCount,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vipAddIncome != null" >
+        vip_add_income = #{vipAddIncome,jdbcType=DOUBLE},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+    update czb_partner_vip_income
+    set partner_id = #{partnerId,jdbcType=VARCHAR},
+      partner_type = #{partnerType,jdbcType=INTEGER},
+      is_settle = #{isSettle,jdbcType=INTEGER},
+      vip_add_count = #{vipAddCount,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      vip_add_income = #{vipAddIncome,jdbcType=DOUBLE},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
+  </update>
+</mapper>
