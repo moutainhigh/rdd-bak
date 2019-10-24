@@ -23,6 +23,8 @@ public interface PartnerMapperExtra {
 
     List<PartnerDTO> selectChildByName(PartnerDTO partnerDTO);
 
+    List<PartnerDTO> selectAllPartner();
+
     int addChildPromotion (PartnerDTO partner);
 
     int addChildConsumer (PartnerDTO partner);
@@ -36,6 +38,8 @@ public interface PartnerMapperExtra {
      PartnerDTO selectPartnerInfo(PartnerDTO partnerDTO);
 
      PartnerDTO selectPartner(PartnerDTO partnerDTO);
+
+     PartnerDTO selectMyPartner(String userId);
 
      PartnerDTO selectHistoryInfo(PartnerDTO partnerDTO);
 

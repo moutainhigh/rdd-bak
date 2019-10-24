@@ -58,44 +58,6 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
                 partner.setMissionStartTime(format.format(format.parse(partner.getMissionStartTime())));
                 partner.setMissionEndTime(format.format(format.parse(partner.getMissionEndTime())));        //去掉返回时间末尾的.0
             }
-            //获取每月下级Vip信息
-
-            if (partner==null) {
-                partner = new PartnerDTO();
-            }
-
-            PartnerDTO partnerDTO1 = partnerMapperExtra.selectPartner(partnerDTO);
-
-            if (partnerDTO1!=null && partnerDTO1.getPartner()==1){  //如果本身是普通合伙人
-                PartnerDTO vipUser = partnerMapperExtra.selectSubVipSecond(partnerDTO);
-                if (vipUser!=null && vipUser.getVipAddCount()>0){
-                    partner.setVipAddCount(vipUser.getVipAddCount());
-                    partner.setVipMoney(mul(vipUser.getVipAddCount().doubleValue(),0.125));
-                    partner.setVipMoney(mul(partner.getVipMoney(),39.0));
-                }else {
-                    partner.setVipAddCount(0);
-                    partner.setVipMoney(0.00);
-                }
-            }else if (partnerDTO1!=null && partnerDTO1.getPartner()==2){
-                PartnerDTO firstSubVip = partnerMapperExtra.selectSubVipFirst(partnerDTO);  //事业合伙人下 第一子级不是普通合伙人的 自己中的Vip增量
-                PartnerDTO thirdSubVip = partnerMapperExtra.selectSubVipFirst(partnerDTO); //事业合伙人下 第一子级是普通合伙人的 自己中的Vip增量
-                Double firstMoney = 0.00;
-                Double secondMoney = 0.00;
-                if (firstSubVip != null && firstSubVip.getVipAddCount()>0) {
-                     firstMoney = mul(firstSubVip.getVipAddCount().doubleValue(),0.2);  //没有被普通合伙人分走的佣金12.5%+7.5%
-                     firstMoney = mul(firstMoney,39.0);
-                }
-                if (thirdSubVip != null && thirdSubVip.getVipAddCount()>0) {
-                    secondMoney = mul(thirdSubVip.getVipAddCount().doubleValue(),0.075);  //被普通合伙人分走后的固有佣金
-                    secondMoney = mul(secondMoney,39.0);
-                }
-                partner.setVipMoney(changeToBigDecimal(firstMoney+secondMoney));
-                if (firstSubVip != null && firstSubVip.getVipAddCount()>0 && thirdSubVip != null && thirdSubVip.getVipAddCount()>0) {
-                    partner.setVipAddCount(firstSubVip.getVipAddCount()+thirdSubVip.getVipAddCount());
-                } else {
-                    partner.setVipAddCount(0);
-                }
-            }
             return partner;
         }catch (Exception e){
             e.printStackTrace();

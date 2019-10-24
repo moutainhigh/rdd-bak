@@ -220,6 +220,26 @@
         WHERE a.user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
+    <select id="selectAllPartner"  resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+        a.user_id as userId,
+        a.partner,
+        a.user_account as userAccount
+        FROM
+        czb_user a
+        WHERE (a.partner = 1 OR a.partner = 2)
+    </select>
+
+    <select id="selectMyPartner" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" >
+        SELECT
+        a.user_id as userId,
+        a.partner,
+        a.user_account as userAccount
+        FROM
+        czb_user a
+        WHERE (a.first_level_partner = #{userId,jdbcType=VARCHAR} OR second_level_partner = #{userId,jdbcType=VARCHAR})
+    </select>
+
     <resultMap id="PartnerMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
