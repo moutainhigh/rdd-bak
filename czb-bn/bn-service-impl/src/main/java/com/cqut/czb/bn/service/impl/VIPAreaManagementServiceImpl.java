@@ -83,13 +83,13 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
 
     @Override
     public VipPriceAndNote getVipPriceAndNote(String area) {
-
+        if(area == null || area == "")
+            return null;
         VipPriceAndNote vipPriceAndNote = new VipPriceAndNote();
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipPrice(area);
         vipPriceAndNote.setArea(vipAreaConfig.getArea());
         vipPriceAndNote.setVipPrice(vipAreaConfig.getVipPrice());
         vipPriceAndNote.setNote(dictMapperExtra.selectDictByName("rechargeNote").getContent());
-
         return vipPriceAndNote;
     }
 }
