@@ -55,8 +55,8 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
 
             if (isUpdate){
                 //金额
-                List<PartnerVipIncome> updatedIncome = partnerVipIncomeMapperExtra.selectVipIncomeByIds(settleIds);
-                for (PartnerVipIncome partnerVipIncome: updatedIncome) {
+                List<PartnerVipIncomeDTO> updatedIncome = partnerVipIncomeMapperExtra.selectVipIncomeByIds(settleIds);
+                for (PartnerVipIncomeDTO partnerVipIncome: updatedIncome) {
                     UserIncomeInfoDTO userIncomeInfo = userIncomeInfoMapperExtra.selectUserIncomeInfo(partnerVipIncome.getPartnerId());
                     Boolean isRefund = false;
                     String id = StringUtil.createId();

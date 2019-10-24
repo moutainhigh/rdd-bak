@@ -10,7 +10,7 @@ public interface PartnerVipIncomeMapperExtra {
 
     PartnerVipIncome selectVipIncomeById(String partnerVipIncomeId);
 
-    List<PartnerVipIncome> selectVipIncomeByIds(String[] array);
+    List<PartnerVipIncomeDTO> selectVipIncomeByIds(String[] array);
 
     int settleVipIncomeRecords(String[] array);
 
