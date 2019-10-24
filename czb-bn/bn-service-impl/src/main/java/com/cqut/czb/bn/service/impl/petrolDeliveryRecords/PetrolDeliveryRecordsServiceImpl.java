@@ -212,6 +212,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         }
         List<PetrolDeliveryDTO> petrolListNoRepeat = new ArrayList<>();
         for(PetrolDeliveryDTO p:petrolMap.values()){
+            PhoneCode code = new PhoneCode();
+            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
+            code.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), p.getDeliveryNum());
             petrolListNoRepeat.add(p);
         }
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
