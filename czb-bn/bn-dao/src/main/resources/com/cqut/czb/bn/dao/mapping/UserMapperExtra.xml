@@ -309,7 +309,7 @@
                 left join czb_income_log cil on cil.info_id = cu.info_id
           and (type = 0 or type is null)
         group by cu.user_id
-        order by cu.create_at desc, amount desc
+        order by cu.is_vip DESC, amount desc, cu.create_at desc
   </select>
   <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
     <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->
