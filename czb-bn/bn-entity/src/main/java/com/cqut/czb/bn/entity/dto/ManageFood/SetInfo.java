@@ -15,6 +15,16 @@ public class SetInfo {
 
     private Double vipPrice;
 
+    private Integer setAmount;
+
+    public Integer getSetAmount() {
+        return setAmount;
+    }
+
+    public void setSetAmount(Integer setAmount) {
+        this.setAmount = setAmount;
+    }
+
     public String getRelationId() {
         return relationId;
     }

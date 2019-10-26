@@ -27,7 +27,7 @@
       orders.pay_status != 0
       <if test="orderId != null and orderId != ''" >
         AND
-        order_id like concat("%", #{orderId}, "%")
+        order_id = #{orderId}
       </if>
       <if test="diningStatus != null and diningStatus != '' || diningStatus == 0" >
         AND
@@ -37,8 +37,28 @@
             AND
           orders.shop_id = #{shopId}
         </if>
+      <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        AND
+        orders.create_at BETWEEN #{startTime} AND #{endTime}
+      </if>
     </where>
     order BY orders.create_at DESC
+  </select>
+
+  <select id="getOrderDishes" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
+    SELECT
+    dish_id dishId
+    FROM
+    czb_order_dishes
+    where order_id = #{orderId}
+  </select>
+
+  <select id="getFood" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.ManageFood.SetInfo">
+    SELECT
+    dish_name dishName
+    FROM
+    czb_dish
+    where dish_id = #{dishId}
   </select>
 
   <update id="sureOrder" parameterType="java.lang.String">
