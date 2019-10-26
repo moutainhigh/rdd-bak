@@ -29,4 +29,6 @@ public interface PetrolDeliveryRecordsMapperExtra {
     int updateImportRecords(List<PetrolDeliveryDTO> list);
 
     PetrolDeliveryDTO getDeliveryInfo(@Param("userId")String userId,@Param("petrolKind")String petrolKind);
+
+    DeliveryMessageDTO selectDeliveryMessageByPetrolNum(String petrolNum);
 }

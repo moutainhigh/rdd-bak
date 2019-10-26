@@ -148,11 +148,11 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                 row = sheet.createRow(i+1);
 
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getPetrolNum());
-                if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
+                if (petrolDeliveryDTOS.get(i).getPetrolKind()==0)
                     row.createCell(count++).setCellValue("国通");
-                else if(petrolDeliveryDTOS.get(i).getDeliveryState()==1)
+                else if(petrolDeliveryDTOS.get(i).getPetrolKind()==1)
                     row.createCell(count++).setCellValue("中石油");
-                else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
+                else if (petrolDeliveryDTOS.get(i).getPetrolKind()==2)
                     row.createCell(count++).setCellValue("中石化");
 
                 if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
@@ -212,6 +212,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         }
         List<PetrolDeliveryDTO> petrolListNoRepeat = new ArrayList<>();
         for(PetrolDeliveryDTO p:petrolMap.values()){
+            PhoneCode code = new PhoneCode();
+            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
+            code.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), p.getDeliveryNum());
             petrolListNoRepeat.add(p);
         }
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
