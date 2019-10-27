@@ -11,6 +11,8 @@ public class FoodOrder {
 
     private String userId;
 
+    private String userAccount;
+
     private String shopId;
 
     private Double actualPrice;
@@ -40,6 +42,14 @@ public class FoodOrder {
     private Food food;
 
     private List<SetInfo> sets;
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
 
     public String getStartTime() {
         return startTime;

@@ -15,14 +15,16 @@
     <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
     <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
     <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+      <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
   </resultMap>
 
   <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
     SELECT
-    order_id, user_id, orders.dish_id, orders.shop_id, actual_price, third_order, pay_status, pey_method,
-    dining_status, remark, orders.create_at, orders.update_at, dish.dish_name
+    order_id, orders.user_id, orders.dish_id, orders.shop_id, actual_price, third_order, pay_status, pey_method,
+    dining_status, remark, orders.create_at, orders.update_at, dish.dish_name, czb_user.user_account
     from czb_dish_order orders
     LEFT  JOIN czb_dish dish on orders.dish_id = dish.dish_id
+      LEFT JOIN czb_user on orders.user_id = czb_user.user_id
     <where>
       orders.pay_status != 0
       <if test="orderId != null and orderId != ''" >
