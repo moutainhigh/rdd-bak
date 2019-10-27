@@ -33,6 +33,8 @@ public class Dish {
 
     private String dishContent;
 
+    private Integer isDelete;
+
     public String getDishId() {
         return dishId;
     }
@@ -151,5 +153,13 @@ public class Dish {
 
     public void setDishContent(String dishContent) {
         this.dishContent = dishContent == null ? null : dishContent.trim();
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 }

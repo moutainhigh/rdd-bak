@@ -17,10 +17,12 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
     <result column="dish_content" property="dishContent" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price, 
-    current_price, vip_price, file_id, create_at, update_at, is_recommend, dish_content
+    current_price, vip_price, file_id, create_at, update_at, is_recommend, dish_content, 
+    is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -37,14 +39,14 @@
       dish_type, supply_time, is_sale, 
       label, original_price, current_price, 
       vip_price, file_id, create_at, 
-      update_at, is_recommend, dish_content
-      )
+      update_at, is_recommend, dish_content, 
+      is_delete)
     values (#{dishId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{dishName,jdbcType=VARCHAR}, 
       #{dishType,jdbcType=INTEGER}, #{supplyTime,jdbcType=VARCHAR}, #{isSale,jdbcType=INTEGER}, 
       #{label,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE}, 
       #{vipPrice,jdbcType=DOUBLE}, #{fileId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{isRecommend,jdbcType=INTEGER}, #{dishContent,jdbcType=VARCHAR}
-      )
+      #{updateAt,jdbcType=TIMESTAMP}, #{isRecommend,jdbcType=INTEGER}, #{dishContent,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.Dish" >
     insert into czb_dish
@@ -94,6 +96,9 @@
       <if test="dishContent != null" >
         dish_content,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="dishId != null" >
@@ -140,6 +145,9 @@
       </if>
       <if test="dishContent != null" >
         #{dishContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="dishContent != null" >
         dish_content = #{dishContent,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
     </set>
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </update>
@@ -206,7 +217,8 @@
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
       is_recommend = #{isRecommend,jdbcType=INTEGER},
-      dish_content = #{dishContent,jdbcType=VARCHAR}
+      dish_content = #{dishContent,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </update>
 </mapper>
