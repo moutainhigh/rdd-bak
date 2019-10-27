@@ -31,6 +31,10 @@
         AND
         order_id = #{orderId}
       </if>
+      <if test="thirdOrder != null and thirdOrder != ''" >
+        AND
+        third_order = #{thirdOrder}
+      </if>
       <if test="diningStatus != null and diningStatus != '' || diningStatus == 0" >
         AND
         dining_status = #{diningStatus}

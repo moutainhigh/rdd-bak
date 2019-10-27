@@ -46,8 +46,8 @@ public class WebOrderServiceImpl implements WebOrderService{
             allMoney += data.getActualPrice();
         }
         List<Food> foods = new ArrayList<>();
-        if(foodOrder.getOrderId() != null) {
-            foods = mapperExtra.getOrderDishes(foodOrder.getOrderId());
+        if(foodOrder.getSearchOrderId() != null && !foodOrder.getSearchOrderId().equals("")) {
+            foods = mapperExtra.getOrderDishes(foodOrder.getSearchOrderId());
             List<SetInfo> countAmountFoods = new ArrayList<>();
             for (Food data: foods) {
                 if(countAmountFoods.size() != 0) {

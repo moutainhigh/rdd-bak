@@ -9,6 +9,8 @@ import java.util.List;
 public class FoodOrder {
     private String orderId;
 
+    private String searchOrderId;
+
     private String userId;
 
     private String userAccount;
@@ -42,6 +44,14 @@ public class FoodOrder {
     private Food food;
 
     private List<SetInfo> sets;
+
+    public String getSearchOrderId() {
+        return searchOrderId;
+    }
+
+    public void setSearchOrderId(String searchOrderId) {
+        this.searchOrderId = searchOrderId;
+    }
 
     public String getUserAccount() {
         return userAccount;
