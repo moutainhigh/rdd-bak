@@ -14,10 +14,11 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="dish_id" property="dishId" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     order_id, user_id, shop_id, actual_price, third_order, pay_status, pey_method, dining_status, 
-    remark, create_at, update_at, dish_id
+    remark, create_at, update_at, dish_id, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -33,13 +34,13 @@
     insert into czb_dish_order (order_id, user_id, shop_id, 
       actual_price, third_order, pay_status, 
       pey_method, dining_status, remark, 
-      create_at, update_at, dish_id
-      )
+      create_at, update_at, dish_id, 
+      is_delete)
     values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, 
       #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=INTEGER}, 
       #{peyMethod,jdbcType=INTEGER}, #{diningStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{dishId,jdbcType=VARCHAR}
-      )
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{dishId,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.food.DishOrder" >
     insert into czb_dish_order
@@ -80,6 +81,9 @@
       <if test="dishId != null" >
         dish_id,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -117,6 +121,9 @@
       </if>
       <if test="dishId != null" >
         #{dishId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -156,6 +163,9 @@
       <if test="dishId != null" >
         dish_id = #{dishId,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
@@ -171,7 +181,8 @@
       remark = #{remark,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      dish_id = #{dishId,jdbcType=VARCHAR}
+      dish_id = #{dishId,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>

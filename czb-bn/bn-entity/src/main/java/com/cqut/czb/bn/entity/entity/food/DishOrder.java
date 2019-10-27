@@ -27,6 +27,8 @@ public class DishOrder {
 
     private String dishId;
 
+    private Integer isDelete;
+
     public String getOrderId() {
         return orderId;
     }
@@ -121,5 +123,13 @@ public class DishOrder {
 
     public void setDishId(String dishId) {
         this.dishId = dishId == null ? null : dishId.trim();
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 }
