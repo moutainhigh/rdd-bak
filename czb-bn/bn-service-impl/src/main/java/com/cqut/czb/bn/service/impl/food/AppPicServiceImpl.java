@@ -43,6 +43,9 @@ public class AppPicServiceImpl implements AppPicService{
         }else {
             return null;
         }
+        if (appRouterDTO.getMenuIdentityCode()==null || "".equals(appRouterDTO.getMenuIdentityCode())){
+            return null;
+        }
         List<AppRouterDTO> list = new ArrayList<>();
         try {
             Object newClass = springUtil.getBean(dictValue+"ServiceImpl");
