@@ -477,4 +477,101 @@
         GROUP BY a.user_id ORDER BY COUNT(c.user_id) DESC
     </select>
 
+<!--以下为partnerVipIncome初始化用方法-->
+    <select id="selectPartnerBecomeTime"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO" >
+        SELECT
+        cir.user_id AS userId,
+        MIN(cir.create_at) AS createAt,
+        user_account AS userAccount,
+        partner AS partner
+        FROM
+        czb_indicator_record cir
+        LEFT JOIN czb_user cu ON cir.user_id = cu.user_id
+        WHERE partner!=0
+        GROUP BY
+        cir.user_id
+    </select>
+
+    <select id="selectFirstPartnerSub" parameterType="java.lang.String"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+            first_level_partner AS userId,
+            SUM(amount) AS vipConsumption
+        FROM
+            czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
+        GROUP BY cu.first_level_partner
+    </select>
+
+    <select id="selectFirstPartnerSubVipCount" parameterType="java.lang.String"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.VipCountDTO" >
+        SELECT
+                COUNT(cu.user_id) AS vipCount
+        FROM
+            czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        WHERE first_level_partner = #{userId,jdbcType=VARCHAR} AND cvrr.recharge_time is not null
+         GROUP BY cu.first_level_partner
+    </select>
+
+    <select id="selectSecondPartnerSub" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+            second_level_partner AS userId,
+            SUM(amount) AS vipConsumption
+        FROM
+            czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP}
+        WHERE
+            second_level_partner = #{userId,jdbcType=VARCHAR}
+        GROUP BY
+            cu.second_level_partner
+    </select>
+
+    <select id="selectSecondPartnerSubVipCount" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.VipCountDTO" >
+       SELECT
+                COUNT(cu.user_id) AS vipCount
+        FROM
+            czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        WHERE second_level_partner = #{userId,jdbcType=VARCHAR} AND cvrr.recharge_time is not null
+         GROUP BY cu.second_level_partner
+    </select>
+
+    <select id="selectSubPartner" parameterType="java.lang.String"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO" >
+        SELECT
+            cu.user_id AS subUserId,
+            cu.first_level_partner AS userId,
+            MIN(cir.create_at) AS createAt
+        FROM
+            czb_user cu
+        LEFT JOIN czb_indicator_record cir ON cu.user_id = cir.user_id
+        WHERE
+            first_level_partner = #{userId,jdbcType=VARCHAR}
+        AND partner = 1
+        GROUP BY cu.user_id
+</select>
+
+    <select id="selectFirstNotBySecondPartnerSub" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        first_level_partner AS userId,
+        SUM(amount) AS vipConsumption
+        FROM
+        czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}
+        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
+        GROUP BY cu.first_level_partner
+    </select>
+
+    <select id="selectFirstBySecondPartnerSub" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        first_level_partner AS userId,
+        SUM(amount) AS vipConsumption
+        FROM
+        czb_user cu
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP}
+        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
+        GROUP BY cu.first_level_partner
+    </select>
+
+
+
 </mapper>
