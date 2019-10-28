@@ -43,7 +43,17 @@ public class FoodOrder {
 
     private Food food;
 
+    private String orderDishes;
+
     private List<SetInfo> sets;
+
+    public String getOrderDishes() {
+        return orderDishes;
+    }
+
+    public void setOrderDishes(String orderDishes) {
+        this.orderDishes = orderDishes;
+    }
 
     public String getSearchOrderId() {
         return searchOrderId;
