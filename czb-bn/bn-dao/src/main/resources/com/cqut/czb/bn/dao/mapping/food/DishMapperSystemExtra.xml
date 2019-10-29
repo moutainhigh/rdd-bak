@@ -45,6 +45,8 @@
       <if test="true">
         AND
         shop_id = #{shopId}
+        AND
+        dish.is_delete = 0
       </if>
     </where>
   </select>
@@ -108,10 +110,11 @@
     from czb_dish
     where dish_id = #{dishId,jdbcType=VARCHAR}
   </select>
-  <delete id="delete" parameterType="java.lang.String">
-    delete from czb_dish
+  <update id="delete" parameterType="java.lang.String">
+    UPDATE czb_dish
+    set is_delete = 1
     where dish_id = #{dishId,jdbcType=VARCHAR}
-  </delete>
+  </update>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
     insert into czb_dish
     <trim prefix="(" suffix=")" suffixOverrides=",">

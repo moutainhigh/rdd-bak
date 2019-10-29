@@ -198,7 +198,7 @@
         where
         menu_identity_code=#{menuIdentityCode,jdbcType=VARCHAR} and
         is_show=1
-        ORDER BY `order` ASC
+        ORDER BY `order` ASC limit 1
     </select>
 
 </mapper>

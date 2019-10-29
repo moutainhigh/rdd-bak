@@ -9,7 +9,11 @@ import java.util.List;
 public class FoodOrder {
     private String orderId;
 
+    private String searchOrderId;
+
     private String userId;
+
+    private String userAccount;
 
     private String shopId;
 
@@ -39,7 +43,33 @@ public class FoodOrder {
 
     private Food food;
 
+    private String orderDishes;
+
     private List<SetInfo> sets;
+
+    public String getOrderDishes() {
+        return orderDishes;
+    }
+
+    public void setOrderDishes(String orderDishes) {
+        this.orderDishes = orderDishes;
+    }
+
+    public String getSearchOrderId() {
+        return searchOrderId;
+    }
+
+    public void setSearchOrderId(String searchOrderId) {
+        this.searchOrderId = searchOrderId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
 
     public String getStartTime() {
         return startTime;

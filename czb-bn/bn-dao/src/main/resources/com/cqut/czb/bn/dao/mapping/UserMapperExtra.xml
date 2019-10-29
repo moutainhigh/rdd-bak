@@ -42,7 +42,7 @@
 
   <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    *
+    <include refid="Base_Column_List"/>
     from czb_user
     where user_account = #{account,jdbcType=VARCHAR}
     and is_deleted = 0

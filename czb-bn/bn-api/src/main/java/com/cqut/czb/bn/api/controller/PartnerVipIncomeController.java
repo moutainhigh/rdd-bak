@@ -6,10 +6,7 @@ import com.cqut.czb.bn.entity.entity.PartnerVipIncome;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/partnerVipIncome")
@@ -23,11 +20,16 @@ public class PartnerVipIncomeController {
         return new JSONResult(partnerVipIncomeService.getVipIncomeList(partnerVipIncomeDTO,pageDTO));
     }
     @PostMapping("settleVipIncome")
-    public JSONResult settleVipIncome(PartnerVipIncomeDTO partnerVipIncomeDTO){
+    public JSONResult settleVipIncome(@RequestBody PartnerVipIncomeDTO partnerVipIncomeDTO){
         if (partnerVipIncomeService.settleVipIncome(partnerVipIncomeDTO)){
             return new JSONResult("结算成功",200);
         } else {
             return new JSONResult("结算失败",500);
         }
+    }
+
+    @GetMapping("initData")
+    public JSONResult initData(){
+        return new JSONResult(partnerVipIncomeService.initVipIncomeData());
     }
 }

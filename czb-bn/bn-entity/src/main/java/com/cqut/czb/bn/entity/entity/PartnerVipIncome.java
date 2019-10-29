@@ -23,6 +23,10 @@ public class PartnerVipIncome {
 
     private Date updateAt;
 
+    private Double firstVipIncome;
+
+    private Double secondVipIncome;
+
     public String getPartnerVipIncomeId() {
         return partnerVipIncomeId;
     }
@@ -101,5 +105,21 @@ public class PartnerVipIncome {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getFirstVipIncome() {
+        return firstVipIncome;
+    }
+
+    public void setFirstVipIncome(Double firstVipIncome) {
+        this.firstVipIncome = firstVipIncome;
+    }
+
+    public Double getSecondVipIncome() {
+        return secondVipIncome;
+    }
+
+    public void setSecondVipIncome(Double secondVipIncome) {
+        this.secondVipIncome = secondVipIncome;
     }
 }

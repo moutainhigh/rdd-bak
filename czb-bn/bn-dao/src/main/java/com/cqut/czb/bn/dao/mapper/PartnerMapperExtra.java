@@ -1,6 +1,10 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.VipCountDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -54,4 +58,23 @@ public interface PartnerMapperExtra {
     List<PartnerDTO> selectNextChild(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectNextChildMoney(PartnerDTO partnerDTO);
+
+
+//合伙人vip收益初始化数据用方法
+    List<PartnerBecomeTimeDTO> selectPartnerBecomeTime();
+
+    List<SubPartnerDTO> selectSubPartner(String userId);
+
+    PartnerVipMoney selectFirstPartnerSub(String userId);
+
+    PartnerVipMoney selectSecondPartnerSub(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    PartnerVipMoney selectFirstBySecondPartnerSub(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstNotBySecondPartnerSub(SubPartnerDTO subPartnerDTO);
+
+    VipCountDTO selectFirstPartnerSubVipCount(String userId);
+
+    VipCountDTO selectSecondPartnerSubVipCount(String userId);
+
 }

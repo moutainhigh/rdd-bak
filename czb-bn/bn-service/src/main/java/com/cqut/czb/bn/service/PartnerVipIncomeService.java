@@ -15,4 +15,6 @@ public interface PartnerVipIncomeService {
 
     Boolean initVipIncomeData();
 
+    Boolean addVipIncome(String userId,Double addIncome);
+
 }
