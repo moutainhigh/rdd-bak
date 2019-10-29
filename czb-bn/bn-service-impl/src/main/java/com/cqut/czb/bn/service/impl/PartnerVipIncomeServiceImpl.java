@@ -123,7 +123,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
         }
         return false;
     }
-
+    @Override
     public Boolean addVipIncome(String userId,Double addIncome){
         if (userId == null || addIncome==null){
             return false;
