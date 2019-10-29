@@ -1,0 +1,2 @@
+alter table czb_partner_vip_income add first_vip_income  double(10,2)  DEFAULT 0.0 COMMENT '一级Vip返佣收益';
+alter table czb_partner_vip_income add second_vip_income   double(10,2)  DEFAULT 0.0 COMMENT '二级Vip返佣收益';
