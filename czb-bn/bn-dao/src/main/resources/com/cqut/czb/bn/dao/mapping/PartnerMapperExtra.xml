@@ -335,6 +335,9 @@
             <if test="userId!=null and userId!=''">
                 a.superior_user = #{userId,jdbcType=VARCHAR}
             </if>
+            <if test="isVip!=null">
+                a.is_vip = #{isVip,jdbcType=INTEGER}
+            </if>
         </where>
         GROUP BY a.user_id ORDER  BY COUNT(b.user_id) DESC
     </select>

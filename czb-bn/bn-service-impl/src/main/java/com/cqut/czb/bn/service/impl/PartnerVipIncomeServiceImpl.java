@@ -130,6 +130,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
         }
         UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
         PartnerVipIncome partnerVipIncome = new PartnerVipIncome();
+        PartnerVipIncome secondPartnerVipIncome = new PartnerVipIncome();
         if (userDTO!=null && userDTO.getFirstLevelPartner()==null && userDTO.getSecondLevelPartner()!=null){  //如果本身是普通合伙人
             partnerVipIncome.setPartnerId(userDTO.getSecondLevelPartner());
             partnerVipIncome.setVipAddCount(1);  //下级vip数量加一
@@ -137,7 +138,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             partnerVipIncome.setVipAddIncome(mul(addIncome,Double.parseDouble(vipPartnerProportion.getContent())));  //合伙人获得返佣
             return partnerVipIncomeMapperExtra.updateVipIncomeByAdd(partnerVipIncome)>0;
         }else if (userDTO!=null && userDTO.getFirstLevelPartner()!=null && userDTO.getSecondLevelPartner()==null){ //如果为事业合伙人下级且没有普通合伙人上级
-            partnerVipIncome.setPartnerId(userDTO.getUserId());
+            partnerVipIncome.setPartnerId(userDTO.getFirstLevelPartner());
             partnerVipIncome.setVipAddCount(1);
             Dict vipPartnerProportion = dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion());
             Dict vipFirstPartnerProportion = dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()); //事业合伙人专属下级充值vip收益比例
@@ -145,12 +146,19 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             partnerVipIncome.setVipAddIncome(mul(addIncome,proportion));
             return partnerVipIncomeMapperExtra.updateVipIncomeByAdd(partnerVipIncome)>0;
         }else if (userDTO!=null && userDTO.getFirstLevelPartner()!=null && userDTO.getSecondLevelPartner()!=null){ //如果为事业合伙人下级且有普通合伙人上级
-            partnerVipIncome.setPartnerId(userDTO.getUserId());
+            partnerVipIncome.setPartnerId(userDTO.getFirstLevelPartner());
+            secondPartnerVipIncome.setPartnerId(userDTO.getSecondLevelPartner());
             partnerVipIncome.setVipAddCount(1);
+            secondPartnerVipIncome.setVipAddCount(1);
             Dict vipFirstPartnerProportion = dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion());
+            Dict vipPartnerProportion = dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion());
             Double proportion = Double.parseDouble(vipFirstPartnerProportion.getContent());
-            partnerVipIncome.setVipAddIncome(mul(addIncome,proportion));
-            return partnerVipIncomeMapperExtra.updateVipIncomeByAdd(partnerVipIncome)>0;
+            Double otherProportion = Double.parseDouble(vipPartnerProportion.getContent());
+            secondPartnerVipIncome.setVipAddIncome(mul(addIncome,otherProportion));   //事业合伙人得%7.5
+            partnerVipIncome.setVipAddIncome(mul(addIncome,proportion));    //普通合伙人得12.5%
+            Boolean firstPartner = partnerVipIncomeMapperExtra.updateVipIncomeByAdd(partnerVipIncome)>0;
+            Boolean secondPartner = partnerVipIncomeMapperExtra.updateVipIncomeByAdd(secondPartnerVipIncome)>0;
+            return firstPartner && secondPartner;
         }
         return null;
     }
