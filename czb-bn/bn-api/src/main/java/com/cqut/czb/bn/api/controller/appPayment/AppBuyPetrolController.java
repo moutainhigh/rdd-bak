@@ -4,7 +4,7 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
-import com.cqut.czb.bn.entity.entity.*;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.appPaymentService.AppBuyPetrolService;

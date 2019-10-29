@@ -8,6 +8,16 @@ public class RecommenderDTO {
 
     private String userName;
 
+    private Integer isVip;
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
     public String getUserId() {
         return userId;
     }

@@ -324,7 +324,7 @@
     <!--order by amount desc-->
   <!--</select>-->
   <select id="selectRecommender" resultType="com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO">
-    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName'
+    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName', is_vip as 'isVip'
     from czb_user
     <where>
       user_id = (
