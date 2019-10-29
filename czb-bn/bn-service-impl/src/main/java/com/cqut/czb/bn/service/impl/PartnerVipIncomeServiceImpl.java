@@ -6,10 +6,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.*;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
-import com.cqut.czb.bn.entity.entity.Dict;
-import com.cqut.czb.bn.entity.entity.IncomeLog;
-import com.cqut.czb.bn.entity.entity.PartnerVipIncome;
-import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
+import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.util.config.partnerVipIncomeConfig.PartnerVipIncomeConfig;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -93,31 +90,29 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                         }
                         Boolean isLog = incomeLogMapperExtra.insert(incomeLog) > 0;  //插入收入记录
                         if (isLog) {
-                            return true;
+                            //生成新的收益记录
+                            String newId = StringUtil.createId();
+                            PartnerVipIncome newPartnerVipIncome = new PartnerVipIncome();
+                            newPartnerVipIncome.setPartnerVipIncomeId(newId);
+                            newPartnerVipIncome.setPartnerId(partnerVipIncome.getPartnerId());
+                            newPartnerVipIncome.setIsSettle(0);
+                            newPartnerVipIncome.setStartTime(new Date());
+                            newPartnerVipIncome.setVipAddCount(0);
+                            newPartnerVipIncome.setVipAddIncome(0.0);
+                            newPartnerVipIncome.setPartnerType(partnerVipIncome.getPartnerType());
+                            newPartnerVipIncome.setCreateAt(new Date());
+                            boolean isInsert = partnerVipIncomeMapperExtra.insertIncome(newPartnerVipIncome)>0;
+                            if (isInsert){
+                                return true;
+                            }else {
+                                return false;
+                            }
                         } else {
                             return false;
                         }
                     }
-                    //生成新的收益记录
-                    String newId = StringUtil.createId();
-                    PartnerVipIncome newPartnerVipIncome = new PartnerVipIncome();
-                    newPartnerVipIncome.setPartnerVipIncomeId(newId);
-                    newPartnerVipIncome.setPartnerId(partnerVipIncome.getPartnerId());
-                    newPartnerVipIncome.setIsSettle(0);
-                    newPartnerVipIncome.setStartTime(new Date());
-                    newPartnerVipIncome.setVipAddCount(0);
-                    newPartnerVipIncome.setVipAddIncome(0.0);
-                    newPartnerVipIncome.setPartnerType(partnerVipIncome.getPartnerType());
-                    newPartnerVipIncome.setCreateAt(new Date());
-                    boolean isInsert = partnerVipIncomeMapperExtra.insertIncome(newPartnerVipIncome)>0;
-                    if (isInsert){
-                        return true;
-                    }else {
-                        return false;
-                    }
+
                 }
-
-
             }else {
                 return false;
         }
@@ -167,6 +162,14 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             return firstPartner && secondPartner;
         }
         return null;
+    }
+
+    @Override
+    public PartnerVipIncomeDTO getVipIncomeByUser(User user) {
+        if (user==null || user.getUserId()==null){
+            return null;
+        }
+        return partnerVipIncomeMapperExtra.selectVipIncomeByPartnerId(user.getUserId());
     }
 
     @Override

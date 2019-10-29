@@ -336,7 +336,10 @@
                 a.superior_user = #{userId,jdbcType=VARCHAR}
             </if>
             <if test="isVip!=null">
-                a.is_vip = #{isVip,jdbcType=INTEGER}
+                AND a.is_vip = #{isVip,jdbcType=INTEGER}
+            </if>
+            <if test="partner!=null">
+                AND a.partner = #{partner,jdbcType=INTEGER}
             </if>
         </where>
         GROUP BY a.user_id ORDER  BY COUNT(b.user_id) DESC
@@ -355,6 +358,12 @@
         <where>
             <if test="userId!=null and userId!=''">
                 a.superior_user = #{userId,jdbcType=VARCHAR}
+            </if>
+            <if test="isVip!=null">
+                AND a.is_vip = #{isVip,jdbcType=INTEGER}
+            </if>
+            <if test="partner!=null">
+                AND a.partner = #{partner,jdbcType=INTEGER}
             </if>
         </where>
         GROUP BY a.user_id
