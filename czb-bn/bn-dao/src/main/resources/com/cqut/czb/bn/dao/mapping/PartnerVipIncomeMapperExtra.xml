@@ -64,6 +64,15 @@
             partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
     </select>
 
+    <select id="selectVipIncomeByPartnerId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        czb_partner_vip_income
+        WHERE
+        partner_id = #{partnerId,jdbcType=VARCHAR} AND is_settle= 0 limit 1
+    </select>
+
     <select id="selectVipIncomeByIds" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />
@@ -95,7 +104,13 @@
         set
         vip_add_count = vip_add_count + #{vipAddCount,jdbcType=INTEGER},
         vip_add_income = vip_add_income + #{vipAddIncome,jdbcType=DOUBLE},
-        update_at = now()
+        update_at = now(),
+        <if test="firstVipIncome != null" >
+            first_vip_income = #{firstVipIncome,jdbcType=DOUBLE},
+        </if>
+        <if test="secondVipIncome != null" >
+            second_vip_income = #{secondVipIncome,jdbcType=DOUBLE},
+        </if>
         where
         is_settle = 0 AND
         partner_id = #{partnerId,jdbcType=VARCHAR}
@@ -134,6 +149,12 @@
             <if test="updateAt != null" >
                 update_at,
             </if>
+            <if test="firstVipIncome != null" >
+                first_vip_income,
+            </if>
+            <if test="secondVipIncome != null" >
+                second_vip_income,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="partnerVipIncomeId != null" >
@@ -165,6 +186,12 @@
             </if>
             <if test="updateAt != null" >
                 #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstVipIncome != null" >
+                #{firstVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondVipIncome != null" >
+                #{secondVipIncome,jdbcType=DOUBLE},
             </if>
         </trim>
     </insert>
