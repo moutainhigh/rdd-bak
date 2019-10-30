@@ -174,6 +174,13 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<TeamDTO> selectTeam(String userId) {
         List<TeamDTO> teamDTOList = userMapperExtra.selectTeam(userId);
+        //修复IOS我的团队闪退用，之后删除
+        TeamDTO teamDTO = new TeamDTO();
+        teamDTO.setAmount(0.0);
+        teamDTO.setIsVip(0);
+        teamDTO.setUserAccount("**********");
+        teamDTO.setUserId(userId);
+        teamDTOList.add(teamDTO);
 //        for(int i = 0; i < teamDTOList.size(); i++) {
 //            teamDTOList.get(i).setUserAccount(
 ////                    teamDTOList.get(i).getUserAccount().replaceAll(
