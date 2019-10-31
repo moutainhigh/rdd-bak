@@ -607,6 +607,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
+        //vip是1 油卡是2
         boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
         System.out.println("addVipIncome"+addVipIncome);
 //        //发送购买成功推送给特定用户
@@ -693,7 +694,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true){
                 //发送购买成功推送给特定用户
-                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
+//                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
+                //vip是1 油卡是2
+                boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
+                System.out.println("addVipIncome"+addVipIncome);
                 return 1;
             }
             else
@@ -703,7 +707,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "0", 1);
             //发送购买成功推送给特定用户
-            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
+//            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
+            //vip是1 油卡是2
+            boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
+            System.out.println("addVipIncome"+addVipIncome);
 
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
 
@@ -778,7 +785,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
             if (beginPetrolRecharge == true){
                 //发送购买成功推送给特定用户
-                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
+//                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
+                //vip是1 油卡是2
+                boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
+                System.out.println("addVipIncome"+addVipIncome);
                 return 1;
             }
             else
@@ -790,7 +800,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //此处插入购油的相关信息，油卡购买记录
 
             //发送购买成功推送给特定用户
-            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
+//            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
+            //vip是1 油卡是2
+            boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
+            System.out.println("addVipIncome"+addVipIncome);
 
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
             //判断是否放回油卡
