@@ -45,6 +45,7 @@
         <result column="pay_method" property="payMethod" jdbcType="TINYINT" />
         <result column="contact_number" property="riderPhone" jdbcType="VARCHAR" />
         <result column="coupon_id" property="couponId" jdbcType="VARCHAR" />
+        <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
@@ -313,6 +314,7 @@
             orders.cancel_time ,
             orders.cancel_reason ,
             orders.create_at,
+            orders.third_order,
             orders.coupon_id
         FROM
             czb_vehicle_clean_order orders
@@ -347,6 +349,10 @@
             <if test="phone != null and phone != ''">
                 AND
                 vehicles.phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND
+                orders.create_at BETWEEN #{startTime} AND #{endTime}
             </if>
         </where>
         order by orders.create_at desc

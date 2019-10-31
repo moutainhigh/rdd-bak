@@ -210,9 +210,9 @@ public class ManageSystemFoodServiceImpl implements ManageSystemFoodService{
      * @return
      */
     @Override
-    public JSONResult getShops(PageDTO pageDTO) {
+    public JSONResult getShops(ShopInfo shopInfo,PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        Page<ShopInfo> infos = mapper.getShops();
+        Page<ShopInfo> infos = mapper.getShops(shopInfo);
         return new JSONResult("获取美食商店成功", 200, new PageInfo(infos));
     }
 
