@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.food;
 
 import com.cqut.czb.bn.entity.dto.ManageFood.Food;
+import com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard;
@@ -26,5 +27,5 @@ public interface ManageSystemFoodService {
     JSONResult getSetInfo(Food food);
 
     //获得商店信息
-    JSONResult getShops(PageDTO pageDTO);
+    JSONResult getShops(ShopInfo shopInfo, PageDTO pageDTO);
 }

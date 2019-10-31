@@ -28,5 +28,5 @@ public interface DishSystemMapperExtra {
     int deleteList(@Param("list") List<SetInfo> list);
 
     // 获得商店
-    Page<ShopInfo> getShops();
+    Page<ShopInfo> getShops(ShopInfo shopInfo);
 }

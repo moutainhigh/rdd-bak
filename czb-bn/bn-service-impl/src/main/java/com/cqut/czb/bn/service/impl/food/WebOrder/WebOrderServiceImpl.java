@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,24 +41,34 @@ public class WebOrderServiceImpl implements WebOrderService{
      */
     @Override
     public JSONResult search(FoodOrder foodOrder, PageDTO pageDTO, User user) {
-        //根据redis信息，设置此次查询人的商店id
-        foodOrder.setShopId(dishSystemMapperExtra.getShopId(user.getUserId()));
+//        //根据redis信息，设置此次查询人的商店id
+//        foodOrder.setShopId(dishSystemMapperExtra.getShopId(user.getUserId()));
 
-
-        //获取总的订单，然后将收益相加
-        List<FoodOrder> orderList = mapperExtra.search(foodOrder);
-        Double allMoney = new Double("0"); // 总收益
-        Integer orderAllAmount = orderList.size(); //总单数
-        for (FoodOrder order: orderList) {
-            // 满足if条件的为实收金额的订单，将钱加到总收益里
-            if((order.getDiningStatus() == 0 || order.getDiningStatus() == 2) && order.getPayStatus() == 1)
-                allMoney += order.getActualPrice();
+        //是否有商店id，是否商店id为""，这里是区分菜品管理页面是否为管理员模式
+        if(foodOrder.getShopId().equals("") || null == foodOrder.getShopId()) {
+            foodOrder.setShopId(dishSystemMapperExtra.getShopId(user.getUserId()));
         }
 
         // 只处理分页数据的信息
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         Page<FoodOrder> foodOrders = mapperExtra.search(foodOrder);
         JSONResult jsonResult = getOrderDishes(foodOrders, user);
+
+        //查询分页信息后（根据条件查询），此时将前端查询条件清空
+        foodOrder.setDiningStatus(null);
+        foodOrder.setOrderId(null);
+        foodOrder.setThirdOrder(null);
+        //获取总的订单，然后将收益相加
+        List<FoodOrder> orderList = mapperExtra.search(foodOrder);
+        BigDecimal allMoney = new BigDecimal("0"); // 总收益
+        Integer orderAllAmount = 0; //总单数
+        for (FoodOrder order: orderList) {
+            // 满足if条件的为实收金额的订单，将钱加到总收益里
+            if((order.getDiningStatus() == 0 || order.getDiningStatus() == 2) && order.getPayStatus() == 1){
+                allMoney = allMoney.add(new BigDecimal(order.getActualPrice().toString()));
+                orderAllAmount++;
+            }
+        }
 
         //获取今日的订单，然后将收益相加
         SimpleDateFormat day = new SimpleDateFormat("y-MM-dd");//设置日期格式为天,大写的H为24小时制，小写为12
@@ -66,25 +77,23 @@ public class WebOrderServiceImpl implements WebOrderService{
 
         foodOrder.setStartTime(todayStr + " 00:00:00");
         foodOrder.setEndTime(todayStr + " 23:59:59");
-        System.out.println("111111111111111111111111111111111111111111");
-        System.out.println(todayStr);
-        System.out.println(foodOrder.getStartTime());
-        System.out.println(foodOrder.getEndTime());
 
         List<FoodOrder> orderTodayList = mapperExtra.search(foodOrder);
         // 今日总收益
-        Double todayMoney = new Double("0");
-        Integer orderTodayAmount = orderTodayList.size();
+        BigDecimal todayMoney = new BigDecimal("0"); // 总收益
+        Integer orderTodayAmount = 0;
         for (FoodOrder order: orderTodayList) {
             // 满足if条件的为实收金额的订单，将钱加到总收益里
-            if((order.getDiningStatus() == 0 || order.getDiningStatus() == 2) && order.getPayStatus() == 1)
-                todayMoney += order.getActualPrice();
+            if((order.getDiningStatus() == 0 || order.getDiningStatus() == 2) && order.getPayStatus() == 1){
+                orderTodayAmount++;
+                todayMoney = todayMoney.add(new BigDecimal(order.getActualPrice().toString()));
+            }
         }
 
-        // 设置总收益和用户账号
-        String pageInfo = "总销售额：" + allMoney.toString() + "元——总订单数："  + orderAllAmount.toString() + "单";
+        // 设置总收益
+        String pageInfo = "总销售额：" + allMoney.doubleValue() + "元——总订单数："  + orderAllAmount.toString() + "单";
         pageInfo = pageInfo  + ";";
-        pageInfo = pageInfo +  "今销售额：" + todayMoney + "元——今订单数："  +  orderTodayAmount.toString() + "单";
+        pageInfo = pageInfo +  "今销售额：" + todayMoney.doubleValue() + "元——今订单数："  +  orderTodayAmount.toString() + "单";
         jsonResult.setMessage(pageInfo);
 
         return jsonResult;

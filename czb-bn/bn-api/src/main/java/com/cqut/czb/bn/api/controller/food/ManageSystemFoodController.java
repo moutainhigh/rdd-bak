@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.food;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.ManageFood.Food;
+import com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -105,7 +106,7 @@ public class ManageSystemFoodController {
      * @return
      */
     @GetMapping("/getShops")
-    public JSONResult getShops(PageDTO pageDTO) {
-        return service.getShops(pageDTO);
+    public JSONResult getShops(ShopInfo shopInfo, PageDTO pageDTO) {
+        return service.getShops(shopInfo, pageDTO);
     }
 }

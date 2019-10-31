@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -255,11 +256,52 @@ public class ServerOrderServiceImpl implements ServerOrderService {
 
     @Override
     public JSONResult search(VehicleOrderManageDTO orderManageDTO, PageDTO pageDTO) {
+
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
         Page<VehicleOrderManageDTO> orderList = mapperExtra.search(orderManageDTO);
         PageInfo<VehicleOrderManageDTO> orderInfoList = new PageInfo<>(orderList);
 
-        return new JSONResult("查询成功", 200, orderInfoList);
+        //获取总的订单，然后将收益相加
+        orderManageDTO.setProcessStatus(new Byte("3"));
+        orderManageDTO.setServerOrderId(null);
+        orderManageDTO.setThirdOrder(null);
+        orderManageDTO.setPhone(null);
+        orderManageDTO.setRiderPhone(null);
+        orderManageDTO.setRiderName(null);
+        orderManageDTO.setFirstName(null);
+        List<VehicleOrderManageDTO> orderAllList = mapperExtra.search(orderManageDTO);
+        BigDecimal allMoney = new BigDecimal("0"); // 总收益
+        Integer orderAllAmount = 0; //总单数
+        for (VehicleOrderManageDTO order: orderAllList) {
+            // 满足if条件的为实收金额的订单，将钱加到总收益里
+            allMoney = allMoney.add(new BigDecimal(order.getActualPrice().toString()));
+            orderAllAmount++;
+        }
+
+        //获取今日的订单，然后将收益相加
+        SimpleDateFormat day = new SimpleDateFormat("y-MM-dd");//设置日期格式为天,大写的H为24小时制，小写为12
+        Date today = new Date();
+        String todayStr = day.format(today);
+
+        orderManageDTO.setStartTime(todayStr + " 00:00:00");
+        orderManageDTO.setEndTime(todayStr + " 23:59:59");
+
+        List<VehicleOrderManageDTO> orderTodayList = mapperExtra.search(orderManageDTO);
+        // 今日总收益
+        BigDecimal todayMoney = new BigDecimal("0"); // 总收益
+        Integer orderTodayAmount = 0;
+        for (VehicleOrderManageDTO order: orderTodayList) {
+            // 满足if条件的为实收金额的订单，将钱加到总收益里
+            orderTodayAmount++;
+            todayMoney = todayMoney.add(new BigDecimal(order.getActualPrice().toString()));
+        }
+
+        // 设置总收益
+        String pageInfo = "总销售额：" + allMoney.doubleValue() + "元——总订单数："  + orderAllAmount.toString() + "单";
+        pageInfo = pageInfo  + ";";
+        pageInfo = pageInfo +  "今销售额：" + todayMoney.doubleValue() + "元——今订单数："  +  orderTodayAmount.toString() + "单";
+
+        return new JSONResult(pageInfo, 200, orderInfoList);
     }
 
     @Override

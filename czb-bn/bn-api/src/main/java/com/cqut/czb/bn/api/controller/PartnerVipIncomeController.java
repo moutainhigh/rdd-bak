@@ -18,11 +18,11 @@ public class PartnerVipIncomeController {
     @Autowired
     PartnerVipIncomeService partnerVipIncomeService;
 
-    @GetMapping("getVipIncomeList")
+    @GetMapping("/getVipIncomeList")
     public JSONResult getVipIncomeList(PartnerVipIncomeDTO partnerVipIncomeDTO, PageDTO pageDTO){
         return new JSONResult(partnerVipIncomeService.getVipIncomeList(partnerVipIncomeDTO,pageDTO));
     }
-    @PostMapping("settleVipIncome")
+    @PostMapping("/settleVipIncome")
     public JSONResult settleVipIncome(PartnerVipIncomeDTO partnerVipIncomeDTO){
         if (partnerVipIncomeService.settleVipIncome(partnerVipIncomeDTO)){
             return new JSONResult("结算成功",200);
