@@ -29,6 +29,14 @@ public class PartnerVipIncomeDTO {
 
     private Double secondVipIncome;
 
+    private Double firstPetrolIncome;
+
+    private Double secondPetrolIncome;
+
+    private Double vipTotalMoney;    //合伙人展示用vip总收入
+
+    private Double petrolTotalMoney; //合伙人展示用油卡总收入
+
     private Date createAt;
 
     private Date updateAt;
@@ -135,6 +143,38 @@ public class PartnerVipIncomeDTO {
 
     public void setSecondVipIncome(Double secondVipIncome) {
         this.secondVipIncome = secondVipIncome;
+    }
+
+    public Double getFirstPetrolIncome() {
+        return firstPetrolIncome;
+    }
+
+    public void setFirstPetrolIncome(Double firstPetrolIncome) {
+        this.firstPetrolIncome = firstPetrolIncome;
+    }
+
+    public Double getSecondPetrolIncome() {
+        return secondPetrolIncome;
+    }
+
+    public void setSecondPetrolIncome(Double secondPetrolIncome) {
+        this.secondPetrolIncome = secondPetrolIncome;
+    }
+
+    public Double getVipTotalMoney() {
+        return vipTotalMoney;
+    }
+
+    public void setVipTotalMoney(Double vipTotalMoney) {
+        this.vipTotalMoney = vipTotalMoney;
+    }
+
+    public Double getPetrolTotalMoney() {
+        return petrolTotalMoney;
+    }
+
+    public void setPetrolTotalMoney(Double petrolTotalMoney) {
+        this.petrolTotalMoney = petrolTotalMoney;
     }
 
     public Date getCreateAt() {

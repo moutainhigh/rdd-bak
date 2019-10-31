@@ -511,8 +511,8 @@
             SUM(turnover_amount) AS petrolMoney
         FROM
             czb_user cu
-        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
-        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at>='2019-10-11'
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
         WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY cu.first_level_partner
     </select>
@@ -522,7 +522,7 @@
                 COUNT(cu.user_id) AS vipCount
         FROM
             czb_user cu
-        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at>='2019-10-11'
         WHERE first_level_partner = #{userId,jdbcType=VARCHAR} AND cvrr.recharge_time is not null
          GROUP BY cu.first_level_partner
     </select>
@@ -534,8 +534,8 @@
             SUM(turnover_amount) AS petrolMoney
         FROM
             czb_user cu
-        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP}
-        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at>='2019-10-11'
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
         WHERE
             second_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY
@@ -547,7 +547,7 @@
                 COUNT(cu.user_id) AS vipCount
         FROM
             czb_user cu
-        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at>='2019-10-11'
         WHERE second_level_partner = #{userId,jdbcType=VARCHAR} AND cvrr.recharge_time is not null
          GROUP BY cu.second_level_partner
     </select>
@@ -573,8 +573,8 @@
         SUM(turnover_amount) AS petrolMoney
         FROM
         czb_user cu
-        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}
-        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY cu.first_level_partner
     </select>
@@ -586,8 +586,8 @@
         SUM(turnover_amount) AS petrolMoney
         FROM
         czb_user cu
-        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP}
-        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY cu.first_level_partner
     </select>

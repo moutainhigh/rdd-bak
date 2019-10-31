@@ -14,10 +14,15 @@
         <result column="vip_add_income" property="vipAddIncome" jdbcType="DOUBLE" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="first_vip_income" property="firstVipIncome" jdbcType="DOUBLE" />
+        <result column="second_vip_income" property="secondVipIncome" jdbcType="DOUBLE" />
+        <result column="first_petrol_income" property="firstPetrolIncome" jdbcType="DOUBLE" />
+        <result column="second_petrol_income" property="secondPetrolIncome" jdbcType="DOUBLE" />
     </resultMap>
     <sql id="Base_Column_List" >
-        partner_vip_income_id, partner_id, partner_type, is_settle, vip_add_count, start_time,
-        end_time, vip_add_income, create_at, update_at
+       partner_vip_income_id, partner_id, partner_type, is_settle, vip_add_count, start_time,
+    end_time, vip_add_income, create_at, update_at, first_vip_income, second_vip_income,
+    first_petrol_income, second_petrol_income
     </sql>
     <select id="selectVipIncomeList" resultMap="BaseResultMap" parameterType="java.lang.String" >
         SELECT

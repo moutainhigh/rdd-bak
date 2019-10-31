@@ -4,15 +4,13 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
-import com.cqut.czb.bn.entity.entity.IndicatorRecord;
-import com.cqut.czb.bn.entity.entity.Role;
-import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.UserRole;
+import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.RedisUtil;
 import com.cqut.czb.bn.util.date.DateUtil;
@@ -48,8 +46,10 @@ public class UserServiceImpl implements IUserService {
 
     private final RedisUtil redisUtil;
 
+    private final PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra;
+
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil,PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
@@ -58,6 +58,7 @@ public class UserServiceImpl implements IUserService {
         this.indicatorRecordMapperExtra = indicatorRecordMapperExtra;
         this.indicatorRecordMapper = indicatorRecordMapper;
         this.redisUtil = redisUtil;
+        this.partnerVipIncomeMapperExtra = partnerVipIncomeMapperExtra;
     }
 
     @Override
@@ -198,6 +199,22 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean changePartner(UserInputDTO userInputDTO) {
         IndicatorRecord indicatorRecord = indicatorRecordMapperExtra.selectIndicatorRecordInfo(userInputDTO.getUserId());
+        PartnerVipIncomeDTO partnerVipIncomeDTO = partnerVipIncomeMapperExtra.selectVipIncomeByPartnerId(userInputDTO.getUserId());
+        if (userInputDTO.getPartner()!=0){
+            if (partnerVipIncomeDTO == null){
+                PartnerVipIncome partnerVipIncome = new PartnerVipIncome();
+                partnerVipIncome.setPartnerVipIncomeId(StringUtil.createId());
+                partnerVipIncome.setPartnerId(userInputDTO.getUserId());
+                partnerVipIncome.setIsSettle(0);
+                partnerVipIncome.setCreateAt(new Date());
+                partnerVipIncome.setStartTime(new Date());
+                partnerVipIncome.setPartnerType(userInputDTO.getPartner());
+                Boolean isInsert = partnerVipIncomeMapperExtra.insertIncome(partnerVipIncome)>0;
+                if (!isInsert){
+                    return false;
+                }
+            }
+        }
         boolean isUpdateIndicatorRecord =true;
          if(0 == userInputDTO.getPartner()){
             userInputDTO.setIsLoginPc(0);

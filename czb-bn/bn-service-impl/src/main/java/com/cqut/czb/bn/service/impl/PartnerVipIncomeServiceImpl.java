@@ -203,7 +203,12 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
         if (user==null || user.getUserId()==null){
             return null;
         }
-        return partnerVipIncomeMapperExtra.selectVipIncomeByPartnerId(user.getUserId());
+        PartnerVipIncomeDTO partnerVipIncomeDTO =  partnerVipIncomeMapperExtra.selectVipIncomeByPartnerId(user.getUserId());
+        if (partnerVipIncomeDTO!=null){
+            partnerVipIncomeDTO.setVipTotalMoney(add(partnerVipIncomeDTO.getFirstVipIncome(),partnerVipIncomeDTO.getSecondPetrolIncome()));
+            partnerVipIncomeDTO.setPetrolTotalMoney(add(partnerVipIncomeDTO.getFirstPetrolIncome(),partnerVipIncomeDTO.getSecondPetrolIncome()));
+        }
+        return partnerVipIncomeDTO;
     }
 
     @Override
@@ -280,7 +285,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             partnerVipIncome.setPartnerType(partnerDTO.getPartner());
             partnerVipIncome.setIsSettle(0);
             partnerVipIncome.setPartnerVipIncomeId(StringUtil.createId());
-            partnerVipIncome.setStartTime(partnerDTO.getCreateAt());
+            partnerVipIncome.setStartTime(new Date(119,9,11));
             partnerVipIncome.setCreateAt(new Date());
             partnerVipIncome.setVipAddIncome(totalMoney);
             partnerVipIncome.setVipAddCount(totalCount);
