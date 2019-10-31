@@ -12,10 +12,12 @@
     <result column="vip_add_income" property="vipAddIncome" jdbcType="DOUBLE" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="first_vip_income" property="firstVipIncome" jdbcType="DOUBLE" />
+    <result column="second_vip_income" property="secondVipIncome" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     partner_vip_income_id, partner_id, partner_type, is_settle, vip_add_count, start_time, 
-    end_time, vip_add_income, create_at, update_at
+    end_time, vip_add_income, create_at, update_at, first_vip_income, second_vip_income
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -31,11 +33,13 @@
     insert into czb_partner_vip_income (partner_vip_income_id, partner_id, partner_type, 
       is_settle, vip_add_count, start_time, 
       end_time, vip_add_income, create_at, 
-      update_at)
+      update_at, first_vip_income, second_vip_income
+      )
     values (#{partnerVipIncomeId,jdbcType=VARCHAR}, #{partnerId,jdbcType=VARCHAR}, #{partnerType,jdbcType=INTEGER}, 
       #{isSettle,jdbcType=INTEGER}, #{vipAddCount,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{vipAddIncome,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{updateAt,jdbcType=TIMESTAMP}, #{firstVipIncome,jdbcType=DOUBLE}, #{secondVipIncome,jdbcType=DOUBLE}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
     insert into czb_partner_vip_income
@@ -70,6 +74,12 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="firstVipIncome != null" >
+        first_vip_income,
+      </if>
+      <if test="secondVipIncome != null" >
+        second_vip_income,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="partnerVipIncomeId != null" >
@@ -101,6 +111,12 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstVipIncome != null" >
+        #{firstVipIncome,jdbcType=DOUBLE},
+      </if>
+      <if test="secondVipIncome != null" >
+        #{secondVipIncome,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -134,6 +150,12 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="firstVipIncome != null" >
+        first_vip_income = #{firstVipIncome,jdbcType=DOUBLE},
+      </if>
+      <if test="secondVipIncome != null" >
+        second_vip_income = #{secondVipIncome,jdbcType=DOUBLE},
+      </if>
     </set>
     where partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
   </update>
@@ -147,7 +169,9 @@
       end_time = #{endTime,jdbcType=TIMESTAMP},
       vip_add_income = #{vipAddIncome,jdbcType=DOUBLE},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      first_vip_income = #{firstVipIncome,jdbcType=DOUBLE},
+      second_vip_income = #{secondVipIncome,jdbcType=DOUBLE}
     where partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -1,22 +1,17 @@
-package com.cqut.czb.bn.entity.dto.myTeam;
+package com.cqut.czb.bn.entity.dto.partnerVipIncome;
 
-public class RecommenderDTO {
+import java.util.Date;
 
+public class PartnerBecomeTimeDTO {
     private String userId;
 
     private String userAccount;
 
     private String userName;
 
-    private Integer isVip;
+    private Integer partner;
 
-    public Integer getIsVip() {
-        return isVip;
-    }
-
-    public void setIsVip(Integer isVip) {
-        this.isVip = isVip;
-    }
+    private Date createAt;
 
     public String getUserId() {
         return userId;
@@ -40,5 +35,21 @@ public class RecommenderDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Integer partner) {
+        this.partner = partner;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 }

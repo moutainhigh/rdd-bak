@@ -25,6 +25,10 @@ public class PartnerVipIncomeDTO {
 
     private String settleIds;  //批量结算id串
 
+    private Double firstVipIncome;
+
+    private Double secondVipIncome;
+
     private Date createAt;
 
     private Date updateAt;
@@ -115,6 +119,22 @@ public class PartnerVipIncomeDTO {
 
     public void setSettleIds(String settleIds) {
         this.settleIds = settleIds;
+    }
+
+    public Double getFirstVipIncome() {
+        return firstVipIncome;
+    }
+
+    public void setFirstVipIncome(Double firstVipIncome) {
+        this.firstVipIncome = firstVipIncome;
+    }
+
+    public Double getSecondVipIncome() {
+        return secondVipIncome;
+    }
+
+    public void setSecondVipIncome(Double secondVipIncome) {
+        this.secondVipIncome = secondVipIncome;
     }
 
     public Date getCreateAt() {

@@ -11,6 +11,7 @@ import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
 import com.cqut.czb.bn.entity.global.PetrolCache;
+import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
@@ -77,6 +78,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     @Autowired
     ServerOrderServiceImpl serverOrderService;
+
+    @Autowired
+    PartnerVipIncomeService partnerVipIncomeService;
 
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
@@ -544,8 +548,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣 String BusinessType
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
-        //发送购买成功推送给特定用户
-        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
+        boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money);
+        System.out.println("addVipIncome"+addVipIncome);
+//        //发送购买成功推送给特定用户
+//        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
         return 1;
     }
 
@@ -601,8 +607,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
-        //发送购买成功推送给特定用户
-        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
+        boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money);
+        System.out.println("addVipIncome"+addVipIncome);
+//        //发送购买成功推送给特定用户
+//        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
         return 1;
     }
 

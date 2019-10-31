@@ -234,11 +234,11 @@ public class PhoneCode {
             if (sendSmsResponse.getCode() != null
                     && sendSmsResponse.getCode().equals("OK")) {
                 // 请求成功
-                System.out.println("验证码获取成功");
+                System.out.println("充值短信获取成功");
             } else {
                 //如果验证码出错，会输出错误码告诉你具体原因
                 System.out.println(sendSmsResponse.getCode());
-                System.out.println("验证码获取失败");
+                System.out.println("充值短信获取失败");
             }
         } catch (ServerException e) {
             e.printStackTrace();
