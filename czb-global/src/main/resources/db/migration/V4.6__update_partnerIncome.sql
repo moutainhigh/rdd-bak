@@ -1,0 +1,2 @@
+alter table czb_partner_vip_income add first_petrol_income  double(10,2)  DEFAULT 0.0 COMMENT '一级油卡返佣收益';
+alter table czb_partner_vip_income add second_petrol_income   double(10,2)  DEFAULT 0.0 COMMENT '二级油卡返佣收益';
