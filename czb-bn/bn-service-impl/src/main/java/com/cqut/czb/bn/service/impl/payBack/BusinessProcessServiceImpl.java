@@ -548,7 +548,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣 String BusinessType
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
-        boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money);
+        boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
         System.out.println("addVipIncome"+addVipIncome);
 //        //发送购买成功推送给特定用户
 //        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
@@ -607,7 +607,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //进行返佣
         boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
         System.out.println("返佣"+beginFanYong);
-        boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money);
+        boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
         System.out.println("addVipIncome"+addVipIncome);
 //        //发送购买成功推送给特定用户
 //        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());

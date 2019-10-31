@@ -27,6 +27,10 @@ public class PartnerVipIncome {
 
     private Double secondVipIncome;
 
+    private Double firstPetrolIncome;
+
+    private Double secondPetrolIncome;
+
     public String getPartnerVipIncomeId() {
         return partnerVipIncomeId;
     }
@@ -121,5 +125,21 @@ public class PartnerVipIncome {
 
     public void setSecondVipIncome(Double secondVipIncome) {
         this.secondVipIncome = secondVipIncome;
+    }
+
+    public Double getFirstPetrolIncome() {
+        return firstPetrolIncome;
+    }
+
+    public void setFirstPetrolIncome(Double firstPetrolIncome) {
+        this.firstPetrolIncome = firstPetrolIncome;
+    }
+
+    public Double getSecondPetrolIncome() {
+        return secondPetrolIncome;
+    }
+
+    public void setSecondPetrolIncome(Double secondPetrolIncome) {
+        this.secondPetrolIncome = secondPetrolIncome;
     }
 }

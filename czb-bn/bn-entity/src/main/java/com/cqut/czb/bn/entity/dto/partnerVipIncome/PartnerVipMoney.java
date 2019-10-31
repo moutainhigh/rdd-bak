@@ -9,6 +9,8 @@ public class PartnerVipMoney {
 
     private Double firstVipConsumption; //事业合伙人专属收益部分的总金额
 
+    private Double petrolMoney;   //下级油卡消费总金额
+
     public String getPartnerId() {
         return partnerId;
     }
@@ -39,5 +41,13 @@ public class PartnerVipMoney {
 
     public void setFirstVipConsumption(Double firstVipConsumption) {
         this.firstVipConsumption = firstVipConsumption;
+    }
+
+    public Double getPetrolMoney() {
+        return petrolMoney;
+    }
+
+    public void setPetrolMoney(Double petrolMoney) {
+        this.petrolMoney = petrolMoney;
     }
 }

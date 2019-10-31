@@ -14,7 +14,7 @@ public interface PartnerVipIncomeService {
 
     Boolean settleVipIncome(PartnerVipIncomeDTO partnerVipIncomeDTO);
 
-    Boolean addVipIncome(String userId,Double addIncome);
+    Boolean addVipIncome(String userId,Double addIncome, Integer type);
 
     PartnerVipIncomeDTO getVipIncomeByUser(User user);
 
