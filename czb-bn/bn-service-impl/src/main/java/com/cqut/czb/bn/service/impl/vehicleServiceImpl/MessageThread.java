@@ -8,8 +8,6 @@ import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
-import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
-import javapns.Push;
 import javapns.devices.Device;
 import javapns.devices.implementations.basic.BasicDevice;
 import javapns.notification.AppleNotificationServerBasicImpl;
@@ -139,7 +137,7 @@ public class MessageThread implements Runnable {
             List<String> tokens = new ArrayList<String>();
             tokens.add(deviceToken);
             String certificatePath = "iosPush.p12";
-//            String certificatePath = "E:\\czb-master\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
+//            String certificatePath = "/Users/nihao/IdeaProjects/czb-server/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/certificate/iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
             if (type==3){
@@ -167,7 +165,7 @@ public class MessageThread implements Runnable {
                 }
                 PushNotificationManager pushManager = new PushNotificationManager();
                 //true：表示的是产品发布推送服务 false：表示的是产品测试推送服务
-                pushManager.initializeConnection(new AppleNotificationServerBasicImpl(certificatePath, certificatePassword, false));
+                pushManager.initializeConnection(new AppleNotificationServerBasicImpl(certificatePath, certificatePassword, true));
                 List<PushedNotification> notifications = new ArrayList<PushedNotification>();
                 System.out.println("发送push消息");
                 // 发送push消息
