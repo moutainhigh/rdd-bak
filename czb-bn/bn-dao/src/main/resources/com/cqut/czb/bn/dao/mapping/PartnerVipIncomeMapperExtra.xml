@@ -102,15 +102,23 @@
     <update id="updateVipIncomeByAdd" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
         update czb_partner_vip_income
         set
-        vip_add_count = vip_add_count + #{vipAddCount,jdbcType=INTEGER},
         vip_add_income = vip_add_income + #{vipAddIncome,jdbcType=DOUBLE},
-        update_at = now(),
+        <if test="vipAddCount != null">
+            vip_add_count = vip_add_count + #{vipAddCount,jdbcType=INTEGER},
+        </if>
         <if test="firstVipIncome != null" >
-            first_vip_income = #{firstVipIncome,jdbcType=DOUBLE},
+            first_vip_income = first_vip_income + #{firstVipIncome,jdbcType=DOUBLE},
         </if>
         <if test="secondVipIncome != null" >
-            second_vip_income = #{secondVipIncome,jdbcType=DOUBLE},
+            second_vip_income = second_vip_income + #{secondVipIncome,jdbcType=DOUBLE},
         </if>
+        <if test="firstPetrolIncome != null" >
+            first_petrol_income = first_vip_income + #{firstPetrolIncome,jdbcType=DOUBLE},
+        </if>
+        <if test="secondPetrolIncome != null" >
+            second_petrol_income = second_vip_income + #{secondPetrolIncome,jdbcType=DOUBLE},
+        </if>
+        update_at = now()
         where
         is_settle = 0 AND
         partner_id = #{partnerId,jdbcType=VARCHAR}
@@ -155,6 +163,12 @@
             <if test="secondVipIncome != null" >
                 second_vip_income,
             </if>
+            <if test="firstPetrolIncome != null" >
+                first_petrol_income,
+            </if>
+            <if test="secondPetrolIncome != null" >
+                second_petrol_income,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="partnerVipIncomeId != null" >
@@ -192,6 +206,12 @@
             </if>
             <if test="secondVipIncome != null" >
                 #{secondVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="firstPetrolIncome != null" >
+                #{firstPetrolIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondPetrolIncome != null" >
+                #{secondPetrolIncome,jdbcType=DOUBLE},
             </if>
         </trim>
     </insert>

@@ -507,10 +507,12 @@
     <select id="selectFirstPartnerSub" parameterType="java.lang.String"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
         SELECT
             first_level_partner AS userId,
-            SUM(amount) AS vipConsumption
+            SUM(amount) AS vipConsumption,
+            SUM(turnover_amount) AS petrolMoney
         FROM
             czb_user cu
         LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id
         WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY cu.first_level_partner
     </select>
@@ -528,10 +530,12 @@
     <select id="selectSecondPartnerSub" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
         SELECT
             second_level_partner AS userId,
-            SUM(amount) AS vipConsumption
+            SUM(amount) AS vipConsumption,
+            SUM(turnover_amount) AS petrolMoney
         FROM
             czb_user cu
         LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP}
         WHERE
             second_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY
@@ -565,10 +569,12 @@
     <select id="selectFirstNotBySecondPartnerSub" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
         SELECT
         first_level_partner AS userId,
-        SUM(amount) AS vipConsumption
+        SUM(amount) AS vipConsumption,
+        SUM(turnover_amount) AS petrolMoney
         FROM
         czb_user cu
         LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY cu.first_level_partner
     </select>
@@ -576,10 +582,12 @@
     <select id="selectFirstBySecondPartnerSub" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
         SELECT
         first_level_partner AS userId,
-        SUM(amount) AS vipConsumption
+        SUM(amount) AS vipConsumption,
+        SUM(turnover_amount) AS petrolMoney
         FROM
         czb_user cu
         LEFT JOIN czb_vip_recharge_records cvrr ON cu.user_id = cvrr.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_petrol_sales_records cpsr ON cu.user_id = cpsr.buyer_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP}
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         GROUP BY cu.first_level_partner
     </select>
