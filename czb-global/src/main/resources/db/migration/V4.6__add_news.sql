@@ -1,0 +1,1 @@
+alter table czb_msg_record add content  varchar(255)  DEFAULT null COMMENT '消息记录内容';
