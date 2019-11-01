@@ -62,7 +62,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 chain.doFilter(request, response);
             }
         }catch (Exception e){
-            throw new SecurityException("身份验证过期");
+            e.printStackTrace();
+//            throw new SecurityException("身份验证过期");
         }
     }
 
