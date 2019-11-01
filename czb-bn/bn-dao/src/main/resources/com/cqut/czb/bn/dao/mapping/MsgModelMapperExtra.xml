@@ -80,4 +80,31 @@
                 )
             </foreach>
     </insert>
+    <insert id="insertRecord" parameterType="java.util.List">
+        INSERT INTO `czb`.`czb_msg_record`
+        (
+        `msg_record_id`,
+        `msg_model_id`,
+        `msg_announcer_id`,
+        `msg_receiver_id`,
+        `msg_state`, `alert`,
+        `content`,
+        `create_at`,
+        `update_at`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.msgRecordId},
+            #{item.msgModelId},
+            #{item.msgAnnouncerId},
+            #{item.msgReceiverId},
+            0,
+            0,
+            #{item.content},
+            now(),
+            NOW()
+            )
+        </foreach>
+    </insert>
 </mapper>
