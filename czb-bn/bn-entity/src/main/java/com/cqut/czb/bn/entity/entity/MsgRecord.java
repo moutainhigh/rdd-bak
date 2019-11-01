@@ -19,6 +19,8 @@ public class MsgRecord {
 
     private Date updateAt;
 
+    private String content;
+
     public String getMsgRecordId() {
         return msgRecordId;
     }
@@ -81,5 +83,13 @@ public class MsgRecord {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }

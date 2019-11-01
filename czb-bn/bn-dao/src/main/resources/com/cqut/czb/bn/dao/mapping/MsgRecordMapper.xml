@@ -10,10 +10,11 @@
     <result column="alert" property="alert" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     msg_record_id, msg_model_id, msg_announcer_id, msg_receiver_id, msg_state, alert, 
-    create_at, update_at
+    create_at, update_at, content
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -28,10 +29,12 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.MsgRecord" >
     insert into czb_msg_record (msg_record_id, msg_model_id, msg_announcer_id, 
       msg_receiver_id, msg_state, alert, 
-      create_at, update_at)
+      create_at, update_at, content
+      )
     values (#{msgRecordId,jdbcType=VARCHAR}, #{msgModelId,jdbcType=VARCHAR}, #{msgAnnouncerId,jdbcType=VARCHAR}, 
       #{msgReceiverId,jdbcType=VARCHAR}, #{msgState,jdbcType=INTEGER}, #{alert,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.MsgRecord" >
     insert into czb_msg_record
@@ -60,6 +63,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="content != null" >
+        content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="msgRecordId != null" >
@@ -85,6 +91,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -123,7 +132,8 @@
       msg_state = #{msgState,jdbcType=INTEGER},
       alert = #{alert,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=VARCHAR}
     where msg_record_id = #{msgRecordId,jdbcType=VARCHAR}
   </update>
 </mapper>
