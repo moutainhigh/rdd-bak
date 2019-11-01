@@ -4,6 +4,10 @@ import com.cqut.czb.bn.entity.dto.personCenter.myWallet.BalanceAndInfoIdDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.InsertIncomeInfo;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.WithDrawLogDTO;
+import com.cqut.czb.bn.entity.entity.withDrawed.Income;
+import com.cqut.czb.bn.entity.entity.withDrawed.IncomeInputDTO;
+import com.cqut.czb.bn.entity.entity.withDrawed.IncomeOutputDTO;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -29,4 +33,10 @@ public interface MyWalletMapperExtra {
 
     // 若取余额为空，则插入一条此用户的余额表
     int insertIncomeInfo(InsertIncomeInfo incomeInfo);
+
+    Page<Income> getUserIncomeInfo(IncomeInputDTO incomeInputDTO);
+
+    IncomeOutputDTO getAllInfo();
+
+    IncomeOutputDTO todayAllInfo(IncomeInputDTO incomeInputDTO);
 }

@@ -96,6 +96,7 @@ public class IncomeLog {
     }
 
     public void setCreateAt(Date createAt) {
+        createAt.setTime(createAt.getTime() + 8*3600*1000);
         this.createAt = createAt;
     }
 

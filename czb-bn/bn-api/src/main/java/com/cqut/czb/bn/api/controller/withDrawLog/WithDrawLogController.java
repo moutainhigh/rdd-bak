@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.withDrawLog;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.IncomeLog;
+import com.cqut.czb.bn.entity.entity.withDrawed.IncomeInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WithDrawLog.WithDrawLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,11 @@ public class WithDrawLogController {
     @GetMapping("/getLogData")
     public JSONResult getLogData(IncomeLog incomeLog, PageDTO pageDTO) {
         return service.getLogData(incomeLog, pageDTO);
+    }
+
+    @GetMapping("/getUserIncomeInfo")
+    public JSONResult getUserIncomeInfo(IncomeInputDTO incomeInputDTO, PageDTO pageDTO) {
+
+        return service.getUserIncomeInfo(incomeInputDTO, pageDTO);
     }
 }
