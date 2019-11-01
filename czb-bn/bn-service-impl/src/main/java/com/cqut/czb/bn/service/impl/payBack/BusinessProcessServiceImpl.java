@@ -787,7 +787,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 //发送购买成功推送给特定用户
 //                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
                 //vip是1 油卡是2
-                boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
+                boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
                 System.out.println("addVipIncome"+addVipIncome);
                 return 1;
             }
@@ -802,7 +802,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //发送购买成功推送给特定用户
 //            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
             //vip是1 油卡是2
-            boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
+            boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
             System.out.println("addVipIncome"+addVipIncome);
 
             boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
