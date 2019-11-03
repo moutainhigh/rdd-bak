@@ -11,7 +11,6 @@ import cn.jpush.api.push.model.notification.AndroidNotification;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
-import com.cqut.czb.bn.dao.mapper.AppRouterMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
@@ -19,12 +18,10 @@ import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
-import com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import jdk.nashorn.internal.parser.JSONParser;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
 
 public class JGPush implements Runnable{
 
@@ -42,6 +39,16 @@ public class JGPush implements Runnable{
     static String userId;
 
     static Integer type=1;
+
+    private Map<String,String> content;
+
+    public Map<String, String> getContent() {
+        return content;
+    }
+
+    public void setContent(Map<String, String> content) {
+        this.content = content;
+    }
 
     public static Integer getType() {
         return type;
@@ -116,27 +123,39 @@ public class JGPush implements Runnable{
             pushDTO.setMenuName(appRouter.getMenuName());
             pushDTO.setPathType(appRouter.getPathType());
         }
+        if (!content.isEmpty()){
+            for (Map.Entry<String, String> exp:content.entrySet()) {
+                if (remotePushNotice!=null) {
+                    remotePushNotice.setNoticeContent(remotePushNotice.getNoticeContent().replace("${"+exp.getKey()+"}",exp.getValue()));
+                }else {
+                    return ;
+                }
+            }
+        }
+
         pushDTO.setTitle(remotePushNotice.getNoticeContent());
         JPushClient jPushClient = new JPushClient(MASTERSECRET, APPKEY);
         try {
             PushPayload pushPayload = null;
             if (type==3){
                 pushPayload=buildPushObjectWithAll(remotePushNotice.getNoticeContent(), remotePushNotice.getNoticeTitle(), pushDTO);
-                        }else {
-                             pushPayload= buildPushObjectWithRegistrationId(remotePush.getDeviceToken(),
-                                    remotePushNotice.getNoticeContent(), remotePushNotice.getNoticeTitle(), pushDTO);
-                        }
-                         System.out.println(pushPayload);
-                         PushResult pushResult=jPushClient.sendPush(pushPayload);  //发送推送对象
-                         //System.out.println(pushResult);
-                         if(pushResult.getResponseCode() == 200) {  //状态码等于200 为成功
-
-                             }
-                     } catch (APIConnectionException e) {
-                         e.printStackTrace();
-                     } catch (APIRequestException e) {
-                         e.printStackTrace();
-                     }
+            }else {
+                     pushPayload= buildPushObjectWithRegistrationId(remotePush.getDeviceToken(),
+                            remotePushNotice.getNoticeContent(), remotePushNotice.getNoticeTitle(), pushDTO);
+            }
+                 System.out.println(pushPayload);
+                 PushResult pushResult=jPushClient.sendPush(pushPayload);  //发送推送对象
+                 //System.out.println(pushResult);
+                 if(pushResult.getResponseCode() == 200) {  //状态码等于200 为成功
+                     System.out.println("Android： 发送推送成功 UserId ： "  + userId);
+                 }else{
+                     System.out.println("Android： 发送推送失败 UserId ： "  + userId);
+                 }
+             } catch (APIConnectionException e) {
+                 e.printStackTrace();
+             } catch (APIRequestException e) {
+                 e.printStackTrace();
+             }
 
     }
 
