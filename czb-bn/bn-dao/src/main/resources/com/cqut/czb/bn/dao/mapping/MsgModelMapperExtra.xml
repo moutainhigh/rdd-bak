@@ -90,11 +90,11 @@
         `msg_model_id`,
         `msg_announcer_id`,
         `msg_receiver_id`,
-        `msg_state`, `alert`,
+        `msg_state`,
+        `alert`,
         `content`,
         `create_at`,
-        `update_at`,
-        `content`
+        `update_at`
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
@@ -107,8 +107,7 @@
             0,
             #{item.content},
             now(),
-            NOW(),
-            #{item.content}
+            NOW()
             )
         </foreach>
     </insert>
