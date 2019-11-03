@@ -213,6 +213,7 @@ public class UserServiceImpl implements IUserService {
                 }
             }
         }
+        User superUser = userMapper.selectByPrimaryKey(userInputDTO.getSuperiorUser());
         boolean isUpdateIndicatorRecord =true;
          if(0 == userInputDTO.getPartner()){
             userInputDTO.setIsLoginPc(0);
@@ -266,6 +267,10 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
                 userInputDTO.setSecondLevelPartner("");
+                if(superUser != null && 2 != superUser.getPartner()){
+                    userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
+                    userInputDTO.setSuperiorUser("");
+                }
             }
             if (2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
@@ -288,17 +293,17 @@ public class UserServiceImpl implements IUserService {
             if(null != userList && 0 < userList.size()) {
                 if (0 == userInputDTO.getPartner()) {
                     if (1 == user.getPartner()) {
-                        // 2级变0级
+                        // 一级变0级
                         userMapperExtra.updatePartnerState(userList, null, "");
                     }
                     if (2 == user.getPartner()) {
-                        // 1级变0级
+                        // 二级变0级
                         userMapperExtra.updatePartnerState(userList, "", null);
                     }
                 }
                 if (1 == userInputDTO.getPartner()) {
                     if (2 == user.getPartner()) {
-                        // 1级变2级
+                        // 2级变1级
                         userMapperExtra.updatePartnerState(userList, "", userInputDTO.getUserId());
                     }
                     if (0 == user.getPartner()) {
@@ -307,7 +312,7 @@ public class UserServiceImpl implements IUserService {
                 }
                 if (2 == userInputDTO.getPartner()) {
                     if (1 == user.getPartner()) {
-                        // 2级变1级
+                        // 1级变2级
                         userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), "");
                     }
                     if (0 == user.getPartner()) {
