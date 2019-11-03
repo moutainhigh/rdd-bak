@@ -93,17 +93,16 @@ public class MessageManagementServiceImpl implements MessageManagementService {
 
 
     @Override
-    public JSONResult sendMessageToOne(Map<String, String> maps, String userId) {
+    public boolean sendMessageToOne(Map<String, String> maps, String userId) {
         String msgModelId = maps.get("msgModelId");
         String receiverId = maps.get("receiverId");
         if(msgModelId == null || userId == null || receiverId == null) {
-            return new JSONResult("缺少参数", 400);
+            return false;
         }
-
         if(sendMsg(msgModelId, maps, userId, receiverId))
-            return new JSONResult("发送成功", 200);
+            return true;
         else
-            return new JSONResult("网络繁忙", 500);
+            return false;
     }
 
     /**
