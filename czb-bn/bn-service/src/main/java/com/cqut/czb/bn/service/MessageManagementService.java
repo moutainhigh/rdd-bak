@@ -20,6 +20,8 @@ public interface MessageManagementService {
 
     Boolean createMsgModel(MsgModel msgModel);
 
+    Boolean editMsgModel(MsgModel msgModel);
+
     Boolean sendMessage(String msgModelId);
 
     boolean sendMessageToOne(Map<String, String> maps, String userId);

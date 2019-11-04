@@ -46,6 +46,13 @@ public class MessageManagementController {
         return new JSONResult(messageManagementService.createMsgModel(msgModel));
     }
 
+    @PostMapping("/editMsgModel")
+    public JSONResult editMsgModel(@RequestBody MsgModel msgModel, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        msgModel.setAnnouncerId(user.getUserId());
+        return new JSONResult(messageManagementService.editMsgModel(msgModel));
+    }
+
     @PostMapping("/sendMessage")
     public JSONResult sendMessage(@Param("msgModelId")String msgModelId){
         return new JSONResult(messageManagementService.sendMessage(msgModelId));

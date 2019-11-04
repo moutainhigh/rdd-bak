@@ -70,6 +70,26 @@ public class MessageListDTO extends PageDTO {
      */
     private String announcerId;
 
+    private Integer msgType;
+
+    private Date endTime;
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(Integer msgType) {
+        this.msgType = msgType;
+    }
+
     public String getAnnouncerId() {
         return announcerId;
     }
