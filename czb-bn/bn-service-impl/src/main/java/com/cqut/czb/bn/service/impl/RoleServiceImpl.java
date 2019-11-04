@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
 import com.cqut.czb.bn.entity.dto.roleMenu.RoleMenuDTO;
+import com.cqut.czb.bn.entity.entity.Menu;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.IRoleService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -124,7 +125,11 @@ public class RoleServiceImpl implements IRoleService {
     public PageInfo<RoleDTO> selectRole(RoleInputDTO roleInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
         List<RoleDTO> roleList = roleMapperExtra.selectRole(roleInputDTO);
-
+        for(int i = 1; i < roleList.size(); i++){
+            for(Menu menu: roleList.get(i).getMenuList()){
+                roleList.get(0).getMenuList().add(menu);
+            }
+        }
         return new PageInfo<>(roleList);
     }
 

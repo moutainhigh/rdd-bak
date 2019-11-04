@@ -81,6 +81,7 @@
     <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <collection property="roles" column="{userId = user_id}" javaType="list" select="selectRoleList"></collection>
   </resultMap>
   <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >
   select
@@ -90,6 +91,7 @@
   left join czb_role cr on cr.role_id = cur.role_id
   where user_account = #{account,jdbcType=VARCHAR}
   and is_deleted = 0
+  LIMIT 1
 </select>
 
   <select id="findUserDTOById" resultMap="dtoResultMap" parameterType="java.lang.String" >
@@ -100,7 +102,17 @@
     left join czb_role cr on cr.role_id = cur.role_id
     where cu.user_id = #{id,jdbcType=VARCHAR}
     and is_deleted = 0
+    LIMIT 1
   </select>
+
+  <select id="selectRoleList" resultType="java.lang.String">
+    SELECT czb_user_role.role_id
+    FROM czb_user
+    LEFT JOIN czb_user_role
+    ON czb_user.user_id = czb_user_role.user_id
+    WHERE czb_user_role.user_id = #{userId, jdbcType=VARCHAR}
+  </select>
+
   <update id="updateUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     update czb_user
     <set >
@@ -119,7 +131,7 @@
       <if test="userName != null and userName != ''" >
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-        update_at = now(),
+
       <if test="partner != null" >
         partner = #{partner,jdbcType=INTEGER},
       </if>
