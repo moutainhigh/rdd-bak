@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.partnerVipIncome;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class PartnerVipIncomeDTO {
@@ -17,8 +19,10 @@ public class PartnerVipIncomeDTO {
 
     private Integer vipAddCount;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     private Double vipAddIncome;

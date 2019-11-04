@@ -62,6 +62,11 @@ public class MessageManagementServiceImpl implements MessageManagementService {
     }
 
     @Override
+    public Boolean editMsgModel(MsgModel msgModel) {
+        return msgModelMapper.updateByPrimaryKeySelective(msgModel) > 0;
+    }
+
+    @Override
     public Boolean sendMessage(String msgModelId) {
         try{
             //创建多个ID，使用纳秒级的时间戳
