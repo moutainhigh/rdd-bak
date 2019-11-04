@@ -2,7 +2,6 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO;
 import com.cqut.czb.bn.entity.entity.MsgModel;
-import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +22,5 @@ public interface MessageManagementService {
 
     Boolean sendMessage(String msgModelId);
 
-    JSONResult sendMessageToOne(Map<String, String> maps, String userId);
+    boolean sendMessageToOne(Map<String, String> maps, String userId);
 }

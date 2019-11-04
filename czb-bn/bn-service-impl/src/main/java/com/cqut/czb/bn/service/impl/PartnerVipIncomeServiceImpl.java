@@ -103,7 +103,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                             newPartnerVipIncome.setCreateAt(new Date());
                             boolean isInsert = partnerVipIncomeMapperExtra.insertIncome(newPartnerVipIncome)>0;
                             if (isInsert){
-                                return true;
+
                             }else {
                                 return false;
                             }
@@ -116,7 +116,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             }else {
                 return false;
         }
-        return false;
+        return true;
     }
     @Override
     public Boolean addVipIncome(String userId,Double addIncome,Integer type){
@@ -205,7 +205,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
         }
         PartnerVipIncomeDTO partnerVipIncomeDTO =  partnerVipIncomeMapperExtra.selectVipIncomeByPartnerId(user.getUserId());
         if (partnerVipIncomeDTO!=null){
-            partnerVipIncomeDTO.setVipTotalMoney(add(partnerVipIncomeDTO.getFirstVipIncome(),partnerVipIncomeDTO.getSecondPetrolIncome()));
+            partnerVipIncomeDTO.setVipTotalMoney(add(partnerVipIncomeDTO.getFirstVipIncome(),partnerVipIncomeDTO.getSecondVipIncome()));
             partnerVipIncomeDTO.setPetrolTotalMoney(add(partnerVipIncomeDTO.getFirstPetrolIncome(),partnerVipIncomeDTO.getSecondPetrolIncome()));
         }
         return partnerVipIncomeDTO;
@@ -215,6 +215,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
     public Boolean initVipIncomeData() {
             //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）
         List<PartnerBecomeTimeDTO> allPartner = partnerMapperExtra.selectPartnerBecomeTime();
+        System.out.println("合伙人数量："+allPartner.size());
         for (PartnerBecomeTimeDTO partnerDTO : allPartner){
             Double totalMoney = 0.0;  //vip应得返佣
             Double firstIncome = 0.0;   //一级vip收益
@@ -229,35 +230,40 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             Integer totalCount = 0;   //下级新增的Vip数
             if (partnerDTO.getPartner() == 2){
                 Double proportion = add(Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent()),Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent()));
-                PartnerVipMoney firstPartnerSubMoney = partnerMapperExtra.selectFirstPartnerSub(partnerDTO.getUserId());  //先算出事业合伙人直属下级的消费，利息12.5%+7.5%
-                if (firstPartnerSubMoney!=null && firstPartnerSubMoney.getVipConsumption()!=null) {
-                    totalMoney = add(totalMoney, mul(firstPartnerSubMoney.getVipConsumption(), proportion));  //乘以倍率算出vip第一部分
-                    firstIncome = add(firstIncome, mul(firstPartnerSubMoney.getVipConsumption(), proportion));
+                PartnerVipMoney firstPartnerSubMoneyVip = partnerMapperExtra.selectFirstPartnerSubVip(partnerDTO);  //先算出事业合伙人直属下级的消费，利息12.5%+7.5%
+                PartnerVipMoney firstPartnerSubMoneyPetrol = partnerMapperExtra.selectFirstPartnerSubPetrol(partnerDTO);
+                if (firstPartnerSubMoneyVip!=null && firstPartnerSubMoneyVip.getVipConsumption()!=null) {
+                    totalMoney = add(totalMoney, mul(firstPartnerSubMoneyVip.getVipConsumption(), proportion));  //乘以倍率算出vip第一部分
+                    firstIncome = add(firstIncome, mul(firstPartnerSubMoneyVip.getVipConsumption(), proportion));
                 }
-                if (firstPartnerSubMoney!=null && firstPartnerSubMoney.getPetrolMoney()!=null) {
-                    totalMoney = add(totalMoney, mul(firstPartnerSubMoney.getPetrolMoney(), petrolProportion)); //乘以倍率算出油卡第一部分
-                    firstPetrolIncome = add(firstPetrolIncome, mul(firstPartnerSubMoney.getPetrolMoney(), petrolProportion));
+                if (firstPartnerSubMoneyPetrol!=null && firstPartnerSubMoneyPetrol.getPetrolMoney()!=null) {
+                    totalMoney = add(totalMoney, mul(firstPartnerSubMoneyPetrol.getPetrolMoney(), petrolProportion)); //乘以倍率算出油卡第一部分
+                    firstPetrolIncome = add(firstPetrolIncome, mul(firstPartnerSubMoneyPetrol.getPetrolMoney(), petrolProportion));
                 }
                 List<SubPartnerDTO> subPartnerList = partnerMapperExtra.selectSubPartner(partnerDTO.getUserId());  //找到该事业合伙人的全部下级合伙人
                 if (subPartnerList!=null && subPartnerList.size()>0) {
                     for (SubPartnerDTO subPartnerDTO : subPartnerList) {  //依次算出事业合伙人下级的每个普通合伙人分走的钱
-                        PartnerVipMoney notBySecond = partnerMapperExtra.selectFirstNotBySecondPartnerSub(subPartnerDTO);   //下级成为合伙人之前，利息12.5%+7.5%
-                        if (notBySecond != null && notBySecond.getVipConsumption() != null) {
-                            totalMoney = add(totalMoney, mul(notBySecond.getVipConsumption(), proportion));
-                            firstIncome = add(firstIncome, mul(notBySecond.getVipConsumption(), proportion));
+                        PartnerVipMoney notBySecondVip = partnerMapperExtra.selectFirstNotBySecondPartnerSubVip(subPartnerDTO);   //下级成为合伙人之前，利息12.5%+7.5%
+                        if (notBySecondVip != null && notBySecondVip.getVipConsumption() != null) {
+                            totalMoney = add(totalMoney, mul(notBySecondVip.getVipConsumption(), proportion));
+//                            totalMoney = add(totalMoney, mul(notBySecondVip.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent())));
+                            firstIncome = add(firstIncome, mul(notBySecondVip.getVipConsumption(), proportion));
                         }
-                        if (notBySecond != null && notBySecond.getPetrolMoney() != null){
-                            totalMoney = add(totalMoney, mul(notBySecond.getPetrolMoney(), petrolProportion));
-                            firstPetrolIncome = add(firstPetrolIncome, mul(notBySecond.getPetrolMoney(), petrolProportion));
+                        PartnerVipMoney notBySecondPetrol = partnerMapperExtra.selectFirstNotBySecondPartnerSubPetrol(subPartnerDTO);
+                        if (notBySecondPetrol != null && notBySecondPetrol.getPetrolMoney() != null){
+                            totalMoney = add(totalMoney, mul(notBySecondPetrol.getPetrolMoney(), petrolProportion));
+//                            totalMoney = add(totalMoney, mul(notBySecondPetrol.getPetrolMoney(), petrolProportion2));
+                            firstPetrolIncome = add(firstPetrolIncome, mul(notBySecondPetrol.getPetrolMoney(), petrolProportion));
                         }
-                        PartnerVipMoney BySecond = partnerMapperExtra.selectFirstBySecondPartnerSub(subPartnerDTO);  //下级成为合伙人之后，利息7.5%
-                        if (BySecond != null && BySecond.getVipConsumption() != null) {
-                            totalMoney = add(totalMoney, mul(BySecond.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent())));
-                            secondIncome = add(secondIncome, mul(BySecond.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent())));
+                        PartnerVipMoney BySecondVip = partnerMapperExtra.selectFirstBySecondPartnerSubVip(subPartnerDTO);  //下级成为合伙人之后，利息7.5%
+                        if (BySecondVip != null && BySecondVip.getVipConsumption() != null) {
+                            totalMoney = add(totalMoney, mul(BySecondVip.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent())));
+                            secondIncome = add(secondIncome, mul(BySecondVip.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent())));
                         }
-                        if (BySecond != null && BySecond.getPetrolMoney() != null){
-                            totalMoney = add(totalMoney, mul(BySecond.getPetrolMoney(), petrolProportion2));
-                            secondPetrolIncome = add(secondPetrolIncome, mul(BySecond.getPetrolMoney(),petrolProportion2));
+                        PartnerVipMoney BySecondPetrol = partnerMapperExtra.selectFirstBySecondPartnerSubPetrol(subPartnerDTO);
+                        if (BySecondPetrol != null && BySecondPetrol.getPetrolMoney() != null){
+                            totalMoney = add(totalMoney, mul(BySecondPetrol.getPetrolMoney(), petrolProportion2));
+                            secondPetrolIncome = add(secondPetrolIncome, mul(BySecondPetrol.getPetrolMoney(),petrolProportion2));
                         }
                     }
                 }
@@ -265,16 +271,17 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                 if (countDTO!=null && countDTO.getVipCount()!=null)
                     totalCount += countDTO.getVipCount();
             } else if (partnerDTO.getPartner() == 1){    //只有一种利息12.5%，直接算
-                PartnerVipMoney partnerVipMoney = partnerMapperExtra.selectSecondPartnerSub(partnerDTO);
-                if (partnerVipMoney!=null && partnerVipMoney.getVipConsumption()!=null) {
-                    totalMoney = add(totalMoney,mul(partnerVipMoney.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent())));
-                    firstIncome = add(firstIncome, mul(partnerVipMoney.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent())));
+                PartnerVipMoney partnerVipMoneyVip = partnerMapperExtra.selectSecondPartnerSubVip(partnerDTO);
+                if (partnerVipMoneyVip!=null && partnerVipMoneyVip.getVipConsumption()!=null) {
+                    totalMoney = add(totalMoney,mul(partnerVipMoneyVip.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent())));
+                    firstIncome = add(firstIncome, mul(partnerVipMoneyVip.getVipConsumption(), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent())));
                 }
-                if (partnerVipMoney!=null && partnerVipMoney.getPetrolMoney()!=null) {
-                    totalMoney = add(totalMoney,mul(partnerVipMoney.getPetrolMoney(),petrolProportion1));
-                    firstPetrolIncome = add(firstPetrolIncome,mul(partnerVipMoney.getPetrolMoney(),petrolProportion1));
+                PartnerVipMoney partnerVipMoneyPetrol = partnerMapperExtra.selectSecondPartnerSubPetrol(partnerDTO);
+                if (partnerVipMoneyPetrol!=null && partnerVipMoneyPetrol.getPetrolMoney()!=null) {
+                    totalMoney = add(totalMoney,mul(partnerVipMoneyPetrol.getPetrolMoney(),petrolProportion1));
+                    firstPetrolIncome = add(firstPetrolIncome,mul(partnerVipMoneyPetrol.getPetrolMoney(),petrolProportion1));
                 }
-                VipCountDTO countDTO = partnerMapperExtra.selectSecondPartnerSubVipCount(partnerDTO.getUserId());
+                VipCountDTO countDTO = partnerMapperExtra.selectSecondPartnerSubVipCount(partnerDTO);
                 if (countDTO!=null && countDTO.getVipCount()!=null)
                 totalCount += countDTO.getVipCount();
             } else {

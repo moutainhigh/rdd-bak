@@ -55,6 +55,6 @@ public class MessageManagementController {
     @PostMapping("/sendMessageToOne")
     public JSONResult sendMessageToOne(@RequestBody Map<String, String> map, Principal principal) {
         User user = (User)redisUtils.get(principal.getName());
-        return messageManagementService.sendMessageToOne(map, user.getUserId());
+        return new JSONResult(messageManagementService.sendMessageToOne(map, user.getUserId()));
     }
 }

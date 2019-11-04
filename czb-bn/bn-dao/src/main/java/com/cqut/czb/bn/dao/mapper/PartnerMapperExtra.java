@@ -65,16 +65,24 @@ public interface PartnerMapperExtra {
 
     List<SubPartnerDTO> selectSubPartner(String userId);
 
-    PartnerVipMoney selectFirstPartnerSub(String userId);
+    PartnerVipMoney selectFirstPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
 
-    PartnerVipMoney selectSecondPartnerSub(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+    PartnerVipMoney selectFirstPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
 
-    PartnerVipMoney selectFirstBySecondPartnerSub(SubPartnerDTO subPartnerDTO);
+    PartnerVipMoney selectSecondPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
 
-    PartnerVipMoney selectFirstNotBySecondPartnerSub(SubPartnerDTO subPartnerDTO);
+    PartnerVipMoney selectSecondPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    PartnerVipMoney selectFirstBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstNotBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstNotBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
 
     VipCountDTO selectFirstPartnerSubVipCount(String userId);
 
-    VipCountDTO selectSecondPartnerSubVipCount(String userId);
+    VipCountDTO selectSecondPartnerSubVipCount(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
 
 }

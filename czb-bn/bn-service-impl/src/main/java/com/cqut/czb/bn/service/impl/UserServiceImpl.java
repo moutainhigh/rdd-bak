@@ -123,14 +123,15 @@ public class UserServiceImpl implements IUserService {
                         exp.setRoleId(userRole1.getRoleId());
                         List<RoleDTO> roleList = roleMapperExtra.selectRole(exp);
                         if (roleList!=null && roleList.size()!=0) {
-                            if ("服务商".equals(roleList.get(0).getRoleName())){
+                            if ("普通用户".equals(roleList.get(0).getRoleName())){
                                 UserInputDTO user = new UserInputDTO();
                                 user.setUserId(userInputDTO.getUserId());
-                                user.setIsLoginPc(1);
+                                user.setIsLoginPc(0);
                                 userMapperExtra.updateUser(user);
                             }else {
                                 UserInputDTO user = new UserInputDTO();
-                                user.setIsLoginPc(0);
+                                user.setUserId(userInputDTO.getUserId());
+                                user.setIsLoginPc(1);
                                 userMapperExtra.updateUser(user);
                             }
                             UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
@@ -146,11 +147,7 @@ public class UserServiceImpl implements IUserService {
                 isInsert = userRoleMapperExtra.insertUserRoles(insertList) > 0;
             }
         }
-        boolean isDelete = true;
-        if(deleteList.size() > 0) {
-            isDelete = userRoleMapperExtra.deleteUserRoles(deleteList) > 0;
-        }
-        return isInsert && isDelete;
+        return isInsert;
     }
 
     @Override
@@ -163,12 +160,13 @@ public class UserServiceImpl implements IUserService {
         UserRole userRole = new UserRole();
         userRole.setUserId(userDTO.getUserId());
         List<UserRole> userRoleList = userRoleMapperExtra.slectUserRoleList(userRole);
+        List<RoleDTO> roleDTOList = new ArrayList<>();
         for(UserRole userRole1: userRoleList) {
             RoleInputDTO roleInputDTO = new RoleInputDTO();
             roleInputDTO.setRoleId(userRole1.getRoleId());
-            List<RoleDTO> roleDTOList = roleMapperExtra.selectRole(roleInputDTO);
-            userDTO.setRoleList(roleDTOList);
+            roleDTOList.add(roleMapperExtra.selectRole(roleInputDTO).get(0));
         }
+        userDTO.setRoleList(roleDTOList);
         return userDTO;
     }
 
@@ -215,6 +213,7 @@ public class UserServiceImpl implements IUserService {
                 }
             }
         }
+        User superUser = userMapper.selectByPrimaryKey(userInputDTO.getSuperiorUser());
         boolean isUpdateIndicatorRecord =true;
          if(0 == userInputDTO.getPartner()){
             userInputDTO.setIsLoginPc(0);
@@ -234,6 +233,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 userInputDTO.setSecondLevelPartner("");
+                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
             if( 2 == userInputDTO.getPartner()) {
@@ -268,6 +268,10 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
                 userInputDTO.setSecondLevelPartner("");
+                if(superUser != null && 2 != superUser.getPartner()){
+                    userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
+                    userInputDTO.setSuperiorUser("");
+                }
             }
             if (2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
@@ -276,6 +280,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualPromotionNumber(0);
                 isUpdateIndicatorRecord = indicatorRecordMapper.insertSelective(indicatorRecord) > 0;
                 userInputDTO.setFirstLevelPartner("");
+                userInputDTO.setSecondLevelPartner("");
                 userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
             }
@@ -289,17 +294,17 @@ public class UserServiceImpl implements IUserService {
             if(null != userList && 0 < userList.size()) {
                 if (0 == userInputDTO.getPartner()) {
                     if (1 == user.getPartner()) {
-                        // 2级变0级
+                        // 一级变0级
                         userMapperExtra.updatePartnerState(userList, null, "");
                     }
                     if (2 == user.getPartner()) {
-                        // 1级变0级
+                        // 二级变0级
                         userMapperExtra.updatePartnerState(userList, "", null);
                     }
                 }
                 if (1 == userInputDTO.getPartner()) {
                     if (2 == user.getPartner()) {
-                        // 1级变2级
+                        // 2级变1级
                         userMapperExtra.updatePartnerState(userList, "", userInputDTO.getUserId());
                     }
                     if (0 == user.getPartner()) {
@@ -308,7 +313,7 @@ public class UserServiceImpl implements IUserService {
                 }
                 if (2 == userInputDTO.getPartner()) {
                     if (1 == user.getPartner()) {
-                        // 2级变1级
+                        // 1级变2级
                         userMapperExtra.updatePartnerState(userList, userInputDTO.getUserId(), "");
                     }
                     if (0 == user.getPartner()) {
@@ -323,11 +328,15 @@ public class UserServiceImpl implements IUserService {
                     redisUtil.put(user.getUserAccount(), userDTO);
                 }
             }
+            String roleId= roleMapperExtra.selectRoleIdByRoleName("合伙人");
+            if(roleId != null){
+                userInputDTO.setRoleId(roleId);
+                return this.assignRole(userInputDTO);
+            }
             return true;
         } else {
             return false;
         }
-
     }
 
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {

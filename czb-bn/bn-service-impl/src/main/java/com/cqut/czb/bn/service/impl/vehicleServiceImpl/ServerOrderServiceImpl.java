@@ -164,6 +164,9 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                 user.setUserId(userId);
                 JGPush jgPush = new JGPush();
                 jgPush.setType(1);
+                if (insertContent!=null) {
+                    jgPush.setContent(insertContent);
+                }
 //                jgPush.setNoticeId("688008757855812");
                 jgPush.setNoticeId(noticeId);
                 jgPush.setUserId(user.getUserId());

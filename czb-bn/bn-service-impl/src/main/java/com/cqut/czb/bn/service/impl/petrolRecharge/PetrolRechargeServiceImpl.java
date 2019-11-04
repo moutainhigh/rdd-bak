@@ -1,10 +1,19 @@
 package com.cqut.czb.bn.service.impl.petrolRecharge;
 
+import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
+import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
+import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.service.MessageManagementService;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
+import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
+import com.cqut.czb.bn.util.config.SendMesConfig.MessageModelInfo;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -14,12 +23,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
+
+    @Autowired
+    PetrolSalesRecordsMapper petrolSalesRecordsMapper;
+
+    @Autowired
+    MessageManagementService messageManagementService;
 
     @Override
     public PageInfo<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO) {
@@ -30,18 +51,22 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
     @Override
     public boolean recharge(PetrolRechargeInputDTO record) {
-        boolean isRecharge = petrolSalesRecordsMapperExtra.recharge(record.getRecordId())>0;
+        boolean isRecharge = petrolSalesRecordsMapperExtra.recharge(record.getRecordId()) > 0;
+        //充值油卡更新卡号操作
         if(isRecharge && record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != ""){
             petrolSalesRecordsMapperExtra.updatePetrolNum(record);
-            PhoneCode phoneCode = new PhoneCode();
-            if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getUpdatePetrolNum(), record.getPetrolDenomination()))){
-                System.out.print("充值油卡发送成功");
-            }
         }
-        PhoneCode phoneCode = new PhoneCode();
-        if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getPetrolNum(), record.getPetrolDenomination()))){
-            System.out.print("充值油卡发送成功");
-        }
+        PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
+        Map<String,String> content = new HashMap<>();
+        content.put("petrolKind", record.getPetrolKind());
+        content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
+        serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
+        content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+        content.put("receiverId", petrolSalesRecords.getBuyerId());
+        content.put("userAccount", record.getUserAccount());
+        content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
+        content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
+        messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
         return isRecharge;
     }
 
