@@ -112,9 +112,8 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<petrolPriceReportDTO> selectPetrolPriceReport(String area) {
-        if(area==null&&area.equals("")){
-            System.out.println("area为空");
-            return null;
+        if(area==null||area.equals("")){
+            area="重庆市";
         }
         return petrolPriceReportMapperExtra.selectAll(area);
     }
