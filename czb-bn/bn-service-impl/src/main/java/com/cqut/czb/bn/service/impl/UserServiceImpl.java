@@ -233,6 +233,7 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 userInputDTO.setSecondLevelPartner("");
+                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
             if( 2 == userInputDTO.getPartner()) {
