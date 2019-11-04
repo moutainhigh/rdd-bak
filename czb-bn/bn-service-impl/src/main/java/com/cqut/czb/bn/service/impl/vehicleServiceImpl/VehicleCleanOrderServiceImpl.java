@@ -101,7 +101,8 @@ public class VehicleCleanOrderServiceImpl implements VehicleCleanOrderService{
                     userIncome.setOtherIncome(0.00);
                     Boolean insert = userIncomeInfoMapperExtra.insert(userIncome)>0;  //无记录则插入
                     if (insert){   //插入成功开始进行余额返还
-                        userIncomeInfo.setInfoId(userIncome.getInfoId());
+//                        userIncomeInfo.setInfoId(userIncome.getInfoId());
+                        userIncomeInfo = userIncomeInfoMapperExtra.selectUserIncomeInfo(vehicleCleanOrderDTOList.get(0).getUserId());
                         userIncomeInfo.setUpdateAt(new Date());
                         userIncomeInfo.setRefundMoney(vehicleCleanOrderDTOList.get(0).getActualPrice());
                         isRefund = userIncomeInfoMapperExtra.updateOtherIncome(userIncomeInfo)>0;

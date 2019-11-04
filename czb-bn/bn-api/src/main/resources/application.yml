@@ -8,6 +8,11 @@ spring:
 #    username: ${MYSQL_USER:czb_user}
 #    password: ${MYSQL_PASS:Q@iG4#6F}
 
+#    url: jdbc:mysql://${MYSQL_URL:121.41.9.13:9525/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
+#    username: ${MYSQL_USER:tempRoot}
+#    password: ${MYSQL_PASS:8kkC&25%}
+
+
     url: jdbc:mysql://${MYSQL_URL:39.98.250.45:3306/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:G@6tSRWx}
@@ -20,7 +25,8 @@ spring:
 #    host: 172.16.43.86
 #    port: 5259
 #    password: r2Z0@WJM
-    host: localhost
+    host: 39.98.250.45
+#    host: localhost
     port: 6379
     password: root
     jedis:
@@ -36,9 +42,12 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+  mvc:
+    async:
+      request-timeout: 10000
 
 server:
-  port: 8899
+  port: 8090
 
 flyway:
     baseline-on-migrate: true
@@ -61,3 +70,4 @@ jwt:
   iss: echisan
   expiration: 3600
   expiration_prmember: 604800
+
