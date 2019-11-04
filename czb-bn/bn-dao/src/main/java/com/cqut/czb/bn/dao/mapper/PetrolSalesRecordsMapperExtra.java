@@ -17,7 +17,7 @@ public interface PetrolSalesRecordsMapperExtra {
 
     List<Petrol> getGTSoldPetrolForUser(String userId);
 
-    List<AppPetrolSaleInfoOutputDTO> getPhysicalCardsForUser(@Param("userId") String userId, @Param("petrolKind")String petrolKind);
+    List<AppPetrolSaleInfoOutputDTO> getPhysicalCardsForUser(@Param("userId") String userId, @Param("petrolKind") String petrolKind);
 
     int insert(PetrolSalesRecords record);
 
@@ -29,6 +29,7 @@ public interface PetrolSalesRecordsMapperExtra {
 
     /**
      * 通过合同id查出相应的卡
+     *
      * @param contractId
      * @return
      */
@@ -36,6 +37,7 @@ public interface PetrolSalesRecordsMapperExtra {
 
     /**
      * 通过订单号查询购买信息
+     *
      * @param orgId
      * @return
      */
@@ -43,6 +45,7 @@ public interface PetrolSalesRecordsMapperExtra {
 
     /**
      * 更改购买信息
+     *
      * @param record
      * @return
      */
@@ -51,4 +54,20 @@ public interface PetrolSalesRecordsMapperExtra {
     String sumOfPetrolSaleMoney(GetPetrolSaleInfoInputDTO infoInputDTO);
 
     int updatePetrolNum(PetrolRechargeInputDTO inputDTO);
+
+    /**
+     * 油卡拥有者判断
+     *
+     * @param petrol
+     * @return
+     */
+    List<Petrol> getOwnPetrol(Petrol petrol);
+
+    /**
+     * 判断油卡卡号是否重复
+     *
+     * @param petrolNum
+     * @return
+     */
+    List<Petrol> judgePetrolNumRepeat(@Param("petrolNum") String petrolNum);
 }

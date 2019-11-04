@@ -6,6 +6,7 @@ import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
+import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.MessageManagementService;
@@ -53,7 +54,14 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
     public boolean recharge(PetrolRechargeInputDTO record) {
         boolean isRecharge = petrolSalesRecordsMapperExtra.recharge(record.getRecordId()) > 0;
         //充值油卡更新卡号操作
-        if(isRecharge && record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != ""){
+        if(isRecharge && record.getUpdatePetrolNum() != null && "".equals(record.getUpdatePetrolNum())){
+            // 判断要更新的油卡卡号是否跟数据库中的卡号重复
+            List<Petrol> repeatPetrol = petrolSalesRecordsMapperExtra.judgePetrolNumRepeat(record.getUpdatePetrolNum());
+            if (repeatPetrol != null && repeatPetrol.size() > 0) {
+                return false;
+            }
+            // 管理员修改卡号，加前缀S
+            record.setUpdatePetrolNum("S" + record.getUpdatePetrolNum());
             petrolSalesRecordsMapperExtra.updatePetrolNum(record);
         }
         PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());

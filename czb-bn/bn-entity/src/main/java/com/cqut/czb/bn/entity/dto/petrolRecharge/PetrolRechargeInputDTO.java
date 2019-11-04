@@ -3,6 +3,7 @@ package com.cqut.czb.bn.entity.dto.petrolRecharge;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 
 public class PetrolRechargeInputDTO extends PageDTO {
+    private String userId;
     private String petrolNum;
     private String isRecharged;
     private String petrolKind;
@@ -10,6 +11,14 @@ public class PetrolRechargeInputDTO extends PageDTO {
     private String updatePetrolNum;
     private double petrolDenomination;
     private String userAccount;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserAccount() {
         return userAccount;
