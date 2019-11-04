@@ -551,7 +551,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
         System.out.println("addVipIncome"+addVipIncome);
 //        //发送购买成功推送给特定用户
-        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
+        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId(), money);
         return 1;
     }
 
@@ -611,7 +611,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);
         System.out.println("addVipIncome"+addVipIncome);
 //        //发送购买成功推送给特定用户
-        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId());
+        editContent(ownerId,null,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId(), money);
         return 1;
     }
 
@@ -697,7 +697,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
                 System.out.println("addVipIncome"+addVipIncome);
                 //发送购买成功推送给特定用户
-                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
+                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId(), money);
                 return 1;
             }
             else
@@ -713,7 +713,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             Boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
             Integer putBack = dataProcessService.putBackPetrol(isChange,petrolNum);
             //发送购买成功推送给特定用户
-            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
+            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId(), money);
             return putBack;
         }
         return 1;
@@ -789,7 +789,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
                 System.out.println("addVipIncome"+addVipIncome);
                 //发送购买成功推送给特定用户
-                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId());
+                editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId(), money);
                 return 1;
             }
             else
@@ -807,14 +807,14 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //判断是否放回油卡
             Integer putBack = dataProcessService.putBackPetrol(isChange,petrolNum);
             //发送购买成功推送给特定用户
-            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId());
+            editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId(), money);
             return putBack;
         }
 
         return 1;
     }
 
-    public void editContent(String ownerId,String petrolNum,String userId,String noticeId) {
+    public void editContent(String ownerId,String petrolNum,String userId,String noticeId, Double money) {
         //发送购买成功推送给特定用户
         Map<String,String> content = new HashMap<>();
         if (ownerId == null && petrolNum == null){
@@ -824,14 +824,12 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             Petrol petrol = petrolMapperExtra.selectPetrolByNum(petrolNum);
             if (petrol!=null && petrol.getPetrolKind()==1){
                 content.put("petrolKind","中石油");
-                content.put("petrolPrice",petrol.getPetrolPrice().toString());
             }else if (petrol!=null && petrol.getPetrolKind()==2) {
                 content.put("petrolKind","中石化");
-                content.put("petrolPrice",petrol.getPetrolPrice().toString());
             }else if (petrol!=null && petrol.getPetrolKind()==0) {
                 content.put("petrolKind","国通");
-                content.put("petrolPrice",petrol.getPetrolPrice().toString());
             }
+            content.put("petrolPrice", String.valueOf(money));
         }
         if (ownerId != null) {
             UserDTO userDTO = userMapperExtra.findUserDTOById(ownerId);

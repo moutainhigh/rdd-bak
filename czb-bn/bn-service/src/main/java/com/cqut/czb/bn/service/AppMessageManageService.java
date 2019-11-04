@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.ModifyInfoDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.MsgNumDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO;
@@ -12,7 +13,7 @@ public interface AppMessageManageService {
     /**
      * app get all the Messages of the person(获取个人所有的未读信息)
      */
-    List<MsgRecordDTO> getMessages(User user);
+    List<MsgRecordDTO> getMessages(User user, PageDTO pageDTO);
 
     /**
      * app get all the message number

@@ -296,23 +296,18 @@ INNER JOIN (
     </update>
 
     <update id="updatePetrolNum" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO">
-        UPDATE czb_petrol_sales_records
-        LEFT JOIN czb_petrol_delivery_records
-        ON czb_petrol_sales_records.petrol_num = czb_petrol_delivery_records.petrol_num
-        AND czb_petrol_sales_records.buyer_id = #{userId, jdbcType = VARCHAR}
-        LEFT JOIN czb_petrol
-        ON czb_petrol_sales_records.petrol_num = czb_petrol.petrol_num
-        LEFT JOIN czb_address
-        ON czb_address.address_id = czb_petrol_delivery_records.address_id
-        AND czb_address.user_id = #{userId, jdbcType = VARCHAR}
-        SET czb_petrol_delivery_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
+          UPDATE czb_petrol_sales_records
+          LEFT JOIN czb_petrol_delivery_records
+            ON czb_petrol_sales_records.petrol_num = czb_petrol_delivery_records.petrol_num
+          LEFT JOIN czb_petrol
+            ON czb_petrol_sales_records.petrol_num = czb_petrol.petrol_num
+          SET czb_petrol_delivery_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
             czb_petrol.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
             czb_petrol_sales_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR}
-        WHERE
-            czb_petrol.petrol_kind = 1
-        AND czb_petrol.state = 2
-        AND czb_petrol.petrol_num = #{petrolNum, jdbcType = VARCHAR}
-        AND czb_petrol.owner_id = #{userId, jdbcType = VARCHAR}
+          WHERE
+	        czb_petrol.petrol_kind = 1
+	        AND czb_petrol.state = 2
+	        AND czb_petrol.petrol_num = #{petrolNum, jdbcType = VARCHAR}
     </update>
 
     <resultMap id="simplePetrol" type="com.cqut.czb.bn.entity.entity.Petrol">
@@ -338,7 +333,7 @@ INNER JOIN (
         FROM
             czb_petrol
         WHERE
-            petrol_num like concat('%',#{petrolNum,jdbcType=INTEGER},'%')
+            petrol_num = #{petrolNum,jdbcType=INTEGER}
         LIMIT 1
     </select>
 

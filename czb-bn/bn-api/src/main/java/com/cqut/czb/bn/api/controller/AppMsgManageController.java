@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.ModifyInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -42,11 +43,11 @@ public class AppMsgManageController {
      * app get all the Messages of the person(获取个人近期的所有信息)
      */
     @RequestMapping(value = "/getMessages", method = RequestMethod.GET)
-    public JSONResult getMessages(Principal principal) {
+    public JSONResult getMessages(Principal principal, PageDTO pageDTO) {
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();
 //        user.setUserId("156225046615657");
-        return new JSONResult(appMessageManageService.getMessages(user));
+        return new JSONResult(appMessageManageService.getMessages(user, pageDTO));
     }
 
     /**
