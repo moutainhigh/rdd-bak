@@ -87,9 +87,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             Petrol petrol =  petrolMapperExtra.selectPetrolByDeliveryRecordId(deliveryInput.getRecordId());
             Map<String,String> content = new HashMap<>();
             if(1 == petrol.getPetrolKind()){
-                content.put("petrolKind", "中石油");
+                content.put("petrolKind", "中国石油加油卡");
             }else if(2 == petrol.getPetrolKind()){
-                content.put("petrolKind", "中石化");
+                content.put("petrolKind", "中国石化加油卡");
             }else {
                 content.put("petrolKind", " ");
             }
@@ -265,9 +265,9 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                         Petrol petrol =  petrolMapperExtra.selectPetrolByNum( p.getPetrolNum());
                         Map<String,String> content = new HashMap<>();
                         if(1 == petrol.getPetrolKind()){
-                            content.put("petrolKind", "中石油");
+                            content.put("petrolKind", "中国石油加油卡");
                         }else if(2 == petrol.getPetrolKind()){
-                            content.put("petrolKind", "中石化");
+                            content.put("petrolKind", "中国石化加油卡");
                         }else {
                             content.put("petrolKind", " ");
                         }
