@@ -116,6 +116,11 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             jsonResult.setMessage("该油卡的持有人不存在");
             return jsonResult;
         }
+        if (record.getUpdatePetrolNum().length() != 16){
+            jsonResult.setData(false);
+            jsonResult.setMessage("该油卡格式错误");
+            return jsonResult;
+        }
         // 用户修改卡号，加前缀RDD
         record.setUpdatePetrolNum("RDD" + record.getUpdatePetrolNum() + receiverList.get(0));
         // 修改油卡卡号
