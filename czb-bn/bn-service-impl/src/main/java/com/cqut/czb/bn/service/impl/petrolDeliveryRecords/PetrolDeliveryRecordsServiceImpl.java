@@ -61,6 +61,18 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
             phoneCode.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), messageDTO.getDeliveryNum());
         }
+        //发送APP内部消息 和 推送
+//        PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
+//        Map<String,String> content = new HashMap<>();
+//        content.put("petrolKind", record.getPetrolKind());
+//        content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
+//        serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
+//        content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+//        content.put("receiverId", petrolSalesRecords.getBuyerId());
+//        content.put("userAccount", record.getUserAccount());
+//        content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
+//        content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
+//        messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
         return updateDeliveryRecord;
     }
 

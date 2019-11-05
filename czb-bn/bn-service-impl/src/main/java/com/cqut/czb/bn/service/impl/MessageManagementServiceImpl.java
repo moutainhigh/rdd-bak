@@ -133,7 +133,7 @@ public class MessageManagementServiceImpl implements MessageManagementService {
         record.setMsgRecordId(createId());
         record.setMsgModelId(msgModelId);
         record.setAlert(msgModel.getAltert());
-        record.setMsgState(0);
+        record.setMsgState(1);
         record.setMsgAnnouncerId(announcerId);
         record.setMsgReceiverId(receiverId);
         record.setContent(msgModel.getMsgContent());

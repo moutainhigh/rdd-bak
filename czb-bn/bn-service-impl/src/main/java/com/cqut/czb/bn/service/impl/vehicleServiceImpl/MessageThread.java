@@ -4,7 +4,7 @@ import com.cqut.czb.bn.dao.mapper.AppRouterMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.CleanRiderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra;
-import com.cqut.czb.bn.entity.dto.PushDTO;
+import com.cqut.czb.bn.entity.dto.PushIOSDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
@@ -146,7 +146,7 @@ public class MessageThread implements Runnable {
             try
             {
                 PushNotificationPayload payLoad = new PushNotificationPayload();
-                PushDTO pushDTO = new PushDTO();
+                PushIOSDTO pushDTO = new PushIOSDTO();
                 if (remotePushNotice.getAppRouterId()!=null){
                     AppRouter appRouter = appRouterMapper.selectByPrimaryKey(remotePushNotice.getAppRouterId());
                     if (appRouter!=null && appRouter.getRouterId()!=null) {
