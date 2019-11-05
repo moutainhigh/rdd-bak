@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -80,7 +81,13 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Override
     public List<AppPetrolSaleInfoOutputDTO> getPhysicalCardRechargeRecords(String userId, String petrolKind) {
-        List<AppPetrolSaleInfoOutputDTO> list=petrolSalesRecordsMapperExtra.getPhysicalCardsForUser(userId,petrolKind);
+        List<AppPetrolSaleInfoOutputDTO> list = petrolSalesRecordsMapperExtra.getPhysicalCardsForUser(userId,petrolKind);
+        //解决app油卡购买时间显示问题
+        for(AppPetrolSaleInfoOutputDTO appPetrolSaleInfoOutputDTO : list){
+            Date temp = appPetrolSaleInfoOutputDTO.getCreateAt();
+            appPetrolSaleInfoOutputDTO.setCreateAt(appPetrolSaleInfoOutputDTO.getTransactionTime());
+            appPetrolSaleInfoOutputDTO.setTransactionTime(temp);
+        }
         return list;
     }
 
