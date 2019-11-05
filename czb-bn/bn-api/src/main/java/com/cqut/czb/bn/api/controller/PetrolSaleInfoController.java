@@ -3,6 +3,7 @@ package com.cqut.czb.bn.api.controller;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
+import com.cqut.czb.bn.entity.global.DateDealWith;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
@@ -17,6 +18,8 @@ import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/api/petrolSaleInfo")
+
+
 public class PetrolSaleInfoController {
     @Autowired
     IPetrolManagementService petrolManagementService;
@@ -28,6 +31,12 @@ public class PetrolSaleInfoController {
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolSaleInfoList(inputDTO));
         dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO));
+        //获取今日销售数据
+        GetPetrolSaleInfoInputDTO inputDTO2=new GetPetrolSaleInfoInputDTO();
+        inputDTO2.setStartTime(DateDealWith.backStartTime());
+        inputDTO2.setEndTime(DateDealWith.backEndTime());
+        dataWithCountOutputDTO.setTodayCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO2));
+        dataWithCountOutputDTO.setTodayNum(petrolManagementService.getPetrolSaleInfoList(inputDTO2).getSize()+"");
         return new JSONResult(dataWithCountOutputDTO);
     }
 

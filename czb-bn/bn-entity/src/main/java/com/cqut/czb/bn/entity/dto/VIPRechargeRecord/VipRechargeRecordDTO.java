@@ -13,6 +13,26 @@ public class VipRechargeRecordDTO {
 
     private Double totalAmount;
 
+    private Double todayTotalAmount;
+
+    private Integer  todayTotalNum;
+
+    public Double getTodayTotalAmount() {
+        return todayTotalAmount;
+    }
+
+    public void setTodayTotalAmount(Double todayTotalAmount) {
+        this.todayTotalAmount = todayTotalAmount;
+    }
+
+    public Integer getTodayTotalNum() {
+        return todayTotalNum;
+    }
+
+    public void setTodayTotalNum(Integer todayTotalNum) {
+        this.todayTotalNum = todayTotalNum;
+    }
+
     public void setVipRechargeRecordListDTOList(PageInfo vipRechargeRecordListDTOList) {
         this.vipRechargeRecordListDTOList = vipRechargeRecordListDTOList;
     }
