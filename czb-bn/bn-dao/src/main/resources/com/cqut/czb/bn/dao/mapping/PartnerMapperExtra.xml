@@ -314,10 +314,18 @@
         <id column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="partner" property="partner" jdbcType="INTEGER" />
         <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
-        <result column="near_time" property="nearTime" jdbcType="TIMESTAMP" />
         <result column="total_count" property="totalCount" jdbcType="INTEGER" />
         <result column="is_vip" property="isVip" jdbcType="INTEGER" />
         <result column="vip_count" property="vipCount" jdbcType="INTEGER" />
+        <association property="totalMoney" column="user_id"  select="selectNextChildMoney"></association>
+        <association property="nearTime" column="user_id"  select="selectNextChildMoneyTime"></association>
+    </resultMap>
+
+    <resultMap id="PartnerChildMoneyMap" type="java.lang.Double">
+        <result column="total_money" property="totalMoney" jdbcType="DOUBLE"/>
+    </resultMap>
+    <resultMap id="PartnerChildMoneyTimeMap" type="java.util.Date">
+        <result column="near_time" property="nearTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <select id="selectNextChild" resultMap="PartnerChildMap" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO"  >
         SELECT
@@ -345,7 +353,31 @@
         GROUP BY a.user_id ORDER  BY COUNT(b.user_id) DESC
     </select>
 
-    <select id="selectNextChildMoney" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+
+
+    <select id="selectNextChildMoney"  resultMap="PartnerChildMoneyMap">
+        SELECT
+        SUM(c.money) as total_money
+        FROM
+        czb_consumption_record c
+        LEFT JOIN czb_user a ON c.user_id =a.user_id
+        where
+        a.user_id = #{user_id,jdbcType=VARCHAR} AND a.user_id is not NULL
+    </select>
+
+    <select id="selectNextChildMoneyTime"  resultMap="PartnerChildMoneyTimeMap">
+        SELECT
+        MAX(c.create_at) as near_time
+        FROM
+        czb_consumption_record c
+        LEFT JOIN czb_user a ON c.user_id =a.user_id
+        where
+        a.user_id = #{user_id,jdbcType=VARCHAR} AND a.user_id is not NULL
+    </select>
+
+
+
+    <select id="selectNextChildMoney1" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
         SELECT
         a.user_id as userId,
         a.user_account as userAccount,
@@ -353,8 +385,8 @@
         SUM(c.money) as totalMoney,
         MAX(c.create_at) AS nearTime
         FROM
-        czb_user a
-        LEFT JOIN czb_consumption_record c ON a.user_id =c.user_id
+        czb_consumption_record c
+        LEFT JOIN czb_user a ON c.user_id =a.user_id
         <where>
             <if test="userId!=null and userId!=''">
                 a.superior_user = #{userId,jdbcType=VARCHAR}
@@ -451,42 +483,65 @@
             ) AND b.money is not null
     </select>
 
-    <select id="selectAllPartnerManage" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+    <resultMap id="AllPartnerMap" type="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+        <id column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="partner" property="partner" jdbcType="INTEGER" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
+        <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="is_vip" property="isVip" jdbcType="INTEGER" />
+        <result column="vip_count" property="vipCount" jdbcType="INTEGER" />
+        <association property="totalMoney" column="user_id"  select="selectAllPartnerMoney"></association>
+        <association property="nearTime" column="user_id"  select="selectAllPartnerMoneyTime"></association>
+        <association property="consumptionCount" column="user_id"  select="selectAllPartnerMoneyCount"></association>
+    </resultMap>
+
+    <select id="selectAllPartnerManage" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultMap="AllPartnerMap">
         SELECT
-        a.user_id AS userId,
-        a.user_account AS  userAccount,
-        a.partner AS partner,
-        a.is_vip as isVip,
-        COUNT(case when c.is_vip=1 then 1 else null end ) AS vipCount,
-        SUM(b.money) AS totalMoney,
-        COUNT(b.money) AS consumptionCount,
-        MAX(b.create_at) as nearTime
+        a.user_id,
+        a.user_account,
+        a.partner,
+        a.is_vip,
+        COUNT(case when c.is_vip=1 then 1 else null end ) AS vip_count,
+        COUNT(c.user_id) AS total_count
         FROM
         czb_user a
         LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner  OR a.user_id = c.second_level_partner )
-        LEFT JOIN czb_consumption_record b ON c.user_id = b.user_id
         WHERE
         a.partner!=0
         <if test="userAccount!=null and userAccount!=''">
             AND a.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
         </if>
-        GROUP BY a.user_id ORDER BY SUM(b.money) DESC
+        GROUP BY a.user_id ORDER BY COUNT(case when c.is_vip=1 then 1 else null end ) DESC
     </select>
 
-    <select id="selectAllPartnerCount" parameterType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO" resultType="com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO">
+    <select id="selectAllPartnerMoney" resultType="java.lang.Double">
         SELECT
-        a.user_id AS userId,
-        a.user_account as userAccount,
-        COUNT(c.user_id) AS totalCount
+        sum(a.money) AS total_money
         FROM
-        czb_user a
-        LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner OR a.user_id = c.second_level_partner)
-        WHERE
-        a.partner!=0
-        <if test="userAccount!=null and userAccount!=''">
-            AND a.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
-        </if>
-        GROUP BY a.user_id ORDER BY COUNT(c.user_id) DESC
+        czb_consumption_record a
+        LEFT JOIN czb_user b ON a.user_id = b.user_id
+        WHERE (b.first_level_partner = #{user_id,jdbcType=VARCHAR} OR b.second_level_partner=#{user_id,jdbcType=VARCHAR})
+        AND b.user_id is not null
+    </select>
+
+    <select id="selectAllPartnerMoneyCount" resultType="java.lang.Integer">
+        SELECT
+        count(a.create_at) AS consumption_count
+        FROM
+        czb_consumption_record a
+        LEFT JOIN czb_user b ON a.user_id = b.user_id
+        WHERE (b.first_level_partner = #{user_id,jdbcType=VARCHAR} OR b.second_level_partner=#{user_id,jdbcType=VARCHAR})
+        AND b.user_id is not null
+    </select>
+
+    <select id="selectAllPartnerMoneyTime"  resultType="java.util.Date">
+        SELECT
+        max(a.create_at) AS near_time
+        FROM
+        czb_consumption_record a
+        LEFT JOIN czb_user b ON a.user_id = b.user_id
+        WHERE (b.first_level_partner = #{user_id,jdbcType=VARCHAR} OR b.second_level_partner=#{user_id,jdbcType=VARCHAR})
+        AND b.user_id is not null
     </select>
 
 <!--以下为partnerVipIncome初始化用方法-->
