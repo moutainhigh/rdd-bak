@@ -53,15 +53,29 @@ public interface PetrolSalesRecordsMapperExtra {
 
     String sumOfPetrolSaleMoney(GetPetrolSaleInfoInputDTO infoInputDTO);
 
+    /**
+     * 后台管理系统修改油卡卡号
+     *
+     * @param inputDTO
+     * @return
+     */
     int updatePetrolNum(PetrolRechargeInputDTO inputDTO);
 
     /**
-     * 油卡拥有者判断
+     * app修改油卡卡号，要对userId进行验证
      *
-     * @param petrol
+     * @param inputDTO
      * @return
      */
-    List<Petrol> getOwnPetrol(Petrol petrol);
+    int appUpdatePetrolNum(PetrolRechargeInputDTO inputDTO);
+
+    /**
+     * 通过userId与petrolNum，获取receiver姓名
+     *
+     * @param inputDTO
+     * @return
+     */
+    List<String> getReceiver(PetrolRechargeInputDTO inputDTO);
 
     /**
      * 判断油卡卡号是否重复

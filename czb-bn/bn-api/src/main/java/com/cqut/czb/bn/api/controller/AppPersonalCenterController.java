@@ -80,7 +80,7 @@ public class AppPersonalCenterController {
         if (user == null) {
             return null;
         }
-        return new JSONResult(appPersonalCenterService.modifyPetrolNum(user.getUserId(), inputDTO));
+        return appPersonalCenterService.modifyPetrolNum(user.getUserId(), inputDTO);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -92,25 +93,34 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     }
 
     @Override
-    public boolean modifyPetrolNum(String userId, PetrolRechargeInputDTO record) {
+    public JSONResult modifyPetrolNum(String userId, PetrolRechargeInputDTO record) {
+        JSONResult<Boolean> jsonResult = new JSONResult<>();
+
+        if (record.getUpdatePetrolNum() == null || "".equals(record.getUpdatePetrolNum())) {
+            jsonResult.setData(false);
+            jsonResult.setMessage("要修改的卡号不能为空");
+            return jsonResult;
+        }
         // 判断要更新的油卡卡号是否跟数据库中的卡号重复
         List<Petrol> repeatPetrol = petrolSalesRecordsMapperExtra.judgePetrolNumRepeat(record.getUpdatePetrolNum());
         if (repeatPetrol != null && repeatPetrol.size() > 0) {
-            return false;
+            jsonResult.setData(false);
+            jsonResult.setMessage("该卡号已被使用");
+            return jsonResult;
         }
-        // 判断该用户是否是这张油卡的拥有者
-        Petrol petrol = new Petrol();
-        petrol.setOwnerId(userId);
-        petrol.setPetrolNum(record.getPetrolNum());
-        List<Petrol> ownPetrol = petrolSalesRecordsMapperExtra.getOwnPetrol(petrol);
-        if (ownPetrol != null && ownPetrol.size() > 0) {
-            // 用户修改卡号，加前缀RDD
-            record.setUpdatePetrolNum("RDD" + record.getUpdatePetrolNum());
-            record.setUserId(userId);
-            // 修改油卡卡号
-            return petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
+        // 根据油卡寄送表与地址表查找出该用户收货人
+        record.setUserId(userId);
+        List<String> receiverList = petrolSalesRecordsMapperExtra.getReceiver(record);
+        if (receiverList == null || receiverList.size() == 0) {
+            jsonResult.setData(false);
+            jsonResult.setMessage("该油卡的持有人不存在");
+            return jsonResult;
         }
-        return false;
+        // 用户修改卡号，加前缀RDD
+        record.setUpdatePetrolNum("RDD" + record.getUpdatePetrolNum() + receiverList.get(0));
+        // 修改油卡卡号
+        jsonResult.setData(petrolSalesRecordsMapperExtra.appUpdatePetrolNum(record) > 0);
+        return jsonResult;
     }
 
     @Override

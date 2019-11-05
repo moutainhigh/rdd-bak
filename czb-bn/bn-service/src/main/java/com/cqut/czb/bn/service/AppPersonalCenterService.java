@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.global.JSONResult;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public interface AppPersonalCenterService {
      *
      * @return
      */
-    boolean modifyPetrolNum(String userId, PetrolRechargeInputDTO record);
+    JSONResult modifyPetrolNum(String userId, PetrolRechargeInputDTO record);
 
     /**
      * 查出个人中心菜单展示

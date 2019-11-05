@@ -295,6 +295,7 @@ INNER JOIN (
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
 
+    <!--后台管理系统修改油卡卡号，不对userId进行验证（因为没有传）-->
     <update id="updatePetrolNum" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO">
           UPDATE czb_petrol_sales_records
           LEFT JOIN czb_petrol_delivery_records
@@ -310,22 +311,31 @@ INNER JOIN (
 	        AND czb_petrol.petrol_num = #{petrolNum, jdbcType = VARCHAR}
     </update>
 
+    <!--APP用户修改油卡卡号，要对userId进行验证，即用户只能修改自己的卡号-->
+    <update id="appUpdatePetrolNum" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO">
+        UPDATE czb_petrol_sales_records
+        LEFT JOIN czb_petrol_delivery_records
+        ON czb_petrol_sales_records.petrol_num = czb_petrol_delivery_records.petrol_num
+        AND czb_petrol_sales_records.buyer_id = #{userId, jdbcType = VARCHAR}
+        LEFT JOIN czb_petrol
+        ON czb_petrol_sales_records.petrol_num = czb_petrol.petrol_num
+        LEFT JOIN czb_address
+        ON czb_address.address_id = czb_petrol_delivery_records.address_id
+        AND czb_address.user_id = #{userId, jdbcType = VARCHAR}
+        SET czb_petrol_delivery_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
+            czb_petrol.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR},
+            czb_petrol_sales_records.petrol_num = #{updatePetrolNum, jdbcType = VARCHAR}
+        WHERE
+            czb_petrol.petrol_kind = 1
+        AND czb_petrol.state = 2
+        AND czb_petrol.petrol_num = #{petrolNum, jdbcType = VARCHAR}
+        AND czb_petrol.owner_id = #{userId, jdbcType = VARCHAR}
+    </update>
+
     <resultMap id="simplePetrol" type="com.cqut.czb.bn.entity.entity.Petrol">
         <id column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
         <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
     </resultMap>
-    <!--油卡拥有者判断-->
-    <select id="getOwnPetrol" parameterType="com.cqut.czb.bn.entity.entity.Petrol" resultMap="simplePetrol">
-        SELECT
-            petrol_id
-        FROM
-            czb_petrol
-        WHERE
-            owner_id = #{ownerId, jdbcType = VARCHAR}
-        AND
-            petrol_num = #{petrolNum, jdbcType = VARCHAR}
-        LIMIT 1
-    </select>
 
     <select id="judgePetrolNumRepeat" parameterType="java.lang.String" resultMap="simplePetrol">
         SELECT
@@ -333,8 +343,19 @@ INNER JOIN (
         FROM
             czb_petrol
         WHERE
-            petrol_num = #{petrolNum,jdbcType=INTEGER}
+            petrol_num like concat('%', #{petrolNum,jdbcType=VARCHAR},'%')
         LIMIT 1
+    </select>
+
+    <select id="getReceiver" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultType="java.lang.String">
+        SELECT
+            receiver
+        FROM
+            czb_petrol_delivery_records AS a
+        LEFT JOIN czb_address AS b ON a.address_id = b.address_id
+        AND a.petrol_num = #{petrolNum,jdbcType=INTEGER}
+        WHERE
+            b.user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectPetrolSalesRecords" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO">
