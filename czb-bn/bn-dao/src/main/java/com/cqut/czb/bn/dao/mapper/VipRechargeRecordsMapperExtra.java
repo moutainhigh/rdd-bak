@@ -18,4 +18,6 @@ public interface VipRechargeRecordsMapperExtra {
 
     String selectVipArea(@Param("ownerId") String ownerId);
 
+    Double getVipRechargeTotalMoney(VipRechargeRecordListDTO vipRechargeRecordListDTO);
+
 }
