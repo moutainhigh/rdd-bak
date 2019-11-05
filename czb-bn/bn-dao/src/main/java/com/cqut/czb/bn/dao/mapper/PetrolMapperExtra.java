@@ -62,4 +62,6 @@ public interface PetrolMapperExtra {
     Petrol selectPetrolByNum(String petrolNum);
 
     List<PetrolStock> selectPetrolStock(String area);
+
+    Petrol selectPetrolByDeliveryRecordId(@Param("recordId")String recordId);
 }

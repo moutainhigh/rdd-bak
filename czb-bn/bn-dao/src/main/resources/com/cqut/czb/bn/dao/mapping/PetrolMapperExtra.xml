@@ -304,4 +304,26 @@
 	  czb_petrol.petrol_kind
   </select>
 
+  <select id="selectPetrolByDeliveryRecordId" resultType="com.cqut.czb.bn.entity.entity.Petrol">
+    SELECT
+        petrol_id petrolId,
+        czb_petrol_delivery_records.petrol_num petrolNum,
+        petrol_psw petrolPsw,
+        petrol_kind petrolKind,
+        petrol_denomination petrolDenomination,
+        petrol_price petrolPrice,
+        state,
+        discount,
+        area,
+        owner_id ownerId,
+        petrol_type petrolType,
+        commission,
+        remark
+    FROM
+        czb_petrol
+        LEFT JOIN czb_petrol_delivery_records ON czb_petrol.petrol_num = czb_petrol_delivery_records.petrol_num
+    WHERE
+        czb_petrol_delivery_records.record_id = #{recordId, jdbcType = VARCHAR}
+    limit 1
+  </select>
 </mapper>
