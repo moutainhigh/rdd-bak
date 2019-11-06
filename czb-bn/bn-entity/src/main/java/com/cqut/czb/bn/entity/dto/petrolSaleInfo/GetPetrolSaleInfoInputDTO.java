@@ -21,6 +21,24 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     private Date endTime;
     private Integer recordType;
     private String thirdOrderId;
+    private Date todayStartTime;
+    private Date todayEndTime;
+
+    public Date getTodayStartTime() {
+        return todayStartTime;
+    }
+
+    public void setTodayStartTime(Date todayStartTime) {
+        this.todayStartTime = todayStartTime;
+    }
+
+    public Date getTodayEndTime() {
+        return todayEndTime;
+    }
+
+    public void setTodayEndTime(Date todayEndTime) {
+        this.todayEndTime = todayEndTime;
+    }
 
     public String getThirdOrderId() {
         return thirdOrderId;

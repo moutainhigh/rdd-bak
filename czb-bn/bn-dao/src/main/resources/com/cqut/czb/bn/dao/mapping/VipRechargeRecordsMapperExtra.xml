@@ -108,6 +108,33 @@
     ORDER BY  czb_vip_recharge_records.create_at desc
   </select>
 
+  <!--查询总额-->
+  <select id="getVipRechargeTotalMoney" parameterType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO" resultType="java.lang.Double">
+    SELECT
+    SUM(amount)
+    FROM
+    czb_vip_recharge_records
+    LEFT JOIN czb_user ON czb_user.user_id = czb_vip_recharge_records.user_id
+    LEFT JOIN czb_vip_area_config ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+    WHERE
+    is_received = 1
+    <if test="startTime != null">
+      AND recharge_time &gt;= #{startTime,jdbcType = TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+      AND recharge_time &lt;= #{endTime,jdbcType = TIMESTAMP}
+    </if>
+    <if test="area != null and area != ''">
+      AND area LIKE concat('%',#{area,jdbcType = VARCHAR},'%')
+    </if>
+    <if test="userAccount != null and userAccount != ''">
+      AND czb_user.user_account LIKE concat('%',#{userAccount,jdbcType = VARCHAR},'%')
+    </if>
+    <if test="rechargeWay != null and rechargeWay != ''">
+      AND recharge_way = #{rechargeWay,jdbcType = INTEGER}
+    </if>
+  </select>
+
   <!--selectVipArea-->
   <select id="selectVipArea" parameterType="java.lang.String" resultType="java.lang.String">
 

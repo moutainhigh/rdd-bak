@@ -57,7 +57,7 @@ public interface PartnerMapperExtra {
 
     List<PartnerDTO> selectNextChild(PartnerDTO partnerDTO);
 
-    List<PartnerDTO> selectNextChildMoney(PartnerDTO partnerDTO);
+    List<PartnerDTO> selectNextChildMoney1(PartnerDTO partnerDTO);
 
 
 //合伙人vip收益初始化数据用方法
