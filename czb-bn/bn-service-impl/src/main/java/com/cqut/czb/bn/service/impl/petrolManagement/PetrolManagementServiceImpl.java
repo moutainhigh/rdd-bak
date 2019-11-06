@@ -165,8 +165,12 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
 
     public JSONResult changePetrolNum(PetrolRechargeInputDTO record){
         boolean isSuccess = false;
-        if(record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "")
-             isSuccess= petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
+        if(record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") {
+            if(!record.getUpdatePetrolNum().startsWith("S")){
+                record.setUpdatePetrolNum("S" + record.getUpdatePetrolNum());
+            }
+            isSuccess = petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
+        }
         if(isSuccess)
             return new JSONResult("修改成功",200);
         else
