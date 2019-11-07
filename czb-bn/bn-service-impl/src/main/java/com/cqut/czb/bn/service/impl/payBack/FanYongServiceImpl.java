@@ -99,6 +99,14 @@ public class FanYongServiceImpl implements FanYongService {
             System.out.println("fangyongRate：" + fangyongRate);
         }
 
+
+        //如果返佣比例为零则表示已经停止了返佣
+       if(dict3 != null || dict3.getContent() != null||"0".equals(dict3.getContent())){
+           System.out.println("fangyongRate为空");
+           return true;
+       }
+
+
         if(BusinessType==2){
              if(userIdUp1!=null)
               VipFy(FyRemark,userId, userIdUp1, fangyongRate, money, actualPayment, fangyong1, fangyong2,orgId);
@@ -181,6 +189,11 @@ public class FanYongServiceImpl implements FanYongService {
         boolean ischangeUserIncomeInfo;
         //amount为变更金额
         double amount=(BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(fangyongRate)).multiply(BigDecimal.valueOf(FYrate))).doubleValue();
+
+        if(amount<=0){
+            System.out.println("amount为0");
+            return true;
+        }
         if (userIncomeInfo == null) {//空则插入；不为空则修改
             //用户收益信息表——新增
             int type=0;//0为反用

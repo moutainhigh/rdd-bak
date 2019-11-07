@@ -156,4 +156,7 @@ public class AppHomePageController {
     public JSONResult getPetrolStock(@Param("area")String area){
         return new JSONResult(appHomePageService.getPetrolStock(area));
     }
+
+
+
 }
