@@ -179,17 +179,17 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                 Double otherProportion = Double.parseDouble(vipPartnerProportion.getContent());
                 Double firstIncome = mul(addIncome, proportion);  //一级（事业）合伙人收益，
                 Double secondIncome = mul(addIncome, otherProportion);  //二级（普通）合伙人收益
-                secondPartnerVipIncome.setVipAddIncome(firstIncome);   //事业合伙人得%7.5,二级返利
-                secondPartnerVipIncome.setSecondVipIncome(firstIncome);
-                partnerVipIncome.setVipAddIncome(secondIncome);    //普通合伙人得12.5%
-                partnerVipIncome.setFirstVipIncome(secondIncome);
+                partnerVipIncome.setVipAddIncome(firstIncome);   //普通合伙人得12.5%
+                partnerVipIncome.setSecondVipIncome(firstIncome);
+                secondPartnerVipIncome.setVipAddIncome(secondIncome);    //事业合伙人得%7.5,二级返利
+                secondPartnerVipIncome.setFirstVipIncome(secondIncome);
             }else if (type == 2){
                 Double firstPetrolIncome = mul(addIncome,firstPetrolProportion);
                 Double secondPetrolIncome = mul(addIncome,secondPetrolProportion);
-                partnerVipIncome.setVipAddIncome(firstPetrolIncome);
-                partnerVipIncome.setFirstPetrolIncome(firstPetrolIncome);
-                secondPartnerVipIncome.setVipAddIncome(secondPetrolIncome);
-                secondPartnerVipIncome.setSecondPetrolIncome(secondPetrolIncome);
+                partnerVipIncome.setVipAddIncome(secondPetrolIncome);
+                partnerVipIncome.setSecondPetrolIncome(secondPetrolIncome);
+                secondPartnerVipIncome.setVipAddIncome(firstPetrolIncome);
+                secondPartnerVipIncome.setFirstPetrolIncome(firstPetrolIncome);
             }
             Boolean firstPartner = partnerVipIncomeMapperExtra.updateVipIncomeByAdd(partnerVipIncome)>0;
             Boolean secondPartner = partnerVipIncomeMapperExtra.updateVipIncomeByAdd(secondPartnerVipIncome)>0;
