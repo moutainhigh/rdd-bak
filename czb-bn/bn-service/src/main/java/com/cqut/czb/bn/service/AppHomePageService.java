@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.PaymentProcessDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolStock;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appHomePage.appAnnouncementDTO;
@@ -77,4 +78,8 @@ public interface AppHomePageService {
     List<String> selectArea();
 
     List<PetrolStock> getPetrolStock(String area);
+
+    boolean inputDate(PaymentProcessDTO paymentProcessDTO);
+
+
 }
