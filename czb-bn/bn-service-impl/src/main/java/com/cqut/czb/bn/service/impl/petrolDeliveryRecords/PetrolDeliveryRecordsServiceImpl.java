@@ -77,30 +77,30 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             deliveryInput.setDeliveryState(0);
         }
         Boolean updateDeliveryRecord = petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0;
-        if(updateDeliveryRecord){
-            PhoneCode phoneCode = new PhoneCode();
-            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
-            phoneCode.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), messageDTO.getDeliveryNum());
-        }
 //        if(updateDeliveryRecord){
+//            PhoneCode phoneCode = new PhoneCode();
 //            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
-//            Petrol petrol =  petrolMapperExtra.selectPetrolByDeliveryRecordId(deliveryInput.getRecordId());
-//            Map<String,String> content = new HashMap<>();
-//            if(1 == petrol.getPetrolKind()){
-//                content.put("petrolKind", "中国石油加油卡");
-//            }else if(2 == petrol.getPetrolKind()){
-//                content.put("petrolKind", "中国石化加油卡");
-//            }else {
-//                content.put("petrolKind", " ");
-//            }
-//            serverOrderService.sendMessage(petrol.getOwnerId(), MesInfo.noticeId.DELIVERY_PETROL_USER.getNoticeId(),content);
-//            content.put("petrolNum", messageDTO.getPetrolNum());
-//            content.put("deliveryNum", messageDTO.getDeliveryNum());
-//            content.put("msgModelId", MessageModelInfo.DELIVERY_SUCCESS_MESSAGE_USER.getMessageModelInfo());
-//            content.put("receiverId", petrol.getOwnerId());
-//            content.put("userAccount", messageDTO.getUserAccount());
-//            messageManagementService.sendMessageToOne(content, "123456");
+//            phoneCode.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), messageDTO.getDeliveryNum());
 //        }
+        if(updateDeliveryRecord){
+            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
+            Petrol petrol =  petrolMapperExtra.selectPetrolByDeliveryRecordId(deliveryInput.getRecordId());
+            Map<String,String> content = new HashMap<>();
+            if(1 == petrol.getPetrolKind()){
+                content.put("petrolKind", "中国石油加油卡");
+            }else if(2 == petrol.getPetrolKind()){
+                content.put("petrolKind", "中国石化加油卡");
+            }else {
+                content.put("petrolKind", " ");
+            }
+            serverOrderService.sendMessage(petrol.getOwnerId(), MesInfo.noticeId.DELIVERY_PETROL_USER.getNoticeId(),content);
+            content.put("petrolNum", messageDTO.getPetrolNum());
+            content.put("deliveryNum", messageDTO.getDeliveryNum());
+            content.put("msgModelId", MessageModelInfo.DELIVERY_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+            content.put("receiverId", petrol.getOwnerId());
+            content.put("userAccount", messageDTO.getUserAccount());
+            messageManagementService.sendMessageToOne(content, "123456");
+        }
         return updateDeliveryRecord;
     }
 
@@ -252,41 +252,41 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             }
         }
         List<PetrolDeliveryDTO> petrolListNoRepeat = new ArrayList<>();
-        for(PetrolDeliveryDTO p:petrolMap.values()){
-            PhoneCode code = new PhoneCode();
-            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
-            code.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), p.getDeliveryNum());
-            petrolListNoRepeat.add(p);
-        }
-//        for (PetrolDeliveryDTO p:petrolMap.values()) {
+//        for(PetrolDeliveryDTO p:petrolMap.values()){
+//            PhoneCode code = new PhoneCode();
+//            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
+//            code.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), p.getDeliveryNum());
 //            petrolListNoRepeat.add(p);
-//            fixedThreadPool.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
-//                        Petrol petrol =  petrolMapperExtra.selectPetrolByNum( p.getPetrolNum());
-//                        Map<String,String> content = new HashMap<>();
-//                        if(1 == petrol.getPetrolKind()){
-//                            content.put("petrolKind", "中国石油加油卡");
-//                        }else if(2 == petrol.getPetrolKind()){
-//                            content.put("petrolKind", "中国石化加油卡");
-//                        }else {
-//                            content.put("petrolKind", " ");
-//                        }
-//                        serverOrderService.sendMessage(petrol.getOwnerId(), MesInfo.noticeId.DELIVERY_PETROL_USER.getNoticeId(),content);
-//                        content.put("petrolNum", p.getPetrolNum());
-//                        content.put("deliveryNum", p.getDeliveryNum());
-//                        content.put("msgModelId", MessageModelInfo.DELIVERY_SUCCESS_MESSAGE_USER.getMessageModelInfo());
-//                        content.put("receiverId", petrol.getOwnerId());
-//                        content.put("userAccount", messageDTO.getUserAccount());
-//                        messageManagementService.sendMessageToOne(content, "123456");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
 //        }
+        for (PetrolDeliveryDTO p:petrolMap.values()) {
+            petrolListNoRepeat.add(p);
+            fixedThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
+                        Petrol petrol =  petrolMapperExtra.selectPetrolByNum( p.getPetrolNum());
+                        Map<String,String> content = new HashMap<>();
+                        if(1 == petrol.getPetrolKind()){
+                            content.put("petrolKind", "中国石油加油卡");
+                        }else if(2 == petrol.getPetrolKind()){
+                            content.put("petrolKind", "中国石化加油卡");
+                        }else {
+                            content.put("petrolKind", " ");
+                        }
+                        serverOrderService.sendMessage(petrol.getOwnerId(), MesInfo.noticeId.DELIVERY_PETROL_USER.getNoticeId(),content);
+                        content.put("petrolNum", p.getPetrolNum());
+                        content.put("deliveryNum", p.getDeliveryNum());
+                        content.put("msgModelId", MessageModelInfo.DELIVERY_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+                        content.put("receiverId", petrol.getOwnerId());
+                        content.put("userAccount", messageDTO.getUserAccount());
+                        messageManagementService.sendMessageToOne(content, "123456");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
         return countForInsert;
     }
