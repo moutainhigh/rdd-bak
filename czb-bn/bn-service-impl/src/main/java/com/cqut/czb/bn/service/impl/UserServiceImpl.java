@@ -81,10 +81,19 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean updateUser(UserInputDTO userInputDTO) {
         if(null != userInputDTO.getSuperiorUser() && !"".equals(userInputDTO.getSuperiorUser())) {
-            User user = userMapperExtra.findUserByAccount(userInputDTO.getSuperiorUser());
-            userInputDTO.setSuperiorUser(user.getUserId());
-        }
+            User superior = userMapperExtra.findUserByAccount(userInputDTO.getSuperiorUser());
+            userInputDTO.setSuperiorUser(superior.getUserId());
+            userInputDTO.setFirstLevelPartner(superior.getFirstLevelPartner());
+            userInputDTO.setSecondLevelPartner(superior.getSecondLevelPartner());
+            if(1 == superior.getPartner()) {
+                userInputDTO.setSecondLevelPartner(superior.getUserId());
+            }
+            if(2 == superior.getPartner()) {
+                userInputDTO.setFirstLevelPartner(superior.getUserId());
+            }
             return userMapperExtra.updateUser(userInputDTO) > 0;
+        }
+        return false;
     }
 
     @Override
