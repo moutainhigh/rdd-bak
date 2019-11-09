@@ -101,7 +101,7 @@ public class FanYongServiceImpl implements FanYongService {
 
 
         //如果返佣比例为零则表示已经停止了返佣
-       if(dict3 != null || dict3.getContent() != null||"0".equals(dict3.getContent())){
+       if(dict3 == null || dict3.getContent() == null||"0".equals(dict3.getContent())){
            System.out.println("fangyongRate为空");
            return true;
        }
