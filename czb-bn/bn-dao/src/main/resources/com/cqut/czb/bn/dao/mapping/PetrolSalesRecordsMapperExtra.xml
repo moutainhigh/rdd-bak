@@ -72,6 +72,15 @@ FROM
               <if test="thirdOrderId != null and thirdOrderId != '' ">
                 and records.third_order_id like concat('%',#{thirdOrderId, jdbcType=VARCHAR},'%')
               </if>
+              <if test="bindingType != null and bindingType == 2">
+                AND records.petrol_num like 'RDD%'
+              </if>
+              <if test="bindingType != null and bindingType == 1">
+                AND records.petrol_num like 'S%'
+              </if>
+              <if test="bindingType != null and bindingType == 3">
+                AND (records.petrol_num like 'RDD%' OR records.petrol_num like 'S%')
+              </if>
               and state = 1
         </where>
 	) AS t1
@@ -152,11 +161,11 @@ INNER JOIN (
         <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
         <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
         <result column="turnover_amount" property="turnoverAmount" jdbcType="DOUBLE" />
-        <result column="transaction_time" property="transactionTime" jdbcType="TIMESTAMP" />
+        <result column="create_at" property="transactionTime" jdbcType="TIMESTAMP" />
         <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
         <result column="state" property="state" jdbcType="INTEGER" />
         <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
-        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="transaction_time" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
         <result column="record_type" property="recordType" jdbcType="INTEGER" />
         <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
@@ -260,6 +269,15 @@ INNER JOIN (
             </if>
             <if test="petrolKind != null and petrolKind != ''">
                 and petrol_kind = #{petrolKind,jdbcType = INTEGER}
+            </if>
+            <if test="bindingType != null and bindingType == 2">
+                AND petrol_num like 'RDD%'
+            </if>
+            <if test="bindingType != null and bindingType == 1">
+                AND petrol_num like 'S%'
+            </if>
+            <if test="bindingType != null and bindingType == 3">
+                AND (petrol_num like 'RDD%' OR petrol_num like 'S%')
             </if>
             and is_recharged != -1
             and state = 1
@@ -478,6 +496,15 @@ INNER JOIN (
             </if>
             <if test="thirdOrderId != null and thirdOrderId != '' ">
                 and records.third_order_id like concat('%',#{thirdOrderId, jdbcType=VARCHAR},'%')
+            </if>
+            <if test="bindingType != null and bindingType == 2">
+                AND records.petrol_num like 'RDD%'
+            </if>
+            <if test="bindingType != null and bindingType == 1">
+                AND records.petrol_num like 'S%'
+            </if>
+            <if test="bindingType != null and bindingType == 3">
+                AND (records.petrol_num like 'RDD%' OR records.petrol_num like 'S%')
             </if>
               and state = 1
         </where>

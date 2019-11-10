@@ -112,6 +112,7 @@ public class PetrolDeliveryRecordsController {
         } catch (IOException e) {
             message = "导出Excel数据失败，请稍后再试";
         } catch (Exception e1) {
+            e1.printStackTrace();
             message = "Excel数据量过大，请缩短导出文件的时间间隔";
         }
         result.put("message", message);

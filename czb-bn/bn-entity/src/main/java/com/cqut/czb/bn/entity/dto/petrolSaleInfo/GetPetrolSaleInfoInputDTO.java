@@ -23,6 +23,15 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     private String thirdOrderId;
     private Date todayStartTime;
     private Date todayEndTime;
+    private Integer bindingType; //1 公司匹配 2 线下匹配 3 绑定过的卡
+
+    public Integer getBindingType() {
+        return bindingType;
+    }
+
+    public void setBindingType(Integer bindingType) {
+        this.bindingType = bindingType;
+    }
 
     public Date getTodayStartTime() {
         return todayStartTime;
