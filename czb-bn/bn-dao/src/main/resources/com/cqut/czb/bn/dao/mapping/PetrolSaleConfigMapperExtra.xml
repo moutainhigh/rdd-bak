@@ -153,7 +153,26 @@
   </update>
 
   <select id="getAllArea" resultType="java.lang.String">
-    select distinct area  from czb_petrol_sale_config where sale_state =1
+    SELECT
+    czb_petrol_sale_config.area
+    FROM
+    czb_petrol_sale_config
+    LEFT JOIN (
+    SELECT
+    czb_vip_area_config.area area,
+    count( czb_vip_recharge_records.vip_area_config_id ) vipNum
+    FROM
+    czb_vip_area_config
+    LEFT JOIN czb_vip_recharge_records ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+    GROUP BY
+    czb_vip_area_config.vip_area_config_id
+    ) AS vip ON czb_petrol_sale_config.area = vip.area
+    where sale_state =1
+    GROUP BY
+    czb_petrol_sale_config.area,
+    vip.vipNum
+    ORDER BY
+    vip.vipNum DESC
   </select>
 
 </mapper>
