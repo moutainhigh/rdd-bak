@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.myTeam;
 
+import java.util.Date;
+
 public class RecommenderDTO {
 
     private String userId;
@@ -7,6 +9,16 @@ public class RecommenderDTO {
     private String userAccount;
 
     private String userName;
+
+    private Date createAt;
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
     private Integer isVip;
 
