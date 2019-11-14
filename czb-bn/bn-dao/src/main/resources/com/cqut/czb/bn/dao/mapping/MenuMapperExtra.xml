@@ -25,6 +25,7 @@
         menu_id = #{menuId,jdbcType=VARCHAR}
       </if>
     </where>
+    ORDER BY menu_level
   </select>
   <select id="selectRolesMenu" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.menu.MenuInputDTO">
     select

@@ -404,4 +404,36 @@
         and is_deleted = 0
   </select>
 
+  <select id="getOldSubUserPartner" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from czb_user
+    where old_superior = #{userId,jdbcType=VARCHAR} AND partner = 1
+  </select>
+
+  <select id="getOldSubUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from czb_user
+    where old_superior = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateSuperUser">
+    update czb_user
+    set superior_user CASE  user_id <foreach collection="userList" item="item" index="index"
+                                                        separator="" open="" close="end">
+    when   #{item.userId,jdbcType=VARCHAR} THEN  #{item.oldSuperior,jdbcType=VARCHAR}
+  </foreach>
+    <where>
+      <if test="userList!=null and userList.get(0)!=null">
+        user_id in
+        <foreach collection="userList" index="index" item="item" separator="," open="(" close=")" >
+          #{item.userId, jdbcType=VARCHAR}
+        </foreach>
+      </if>
+    </where>
+  </update>
+
+
+
 </mapper>
