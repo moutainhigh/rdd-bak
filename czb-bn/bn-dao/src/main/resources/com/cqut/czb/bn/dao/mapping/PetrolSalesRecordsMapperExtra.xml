@@ -161,11 +161,11 @@ INNER JOIN (
         <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
         <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR" />
         <result column="turnover_amount" property="turnoverAmount" jdbcType="DOUBLE" />
-        <result column="create_at" property="transactionTime" jdbcType="TIMESTAMP" />
+        <result column="transaction_time" property="transactionTime" jdbcType="TIMESTAMP" />
         <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
         <result column="state" property="state" jdbcType="INTEGER" />
         <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
-        <result column="transaction_time" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
         <result column="record_type" property="recordType" jdbcType="INTEGER" />
         <result column="is_recharged" property="isRecharged" jdbcType="INTEGER" />
