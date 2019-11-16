@@ -3,26 +3,37 @@ package com.cqut.czb.bn.entity.dto.partnerAndOperateCenter;
 import java.math.BigDecimal;
 
 public class CareerStatisticsDTO {
+    //当前普通合伙人
     private Integer partnerCount;
 
+    //当前年卡会员
     private Integer ordinaryUserCount;
 
+    //直推vip人数
     private Integer directVipCount;
 
+    //直推vip收益
     private BigDecimal directVipIncome;
 
+    //直推油卡收益
     private BigDecimal directPetrolIncome;
 
+    //间推vip人数
     private Integer indirectVipCount;
 
+    //间推vip收益
     private BigDecimal indirectVipIncome;
 
+    //间推油卡收益
     private BigDecimal indirectPetrolIncome;
 
+    //已提现
     private BigDecimal withdrawed;
 
+    //未提现
     private BigDecimal balance;
 
+    //总收益
     private BigDecimal allCommissionIncome;
 
     public Integer getPartnerCount() {
