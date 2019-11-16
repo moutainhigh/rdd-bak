@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.CareerStatisticsMapperExtra" >
+  <select id="statistics" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO">
+    SELECT
+	result.balance,
+	result.directPetrolIncome,
+	result.directVipIncome,
+	result.indirectPetrolIncome,
+	result.indirectVipIncome,
+	(
+		result.directPetrolIncome + result.directVipIncome + result.indirectPetrolIncome + result.indirectVipIncome
+	) AS allCommissionIncome,
+	result.withdrawed
+    FROM
+        (
+            SELECT
+                info.info_id,
+                (
+                    info.fanyong_income + info.got_total_rent + info.other_income + info.pay_total_rent + info.share_income - info.withdrawed
+                ) AS balance,
+                withdrawed,
+                sum(income.first_petrol_income) AS directPetrolIncome,
+                sum(income.first_vip_income) AS directVipIncome,
+                sum(
+                    income.second_petrol_income
+                ) AS indirectPetrolIncome,
+                sum(income.second_vip_income) AS indirectVipIncome
+            FROM
+                czb_user_income_info info,
+                czb_partner_vip_income income
+            WHERE
+                income.partner_id = #{userId}
+            AND info.user_id = #{userId}
+            GROUP BY
+                info_id
+        ) AS result
+  </select>
+
+  <select id="getUsers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO">
+        SELECT
+            count(IF(partner = 1, 1, NULL)) AS partnerCount,
+            count(IF(vip = 1, 1, NULL)) AS ordinaryUserCount,
+            count(
+
+                IF (
+                    vip = 1
+                    AND superior = #{userId},
+                    1,
+                    NULL
+                )
+            ) AS directVipCount,
+            count(
+
+                IF (
+                    vip = 1
+                    AND superior != #{userId},
+                    1,
+                    NULL
+                )
+            ) AS indirectVipCount
+        FROM
+            (
+                SELECT
+                    users.user_id userId,
+                    users.is_vip vip,
+                    users.partner,
+                    users.superior_user superior
+                FROM
+                    czb_user users
+                WHERE
+                    first_level_partner = #{userId}
+            ) AS allUser
+  </select>
+</mapper>
