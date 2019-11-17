@@ -123,16 +123,17 @@ public class JGPush implements Runnable{
             pushDTO.setMenuName(appRouter.getMenuName());
             pushDTO.setPathType(appRouter.getPathType());
         }
-        if (!content.isEmpty()){
-            for (Map.Entry<String, String> exp:content.entrySet()) {
-                if (remotePushNotice!=null) {
-                    remotePushNotice.setNoticeContent(remotePushNotice.getNoticeContent().replace("${"+exp.getKey()+"}",exp.getValue()));
-                }else {
-                    return ;
+        if(content != null){
+            if (!content.isEmpty()){
+                for (Map.Entry<String, String> exp:content.entrySet()) {
+                    if (remotePushNotice!=null) {
+                        remotePushNotice.setNoticeContent(remotePushNotice.getNoticeContent().replace("${"+exp.getKey()+"}",exp.getValue()));
+                    }else {
+                        return ;
+                    }
                 }
             }
         }
-
         pushDTO.setTitle(remotePushNotice.getNoticeContent());
         JPushClient jPushClient = new JPushClient(MASTERSECRET, APPKEY);
         try {
