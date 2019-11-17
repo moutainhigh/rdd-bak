@@ -11,6 +11,8 @@ public class VipRechargeRecordListDTO extends PageDTO {
 
     private String userId;
 
+    private String superiorUser;
+
     private Double amount;
 
     private Integer rechargeWay;
@@ -47,6 +49,14 @@ public class VipRechargeRecordListDTO extends PageDTO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getSuperiorUser() {
+        return superiorUser;
+    }
+
+    public void setSuperiorUser(String superiorUser) {
+        this.superiorUser = superiorUser;
     }
 
     public Double getAmount() {

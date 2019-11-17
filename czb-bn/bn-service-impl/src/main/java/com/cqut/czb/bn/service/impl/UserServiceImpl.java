@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 @Transactional
@@ -214,9 +215,18 @@ public class UserServiceImpl implements IUserService {
                 }
             }
         }
-        User superUser = userMapper.selectByPrimaryKey(userInputDTO.getSuperiorUser());
+        User superUser = userMapperExtra.findUserByAccount(userInputDTO.getSuperiorUser());
+        if (superUser!=null && superUser.getUserId()!=null){   //前台传过来的为父级的userAccount,转换为id
+            userInputDTO.setSuperiorUser(superUser.getUserId());
+        }else {
+            userInputDTO.setSuperiorUser("");
+        }
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
         boolean isUpdateIndicatorRecord =true;
          if(0 == userInputDTO.getPartner()){
+            if (superUser==null || superUser.getPartner()==null){   //如果没有父级可能为降级，则将oldSuperior填入super
+                userInputDTO.setOldSuperior(userDTO.getOldSuperior());
+            }
             userInputDTO.setIsLoginPc(0);
         }
         else if(null != indicatorRecord) {
@@ -234,7 +244,22 @@ public class UserServiceImpl implements IUserService {
                 indicatorRecord.setActualNewConsumer(0);
                 indicatorRecord.setActualPromotionNumber(0);
                 userInputDTO.setSecondLevelPartner("");
-                userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
+                if (superUser != null && superUser.getPartner()!=2){   //如果上级不是事业合伙人就要脱离
+                    userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
+                    userInputDTO.setSuperiorUser("");
+                }
+                if (superUser == null || superUser.getPartner()==null){  //如果没有推荐人则看是否为事业合伙人降级,以前是否有事业合伙人上级
+                    if (userDTO!=null && userDTO.getOldSuperior()!=null && !"".equals(userDTO.getOldSuperior())){
+                        User oldSuperior = userMapper.selectByPrimaryKey(userDTO.getOldSuperior());
+                        if (oldSuperior.getPartner()==2) {
+                            userInputDTO.setSuperiorUser(userDTO.getOldSuperior());
+                        }
+                    }
+                }
+                //当升级为普通合伙人时，如果上级有事业合伙人，那么就暂时归到上级的事业合伙人的团队中
+                if (superUser != null && superUser.getFirstLevelPartner()!=null && superUser.getFirstLevelPartner()!=""){
+                    userInputDTO.setSuperiorUser(userInputDTO.getFirstLevelPartner());
+                }
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
             if( 2 == userInputDTO.getPartner()) {
@@ -247,6 +272,11 @@ public class UserServiceImpl implements IUserService {
                 userInputDTO.setSecondLevelPartner("");
                 userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
+                //如果有暂归到其他事业合伙人名下的自身以前的普通合伙人下级
+                List<User> userList = userMapperExtra.getOldSubUserPartner(userInputDTO.getUserId());
+                if (userList!=null && userList.size()>0){
+                    Boolean update = userMapperExtra.updateSuperUser(userList)>0; //当升级之后就归还
+                }
             }
             userInputDTO.setIsLoginPc(1);
         } else if(0 != userInputDTO.getPartner()) {
@@ -273,6 +303,18 @@ public class UserServiceImpl implements IUserService {
                     userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                     userInputDTO.setSuperiorUser("");
                 }
+                if (superUser == null || superUser.getPartner()==null){  //如果没有推荐人则看是否为事业合伙人降级,以前是否有事业合伙人上级
+                    if (userDTO!=null && userDTO.getOldSuperior()!=null && !"".equals(userDTO.getOldSuperior())){
+                        User oldSuperior = userMapper.selectByPrimaryKey(userDTO.getOldSuperior());
+                        if (oldSuperior.getPartner()==2) {
+                        userInputDTO.setSuperiorUser(userDTO.getOldSuperior());
+                        }
+                    }
+                }
+                //当升级为普通合伙人时，如果上级有事业合伙人，那么就暂时归到上级的事业合伙人的团队中
+                if (superUser != null && superUser.getFirstLevelPartner()!=null && superUser.getFirstLevelPartner()!=""){
+                    userInputDTO.setSuperiorUser(userInputDTO.getFirstLevelPartner());
+                }
             }
             if (2 == userInputDTO.getPartner()) {
                 indicatorRecord.setTargetPromotionNumber(Integer.parseInt(dictMapperExtra.selectDictByName("businessNumIndicators").getContent()));
@@ -284,6 +326,11 @@ public class UserServiceImpl implements IUserService {
                 userInputDTO.setSecondLevelPartner("");
                 userInputDTO.setOldSuperior(userInputDTO.getSuperiorUser());
                 userInputDTO.setSuperiorUser("");
+                //如果有暂归到其他事业合伙人名下的自身以前的普通合伙人下级
+                List<User> userList = userMapperExtra.getOldSubUserPartner(userInputDTO.getUserId());
+                if (userList!=null && userList.size()>0){
+                    Boolean update = userMapperExtra.updateSuperUser(userList)>0; //当升级之后就归还
+                }
             }
             userInputDTO.setIsLoginPc(1);
         }
@@ -323,10 +370,10 @@ public class UserServiceImpl implements IUserService {
                 }
             }
             if(userMapperExtra.updateUser(userInputDTO) > 0) {
-                UserDTO userDTO = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
+                UserDTO userDTO1 = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
                 if(redisUtil.hasKey(user.getUserAccount())) {
                     redisUtil.remove(user.getUserAccount());
-                    redisUtil.put(user.getUserAccount(), userDTO);
+                    redisUtil.put(user.getUserAccount(), userDTO1);
                 }
             }
             String roleId= roleMapperExtra.selectRoleIdByRoleName("合伙人");

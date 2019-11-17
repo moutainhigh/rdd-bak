@@ -81,4 +81,14 @@ public interface UserMapperExtra {
      */
     String selectVipUser(@Param("userId") String userId);
 
+
+    List<User> getOldSubUserPartner(String userId);
+
+    List<User> getOldSubUser(String userId);
+
+    /**
+     * 批量修改superiorUser
+     */
+    int updateSuperUser(List<User> userList);
+
 }

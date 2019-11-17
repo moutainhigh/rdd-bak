@@ -22,5 +22,7 @@ public interface UserIncomeInfoMapperExtra {
 
     int updateOtherIncome(UserIncomeInfoDTO userIncomeInfoDTO);
 
+    int updateFanYongIncome(UserIncomeInfoDTO userIncomeInfoDTO);
+
 
 }

@@ -95,6 +95,28 @@ public class RemotePushNoticeServiceImpl implements RemotePushNoticeService {
             Thread thread = new Thread(messageThread);
             thread.start();
             return true;
+        }else if (pushDTO.getPathType()==3) {
+            try {
+                JGPush jgPush = new JGPush();
+                jgPush.setType(3);
+                jgPush.setNoticeId(pushDTO.getTitle());
+                jgPush.setAppRouterMapper(appRouterMapper);
+                jgPush.setRemotePushMapperExtra(remotePushMapperExtra);
+                jgPush.setRemotePushNoticeMapperExtra(mapper);
+                Thread thread = new Thread(jgPush);
+                thread.start();
+                MessageThread messageThread = new MessageThread();
+                messageThread.setType(3);
+                messageThread.setNoticeId(pushDTO.getTitle());
+                messageThread.setAppRouterMapper(appRouterMapper);
+                messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
+                messageThread.setRemotePushNoticeMapperExtra(mapper);
+                Thread thread1 = new Thread(messageThread);
+                thread1.start();
+                return true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return false;
     }

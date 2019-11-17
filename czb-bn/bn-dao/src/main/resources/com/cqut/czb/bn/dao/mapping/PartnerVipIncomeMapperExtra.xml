@@ -221,4 +221,50 @@
         </trim>
     </insert>
 
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+        update czb_partner_vip_income
+        <set >
+            <if test="partnerId != null" >
+                partner_id = #{partnerId,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerType != null" >
+                partner_type = #{partnerType,jdbcType=INTEGER},
+            </if>
+            <if test="isSettle != null" >
+                is_settle = #{isSettle,jdbcType=INTEGER},
+            </if>
+            <if test="vipAddCount != null" >
+                vip_add_count = #{vipAddCount,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null" >
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="vipAddIncome != null" >
+                vip_add_income = #{vipAddIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstVipIncome != null" >
+                first_vip_income = #{firstVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondVipIncome != null" >
+                second_vip_income = #{secondVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="firstPetrolIncome != null" >
+                first_petrol_income = #{firstPetrolIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondPetrolIncome != null" >
+                second_petrol_income = #{secondPetrolIncome,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where partner_id = #{partnerId,jdbcType=VARCHAR} AND is_settle = 0
+    </update>
+
 </mapper>
