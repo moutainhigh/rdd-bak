@@ -19,4 +19,6 @@ public interface PartnerVipIncomeMapperExtra {
     int updateVipIncomeByAdd(PartnerVipIncome partnerVipIncome);
 
     int insertIncome(PartnerVipIncome partnerVipIncome);
+
+    int updateByPrimaryKeySelective(PartnerVipIncome partnerVipIncome);
 }

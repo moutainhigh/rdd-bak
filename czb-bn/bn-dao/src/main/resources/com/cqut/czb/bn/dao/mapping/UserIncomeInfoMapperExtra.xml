@@ -180,4 +180,12 @@
     where info_id = #{infoId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateFanYongIncome" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO">
+        update czb_user_income_info
+        set
+        fanyong_income = fanyong_income+#{refundMoney,jdbcType=DOUBLE},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where info_id = #{infoId,jdbcType=VARCHAR}
+    </update>
+
 </mapper>

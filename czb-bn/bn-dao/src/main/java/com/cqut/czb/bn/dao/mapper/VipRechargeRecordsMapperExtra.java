@@ -14,6 +14,8 @@ public interface VipRechargeRecordsMapperExtra {
 
     List<VipRechargeRecordListDTO> getVipRechargeRecord(VipRechargeRecordListDTO vipRechargeRecordListDTO);
 
+    List<VipRechargeRecordListDTO> getVipRechargeRecordTest(VipRechargeRecordListDTO vipRechargeRecordListDTO);
+
     int insert(VipRechargeRecords vipRechargeRecords);
 
     String selectVipArea(@Param("ownerId") String ownerId);

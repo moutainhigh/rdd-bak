@@ -179,9 +179,9 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                 Double otherProportion = Double.parseDouble(vipPartnerProportion.getContent());
                 Double firstIncome = mul(addIncome, proportion);  //一级（事业）合伙人收益，
                 Double secondIncome = mul(addIncome, otherProportion);  //二级（普通）合伙人收益
-                partnerVipIncome.setVipAddIncome(firstIncome);   //普通合伙人得12.5%
+                partnerVipIncome.setVipAddIncome(firstIncome);   //事业合伙人得%7.5,二级返利
                 partnerVipIncome.setSecondVipIncome(firstIncome);
-                secondPartnerVipIncome.setVipAddIncome(secondIncome);    //事业合伙人得%7.5,二级返利
+                secondPartnerVipIncome.setVipAddIncome(secondIncome);    //普通合伙人得12.5%
                 secondPartnerVipIncome.setFirstVipIncome(secondIncome);
             }else if (type == 2){
                 Double firstPetrolIncome = mul(addIncome,firstPetrolProportion);
@@ -289,18 +289,18 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             }
             PartnerVipIncome partnerVipIncome = new PartnerVipIncome();
             partnerVipIncome.setPartnerId(partnerDTO.getUserId());
-            partnerVipIncome.setPartnerType(partnerDTO.getPartner());
-            partnerVipIncome.setIsSettle(0);
-            partnerVipIncome.setPartnerVipIncomeId(StringUtil.createId());
-            partnerVipIncome.setStartTime(new Date(119,9,11));
-            partnerVipIncome.setCreateAt(new Date());
+//            partnerVipIncome.setPartnerType(partnerDTO.getPartner());
+//            partnerVipIncome.setIsSettle(0);
+//            partnerVipIncome.setPartnerVipIncomeId(StringUtil.createId());
+//            partnerVipIncome.setStartTime(new Date(119,9,11));
+//            partnerVipIncome.setCreateAt(new Date());
             partnerVipIncome.setVipAddIncome(totalMoney);
             partnerVipIncome.setVipAddCount(totalCount);
             partnerVipIncome.setFirstPetrolIncome(firstPetrolIncome);
             partnerVipIncome.setSecondPetrolIncome(secondPetrolIncome);
             partnerVipIncome.setFirstVipIncome(firstIncome);
             partnerVipIncome.setSecondVipIncome(secondIncome);
-            partnerVipIncomeMapperExtra.insertIncome(partnerVipIncome);
+            partnerVipIncomeMapperExtra.updateByPrimaryKeySelective(partnerVipIncome);
         }
 
 

@@ -12,4 +12,6 @@ public interface VIPRechargeRecordService {
     VipRechargeRecordDTO getVipRechargeRecordList(VipRechargeRecordListDTO vipRechargeRecordListDTO);
 
     Boolean deleteVIPRechargeByID(String vipRechargeRecordId);
+
+    Boolean addVipMoney(VipRechargeRecordListDTO vipRechargeRecordListDTO);
 }
