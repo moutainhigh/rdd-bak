@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.GeneralPartnerMapperExtra" >
+    <select id="selectGeneralPartnerList" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GetGeneralPartnerListVo" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetGeneralPartnerListDTO">
+        select
+            czb_user.user_id as generalPartnerId,
+            czb_user.user_name as generalPartnerName,
+            czb_user.user_account as generalPartnerPhoneNumber,
+			czb_user.create_at as registrationTime,
+            area ,
+            user3.promotionNumbers as  promotionNumbers,
+            user2.user_name as recommenderName ,
+            user2.user_account as rcommenderPhoneNumber,
+            income1.unsettledAmount as unsettledAmount,
+            income2.settledAmount as settledAmount
+        from
+            czb_user
+            left outer join czb_vip_recharge_records on czb_user.user_id = czb_vip_recharge_records.user_id
+            left outer join czb_vip_area_config on czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+            left outer join (select czb_user.user_id,czb_user.user_name,czb_user.user_account from czb_user) as user2 on user2.user_id = czb_user.superior_user
+						left outer join (select count(1) as promotionNumbers,czb_user.second_level_partner from czb_user where partner = 0 GROUP BY second_level_partner) as user3 on user3.second_level_partner = czb_user.user_id
+						left outer join (select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as unsettledAmount , czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 0) as income1 on income1.partner_id = czb_user.user_id
+						left outer join(select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as settledAmount, czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 1) as income2 on income2.partner_id = czb_user.user_id
+        where
+            czb_user.superior_user = #{userId} and czb_user.partner = 1
+        <if test="account!=null">
+            AND czb_user.user_account = #{account}
+        </if>
+        <if test="creatAt!=null">
+            AND czb_user.create_at = #{createAt}
+        </if>
+        <if test="areaId!=null">
+            AND czb_vip_recharge_records.vip_area_config_id = #{areaId}
+        </if>
+    </select>
+    <select id="selectDevelopmentNumbers" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GeneralPartnerDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetNumberOfDevelopmentDTO">
+        select
+		sum(case
+		when second_level_partner = superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${dateType}),#{format}),'%')
+		then 1 else 0
+		end) as firstDirect,
+		sum(
+		case when second_level_partner != superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${dateType}),#{format}),'%')
+		 then 1 else 0 end) as firstIndirect,
+		sum(case
+		when second_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${dateType}),#{format}),'%') then 1
+		else 0
+		end) as secondDirect,
+		sum(
+		case when second_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${dateType}),#{format}),'%') then 1
+		else 0 end) as secondIndirect,
+		sum(case
+		when second_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${dateType}),#{format}),'%') then 1
+		else 0
+		end) as thirdDirect,
+		sum(
+		case when second_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${dateType}),#{format}),'%') then 1
+		else 0 end) as thirdIndirect
+      from
+		czb_user
+      where
+		second_level_partner = #{userId}
+    </select>
+</mapper>
