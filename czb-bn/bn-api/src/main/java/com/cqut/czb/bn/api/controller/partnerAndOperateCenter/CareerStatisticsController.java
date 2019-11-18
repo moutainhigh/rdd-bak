@@ -2,13 +2,13 @@ package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectInputDTO;
+import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -28,13 +28,27 @@ public class CareerStatisticsController {
      * @return
      */
     @GetMapping("/statistics")
-    public JSONResult statistics() {
-//        User user = (User)redisUtils.get(principal.getName());
-//        if(user.getUserId() == null){
-//            return new JSONResult("没有权限", 500);
-//        }
-        User user = new User();
-        user.setUserId("715727701391196425");
+    public JSONResult statistics(Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        if(user.getUserId() == null){
+            return new JSONResult("没有权限", 500);
+        }
+
         return service.statistics(user.getUserId());
+    }
+
+    @GetMapping("/getDirectAndIndirectIncome")
+    public JSONResult getDirectAndIndirectIncome(Principal principal, DirectAndIndirectInputDTO inputDTO) {
+        User user = (User)redisUtils.get(principal.getName());
+        if(user.getUserId() == null){
+            return new JSONResult("没有权限", 500);
+        }
+
+        return  service.getDirectAndIndirectIncome(inputDTO.getType(), user.getUserId());
+    }
+
+    @GetMapping("/getOrdinaryDirectNum")
+    public JSONResult getOrdinaryDirectNum(OrdinaryUserDirectInputDTO inputDTO) {
+        return  service.getOrdinaryDirectNum(inputDTO.getType(), inputDTO.getUserId());
     }
 }
