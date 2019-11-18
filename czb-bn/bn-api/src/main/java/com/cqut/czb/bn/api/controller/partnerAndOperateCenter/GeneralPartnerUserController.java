@@ -2,9 +2,11 @@ package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO;
+import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectInputDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.UserIncomeStatisticDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.GeneralPartnerUserService;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.annotations.Param;
@@ -30,6 +32,9 @@ public class GeneralPartnerUserController {
 
     @Autowired
     private GeneralPartnerUserService service;
+
+    @Autowired
+    CareerStatisticsService careerService;
 
     /**
      * 获取普通合伙人下普通用户数据
@@ -59,7 +64,7 @@ public class GeneralPartnerUserController {
      * @return
      */
     @GetMapping("/promoterStatistic")
-    public JSONResult promoterStatistic(@RequestBody String userId){
-        return service.getPromoterStatistic(userId);
+    public JSONResult promoterStatistic(OrdinaryUserDirectInputDTO inputDTO){
+        return careerService.getOrdinaryDirectNum(inputDTO.getType(), inputDTO.getUserId());
     }
 }
