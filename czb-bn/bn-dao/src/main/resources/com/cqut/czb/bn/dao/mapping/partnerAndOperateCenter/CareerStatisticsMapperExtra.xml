@@ -136,4 +136,37 @@
         AND create_at BETWEEN #{startTime}
         AND #{endTime}
   </select>
+
+    <select id="getNumberOfDevelopment" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO">
+       select
+		sum(case
+		when first_level_partner = superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		then 1 else 0
+		end) as firstDirectNumber,
+		sum(
+		case when first_level_partner != superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		 then 1 else 0 end) as firstIndirectNumber,
+		sum(case
+		when first_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0
+		end) as secondDirectNumber,
+		sum(
+		case when first_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0 end) as secondIndirectNumber,
+		sum(case
+		when first_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0
+		end) as thirdDirectNumber,
+		sum(
+		case when first_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0 end) as thirdIndirectNumber
+      from
+		czb_user
+      where
+		first_level_partner = #{userId}
+    </select>
 </mapper>

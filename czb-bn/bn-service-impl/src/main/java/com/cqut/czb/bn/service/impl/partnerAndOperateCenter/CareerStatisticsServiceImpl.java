@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.CareerStatisticsMapper
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectDTO;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,25 +26,29 @@ public class CareerStatisticsServiceImpl implements CareerStatisticsService {
         CareerStatisticsDTO secondData = mapperExtra.getUsers(userId);
 
         //因为返回结果frstData，所以将secondData数据设置到firstData中
-        if( null != secondData.getPartnerCount())
+        if( null != secondData.getPartnerCount()) {
             firstData.setPartnerCount(secondData.getPartnerCount());
-        else
+        } else {
             firstData.setPartnerCount(0);
+        }
 
         if( null != secondData.getOrdinaryUserCount())
             firstData.setOrdinaryUserCount(secondData.getOrdinaryUserCount());
-        else
+        else {
             firstData.setOrdinaryUserCount(0);
+        }
 
-        if( null != secondData.getDirectVipCount())
+        if( null != secondData.getDirectVipCount()) {
             firstData.setDirectVipCount(secondData.getDirectVipCount());
-        else
+        } else {
             firstData.setDirectVipCount(0);
+        }
 
-        if( null != secondData.getIndirectVipCount())
+        if( null != secondData.getIndirectVipCount()) {
             firstData.setIndirectVipCount(secondData.getIndirectVipCount());
-        else
+        } else {
             firstData.setIndirectVipCount(0);
+        }
 
         return new JSONResult("统计数据查询成功", 200, firstData);
     }
@@ -200,5 +205,11 @@ public class CareerStatisticsServiceImpl implements CareerStatisticsService {
         System.out.println("前前：" + startTime3 + endTime3);
 
         return  result;
+    }
+
+    @Override
+    public JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+        CareerStatisticsDTO numberOfDevelopment = mapperExtra.getNumberOfDevelopment(statisticsDevelopmentNumbers);
+        return new JSONResult("发展人数数据查询成功", 200, numberOfDevelopment);
     }
 }
