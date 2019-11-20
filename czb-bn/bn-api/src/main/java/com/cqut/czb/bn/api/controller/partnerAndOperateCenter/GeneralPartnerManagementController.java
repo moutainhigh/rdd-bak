@@ -2,8 +2,11 @@ package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GetGeneralPartnerListVo;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.GeneralPartnerService;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.models.auth.In;
@@ -22,11 +25,14 @@ import java.util.Date;
  */
 
 @RestController
-@RequestMapping("/GeneralPartner")
+@RequestMapping("/api/GeneralPartner")
 public class GeneralPartnerManagementController {
 
     @Autowired
     GeneralPartnerService service;
+
+    @Autowired
+    CareerStatisticsService statisticsService;
 
     @Autowired
     RedisUtils redisUtils;
@@ -37,10 +43,15 @@ public class GeneralPartnerManagementController {
      * @return
      */
     @GetMapping("/getGeneralPartnerList")
-    public JSONResult getGeneralPartnerList(Principal principal, String account, Date creatAt,Integer areaId, PageDTO pageDTO){
-
+    public JSONResult getGeneralPartnerList(GeneralPartnerUserPageDTO pageDTO){
 //        User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(service.getGeneralPartnerList("155962733891547",account,creatAt,areaId,pageDTO));
+//        if(user==null){
+//            return new JSONResult("没有权限", 500);
+//        }
+//        if(user.getUserId() == null){
+//            return new JSONResult("没有权限", 500);
+//        }
+        return service.getGeneralPartnerList(pageDTO);
     }
 
     /**
@@ -49,8 +60,8 @@ public class GeneralPartnerManagementController {
      * @return
      */
     @GetMapping("/getReturn")
-    public JSONResult getReturn(){
-        return null;
+    public JSONResult getReturn(Integer condition, String userId){
+        return statisticsService.getDirectAndIndirectIncome(condition,userId);
     }
 
     /**
@@ -61,6 +72,6 @@ public class GeneralPartnerManagementController {
     @GetMapping("/getNumberOfDevelopment")
     public JSONResult getNumberOfDevelopment(String userId, Integer condition){
 
-        return new JSONResult(service.getNumberOfDevelopment("9026937424356684",1));
+        return service.getNumberOfDevelopment(userId,condition);
     }
 }
