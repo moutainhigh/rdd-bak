@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="address_id" property="addressId" jdbcType="VARCHAR" />
+    <result column="delivery_state" property="deliveryState" jdbcType="INTEGER" />
+    <result column="delivery_num" property="deliveryNum" jdbcType="VARCHAR" />
+    <result column="delivery_company" property="deliveryCompany" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, order_id, address_id, delivery_state, delivery_num, delivery_company, 
+    create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_wechat_goods_delivery_records
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_wechat_goods_delivery_records
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords" >
+    insert into czb_wechat_goods_delivery_records (record_id, order_id, address_id, 
+      delivery_state, delivery_num, delivery_company, 
+      create_at, update_at)
+    values (#{recordId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{addressId,jdbcType=VARCHAR}, 
+      #{deliveryState,jdbcType=INTEGER}, #{deliveryNum,jdbcType=VARCHAR}, #{deliveryCompany,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords" >
+    insert into czb_wechat_goods_delivery_records
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="addressId != null" >
+        address_id,
+      </if>
+      <if test="deliveryState != null" >
+        delivery_state,
+      </if>
+      <if test="deliveryNum != null" >
+        delivery_num,
+      </if>
+      <if test="deliveryCompany != null" >
+        delivery_company,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryState != null" >
+        #{deliveryState,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryNum != null" >
+        #{deliveryNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryCompany != null" >
+        #{deliveryCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords" >
+    update czb_wechat_goods_delivery_records
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryState != null" >
+        delivery_state = #{deliveryState,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryNum != null" >
+        delivery_num = #{deliveryNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryCompany != null" >
+        delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords" >
+    update czb_wechat_goods_delivery_records
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      address_id = #{addressId,jdbcType=VARCHAR},
+      delivery_state = #{deliveryState,jdbcType=INTEGER},
+      delivery_num = #{deliveryNum,jdbcType=VARCHAR},
+      delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+</mapper>

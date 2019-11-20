@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.BusinessCommonUserMapperExtra">
+    <cache/>
     <select id="list" parameterType="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.BusinessCommonUserVo" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.BusinessCommonUserOutputDTO">
         SELECT
-            czb_user.user_id as userId,
-            czb_user.user_account as mobile,
-            czb_user.create_at as createAt,
-            DATE_ADD(czb_vip_recharge_records.create_at,INTERVAL 1 YEAR) AS expireTime,
-            area,
-            CASE WHEN superior_user = #{userId} THEN 1 ELSE 0 END AS promotionType,
-            user2.user_account as promotionMobile,
-            income.total_price as petrolMoney,
-            income.my_income as myProfit
+        czb_user.user_id as userId,
+        czb_user.user_account as mobile,
+        czb_user.create_at as createAt,
+        DATE_ADD(MAX(DISTINCT czb_vip_recharge_records.create_at),INTERVAL 1 YEAR) as  expireTime,
+        area,
+        CASE WHEN superior_user = #{userId} THEN 1 ELSE 0 END AS promotionType,
+        user2.user_account as promotionMobile,
+        income.total_price as petrolMoney,
+        income.my_income as myProfit
         FROM
-            czb_user
-                LEFT OUTER JOIN czb_vip_recharge_records ON czb_user.user_id = czb_vip_recharge_records.user_id
-                LEFT OUTER JOIN czb_vip_area_config ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
-                left outer join (select czb_user.user_id,czb_user.user_account from czb_user) as user2 on user2.user_id = czb_user.superior_user
-                left outer join (select czb_user.user_id,czb_petrol_sales_records.buyer_id,sum(czb_petrol_sales_records.current_price) as total_price,sum(czb_petrol_sales_records.current_price) * 0.0015 as my_income from czb_user join czb_petrol_sales_records on czb_user.user_id = czb_petrol_sales_records.buyer_id group by czb_petrol_sales_records.buyer_id) as income on czb_user.user_id = income.buyer_id
+        czb_user
+        LEFT OUTER JOIN czb_vip_recharge_records ON czb_user.user_id = czb_vip_recharge_records.user_id
+        LEFT OUTER JOIN czb_vip_area_config ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+        left outer join (select czb_user.user_id,czb_user.user_account from czb_user) as user2 on user2.user_id = czb_user.superior_user
+        left outer join (select czb_user.user_id,czb_petrol_sales_records.buyer_id,sum(czb_petrol_sales_records.current_price) as total_price,sum(czb_petrol_sales_records.current_price) * 0.0015 as my_income from czb_user join czb_petrol_sales_records on czb_user.user_id = czb_petrol_sales_records.buyer_id group by czb_petrol_sales_records.buyer_id) as income on czb_user.user_id = income.buyer_id
         WHERE
-            czb_user.first_level_partner = #{userId} AND partner = 0
+        czb_user.first_level_partner = #{userId} AND partner = 0
         <if test="mobile!=null">
             AND  czb_user.user_account = #{mobile}
         </if>
         <if test="createAt!=null">
-            AND  czb_user.create_at = #{createAt}
+            AND  czb_user.create_at > #{createAt}
         </if>
         <if test="areaId!= null">
             AND czb_vip_recharge_records.vip_area_config_id = #{areaId}
         </if>
+        GROUP BY czb_user.user_id,area,petrolMoney,myProfit
+
     </select>
 </mapper>

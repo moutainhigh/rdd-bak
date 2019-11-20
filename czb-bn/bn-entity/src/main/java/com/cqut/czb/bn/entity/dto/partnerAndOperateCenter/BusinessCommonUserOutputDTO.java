@@ -1,7 +1,8 @@
 package com.cqut.czb.bn.entity.dto.partnerAndOperateCenter;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
 * @CreateDate:     2019/11/16 17:14
 * @Version:        1.0
 */
-public class BusinessCommonUserOutputDTO {
+public class BusinessCommonUserOutputDTO implements Serializable {
 
     /**
      * 普通用户userId
@@ -34,13 +35,13 @@ public class BusinessCommonUserOutputDTO {
     /**
      * 普通用户注册时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createAt;
 
     /**
      * 年费到期时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date expireTime;
 
     /**
