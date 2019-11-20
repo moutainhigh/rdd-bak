@@ -109,5 +109,6 @@ CREATE TABLE `czb_wechat_vip_apply` (
   `remark` varchar(50) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `status` int default 0,
   PRIMARY KEY (`record_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
