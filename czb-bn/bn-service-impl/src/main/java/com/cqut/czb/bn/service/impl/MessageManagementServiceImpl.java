@@ -78,7 +78,8 @@ public class MessageManagementServiceImpl implements MessageManagementService {
             String idPrex = String.valueOf(System.currentTimeMillis());
             List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId,msgModel.getReceiverType());
             for(int i = 0; i < msgRecordList.size(); i++){
-                msgRecordList.get(i).setMsgModelId(idPrex + i);
+                msgRecordList.get(i).setMsgRecordId(idPrex + String.valueOf(i));
+                msgRecordList.get(i).setMsgModelId(msgModelId);
             }
             msgModel.setIsSend(1);
             msgModelMapper.updateByPrimaryKey(msgModel);
