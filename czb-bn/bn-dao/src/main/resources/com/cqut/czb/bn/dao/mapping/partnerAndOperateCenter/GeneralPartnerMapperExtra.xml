@@ -23,13 +23,13 @@
             left outer join(select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as settledAmount, czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 1) as income2 on income2.partner_id = czb_user.user_id
         <where>
                 czb_user.superior_user = #{userId} and czb_user.partner = 1
-            <if test="account != null">
+            <if test="account != null and account != ''">
                 AND czb_user.user_account = #{account}
             </if>
-            <if test="createAt != null">
+            <if test="createAt != null and creatAt != ''">
                 AND czb_user.create_at = #{createAt}
             </if>
-            <if test="area != null">
+            <if test="area != null and area != ''">
                 AND czb_vip_recharge_records.vip_area_config_id = #{area}
             </if>
         </where>

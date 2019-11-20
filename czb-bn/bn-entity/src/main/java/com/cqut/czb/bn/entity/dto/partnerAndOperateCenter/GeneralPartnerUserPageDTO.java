@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.partnerAndOperateCenter;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 public class GeneralPartnerUserPageDTO extends PageDTO {
     private String userId = null;
     private String account = null;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
     private String area = null;
 
