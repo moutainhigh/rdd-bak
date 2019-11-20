@@ -43,9 +43,16 @@ public class GeneralPartnerUserController {
      * @return
      */
     @GetMapping("/getTableData")
-    public JSONResult getTableData(Principal principal,GeneralPartnerUserPageDTO pageDTO){
-        User user = (User)redisUtils.get(principal.getName());
+    public JSONResult getTableData(GeneralPartnerUserPageDTO pageDTO){
+//        User user = (User)redisUtils.get(principal.getName());
+//        if(user != null){
+//            return service.getGeneralPartnerUserTableData(user,pageDTO);
+//        }
+
+        User user = new User();
+        user.setUserId("155980397456674");
         return service.getGeneralPartnerUserTableData(user,pageDTO);
+//        return new JSONResult("没有权限",500);
     }
 
     /**
