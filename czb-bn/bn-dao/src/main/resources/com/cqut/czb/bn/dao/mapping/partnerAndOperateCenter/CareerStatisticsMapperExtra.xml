@@ -72,4 +72,101 @@
                     first_level_partner = #{userId}
             ) AS allUser
   </select>
+  <select id="getDirectAndIndirectIncome" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectDTO">
+        SELECT
+            sum(
+
+                IF (
+                    result.partnerLevel = 1
+                    AND result.is_settlement = 1,
+                    result.amount,
+                    0
+                )
+            ) direct,
+            sum(
+
+                IF (
+                    result.partnerLevel = 2
+                    AND result.is_settlement = 1,
+                    result.amount,
+                    0
+                )
+            ) indirect,
+            sum(
+
+                IF (
+                    result.partnerLevel = 0
+                    AND result.is_settlement = 0
+                    AND result.remark = '充值vip返佣',
+                    result.amount,
+                    0
+                )
+            ) directVip
+        FROM
+            (
+                SELECT
+                    log.amount amount,
+                    log.partner_commission_level partnerLevel,
+                    log.is_settlement,
+                    log.remark
+                FROM
+                    (
+                        SELECT
+                            info_id infoId
+                        FROM
+                            czb_user_income_info info
+                        WHERE
+                            info.user_id = #{userId}
+                    ) AS infoIdResult
+                LEFT JOIN czb_income_log log ON log.info_id = infoIdResult.infoId
+                WHERE
+                    log.create_at BETWEEN #{startTime}
+                AND #{endTime}
+                AND amount != 0
+            ) AS result
+  </select>
+
+  <select id="getOrdinaryDirectNum" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectDTO">
+        SELECT
+            count(user_id) AS directNum
+        FROM
+            czb_user
+        WHERE
+            superior_user = #{userId}
+        AND create_at BETWEEN #{startTime}
+        AND #{endTime}
+  </select>
+
+    <select id="getNumberOfDevelopment" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO">
+       select
+		sum(case
+		when first_level_partner = superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		then 1 else 0
+		end) as firstDirectNumber,
+		sum(
+		case when first_level_partner != superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		 then 1 else 0 end) as firstIndirectNumber,
+		sum(case
+		when first_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0
+		end) as secondDirectNumber,
+		sum(
+		case when first_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0 end) as secondIndirectNumber,
+		sum(case
+		when first_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0
+		end) as thirdDirectNumber,
+		sum(
+		case when first_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0 end) as thirdIndirectNumber
+      from
+		czb_user
+      where
+		first_level_partner = #{userId}
+    </select>
 </mapper>

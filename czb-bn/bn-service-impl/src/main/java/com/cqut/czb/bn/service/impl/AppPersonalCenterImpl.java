@@ -85,6 +85,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
         List<AppPetrolSaleInfoOutputDTO> list = petrolSalesRecordsMapperExtra.getPhysicalCardsForUser(userId,petrolKind);
         //解决app油卡购买时间显示问题
         for(AppPetrolSaleInfoOutputDTO appPetrolSaleInfoOutputDTO : list){
+            appPetrolSaleInfoOutputDTO.setUpdateAt(appPetrolSaleInfoOutputDTO.getCreateAt());
             appPetrolSaleInfoOutputDTO.setTransactionTime(appPetrolSaleInfoOutputDTO.getCreateAt());
         }
         return list;

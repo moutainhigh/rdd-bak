@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.GeneralPartnerUserMapperExtra" >
+
+    <!-- 获取表格数据 -->
+    <select id="getTableData" parameterType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO"
+    resultType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GeneralPartnerUser">
+        select
+            czb_user.user_id as userId,
+            czb_user.user_name as userName,
+            czb_user.user_account as userAccount,
+            area,
+            czb_user.create_at as createAt,
+            DATE_ADD(czb_vip_recharge_records.create_at,INTERVAL 1 YEAR) as expireAt,
+            case when czb_user.superior_user = czb_user.second_level_partner then 0 else 1 end as promotionType,
+            superior_user as superiorUser,
+            user2.user_name as superiorUserName,
+            user2.user_account as superiorUserAccount,
+            income.total_price as accumulatedConsumptionAmount,
+            income.my_income as myIncome
+        from
+            czb_user
+            left outer join czb_vip_recharge_records on czb_user.user_id = czb_vip_recharge_records.user_id
+            left outer join czb_vip_area_config on czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+            left outer join (select czb_user.user_id,czb_user.user_name,czb_user.user_account from czb_user) as user2 on user2.user_id = czb_user.superior_user
+            left outer join (select czb_user.user_id,czb_petrol_sales_records.buyer_id,sum(czb_petrol_sales_records.current_price) as total_price,sum(czb_petrol_sales_records.current_price) * 0.003 as my_income from czb_user join czb_petrol_sales_records on czb_user.user_id = czb_petrol_sales_records.buyer_id group by czb_petrol_sales_records.buyer_id) as income on czb_user.user_id = income.buyer_id
+        <where>
+            <if test="userId != null">
+            and
+                czb_user.second_level_partner = #{userId}
+            </if>
+            <if test="account != null">
+            and
+                czb_user.user_account = #{account}
+            </if>
+            <if test="createAt != null">
+            and
+                czb_user.create_at = #{createAt}
+            </if>
+            <if test="area != null">
+            and
+                czb_vip_area_config.area = #{area}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询总条数 -->
+    <select id="selectTotalCount" parameterType="java.lang.String">
+        select count(1) from `czb_user` where second_level_partner = #{userId}
+    </select>
+
+    <!-- 获取推荐人数 -->
+
+
+    <!-- 获取直推收益 -->
+    <select id="getIncomeStatistic" parameterType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.UserIncomeStatisticDTO" resultType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.HumanAmountStatistic">
+        select
+            sum(
+            case
+                when czb_income_log.create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%')
+                then czb_income_log.amount
+            else 0
+            end
+            ) as firstData,
+            sum(
+            case
+                when czb_income_log.create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%')
+                then czb_income_log.amount
+            else 0
+            end
+            ) as secondData,
+            sum(
+            case
+                when czb_income_log.create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+                then czb_income_log.amount
+            else 0
+            end
+            ) as thirdData
+        from
+            czb_user_income_info
+        join
+            czb_income_log
+        on
+            czb_user_income_info.info_id = czb_income_log.info_id
+        where
+            user_id = #{userId}
+            and remark = '充值vip返佣'
+            and partner_commission_level = 1
+    </select>
+</mapper>

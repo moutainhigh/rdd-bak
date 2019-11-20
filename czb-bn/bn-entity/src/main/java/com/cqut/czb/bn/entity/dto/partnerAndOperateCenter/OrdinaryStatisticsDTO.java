@@ -2,9 +2,7 @@ package com.cqut.czb.bn.entity.dto.partnerAndOperateCenter;
 
 import java.math.BigDecimal;
 
-public class CareerStatisticsDTO {
-    //当前普通合伙人
-    private Integer partnerCount;
+public class OrdinaryStatisticsDTO {
 
     //当前年卡会员
     private Integer ordinaryUserCount;
@@ -54,13 +52,6 @@ public class CareerStatisticsDTO {
     //第三个间推发展人数
     private Integer thirdIndirectNumber;
 
-    public Integer getPartnerCount() {
-        return partnerCount;
-    }
-
-    public void setPartnerCount(Integer partnerCount) {
-        this.partnerCount = partnerCount;
-    }
 
     public Integer getOrdinaryUserCount() {
         return ordinaryUserCount;
