@@ -19,7 +19,7 @@ public class GetGeneralPartnerListDTO {
     private String area;
 
     //注册时间
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date registrationTime;
 
     //推荐人电话
@@ -32,13 +32,13 @@ public class GetGeneralPartnerListDTO {
     private Integer promotionNumbers;
 
     //未结算金额
-    private Integer unsettledAmount;
+    private float unsettledAmount;
 
     //累计收入
-    private Integer accumulatedIncome;
+    private float accumulatedIncome;
 
     //已结算金额
-    private Integer settledAmount;
+    private float settledAmount;
 
     public String getGeneralPartnerId() {
         return generalPartnerId;
@@ -104,27 +104,27 @@ public class GetGeneralPartnerListDTO {
         this.promotionNumbers = promotionNumbers;
     }
 
-    public Integer getUnsettledAmount() {
+    public float getUnsettledAmount() {
         return unsettledAmount;
     }
 
-    public void setUnsettledAmount(Integer unsettledAmount) {
+    public void setUnsettledAmount(float unsettledAmount) {
         this.unsettledAmount = unsettledAmount;
     }
 
-    public Integer getAccumulatedIncome() {
+    public float getAccumulatedIncome() {
         return accumulatedIncome;
     }
 
-    public void setAccumulatedIncome(Integer accumulatedIncome) {
+    public void setAccumulatedIncome(float accumulatedIncome) {
         this.accumulatedIncome = accumulatedIncome;
     }
 
-    public Integer getSettledAmount() {
+    public float getSettledAmount() {
         return settledAmount;
     }
 
-    public void setSettledAmount(Integer settledAmount) {
+    public void setSettledAmount(float settledAmount) {
         this.settledAmount = settledAmount;
     }
 }

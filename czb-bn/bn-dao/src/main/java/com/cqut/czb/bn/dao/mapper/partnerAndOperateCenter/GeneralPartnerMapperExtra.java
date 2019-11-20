@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter;
 
+import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetGeneralPartnerListDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetNumberOfDevelopmentDTO;
 import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GeneralPartnerDevelopmentNumbers;
@@ -13,7 +14,7 @@ public interface GeneralPartnerMapperExtra {
      * @param
      * @return
      */
-    List<GetGeneralPartnerListDTO> selectGeneralPartnerList(GetGeneralPartnerListVo vo);
+    List<GetGeneralPartnerListDTO> selectGeneralPartnerList(GeneralPartnerUserPageDTO pageDTO);
 
     /**
      *

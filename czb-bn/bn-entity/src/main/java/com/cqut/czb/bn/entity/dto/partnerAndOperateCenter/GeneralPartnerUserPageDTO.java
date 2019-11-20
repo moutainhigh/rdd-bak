@@ -12,10 +12,10 @@ import java.util.Date;
  * @version: v1.0
  */
 public class GeneralPartnerUserPageDTO extends PageDTO {
-    private String userId;
-    private String account;
+    private String userId = null;
+    private String account = null;
     private Date createAt;
-    private String area;
+    private String area = null;
 
     public String getUserId() {
         return userId;
