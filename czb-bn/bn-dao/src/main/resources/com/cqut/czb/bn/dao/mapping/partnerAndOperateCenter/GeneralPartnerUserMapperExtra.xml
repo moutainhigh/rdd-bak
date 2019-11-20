@@ -26,31 +26,19 @@
             left outer join (select czb_user.user_id,czb_petrol_sales_records.buyer_id,sum(czb_petrol_sales_records.current_price) as total_price,sum(czb_petrol_sales_records.current_price) * 0.003 as my_income from czb_user join czb_petrol_sales_records on czb_user.user_id = czb_petrol_sales_records.buyer_id group by czb_petrol_sales_records.buyer_id) as income on czb_user.user_id = income.buyer_id
         <where>
             <if test="userId != null">
-            and
                 czb_user.second_level_partner = #{userId}
             </if>
-            <if test="account != null">
-            and
-                czb_user.user_account = #{account}
+            <if test="account != null || account != ''">
+            and czb_user.user_account = #{account}
             </if>
             <if test="createAt != null">
-            and
-                czb_user.create_at = #{createAt}
+            and czb_user.create_at = #{createAt}
             </if>
-            <if test="area != null">
-            and
-                czb_vip_area_config.area = #{area}
+            <if test="area != null || area != ''">
+            and czb_vip_area_config.area = #{area}
             </if>
         </where>
     </select>
-
-    <!-- 查询总条数 -->
-    <select id="selectTotalCount" parameterType="java.lang.String">
-        select count(1) from `czb_user` where second_level_partner = #{userId}
-    </select>
-
-    <!-- 获取推荐人数 -->
-
 
     <!-- 获取直推收益 -->
     <select id="getIncomeStatistic" parameterType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.UserIncomeStatisticDTO" resultType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.HumanAmountStatistic">

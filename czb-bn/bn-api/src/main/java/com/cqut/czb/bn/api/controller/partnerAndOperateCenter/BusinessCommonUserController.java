@@ -6,7 +6,9 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.BusinessCommonUserService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +43,7 @@ public class BusinessCommonUserController {
      * @return
      */
     @GetMapping("/list")
-    public JSONResult list(Principal principal,String mobile, Date createAt, Integer areaId, PageDTO pageDTO){
+    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, Integer areaId, PageDTO pageDTO){
        /* if(principal == null || principal.getName() == null){
             return new JSONResult("没有权限",500);
         }
@@ -51,4 +53,7 @@ public class BusinessCommonUserController {
         }*/
         return new JSONResult(businessCommonUserService.list("156342470371369",mobile,createAt,areaId,pageDTO));
     }
+
+
+
 }
