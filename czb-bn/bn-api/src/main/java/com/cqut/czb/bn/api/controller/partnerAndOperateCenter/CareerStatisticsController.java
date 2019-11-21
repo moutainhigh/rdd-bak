@@ -38,6 +38,12 @@ public class CareerStatisticsController {
         return service.statistics(user.getUserId());
     }
 
+    /**
+     * 合伙人直推间推收益
+     * @param principal
+     * @param inputDTO
+     * @return
+     */
     @GetMapping("/getDirectAndIndirectIncome")
     public JSONResult getDirectAndIndirectIncome(Principal principal, DirectAndIndirectInputDTO inputDTO) {
         User user = (User)redisUtils.get(principal.getName());
@@ -60,11 +66,11 @@ public class CareerStatisticsController {
      */
     @GetMapping("/getNumberOfDevelopment")
     public JSONResult getNumberOfDevelopment(Principal principal, statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
-//        User user =  (User)redisUtils.get(principal.getName());
-        statisticsDevelopmentNumbers.setUserId("156342470371369");
-        statisticsDevelopmentNumbers.setCondition(1);
-//        User user = new User();
-//        user.setUserId("756152457954521512");
+        User user =  (User)redisUtils.get(principal.getName());
+        if(user.getUserId() == null){
+            return new JSONResult("没有权限", 500);
+        }
+        statisticsDevelopmentNumbers.setUserId(user.getUserId());
         return service.getNumberOfDevelopment(statisticsDevelopmentNumbers);
     }
 }
