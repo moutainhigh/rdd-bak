@@ -3,12 +3,13 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapper" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category" >
     <id column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="superior_id" property="superiorId" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    category_id, content, create_at, update_at
+    category_id, superior_id, content, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -21,16 +22,19 @@
     where category_id = #{categoryId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category" >
-    insert into czb_category (category_id, content, create_at, 
-      update_at)
-    values (#{categoryId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+    insert into czb_category (category_id, superior_id, content, 
+      create_at, update_at)
+    values (#{categoryId,jdbcType=VARCHAR}, #{superiorId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category" >
     insert into czb_category
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="categoryId != null" >
         category_id,
+      </if>
+      <if test="superiorId != null" >
+        superior_id,
       </if>
       <if test="content != null" >
         content,
@@ -46,6 +50,9 @@
       <if test="categoryId != null" >
         #{categoryId,jdbcType=VARCHAR},
       </if>
+      <if test="superiorId != null" >
+        #{superiorId,jdbcType=VARCHAR},
+      </if>
       <if test="content != null" >
         #{content,jdbcType=VARCHAR},
       </if>
@@ -60,6 +67,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category" >
     update czb_category
     <set >
+      <if test="superiorId != null" >
+        superior_id = #{superiorId,jdbcType=VARCHAR},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=VARCHAR},
       </if>
@@ -74,7 +84,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category" >
     update czb_category
-    set content = #{content,jdbcType=VARCHAR},
+    set superior_id = #{superiorId,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where category_id = #{categoryId,jdbcType=VARCHAR}
