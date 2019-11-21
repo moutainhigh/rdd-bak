@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
+import com.cqut.czb.bn.service.partnerAndOperateCenter.OrdinaryStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,9 @@ public class CareerStatisticsController {
 
     @Autowired
     CareerStatisticsService service;
+
+    @Autowired
+    OrdinaryStatisticsService statisticsService;
 
     @Autowired
     RedisUtils redisUtils;
@@ -72,5 +76,25 @@ public class CareerStatisticsController {
         }
         statisticsDevelopmentNumbers.setUserId(user.getUserId());
         return service.getNumberOfDevelopment(statisticsDevelopmentNumbers);
+    }
+
+    /**
+     * 事业合伙人中心-普通合伙人管理详情-发展人数获取
+     * @param
+     * @return
+     */
+    @GetMapping("/getDevelopment")
+    public JSONResult getDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+        return statisticsService.getNumberOfDevelopment(statisticsDevelopmentNumbers);
+    }
+
+    /**
+     * 事业合伙人中心-普通合伙人管理详情-直推间推收益
+     * @param statisticsDevelopmentNumbers
+     * @return
+     */
+    @GetMapping("/getIncome")
+    public JSONResult getIncome(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+        return  service.getDirectAndIndirectIncome(statisticsDevelopmentNumbers.getCondition(), statisticsDevelopmentNumbers.getUserId());
     }
 }
