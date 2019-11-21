@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatVipApplyMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, user_id, phone_num, user_name, remark, create_at, update_at, status
+  </sql>
+
+  <select id="selectVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply" resultType="com.cqut.czb.bn.entity.entity.VIPApply">
+        SELECT
+        U.user_account AS vipAccount,
+        U.user_name AS vipName,
+        WVP.create_at AS createAt,
+        WVP.update_at AS updateAt,
+        WVP.record_id AS recordId,
+        WVP.remark,
+        WVP.STATUS,
+        WVP.phone_num AS phoneNum
+        FROM
+            czb_wechat_vip_apply AS WVP,
+            czb_user AS U
+        WHERE
+            WVP.user_id = U.user_id
+    </select>
+</mapper>
