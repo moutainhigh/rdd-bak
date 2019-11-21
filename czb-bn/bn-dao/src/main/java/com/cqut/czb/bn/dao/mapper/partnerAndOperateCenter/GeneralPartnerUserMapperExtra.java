@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPage
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.UserIncomeStatisticDTO;
 import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GeneralPartnerUser;
 import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.HumanAmountStatistic;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

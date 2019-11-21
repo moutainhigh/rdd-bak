@@ -15,8 +15,7 @@ import java.util.Date;
 public class GeneralPartnerUserPageDTO extends PageDTO {
     private String userId = null;
     private String account = null;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createAt;
+    private String createAt;
     private String area = null;
 
     public String getUserId() {
@@ -35,11 +34,11 @@ public class GeneralPartnerUserPageDTO extends PageDTO {
         this.account = account;
     }
 
-    public Date getCreateAt() {
+    public String getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(Date createAt) {
+    public void setCreateAt(String createAt) {
         this.createAt = createAt;
     }
 
