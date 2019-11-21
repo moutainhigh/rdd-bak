@@ -17,6 +17,8 @@ public class WeChatVipApply {
 
     private Date updateAt;
 
+    private Integer status;
+
     public String getRecordId() {
         return recordId;
     }
@@ -71,5 +73,13 @@ public class WeChatVipApply {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -39,6 +39,7 @@ CREATE TABLE `czb_wechat_commodity_order`  (
 DROP TABLE IF EXISTS `czb_category`;
 CREATE TABLE `czb_category`  (
   `category_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `superior_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `content` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `create_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_at` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
@@ -70,8 +71,8 @@ CREATE TABLE `czb_wechat_commodity`  (
   `shop_phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `shop_content` varchar(225) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `shop_address` varchar(225) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `longitude` double(10,2) NULL DEFAULT NULL,
-  `latitude` double(10,2) NULL DEFAULT NULL,
+  `longitude` double(10,10) NULL DEFAULT NULL,
+  `latitude` double(10,10) NULL DEFAULT NULL,
   `is_have_shop` int(1) NULL DEFAULT NULL,
   `show_place` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `show_order` int(4) NULL DEFAULT NULL,
@@ -109,5 +110,6 @@ CREATE TABLE `czb_wechat_vip_apply` (
   `remark` varchar(50) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `status` int default 0,
   PRIMARY KEY (`record_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
