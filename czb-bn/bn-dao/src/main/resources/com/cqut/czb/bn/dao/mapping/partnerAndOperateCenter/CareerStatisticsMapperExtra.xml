@@ -74,7 +74,7 @@
   </select>
   <select id="getDirectAndIndirectIncome" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectDTO">
         SELECT
-            sum(
+            COALESCE(sum(
 
                 IF (
                     result.partnerLevel = 1
@@ -82,8 +82,9 @@
                     result.amount,
                     0
                 )
-            ) direct,
-            sum(
+            ), 0)
+             direct,
+             COALESCE(sum(
 
                 IF (
                     result.partnerLevel = 2
@@ -91,8 +92,9 @@
                     result.amount,
                     0
                 )
-            ) indirect,
-            sum(
+            ),0)
+             indirect,
+             COALESCE(sum(
 
                 IF (
                     result.partnerLevel = 0
@@ -101,7 +103,8 @@
                     result.amount,
                     0
                 )
-            ) directVip
+            ), 0)
+             directVip
         FROM
             (
                 SELECT
