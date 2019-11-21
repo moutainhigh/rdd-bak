@@ -36,10 +36,12 @@ public class OrdinaryStatisticsController {
     @GetMapping("/statistics")
     public JSONResult statistics(Principal principal) {
         User user = (User)redisUtils.get(principal.getName());
+//        User user = new User();
+//        user.setUserId("54598729134309428");
         if(user.getUserId() == null){
             return new JSONResult("没有权限", 500);
         }
-        user.setUserId("54598729134309428");
+
         return service.statistics(user.getUserId());
     }
 
@@ -54,9 +56,9 @@ public class OrdinaryStatisticsController {
         if(user.getUserId() == null){
             return new JSONResult("没有权限", 500);
         }
+//        user.setUserId("756152457954521512");
         statisticsDevelopmentNumbers.setUserId(user.getUserId());
 //        statisticsDevelopmentNumbers.setCondition(1);
-//        user.setUserId("756152457954521512");
         return service.getNumberOfDevelopment(statisticsDevelopmentNumbers);
     }
 
