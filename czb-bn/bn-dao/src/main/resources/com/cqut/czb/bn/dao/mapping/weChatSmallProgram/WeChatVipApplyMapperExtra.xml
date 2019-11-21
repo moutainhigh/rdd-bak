@@ -16,19 +16,17 @@
   </sql>
 
   <select id="selectVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply" resultType="com.cqut.czb.bn.entity.entity.VIPApply">
-        SELECT
-        U.user_account AS vipAccount,
-        U.user_name AS vipName,
-        WVP.create_at AS createAt,
-        WVP.update_at AS updateAt,
-        WVP.record_id AS recordId,
-        WVP.remark,
-        WVP.STATUS,
-        WVP.phone_num AS phoneNum
-        FROM
-            czb_wechat_vip_apply AS WVP,
-            czb_user AS U
-        WHERE
-            WVP.user_id = U.user_id
+     SELECT
+	U.user_account AS vipAccount,
+	WVP.user_name AS vipName,
+	WVP.STATUS AS audit,
+	WVP.phone_num AS phoneNum
+FROM
+	czb_wechat_vip_apply AS WVP,
+	czb_user AS U
+WHERE
+	WVP.user_id = U.user_id
+ORDER BY
+	WVP.create_at DESC
     </select>
 </mapper>
