@@ -13,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,13 @@ public class GeneralPartnerUserServiceImpl implements GeneralPartnerUserService 
     @Override
     public JSONResult getGeneralPartnerUserTableData(User user, GeneralPartnerUserPageDTO pageDTO) {
         pageDTO.setUserId(user.getUserId());
+        String time = null;
+        if("" != pageDTO.getCreateAt()){
+            time = pageDTO.getCreateAt().substring(0,10);
+        }
+
+        pageDTO.setCreateAt(time);
+
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize(),true);
         List<GeneralPartnerUser> partnerUserDTO = mapper.getTableData(pageDTO);
         System.out.println(partnerUserDTO);
