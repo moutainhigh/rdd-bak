@@ -25,13 +25,7 @@ public class VipApplyServiceImpl implements VipApplyService {
     @Override
     public PageInfo<VIPApply> getvip(VIPApply record) {
         PageHelper.startPage(record.getCurrentPage(), record.getPageSize());
-
-        if ("" == record.getVipAccount() || record.getVipAccount() == null) {
-            record.setVipAccount(null);
-        }
-
-        List<VIPApply> vipApplies = vipApplyMapper.selectVipApply(record);
-        return new PageInfo<VIPApply>(vipApplies);
+        return new PageInfo<>(vipApplyMapper.selectVipApply(record));
     }
 
     @Override
@@ -44,8 +38,6 @@ public class VipApplyServiceImpl implements VipApplyService {
             }
             return true;
         }
-        else {
             return false;
-        }
     }
 }
