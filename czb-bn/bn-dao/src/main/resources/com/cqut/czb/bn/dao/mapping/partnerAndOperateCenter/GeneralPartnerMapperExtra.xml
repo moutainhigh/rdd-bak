@@ -36,6 +36,7 @@
             </if>
         </where>
         GROUP BY generalPartnerId,generalPartnerName,area,generalPartnerPhoneNumber,promotionNumbers,recommenderName,unsettledAmount,settledAmount
+        ORDER BY promotionNumbers DESC
     </select>
     <select id="selectDevelopmentNumbers" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GeneralPartnerDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetNumberOfDevelopmentDTO">
         select
