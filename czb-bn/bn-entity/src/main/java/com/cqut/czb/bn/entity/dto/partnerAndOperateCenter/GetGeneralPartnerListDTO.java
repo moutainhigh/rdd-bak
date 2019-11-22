@@ -32,13 +32,13 @@ public class GetGeneralPartnerListDTO {
     private Integer promotionNumbers;
 
     //未结算金额
-    private float unsettledAmount;
+    private double unsettledAmount;
 
     //累计收入
-    private float accumulatedIncome;
+    private double accumulatedIncome;
 
     //已结算金额
-    private float settledAmount;
+    private double settledAmount;
 
     public String getGeneralPartnerId() {
         return generalPartnerId;
@@ -104,27 +104,27 @@ public class GetGeneralPartnerListDTO {
         this.promotionNumbers = promotionNumbers;
     }
 
-    public float getUnsettledAmount() {
+    public double getUnsettledAmount() {
         return unsettledAmount;
     }
 
-    public void setUnsettledAmount(float unsettledAmount) {
+    public void setUnsettledAmount(double unsettledAmount) {
         this.unsettledAmount = unsettledAmount;
     }
 
-    public float getAccumulatedIncome() {
+    public double getAccumulatedIncome() {
         return accumulatedIncome;
     }
 
-    public void setAccumulatedIncome(float accumulatedIncome) {
+    public void setAccumulatedIncome(double accumulatedIncome) {
         this.accumulatedIncome = accumulatedIncome;
     }
 
-    public float getSettledAmount() {
+    public double getSettledAmount() {
         return settledAmount;
     }
 
-    public void setSettledAmount(float settledAmount) {
+    public void setSettledAmount(double settledAmount) {
         this.settledAmount = settledAmount;
     }
 }
