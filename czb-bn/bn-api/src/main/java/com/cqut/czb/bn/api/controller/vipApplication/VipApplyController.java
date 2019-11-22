@@ -36,7 +36,6 @@ public class VipApplyController {
      */
     @PostMapping("/updatevip")
     public JSONResult updateVip(VIPApply vipApplication) {
-        System.out.println(vipApplication);
         return new JSONResult(vipApplyService.updateVip(vipApplication));
     }
 }

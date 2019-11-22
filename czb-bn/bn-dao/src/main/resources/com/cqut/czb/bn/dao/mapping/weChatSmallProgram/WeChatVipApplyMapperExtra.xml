@@ -34,7 +34,7 @@
               and WVP.user_name like concat('%', #{vipName,jdbcType=VARCHAR}, '%')
           </if>
           <if test="audit != null and audit != 3  and audit != ''">
-              and WVP.STATUS = #{audit,jdbcType=VARCHAR}
+              and WVP.STATUS = #{audit,jdbcType=Integer}
           </if>
       </where>
     ORDER BY

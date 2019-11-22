@@ -31,13 +31,13 @@ public class VipApplyServiceImpl implements VipApplyService {
     @Override
     public boolean updateVip(VIPApply vipApplication) {
 //        if(vipApplyMapper.updateVip(vipApplication)){
-////            UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
-////            if(redisUtil.hasKey(user.getUserAccount())) {
-////                redisUtil.remove(user.getUserAccount());
-////                redisUtil.put(user.getUserAccount(), user);
-////            }
-//            return true;
-//        }
+//////            UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
+//////            if(redisUtil.hasKey(user.getUserAccount())) {
+//////                redisUtil.remove(user.getUserAccount());
+//////                redisUtil.put(user.getUserAccount(), user);
+//////            }
+////            return true;
+////        }
         return vipApplyMapper.updateVip(vipApplication);
     }
 }
