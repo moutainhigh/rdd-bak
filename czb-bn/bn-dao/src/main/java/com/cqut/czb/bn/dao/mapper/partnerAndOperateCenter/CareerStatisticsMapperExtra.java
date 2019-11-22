@@ -16,4 +16,6 @@ public interface CareerStatisticsMapperExtra {
     OrdinaryUserDirectDTO getOrdinaryDirectNum(@Param("userId")String userId,  @Param("startTime") String startTime, @Param("endTime")String endTime);
 
     CareerStatisticsDTO getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers);
+
+    Double getAllVipDirectIncome(@Param("userId")String userId);
 }

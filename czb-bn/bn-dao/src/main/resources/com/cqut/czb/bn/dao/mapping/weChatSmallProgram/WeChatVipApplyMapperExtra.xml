@@ -41,7 +41,7 @@
         WVP.create_at DESC
     </select>
 
-    <update id="updateVip" parameterType="com.cqut.czb.bn.entity.entity.VIPApply">
+    <update id="updateVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply">
         UPDATE czb_wechat_vip_apply,
         czb_user
         SET czb_wechat_vip_apply.`status` = #{audit,jdbcType=CHAR},

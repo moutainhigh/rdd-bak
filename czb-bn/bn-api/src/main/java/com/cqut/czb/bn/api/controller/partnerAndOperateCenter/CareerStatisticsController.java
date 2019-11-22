@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectInputDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -58,6 +57,11 @@ public class CareerStatisticsController {
         return  service.getDirectAndIndirectIncome(inputDTO.getType(), user.getUserId());
     }
 
+    /**
+     * 普通用户直推人数
+     * @param inputDTO
+     * @return
+     */
     @GetMapping("/getOrdinaryDirectNum")
     public JSONResult getOrdinaryDirectNum(OrdinaryUserDirectInputDTO inputDTO) {
         return  service.getOrdinaryDirectNum(inputDTO.getType(), inputDTO.getUserId());
