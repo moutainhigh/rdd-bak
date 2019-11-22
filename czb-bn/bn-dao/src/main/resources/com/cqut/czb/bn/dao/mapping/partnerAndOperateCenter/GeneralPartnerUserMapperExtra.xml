@@ -102,6 +102,6 @@
         where
             user_id = #{userId}
             and remark = '充值vip返佣'
-            and partner_commission_level = 1
+            and is_settlement = 0
     </select>
 </mapper>
