@@ -40,4 +40,14 @@
     ORDER BY
         WVP.create_at DESC
     </select>
+
+    <update id="updateVip" parameterType="com.cqut.czb.bn.entity.entity.VIPApply">
+        UPDATE czb_wechat_vip_apply,
+        czb_user
+        SET czb_wechat_vip_apply.`status` = #{audit,jdbcType=CHAR},
+        czb_user.is_vip = #{isVip,jdbcType=CHAR}
+        WHERE
+	    czb_user.user_id = #{vipId,jdbcType=VARCHAR}
+	    AND czb_wechat_vip_apply.user_id = #{vipId,jdbcType=VARCHAR}
+    </update>
 </mapper>

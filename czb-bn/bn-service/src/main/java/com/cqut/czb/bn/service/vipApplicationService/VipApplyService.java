@@ -12,4 +12,6 @@ import org.springframework.stereotype.Component;
 public interface VipApplyService {
 
    PageInfo<VIPApply> getvip(VIPApply record);
+
+   boolean updateVip(VIPApply vipApplication);
 }

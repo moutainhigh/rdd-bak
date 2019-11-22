@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.vipApplyServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatVipApplyMapperExtra;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.VIPApply;
 import com.cqut.czb.bn.service.vipApplicationService.VipApplyService;
 import com.github.pagehelper.PageHelper;
@@ -25,13 +26,18 @@ public class VipApplyServiceImpl implements VipApplyService {
 
         List<VIPApply> vipApplies = vipApplyMapper.selectVipApply(record);
         return new PageInfo<VIPApply>(vipApplies);
+    }
 
-
-
-//        UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
-//        if(redisUtil.hasKey(user.getUserAccount())) {
-//            redisUtil.remove(user.getUserAccount());
-//            redisUtil.put(user.getUserAccount(), user);
+    @Override
+    public boolean updateVip(VIPApply vipApplication) {
+//        if(vipApplyMapper.updateVip(vipApplication)){
+////            UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
+////            if(redisUtil.hasKey(user.getUserAccount())) {
+////                redisUtil.remove(user.getUserAccount());
+////                redisUtil.put(user.getUserAccount(), user);
+////            }
+//            return true;
 //        }
+        return vipApplyMapper.updateVip(vipApplication);
     }
 }
