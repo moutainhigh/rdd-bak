@@ -29,7 +29,7 @@ public class AppShopSettleInController {
     RedisUtils redisUtils;
 
     /**
-     * app's Advertising display for merchants to enter（商家入驻轮播图）
+     * app'a Advertising display for merchants to enter（商家入驻轮播图）
      *
      * @return
      */
@@ -39,7 +39,7 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app's Get display items for each navigation item（获取单个导航栏信息）
+     * app'a Get display items for each navigation item（获取单个导航栏信息）
      */
     @RequestMapping(value = "/selectGoods", method = RequestMethod.GET)
     public JSONResult selectGoods(PageDTO pageDTO, @Param("classification") String classification) {
@@ -57,7 +57,7 @@ public class AppShopSettleInController {
         return new JSONResult(appShopSettleInService.useService(orderId));
     }
     /**
-     * app's Get all the goods information（获取多个导航栏信息）
+     * app'a Get all the goods information（获取多个导航栏信息）
      */
     @RequestMapping(value = "/selectAllGoods", method = RequestMethod.GET)
     public JSONResult selectAllGoods(@Param("classification") String classification) {
@@ -71,7 +71,7 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app's Get Service details information（获取商品具体的信息）
+     * app'a Get Service details information（获取商品具体的信息）
      */
     @RequestMapping(value = "/selectServiceDetails", method = RequestMethod.GET)
     public JSONResult selectServiceDetails(@Param("commodityId") String commodityId) {
@@ -79,7 +79,7 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app's Get the nav（获取导航栏）
+     * app'a Get the nav（获取导航栏）
      */
     @RequestMapping(value = "/selectShopSettleInNav", method = RequestMethod.GET)
     public JSONResult selectShopSettleInNav() {
@@ -87,7 +87,7 @@ public class AppShopSettleInController {
     }
 
     /**
-     * app's Get the information input（获取信息录入必填项）
+     * app'a Get the information input（获取信息录入必填项）
      */
     @RequestMapping(value = "/getInputItem", method = RequestMethod.GET)
     public JSONResult getInputItem(@Param("commodityId") String commodityId) {
