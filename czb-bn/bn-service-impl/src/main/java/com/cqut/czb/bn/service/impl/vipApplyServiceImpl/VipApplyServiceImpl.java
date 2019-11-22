@@ -11,8 +11,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class VipApplyServiceImpl implements VipApplyService {
     @Autowired
@@ -23,15 +21,15 @@ public class VipApplyServiceImpl implements VipApplyService {
     @Autowired
     RedisUtil redisUtil;
     @Override
-    public PageInfo<VIPApply> getvip(VIPApply record) {
-        PageHelper.startPage(record.getCurrentPage(), record.getPageSize());
-        return new PageInfo<>(vipApplyMapper.selectVipApply(record));
+    public PageInfo<VIPApply> selectVipApply(VIPApply vipApply) {
+        PageHelper.startPage(vipApply.getCurrentPage(), vipApply.getPageSize());
+        return new PageInfo<>(vipApplyMapper.selectVipApply(vipApply));
     }
 
     @Override
-    public boolean updateVip(VIPApply vipApplication) {
-        if(vipApplyMapper.updateVip(vipApplication)){
-            UserDTO user = userMapperExtra.findUserDTOById(vipApplication.getVipId());
+    public boolean updateVipApply(VIPApply vipApply) {
+        if(vipApplyMapper.updateVipApply(vipApply)){
+            UserDTO user = userMapperExtra.findUserDTOById(vipApply.getVipId());
             if(redisUtil.hasKey(user.getUserAccount())) {
                 redisUtil.remove(user.getUserAccount());
                 redisUtil.put(user.getUserAccount(), user);

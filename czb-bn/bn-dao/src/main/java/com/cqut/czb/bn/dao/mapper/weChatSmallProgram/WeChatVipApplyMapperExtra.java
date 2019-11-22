@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface WeChatVipApplyMapperExtra {
 
-    List<VIPApply> selectVipApply(VIPApply record);
+    List<VIPApply> selectVipApply(VIPApply vipApply);
 
-    boolean updateVip(VIPApply vipApplication);
+    boolean updateVipApply(VIPApply vipApply);
 }
