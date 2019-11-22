@@ -26,7 +26,16 @@ public class VipApplyController {
      */
     @GetMapping("/getvip")
     public JSONResult getVip(VIPApply vipApplication) {
-        System.out.println(111);
         return new JSONResult(vipApplyService.getvip(vipApplication));
+    }
+
+    /**
+     * 申请会员审核
+     * @param vipApplication
+     * @return
+     */
+    @PostMapping("/updatevip")
+    public JSONResult updateVip(VIPApply vipApplication) {
+        return new JSONResult(vipApplyService.updateVip(vipApplication));
     }
 }
