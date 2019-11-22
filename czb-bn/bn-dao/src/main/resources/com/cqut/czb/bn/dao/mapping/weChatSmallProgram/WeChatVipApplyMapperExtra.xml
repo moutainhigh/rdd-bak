@@ -16,17 +16,38 @@
   </sql>
 
   <select id="selectVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply" resultType="com.cqut.czb.bn.entity.entity.VIPApply">
-     SELECT
-	U.user_account AS vipAccount,
-	WVP.user_name AS vipName,
-	WVP.STATUS AS audit,
-	WVP.phone_num AS phoneNum
-FROM
-	czb_wechat_vip_apply AS WVP,
-	czb_user AS U
-WHERE
-	WVP.user_id = U.user_id
-ORDER BY
-	WVP.create_at DESC
+         SELECT
+        U.user_account AS vipAccount,
+        WVP.user_name AS vipName,
+        U.user_id as vipID,
+        WVP.STATUS AS audit,
+        WVP.phone_num AS phoneNum
+    FROM
+        czb_wechat_vip_apply AS WVP,
+        czb_user AS U
+      <where>
+          WVP.user_id = U.user_id
+          <if test="vipAccount != null and vipAccount != ''">
+              and U.user_account like concat('%', #{vipAccount}, '%')
+          </if>
+          <if test="vipName != null and vipName != ''">
+              and WVP.user_name like concat('%', #{vipName,jdbcType=VARCHAR}, '%')
+          </if>
+          <if test="audit != null and audit != 3 ">
+              and WVP.STATUS = #{audit,jdbcType=INTEGER}
+          </if>
+      </where>
+    ORDER BY
+        WVP.create_at DESC
     </select>
+
+    <update id="updateVip" parameterType="com.cqut.czb.bn.entity.entity.VIPApply">
+        UPDATE czb_wechat_vip_apply,
+        czb_user
+        SET czb_wechat_vip_apply.`status` = #{audit,jdbcType=CHAR},
+        czb_user.is_vip = #{isVip,jdbcType=CHAR}
+        WHERE
+	    czb_user.user_id = #{vipId,jdbcType=VARCHAR}
+	    AND czb_wechat_vip_apply.user_id = #{vipId,jdbcType=VARCHAR}
+    </update>
 </mapper>
