@@ -7,6 +7,8 @@ import java.util.Date;
 public class VIPApply extends PageDTO {
     private String vipAccount;
 
+    private String vipID;
+
     private String vipName;
 
     private Integer audit;
@@ -33,6 +35,10 @@ public class VIPApply extends PageDTO {
         return phoneNum;
     }
 
+    public String getVipID() {
+        return vipID;
+    }
+
     /**
      * set方法
      * @param vipAccount
@@ -53,4 +59,7 @@ public class VIPApply extends PageDTO {
         this.phoneNum = phoneNum;
     }
 
+    public void setVipID(String vipID) {
+        this.vipID = vipID;
+    }
 }

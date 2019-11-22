@@ -1,4 +1,4 @@
-package com.cqut.czb.bn.service.impl.vipApplicationServiceImpl;
+package com.cqut.czb.bn.service.impl.vipApplyServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatVipApplyMapperExtra;
 import com.cqut.czb.bn.entity.entity.VIPApply;
@@ -18,8 +18,12 @@ public class VipApplyServiceImpl implements VipApplyService {
     @Override
     public PageInfo<VIPApply> getvip(VIPApply record) {
         PageHelper.startPage(record.getCurrentPage(), record.getPageSize());
-        List<VIPApply> vipApplies = vipApplyMapper.selectVipApply(record);
 
+        if ("" == record.getVipAccount() || record.getVipAccount() == null) {
+            record.setVipAccount(null);
+        }
+
+        List<VIPApply> vipApplies = vipApplyMapper.selectVipApply(record);
         return new PageInfo<VIPApply>(vipApplies);
 
 

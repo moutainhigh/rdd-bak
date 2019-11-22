@@ -16,17 +16,28 @@
   </sql>
 
   <select id="selectVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply" resultType="com.cqut.czb.bn.entity.entity.VIPApply">
-     SELECT
-	U.user_account AS vipAccount,
-	WVP.user_name AS vipName,
-	WVP.STATUS AS audit,
-	WVP.phone_num AS phoneNum
-FROM
-	czb_wechat_vip_apply AS WVP,
-	czb_user AS U
-WHERE
-	WVP.user_id = U.user_id
-ORDER BY
-	WVP.create_at DESC
+         SELECT
+        U.user_account AS vipAccount,
+        WVP.user_name AS vipName,
+        U.user_id as vipID,
+        WVP.STATUS AS audit,
+        WVP.phone_num AS phoneNum
+    FROM
+        czb_wechat_vip_apply AS WVP,
+        czb_user AS U
+      <where>
+          WVP.user_id = U.user_id
+          <if test="vipAccount != null and vipAccount != ''">
+              and U.user_account like concat('%', #{vipAccount}, '%')
+          </if>
+          <if test="vipName != null and vipName != ''">
+              and WVP.user_name like concat('%', #{vipName,jdbcType=VARCHAR}, '%')
+          </if>
+          <if test="audit != null and audit != 3  and audit != ''">
+              and WVP.STATUS = #{audit,jdbcType=VARCHAR}
+          </if>
+      </where>
+    ORDER BY
+        WVP.create_at DESC
     </select>
 </mapper>
