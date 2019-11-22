@@ -6,13 +6,13 @@ public class BusinessCommonUserVo {
     private String userId;
     private String mobile;
     private  Date createAt;
-    private Integer areaId;
+    private String area;
 
-    public BusinessCommonUserVo(String userId, String mobile, Date createAt, Integer areaId) {
+    public BusinessCommonUserVo(String userId, String mobile, Date createAt, String area) {
         this.userId = userId;
         this.mobile = mobile;
         this.createAt = createAt;
-        this.areaId = areaId;
+        this.area = area;
     }
 
     public String getUserId() {
@@ -39,11 +39,11 @@ public class BusinessCommonUserVo {
         this.createAt = createAt;
     }
 
-    public Integer getAreaId() {
-        return areaId;
+    public String getArea() {
+        return area;
     }
 
-    public void setAreaId(Integer areaId) {
-        this.areaId = areaId;
+    public void setArea(Integer areaId) {
+        this.area = area;
     }
 }
