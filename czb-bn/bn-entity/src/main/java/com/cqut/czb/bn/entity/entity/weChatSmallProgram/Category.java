@@ -5,6 +5,8 @@ import java.util.Date;
 public class Category {
     private String categoryId;
 
+    private String superiorId;
+
     private String content;
 
     private Date createAt;
@@ -17,6 +19,14 @@ public class Category {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId == null ? null : categoryId.trim();
+    }
+
+    public String getSuperiorId() {
+        return superiorId;
+    }
+
+    public void setSuperiorId(String superiorId) {
+        this.superiorId = superiorId == null ? null : superiorId.trim();
     }
 
     public String getContent() {
