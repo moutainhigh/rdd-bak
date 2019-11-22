@@ -66,7 +66,7 @@
             </if>
         </where>
         group by userId,userName,userAccount,czb_vip_area_config.area,promotionType,superiorUser,superiorUserName,						superiorUserAccount,accumulatedConsumptionAmount,myIncome
-        order by expireAt desc
+        order by accumulatedConsumptionAmount desc
     </select>
 
     <!-- 获取直推收益 -->
