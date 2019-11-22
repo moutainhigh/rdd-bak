@@ -4,20 +4,22 @@
     <select id="selectGeneralPartnerList" parameterType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetGeneralPartnerListDTO">
         select
             czb_user.user_id as generalPartnerId,
-            czb_user.user_name as generalPartnerName,
+            czb_address.receiver  as generalPartnerName,
             czb_user.user_account as generalPartnerPhoneNumber,
 			czb_user.create_at as registrationTime,
-            area ,
+            czb_vip_area_config.area as area ,
+            max(czb_vip_recharge_records.create_at) vipCreateAt,
             user3.promotionNumbers as  promotionNumbers,
-            user2.user_name as recommenderName ,
+            user2.receiver as recommenderName ,
             user2.user_account as recommenderPhoneNumber,
             income1.unsettledAmount as unsettledAmount,
             income2.settledAmount as settledAmount
         from
             czb_user
             left outer join czb_vip_recharge_records on czb_user.user_id = czb_vip_recharge_records.user_id
+            left outer join czb_address on czb_user.user_id = czb_address.user_id
             left outer join czb_vip_area_config on czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
-            left outer join (select czb_user.user_id,czb_user.user_name,czb_user.user_account from czb_user) as user2 on user2.user_id = czb_user.superior_user
+            left outer join (select czb_user.user_id,czb_user.user_name,czb_user.user_account,czb_address.receiver from czb_user left outer join czb_address on czb_user.user_id = czb_address.user_id) as user2 on user2.user_id = czb_user.superior_user
             left outer join (select count(1) as promotionNumbers,czb_user.second_level_partner from czb_user where partner = 0 GROUP BY second_level_partner) as user3 on user3.second_level_partner = czb_user.user_id
             left outer join (select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as unsettledAmount , czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 0) as income1 on income1.partner_id = czb_user.user_id
             left outer join(select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as settledAmount, czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 1) as income2 on income2.partner_id = czb_user.user_id
@@ -26,13 +28,14 @@
             <if test="account != null and account != ''">
                 AND czb_user.user_account = #{account}
             </if>
-            <if test="createAt != null and creatAt != ''">
-                AND czb_user.create_at = #{createAt}
+            <if test="createAt != null and createAt != ''">
+                AND czb_user.create_at like concat('%', #{createAt}, '%')
             </if>
             <if test="area != null and area != ''">
                 AND czb_vip_recharge_records.vip_area_config_id = #{area}
             </if>
         </where>
+        GROUP BY generalPartnerId,generalPartnerName,area,generalPartnerPhoneNumber,promotionNumbers,recommenderName,unsettledAmount,settledAmount
     </select>
     <select id="selectDevelopmentNumbers" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.GeneralPartnerDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GetNumberOfDevelopmentDTO">
         select

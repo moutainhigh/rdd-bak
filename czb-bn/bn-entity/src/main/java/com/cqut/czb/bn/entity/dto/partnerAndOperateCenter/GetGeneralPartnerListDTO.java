@@ -19,7 +19,7 @@ public class GetGeneralPartnerListDTO {
     private String area;
 
     //注册时间
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date registrationTime;
 
     //推荐人电话
