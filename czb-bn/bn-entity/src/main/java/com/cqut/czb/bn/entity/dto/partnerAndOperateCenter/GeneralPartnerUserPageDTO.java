@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.partnerAndOperateCenter;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

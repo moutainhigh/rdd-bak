@@ -9,7 +9,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import java.util.Date;
 
 public interface GeneralPartnerService {
-    JSONResult getGeneralPartnerList(GeneralPartnerUserPageDTO pageDTO);
+    JSONResult getGeneralPartnerList(User user,GeneralPartnerUserPageDTO pageDTO);
 
     JSONResult getNumberOfDevelopment(String userId, Integer condition);
 

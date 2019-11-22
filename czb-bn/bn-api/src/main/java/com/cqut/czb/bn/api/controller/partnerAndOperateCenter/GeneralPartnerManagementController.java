@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.GeneralPartnerService;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 
 /**
@@ -36,15 +39,15 @@ public class GeneralPartnerManagementController {
      * @return
      */
     @GetMapping("/getGeneralPartnerList")
-    public JSONResult getGeneralPartnerList(GeneralPartnerUserPageDTO pageDTO){
-//        User user = (User)redisUtils.get(principal.getName());
-//        if(user==null){
-//            return new JSONResult("没有权限", 500);
-//        }
-//        if(user.getUserId() == null){
-//            return new JSONResult("没有权限", 500);
-//        }
-        return service.getGeneralPartnerList(pageDTO);
+    public JSONResult getGeneralPartnerList(Principal principal,GeneralPartnerUserPageDTO pageDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null){
+            return new JSONResult("没有权限", 500);
+        }
+        if(user.getUserId() == null){
+            return new JSONResult("没有权限", 500);
+        }
+        return service.getGeneralPartnerList(user,pageDTO);
     }
 
     /**
