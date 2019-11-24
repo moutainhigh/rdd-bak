@@ -91,4 +91,8 @@ public interface UserMapperExtra {
      */
     int updateSuperUser(List<User> userList);
 
+
+    List<User> getTest();
+
+    int updateTest(List<User> userList);
 }

@@ -1,13 +1,13 @@
 package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectInputDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
+import com.cqut.czb.bn.service.partnerAndOperateCenter.OrdinaryStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +19,9 @@ public class CareerStatisticsController {
 
     @Autowired
     CareerStatisticsService service;
+
+    @Autowired
+    OrdinaryStatisticsService statisticsService;
 
     @Autowired
     RedisUtils redisUtils;
@@ -38,6 +41,12 @@ public class CareerStatisticsController {
         return service.statistics(user.getUserId());
     }
 
+    /**
+     * 合伙人直推间推收益
+     * @param principal
+     * @param inputDTO
+     * @return
+     */
     @GetMapping("/getDirectAndIndirectIncome")
     public JSONResult getDirectAndIndirectIncome(Principal principal, DirectAndIndirectInputDTO inputDTO) {
         User user = (User)redisUtils.get(principal.getName());
@@ -48,6 +57,11 @@ public class CareerStatisticsController {
         return  service.getDirectAndIndirectIncome(inputDTO.getType(), user.getUserId());
     }
 
+    /**
+     * 普通用户直推人数
+     * @param inputDTO
+     * @return
+     */
     @GetMapping("/getOrdinaryDirectNum")
     public JSONResult getOrdinaryDirectNum(OrdinaryUserDirectInputDTO inputDTO) {
         return  service.getOrdinaryDirectNum(inputDTO.getType(), inputDTO.getUserId());
@@ -60,11 +74,31 @@ public class CareerStatisticsController {
      */
     @GetMapping("/getNumberOfDevelopment")
     public JSONResult getNumberOfDevelopment(Principal principal, statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
-//        User user =  (User)redisUtils.get(principal.getName());
-        statisticsDevelopmentNumbers.setUserId("156342470371369");
-        statisticsDevelopmentNumbers.setCondition(1);
-//        User user = new User();
-//        user.setUserId("756152457954521512");
+        User user =  (User)redisUtils.get(principal.getName());
+        if(user.getUserId() == null){
+            return new JSONResult("没有权限", 500);
+        }
+        statisticsDevelopmentNumbers.setUserId(user.getUserId());
         return service.getNumberOfDevelopment(statisticsDevelopmentNumbers);
+    }
+
+    /**
+     * 事业合伙人中心-普通合伙人管理详情-发展人数获取
+     * @param
+     * @return
+     */
+    @GetMapping("/getDevelopment")
+    public JSONResult getDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+        return statisticsService.getNumberOfDevelopment(statisticsDevelopmentNumbers);
+    }
+
+    /**
+     * 事业合伙人中心-普通合伙人管理详情-直推间推收益
+     * @param statisticsDevelopmentNumbers
+     * @return
+     */
+    @GetMapping("/getIncome")
+    public JSONResult getIncome(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+        return  service.getDirectAndIndirectIncome(statisticsDevelopmentNumbers.getCondition(), statisticsDevelopmentNumbers.getUserId());
     }
 }

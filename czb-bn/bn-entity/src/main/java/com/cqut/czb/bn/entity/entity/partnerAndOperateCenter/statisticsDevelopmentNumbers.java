@@ -32,11 +32,11 @@ public class statisticsDevelopmentNumbers {
 
     public String getFormat() {
         if (condition == 0) {
-            return "%Y";
+            return "%Y-%m-%d";
         } else if (condition == 1) {
             return "%Y-%m";
         } else {
-            return "%Y-%m-%d";
+            return "%Y";
         }
     }
 
@@ -46,11 +46,11 @@ public class statisticsDevelopmentNumbers {
 
     public String getType() {
         if (condition == 0) {
-            return "YEAR";
+            return "DAY";
         } else if (condition == 1) {
             return "MONTH";
         } else {
-            return "DAY";
+            return "YEAR";
         }
     }
 

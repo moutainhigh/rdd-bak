@@ -2,6 +2,7 @@ package com.cqut.czb.bn.entity.entity.partnerAndOperateCenter;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -71,7 +72,7 @@ public class GeneralPartnerUser {
     /**
      * 我的收益
      */
-    private Double myIncome;
+    private BigDecimal myIncome;
 
     public Integer getPage() {
         return page;
@@ -177,11 +178,11 @@ public class GeneralPartnerUser {
         this.accumulatedConsumptionAmount = accumulatedConsumptionAmount;
     }
 
-    public Double getMyIncome() {
+    public BigDecimal getMyIncome() {
         return myIncome;
     }
 
-    public void setMyIncome(Double myIncome) {
+    public void setMyIncome(BigDecimal myIncome) {
         this.myIncome = myIncome;
     }
 }

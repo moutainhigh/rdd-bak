@@ -688,6 +688,104 @@
         GROUP BY cu.first_level_partner
     </select>
 
+<!--返佣收益变更记录初始化用-->
+    <select id="selectAllFirstPartnerSubVip"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cvrr.record_id AS recordId,
+        cvrr.user_id AS userId,
+        first_level_partner AS partnerId,
+        amount AS vipConsumption
+        FROM
+        czb_vip_recharge_records cvrr
+        LEFT JOIN czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at>='2019-10-11' AND cvrr.create_at>=#{createAt,jdbcType=TIMESTAMP}
+        WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
 
+    <select id="selectAllFirstPartnerSubPetrol" parameterType="java.lang.String"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cpsr.record_id AS recordId,
+        cpsr.buyer_id AS userId,
+        first_level_partner AS partnerId,
+        turnover_amount AS petrolMoney
+        FROM
+        czb_petrol_sales_records cpsr
+        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
+        WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllSecondPartnerSubVip" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cvrr.record_id AS recordId,
+        cvrr.user_id AS userId,
+        second_level_partner AS partnerId,
+        amount AS vipConsumption
+        FROM
+        czb_vip_recharge_records cvrr
+        LEFT JOIN czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at>='2019-10-11' AND  cvrr.create_at> #{createAt,jdbcType=TIMESTAMP}
+        WHERE
+        second_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectAllSecondPartnerSubPetrol" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cpsr.record_id AS recordId,
+        cpsr.buyer_id AS userId,
+        second_level_partner AS partnerId,
+        turnover_amount AS petrolMoney
+        FROM
+        czb_petrol_sales_records cpsr
+        LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1 AND cpsr.create_at>#{createAt,jdbcType=TIMESTAMP}
+        WHERE
+        second_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllFirstNotBySecondPartnerSubVip" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cvrr.record_id AS recordId,
+        cvrr.user_id AS userId,
+        first_level_partner AS partnerId,
+        amount AS vipConsumption
+        FROM
+        czb_vip_recharge_records cvrr
+        LEFT JOIN czb_user cu ON cvrr.user_id = cu.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
+        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllFirstNotBySecondPartnerSubPetrol" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cpsr.record_id AS recordId,
+        cpsr.buyer_id AS userId,
+        first_level_partner AS partnerId,
+        turnover_amount AS petrolMoney
+        FROM
+        czb_petrol_sales_records cpsr
+        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
+        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllFirstBySecondPartnerSubVip" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cvrr.record_id AS recordId,
+        cvrr.user_id AS userId,
+        first_level_partner AS partnerId,
+        amount AS vipConsumption
+        FROM
+        czb_vip_recharge_records cvrr
+        LEFT JOIN  czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
+        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllFirstBySecondPartnerSubPetrol" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
+        SELECT
+        cpsr.record_id AS recordId,
+        cpsr.buyer_id AS userId,
+        first_level_partner AS partnerId,
+        turnover_amount AS petrolMoney
+        FROM
+        czb_petrol_sales_records cpsr
+        LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
+        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

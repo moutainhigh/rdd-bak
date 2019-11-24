@@ -435,5 +435,38 @@
   </update>
 
 
+  <select id="getTest" resultMap="BaseResultMap" >
+    SELECT
+        cu.user_id,
+        cu.user_account,
+        cu.partner,
+        cu.superior_user,
+        cu.old_superior,
+        cu.second_level_partner,
+        cu.first_level_partner
+    FROM
+        czb_user cu
+    LEFT JOIN czb_user cu1 ON cu.superior_user = cu1.user_id
+    WHERE
+        cu.partner = 1
+    AND cu1.partner != 2 AND cu.first_level_partner is not null
+  </select>
+
+  <update id="updateTest">
+    update czb_user
+    set old_superior = CASE  user_id <foreach collection="list" item="item" index="index"
+                                             separator="" open="" close="end,">
+    when   #{item.userId,jdbcType=VARCHAR} THEN  #{item.superiorUser,jdbcType=VARCHAR}
+  </foreach>
+    superior_user = CASE user_id <foreach collection="list" item="item" index="index"
+                                            separator="" open="" close="end">
+    when   #{item.userId,jdbcType=VARCHAR} THEN  #{item.firstLevelPartner,jdbcType=VARCHAR}
+  </foreach>
+    where
+        user_id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")" >
+          #{item.userId, jdbcType=VARCHAR}
+        </foreach>
+  </update>
 
 </mapper>
