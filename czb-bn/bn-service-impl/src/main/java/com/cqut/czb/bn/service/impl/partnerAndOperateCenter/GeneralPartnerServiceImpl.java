@@ -16,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,8 +28,8 @@ public class GeneralPartnerServiceImpl implements GeneralPartnerService {
     GeneralPartnerMapperExtra mapperExtra;
 
     @Override
-    public JSONResult getGeneralPartnerList(GeneralPartnerUserPageDTO pageDTO) {
-//        pageDTO.setUserId(user.getUserId());
+    public JSONResult getGeneralPartnerList(User user,GeneralPartnerUserPageDTO pageDTO) {
+        pageDTO.setUserId(user.getUserId());
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
         List<GetGeneralPartnerListDTO> generalPartnerList = mapperExtra.selectGeneralPartnerList(pageDTO);
         PageInfo<GetGeneralPartnerListDTO> pageInfo = new PageInfo<>(generalPartnerList);

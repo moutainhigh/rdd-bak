@@ -35,13 +35,13 @@ public class BusinessCommonUserOutputDTO implements Serializable {
     /**
      * 普通用户注册时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss", timezone = "GMT+8")
     private Date createAt;
 
     /**
      * 年费到期时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss", timezone = "GMT+8")
     private Date expireTime;
 
     /**

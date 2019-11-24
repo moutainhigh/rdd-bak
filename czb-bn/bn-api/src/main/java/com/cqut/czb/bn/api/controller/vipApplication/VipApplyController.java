@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/service/VipApply")
+@RequestMapping("/api/VipApply")
 public class VipApplyController {
 
     @Autowired
@@ -24,9 +24,18 @@ public class VipApplyController {
      * @param
      * @return
      */
-    @GetMapping("/getvip")
-    public JSONResult getVip(VIPApply vipApplication) {
-        System.out.println(111);
-        return new JSONResult(vipApplyService.getvip(vipApplication));
+    @GetMapping("/selectVipApply")
+    public JSONResult selectVipApply(VIPApply vipApply) {
+        return new JSONResult(vipApplyService.selectVipApply(vipApply));
+    }
+
+    /**
+     * 申请会员审核
+     * @param vipApply
+     * @return
+     */
+    @PostMapping("/updateVipApply")
+    public JSONResult updateVipApply(VIPApply vipApply) {
+        return new JSONResult(vipApplyService.updateVipApply(vipApply));
     }
 }

@@ -129,6 +129,40 @@
             ) AS result
   </select>
 
+    <select id="getAllVipDirectIncome" resultType="java.lang.Double" parameterType="java.lang.String">
+        SELECT
+            sum(
+
+                IF (
+                    result.partnerLevel = 0
+                    AND result.is_settlement = 0
+                    AND result.remark = '充值vip返佣',
+                    result.amount,
+                    0
+                )
+            ) directVip
+        FROM
+            (
+                SELECT
+                    log.amount amount,
+                    log.partner_commission_level partnerLevel,
+                    log.is_settlement,
+                    log.remark
+                FROM
+                    (
+                        SELECT
+                            info_id infoId
+                        FROM
+                            czb_user_income_info info
+                        WHERE
+                            info.user_id = #{userId}
+                    ) AS infoIdResult
+                LEFT JOIN czb_income_log log ON log.info_id = infoIdResult.infoId
+                WHERE
+                    amount != 0
+            ) AS result
+    </select>
+
   <select id="getOrdinaryDirectNum" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectDTO">
         SELECT
             count(user_id) AS directNum

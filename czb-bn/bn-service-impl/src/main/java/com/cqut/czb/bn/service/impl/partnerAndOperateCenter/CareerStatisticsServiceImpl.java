@@ -64,6 +64,10 @@ public class CareerStatisticsServiceImpl implements CareerStatisticsService {
             result = getTime(Calendar.YEAR, result, userId);
         }
 
+        if(result.size() != 0){
+            result.get(0).setAllDirectVipIncome(mapperExtra.getAllVipDirectIncome(userId));
+        }
+
         return new JSONResult("数据查询成功", 200, result);
     }
 

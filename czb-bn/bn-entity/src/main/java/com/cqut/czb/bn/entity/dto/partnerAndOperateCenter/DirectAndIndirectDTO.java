@@ -12,6 +12,17 @@ public class DirectAndIndirectDTO {
     //vip直返收益
     private BigDecimal directVip;
 
+    //所有vip直返
+    private Double allDirectVipIncome;
+
+    public Double getAllDirectVipIncome() {
+        return allDirectVipIncome;
+    }
+
+    public void setAllDirectVipIncome(Double allDirectVipIncome) {
+        this.allDirectVipIncome = allDirectVipIncome;
+    }
+
     public BigDecimal getDirect() {
         return direct;
     }
