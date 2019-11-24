@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.partnerVipIncome.*;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
+import com.cqut.czb.bn.service.impl.payBack.FanYongServiceImpl;
 import com.cqut.czb.bn.util.config.partnerVipIncomeConfig.PartnerVipIncomeConfig;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -35,6 +36,10 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
     DictMapperExtra dictMapperExtra;
     @Autowired
     UserMapperExtra userMapperExtra;
+    @Autowired
+    FanYongServiceImpl fanYongService;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public PageInfo<PartnerVipIncomeDTO> getVipIncomeList(PartnerVipIncomeDTO partnerVipIncomeDTO, PageDTO pageDTO) {
@@ -211,7 +216,6 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
         return partnerVipIncomeDTO;
     }
 
-    @Override
     public Boolean initVipIncomeData() {
             //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）
         List<PartnerBecomeTimeDTO> allPartner = partnerMapperExtra.selectPartnerBecomeTime();
@@ -235,6 +239,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                 if (firstPartnerSubMoneyVip!=null && firstPartnerSubMoneyVip.getVipConsumption()!=null) {
                     totalMoney = add(totalMoney, mul(firstPartnerSubMoneyVip.getVipConsumption(), proportion));  //乘以倍率算出vip第一部分
                     firstIncome = add(firstIncome, mul(firstPartnerSubMoneyVip.getVipConsumption(), proportion));
+
                 }
                 if (firstPartnerSubMoneyPetrol!=null && firstPartnerSubMoneyPetrol.getPetrolMoney()!=null) {
                     totalMoney = add(totalMoney, mul(firstPartnerSubMoneyPetrol.getPetrolMoney(), petrolProportion)); //乘以倍率算出油卡第一部分
@@ -287,20 +292,20 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             } else {
                 break;
             }
-            PartnerVipIncome partnerVipIncome = new PartnerVipIncome();
-            partnerVipIncome.setPartnerId(partnerDTO.getUserId());
+//            PartnerVipIncome partnerVipIncome = new PartnerVipIncome();
+//            partnerVipIncome.setPartnerId(partnerDTO.getUserId());
 //            partnerVipIncome.setPartnerType(partnerDTO.getPartner());
 //            partnerVipIncome.setIsSettle(0);
 //            partnerVipIncome.setPartnerVipIncomeId(StringUtil.createId());
 //            partnerVipIncome.setStartTime(new Date(119,9,11));
 //            partnerVipIncome.setCreateAt(new Date());
-            partnerVipIncome.setVipAddIncome(totalMoney);
-            partnerVipIncome.setVipAddCount(totalCount);
-            partnerVipIncome.setFirstPetrolIncome(firstPetrolIncome);
-            partnerVipIncome.setSecondPetrolIncome(secondPetrolIncome);
-            partnerVipIncome.setFirstVipIncome(firstIncome);
-            partnerVipIncome.setSecondVipIncome(secondIncome);
-            partnerVipIncomeMapperExtra.updateByPrimaryKeySelective(partnerVipIncome);
+//            partnerVipIncome.setVipAddIncome(totalMoney);
+//            partnerVipIncome.setVipAddCount(totalCount);
+//            partnerVipIncome.setFirstPetrolIncome(firstPetrolIncome);
+//            partnerVipIncome.setSecondPetrolIncome(secondPetrolIncome);
+//            partnerVipIncome.setFirstVipIncome(firstIncome);
+//            partnerVipIncome.setSecondVipIncome(secondIncome);
+//            partnerVipIncomeMapperExtra.updateByPrimaryKeySelective(partnerVipIncome);
         }
 
 
@@ -346,6 +351,103 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
 //            }
         return true;
     }
+    @Override
+    public Boolean initFyIncomeLogData() {
+        //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）
+        List<PartnerBecomeTimeDTO> allPartner = partnerMapperExtra.selectPartnerBecomeTime();
+        System.out.println("合伙人数量：" + allPartner.size());
+        for (PartnerBecomeTimeDTO partnerDTO : allPartner) {
+            Double totalMoney = 0.0;  //vip应得返佣
+            Double firstIncome = 0.0;   //一级vip收益
+            Double secondIncome = 0.0;  //二级vip收益
+            Double firstPetrolIncome = 0.0; //一级油卡收益
+            Double secondPetrolIncome = 0.0; //二级油卡收益
+            Dict petrol1 = dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getFirstPetrolProportion());
+            Dict petrol2 = dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getSecondPetrolProportion());
+            Double petrolProportion1 = Double.parseDouble(petrol1.getContent());
+            Double petrolProportion2 = Double.parseDouble(petrol2.getContent());
+            Double petrolProportion = add(petrolProportion1, petrolProportion2);
+            Integer totalCount = 0;   //下级新增的Vip数
+            if (partnerDTO.getPartner() == 2) {
+                Double proportion = add(Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent()), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent()));
+                List<PartnerVipMoney> firstPartnerSubMoneyVip = partnerMapperExtra.selectAllFirstPartnerSubVip(partnerDTO);  //先算出事业合伙人直属下级的消费，利息12.5%+7.5%
+                List<PartnerVipMoney> firstPartnerSubMoneyPetrol = partnerMapperExtra.selectAllFirstPartnerSubPetrol(partnerDTO);
+                for (PartnerVipMoney partnerVipMoney : firstPartnerSubMoneyVip) {
+                    if (partnerVipMoney != null && partnerVipMoney.getVipConsumption() != null) {
+                        User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                        String FyRemark = "充值vip返佣";
+                        fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),1);
+                    }
+                }
+                for (PartnerVipMoney partnerVipMoney: firstPartnerSubMoneyPetrol) {
+                    if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
+                        User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                        String FyRemark = "购油返佣";
+                        fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
+                    }
+                }
+                List<SubPartnerDTO> subPartnerList = partnerMapperExtra.selectSubPartner(partnerDTO.getUserId());  //找到该事业合伙人的全部下级合伙人
+                if (subPartnerList != null && subPartnerList.size() > 0) {
+                    for (SubPartnerDTO subPartnerDTO : subPartnerList) {  //依次算出事业合伙人下级的每个普通合伙人分走的钱
+                        List<PartnerVipMoney> notBySecondVip = partnerMapperExtra.selectAllFirstNotBySecondPartnerSubVip(subPartnerDTO);   //下级成为合伙人之前，利息12.5%+7.5%
+                        for (PartnerVipMoney partnerVipMoney: notBySecondVip) {
+                            if (partnerVipMoney != null && partnerVipMoney.getVipConsumption() != null) {
+                                User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                                String FyRemark = "充值vip返佣";
+                                fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),1);
+                            }
+                        }
+                        List<PartnerVipMoney> notBySecondPetrol = partnerMapperExtra.selectAllFirstNotBySecondPartnerSubPetrol(subPartnerDTO);
+                        for (PartnerVipMoney partnerVipMoney : notBySecondPetrol) {
+                            if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
+                                User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                                String FyRemark = "购油返佣";
+                                fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
+                            }
+                        }
+                        List<PartnerVipMoney> BySecondVip = partnerMapperExtra.selectAllFirstBySecondPartnerSubVip(subPartnerDTO);  //下级成为合伙人之后，利息7.5%
+                        for (PartnerVipMoney partnerVipMoney : BySecondVip) {
+                            if (partnerVipMoney != null && partnerVipMoney.getVipConsumption() != null) {
+                                User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                                String FyRemark = "充值vip返佣";
+                                fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),2);
+                            }
+                        }
+                        List<PartnerVipMoney> BySecondPetrol = partnerMapperExtra.selectAllFirstBySecondPartnerSubPetrol(subPartnerDTO);
+                        for (PartnerVipMoney partnerVipMoney : BySecondPetrol) {
+                            if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
+                                User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                                String FyRemark = "购油返佣";
+                                fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),2);
+                            }
+                        }
+                    }
+                }
+            } else if (partnerDTO.getPartner() == 1) {    //只有一种利息12.5%，直接算
+                List<PartnerVipMoney> partnerVipMoneyVip = partnerMapperExtra.selectAllSecondPartnerSubVip(partnerDTO);
+                for (PartnerVipMoney partnerVipMoney : partnerVipMoneyVip) {
+                    if (partnerVipMoney != null && partnerVipMoney.getVipConsumption() != null) {
+                        User user = userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                        String FyRemark = "充值vip返佣";
+                        fanYongService.FyIncomeLogTest(2,user, FyRemark, partnerVipMoney.getPartnerId(), partnerVipMoney.getVipConsumption(), partnerVipMoney.getRecordId(),1);
+                    }
+                }
+                List<PartnerVipMoney> partnerVipMoneyPetrol = partnerMapperExtra.selectAllSecondPartnerSubPetrol(partnerDTO);
+                for (PartnerVipMoney partnerVipMoney : partnerVipMoneyPetrol) {
+                    if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
+                        User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
+                        String FyRemark = "购油返佣";
+                        fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+        return true;
+    }
+
+
 
     public Double changeToBigDecimal(Double num){
         BigDecimal b = new BigDecimal(num);

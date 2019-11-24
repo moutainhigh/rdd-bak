@@ -18,6 +18,6 @@ public interface PartnerVipIncomeService {
 
     PartnerVipIncomeDTO getVipIncomeByUser(User user);
 
-    Boolean initVipIncomeData();
+    Boolean initFyIncomeLogData();
 
 }

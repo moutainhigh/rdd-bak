@@ -11,6 +11,8 @@ public interface IncomeLogMapperExtra {
 
     int insert(IncomeLog record);
 
+    int insertTest(IncomeLog record);
+
     int insertSelective(IncomeLog record);
 
     IncomeLog selectByPrimaryKey(String recordId);
