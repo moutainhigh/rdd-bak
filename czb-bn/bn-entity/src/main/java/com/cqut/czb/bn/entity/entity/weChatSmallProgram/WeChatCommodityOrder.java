@@ -17,7 +17,7 @@ public class WeChatCommodityOrder {
 
     private Integer payStatus;
 
-    private Integer peyMethod;
+    private Integer payMethod;
 
     private String remark;
 
@@ -107,12 +107,12 @@ public class WeChatCommodityOrder {
         this.payStatus = payStatus;
     }
 
-    public Integer getPeyMethod() {
-        return peyMethod;
+    public Integer getPayMethod() {
+        return payMethod;
     }
 
-    public void setPeyMethod(Integer peyMethod) {
-        this.peyMethod = peyMethod;
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
     }
 
     public String getRemark() {

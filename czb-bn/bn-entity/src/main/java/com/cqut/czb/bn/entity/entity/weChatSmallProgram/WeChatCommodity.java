@@ -51,6 +51,8 @@ public class WeChatCommodity {
 
     private Integer isHaveShop;
 
+    private Double fyMoney;
+
     private String showPlace;
 
     private Integer showOrder;
@@ -249,6 +251,14 @@ public class WeChatCommodity {
 
     public void setIsHaveShop(Integer isHaveShop) {
         this.isHaveShop = isHaveShop;
+    }
+
+    public Double getFyMoney() {
+        return fyMoney;
+    }
+
+    public void setFyMoney(Double fyMoney) {
+        this.fyMoney = fyMoney;
     }
 
     public String getShowPlace() {

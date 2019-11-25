@@ -26,6 +26,7 @@
     <result column="longitude" property="longitude" jdbcType="DOUBLE" />
     <result column="latitude" property="latitude" jdbcType="DOUBLE" />
     <result column="is_have_shop" property="isHaveShop" jdbcType="INTEGER" />
+    <result column="fy_money" property="fyMoney" jdbcType="DOUBLE" />
     <result column="show_place" property="showPlace" jdbcType="VARCHAR" />
     <result column="show_order" property="showOrder" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
@@ -35,8 +36,8 @@
     commodity_id, shop_id, area, commodity_title, commodity_info, discount, commodity_img_id, 
     cost_price, original_price, sale_price, commmodity_type_id, starting_time_business, 
     end_time_business, commodity_source, commodity_num, is_sale, take_way, shop_name, 
-    shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, show_place, 
-    show_order, create_at, update_at
+    shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, fy_money, 
+    show_place, show_order, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -57,8 +58,8 @@
       is_sale, take_way, shop_name, 
       shop_phone, shop_content, shop_address, 
       longitude, latitude, is_have_shop, 
-      show_place, show_order, create_at, 
-      update_at)
+      fy_money, show_place, show_order, 
+      create_at, update_at)
     values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
       #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, 
       #{commodityImgId,jdbcType=VARCHAR}, #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, 
@@ -67,8 +68,8 @@
       #{isSale,jdbcType=INTEGER}, #{takeWay,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, 
       #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER}, 
-      #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{fyMoney,jdbcType=DOUBLE}, #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
     insert into czb_wechat_commodity
@@ -144,6 +145,9 @@
       </if>
       <if test="isHaveShop != null" >
         is_have_shop,
+      </if>
+      <if test="fyMoney != null" >
+        fy_money,
       </if>
       <if test="showPlace != null" >
         show_place,
@@ -231,6 +235,9 @@
       <if test="isHaveShop != null" >
         #{isHaveShop,jdbcType=INTEGER},
       </if>
+      <if test="fyMoney != null" >
+        #{fyMoney,jdbcType=DOUBLE},
+      </if>
       <if test="showPlace != null" >
         #{showPlace,jdbcType=VARCHAR},
       </if>
@@ -317,6 +324,9 @@
       <if test="isHaveShop != null" >
         is_have_shop = #{isHaveShop,jdbcType=INTEGER},
       </if>
+      <if test="fyMoney != null" >
+        fy_money = #{fyMoney,jdbcType=DOUBLE},
+      </if>
       <if test="showPlace != null" >
         show_place = #{showPlace,jdbcType=VARCHAR},
       </if>
@@ -357,6 +367,7 @@
       longitude = #{longitude,jdbcType=DOUBLE},
       latitude = #{latitude,jdbcType=DOUBLE},
       is_have_shop = #{isHaveShop,jdbcType=INTEGER},
+      fy_money = #{fyMoney,jdbcType=DOUBLE},
       show_place = #{showPlace,jdbcType=VARCHAR},
       show_order = #{showOrder,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
