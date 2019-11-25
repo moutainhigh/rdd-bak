@@ -398,8 +398,8 @@ public class FanYongServiceImpl implements FanYongService {
     }
 
     public Boolean FyIncomeLogTest(Integer type, User user, String FyRemark, String sourId, double money, String orgId,Integer num) {  //type 1为油卡充值， 2 为vip充值，
-        UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getUserId());//查出原收益信息
-        String uuid = StringUtil.createId();
+        UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(sourId);//查出原收益信息
+        UserIncomeInfoDTO uuid = userIncomeInfoMapperExtra.selectUserIncomeInfo(sourId);
         int level = 0;
         Date create = null;
         Double FyMoney = 0.0;
@@ -429,7 +429,7 @@ public class FanYongServiceImpl implements FanYongService {
                 PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
                 create = petrolSalesRecords.getCreateAt();
             }
-            insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid, FyMoney, 0, oldUserIncomeInfo, orgId, create);
+            insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId, create);
         }
         if (num == 2) {
                 level = 2;
@@ -444,7 +444,7 @@ public class FanYongServiceImpl implements FanYongService {
                     VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
                     create = vipRechargeRecords.getCreateAt();
                 }
-                insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid, FyMoney, 0, oldUserIncomeInfo, orgId, create);
+                insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId, create);
         }
         return true;
     }
