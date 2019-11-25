@@ -35,11 +35,7 @@ public class AppBuyPetrolController {
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
     public synchronized JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
-//    public JSONResult buyPetrol(PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
-//        User user=new User();
-//        user.setUserAccount("15870596710");
-//        user.setUserId("155887754610894");
         //防止数据为空
         if(petrolInputDTO==null||user==null){
             return new JSONResult("申请数据有误", ResponseCodeConstants.FAILURE);
