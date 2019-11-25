@@ -53,6 +53,12 @@
         <if test="area!= null and area!= ''">
             AND czb_vip_area_config.area like concat('%',#{area},'%')
         </if>
+        <if test="promotionMobile!= null and promotionMobile!= ''">
+            AND user2.user_account like concat('%',#{promotionMobile},'%')
+        </if>
+        <if test="isVip!= null">
+            AND czb_user.is_vip = #{isVip}
+        </if>
         group by userId,realName,mobile,czb_vip_area_config.area,promotionType,superiorUser,spreadName,promotionMobile,petrolMoney,myProfit
         order by expireTime desc
     </select>

@@ -22,9 +22,18 @@ public class BusinessCommonUserServiceImpl implements BusinessCommonUserService 
     private BusinessCommonUserMapperExtra mapperExtra;
 
     @Override
-    public PageInfo<BusinessCommonUserOutputDTO> list(String userId, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd")Date createAt, String area, PageDTO pageDTO) {
+    public PageInfo<BusinessCommonUserOutputDTO> list(String userId, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd")Date createAt, String area, String promotionMobile,Integer isVip,PageDTO pageDTO) {
+        if(mobile != null ){
+            mobile = mobile.trim();
+        }
+        if(area!=null){
+            area = area.trim();
+        }
+        if(promotionMobile!=null){
+            promotionMobile = promotionMobile.trim();
+        }
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize(),true);
-        BusinessCommonUserVo vo = new BusinessCommonUserVo(userId,mobile,createAt,area);
+        BusinessCommonUserVo vo = new BusinessCommonUserVo(userId,mobile,createAt,area,promotionMobile,isVip);
         List<BusinessCommonUserOutputDTO> list = mapperExtra.list(vo);
 
         PageInfo<BusinessCommonUserOutputDTO> pageInfo = new PageInfo<>(list);

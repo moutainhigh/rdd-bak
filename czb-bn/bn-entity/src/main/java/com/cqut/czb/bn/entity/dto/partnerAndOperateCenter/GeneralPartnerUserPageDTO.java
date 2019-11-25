@@ -18,6 +18,8 @@ public class GeneralPartnerUserPageDTO extends PageDTO {
     private String account = null;
     private String createAt;
     private String area = null;
+    private String superiorUserAccount = null;
+    private Integer isVip = null;
 
     public String getUserId() {
         return userId;
@@ -49,5 +51,21 @@ public class GeneralPartnerUserPageDTO extends PageDTO {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getSuperiorUserAccount() {
+        return superiorUserAccount;
+    }
+
+    public void setSuperiorUserAccount(String superiorUserAccount) {
+        this.superiorUserAccount = superiorUserAccount;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
     }
 }
