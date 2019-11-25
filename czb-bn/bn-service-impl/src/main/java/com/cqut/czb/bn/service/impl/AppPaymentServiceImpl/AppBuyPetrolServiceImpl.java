@@ -43,6 +43,9 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
     @Autowired
     AppHomePageService appHomePageService;
 
+    @Autowired
+    DictMapperExtra dictMapperExtra;
+
     @Override
     public JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
 
@@ -167,12 +170,15 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Override
     public Map<String,Object> PurchaseControl(PetrolInputDTO petrolInputDTO) {
-        //判断今日是否购买过油卡
-        Boolean res= isTodayHadBuy(petrolInputDTO);
-        if(res==true){
-            Map<String,Object> info=new HashMap<>();
-            info.put("-1","每日购油只限一次");
-            return info;
+        //判断今日是否购买过油卡is_continuous_buy
+        Dict dict=dictMapperExtra.selectDictByName("is_continuous_buy");
+        if(dict.getContent().equals("否")){
+            Boolean res= isTodayHadBuy(petrolInputDTO);
+            if(res==true){
+                Map<String,Object> info=new HashMap<>();
+                info.put("-1","每日购油只限一次");
+                return info;
+            }
         }
 
         if(StringUtil.isNullOrEmpty(petrolInputDTO.getArea())) {
