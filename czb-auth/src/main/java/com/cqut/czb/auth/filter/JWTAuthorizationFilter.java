@@ -41,10 +41,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         // 如果请求头中没有Authorization信息则直接放行了
-        if (tokenHeader == null) {
-            chain.doFilter(request, response);
-            return;
-        }
+//        if (tokenHeader == null) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
 
 
         if(null == tokenHeader || "".equals(tokenHeader)) {
@@ -57,6 +57,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 // 验证token信息正确性，并设置到SecurityContextHolder认证信息中
                 SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
                 //验证SecurityContextHolder认证信息，有当前请求的信息认证则通过
+
                 super.doFilterInternal(request, response, chain);
             } else {
                 chain.doFilter(request, response);
