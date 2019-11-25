@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
@@ -76,7 +77,7 @@ public class FanYongServiceImpl implements FanYongService {
                 dict2 = dictMapperExtra.selectDictByName("notCQFY2");
                 dict3 = dictMapperExtra.selectDictByName("notCQFY_rate");
             }
-            FyIncomeLog(1, user, FyRemark, userId, money, orgId);
+            FyIncomeLog(1, user, FyRemark, userIdUp1, money, orgId);
         } else if (BusinessType == 2) {//充值vip
             FyRemark = "充值vip返佣";
             dict1 = dictMapperExtra.selectDictByName("vipFY1");
@@ -191,8 +192,6 @@ public class FanYongServiceImpl implements FanYongService {
     }
 
     public Boolean FyIncomeLog(Integer type, User user, String FyRemark, String sourId, double money, String orgId) {  //type 1为油卡充值， 2 为vip充值，
-        UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getUserId());//查出原收益信息
-        String uuid = StringUtil.createId();
         int level = 0;
         Date create = null;
         Double FyMoney = 0.0;
@@ -213,7 +212,9 @@ public class FanYongServiceImpl implements FanYongService {
             } else if (type == 1) {
                 FyMoney = (BigDecimal.valueOf(firstPetrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
             }
-            insertFyIncomeLog(FyRemark, level, user.getUserId(), sourId, uuid, FyMoney, 0, oldUserIncomeInfo, orgId);
+            UserIncomeInfoDTO uuid = userIncomeInfoMapperExtra.selectUserIncomeInfo(user.getSecondLevelPartner());
+            UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getSecondLevelPartner());//查出原收益信息
+            insertFyIncomeLog(FyRemark, level, user.getUserId(), user.getSecondLevelPartner(), uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId);
         }
         if (user.getFirstLevelPartner() != null && !"".equals(user.getFirstLevelPartner())) {
             if (level == 1) {
@@ -223,7 +224,9 @@ public class FanYongServiceImpl implements FanYongService {
                 } else if (type == 2) {
                     FyMoney = (BigDecimal.valueOf(secondProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
                 }
-                insertFyIncomeLog(FyRemark, level, user.getUserId(), sourId, uuid, FyMoney, 0, oldUserIncomeInfo, orgId);
+                UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getFirstLevelPartner());//查出原收益信息
+                UserIncomeInfoDTO uuid = userIncomeInfoMapperExtra.selectUserIncomeInfo(user.getFirstLevelPartner());
+                insertFyIncomeLog(FyRemark, level, user.getUserId(), user.getFirstLevelPartner(), uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId);
             } else if (level == 0) {
                 level = 1;
                 if (type == 1) {
@@ -231,7 +234,9 @@ public class FanYongServiceImpl implements FanYongService {
                 } else if (type == 2) {
                     FyMoney = (BigDecimal.valueOf(proportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
                 }
-                insertFyIncomeLog(FyRemark, level, user.getUserId(), sourId, uuid, FyMoney, 0, oldUserIncomeInfo, orgId);
+                UserIncomeInfoDTO uuid = userIncomeInfoMapperExtra.selectUserIncomeInfo(user.getFirstLevelPartner());
+                UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getFirstLevelPartner());//查出原收益信息
+                insertFyIncomeLog(FyRemark, level, user.getUserId(), user.getFirstLevelPartner(), uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId);
             }
 
         }
