@@ -35,6 +35,10 @@ public class IncomeLog {
 
     private Date targetYearMonth;
 
+    private Integer isSettlement;
+
+    private Integer partnerCommissionLevel;
+
     public String getRecordId() {
         return recordId;
     }
@@ -96,7 +100,6 @@ public class IncomeLog {
     }
 
     public void setCreateAt(Date createAt) {
-        createAt.setTime(createAt.getTime() + 8*3600*1000);
         this.createAt = createAt;
     }
 
@@ -162,5 +165,21 @@ public class IncomeLog {
 
     public void setTargetYearMonth(Date targetYearMonth) {
         this.targetYearMonth = targetYearMonth;
+    }
+
+    public Integer getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(Integer isSettlement) {
+        this.isSettlement = isSettlement;
+    }
+
+    public Integer getPartnerCommissionLevel() {
+        return partnerCommissionLevel;
+    }
+
+    public void setPartnerCommissionLevel(Integer partnerCommissionLevel) {
+        this.partnerCommissionLevel = partnerCommissionLevel;
     }
 }

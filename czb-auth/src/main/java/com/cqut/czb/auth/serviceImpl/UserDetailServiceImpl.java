@@ -170,6 +170,37 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
+    public Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO) {
+        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return false;
+        User user = BeanMapper.map(personalUserDTO, User.class);
+        user.setUserId(StringUtil.createId());
+        user.setUserType(2);
+        user.setUserPsw(bCryptPasswordEncoder.encode("000000"));
+        user.setCreateAt(new Date());
+        user.setIsDeleted(0);
+        user.setIsIdentified(0);
+        user.setIsLoginPc(0);
+        user.setUserRank(0);
+        if(null != personalUserDTO.getSuperiorUser() && !"".equals(personalUserDTO.getSuperiorUser())) {
+            user.setSuperiorUser(personalUserDTO.getSuperiorUser());
+        }
+        UserIncomeInfo userIncomeInfo = new UserIncomeInfo();
+        userIncomeInfo.setUserId(user.getUserId());
+        userIncomeInfo.setInfoId(StringUtil.createId());
+        userIncomeInfo.setFanyongIncome(0.00);
+        userIncomeInfo.setShareIncome(0.00);
+        userIncomeInfo.setGotTotalRent(0.00);
+        userIncomeInfo.setOtherIncome(0.00);
+        userIncomeInfo.setPayTotalRent(0.00);
+        userIncomeInfo.setWithdrawed(0.00);
+        userIncomeInfo.setCreateAt(new Date());
+        if(userIncomeInfoMapper.insertSelective(userIncomeInfo) > 0 && userMapper.insertSelective(user) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Boolean checkAccount(User user) {
         return userMapperExtra.checkAccount(user.getUserAccount());
     }

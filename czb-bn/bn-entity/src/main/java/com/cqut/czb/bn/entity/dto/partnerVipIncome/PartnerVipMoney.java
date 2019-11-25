@@ -1,15 +1,27 @@
 package com.cqut.czb.bn.entity.dto.partnerVipIncome;
 
 public class PartnerVipMoney {
+    private String userId;
+
     private String partnerId;
 
     private Integer partnerType;
+
+    private String recordId;
 
     private Double vipConsumption;  //下级vip充值的总金额
 
     private Double firstVipConsumption; //事业合伙人专属收益部分的总金额
 
     private Double petrolMoney;   //下级油卡消费总金额
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getPartnerId() {
         return partnerId;
@@ -25,6 +37,14 @@ public class PartnerVipMoney {
 
     public void setPartnerType(Integer partnerType) {
         this.partnerType = partnerType;
+    }
+
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
 
     public Double getVipConsumption() {

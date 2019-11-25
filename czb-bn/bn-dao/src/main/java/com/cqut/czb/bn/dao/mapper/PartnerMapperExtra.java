@@ -85,4 +85,20 @@ public interface PartnerMapperExtra {
 
     VipCountDTO selectSecondPartnerSubVipCount(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
 
+//初始化用
+    List<PartnerVipMoney> selectAllFirstPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllFirstPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllSecondPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllSecondPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllFirstBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectAllFirstBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectAllFirstNotBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectAllFirstNotBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
 }

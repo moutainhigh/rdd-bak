@@ -51,21 +51,22 @@
             as income
             on czb_user.user_id = income.buyer_id
         <where>
+            czb_user.partner = 0
             <if test="userId != null">
-                czb_user.second_level_partner = #{userId}
+            and czb_user.second_level_partner = #{userId}
             </if>
             <if test="account != null and account != ''">
-            and czb_user.user_account = #{account}
+            and czb_user.user_account like concat('%',#{account},'%')
             </if>
             <if test="createAt != null and createAt != ''">
-            and czb_user.create_at like  concat('%', #{createAt}, '%')
+            and czb_user.create_at like concat('%', #{createAt}, '%')
             </if>
             <if test="area != null and area != ''">
-            and czb_vip_area_config.area = #{area}
+            and czb_vip_area_config.area like concat('%',#{area},'%')
             </if>
         </where>
         group by userId,userName,userAccount,czb_vip_area_config.area,promotionType,superiorUser,superiorUserName,						superiorUserAccount,accumulatedConsumptionAmount,myIncome
-        order by expireAt desc
+        order by accumulatedConsumptionAmount desc
     </select>
 
     <!-- 获取直推收益 -->
@@ -101,6 +102,6 @@
         where
             user_id = #{userId}
             and remark = '充值vip返佣'
-            and partner_commission_level = 1
+            and is_settlement = 0
     </select>
 </mapper>
