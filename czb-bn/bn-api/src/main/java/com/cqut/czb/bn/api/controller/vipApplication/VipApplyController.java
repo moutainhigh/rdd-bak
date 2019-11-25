@@ -1,10 +1,14 @@
 package com.cqut.czb.bn.api.controller.vipApplication;
 
 import com.cqut.czb.bn.entity.entity.VIPApply;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.vipApplicationService.VipApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * 作者： 马杰,陈爽
@@ -37,5 +41,14 @@ public class VipApplyController {
     @PostMapping("/updateVipApply")
     public JSONResult updateVipApply(VIPApply vipApply) {
         return new JSONResult(vipApplyService.updateVipApply(vipApply));
+    }
+
+    /**
+     * 申请会员
+     * @return
+     */
+    @PostMapping("/applyWCPVip")
+    public JSONResult applyWCPVip(Principal principal, @Valid WeChatVipApply weChatVipApply){
+        return new JSONResult(vipApplyService.applyWCPVip(weChatVipApply, principal));
     }
 }
