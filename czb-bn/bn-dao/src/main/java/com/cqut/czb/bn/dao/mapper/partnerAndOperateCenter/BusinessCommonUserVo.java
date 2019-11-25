@@ -7,12 +7,16 @@ public class BusinessCommonUserVo {
     private String mobile;
     private  Date createAt;
     private String area;
+    private String promotionMobile;
+    private Integer isVip;
 
-    public BusinessCommonUserVo(String userId, String mobile, Date createAt, String area) {
+    public BusinessCommonUserVo(String userId, String mobile, Date createAt, String area,String promotionMobile,Integer isVip) {
         this.userId = userId;
         this.mobile = mobile;
         this.createAt = createAt;
         this.area = area;
+        this.promotionMobile = promotionMobile;
+        this.isVip = isVip;
     }
 
     public String getUserId() {
@@ -45,5 +49,21 @@ public class BusinessCommonUserVo {
 
     public void setArea(Integer areaId) {
         this.area = area;
+    }
+
+    public String getPromotionMobile() {
+        return promotionMobile;
+    }
+
+    public void setPromotionMobile(String promotionMobile) {
+        this.promotionMobile = promotionMobile;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
     }
 }

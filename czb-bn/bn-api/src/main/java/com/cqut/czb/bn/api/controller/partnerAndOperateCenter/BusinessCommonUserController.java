@@ -45,15 +45,15 @@ public class BusinessCommonUserController {
      * @return
      */
     @GetMapping("/list")
-    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area, PageDTO pageDTO){
+    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area, String promotionMobile, Integer isVip,PageDTO pageDTO){
         if(principal == null || principal.getName() == null){
             return new JSONResult("没有权限",500);
         }
         User user = (User) redisUtils.get(principal.getName());
-        if(user == null || user.getUserId() == null){
-            return new JSONResult("没有权限",500);
+        if(user == null || user.getUserId() == null) {
+            return new JSONResult("没有权限", 500);
         }
-        return new JSONResult(businessCommonUserService.list(user.getUserId(),mobile,createAt,area,pageDTO));
+        return new JSONResult(businessCommonUserService.list(user.getUserId(),mobile,createAt,area,promotionMobile,isVip,pageDTO));
     }
 
 

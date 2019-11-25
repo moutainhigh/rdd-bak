@@ -39,8 +39,22 @@ public class GeneralPartnerUserServiceImpl implements GeneralPartnerUserService 
     @Override
     public JSONResult getGeneralPartnerUserTableData(User user, GeneralPartnerUserPageDTO pageDTO) {
         pageDTO.setUserId(user.getUserId());
+        String account = pageDTO.getAccount();
+        String superiorAccount = pageDTO.getSuperiorUserAccount();
+
+        if(!"".equals(account) && null != account){
+            account = account.trim();
+        }
+
+        if(!"".equals(account) && null != account){
+            superiorAccount = superiorAccount.trim();
+        }
+
+        pageDTO.setAccount(account);
+        pageDTO.setSuperiorUserAccount(superiorAccount);
+
         String time = null;
-        if("" != pageDTO.getCreateAt()){
+        if(!"".equals(pageDTO.getCreateAt()) && null != pageDTO.getCreateAt()){
             time = pageDTO.getCreateAt().substring(0,10);
         }
 
