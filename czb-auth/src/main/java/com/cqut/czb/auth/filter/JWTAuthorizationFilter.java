@@ -41,11 +41,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         // 如果请求头中没有Authorization信息则直接放行了
-//        if (tokenHeader == null) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-
+        if (!request.getRequestURI().startsWith("/api")) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         if(null == tokenHeader || "".equals(tokenHeader)) {
             throw new SecurityException("登录信息不能为空");
