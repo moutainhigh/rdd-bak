@@ -7,6 +7,8 @@ public class WeChatCommodity {
 
     private String shopId;
 
+    private String area;
+
     private String commodityTitle;
 
     private String commodityInfo;
@@ -71,6 +73,14 @@ public class WeChatCommodity {
 
     public void setShopId(String shopId) {
         this.shopId = shopId == null ? null : shopId.trim();
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area == null ? null : area.trim();
     }
 
     public String getCommodityTitle() {
