@@ -103,7 +103,7 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 return null;
             }else if(wcpLoginBack.getErrmsg() != null && wcpLoginBack.getErrcode() != null){
                 System.out.println("微信登录失败，错误码：" + code + "错误信息：" + wcpLoginBack.getErrcode());
-                result.put(AuthConfig.FAILED_REASON, "身份验证已过期，请重新登录");
+                result.put(AuthConfig.FAILED_REASON, "微信登录失败");
                 result.put(AuthConfig.STATUS, false);
                 this.setupResponseWrite(response, result);
                 return null;
@@ -138,11 +138,13 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
         // 所以就是JwtUser啦
         JwtUser jwtUser = (JwtUser) authResult.getPrincipal();
         String token = JwtTool.createToken(jwtUser.getAccount(), false);
+        WCPLoginBack wcpLoginBack = this.getWcpLoginBack(request.getParameter("code"));
         if(redisUtils == null){
             redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
         UserDTO user = jwtUser.getUser();
         redisUtils.put(jwtUser.getAccount(), user);
+        redisUtils.put(jwtUser.getAccount() + "sessionKey", wcpLoginBack.getSession_key());
         if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {
             redisUtils.remove(jwtUser.getAccount()+AuthConfig.TOKEN);
         }
