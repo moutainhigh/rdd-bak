@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+        <id column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+        <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+        <result column="commodity_title" property="commodityTitle" jdbcType="VARCHAR" />
+        <result column="commodity_info" property="commodityInfo" jdbcType="VARCHAR" />
+        <result column="discount" property="discount" jdbcType="DOUBLE" />
+        <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
+        <result column="cost_price" property="costPrice" jdbcType="DOUBLE" />
+        <result column="original_price" property="originalPrice" jdbcType="DOUBLE" />
+        <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+        <result column="commmodity_type_id" property="commmodityTypeId" jdbcType="VARCHAR" />
+        <result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />
+        <result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />
+        <result column="commodity_source" property="commoditySource" jdbcType="VARCHAR" />
+        <result column="commodity_num" property="commodityNum" jdbcType="INTEGER" />
+        <result column="is_sale" property="isSale" jdbcType="INTEGER" />
+        <result column="take_way" property="takeWay" jdbcType="INTEGER" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR" />
+        <result column="shop_content" property="shopContent" jdbcType="VARCHAR" />
+        <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="is_have_shop" property="isHaveShop" jdbcType="INTEGER" />
+        <result column="show_place" property="showPlace" jdbcType="VARCHAR" />
+        <result column="show_order" property="showOrder" jdbcType="INTEGER" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img_id,
+        cost_price, original_price, sale_price, commmodity_type_id, starting_time_business,
+        end_time_business, commodity_source, commodity_num, is_sale, take_way, shop_name,
+        shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, show_place,
+        show_order, create_at, update_at
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_wechat_commodity
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllCommodity" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_wechat_commodity
+        <where>
+          <if test="commodityTitle != null and commodityTitle !=''">
+              AND commodity_title LIKE concat('%',#{commodityTitle,jdbcType=VARCHAR},'%')
+          </if>
+            <if test="showPlace != null and showPlace !=''">
+                AND show_place = #{showPlace,jdbcType=VARCHAR}
+            </if>
+            <if test="isSale != null ">
+                AND is_sale = #{isSale,jdbcType=INTEGER}
+            </if>
+            <if test="commoditySource != null and commoditySource !=''">
+                AND commodity_source LIKE concat('%',#{commoditySource,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="takeWay != null and takeWay !=''">
+                AND take_way LIKE concat('%',#{takeWay,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_wechat_commodity
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+        insert into czb_wechat_commodity (commodity_id, shop_id, commodity_title,
+        commodity_info, discount, commodity_img_id,
+        cost_price, original_price, sale_price,
+        commmodity_type_id, starting_time_business,
+        end_time_business, commodity_source, commodity_num,
+        is_sale, take_way, shop_name,
+        shop_phone, shop_content, shop_address,
+        longitude, latitude, is_have_shop,
+        show_place, show_order, create_at,
+        update_at)
+        values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR},
+        #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, #{commodityImgId,jdbcType=VARCHAR},
+        #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, #{salePrice,jdbcType=DOUBLE},
+        #{commmodityTypeId,jdbcType=VARCHAR}, #{startingTimeBusiness,jdbcType=TIMESTAMP},
+        #{endTimeBusiness,jdbcType=TIMESTAMP}, #{commoditySource,jdbcType=VARCHAR}, #{commodityNum,jdbcType=INTEGER},
+        #{isSale,jdbcType=INTEGER}, #{takeWay,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR},
+        #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR},
+        #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER},
+        #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP},
+        #{updateAt,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+        insert into czb_wechat_commodity
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="commodityId != null" >
+                commodity_id,
+            </if>
+            <if test="shopId != null" >
+                shop_id,
+            </if>
+            <if test="commodityTitle != null" >
+                commodity_title,
+            </if>
+            <if test="commodityInfo != null" >
+                commodity_info,
+            </if>
+            <if test="discount != null" >
+                discount,
+            </if>
+            <if test="commodityImgId != null" >
+                commodity_img_id,
+            </if>
+            <if test="costPrice != null" >
+                cost_price,
+            </if>
+            <if test="originalPrice != null" >
+                original_price,
+            </if>
+            <if test="salePrice != null" >
+                sale_price,
+            </if>
+            <if test="commmodityTypeId != null" >
+                commmodity_type_id,
+            </if>
+            <if test="startingTimeBusiness != null" >
+                starting_time_business,
+            </if>
+            <if test="endTimeBusiness != null" >
+                end_time_business,
+            </if>
+            <if test="commoditySource != null" >
+                commodity_source,
+            </if>
+            <if test="commodityNum != null" >
+                commodity_num,
+            </if>
+            <if test="isSale != null" >
+                is_sale,
+            </if>
+            <if test="takeWay != null" >
+                take_way,
+            </if>
+            <if test="shopName != null" >
+                shop_name,
+            </if>
+            <if test="shopPhone != null" >
+                shop_phone,
+            </if>
+            <if test="shopContent != null" >
+                shop_content,
+            </if>
+            <if test="shopAddress != null" >
+                shop_address,
+            </if>
+            <if test="longitude != null" >
+                longitude,
+            </if>
+            <if test="latitude != null" >
+                latitude,
+            </if>
+            <if test="isHaveShop != null" >
+                is_have_shop,
+            </if>
+            <if test="showPlace != null" >
+                show_place,
+            </if>
+            <if test="showOrder != null" >
+                show_order,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="commodityId != null" >
+                #{commodityId,jdbcType=VARCHAR},
+            </if>
+            <if test="shopId != null" >
+                #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityTitle != null" >
+                #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityInfo != null" >
+                #{commodityInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null" >
+                #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityImgId != null" >
+                #{commodityImgId,jdbcType=VARCHAR},
+            </if>
+            <if test="costPrice != null" >
+                #{costPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="originalPrice != null" >
+                #{originalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="salePrice != null" >
+                #{salePrice,jdbcType=DOUBLE},
+            </if>
+            <if test="commmodityTypeId != null" >
+                #{commmodityTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="startingTimeBusiness != null" >
+                #{startingTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTimeBusiness != null" >
+                #{endTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commoditySource != null" >
+                #{commoditySource,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityNum != null" >
+                #{commodityNum,jdbcType=INTEGER},
+            </if>
+            <if test="isSale != null" >
+                #{isSale,jdbcType=INTEGER},
+            </if>
+            <if test="takeWay != null" >
+                #{takeWay,jdbcType=INTEGER},
+            </if>
+            <if test="shopName != null" >
+                #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopPhone != null" >
+                #{shopPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopContent != null" >
+                #{shopContent,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddress != null" >
+                #{shopAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null" >
+                #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="latitude != null" >
+                #{latitude,jdbcType=DOUBLE},
+            </if>
+            <if test="isHaveShop != null" >
+                #{isHaveShop,jdbcType=INTEGER},
+            </if>
+            <if test="showPlace != null" >
+                #{showPlace,jdbcType=VARCHAR},
+            </if>
+            <if test="showOrder != null" >
+                #{showOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+        update czb_wechat_commodity
+        <set >
+            <if test="shopId != null" >
+                shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityTitle != null" >
+                commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityInfo != null" >
+                commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null" >
+                discount = #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityImgId != null" >
+                commodity_img_id = #{commodityImgId,jdbcType=VARCHAR},
+            </if>
+            <if test="costPrice != null" >
+                cost_price = #{costPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="originalPrice != null" >
+                original_price = #{originalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="salePrice != null" >
+                sale_price = #{salePrice,jdbcType=DOUBLE},
+            </if>
+            <if test="commmodityTypeId != null" >
+                commmodity_type_id = #{commmodityTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="startingTimeBusiness != null" >
+                starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTimeBusiness != null" >
+                end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commoditySource != null" >
+                commodity_source = #{commoditySource,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityNum != null" >
+                commodity_num = #{commodityNum,jdbcType=INTEGER},
+            </if>
+            <if test="isSale != null" >
+                is_sale = #{isSale,jdbcType=INTEGER},
+            </if>
+            <if test="takeWay != null" >
+                take_way = #{takeWay,jdbcType=INTEGER},
+            </if>
+            <if test="shopName != null" >
+                shop_name = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopPhone != null" >
+                shop_phone = #{shopPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopContent != null" >
+                shop_content = #{shopContent,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddress != null" >
+                shop_address = #{shopAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude,jdbcType=DOUBLE},
+            </if>
+            <if test="isHaveShop != null" >
+                is_have_shop = #{isHaveShop,jdbcType=INTEGER},
+            </if>
+            <if test="showPlace != null" >
+                show_place = #{showPlace,jdbcType=VARCHAR},
+            </if>
+            <if test="showOrder != null" >
+                show_order = #{showOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+        update czb_wechat_commodity
+        set shop_id = #{shopId,jdbcType=VARCHAR},
+        commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+        commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+        discount = #{discount,jdbcType=DOUBLE},
+        commodity_img_id = #{commodityImgId,jdbcType=VARCHAR},
+        cost_price = #{costPrice,jdbcType=DOUBLE},
+        original_price = #{originalPrice,jdbcType=DOUBLE},
+        sale_price = #{salePrice,jdbcType=DOUBLE},
+        commmodity_type_id = #{commmodityTypeId,jdbcType=VARCHAR},
+        starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+        end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+        commodity_source = #{commoditySource,jdbcType=VARCHAR},
+        commodity_num = #{commodityNum,jdbcType=INTEGER},
+        is_sale = #{isSale,jdbcType=INTEGER},
+        take_way = #{takeWay,jdbcType=INTEGER},
+        shop_name = #{shopName,jdbcType=VARCHAR},
+        shop_phone = #{shopPhone,jdbcType=VARCHAR},
+        shop_content = #{shopContent,jdbcType=VARCHAR},
+        shop_address = #{shopAddress,jdbcType=VARCHAR},
+        longitude = #{longitude,jdbcType=DOUBLE},
+        latitude = #{latitude,jdbcType=DOUBLE},
+        is_have_shop = #{isHaveShop,jdbcType=INTEGER},
+        show_place = #{showPlace,jdbcType=VARCHAR},
+        show_order = #{showOrder,jdbcType=INTEGER},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
+
+    <resultMap id="WCPCommodityInfoType" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO" >
+        <id column="commodityId" property="commodityId" jdbcType="VARCHAR" />
+        <result column="commodityTitle" property="commodityTitle" jdbcType="VARCHAR" />
+        <result column="commodityInfo" property="commodityInfo" jdbcType="VARCHAR" />
+        <result column="originalPrice" property="originalPrice" jdbcType="VARCHAR" />
+        <result column="salePrice" property="salePrice" jdbcType="VARCHAR" />
+        <result column="takeWay" property="takeWay" jdbcType="VARCHAR" />
+        <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+        <result column="shopContent" property="shopContent" jdbcType="VARCHAR" />
+        <result column="commodityNum" property="commodityNum" jdbcType="VARCHAR" />
+        <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+        <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+        <result column="startingTimeBusiness" property="startingTimeBusiness" jdbcType="VARCHAR" />
+        <result column="endTimeBusiness" property="endTimeBusiness" jdbcType="VARCHAR" />
+        <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
+        <result column="fyMoney" property="fyMoney" jdbcType="VARCHAR" />
+        <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
+        <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
+    </resultMap>
+
+    <select id="selectAllCommodityByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
+        SELECT
+            czb_wechat_commodity.commodity_id commodityId,
+            commodity_title commodityTitle,
+            commodity_info commodityInfo,
+            original_price originalPrice,
+            sale_price salePrice,
+            take_way takeWay,
+            commodity_img_id commodityImgId,
+            shop_name shopName,
+            shop_content shopContent,
+            shop_address shopAddress,
+            czb_wechat_commodity.commodity_num commodityNum,
+            longitude,
+            latitude,
+            czb_wechat_commodity.fy_money fyMoney,
+            starting_time_business startingTimeBusiness,
+            end_time_business endTimeBusiness,
+            IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        FROM czb_wechat_commodity
+        czb_wechat_commodity
+        LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+        WHERE
+            czb_wechat_commodity.is_sale = 1
+            AND ( pay_status = 1 OR pay_status IS NULL )
+            <if test = "area != null and area != '' ">
+                AND area = #{area, jdbcType = VARCHAR}
+            </if>
+            <if test = "shopPlace != null and shopPlace != '' ">
+                AND show_place = #{shopPlace, jdbcType = VARCHAR}
+            </if>
+        GROUP BY
+          commodityId
+        ORDER BY show_order
+    </select>
+
+    <select id="selectCommodityImgList" resultType="java.lang.String">
+      SELECT
+	    save_path
+      FROM
+        czb_file_function
+      LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
+      WHERE
+		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+    </select>
+
+    <select id="selectCommodityById" parameterType="java.lang.String" resultMap="WCPCommodityInfoType">
+        SELECT
+        czb_wechat_commodity.commodity_id commodityId,
+        commodity_title commodityTitle,
+        commodity_info commodityInfo,
+        original_price originalPrice,
+        sale_price salePrice,
+        take_way takeWay,
+        commodity_img_id commodityImgId,
+        shop_name shopName,
+        shop_content shopContent,
+        shop_address shopAddress,
+        czb_wechat_commodity.commodity_num commodityNum,
+        longitude,
+        latitude,
+        czb_wechat_commodity.fy_money fyMoney,
+        starting_time_business startingTimeBusiness,
+        end_time_business endTimeBusiness,
+        IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        FROM czb_wechat_commodity
+        czb_wechat_commodity
+        LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+        WHERE
+        czb_wechat_commodity.is_sale = 1
+        AND ( pay_status = 1 OR pay_status IS NULL )
+        AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
+        GROUP BY
+        commodityId
+        ORDER BY show_order
+    </select>
+</mapper>

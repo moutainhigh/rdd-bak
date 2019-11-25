@@ -541,4 +541,28 @@ INNER JOIN (
     <!--<select id="getPetrolsByDateDesc" resultMap="PetrolResultMap">-->
         <!--select <include refid="petrol"/> from czb_petrol where-->
     <!--</select>-->
+
+    <select id="getUnChargeOrders" resultType="com.cqut.czb.bn.entity.dto.ThirdBusiness.GetUnChargeOrderDTO">
+      SELECT
+        psr.record_id as orderId, user_account as buyerPhone , psr.petrol_num as petrolNum , denomination as money
+        FROM czb_petrol_sales_records as psr, czb_user AS u,czb_petrol_delivery_records AS pdr
+        WHERE
+        state=1 AND
+        is_recharged=0 AND
+        record_type=1 AND
+        psr.buyer_id=u.user_id AND
+        psr.petrol_num=pdr.petrol_num AND
+        pdr.delivery_state=2
+    </select>
+
+    <update id="inputChargeOrders" parameterType="java.util.List">
+            <foreach collection="list" item="item" index="index" close="" separator=";">
+                update czb_petrol_sales_records
+                set
+                is_recharged=1
+                where
+                record_id =#{item.orderId}
+            </foreach>
+    </update>
+
 </mapper>

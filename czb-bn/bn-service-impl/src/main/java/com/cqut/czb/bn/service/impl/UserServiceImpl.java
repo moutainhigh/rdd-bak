@@ -224,8 +224,16 @@ public class UserServiceImpl implements IUserService {
         UserDTO userDTO = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
         boolean isUpdateIndicatorRecord =true;
          if(0 == userInputDTO.getPartner()){
-            if (superUser==null || superUser.getPartner()==null){   //如果没有父级可能为降级，则将oldSuperior填入super
-                userInputDTO.setOldSuperior(userDTO.getOldSuperior());
+            if (userDTO!=null && userDTO.getOldSuperior()!=null){   //如果有旧的父级为降级，则将oldSuperior填入super
+                userInputDTO.setSuperiorUser(userDTO.getOldSuperior());
+                User oldSup = userMapperExtra.findUserDTOById(userDTO.getOldSuperior());
+                if (oldSup!=null && oldSup.getPartner()!=null){
+                    if (oldSup.getPartner()==1){    //如果以前的上级为普通合伙人则将二级合伙人设置为他
+                        userInputDTO.setSecondLevelPartner(userDTO.getOldSuperior());
+                    }else if (oldSup.getPartner()==2){
+                        userInputDTO.setFirstLevelPartner(userDTO.getOldSuperior());
+                    }
+                }
             }
             userInputDTO.setIsLoginPc(0);
         }
@@ -253,12 +261,13 @@ public class UserServiceImpl implements IUserService {
                         User oldSuperior = userMapper.selectByPrimaryKey(userDTO.getOldSuperior());
                         if (oldSuperior.getPartner()==2) {
                             userInputDTO.setSuperiorUser(userDTO.getOldSuperior());
+                            userInputDTO.setFirstLevelPartner(userDTO.getOldSuperior());
                         }
                     }
                 }
                 //当升级为普通合伙人时，如果上级有事业合伙人，那么就暂时归到上级的事业合伙人的团队中
                 if (superUser != null && superUser.getFirstLevelPartner()!=null && superUser.getFirstLevelPartner()!=""){
-                    userInputDTO.setSuperiorUser(userInputDTO.getFirstLevelPartner());
+                    userInputDTO.setSuperiorUser(superUser.getFirstLevelPartner());
                 }
                 isUpdateIndicatorRecord = indicatorRecordMapper.updateByPrimaryKey(indicatorRecord) > 0;
             }
@@ -307,7 +316,8 @@ public class UserServiceImpl implements IUserService {
                     if (userDTO!=null && userDTO.getOldSuperior()!=null && !"".equals(userDTO.getOldSuperior())){
                         User oldSuperior = userMapper.selectByPrimaryKey(userDTO.getOldSuperior());
                         if (oldSuperior.getPartner()==2) {
-                        userInputDTO.setSuperiorUser(userDTO.getOldSuperior());
+                            userInputDTO.setSuperiorUser(userDTO.getOldSuperior());
+                            userInputDTO.setFirstLevelPartner(userDTO.getOldSuperior());
                         }
                     }
                 }
@@ -343,17 +353,26 @@ public class UserServiceImpl implements IUserService {
                 if (0 == userInputDTO.getPartner()) {
                     if (1 == user.getPartner()) {
                         // 一级变0级
-                        userMapperExtra.updatePartnerState(userList, null, "");
+                        if (userInputDTO.getSecondLevelPartner()==null){
+                            userInputDTO.setSecondLevelPartner("");
+                        }
+                        userMapperExtra.updatePartnerState(userList, null, userInputDTO.getSecondLevelPartner());
                     }
                     if (2 == user.getPartner()) {
                         // 二级变0级
-                        userMapperExtra.updatePartnerState(userList, "", null);
+                        if (userInputDTO.getFirstLevelPartner()==null){
+                            userInputDTO.setFirstLevelPartner("");
+                        }
+                        userMapperExtra.updatePartnerState(userList, userInputDTO.getFirstLevelPartner(), null);
                     }
                 }
                 if (1 == userInputDTO.getPartner()) {
                     if (2 == user.getPartner()) {
                         // 2级变1级
-                        userMapperExtra.updatePartnerState(userList, "", userInputDTO.getUserId());
+                        if (userInputDTO.getFirstLevelPartner()==null){
+                            userInputDTO.setFirstLevelPartner("");
+                        }
+                        userMapperExtra.updatePartnerState(userList, userInputDTO.getFirstLevelPartner(), userInputDTO.getUserId());
                     }
                     if (0 == user.getPartner()) {
                         userMapperExtra.updatePartnerState(userList, null, userInputDTO.getUserId());
@@ -387,6 +406,8 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+
+
     public List<UserRole> initUserRoleList(UserInputDTO userInputDTO) {
         List<UserRole> userRoleList = new ArrayList<>();
         for(String roleId : userInputDTO.getRoleId().split(",")) {
@@ -398,5 +419,12 @@ public class UserServiceImpl implements IUserService {
         }
 
         return userRoleList;
+    }
+
+    @Override
+    public boolean updateTest() {
+        List<User> userList = userMapperExtra.getTest();
+        Boolean update = userMapperExtra.updateTest(userList)>0;
+        return update;
     }
 }

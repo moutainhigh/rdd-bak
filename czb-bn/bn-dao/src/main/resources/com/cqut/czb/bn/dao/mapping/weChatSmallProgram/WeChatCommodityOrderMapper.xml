@@ -9,7 +9,7 @@
     <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
     <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
     <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
-    <result column="pey_method" property="peyMethod" jdbcType="INTEGER" />
+    <result column="pay_method" property="payMethod" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="electronic_code" property="electronicCode" jdbcType="VARCHAR" />
     <result column="order_state" property="orderState" jdbcType="INTEGER" />
@@ -29,7 +29,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     order_id, user_id, commodity_id, shop_id, actual_price, third_order, pay_status, 
-    pey_method, remark, electronic_code, order_state, address_id, qrcode, phone, commodity_source, 
+    pay_method, remark, electronic_code, order_state, address_id, qrcode, phone, commodity_source, 
     fy_money, cost_price, commodity_type, commmodity_type_id, processing_time, handler, 
     commodity_num, create_at, update_at
   </sql>
@@ -46,7 +46,7 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder" >
     insert into czb_wechat_commodity_order (order_id, user_id, commodity_id, 
       shop_id, actual_price, third_order, 
-      pay_status, pey_method, remark, 
+      pay_status, pay_method, remark, 
       electronic_code, order_state, address_id, 
       qrcode, phone, commodity_source, 
       fy_money, cost_price, commodity_type, 
@@ -55,7 +55,7 @@
       )
     values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
       #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, 
-      #{payStatus,jdbcType=INTEGER}, #{peyMethod,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{payStatus,jdbcType=INTEGER}, #{payMethod,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{electronicCode,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, #{addressId,jdbcType=VARCHAR}, 
       #{qrcode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commoditySource,jdbcType=VARCHAR}, 
       #{fyMoney,jdbcType=DOUBLE}, #{costPrice,jdbcType=DOUBLE}, #{commodityType,jdbcType=INTEGER}, 
@@ -87,8 +87,8 @@
       <if test="payStatus != null" >
         pay_status,
       </if>
-      <if test="peyMethod != null" >
-        pey_method,
+      <if test="payMethod != null" >
+        pay_method,
       </if>
       <if test="remark != null" >
         remark,
@@ -161,8 +161,8 @@
       <if test="payStatus != null" >
         #{payStatus,jdbcType=INTEGER},
       </if>
-      <if test="peyMethod != null" >
-        #{peyMethod,jdbcType=INTEGER},
+      <if test="payMethod != null" >
+        #{payMethod,jdbcType=INTEGER},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -235,8 +235,8 @@
       <if test="payStatus != null" >
         pay_status = #{payStatus,jdbcType=INTEGER},
       </if>
-      <if test="peyMethod != null" >
-        pey_method = #{peyMethod,jdbcType=INTEGER},
+      <if test="payMethod != null" >
+        pay_method = #{payMethod,jdbcType=INTEGER},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -297,7 +297,7 @@
       actual_price = #{actualPrice,jdbcType=DOUBLE},
       third_order = #{thirdOrder,jdbcType=VARCHAR},
       pay_status = #{payStatus,jdbcType=INTEGER},
-      pey_method = #{peyMethod,jdbcType=INTEGER},
+      pay_method = #{payMethod,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       electronic_code = #{electronicCode,jdbcType=VARCHAR},
       order_state = #{orderState,jdbcType=INTEGER},

@@ -1,15 +1,22 @@
 package com.cqut.czb.bn.service.impl.vipApplyServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatVipApplyMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatVipApplyMapperExtra;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VIPApply;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply;
 import com.cqut.czb.bn.service.vipApplicationService.VipApplyService;
 import com.cqut.czb.bn.util.RedisUtil;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.util.Date;
 
 @Service
 public class VipApplyServiceImpl implements VipApplyService {
@@ -17,9 +24,14 @@ public class VipApplyServiceImpl implements VipApplyService {
     WeChatVipApplyMapperExtra vipApplyMapper;
 
     @Autowired
+    WeChatVipApplyMapper weChatVipApplyMapper;
+
+    @Autowired
     UserMapperExtra userMapperExtra;
+
     @Autowired
     RedisUtil redisUtil;
+
     @Override
     public PageInfo<VIPApply> selectVipApply(VIPApply vipApply) {
         PageHelper.startPage(vipApply.getCurrentPage(), vipApply.getPageSize());
@@ -36,6 +48,20 @@ public class VipApplyServiceImpl implements VipApplyService {
             }
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public Boolean applyWCPVip(WeChatVipApply weChatVipApply, Principal principal) {
+        if(principal == null){
             return false;
+        }
+        User user = (User) redisUtil.get(principal.getName());
+        weChatVipApply.setRecordId(StringUtil.createId());
+        weChatVipApply.setUserId(user.getUserId());
+        weChatVipApply.setStatus(0);
+        weChatVipApply.setCreateAt(new Date());
+        weChatVipApply.setUpdateAt(new Date());
+        return weChatVipApplyMapper.insertSelective(weChatVipApply) > 0;
     }
 }

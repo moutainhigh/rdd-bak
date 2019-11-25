@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.entity.entity.weChatSmallProgram;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class WeChatVipApply {
@@ -7,8 +8,10 @@ public class WeChatVipApply {
 
     private String userId;
 
+    @NotNull(message = "手机号不能为空")
     private String phoneNum;
 
+    @NotNull(message = "姓名不能为空")
     private String userName;
 
     private String remark;
