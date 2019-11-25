@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetChargeOrderInputDTO;
 import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetUnChargeOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
@@ -88,6 +89,6 @@ public interface PetrolSalesRecordsMapperExtra {
 
     List<GetUnChargeOrderDTO> getUnChargeOrders();
 
-    int inputChargeOrders(@Param("list") List<GetUnChargeOrderDTO> list);
+    int inputChargeOrders(@Param("list") List<GetChargeOrderInputDTO> list);
 
 }
