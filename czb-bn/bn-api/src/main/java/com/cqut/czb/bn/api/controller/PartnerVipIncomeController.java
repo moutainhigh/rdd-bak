@@ -45,10 +45,6 @@ public class PartnerVipIncomeController {
         }
     }
 
-    @GetMapping("initData")
-    public JSONResult initData(){
-        return new JSONResult(partnerVipIncomeService.initVipIncomeData());
-    }
 
     @PostMapping("add")
     public JSONResult add(@RequestBody PartnerVipMoney partnerVipMoney){
