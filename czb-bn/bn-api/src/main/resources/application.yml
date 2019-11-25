@@ -25,8 +25,7 @@ spring:
     #    host: 172.16.43.86
     #    port: 5259
     #    password: r2Z0@WJM
-    host: 39.98.250.45
-    #    host: localhost
+    host: localhost
     port: 6379
     password: root
     jedis:
@@ -47,7 +46,25 @@ spring:
       request-timeout: 10000
 
 server:
-  port: 8899
+  port: 888
+  http:
+    port: 8899
+  ssl:
+    key-store: classpath:2233184__renduoduo2019.com.jks
+    key-store-type: PKCS12
+    key-store-password: 4wk1P81U
+    key-alias: alias
+
+
+##端口号
+#server.port: 888
+#server.http.port: 8899
+##你生成的证书名字
+#server.ssl.key-store: classpath:tomcat.keystore
+##密钥库密码
+#server.ssl.key-store-password: 123456
+#server.ssl.keyStoreType: JKS
+#server.ssl.keyAlias: tomcat
 
 flyway:
   baseline-on-migrate: true
