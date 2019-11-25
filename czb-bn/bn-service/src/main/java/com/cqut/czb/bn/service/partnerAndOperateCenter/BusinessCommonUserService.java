@@ -8,5 +8,5 @@ import java.util.Date;
 
 public interface BusinessCommonUserService {
 
-    PageInfo<BusinessCommonUserOutputDTO> list(String userId, String mobile, Date createAt, String area, PageDTO pageDTO);
+    PageInfo<BusinessCommonUserOutputDTO> list(String userId, String mobile, Date createAt, String area, String promotionMobile,Integer isVip,PageDTO pageDTO);
 }
