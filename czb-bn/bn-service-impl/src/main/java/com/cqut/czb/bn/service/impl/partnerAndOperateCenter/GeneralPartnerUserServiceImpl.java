@@ -40,7 +40,7 @@ public class GeneralPartnerUserServiceImpl implements GeneralPartnerUserService 
     public JSONResult getGeneralPartnerUserTableData(User user, GeneralPartnerUserPageDTO pageDTO) {
         pageDTO.setUserId(user.getUserId());
         String time = null;
-        if("" != pageDTO.getCreateAt()){
+        if(!"".equals(pageDTO.getCreateAt()) && null != pageDTO.getCreateAt()){
             time = pageDTO.getCreateAt().substring(0,10);
         }
 
