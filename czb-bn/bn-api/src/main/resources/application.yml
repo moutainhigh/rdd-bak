@@ -46,14 +46,14 @@ spring:
       request-timeout: 10000
 
 server:
-  port: 888
-  http:
-    port: 8899
-  ssl:
-    key-store: classpath:2233184__renduoduo2019.com.jks
-    key-store-type: PKCS12
-    key-store-password: 4wk1P81U
-    key-alias: alias
+  port: 8899
+#  http:
+#    port: 8899
+#  ssl:
+#    key-store: classpath:2233184__renduoduo2019.com.jks
+#    key-store-type: PKCS12
+#    key-store-password: 4wk1P81U
+#    key-alias: alias
 
 
 ##端口号
