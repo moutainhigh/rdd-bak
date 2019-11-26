@@ -2,26 +2,18 @@ package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
 public class WeChatCommodityOrderProcess {
     private String orderId; // 平台订单号
-
     private String qrcode; // 二维码
-
+    private Integer orderState; // 订单状态
     private String electronicCode; // 电子码
-
     private String recordId; // 寄送记录id
-
     private String addressId; // 地址id
-
     private String addressInfo; // 地址细节province + city + area + detail
-
     private Integer deliveryState; // 寄送状态
-
     private String deliveryCompany; // 寄送公司代码
-
     private String deliveryNum; // 寄送数量
-
     private String processingTime; // 处理时间
-
     private String handler; // 处理人
+    private Integer takeWay; // 商品取件方式
 
     public String getOrderId() {
         return orderId;
@@ -109,5 +101,21 @@ public class WeChatCommodityOrderProcess {
 
     public void setHandler(String handler) {
         this.handler = handler;
+    }
+
+    public Integer getTakeWay() {
+        return takeWay;
+    }
+
+    public void setTakeWay(Integer takeWay) {
+        this.takeWay = takeWay;
+    }
+
+    public Integer getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(Integer orderState) {
+        this.orderState = orderState;
     }
 }
