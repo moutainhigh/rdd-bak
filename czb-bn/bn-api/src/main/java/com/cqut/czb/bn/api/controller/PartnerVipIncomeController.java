@@ -45,6 +45,10 @@ public class PartnerVipIncomeController {
         }
     }
 
+    @GetMapping("initData")
+    public JSONResult initData() throws Exception {
+        return new JSONResult(partnerVipIncomeService.initFyIncomeLogData());
+    }
 
     @PostMapping("add")
     public JSONResult add(@RequestBody PartnerVipMoney partnerVipMoney){
