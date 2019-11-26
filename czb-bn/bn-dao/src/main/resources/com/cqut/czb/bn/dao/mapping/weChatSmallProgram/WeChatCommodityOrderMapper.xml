@@ -445,6 +445,6 @@
     ON user_table.user_id = order_table.user_id
     LEFT JOIN category
     ON category.category_id = order_table.commodity_type_id
-    WHERE order_table.order_id = #{orderId,jdbc=VARCHAR}
+    WHERE order_table.order_id = #{orderId,jdbcType=VARCHAR}
   </select>
 </mapper>

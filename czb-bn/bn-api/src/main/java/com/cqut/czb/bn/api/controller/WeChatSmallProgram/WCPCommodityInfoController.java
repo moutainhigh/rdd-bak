@@ -16,7 +16,7 @@ import javax.validation.Valid;
  * @create 2019-11-25 14:40
  */
 @RestController
-@RequestMapping("/api/appWCPCommodityInfo")
+@RequestMapping("/api/WCPCommodityInfo")
 public class WCPCommodityInfoController {
 
     @Autowired
