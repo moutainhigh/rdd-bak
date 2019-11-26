@@ -35,22 +35,22 @@ public class OrdinaryStatisticsDTO {
     private BigDecimal allCommissionIncome;
 
     //第一个直推发展人数
-    private Integer firstDirectNumber;
+    private Integer firstDirectNumber = 0;
 
     //第一个间推发展人数
-    private Integer firstIndirectNumber;
+    private Integer firstIndirectNumber = 0;
 
     //第二个直推发展人数
-    private Integer secondDirectNumber;
+    private Integer secondDirectNumber = 0;
 
     //第二个间推发展人数
-    private Integer secondIndirectNumber;
+    private Integer secondIndirectNumber = 0;
 
     //第三个直推发展人数
-    private Integer thirdDirectNumber;
+    private Integer thirdDirectNumber = 0;
 
     //第三个间推发展人数
-    private Integer thirdIndirectNumber;
+    private Integer thirdIndirectNumber = 0;
 
 
     public Integer getOrdinaryUserCount() {
