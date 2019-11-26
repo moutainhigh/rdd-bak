@@ -22,7 +22,7 @@ import java.util.Date;
 * @Version:        1.0
 */
 @RestController
-@RequestMapping("/businessPartner/commonUser")
+@RequestMapping("/api/businessPartner/commonUser")
 public class BusinessCommonUserController {
 
     /**
@@ -46,9 +46,6 @@ public class BusinessCommonUserController {
      */
     @GetMapping("/list")
     public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area, String promotionMobile, Integer isVip,PageDTO pageDTO){
-        if(principal == null || principal.getName() == null){
-            return new JSONResult("没有权限",500);
-        }
         User user = (User) redisUtils.get(principal.getName());
         if(user == null || user.getUserId() == null) {
             return new JSONResult("没有权限", 500);
