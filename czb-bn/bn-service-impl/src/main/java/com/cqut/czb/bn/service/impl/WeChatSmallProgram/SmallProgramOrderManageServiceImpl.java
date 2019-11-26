@@ -8,7 +8,6 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import net.sf.json.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +38,17 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         boolean result = weChatCommodityOrderMapper.obsoleteOrder(orderId) > 0;
         jsonResult.setData(result);
         jsonResult.setCode(200);
-        jsonResult.setMessage("订单作废成功");
+        jsonResult.setMessage("成功作废该订单");
         return jsonResult;
     }
 
     @Override
     public JSONResult<WeChatCommodityOrderDetail> getOrderDetail(String orderId) {
+        // 获取订单通用信息
         JSONResult<WeChatCommodityOrderDetail> jsonResult = new JSONResult<>();
         WeChatCommodityOrderDetail result = weChatCommodityOrderMapper.getOrderDetail(orderId);
+
+        // 根据订单takeWay的值，获取对应类型的信息
         jsonResult.setData(result);
         jsonResult.setCode(200);
         jsonResult.setMessage("数据获取成功");

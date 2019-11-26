@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/smallProgramOrderManage")
+@RequestMapping("/api/smallProgramOrderManage")
 public class SmallProgramOrderManageController {
     @Autowired
     SmallProgramOrderManageService orderManageService;

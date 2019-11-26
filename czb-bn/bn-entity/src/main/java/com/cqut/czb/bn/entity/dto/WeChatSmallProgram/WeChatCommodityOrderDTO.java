@@ -10,18 +10,27 @@ public class WeChatCommodityOrderDTO {
     private Integer orderState; // 订单状态
     private String commodityId; // 商品id
     private String commodityTitle; // 商品名
+    private Integer commodityNum; // 商品数量
     private Double actualPrice; // 实际支付价格
     private Integer payStatus; // 支付状态
-    private Integer peyMethod; // 支付方式
+    private Integer payMethod; // 支付方式
     private String userId; // 用户id
     private String userAccount; // 用户账号(czb_user表)
     private String shopId; // 商店id
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createAt; // 下单时间
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime; // 开始时间(查询使用)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime; // 结束时间(查询使用)
+
+    public Integer getCommodityNum() {
+        return commodityNum;
+    }
+
+    public void setCommodityNum(Integer commodityNum) {
+        this.commodityNum = commodityNum;
+    }
 
     public String getOrderId() {
         return orderId;
@@ -79,12 +88,12 @@ public class WeChatCommodityOrderDTO {
         this.payStatus = payStatus;
     }
 
-    public Integer getPeyMethod() {
-        return peyMethod;
+    public Integer getPayMethod() {
+        return payMethod;
     }
 
-    public void setPeyMethod(Integer peyMethod) {
-        this.peyMethod = peyMethod;
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
     }
 
     public String getUserId() {
