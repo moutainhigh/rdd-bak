@@ -8,7 +8,9 @@ package com.cqut.czb.bn.util.config.SendMesConfig;
 public enum MessageModelInfo {
     RECHARGE_SUCCESS_MESSAGE_USER("810579397367427212"),
 
-    DELIVERY_SUCCESS_MESSAGE_USER("810589727705074463");
+    DELIVERY_SUCCESS_MESSAGE_USER("810589727705074463"),
+
+    RECHARGE_FAIL("1010148044973865661");
 
     private String messageModelInfo;
 

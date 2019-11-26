@@ -384,7 +384,7 @@ INNER JOIN (
         WHERE buyer_id=#{ownerId,jdbcType=VARCHAR}
         AND petrol_kind=#{petrolKind,jdbcType = INTEGER} and
         state=1
-        ORDER BY transaction_time DESC
+        ORDER BY create_at DESC
         LIMIT 1
     </select>
     
