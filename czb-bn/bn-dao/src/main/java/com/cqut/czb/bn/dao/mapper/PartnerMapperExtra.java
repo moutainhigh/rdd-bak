@@ -65,6 +65,8 @@ public interface PartnerMapperExtra {
 
     PartnerBecomeTimeDTO selectPartnerBecomeTimeOne(String userId);
 
+    PartnerBecomeTimeDTO selectOldPartnerBecomeTimeOne(String userId);
+
     List<SubPartnerDTO> selectSubPartner(String userId);
 
     PartnerVipMoney selectFirstPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
