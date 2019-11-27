@@ -565,4 +565,11 @@ INNER JOIN (
             </foreach>
     </update>
 
+    <update id="inputChargeOrder" parameterType="com.cqut.czb.bn.entity.dto.ThirdBusiness.GetChargeOrderInputDTO">
+            update czb_petrol_sales_records
+            set
+            is_recharged=1
+            where
+            record_id =#{orderId}
+    </update>
 </mapper>

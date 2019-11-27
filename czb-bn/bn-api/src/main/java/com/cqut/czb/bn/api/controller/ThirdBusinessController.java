@@ -1,14 +1,18 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.ThirdBusiness.ChargeBackDTO;
+import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetChargeOrderInputDTO;
 import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetUnChargeOrderDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.ThirdBusinessService.GetUnChargeOrderService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -40,7 +44,7 @@ public class ThirdBusinessController {
      * 返回充值订单信息
      */
     @RequestMapping(value="/InputChargeOrders", method= RequestMethod.POST)
-    public synchronized JSONResult RddInputChargeOrders(Principal principal,String objects) {
+    public synchronized JSONResult RddInputChargeOrders(Principal principal,@RequestBody List<GetChargeOrderInputDTO> list) {
         if(principal==null){
             return new JSONResult(405,"未登录");
         }
@@ -48,9 +52,18 @@ public class ThirdBusinessController {
         if(!"RddRechargeNum".equals(user.getUserAccount())){
             return new JSONResult(405,"此账户没有权限");
         }
-        return new JSONResult(getUnChargeOrderService.InputChargeOrders(objects));
+
+        if(list==null||list.size()==0){
+            return new JSONResult(400,"数据为空");
+        }
+
+        List<String> list1=getUnChargeOrderService.InputChargeOrders(list);
+
+        if(list1==null||list1.size()==0){
+            return new JSONResult(200,null);
+        }else {
+            return new JSONResult("订单id有误",400,list1);
+        }
     }
-
-
 
 }
