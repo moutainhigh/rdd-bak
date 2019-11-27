@@ -20,24 +20,17 @@ public class WeChatCommodityOrderDetail {
     private String shopId; // 商店id
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createAt; // 下单时间
-
     private String shopName;
-
     private String shopAddress;
-
     private String commodityImgId;
-
     private List commodityImgList;
-
     private String commoditySource;
-
     private Integer commodityType; // 商品类型
-
     private String commodityTypeContent; // 商品类目
-
     private Integer takeWay; // 商品取件方式
-
     private String remark;
+
+    private Integer deliveryState; // 寄送状态(如果takeWay为1,该字段替代orderState(前台))
 
     public String getShopAddress() {
         return shopAddress;
@@ -213,5 +206,13 @@ public class WeChatCommodityOrderDetail {
 
     public void setCommodityNum(Integer commodityNum) {
         this.commodityNum = commodityNum;
+    }
+
+    public Integer getDeliveryState() {
+        return deliveryState;
+    }
+
+    public void setDeliveryState(Integer deliveryState) {
+        this.deliveryState = deliveryState;
     }
 }
