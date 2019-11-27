@@ -825,31 +825,6 @@
         ORDER BY cpsr.create_at DESC
     </select>
 
-    <select id="selectAllFirstNotByThirdPartnerSubVip" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
-        SELECT
-        cvrr.record_id AS recordId,
-        cvrr.user_id AS userId,
-        first_level_partner AS partnerId,
-        amount AS vipConsumption
-        FROM
-        czb_vip_recharge_records cvrr
-        LEFT JOIN czb_user cu ON cvrr.user_id = cu.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
-        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
-        ORDER BY cvrr.create_at DESC
-    </select>
-
-    <select id="selectAllFirstNotByThirdPartnerSubPetrol" parameterType="com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO"  resultType="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney" >
-        SELECT
-        cpsr.record_id AS recordId,
-        cpsr.buyer_id AS userId,
-        first_level_partner AS partnerId,
-        turnover_amount AS petrolMoney
-        FROM
-        czb_petrol_sales_records cpsr
-        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
-        WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
-        ORDER BY cpsr.create_at DESC
-    </select>
 
 
 </mapper>

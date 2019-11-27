@@ -526,6 +526,11 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                             if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
                                 User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
                                 String FyRemark = "购油返佣";
+                                PartnerBecomeTimeDTO oldSuper = partnerMapperExtra.selectOldPartnerBecomeTimeOne(partnerVipMoney.getUserId());
+                                if (oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
+                                    bufferWritter.write("这是二级返佣："+partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getVipConsumption()+"\n");
+                                    fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),2);
+                                }
                                 bufferWritter.write(partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getPetrolMoney()+"\n");
                                 fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
                             }
