@@ -63,6 +63,8 @@ public interface PartnerMapperExtra {
 //合伙人vip收益初始化数据用方法
     List<PartnerBecomeTimeDTO> selectPartnerBecomeTime();
 
+    PartnerBecomeTimeDTO selectPartnerBecomeTimeOne(String userId);
+
     List<SubPartnerDTO> selectSubPartner(String userId);
 
     PartnerVipMoney selectFirstPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);

@@ -2,6 +2,8 @@ package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
+import com.cqut.czb.bn.entity.entity.Address;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import org.apache.ibatis.annotations.Param;
 
@@ -43,4 +45,28 @@ public interface WeChatCommodityOrderMapper {
      * @return
      */
     WeChatCommodityOrderDetail getOrderDetail(@Param("orderId") String orderId);
+
+    /**
+     * 获取订单处理相关信息详情
+     *
+     * @param orderId
+     * @return
+     */
+    WeChatCommodityOrderProcess getOrderProcessInfo(@Param("orderId") String orderId);
+
+    /**
+     * 处理订单（核销）
+     *
+     * @param input
+     * @return
+     */
+    int dealOrderEl(WeChatCommodityOrderProcess input);
+
+    /**
+     * 处理订单（寄送）
+     * 更新
+     * @param input
+     * @return
+     */
+    int dealOrderSend(WeChatCommodityOrderProcess input);
 }

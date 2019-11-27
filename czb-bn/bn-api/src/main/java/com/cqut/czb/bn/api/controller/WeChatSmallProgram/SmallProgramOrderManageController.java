@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.DealCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
 import com.github.pagehelper.PageInfo;
@@ -33,4 +35,15 @@ public class SmallProgramOrderManageController {
     public JSONResult<WeChatCommodityOrderDetail> getOrderDetail(String orderId) {
         return orderManageService.getOrderDetail(orderId);
     }
+
+    @PostMapping("/getOrderProcessInfo")
+    public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(String orderId) {
+        return orderManageService.getOrderProcessInfo(orderId);
+    }
+
+    @PostMapping("/dealOrder")
+    public JSONResult<Boolean> dealOrder(WeChatCommodityOrderProcess input) {
+        return orderManageService.dealOrder(input);
+    }
+
 }

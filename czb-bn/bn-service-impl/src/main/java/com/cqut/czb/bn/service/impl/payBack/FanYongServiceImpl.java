@@ -418,16 +418,30 @@ public class FanYongServiceImpl implements FanYongService {
         }
         if (num == 1) {
             level = 1;
-            if (type == 2) {
-                FyMoney = (BigDecimal.valueOf(firstProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
-                //ce
-                VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
-                create = vipRechargeRecords.getCreateAt();
-            } else if (type == 1) {
-                FyMoney = (BigDecimal.valueOf(firstPetrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
-                //ce
-                PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
-                create = petrolSalesRecords.getCreateAt();
+            if (user.getSecondLevelPartner() == null || !"".equals(user.getSecondLevelPartner())){
+                if (type == 2) {
+                    FyMoney = (BigDecimal.valueOf(proportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    //ce
+                    VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
+                    create = vipRechargeRecords.getCreateAt();
+                } else if (type == 1) {
+                    FyMoney = (BigDecimal.valueOf(petrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    //ce
+                    PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
+                    create = petrolSalesRecords.getCreateAt();
+                }
+            }else {
+                if (type == 2) {
+                    FyMoney = (BigDecimal.valueOf(firstProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    //ce
+                    VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
+                    create = vipRechargeRecords.getCreateAt();
+                } else if (type == 1) {
+                    FyMoney = (BigDecimal.valueOf(firstPetrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    //ce
+                    PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
+                    create = petrolSalesRecords.getCreateAt();
+                }
             }
             insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId, create);
         }
