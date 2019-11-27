@@ -66,8 +66,12 @@ public class GetUnChargeOrderServiceImpl implements GetUnChargeOrderService{
             return false;
         }
         List<GetChargeOrderInputDTO> list= JSONObject.parseArray(obj,GetChargeOrderInputDTO.class);
+        if(list==null){
+            return false;
+        }
         List<GetChargeOrderInputDTO> successfulOrders=new ArrayList<>();
         List<GetChargeOrderInputDTO> failureOrders=new ArrayList<>();
+        Boolean isModify=false;
         //判断哪些没有充值成功
         for(int i=0;i<list.size();i++){
             if("succeed".equals(list.get(i).getState())){
@@ -76,11 +80,16 @@ public class GetUnChargeOrderServiceImpl implements GetUnChargeOrderService{
                 failureOrders.add(list.get(i));
             }
         }
+        if(successfulOrders.size()>0){
+            isModify=petrolSalesRecordsMapperExtra.inputChargeOrders(successfulOrders)>0;
+        }
+
         //充值成功的进行操作
         SucceedTreatment(successfulOrders);
         //充值失败的进行操作
         FailTreatment(failureOrders);
-        return petrolSalesRecordsMapperExtra.inputChargeOrders(successfulOrders)>0;
+
+        return isModify;
     }
 
     //充值成功后发送短信
