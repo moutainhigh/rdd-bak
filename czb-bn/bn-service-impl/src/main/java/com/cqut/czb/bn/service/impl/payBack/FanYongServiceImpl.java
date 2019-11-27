@@ -203,8 +203,8 @@ public class FanYongServiceImpl implements FanYongService {
         Double secondProportion = Double.parseDouble(firstPartner.getContent());
         Double firstPetrolProportion = Double.parseDouble(firstPetrol.getContent());
         Double secondPetrolProportion = Double.parseDouble(secondPetrol.getContent());
-        Double proportion = (BigDecimal.valueOf(firstProportion).multiply(BigDecimal.valueOf(secondProportion))).doubleValue();
-        Double petrolProportion = (BigDecimal.valueOf(firstPetrolProportion).multiply(BigDecimal.valueOf(secondPetrolProportion))).doubleValue();
+        Double proportion = (BigDecimal.valueOf(firstProportion).add(BigDecimal.valueOf(secondProportion))).doubleValue();
+        Double petrolProportion = (BigDecimal.valueOf(firstPetrolProportion).add(BigDecimal.valueOf(secondPetrolProportion))).doubleValue();
         if (user.getSecondLevelPartner() != null && !"".equals(user.getSecondLevelPartner())) {
             level = 1;
             if (type == 2) {
@@ -400,6 +400,7 @@ public class FanYongServiceImpl implements FanYongService {
     public Boolean FyIncomeLogTest(Integer type, User user, String FyRemark, String sourId, double money, String orgId,Integer num) {  //type 1为油卡充值， 2 为vip充值，
         UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(sourId);//查出原收益信息
         UserIncomeInfoDTO uuid = userIncomeInfoMapperExtra.selectUserIncomeInfo(sourId);
+        User user1 = userMapper.selectByPrimaryKey(sourId);
         int level = 0;
         Date create = null;
         Double FyMoney = 0.0;
@@ -411,14 +412,14 @@ public class FanYongServiceImpl implements FanYongService {
         Double secondProportion = Double.parseDouble(firstPartner.getContent());
         Double firstPetrolProportion = Double.parseDouble(firstPetrol.getContent());
         Double secondPetrolProportion = Double.parseDouble(secondPetrol.getContent());
-        Double proportion = (BigDecimal.valueOf(firstProportion).multiply(BigDecimal.valueOf(secondProportion))).doubleValue();
-        Double petrolProportion = (BigDecimal.valueOf(firstPetrolProportion).multiply(BigDecimal.valueOf(secondPetrolProportion))).doubleValue();
-        if (user.getUserId().equals("156172069918833")) {
+        Double proportion = (BigDecimal.valueOf(firstProportion).add(BigDecimal.valueOf(secondProportion))).doubleValue();
+        Double petrolProportion = (BigDecimal.valueOf(firstPetrolProportion).add(BigDecimal.valueOf(secondPetrolProportion))).doubleValue();
+        if (user.getUserId().equals("638496768496303397")) {
             int ss = 0;
         }
         if (num == 1) {
             level = 1;
-            if (user.getSecondLevelPartner() == null || !"".equals(user.getSecondLevelPartner())){
+            if (user1.getPartner()==2){
                 if (type == 2) {
                     FyMoney = (BigDecimal.valueOf(proportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
                     //ce

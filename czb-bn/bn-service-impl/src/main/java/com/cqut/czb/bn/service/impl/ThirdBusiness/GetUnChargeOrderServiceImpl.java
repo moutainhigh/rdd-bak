@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.ThirdBusiness;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.ThirdBusiness.ChargeBackDTO;
 import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetChargeOrderInputDTO;
 import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetUnChargeOrderDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
@@ -61,16 +62,14 @@ public class GetUnChargeOrderServiceImpl implements GetUnChargeOrderService{
     }
 
     @Override
-    public Boolean InputChargeOrders(String obj) {
-        if(obj==null){
-            return false;
-        }
-        List<GetChargeOrderInputDTO> list= JSONObject.parseArray(obj,GetChargeOrderInputDTO.class);
+    public List<String> InputChargeOrders(List<GetChargeOrderInputDTO> list) {
+
         if(list==null){
-            return false;
+            return null;
         }
         List<GetChargeOrderInputDTO> successfulOrders=new ArrayList<>();
         List<GetChargeOrderInputDTO> failureOrders=new ArrayList<>();
+        List<String> modifyFail=new ArrayList<>();
         Boolean isModify=false;
         //判断哪些没有充值成功
         for(int i=0;i<list.size();i++){
@@ -80,16 +79,23 @@ public class GetUnChargeOrderServiceImpl implements GetUnChargeOrderService{
                 failureOrders.add(list.get(i));
             }
         }
-        if(successfulOrders.size()>0){
-            isModify=petrolSalesRecordsMapperExtra.inputChargeOrders(successfulOrders)>0;
+//        if(successfulOrders.size()>0){
+//            isModify=petrolSalesRecordsMapperExtra.inputChargeOrders(successfulOrders)>0;
+//        }
+        for (int i=0;i<successfulOrders.size();i++){
+            isModify=petrolSalesRecordsMapperExtra.inputChargeOrder(successfulOrders.get(i))>0;
+            if(isModify==false){
+                modifyFail.add(successfulOrders.get(i).getOrderId());
+            }
         }
+
 
         //充值成功的进行操作
         SucceedTreatment(successfulOrders);
         //充值失败的进行操作
         FailTreatment(failureOrders);
 
-        return isModify;
+        return modifyFail;
     }
 
     //充值成功后发送短信
@@ -118,8 +124,14 @@ public class GetUnChargeOrderServiceImpl implements GetUnChargeOrderService{
             return;
         }
         PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(recordId);
+        if (petrolSalesRecords==null){
+            return;
+        }
 //        查询用户的信息
         User user=userMapper.selectByPrimaryKey(petrolSalesRecords.getBuyerId());
+        if(user==null){
+            return;
+        }
         Map<String,String> content = new HashMap<>();
         content.put("petrolKind",  petrolSalesRecords.getPetrolKind().toString());
         content.put("petrolPrice", String.valueOf(petrolSalesRecords.getDenomination()));
@@ -143,6 +155,9 @@ public class GetUnChargeOrderServiceImpl implements GetUnChargeOrderService{
         User user=userMapperExtra.findUserByAccount(dict.getContent());
         String recordId=inputDTO.getOrderId();
         PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(recordId);
+        if(petrolSalesRecords==null){
+            return;
+        }
 //        查询用户的信息
         Map<String,String> content = new HashMap<>();
         content.put("petrolNum", petrolSalesRecords.getPetrolNum());
