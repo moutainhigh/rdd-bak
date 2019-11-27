@@ -314,18 +314,38 @@
     <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">
-    select user_id, user_account, user_name, sum(amount) as 'amount',is_vip, cu.create_at create_at
-    from
-    (select cu.user_id, user_account, user_name, info_id, cu.create_at,is_vip
-        from czb_user cu
-        left join czb_user_income_info cuii on  cu.user_id = cuii.user_id
-        where
-          cu.superior_user = #{userId, jdbcType=VARCHAR}
-                ) cu
-                left join czb_income_log cil on cil.info_id = cu.info_id
-          and (type = 0 or type is null)
-        group by cu.user_id
-        order by cu.is_vip DESC,cu.create_at desc, amount desc
+    SELECT
+	user_id,
+	user_account,
+	user_name,
+	sum( amount ) AS 'amount',
+	is_vip,
+	cu.create_at create_at
+    FROM
+        (
+        SELECT
+            cu.user_id,
+            user_account,
+            user_name,
+            superior_user,
+            info_id,
+            cu.create_at,
+            is_vip
+        FROM
+            czb_user cu
+            LEFT JOIN czb_user_income_info cuii ON cu.user_id = cuii.user_id
+        WHERE
+            cu.superior_user = #{userId, jdbcType = VARCHAR}
+        ) cu
+        LEFT JOIN czb_income_log cil ON cil.commission_source_user = cu.user_id
+        AND ( cil.is_settlement = 0 OR cil.is_settlement IS NULL )
+        AND ( type = 0 OR type IS NULL )
+    GROUP BY
+        cu.user_id
+    ORDER BY
+        cu.is_vip DESC,
+        cu.create_at DESC,
+        amount DESC
   </select>
   <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
     <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->
