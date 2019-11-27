@@ -392,7 +392,9 @@
         <result column="endTimeBusiness" property="endTimeBusiness" jdbcType="VARCHAR" />
         <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="fyMoney" property="fyMoney" jdbcType="VARCHAR" />
+        <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
+        <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
         <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
     </resultMap>
 
@@ -411,6 +413,8 @@
             czb_wechat_commodity.commodity_num commodityNum,
             longitude,
             latitude,
+            is_have_shop isHaveShop,
+            shop_phone shopPhone,
             czb_wechat_commodity.fy_money fyMoney,
             starting_time_business startingTimeBusiness,
             end_time_business endTimeBusiness,
@@ -457,6 +461,8 @@
         czb_wechat_commodity.commodity_num commodityNum,
         longitude,
         latitude,
+        is_have_shop isHaveShop,
+        shop_phone shopPhone,
         czb_wechat_commodity.fy_money fyMoney,
         starting_time_business startingTimeBusiness,
         end_time_business endTimeBusiness,

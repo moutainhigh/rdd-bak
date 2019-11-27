@@ -29,6 +29,8 @@ public class WCPCommodityOutputDTO {
 
     private String shopAddress;
 
+    private String shopPhone;
+
     private String commodityNum;
 
     private String commodityImgId;
@@ -45,7 +47,25 @@ public class WCPCommodityOutputDTO {
 
     private String salesVolume;
 
+    private String isHaveShop;
+
+    public String getShopPhone() {
+        return shopPhone;
+    }
+
+    public void setShopPhone(String shopPhone) {
+        this.shopPhone = shopPhone;
+    }
+
     private List<String> commodityImg;
+
+    public String getIsHaveShop() {
+        return isHaveShop;
+    }
+
+    public void setIsHaveShop(String isHaveShop) {
+        this.isHaveShop = isHaveShop;
+    }
 
     public String getSalesVolume() {
         return salesVolume;
