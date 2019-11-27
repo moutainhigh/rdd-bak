@@ -28,7 +28,7 @@ public class OrdinaryStatisticsServiceImpl implements OrdinaryStatisticsService 
         else {
             firstData.setOrdinaryUserCount(0);
         }
-
+        firstData.setOrdinaryUser(secondData.getOrdinaryUser());
         if( secondData.getDirectVipCount() != null) {
             firstData.setDirectVipCount(secondData.getDirectVipCount());
         } else {

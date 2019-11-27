@@ -7,6 +7,9 @@ public class OrdinaryStatisticsDTO {
     //当前年卡会员
     private Integer ordinaryUserCount;
 
+    //当前非会员
+    private Integer ordinaryUser;
+
     //直推vip人数
     private Integer directVipCount;
 
@@ -179,5 +182,13 @@ public class OrdinaryStatisticsDTO {
 
     public void setThirdIndirectNumber(Integer thirdIndirectNumber) {
         this.thirdIndirectNumber = thirdIndirectNumber;
+    }
+
+    public Integer getOrdinaryUser() {
+        return ordinaryUser;
+    }
+
+    public void setOrdinaryUser(Integer ordinaryUser) {
+        this.ordinaryUser = ordinaryUser;
     }
 }
