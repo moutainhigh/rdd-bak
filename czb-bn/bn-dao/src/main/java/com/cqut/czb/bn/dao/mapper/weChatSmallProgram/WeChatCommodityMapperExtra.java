@@ -14,6 +14,8 @@ public interface WeChatCommodityMapperExtra {
      */
     List<WxCommodityDTO> selectAllCommodity(WxCommodityDTO wxCommodityDTO);
 
+    int deleteByPrimaryKey(String commodityId);
+
     /**
      * 用于微信小程序
      * @param wcpCommodityInputDTO

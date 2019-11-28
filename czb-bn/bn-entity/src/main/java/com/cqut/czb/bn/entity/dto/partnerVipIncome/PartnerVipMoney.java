@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.partnerVipIncome;
 
+import java.util.Date;
+
 public class PartnerVipMoney {
     private String userId;
 
@@ -14,6 +16,8 @@ public class PartnerVipMoney {
     private Double firstVipConsumption; //事业合伙人专属收益部分的总金额
 
     private Double petrolMoney;   //下级油卡消费总金额
+
+    private Date createAt;
 
     public String getUserId() {
         return userId;
@@ -69,5 +73,13 @@ public class PartnerVipMoney {
 
     public void setPetrolMoney(Double petrolMoney) {
         this.petrolMoney = petrolMoney;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 }

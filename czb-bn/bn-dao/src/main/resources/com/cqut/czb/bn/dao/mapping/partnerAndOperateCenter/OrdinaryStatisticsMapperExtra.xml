@@ -47,6 +47,7 @@
     <select id="getUsers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryStatisticsDTO">
         SELECT
             count(IF(vip = 1, 1, NULL)) AS ordinaryUserCount,
+            count(IF(vip = 0, 1, NULL)) AS ordinaryUser,
             count(
 
                 IF (

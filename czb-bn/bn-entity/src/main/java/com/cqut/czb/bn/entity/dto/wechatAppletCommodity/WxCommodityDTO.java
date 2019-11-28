@@ -1,6 +1,9 @@
 package com.cqut.czb.bn.entity.dto.wechatAppletCommodity;
 
+import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
+
 import java.util.Date;
+import java.util.List;
 
 public class WxCommodityDTO {
     private String commodityId;
@@ -52,6 +55,8 @@ public class WxCommodityDTO {
     private String showPlace;
 
     private Integer showOrder;
+
+    private List<FileFunctionDTO> imgs;
 
     private Date createAt;
 
@@ -256,6 +261,15 @@ public class WxCommodityDTO {
     public void setShowOrder(Integer showOrder) {
         this.showOrder = showOrder;
     }
+
+    public List<FileFunctionDTO> getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(List<FileFunctionDTO> imgs) {
+        this.imgs = imgs;
+    }
+
 
     public Date getCreateAt() {
         return createAt;
