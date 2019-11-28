@@ -1,5 +1,4 @@
 package com.cqut.czb.auth.filter;
-
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.config.Config;
@@ -28,14 +27,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-
 /**
  * @Description 该类用于微信小程序登录，登录成功后设置token信息
  * @auther nihao
@@ -144,7 +141,7 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
         }
         UserDTO user = jwtUser.getUser();
         redisUtils.put(jwtUser.getAccount(), user);
-        redisUtils.put(jwtUser.getAccount() + "sessionKey", wcpLoginBack.getSession_key());
+        redisUtils.put(jwtUser.getAccount() + AuthConfig.SESSIONKEY, wcpLoginBack.getSession_key());
         if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {
             redisUtils.remove(jwtUser.getAccount()+AuthConfig.TOKEN);
         }
