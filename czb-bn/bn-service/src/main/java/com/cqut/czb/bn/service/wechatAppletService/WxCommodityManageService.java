@@ -6,4 +6,6 @@ import com.github.pagehelper.PageInfo;
 
 public interface WxCommodityManageService {
     PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO);
+
+    Boolean deletedWxCommodity(String commodityId);
 }

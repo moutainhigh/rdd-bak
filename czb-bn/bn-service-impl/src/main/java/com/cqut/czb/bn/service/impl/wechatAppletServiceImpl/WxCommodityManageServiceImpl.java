@@ -20,4 +20,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
     }
+
+    @Override
+    public Boolean deletedWxCommodity(String commodityId) {
+        return weChatCommodityMapperExtra.deleteByPrimaryKey(commodityId)>0;
+    }
 }

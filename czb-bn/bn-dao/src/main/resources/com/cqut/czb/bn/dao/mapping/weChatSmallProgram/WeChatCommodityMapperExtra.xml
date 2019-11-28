@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra" >
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO" >
         <id column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
         <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
         <result column="commodity_title" property="commodityTitle" jdbcType="VARCHAR" />
@@ -29,6 +29,7 @@
         <result column="show_order" property="showOrder" jdbcType="INTEGER" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <collection property="imgs" select="selectImg" column="commodity_img_id"></collection>
     </resultMap>
     <sql id="Base_Column_List" >
         commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img_id,
@@ -37,6 +38,27 @@
         shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, show_place,
         show_order, create_at, update_at
     </sql>
+    <resultMap id="functionImgsMap" type="com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO">
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="group_code" property="groupCode" jdbcType="VARCHAR" />
+        <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+        <result column="local_id" property="localId" jdbcType="VARCHAR" />
+        <result column="save_path" property="src" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="selectImg" resultMap="functionImgsMap" >
+        SELECT
+            cff.local_id,
+            cff.file_id,
+            cff.group_code,
+            cf.save_path
+        FROM
+            czb_wechat_commodity cwc
+        LEFT JOIN czb_file_function cff ON cwc.commodity_img_id = cff.local_id
+        LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
+        WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
+    </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />
