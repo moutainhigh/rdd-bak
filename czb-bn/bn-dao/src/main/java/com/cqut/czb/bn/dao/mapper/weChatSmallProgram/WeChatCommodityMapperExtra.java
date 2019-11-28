@@ -29,4 +29,8 @@ public interface WeChatCommodityMapperExtra {
      * @return
      */
     WCPCommodityOutputDTO selectCommodityById(String commodityId);
+
+    Integer insertCommodity(WxCommodityDTO wxCommodityDTO);
+
+    Integer updateCommodity(WxCommodityDTO wxCommodityDTO);
 }

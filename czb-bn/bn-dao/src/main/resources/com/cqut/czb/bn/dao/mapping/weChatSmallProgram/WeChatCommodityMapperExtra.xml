@@ -422,40 +422,42 @@
 
     <select id="selectAllCommodityByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
         SELECT
-            czb_wechat_commodity.commodity_id commodityId,
-            commodity_title commodityTitle,
-            commodity_info commodityInfo,
-            original_price originalPrice,
-            sale_price salePrice,
-            take_way takeWay,
-            commodity_img_id commodityImgId,
-            shop_name shopName,
-            shop_content shopContent,
-            shop_address shopAddress,
-            czb_wechat_commodity.commodity_num commodityNum,
-            longitude,
-            latitude,
-            is_have_shop isHaveShop,
-            shop_phone shopPhone,
-            czb_wechat_commodity.fy_money fyMoney,
-            starting_time_business startingTimeBusiness,
-            end_time_business endTimeBusiness,
-            IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
-        FROM czb_wechat_commodity
-        czb_wechat_commodity
+        czb_wechat_commodity.commodity_id commodityId,
+        commodity_title commodityTitle,
+        commodity_info commodityInfo,
+        original_price originalPrice,
+        sale_price salePrice,
+        take_way takeWay,
+        commodity_img_id commodityImgId,
+        czb_shop.shop_name shopName,
+        czb_shop.shop_content shopContent,
+        czb_shop.shop_address shopAddress,
+        czb_wechat_commodity.commodity_num commodityNum,
+        czb_shop.longitude,
+        czb_shop.latitude,
+        is_have_shop isHaveShop,
+        czb_shop.shop_phone shopPhone,
+        czb_wechat_commodity.fy_money fyMoney,
+        czb_wechat_commodity.starting_time_business startingTimeBusiness,
+        czb_wechat_commodity.end_time_business endTimeBusiness,
+        IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        FROM
+        czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+        LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
-            czb_wechat_commodity.is_sale = 1
-            AND ( pay_status = 1 OR pay_status IS NULL )
-            <if test = "area != null and area != '' ">
-                AND area = #{area, jdbcType = VARCHAR}
-            </if>
-            <if test = "shopPlace != null and shopPlace != '' ">
-                AND show_place = #{shopPlace, jdbcType = VARCHAR}
-            </if>
+        czb_wechat_commodity.is_sale = 1
+        AND ( pay_status = 1 OR pay_status IS NULL )
+        <if test = "area != null and area != '' ">
+            AND area = #{area, jdbcType = VARCHAR}
+        </if>
+        <if test = "shopPlace != null and shopPlace != '' ">
+            AND show_place = #{shopPlace, jdbcType = VARCHAR}
+        </if>
         GROUP BY
           commodityId
-        ORDER BY show_order
+        ORDER BY
+          show_order
     </select>
 
     <select id="selectCommodityImgList" resultType="java.lang.String">
@@ -466,6 +468,7 @@
       LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
       WHERE
 		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+      ORDER BY czb_file_function.create_at
     </select>
 
     <select id="selectCommodityById" parameterType="java.lang.String" resultMap="WCPCommodityInfoType">
@@ -477,27 +480,284 @@
         sale_price salePrice,
         take_way takeWay,
         commodity_img_id commodityImgId,
-        shop_name shopName,
-        shop_content shopContent,
-        shop_address shopAddress,
+        czb_shop.shop_name shopName,
+        czb_shop.shop_content shopContent,
+        czb_shop.shop_address shopAddress,
         czb_wechat_commodity.commodity_num commodityNum,
-        longitude,
-        latitude,
+        czb_shop.longitude,
+        czb_shop.latitude,
         is_have_shop isHaveShop,
-        shop_phone shopPhone,
+        czb_shop.shop_phone shopPhone,
         czb_wechat_commodity.fy_money fyMoney,
-        starting_time_business startingTimeBusiness,
-        end_time_business endTimeBusiness,
+        czb_wechat_commodity.starting_time_business startingTimeBusiness,
+        czb_wechat_commodity.end_time_business endTimeBusiness,
         IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
-        FROM czb_wechat_commodity
-        czb_wechat_commodity
+        FROM
+        czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+        LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
         AND ( pay_status = 1 OR pay_status IS NULL )
         AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
         GROUP BY
         commodityId
-        ORDER BY show_order
+        ORDER BY
+        show_order
     </select>
+
+    <insert id="insertCommodity" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO">
+        insert into czb_wechat_commodity
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="commodityId != null" >
+                commodity_id,
+            </if>
+            <if test="shopId != null" >
+                shop_id,
+            </if>
+            <if test="commodityTitle != null" >
+                commodity_title,
+            </if>
+            <if test="commodityInfo != null" >
+                commodity_info,
+            </if>
+            <if test="discount != null" >
+                discount,
+            </if>
+            <if test="commodityImgId != null" >
+                commodity_img_id,
+            </if>
+            <if test="costPrice != null" >
+                cost_price,
+            </if>
+            <if test="originalPrice != null" >
+                original_price,
+            </if>
+            <if test="salePrice != null" >
+                sale_price,
+            </if>
+            <if test="commmodityTypeId != null" >
+                commmodity_type_id,
+            </if>
+            <if test="startingTimeBusiness != null" >
+                starting_time_business,
+            </if>
+            <if test="endTimeBusiness != null" >
+                end_time_business,
+            </if>
+            <if test="commoditySource != null" >
+                commodity_source,
+            </if>
+            <if test="commodityNum != null" >
+                commodity_num,
+            </if>
+            <if test="isSale != null" >
+                is_sale,
+            </if>
+            <if test="takeWay != null" >
+                take_way,
+            </if>
+            <if test="shopName != null" >
+                shop_name,
+            </if>
+            <if test="shopPhone != null" >
+                shop_phone,
+            </if>
+            <if test="shopContent != null" >
+                shop_content,
+            </if>
+            <if test="shopAddress != null" >
+                shop_address,
+            </if>
+            <if test="longitude != null" >
+                longitude,
+            </if>
+            <if test="latitude != null" >
+                latitude,
+            </if>
+            <if test="isHaveShop != null" >
+                is_have_shop,
+            </if>
+            <if test="showPlace != null" >
+                show_place,
+            </if>
+            <if test="showOrder != null" >
+                show_order,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="commodityId != null" >
+                #{commodityId,jdbcType=VARCHAR},
+            </if>
+            <if test="shopId != null" >
+                #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityTitle != null" >
+                #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityInfo != null" >
+                #{commodityInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null" >
+                #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityImgId != null" >
+                #{commodityImgId,jdbcType=VARCHAR},
+            </if>
+            <if test="costPrice != null" >
+                #{costPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="originalPrice != null" >
+                #{originalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="salePrice != null" >
+                #{salePrice,jdbcType=DOUBLE},
+            </if>
+            <if test="commmodityTypeId != null" >
+                #{commmodityTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="startingTimeBusiness != null" >
+                #{startingTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTimeBusiness != null" >
+                #{endTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commoditySource != null" >
+                #{commoditySource,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityNum != null" >
+                #{commodityNum,jdbcType=INTEGER},
+            </if>
+            <if test="isSale != null" >
+                #{isSale,jdbcType=INTEGER},
+            </if>
+            <if test="takeWay != null" >
+                #{takeWay,jdbcType=INTEGER},
+            </if>
+            <if test="shopName != null" >
+                #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopPhone != null" >
+                #{shopPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopContent != null" >
+                #{shopContent,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddress != null" >
+                #{shopAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null" >
+                #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="latitude != null" >
+                #{latitude,jdbcType=DOUBLE},
+            </if>
+            <if test="isHaveShop != null" >
+                #{isHaveShop,jdbcType=INTEGER},
+            </if>
+            <if test="showPlace != null" >
+                #{showPlace,jdbcType=VARCHAR},
+            </if>
+            <if test="showOrder != null" >
+                #{showOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCommodity" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO">
+        update czb_wechat_commodity
+        <set >
+            <if test="shopId != null" >
+                shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityTitle != null" >
+                commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityInfo != null" >
+                commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null" >
+                discount = #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityImgId != null" >
+                commodity_img_id = #{commodityImgId,jdbcType=VARCHAR},
+            </if>
+            <if test="costPrice != null" >
+                cost_price = #{costPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="originalPrice != null" >
+                original_price = #{originalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="salePrice != null" >
+                sale_price = #{salePrice,jdbcType=DOUBLE},
+            </if>
+            <if test="commmodityTypeId != null" >
+                commmodity_type_id = #{commmodityTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="startingTimeBusiness != null" >
+                starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTimeBusiness != null" >
+                end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commoditySource != null" >
+                commodity_source = #{commoditySource,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityNum != null" >
+                commodity_num = #{commodityNum,jdbcType=INTEGER},
+            </if>
+            <if test="isSale != null" >
+                is_sale = #{isSale,jdbcType=INTEGER},
+            </if>
+            <if test="takeWay != null" >
+                take_way = #{takeWay,jdbcType=INTEGER},
+            </if>
+            <if test="shopName != null" >
+                shop_name = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopPhone != null" >
+                shop_phone = #{shopPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopContent != null" >
+                shop_content = #{shopContent,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddress != null" >
+                shop_address = #{shopAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude,jdbcType=DOUBLE},
+            </if>
+            <if test="isHaveShop != null" >
+                is_have_shop = #{isHaveShop,jdbcType=INTEGER},
+            </if>
+            <if test="showPlace != null" >
+                show_place = #{showPlace,jdbcType=VARCHAR},
+            </if>
+            <if test="showOrder != null" >
+                show_order = #{showOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
 </mapper>
