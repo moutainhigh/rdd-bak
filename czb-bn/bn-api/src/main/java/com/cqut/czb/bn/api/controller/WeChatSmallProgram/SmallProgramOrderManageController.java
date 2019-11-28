@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 小程序订单管理Controller
+ * 小程序订单管理
+ * @author 袁才明
  */
 @CrossOrigin
 @RestController
