@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 
 import com.cqut.czb.bn.dao.mapper.AddressMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.DealCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
@@ -22,7 +23,7 @@ import java.util.List;
 public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderManageService {
 
     @Autowired
-    WeChatCommodityOrderMapper weChatCommodityOrderMapper;
+    WeChatCommodityOrderMapperExtra weChatCommodityOrderMapperExtra;
     @Autowired
     AddressMapper addressMapper;
 
@@ -30,7 +31,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(WeChatCommodityOrderDTO input, PageDTO page) {
         PageHelper.startPage(page.getCurrentPage(), page.getPageSize());
         JSONResult<PageInfo<WeChatCommodityOrderDTO>> jsonResult = new JSONResult<>();
-        List<WeChatCommodityOrderDTO> result = weChatCommodityOrderMapper.getTableList(input);
+        List<WeChatCommodityOrderDTO> result = weChatCommodityOrderMapperExtra.getTableList(input);
         PageInfo<WeChatCommodityOrderDTO> pageInfo = new PageInfo<>(result);
         jsonResult.setData(pageInfo);
 
@@ -42,7 +43,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     @Override
     public JSONResult<Boolean> obsoleteOrder(String orderId) {
         JSONResult<Boolean> jsonResult = new JSONResult<>();
-        boolean result = weChatCommodityOrderMapper.obsoleteOrder(orderId) > 0;
+        boolean result = weChatCommodityOrderMapperExtra.obsoleteOrder(orderId) > 0;
         jsonResult.setData(result);
         jsonResult.setCode(200);
         jsonResult.setMessage("成功作废该订单");
@@ -53,7 +54,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     public JSONResult<WeChatCommodityOrderDetail> getOrderDetail(String orderId) {
         // 获取订单通用信息
         JSONResult<WeChatCommodityOrderDetail> jsonResult = new JSONResult<>();
-        WeChatCommodityOrderDetail result = weChatCommodityOrderMapper.getOrderDetail(orderId);
+        WeChatCommodityOrderDetail result = weChatCommodityOrderMapperExtra.getOrderDetail(orderId);
 
         jsonResult.setData(result);
         jsonResult.setCode(200);
@@ -64,7 +65,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     @Override
     public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(String orderId) {
         JSONResult<WeChatCommodityOrderProcess> jsonResult = new JSONResult<>();
-        WeChatCommodityOrderProcess result = weChatCommodityOrderMapper.getOrderProcessInfo(orderId);
+        WeChatCommodityOrderProcess result = weChatCommodityOrderMapperExtra.getOrderProcessInfo(orderId);
 
         // 如果为寄送(takeWay == 1)，获取addressInfo
         if (result.getTakeWay() == 1 && result.getAddressId() != null) {
@@ -84,9 +85,9 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         JSONResult<Boolean> jsonResult = new JSONResult<>();
         Boolean result;
         if (input.getTakeWay() == 1) { // 寄送
-            result = weChatCommodityOrderMapper.dealOrderSend(input) > 0;
+            result = weChatCommodityOrderMapperExtra.dealOrderSend(input) > 0;
         } else if (input.getTakeWay() == 2) { // 核销
-            result = weChatCommodityOrderMapper.dealOrderEl(input) > 0;
+            result = weChatCommodityOrderMapperExtra.dealOrderEl(input) > 0;
         } else {
             jsonResult.setCode(200);
             jsonResult.setMessage("商品取件方式不明确！");
