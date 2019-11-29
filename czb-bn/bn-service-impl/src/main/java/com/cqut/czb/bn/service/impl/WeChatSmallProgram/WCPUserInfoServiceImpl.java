@@ -9,6 +9,7 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -17,7 +18,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.Buffer;
 import java.nio.charset.Charset;
 
@@ -51,30 +55,21 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
                 String json = "{\"scene\":\"" + user.getUserId() + "\",\"path\":\"pages/index/index\"}";
                 System.out.println(json);
                 byte[] data = this.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+wcpAssessToken.getAccess_token(),json);
-                File imageFile = new File("/Users/nihao/Documents/" + "QRCODE.png");
-                //创建输出流
-                FileOutputStream outStream = null;
-                try {
-                    outStream = new FileOutputStream(imageFile);
-                    //写入数据
-                    outStream.write(data);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        //关闭输出流
-                        outStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+                return encode(data);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String encode(byte[] binaryData) {
+        try {
+            return new String(Base64.encodeBase64(binaryData), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     /* 发送 post请求 用HTTPclient 发送请求*/
