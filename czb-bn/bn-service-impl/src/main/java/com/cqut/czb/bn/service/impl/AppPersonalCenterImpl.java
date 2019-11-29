@@ -153,6 +153,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             personalCenterUserDTO.setIsVip(user1.getIsVip());
             if (userRoles!=null && userRoles.size()!=0 && userRoles.get(0).getRoleName()!=null){  //加入用户角色信息
                 personalCenterUserDTO.setRoleName(userRoles.get(0).getRoleName());
+                personalCenterUserDTO.setRoleNameList(userRoles);
             }
             if(vipAreaConfig == null){
                 personalCenterUserDTO.setHaveVip(0);
@@ -162,6 +163,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
         }else {
             if (userRoles!=null && userRoles.size()!=0 && userRoles.get(0).getRoleName()!=null){  //加入用户角色信息
                 personalCenterUserDTO.setRoleName(userRoles.get(0).getRoleName());
+                personalCenterUserDTO.setRoleNameList(userRoles);
             }
         }
 
