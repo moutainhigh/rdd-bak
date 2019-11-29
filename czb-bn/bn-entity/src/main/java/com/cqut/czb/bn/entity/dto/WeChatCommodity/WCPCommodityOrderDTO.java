@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.entity.dto.WeChatCommodity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ public class WCPCommodityOrderDTO {
     private String commodityInfo;
 
     private String commodityId;
+
+    private Double originalPrice;
 
     private Double actualPrice;
 
@@ -67,6 +70,24 @@ public class WCPCommodityOrderDTO {
     private String receiver;
 
     private String commodityImgId;
+
+    private Date createAt;
+
+    public Double getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(Double originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
     public String getCommodityImgId() {
         return commodityImgId;

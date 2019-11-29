@@ -36,6 +36,8 @@
       czb_wechat_commodity_order.electronic_code electronicCode,
       czb_wechat_commodity_order.qrcode QRcode,
       czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
@@ -88,6 +90,8 @@
       CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
       czb_address.contact_number contactNumber,
       czb_address.receiver receiver,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
       commodity_img_id commodityImgId
     FROM
 	  czb_wechat_commodity_order
@@ -113,6 +117,8 @@
       czb_wechat_commodity_order.electronic_code electronicCode,
       czb_wechat_commodity_order.qrcode QRcode,
       czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
