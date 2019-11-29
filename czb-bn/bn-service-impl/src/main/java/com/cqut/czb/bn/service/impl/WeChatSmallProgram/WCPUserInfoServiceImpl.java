@@ -49,7 +49,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
 
             if(wcpAssessToken.getErrcode() == null && wcpAssessToken.getErrmsg() == null){
 
-                String json = "{\"scene\":\"name=jerry\",\"width\":300}";
+                String json = "{\"scene\":\" " + user.getUserId() + "\"}";
                 byte[] data = this.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+wcpAssessToken.getAccess_token(),json);
                 return getImageString(data);
             }
