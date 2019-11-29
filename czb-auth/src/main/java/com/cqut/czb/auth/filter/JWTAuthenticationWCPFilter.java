@@ -66,6 +66,7 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
         this.initHttpServletRep(response);
         String code = request.getParameter("code");
         String superiorUser = request.getParameter("superiorUser");
+        String nickName = request.getParameter("nickName");
         String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
         //使用Token登录
         if ((code == null || "".equals(code)) && tokenHeader != null && tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX)){
@@ -116,6 +117,7 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 personalUserDTO.setUserAccount(wcpLoginBack.getOpenid());
                 personalUserDTO.setUserPsw(Config.initPsw);
                 personalUserDTO.setSuperiorUser(superiorUser);
+                personalUserDTO.setUserName(nickName);
                 if(userDetailService == null){
                     userDetailService = SpringUtils.getBean(UserDetailService.class);
                 }
