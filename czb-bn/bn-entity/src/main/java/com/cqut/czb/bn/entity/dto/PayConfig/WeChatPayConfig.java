@@ -12,11 +12,12 @@ public class WeChatPayConfig {
 
 	// 公众账号ID
 	public static final String app_id = "wxec50dac5d04a0c9f";
-	
-	public static final String sapp_id = "wxbdf58228cad1de4f";
-	
+
+	public static final String sapp_id = "wxd2d0171429ac208f";
+
 	// 商户号
 	public static final String mch_id = "1512674051";
+
 	// 小程序商户号
 	public static final String smch_id = "1518310071";
 
@@ -41,9 +42,14 @@ public class WeChatPayConfig {
 	//点餐
 	public static final String BuyDish_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyDishInfoWeChat";
 
-	//交易类型
+	public static final String applet_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyAppletWeChat";
+
+	//交易类型——app支付
 	public static final String trade_type = "APP";
-	
+
+	//微信小程序支付
+	public static final String WeChat_applet_trade_type = "JSAPI";
+
 	// 设备号
 	public static final String device_info = "WEB";
 

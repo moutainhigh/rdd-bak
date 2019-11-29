@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.util.string.StringUtil;
 
 import java.math.BigDecimal;
@@ -137,6 +138,22 @@ public class WeChatParameterConfig {
         return parameters;
     }
 
+    public static SortedMap<String, Object> getParametersApplet(String userAccount,Double money,String nonceStrTemp, String orgId, String userId, WeChatCommodity weChatCommodity) {
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters=getParametersApplet();
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("out_trade_no", orgId);
+        parameters.put("openid",userAccount);
+        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("total_fee", totalFee);
+        parameters.put("notify_url", WeChatPayConfig.RechargeVip_url);//通用一个接口（购买和充值）
+        parameters.put("detail","微信小程序支付");//支付的类容备注
+        String attach=getAttachApplet(orgId,userId,money,weChatCommodity.getCommodityId());
+        parameters.put("attach",attach);
+        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
+        return parameters;
+    }
+
     /**
      * 微信支付——订单格外数据(充值vip）
      */
@@ -146,6 +163,18 @@ public class WeChatParameterConfig {
         pbp.put("ownerId", userId);
         pbp.put("money",money);
         pbp.put("vipAreaConfigId",vipAreaConfigId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     * 微信支付——微信小程序购买商品
+     */
+    public static String getAttachApplet(String orgId,String userId,double money,String commodityId){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
+        pbp.put("commodityId",commodityId);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -225,6 +254,19 @@ public class WeChatParameterConfig {
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
         parameters.put("trade_type", WeChatPayConfig.trade_type);
+        return parameters;
+    }
+
+    //封装parameters——微信小程序用
+    public static SortedMap<String, Object> getParametersApplet(){
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters.put("appid", WeChatPayConfig.sapp_id);
+        parameters.put("mch_id", WeChatPayConfig.mch_id);
+        parameters.put("device_info", WeChatPayConfig.device_info);
+        parameters.put("sign_type", WeChatPayConfig.sign_type);
+        parameters.put("body", WeChatPayConfig.body);
+        parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
+        parameters.put("trade_type", WeChatPayConfig.WeChat_applet_trade_type);
         return parameters;
     }
 }
