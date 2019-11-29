@@ -16,7 +16,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.stereotype.Service;
-import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.nio.Buffer;
@@ -49,20 +48,33 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
 
             if(wcpAssessToken.getErrcode() == null && wcpAssessToken.getErrmsg() == null){
 
-                String json = "{\"scene\":\" " + user.getUserId() + "\"}";
+                String json = "{\"scene\":\"" + user.getUserId() + "\",\"path\":\"pages/index/index\"}";
+                System.out.println(json);
                 byte[] data = this.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+wcpAssessToken.getAccess_token(),json);
-                return getImageString(data);
+                File imageFile = new File("/Users/nihao/Documents/" + "QRCODE.png");
+                //创建输出流
+                FileOutputStream outStream = null;
+                try {
+                    outStream = new FileOutputStream(imageFile);
+                    //写入数据
+                    outStream.write(data);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        //关闭输出流
+                        outStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
-    }
-
-    public static String getImageString(byte[] data) throws IOException {
-        BASE64Encoder encoder = new BASE64Encoder();
-        return data != null ? encoder.encode(data) : "";
+        return null;
     }
 
     /* 发送 post请求 用HTTPclient 发送请求*/
