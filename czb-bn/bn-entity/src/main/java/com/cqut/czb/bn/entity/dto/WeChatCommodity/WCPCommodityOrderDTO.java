@@ -73,6 +73,16 @@ public class WCPCommodityOrderDTO {
 
     private Date createAt;
 
+    private String shopPhone;
+
+    public String getShopPhone() {
+        return shopPhone;
+    }
+
+    public void setShopPhone(String shopPhone) {
+        this.shopPhone = shopPhone;
+    }
+
     public Double getOriginalPrice() {
         return originalPrice;
     }
