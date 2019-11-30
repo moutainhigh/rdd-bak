@@ -36,10 +36,10 @@ public class WeChatAppletController {
 
     @RequestMapping(value = "/WeChatApplet", method = RequestMethod.POST)
     public JSONResult WeChatApplet(Principal principal,@RequestBody PayInputDTO payInputDTO) {
-
-        User user1 = (User)redisUtils.get(principal.getName());
-        User user=new User();
-        user.setUserAccount(user1.getUserAccount());
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null){
+            return new JSONResult("未登录",405,null);
+        }
         return new JSONResult(weChatAppletPayService.WeChatAppletBuyCommodity(user,payInputDTO));
     }
 }

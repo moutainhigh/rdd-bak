@@ -42,7 +42,7 @@ public class WeChatPayConfig {
 	//点餐
 	public static final String BuyDish_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyDishInfoWeChat";
 
-	public static final String applet_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyAppletWeChat";
+	public static final String applet_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AppletVerifyAsyn/verifyAppletWeChat";
 
 	//交易类型——app支付
 	public static final String trade_type = "APP";
