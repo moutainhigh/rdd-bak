@@ -77,4 +77,12 @@ public interface WeChatCommodityOrderMapperExtra {
      * @return
      */
     Integer updateCommodityOrderState(WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO);
+
+    /**
+     * 商家获取单个订单信息（微信小程序）
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(String userId, String orderId);
 }
