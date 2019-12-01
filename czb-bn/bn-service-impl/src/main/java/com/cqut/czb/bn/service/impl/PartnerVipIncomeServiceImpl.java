@@ -355,7 +355,8 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
 //            }
         return true;
     }
-    public Boolean initFyIncomeLogDataTTT() {
+    @Override
+    public Boolean initFyIncomeLogData() {
         //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）
         List<PartnerBecomeTimeDTO> allPartner = partnerMapperExtra.selectPartnerBecomeTime();
         System.out.println("合伙人数量：" + allPartner.size());
@@ -372,6 +373,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             Double petrolProportion = add(petrolProportion1, petrolProportion2);
             Integer totalCount = 0;   //下级新增的Vip数
             if (partnerDTO.getPartner() == 2) {
+
                 Double proportion = add(Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent()), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent()));
                 List<PartnerVipMoney> firstPartnerSubMoneyVip = partnerMapperExtra.selectAllFirstPartnerSubVip(partnerDTO);  //先算出事业合伙人直属下级的消费，利息12.5%+7.5%
                 List<PartnerVipMoney> firstPartnerSubMoneyPetrol = partnerMapperExtra.selectAllFirstPartnerSubPetrol(partnerDTO);
@@ -397,6 +399,11 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                             if (partnerVipMoney != null && partnerVipMoney.getVipConsumption() != null) {
                                 User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
                                 String FyRemark = "充值vip返佣";
+                                PartnerBecomeTimeDTO oldSuper = partnerMapperExtra.selectOldPartnerBecomeTimeOne(partnerVipMoney.getUserId());
+                                if (oldSuper!=null&&oldSuper.getCreateAt()!=null&&oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
+                                    fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),2);
+                                    continue;
+                                }
                                 fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),1);
                             }
                         }
@@ -405,6 +412,11 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                             if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
                                 User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
                                 String FyRemark = "购油返佣";
+                                PartnerBecomeTimeDTO oldSuper = partnerMapperExtra.selectOldPartnerBecomeTimeOne(partnerVipMoney.getUserId());
+                                if (oldSuper!=null&&oldSuper.getCreateAt()!=null&&oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
+                                    fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),2);
+                                    continue;
+                                }
                                 fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
                             }
                         }
@@ -444,7 +456,6 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                     }
                 }
             } else {
-                break;
             }
         }
         return true;
@@ -452,8 +463,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
 
 
 
-    @Override
-    public Boolean initFyIncomeLogData() throws Exception {
+    public Boolean initFyIncomeLogDataTTT() throws Exception {
         File file = new File("/log.txt");
         if (!file.exists()){
              file.createNewFile();
