@@ -385,6 +385,7 @@ public class FanYongServiceImpl implements FanYongService {
         }
         incomeLog.setInfoId(uuid);
         incomeLog.setSouseId(orgId);//变更来源
+        incomeLog.setIsSettlement(0);  //不需要结算
         incomeLog.setRemark(FyRemark);
         System.out.println("返佣说明" + FyRemark);
         boolean insertIncomeLog = incomeLogMapperExtra.insert(incomeLog) > 0;
