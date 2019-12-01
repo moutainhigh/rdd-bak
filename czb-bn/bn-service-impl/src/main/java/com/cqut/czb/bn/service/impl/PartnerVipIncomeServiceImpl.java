@@ -456,6 +456,9 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
     public Boolean initFyIncomeLogData() throws Exception {
         File file = new File("/log.txt");
         if (!file.exists()){
+             file.createNewFile();
+        } else {
+            file.delete();
             file.createNewFile();
         }
         FileWriter fileWritter = new FileWriter(file.getName(),true);
@@ -463,7 +466,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
         BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
 
 
-        //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）
+        //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）155962733891547
             PartnerBecomeTimeDTO partnerDTO = partnerMapperExtra.selectPartnerBecomeTimeOne("155962733891547");
             Double totalMoney = 0.0;  //vip应得返佣
             Double firstIncome = 0.0;   //一级vip收益
@@ -512,9 +515,10 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                                 User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
                                 String FyRemark = "充值vip返佣";
                                 PartnerBecomeTimeDTO oldSuper = partnerMapperExtra.selectOldPartnerBecomeTimeOne(partnerVipMoney.getUserId());
-                                if (oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
+                                if (oldSuper!=null&&oldSuper.getCreateAt()!=null&&oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
                                     bufferWritter.write("这是二级返佣："+partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getVipConsumption()+"\n");
                                     fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),2);
+                                    continue;
                                 }
                                 bufferWritter.write(partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getVipConsumption()+"\n");
                                 fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),1);
@@ -527,9 +531,10 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                                 User user=userMapper.selectByPrimaryKey(partnerVipMoney.getUserId());
                                 String FyRemark = "购油返佣";
                                 PartnerBecomeTimeDTO oldSuper = partnerMapperExtra.selectOldPartnerBecomeTimeOne(partnerVipMoney.getUserId());
-                                if (oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
-                                    bufferWritter.write("这是二级返佣："+partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getVipConsumption()+"\n");
-                                    fanYongService.FyIncomeLogTest(2,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getVipConsumption(),partnerVipMoney.getRecordId(),2);
+                                if (oldSuper!=null&&oldSuper.getCreateAt()!=null&&oldSuper.getCreateAt().getTime()<partnerVipMoney.getCreateAt().getTime()){
+                                    bufferWritter.write("这是二级返佣："+partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getPetrolMoney()+"\n");
+                                    fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),2);
+                                    continue;
                                 }
                                 bufferWritter.write(partnerVipMoney.getRecordId()+"\\\\"+user.getUserId()+"\\\\"+partnerVipMoney.getPetrolMoney()+"\n");
                                 fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
@@ -592,7 +597,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
     public Double mul (Double num1,Double num2){
         BigDecimal mul1 = new BigDecimal(Double.toString(num1));
         BigDecimal mul2 = new BigDecimal(Double.toString(num2));
-        double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
         return mul;
     }
 
