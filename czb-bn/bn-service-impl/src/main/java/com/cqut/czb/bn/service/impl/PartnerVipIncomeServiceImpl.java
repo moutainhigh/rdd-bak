@@ -598,7 +598,8 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
     public Double mul (Double num1,Double num2){
         BigDecimal mul1 = new BigDecimal(Double.toString(num1));
         BigDecimal mul2 = new BigDecimal(Double.toString(num2));
-        double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
+ //       double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_DOWN).doubleValue(); //直接去掉金额小数点两位后面的数
+        double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); //四舍五入
         return mul;
     }
 
