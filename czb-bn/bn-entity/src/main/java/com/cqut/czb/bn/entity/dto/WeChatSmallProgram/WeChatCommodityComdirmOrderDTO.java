@@ -1,5 +1,9 @@
 package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+
 /**
  * @Description
  * @auther nihao
@@ -11,6 +15,17 @@ public class WeChatCommodityComdirmOrderDTO {
     private String shopId;
 
     private String userId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date time;
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 
     public String getUserId() {
         return userId;

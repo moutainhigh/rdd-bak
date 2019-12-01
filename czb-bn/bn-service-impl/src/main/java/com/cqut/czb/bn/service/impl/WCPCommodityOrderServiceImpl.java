@@ -8,6 +8,7 @@ import com.cqut.czb.bn.service.WCPCommodityOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 
 /**
@@ -46,8 +47,15 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
 
     @Override
     public Boolean comfirmCommodityOrder(String userId, WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO) {
-        weChatCommodityComdirmOrderDTO.setUserId(userId);
-        weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userId));
-        return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
+        if(weChatCommodityComdirmOrderDTO.getTime() != null){
+            Long interval =  (System.currentTimeMillis() - weChatCommodityComdirmOrderDTO.getTime().getTime()) / (1000 * 60);
+            if(interval <= 10){
+                weChatCommodityComdirmOrderDTO.setUserId(userId);
+                weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userId));
+                return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
+            }
+            return false;
+        }
+        return false;
     }
 }
