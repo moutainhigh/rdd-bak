@@ -138,6 +138,7 @@ public class WeChatParameterConfig {
         return parameters;
     }
 
+    //微信小程序用
     public static SortedMap<String, Object> getParametersApplet(String userAccount,Double money,String nonceStrTemp, String orgId, String userId, WeChatCommodity weChatCommodity) {
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters=getParametersApplet();
@@ -146,7 +147,7 @@ public class WeChatParameterConfig {
         parameters.put("openid",userAccount);
         BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
         parameters.put("total_fee", totalFee);
-        parameters.put("notify_url", WeChatPayConfig.RechargeVip_url);//通用一个接口（购买和充值）
+        parameters.put("notify_url", WeChatPayConfig.applet_url);//通用一个接口（购买和充值）
         parameters.put("detail","微信小程序支付");//支付的类容备注
         String attach=getAttachApplet(orgId,userId,money,weChatCommodity.getCommodityId());
         parameters.put("attach",attach);

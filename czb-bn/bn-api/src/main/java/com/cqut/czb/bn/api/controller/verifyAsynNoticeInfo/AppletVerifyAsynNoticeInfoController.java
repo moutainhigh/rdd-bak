@@ -27,7 +27,7 @@ public class AppletVerifyAsynNoticeInfoController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/xml");
         try {
-            response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"Dish"));
+            response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"Applet"));
         } catch (IOException e) {
             e.printStackTrace();
         }

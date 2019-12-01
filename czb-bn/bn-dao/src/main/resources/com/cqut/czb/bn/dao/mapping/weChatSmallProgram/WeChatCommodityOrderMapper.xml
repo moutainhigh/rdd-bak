@@ -26,12 +26,13 @@
     <result column="commodity_num" property="commodityNum" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="is_settlement" property="isSettlement" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     order_id, user_id, commodity_id, shop_id, actual_price, third_order, pay_status, 
-    pay_method, remark, electronic_code, order_state, address_id, qrcode, phone, commodity_source,
+    pay_method, remark, electronic_code, order_state, address_id, qrcode, phone, commodity_source, 
     fy_money, cost_price, commodity_type, commmodity_type_id, processing_time, handler, 
-    commodity_num, create_at, update_at
+    commodity_num, create_at, update_at, is_settlement
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -46,22 +47,22 @@
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder" >
     insert into czb_wechat_commodity_order (order_id, user_id, commodity_id, 
       shop_id, actual_price, third_order, 
-      pay_status, pay_method, remark,
+      pay_status, pay_method, remark, 
       electronic_code, order_state, address_id, 
       qrcode, phone, commodity_source, 
       fy_money, cost_price, commodity_type, 
       commmodity_type_id, processing_time, handler, 
-      commodity_num, create_at, update_at
-      )
+      commodity_num, create_at, update_at, 
+      is_settlement)
     values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
       #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, 
-      #{payStatus,jdbcType=INTEGER}, #{payMethod,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+      #{payStatus,jdbcType=INTEGER}, #{payMethod,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{electronicCode,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, #{addressId,jdbcType=VARCHAR}, 
       #{qrcode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commoditySource,jdbcType=VARCHAR}, 
       #{fyMoney,jdbcType=DOUBLE}, #{costPrice,jdbcType=DOUBLE}, #{commodityType,jdbcType=INTEGER}, 
       #{commmodityTypeId,jdbcType=VARCHAR}, #{processingTime,jdbcType=TIMESTAMP}, #{handler,jdbcType=VARCHAR}, 
-      #{commodityNum,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{commodityNum,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{isSettlement,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder" >
     insert into czb_wechat_commodity_order
@@ -138,6 +139,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="isSettlement != null" >
+        is_settlement,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -211,6 +215,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSettlement != null" >
+        #{isSettlement,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -286,6 +293,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="isSettlement != null" >
+        is_settlement = #{isSettlement,jdbcType=INTEGER},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
@@ -313,7 +323,8 @@
       handler = #{handler,jdbcType=VARCHAR},
       commodity_num = #{commodityNum,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      is_settlement = #{isSettlement,jdbcType=INTEGER}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>
