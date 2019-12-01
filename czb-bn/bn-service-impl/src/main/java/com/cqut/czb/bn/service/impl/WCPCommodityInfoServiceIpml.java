@@ -24,22 +24,22 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     @Override
     public List<WCPCommodityOutputDTO> getCommodity(WCPCommodityInputDTO wcpCommodityInputDTO) {
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityByArea(wcpCommodityInputDTO);
-        if(wcpCommodityInputDTO.getLatitude() != null && wcpCommodityInputDTO.getLongitude() != null) {
-            Double longtitude = Double.valueOf(wcpCommodityInputDTO.getLongitude());
-            Double latitude = Double.valueOf(wcpCommodityInputDTO.getLatitude());
-            for (WCPCommodityOutputDTO wcpCommodityOutputDTO : list) {
-                Double wcpLongtitude = Double.valueOf(wcpCommodityOutputDTO.getLongitude());
-                Double wcpLatitude = Double.valueOf(wcpCommodityOutputDTO.getLatitude());
-                Double distance = DistanceMeter.InputDistance(latitude, longtitude, wcpLatitude, wcpLongtitude);
-                //对距离的格式化
-                if(distance < 1000){
-                    wcpCommodityOutputDTO.setDistance(String.valueOf(distance) + "m");
-                }else if(distance > 1000){
-                    distance = distance / 1000;
-                    wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
-                }
-            }
-        }
+//        if(wcpCommodityInputDTO.getLatitude() != null && wcpCommodityInputDTO.getLatitude() != "" && wcpCommodityInputDTO.getLongitude() != "" && wcpCommodityInputDTO.getLongitude() != null) {
+//            Double longtitude = Double.valueOf(wcpCommodityInputDTO.getLongitude());
+//            Double latitude = Double.valueOf(wcpCommodityInputDTO.getLatitude());
+//            for (WCPCommodityOutputDTO wcpCommodityOutputDTO : list) {
+//                Double wcpLongtitude = Double.valueOf(wcpCommodityOutputDTO.getLongitude());
+//                Double wcpLatitude = Double.valueOf(wcpCommodityOutputDTO.getLatitude());
+//                Double distance = DistanceMeter.InputDistance(latitude, longtitude, wcpLatitude, wcpLongtitude);
+//                //对距离的格式化
+//                if(distance < 1000){
+//                    wcpCommodityOutputDTO.setDistance(String.valueOf(distance) + "m");
+//                }else if(distance > 1000){
+//                    distance = distance / 1000;
+//                    wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
+//                }
+//            }
+//        }
         return list;
     }
 
@@ -61,5 +61,10 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
             }
         }
         return wcpCommodityOutputDTO;
+    }
+
+    @Override
+    public String getAreas() {
+        return weChatCommodityMapperExtra.getAreas();
     }
 }
