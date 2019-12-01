@@ -20,4 +20,6 @@ public interface WCPCommodityOrderService {
     WCPCommodityOrderDTO getOneCommodityOrderById(String userId, String orderId);
 
     Boolean comfirmCommodityOrder(String userId, WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO);
+
+    WCPCommodityOrderDTO getOneCommodityOrderByShop(String userId, String orderId);
 }

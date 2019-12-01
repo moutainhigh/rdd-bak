@@ -71,6 +71,11 @@ public class WCPCommodityOrderController {
         return new JSONResult(wcpCommodityOrderService.getOneCommodityOrderById(user.getUserId(), orderId));
     }
 
+    @GetMapping("/getOneCommodityOrderByShop")
+    public JSONResult getOneCommodityOrderByShop(Principal principal, String orderId){
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        return new JSONResult(wcpCommodityOrderService.getOneCommodityOrderByShop(user.getUserId(), orderId));
+    }
     /**
      * 商家在微信小程序上确认订单
      * @param principal

@@ -58,4 +58,9 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
         }
         return false;
     }
+
+    @Override
+    public WCPCommodityOrderDTO getOneCommodityOrderByShop(String userId, String orderId) {
+        return weChatCommodityOrderMapperExtra.selectOneCommodityOrderByShopUserId(userId, orderId);
+    }
 }
