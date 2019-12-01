@@ -11,9 +11,9 @@ public class WCPCommodityInputDTO {
 
     private String area;
 
-    private String longitude;
+    private Double longitude;
 
-    private String latitude;
+    private Double latitude;
 
     private String shopPlace;
 
@@ -28,14 +28,6 @@ public class WCPCommodityInputDTO {
         this.commodityId = commodityId;
     }
 
-    public String getShopPlace() {
-        return shopPlace;
-    }
-
-    public void setShopPlace(String shopPlace) {
-        this.shopPlace = shopPlace;
-    }
-
     public String getArea() {
         return area;
     }
@@ -44,19 +36,28 @@ public class WCPCommodityInputDTO {
         this.area = area;
     }
 
-    public String getLongitude() {
-        return longitude;
-    }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getShopPlace() {
+        return shopPlace;
+    }
+
+    public void setShopPlace(String shopPlace) {
+        this.shopPlace = shopPlace;
     }
 }

@@ -3,9 +3,11 @@ package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface WeChatCommodityMapperExtra {
     /**
      * 用于后台管理系统
@@ -33,4 +35,10 @@ public interface WeChatCommodityMapperExtra {
     Integer insertCommodity(WxCommodityDTO wxCommodityDTO);
 
     Integer updateCommodity(WxCommodityDTO wxCommodityDTO);
+
+    /**
+     * 获取开启服务地区列表
+     * @return
+     */
+    String getAreas();
 }
