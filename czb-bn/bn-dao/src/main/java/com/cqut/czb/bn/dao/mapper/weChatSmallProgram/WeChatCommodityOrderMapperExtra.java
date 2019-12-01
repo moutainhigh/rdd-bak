@@ -84,5 +84,5 @@ public interface WeChatCommodityOrderMapperExtra {
      * @param orderId
      * @return
      */
-    WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(String userId, String orderId);
+    WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(@Param("userId") String userId, @Param("orderId")String orderId);
 }
