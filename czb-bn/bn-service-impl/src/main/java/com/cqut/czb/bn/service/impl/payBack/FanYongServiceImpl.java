@@ -522,4 +522,5 @@ public class FanYongServiceImpl implements FanYongService {
         return mul;
     }
 
+
 }

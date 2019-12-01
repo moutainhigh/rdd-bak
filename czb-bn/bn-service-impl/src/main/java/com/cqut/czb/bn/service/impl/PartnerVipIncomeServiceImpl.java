@@ -480,6 +480,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             Double petrolProportion = add(petrolProportion1, petrolProportion2);
             Integer totalCount = 0;   //下级新增的Vip数
             if (partnerDTO.getPartner() == 2) {
+
                 Double proportion = add(Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent()), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent()));
                 List<PartnerVipMoney> firstPartnerSubMoneyVip = partnerMapperExtra.selectAllFirstPartnerSubVip(partnerDTO);  //先算出事业合伙人直属下级的消费，利息12.5%+7.5%
                 bufferWritter.write("纯一级Vip返佣:"+firstPartnerSubMoneyVip.size()+"\n");
