@@ -1,14 +1,12 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WCPCommodityOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -71,5 +69,22 @@ public class WCPCommodityOrderController {
     public JSONResult getOneCommodityOrderById(Principal principal, String orderId){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         return new JSONResult(wcpCommodityOrderService.getOneCommodityOrderById(user.getUserId(), orderId));
+    }
+
+    @GetMapping("/getOneCommodityOrderByShop")
+    public JSONResult getOneCommodityOrderByShop(Principal principal, String orderId){
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        return new JSONResult(wcpCommodityOrderService.getOneCommodityOrderByShop(user.getUserId(), orderId));
+    }
+    /**
+     * 商家在微信小程序上确认订单
+     * @param principal
+     * @param weChatCommodityComdirmOrderDTO
+     * @return
+     */
+    @PostMapping("/comfirmWCPCommodityOrder")
+    public JSONResult comfirmWCPCommodityOrder(Principal principal, @RequestBody WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO){
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        return new JSONResult(wcpCommodityOrderService.comfirmCommodityOrder(user.getUserId(), weChatCommodityComdirmOrderDTO));
     }
 }

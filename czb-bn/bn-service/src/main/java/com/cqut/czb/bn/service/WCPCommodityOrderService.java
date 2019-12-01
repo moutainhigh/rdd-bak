@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface WCPCommodityOrderService {
     Boolean comfirmDeliveryState(String userId, String orderId);
 
     WCPCommodityOrderDTO getOneCommodityOrderById(String userId, String orderId);
+
+    Boolean comfirmCommodityOrder(String userId, WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO);
+
+    WCPCommodityOrderDTO getOneCommodityOrderByShop(String userId, String orderId);
 }

@@ -51,6 +51,8 @@ public class WeChatCommodityOrder {
 
     private Date updateAt;
 
+    private Integer isSettlement;
+
     public String getOrderId() {
         return orderId;
     }
@@ -241,5 +243,13 @@ public class WeChatCommodityOrder {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(Integer isSettlement) {
+        this.isSettlement = isSettlement;
     }
 }

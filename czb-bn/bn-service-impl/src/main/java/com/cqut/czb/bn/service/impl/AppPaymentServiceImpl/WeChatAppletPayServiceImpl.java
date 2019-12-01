@@ -38,6 +38,44 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
     @Autowired
     WeChatCommodityOrderMapper weChatCommodityOrderMapper;
 
+    public Boolean inputOrder(String orgId,WeChatCommodity weChatCommodity,User user, PayInputDTO payInputDTO){
+        //插入预支付订单
+        WeChatCommodityOrder weChatCommodityOrder=new WeChatCommodityOrder();
+        weChatCommodityOrder.setOrderId(orgId);
+        weChatCommodityOrder.setUserId(user.getUserId());
+        weChatCommodityOrder.setCommodityId(weChatCommodity.getCommodityId());
+        weChatCommodityOrder.setShopId(weChatCommodity.getShopId());
+        //可能涉及到vip
+        weChatCommodityOrder.setActualPrice(weChatCommodity.getSalePrice());
+        weChatCommodityOrder.setPayStatus(0);
+        weChatCommodityOrder.setPayMethod(2);
+        weChatCommodityOrder.setRemark(payInputDTO.getRemark());
+        //需要生成电子码
+        weChatCommodityOrder.setElectronicCode("");
+        //0：待支付  1：支付完成待处理 2：订单完成
+        weChatCommodityOrder.setOrderState(0);
+        //前台给地址id
+        weChatCommodityOrder.setAddressId(payInputDTO.getAddressId());
+        //插入二维码
+        weChatCommodityOrder.setQrcode("二维码");
+        weChatCommodityOrder.setPhone(payInputDTO.getUserPhone());
+        //来源
+        weChatCommodityOrder.setCommoditySource("本地商家");
+        //返佣金额
+        weChatCommodityOrder.setFyMoney(weChatCommodity.getFyMoney()*Integer.valueOf(payInputDTO.getCommodityNum()));
+        //成本价格
+        weChatCommodityOrder.setCostPrice(weChatCommodity.getCostPrice()*Integer.valueOf(payInputDTO.getCommodityNum()));
+        //商品类型——没确定
+        weChatCommodityOrder.setCommodityType(1);
+        //商品类目id——需要查出来
+        weChatCommodityOrder.setCommmodityTypeId("sdfj");
+        //商品类型
+        weChatCommodityOrder.setCommmodityTypeId(weChatCommodity.getCommmodityTypeId());
+        weChatCommodityOrder.setCreateAt(new Date());
+        weChatCommodityOrder.setCommodityNum(Integer.valueOf(payInputDTO.getCommodityNum()));
+        return weChatCommodityOrderMapper.insertSelective(weChatCommodityOrder)>0;
+    }
+
     @Override
     public JSONObject WeChatAppletBuyCommodity(User user, PayInputDTO payInputDTO) {
         //查出商品信息
@@ -50,41 +88,12 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
          */
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String nonceStrTemp = WeChatUtils.getRandomStr();
-        double money= BigDecimal.valueOf(weChatCommodity.getCostPrice()).subtract(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).doubleValue();
+        double money= BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).doubleValue();
 
-        //插入预支付订单
-        WeChatCommodityOrder weChatCommodityOrder=new WeChatCommodityOrder();
-
-        weChatCommodityOrder.setOrderId(orgId);
-        weChatCommodityOrder.setUserId("254810436006489204");
-        weChatCommodityOrder.setCommodityId(weChatCommodity.getCommodityId());
-        weChatCommodityOrder.setShopId(weChatCommodity.getShopId());
-        weChatCommodityOrder.setActualPrice(weChatCommodity.getSalePrice());
-        weChatCommodityOrder.setPayStatus(0);
-        weChatCommodityOrder.setPayMethod(2);
-        weChatCommodityOrder.setElectronicCode("");//电子码
-        //0：待支付  1：支付完成待处理 2：订单完成
-        weChatCommodityOrder.setOrderState(0);
-        //判断是否会邮寄
-        if(weChatCommodity.getTakeWay()==1){
-            Address address= addressMapperExtra.getDefaultAddress("254810436006489204");
-            weChatCommodityOrder.setAddressId(address.getAddressId());
-        }
-//        //查出商店信息
-//        Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
-        weChatCommodityOrder.setPhone(payInputDTO.getUserPhone());
-        //需要计算
-        weChatCommodityOrder.setFyMoney(weChatCommodity.getFyMoney());
-        weChatCommodityOrder.setCostPrice(weChatCommodity.getCostPrice()*Integer.valueOf(payInputDTO.getCommodityNum()));
-        //商品类型
-        //        weChatCommodityOrder.setCommodityType();
-        weChatCommodityOrder.setCommmodityTypeId(weChatCommodity.getCommmodityTypeId());
-        weChatCommodityOrder.setCreateAt(new Date());
-        weChatCommodityOrder.setCommodityNum(Integer.valueOf(payInputDTO.getCommodityNum()));
-        weChatCommodityOrderMapper.insertSelective(weChatCommodityOrder);
-
+        //插入订单
+        inputOrder( orgId, weChatCommodity, user,  payInputDTO);
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersApplet(user.getUserAccount(),money,nonceStrTemp,orgId,"254810436006489204",weChatCommodity);
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersApplet(user.getUserAccount(),money,nonceStrTemp,orgId,user.getUserId(),weChatCommodity);
         return WeChatParameterConfig.getSign( parameters, nonceStrTemp);
     }
 }

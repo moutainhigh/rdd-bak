@@ -28,4 +28,6 @@ public interface ShopMapperExtra {
     OrderPageShopDTO selectOrderShopInfo(@Param("shopId") String shopId);
 
     List<String> selectImg(@Param("shopId") String shopId);
+
+    String selectShopIdByUserId(String userId);
 }

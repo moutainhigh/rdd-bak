@@ -4,12 +4,14 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.dao.mapper.food.DishOrderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -82,6 +84,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     PartnerVipIncomeService partnerVipIncomeService;
 
+    @Autowired
+    WeChatCommodityOrderMapper weChatCommodityOrderMapper;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
@@ -134,6 +139,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             result.put("success", addCarWashOrderWeChat(restmap));
         }else if(consumptionType.equals("Dish")){
             result.put("success", addBuyDishOrderWeChat(restmap));
+        }else if(consumptionType.equals("Applet")){
+            result.put("success", addAppletOrderWeChat(restmap));
         }else {
             result.put("fail",0);
         }
@@ -199,6 +206,56 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务,5为点餐
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "5", 1);
+
+        return 1;
+    }
+
+
+    /**
+     * 小程序（微信）
+     */
+    public int addAppletOrderWeChat(Map<String, Object> restmap) {
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        //商户订单号
+        String out_trade_no = restmap.get("out_trade_no").toString();
+        //微信交易订单号
+        String thirdOrderId = restmap.get("transaction_id").toString();
+        String[] temp;
+        String orgId = "";
+        double money = Double.valueOf(restmap.get("total_fee").toString());
+        money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+        System.out.println("微信小程序支付:"+money);
+        String ownerId = "";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {
+                continue;
+            }
+            //商家订单
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+            }
+            //用户id
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+            }
+        }
+
+        //更改用户订单
+        WeChatCommodityOrder order=new WeChatCommodityOrder();
+        order.setOrderId(orgId);
+        order.setThirdOrder(thirdOrderId);
+        order.setUpdateAt(new Date());
+        order.setPayStatus(1);
+        int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
+        System.out.println("更改用户订单："+(update>0));
+
+        //查询是否为首次消费
+        dataProcessService.isHaveConsumption(ownerId);
+
+        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务，5为点餐,6小程序购物
+        //插入消费记录
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
 
         return 1;
     }
