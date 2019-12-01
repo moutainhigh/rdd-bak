@@ -11,11 +11,11 @@ public class WCPCommodityInputDTO {
 
     private String area;
 
-    private String longitude;
+    private Double longitude;
 
     private Double latitude;
 
-    private Double shopPlace;
+    private String shopPlace;
 
     @NotNull(message = "商品ID不能为空")
     private String commodityId;
@@ -36,13 +36,6 @@ public class WCPCommodityInputDTO {
         this.area = area;
     }
 
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
 
     public Double getLatitude() {
         return latitude;
@@ -52,11 +45,19 @@ public class WCPCommodityInputDTO {
         this.latitude = latitude;
     }
 
-    public Double getShopPlace() {
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getShopPlace() {
         return shopPlace;
     }
 
-    public void setShopPlace(Double shopPlace) {
+    public void setShopPlace(String shopPlace) {
         this.shopPlace = shopPlace;
     }
 }
