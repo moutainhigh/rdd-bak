@@ -111,7 +111,7 @@
   </select>
 
     <select id="selectOneCommodityOrderByShopUserId" resultMap="OrderDetail">
-            SELECT
+    SELECT
       czb_wechat_commodity_order.order_id orderId,
       czb_wechat_commodity.commodity_title commodityTitle,
       czb_wechat_commodity.commodity_info commodityInfo,
@@ -189,7 +189,7 @@
   <update id="updateCommodityDeliveryState">
     UPDATE czb_wechat_goods_delivery_records,
       czb_wechat_commodity_order
-    SET delivery_state = 2
+    SET delivery_state = 2, czb_wechat_commodity_order.order_state = 1
     WHERE
 	    czb_wechat_goods_delivery_records.order_id = czb_wechat_commodity_order.order_id
 	AND czb_wechat_goods_delivery_records.order_id = #{orderId, jdbcType = VARCHAR}
