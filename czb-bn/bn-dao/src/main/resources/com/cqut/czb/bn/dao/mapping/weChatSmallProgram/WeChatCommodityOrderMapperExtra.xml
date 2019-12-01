@@ -56,6 +56,7 @@
 	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
     WHERE
       czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
+      AND order_state = 0
       AND pay_status = 1
     ORDER BY
       czb_wechat_commodity_order.create_at DESC
@@ -156,6 +157,16 @@
 	AND czb_wechat_goods_delivery_records.order_id = #{orderId, jdbcType = VARCHAR}
 	AND czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
 	AND czb_wechat_goods_delivery_records.delivery_state = 1
+  </update>
+
+  <update id="updateCommodityOrderState" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO">
+    UPDATE czb_wechat_commodity_order
+    SET order_state = 1
+    WHERE
+        order_id = #{orderId, jdbcType = VARCHAR}
+        AND shop_id = #{shopId, jdbcType = VARCHAR}
+        AND pay_status = 1
+        AND order_state = 0
   </update>
 
   <!--分页查询订单（后台管理系统）-->
