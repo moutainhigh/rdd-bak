@@ -4,6 +4,7 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.wechatAppletService.WxCommodityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +66,19 @@ public class wxCommodityManageController {
         return new JSONResult(wxCommodityManageService.selectAllCategory());
     }
 
-//    @PostMapping("/haltSales")
-//    public JSONResult haltSalesById(String ids){
-//
-//    }
+    @GetMapping("/editCommodity")
+    public JSONResult editCommodity(WeChatCommodity weChatCommodity){
+        return new JSONResult(wxCommodityManageService.editWeChatCommodity(weChatCommodity));
+    }
+
+    /**
+     * 后台管理系统 开停售功能
+     * @param ids
+     * @param type 1:开售 2:停售
+     * @return
+     */
+    @PostMapping("/haltSales")
+    public JSONResult haltSalesById(String ids, Integer type){
+        return new JSONResult(wxCommodityManageService.haltOrOnSales(ids, type));
+    }
 }

@@ -219,4 +219,50 @@
       where
 		first_level_partner = #{userId}
     </select>
+
+    <select id="selectFirstUser" resultType="com.cqut.czb.bn.entity.entity.UserRole">
+        SELECT
+            user_id as userId,
+            CASE
+        WHEN #{partner} = 2 THEN
+            '16116086190415782'
+        ELSE
+            '16119473660719098'
+        end
+        as roleId
+        FROM
+            czb_user
+        WHERE
+            partner = #{partner}
+    </select>
+
+    <insert id="insertPermission" parameterType="java.util.List">
+        insert into czb_user_role
+        (
+        id,
+        role_id,
+        user_id
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.roleId},
+            #{item.userId}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateLoginPc" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" open="" close="" separator=";">
+            UPDATE
+            czb_user
+            <set>
+                is_login_pc = 1
+            </set>
+            <where>
+                user_id = #{item.userId}
+            </where>
+        </foreach>
+    </update>
 </mapper>
