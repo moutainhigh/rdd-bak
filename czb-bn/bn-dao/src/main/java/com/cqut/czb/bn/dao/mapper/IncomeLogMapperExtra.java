@@ -23,5 +23,7 @@ public interface IncomeLogMapperExtra {
 
     List<MyIncomeLogDTO>  selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO);
 
+    List<MyIncomeLogDTO>  selectIncomeLog2(MyIncomeLogDTO myIncomeLogDTO);
+
     Page<IncomeLog> getLogData(IncomeLog incomeLog);
 }

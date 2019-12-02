@@ -269,7 +269,35 @@
     withdraw_name as withdrawName,
 	commission_level as commissionLevel,
 	commission_got_user as commissionGotUser,
-	commission_source_user as commissionSourceUser
+	commission_source_user as commissionSourceUser,
+	czb_user.user_account as userAccount,
+	czb_user.user_name as userName
+    from
+    czb_income_log as i,
+    czb_user_income_info as u,
+    czb_user
+    WHERE
+    czb_user.user_id = commission_source_user AND
+    u.user_id = #{userId,jdbcType=VARCHAR} AND
+    i.info_id=u.info_id AND
+    i.type=#{type,jdbcType=INTEGER} and
+    i.amount!=0 AND (i.is_settlement = 0 or i.is_settlement is null)
+    ORDER BY i.create_at DESC
+  </select>
+
+  <select id="selectIncomeLog2" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO" >
+    SELECT
+    amount,
+    before_change_income as beforeChangeIncome,
+    remark ,
+    i.update_at as updateAt,
+    i.create_at as createAt,
+    withdraw_to as withdrawTo,
+    withdraw_account as withdrawAccount,
+    withdraw_name as withdrawName,
+    commission_level as commissionLevel,
+    commission_got_user as commissionGotUser,
+    commission_source_user as commissionSourceUser
     from
     czb_income_log as i,
     czb_user_income_info as u
@@ -279,7 +307,8 @@
     i.type=#{type,jdbcType=INTEGER} and
     i.amount!=0 AND (i.is_settlement = 0 or i.is_settlement is null)
     ORDER BY i.create_at DESC
-  </select>
+</select>
+
 
   <!--后台管理-提现记录-->
   <select id="getLogData" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" resultType="com.cqut.czb.bn.entity.entity.IncomeLog">

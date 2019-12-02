@@ -83,4 +83,22 @@
     role_id as roleId, role_name as roleName
     from czb_role
   </select>
+
+  <select id="getRoleToPage" resultType="com.cqut.czb.bn.entity.entity.Role">
+    SELECT
+			cr.role_name roleName
+		FROM
+			(
+				SELECT
+					cur.role_id,
+					cur.create_at
+				FROM
+					czb_user_role cur
+				WHERE
+					user_id = #{userId}
+				ORDER BY
+					cur.create_at
+			) result
+		LEFT JOIN czb_role cr ON cr.role_id = result.role_id
+  </select>
 </mapper>

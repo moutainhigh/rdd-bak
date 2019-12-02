@@ -4,6 +4,8 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -22,4 +24,6 @@ public interface IRoleService {
     PageInfo<RoleDTO> selectRole(RoleInputDTO roleInputDTO, PageDTO pageDTO);
 
     String selectRoleId(String userId);
+
+    JSONResult getRoleToPage(User user);
 }
