@@ -54,10 +54,9 @@
             cff.group_code,
             cf.save_path
         FROM
-            czb_wechat_commodity cwc
-        LEFT JOIN czb_file_function cff ON cwc.commodity_img_id = cff.local_id
-        LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
-        WHERE cwc.commodity_img_id = #{commodity_img_id,jdbcType=VARCHAR}
+            czb_file_function cff
+	    LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
+        WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
