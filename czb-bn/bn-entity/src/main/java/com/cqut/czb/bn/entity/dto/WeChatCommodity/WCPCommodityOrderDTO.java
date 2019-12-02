@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.WeChatCommodity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +74,7 @@ public class WCPCommodityOrderDTO {
 
     private String commodityImgId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
     private Date createAt;
 
     private String shopPhone;

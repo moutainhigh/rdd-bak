@@ -89,7 +89,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
         WCPTabbarInfo tabbarMine = new WCPTabbarInfo();
         tabbarMine.setUrl("mine");
         tabbarMine.setImgNormal("/static/mine.png");
-        tabbarMine.setImgClick("/static/mine.png");
+        tabbarMine.setImgClick("/static/mine_cilck.png");
         tabbarMine.setText("我的");
         tabbars.add(tabbarHomePage);
         tabbars.add(tabbarMine);
