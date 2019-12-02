@@ -46,7 +46,7 @@ public class GeneralPartnerUserServiceImpl implements GeneralPartnerUserService 
             account = account.trim();
         }
 
-        if(!"".equals(account) && null != account){
+        if(!"".equals(superiorAccount) && null != superiorAccount){
             superiorAccount = superiorAccount.trim();
         }
 

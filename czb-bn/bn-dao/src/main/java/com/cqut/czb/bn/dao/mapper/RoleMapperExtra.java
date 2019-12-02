@@ -2,7 +2,9 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
+import com.cqut.czb.bn.entity.entity.Menu;
 import com.cqut.czb.bn.entity.entity.Role;
+import com.cqut.czb.bn.entity.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +26,6 @@ public interface RoleMapperExtra {
     List<Role> selectAllRole();
 
     String selectRoleIdByRoleName(String roleName);
+
+    List<Role> getRoleToPage(User user);
 }

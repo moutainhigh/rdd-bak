@@ -11,4 +11,6 @@ public interface CareerStatisticsService {
     JSONResult getOrdinaryDirectNum(int type,String userId);
 
     JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers);
+
+    JSONResult initPermission();
 }

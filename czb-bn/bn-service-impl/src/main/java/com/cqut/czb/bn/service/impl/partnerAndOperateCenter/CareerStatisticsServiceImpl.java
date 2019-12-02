@@ -4,9 +4,11 @@ import com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.CareerStatisticsMapper
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectDTO;
+import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -215,5 +217,27 @@ public class CareerStatisticsServiceImpl implements CareerStatisticsService {
     public JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         CareerStatisticsDTO numberOfDevelopment = mapperExtra.getNumberOfDevelopment(statisticsDevelopmentNumbers);
         return new JSONResult("发展人数数据查询成功", 200, numberOfDevelopment);
+    }
+
+    @Override
+    public JSONResult initPermission() {
+        List<UserRole> firsts = mapperExtra.selectFirstUser(2);
+
+        for(UserRole data: firsts){
+            data.setId(StringUtil.createId());
+        }
+        mapperExtra.updateLoginPc(firsts);
+        mapperExtra.insertPermission(firsts);
+
+        List<UserRole> seconds = mapperExtra.selectFirstUser(1);
+
+        for(UserRole data: seconds){
+            data.setId(StringUtil.createId());
+        }
+
+        mapperExtra.updateLoginPc(seconds);
+        mapperExtra.insertPermission(seconds);
+
+        return new JSONResult("true");
     }
 }
