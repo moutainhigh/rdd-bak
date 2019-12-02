@@ -311,6 +311,7 @@
       <result column="amount" property="amount" jdbcType="DOUBLE" />
       <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
       <result column="is_vip" property="isVip" jdbcType="INTEGER" />
+      <result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR" />
     <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">
@@ -320,7 +321,8 @@
 	user_name,
 	sum( amount ) AS 'amount',
 	is_vip,
-	cu.create_at create_at
+	cu.create_at create_at,
+	avatarUrl avatarUrl
     FROM
         (
         SELECT
