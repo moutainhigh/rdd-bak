@@ -30,12 +30,12 @@ public class SmallProgramOrderManageController {
     SmallProgramOrderManageService orderManageService;
 
     @PostMapping("/getTableList")
-    public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(WeChatCommodityOrderDTO weChatCommodityOrderDTO, PageDTO page) {
+    public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(@RequestBody WeChatCommodityOrderDTO weChatCommodityOrderDTO, PageDTO page) {
         return orderManageService.getTableList(weChatCommodityOrderDTO, page);
     }
 
     @PostMapping("/obsoleteOrder")
-    public JSONResult<Boolean> obsoleteOrder(String orderId) {
+    public JSONResult<Boolean> obsoleteOrder(@RequestBody String orderId) {
         return orderManageService.obsoleteOrder(orderId);
     }
 
@@ -49,7 +49,7 @@ public class SmallProgramOrderManageController {
     }
 
     @PostMapping("/getOrderProcessInfo")
-    public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(String orderId) {
+    public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(@RequestBody String orderId) {
         return orderManageService.getOrderProcessInfo(orderId);
     }
 

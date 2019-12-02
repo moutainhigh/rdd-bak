@@ -48,6 +48,18 @@ public class WCPCommodityOrderController {
     }
 
     /**
+     * 获取商家所有小程序订单
+     * @param principal
+     * @param orderState 0 未确认 1 已确认
+     * @return
+     */
+    @GetMapping("/getAllCommodityOrderByLeader")
+    public JSONResult getAllCommodityOrderByLeader(Principal principal,Integer orderState){
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        return new JSONResult(wcpCommodityOrderService.getAllCommodityOrderByLeader(user.getUserId(), orderState));
+    }
+
+    /**
      * 确认收货(小程序寄送订单)
      * @param principal
      * @param orderId
