@@ -577,12 +577,13 @@
         SELECT
         cir.user_id AS userId,
         MIN(cir.create_at) AS createAt,
-        user_account AS userAccount,
-        partner AS partner
+        cu.user_account AS userAccount,
+        cu.partner AS partner
         FROM
         czb_indicator_record cir
         LEFT JOIN czb_user cu ON cir.user_id = cu.old_superior
-        WHERE partner!=0 and  cu.user_id = #{userId,jdbcType=VARCHAR}
+        LEFT JOIN czb_user cu1 on cu.user_id = cu1.superior_user
+        WHERE cu.partner!=0 and  cu1.user_id = #{userId,jdbcType=VARCHAR}
         GROUP BY
         cir.user_id
     </select>
@@ -725,7 +726,7 @@
         amount AS vipConsumption
         FROM
         czb_vip_recharge_records cvrr
-        LEFT JOIN czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at>='2019-10-11' AND cvrr.create_at>=#{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at>='2019-11-03'  AND cvrr.create_at>=#{createAt,jdbcType=TIMESTAMP}
         WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cvrr.create_at DESC
     </select>
@@ -738,7 +739,7 @@
         turnover_amount AS petrolMoney
         FROM
         czb_petrol_sales_records cpsr
-        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
+        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at>='2019-11-03' AND cpsr.state = 1
         WHERE (second_level_partner IS NULL OR second_level_partner = '') AND first_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cpsr.create_at DESC
     </select>
@@ -751,7 +752,7 @@
         amount AS vipConsumption
         FROM
         czb_vip_recharge_records cvrr
-        LEFT JOIN czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at>='2019-10-11' AND  cvrr.create_at> #{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at>='2019-11-03' AND   cvrr.create_at> #{createAt,jdbcType=TIMESTAMP}
         WHERE
         second_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cvrr.create_at DESC
@@ -766,7 +767,7 @@
         turnover_amount AS petrolMoney
         FROM
         czb_petrol_sales_records cpsr
-        LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1 AND cpsr.create_at>#{createAt,jdbcType=TIMESTAMP}
+        LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at>='2019-11-03' AND cpsr.state = 1 AND cpsr.create_at>#{createAt,jdbcType=TIMESTAMP}
         WHERE
         second_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cpsr.create_at DESC
@@ -781,7 +782,7 @@
         cvrr.create_at as createAt
         FROM
         czb_vip_recharge_records cvrr
-        LEFT JOIN czb_user cu ON cvrr.user_id = cu.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
+        LEFT JOIN czb_user cu ON cvrr.user_id = cu.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}AND cvrr.create_at>='2019-11-03'
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cvrr.create_at DESC
     </select>
@@ -791,10 +792,11 @@
         cpsr.record_id AS recordId,
         cpsr.buyer_id AS userId,
         first_level_partner AS partnerId,
-        turnover_amount AS petrolMoney
+        turnover_amount AS petrolMoney,
+        cpsr.create_at as createAt
         FROM
         czb_petrol_sales_records cpsr
-        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
+        LEFT JOIN czb_user cu ON cpsr.buyer_id = cu.user_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-11-03' AND cpsr.state = 1
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cpsr.create_at DESC
     </select>
@@ -807,7 +809,7 @@
         amount AS vipConsumption
         FROM
         czb_vip_recharge_records cvrr
-        LEFT JOIN  czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-10-11'
+        LEFT JOIN  czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-11-03'
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cvrr.create_at DESC
     </select>
@@ -820,11 +822,10 @@
         turnover_amount AS petrolMoney
         FROM
         czb_petrol_sales_records cpsr
-        LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP} AND cpsr.create_at>='2019-10-11' AND cpsr.state = 1
+        LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at >= #{createAt,jdbcType=TIMESTAMP}AND cpsr.create_at>='2019-11-03' AND cpsr.state = 1
         WHERE second_level_partner = #{subUserId,jdbcType=VARCHAR} AND first_level_partner = #{userId,jdbcType=VARCHAR}
         ORDER BY cpsr.create_at DESC
     </select>
-
 
 
 </mapper>

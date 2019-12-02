@@ -2,14 +2,15 @@ package com.cqut.czb.bn.service.impl.AppPaymentServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.dao.mapper.AddressMapperExtra;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.ShopMapper;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatParameterConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
-import com.cqut.czb.bn.entity.entity.Address;
-import com.cqut.czb.bn.entity.entity.Shop;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
@@ -38,6 +39,12 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
     @Autowired
     WeChatCommodityOrderMapper weChatCommodityOrderMapper;
 
+    @Autowired
+    DictMapperExtra dictMapperExtra;
+
+    @Autowired
+    CategoryMapperExtra categoryMapperExtra;
+
     public Boolean inputOrder(String orgId,WeChatCommodity weChatCommodity,User user, PayInputDTO payInputDTO){
         //插入预支付订单
         WeChatCommodityOrder weChatCommodityOrder=new WeChatCommodityOrder();
@@ -45,30 +52,47 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setUserId(user.getUserId());
         weChatCommodityOrder.setCommodityId(weChatCommodity.getCommodityId());
         weChatCommodityOrder.setShopId(weChatCommodity.getShopId());
-        //可能涉及到vip
-        weChatCommodityOrder.setActualPrice(weChatCommodity.getSalePrice());
+
+        weChatCommodityOrder.setActualPrice(BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).doubleValue());
+
         weChatCommodityOrder.setPayStatus(0);
         weChatCommodityOrder.setPayMethod(2);
         weChatCommodityOrder.setRemark(payInputDTO.getRemark());
+
         //需要生成电子码
-        weChatCommodityOrder.setElectronicCode("");
+        weChatCommodityOrder.setElectronicCode(weChatCommodity.getShopId()+orgId+(new Date()));
+
         //0：待支付  1：支付完成待处理 2：订单完成
         weChatCommodityOrder.setOrderState(0);
+
         //前台给地址id
         weChatCommodityOrder.setAddressId(payInputDTO.getAddressId());
+
         //插入二维码
-        weChatCommodityOrder.setQrcode("二维码");
+        weChatCommodityOrder.setQrcode(weChatCommodity.getShopId()+orgId+(new Date()));
+
         weChatCommodityOrder.setPhone(payInputDTO.getUserPhone());
         //来源
         weChatCommodityOrder.setCommoditySource("本地商家");
+
         //返佣金额
-        weChatCommodityOrder.setFyMoney(weChatCommodity.getFyMoney()*Integer.valueOf(payInputDTO.getCommodityNum()));
+        Dict dict1=dictMapperExtra.selectDictByName("sp_fy1");
+        Dict dict2=dictMapperExtra.selectDictByName("sp_fy2");
+        double money=BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).multiply(BigDecimal.valueOf(Integer.valueOf(dict1.getContent())).add(BigDecimal.valueOf(Integer.valueOf(dict2.getContent())))).doubleValue();
+        weChatCommodityOrder.setFyMoney(money);
+
         //成本价格
         weChatCommodityOrder.setCostPrice(weChatCommodity.getCostPrice()*Integer.valueOf(payInputDTO.getCommodityNum()));
-        //商品类型——没确定
-        weChatCommodityOrder.setCommodityType(1);
-        //商品类目id——需要查出来
-        weChatCommodityOrder.setCommmodityTypeId("sdfj");
+
+        //商品类型 1:寄送 2：核销
+        if(weChatCommodity.getTakeWay()==1){
+            weChatCommodityOrder.setCommodityType(1);
+        }else if(weChatCommodity.getTakeWay()==2){
+            weChatCommodityOrder.setCommodityType(2);
+        }
+
+        //商品类目id
+        weChatCommodityOrder.setCommmodityTypeId(weChatCommodity.getCommmodityTypeId());
         //商品类型
         weChatCommodityOrder.setCommmodityTypeId(weChatCommodity.getCommmodityTypeId());
         weChatCommodityOrder.setCreateAt(new Date());

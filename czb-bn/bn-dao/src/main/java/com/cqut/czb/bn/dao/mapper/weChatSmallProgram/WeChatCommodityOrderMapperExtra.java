@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
@@ -69,4 +70,21 @@ public interface WeChatCommodityOrderMapperExtra {
      * @return
      */
     int dealOrderSend(WeChatCommodityOrderProcess input);
+
+    /**
+     * 商家在微信小程序上确认订单
+     * @param weChatCommodityComdirmOrderDTO
+     * @return
+     */
+    Integer updateCommodityOrderState(WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO);
+
+    /**
+     * 商家获取单个订单信息（微信小程序）
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(@Param("userId") String userId, @Param("orderId")String orderId);
+
+    List<WCPCommodityOrderDTO> selectAllCommodityOrderByLeaderId(@Param("userId")String userId, @Param("orderState")Integer orderState);
 }

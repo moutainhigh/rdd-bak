@@ -385,6 +385,7 @@ public class FanYongServiceImpl implements FanYongService {
         }
         incomeLog.setInfoId(uuid);
         incomeLog.setSouseId(orgId);//变更来源
+        incomeLog.setIsSettlement(0);  //不需要结算
         incomeLog.setRemark(FyRemark);
         System.out.println("返佣说明" + FyRemark);
         boolean insertIncomeLog = incomeLogMapperExtra.insert(incomeLog) > 0;
@@ -421,24 +422,25 @@ public class FanYongServiceImpl implements FanYongService {
             level = 1;
             if (user1.getPartner()==2){
                 if (type == 2) {
-                    FyMoney = (BigDecimal.valueOf(proportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    FyMoney = mul(proportion,money);
                     //ce
                     VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
                     create = vipRechargeRecords.getCreateAt();
                 } else if (type == 1) {
-                    FyMoney = (BigDecimal.valueOf(petrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    FyMoney = mul(petrolProportion,money);
                     //ce
                     PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
                     create = petrolSalesRecords.getCreateAt();
                 }
             }else {
                 if (type == 2) {
-                    FyMoney = (BigDecimal.valueOf(firstProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    FyMoney = mul(firstProportion,money);
                     //ce
                     VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
                     create = vipRechargeRecords.getCreateAt();
                 } else if (type == 1) {
                     FyMoney = (BigDecimal.valueOf(firstPetrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    FyMoney = mul(firstPetrolProportion,money);
                     //ce
                     PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
                     create = petrolSalesRecords.getCreateAt();
@@ -449,12 +451,12 @@ public class FanYongServiceImpl implements FanYongService {
         if (num == 2) {
                 level = 2;
                 if (type == 1) {
-                    FyMoney = (BigDecimal.valueOf(secondPetrolProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    FyMoney = mul(secondPetrolProportion,money);
                     //ce
                     PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
                     create = petrolSalesRecords.getCreateAt();
                 } else if (type == 2) {
-                    FyMoney = (BigDecimal.valueOf(secondProportion)).multiply(BigDecimal.valueOf(money)).doubleValue();
+                    FyMoney = mul(secondProportion,money);
                     //ce
                     VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
                     create = vipRechargeRecords.getCreateAt();
@@ -512,5 +514,13 @@ public class FanYongServiceImpl implements FanYongService {
             return false;
         }
     }
+
+    public Double mul (Double num1,Double num2){
+        BigDecimal mul1 = new BigDecimal(Double.toString(num1));
+        BigDecimal mul2 = new BigDecimal(Double.toString(num2));
+        double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        return mul;
+    }
+
 
 }

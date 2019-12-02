@@ -55,6 +55,25 @@ public class OrdinaryStatisticsDTO {
     //第三个间推发展人数
     private Integer thirdIndirectNumber = 0;
 
+    private BigDecimal vip;
+
+    private BigDecimal petrol;
+
+    public BigDecimal getVip() {
+        return vip;
+    }
+
+    public void setVip(BigDecimal vip) {
+        this.vip = vip;
+    }
+
+    public BigDecimal getPetrol() {
+        return petrol;
+    }
+
+    public void setPetrol(BigDecimal petrol) {
+        this.petrol = petrol;
+    }
 
     public Integer getOrdinaryUserCount() {
         return ordinaryUserCount;

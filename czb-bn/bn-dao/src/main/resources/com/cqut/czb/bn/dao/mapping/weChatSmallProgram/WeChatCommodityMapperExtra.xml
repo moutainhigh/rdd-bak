@@ -87,6 +87,12 @@
             </if>
         </where>
     </select>
+    <!--获取提供服务的地区列表-->
+    <select id="getAreas" resultType="java.lang.String">
+        select content
+        from czb_dict
+        where name='bussiness_area'
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_wechat_commodity
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
@@ -759,5 +765,11 @@
             </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateIsSale">
+        update czb_wechat_commodity
+        SET is_sale = #{isSale, jdbcType = INTEGER}
+        WHERE czb_wechat_commodity.commodity_id in (${ids})
     </update>
 </mapper>
