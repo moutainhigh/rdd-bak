@@ -225,9 +225,9 @@
             user_id as userId,
             CASE
         WHEN #{partner} = 2 THEN
-            '16116086190415782'
+            '1058859447069523864'
         ELSE
-            '16119473660719098'
+            '1058862660256758037'
         end
         as roleId
         FROM
