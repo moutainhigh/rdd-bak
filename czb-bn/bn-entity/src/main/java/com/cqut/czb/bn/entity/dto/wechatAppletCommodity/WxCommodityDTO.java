@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.wechatAppletCommodity;
 
 import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -26,8 +27,10 @@ public class WxCommodityDTO {
 
     private String commmodityTypeId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startingTimeBusiness;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTimeBusiness;
 
     private String commoditySource;
@@ -61,6 +64,16 @@ public class WxCommodityDTO {
     private Date createAt;
 
     private Date updateAt;
+
+    private String deleteIds;
+
+    public String getDeleteIds() {
+        return deleteIds;
+    }
+
+    public void setDeleteIds(String deleteIds) {
+        this.deleteIds = deleteIds;
+    }
 
     public String getCommodityId() {
         return commodityId;

@@ -4,7 +4,6 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.wechatAppletService.WxCommodityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +65,10 @@ public class wxCommodityManageController {
         return new JSONResult(wxCommodityManageService.selectAllCategory());
     }
 
-    @GetMapping("/editCommodity")
-    public JSONResult editCommodity(WeChatCommodity weChatCommodity){
-        return new JSONResult(wxCommodityManageService.editWeChatCommodity(weChatCommodity));
+    @PostMapping("/editCommodityWithImg")
+    public JSONResult editCommodityWithImg(Principal principal, WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file) throws IOException {
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.editWeChatCommodityWithImg(user.getUserId(), wxCommodityDTO, file));
     }
 
     /**

@@ -32,4 +32,8 @@
         )
     </insert>
 
+    <delete id="deleteByDeleteIds" parameterType="java.lang.String" >
+        delete from czb_file_function
+        where file_id = ( ${deleteIds,jdbcType=VARCHAR} )
+    </delete>
 </mapper>

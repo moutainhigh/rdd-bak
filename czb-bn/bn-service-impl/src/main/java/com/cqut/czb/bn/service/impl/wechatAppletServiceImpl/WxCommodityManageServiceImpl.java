@@ -2,6 +2,8 @@ package com.cqut.czb.bn.service.impl.wechatAppletServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.FileFunctionMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapper;
+import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
+import com.cqut.czb.bn.dao.mapper.ShopMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
@@ -35,6 +37,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     WeChatCommodityMapper weChatCommodityMapper;
 
     @Autowired
+    FileMapperExtra fileMapperExtra;
+
+    @Autowired
     FileMapper fileMapper;
 
     @Autowired
@@ -42,6 +47,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Autowired
     CategoryMapperExtra categoryMapperExtra;
+
+    @Autowired
+    ShopMapperExtra shopMapperExtra;
 
     @Override
     public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO) {
@@ -56,6 +64,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException {
+        wxCommodityDTO.setShopId(shopMapperExtra.selectShopIdByUserId(user.getUserId()));
         wxCommodityDTO.setCommodityId(StringUtil.createId());
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
@@ -114,7 +123,11 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     public Boolean updateCommodity(WxCommodityDTO wxCommodityDTO) {
         if(wxCommodityDTO.getCommodityId() == null || wxCommodityDTO.getCommodityImgId() == "")
             return false;
-        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0;
+        Boolean deleteImgs = true;
+        if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
+            deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+        }
+        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && deleteImgs;
     }
 
     @Override
@@ -133,7 +146,32 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     }
 
     @Override
-    public Boolean editWeChatCommodity(WeChatCommodity weChatCommodity) {
-        return weChatCommodityMapper.updateByPrimaryKeySelective(weChatCommodity) > 0;
+    public Boolean editWeChatCommodityWithImg(String userId, WxCommodityDTO wxCommodityDTO, MultipartFile file) throws IOException {
+        Boolean insertImg = true;
+        if(file != null && !file.isEmpty() && wxCommodityDTO.getCommodityImgId() != null && wxCommodityDTO.getCommodityImgId() != ""){
+            String address = "";
+            address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            File file1 = new File();
+            file1.setFileId(StringUtil.createId());
+            file1.setFileName(file.getOriginalFilename());
+            file1.setSavePath(address);
+            file1.setUploader(userId);
+            file1.setCreateAt(new Date());
+            file1.setUpdateAt(new Date());
+
+            FileFunction fileFunction = new FileFunction();
+            fileFunction.setId(StringUtil.createId());
+            fileFunction.setFileId(file1.getFileId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setCreateAt(new Date());
+            fileFunction.setUpdateAt(new Date());
+            fileFunction.setGroupCode("WCCommodity");
+            insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
+        }
+        Boolean deleteImgs = true;
+        if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
+            deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+        }
+        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
     }
 }
