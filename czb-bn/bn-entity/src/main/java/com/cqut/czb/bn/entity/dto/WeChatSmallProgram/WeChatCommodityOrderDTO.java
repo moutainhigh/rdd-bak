@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class WeChatCommodityOrderDTO {
+    private String managerId; // 管理人员的userId(管理员or微信商家)
+
     private String orderId; // 订单id
     private String thirdOrder; // 第三方订单号
     private Integer orderState; // 订单状态
@@ -23,6 +25,17 @@ public class WeChatCommodityOrderDTO {
     private Date startTime; // 开始时间(查询使用)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime; // 结束时间(查询使用)
+
+    private Integer takeWay;
+    private Integer deliveryState;
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
 
     public Integer getCommodityNum() {
         return commodityNum;
@@ -142,5 +155,21 @@ public class WeChatCommodityOrderDTO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getTakeWay() {
+        return takeWay;
+    }
+
+    public void setTakeWay(Integer takeWay) {
+        this.takeWay = takeWay;
+    }
+
+    public Integer getDeliveryState() {
+        return deliveryState;
+    }
+
+    public void setDeliveryState(Integer deliveryState) {
+        this.deliveryState = deliveryState;
     }
 }
