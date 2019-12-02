@@ -101,8 +101,8 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
             if("微信商家".equals(roleDTO.getRoleName())){
                 WCPTabbarInfo tabbarShop = new WCPTabbarInfo();
                 tabbarShop.setUrl("shopOrder");
-                tabbarShop.setImgNormal("/static/homePage.png");
-                tabbarShop.setImgClick("/static/homePageNo.png");
+                tabbarShop.setImgNormal("/static/order_noclick.png");
+                tabbarShop.setImgClick("/static/order_click.png");
                 tabbarShop.setText("订单中心");
                 tabbars.add(tabbarShop);
             }

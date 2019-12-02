@@ -355,8 +355,8 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
 //            }
         return true;
     }
-    @Override
-    public Boolean initFyIncomeLogData() {
+
+    public Boolean initFyIncomeLogDataTTT() {
         //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）
         List<PartnerBecomeTimeDTO> allPartner = partnerMapperExtra.selectPartnerBecomeTime();
         System.out.println("合伙人数量：" + allPartner.size());
@@ -462,8 +462,8 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
     }
 
 
-
-    public Boolean initFyIncomeLogDataTTT() throws Exception {
+    @Override
+    public Boolean initFyIncomeLogData() throws Exception {
         File file = new File("/log.txt");
         if (!file.exists()){
              file.createNewFile();
@@ -477,7 +477,7 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
 
 
         //初始化数据库的合伙人vip收益，统计过去的数据（限用于数据初始化）155962733891547
-            PartnerBecomeTimeDTO partnerDTO = partnerMapperExtra.selectPartnerBecomeTimeOne("155962733891547");
+            PartnerBecomeTimeDTO partnerDTO = partnerMapperExtra.selectPartnerBecomeTimeOne("155980397456674");
             Double totalMoney = 0.0;  //vip应得返佣
             Double firstIncome = 0.0;   //一级vip收益
             Double secondIncome = 0.0;  //二级vip收益
@@ -490,7 +490,6 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
             Double petrolProportion = add(petrolProportion1, petrolProportion2);
             Integer totalCount = 0;   //下级新增的Vip数
             if (partnerDTO.getPartner() == 2) {
-
                 Double proportion = add(Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipPartnerProportion()).getContent()), Double.parseDouble(dictMapperExtra.selectDictByName(PartnerVipIncomeConfig.getVipFirstPartnerProportion()).getContent()));
                 List<PartnerVipMoney> firstPartnerSubMoneyVip = partnerMapperExtra.selectAllFirstPartnerSubVip(partnerDTO);  //先算出事业合伙人直属下级的消费，利息12.5%+7.5%
                 bufferWritter.write("纯一级Vip返佣:"+firstPartnerSubMoneyVip.size()+"\n");
@@ -582,6 +581,21 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                         fanYongService.FyIncomeLogTest(2,user, FyRemark, partnerVipMoney.getPartnerId(), partnerVipMoney.getVipConsumption(), partnerVipMoney.getRecordId(),1);
                     }
                 }
+                //如果下级有人升级为普通合伙人导致漏算
+                List<PartnerBecomeTimeDTO> beforeBecomeVip = partnerMapperExtra.selectBeforeBecome(partnerDTO.getUserId());
+                if (beforeBecomeVip!=null && beforeBecomeVip.get(0)!=null) {
+                    for (PartnerBecomeTimeDTO before : beforeBecomeVip) {
+                        List<PartnerVipMoney> beforeVip = partnerMapperExtra.selectByOldSuperVip(before);
+                        if (beforeVip!=null && beforeVip.size()>0){
+                            for (PartnerVipMoney vip: beforeVip){
+                                User user = userMapper.selectByPrimaryKey(vip.getUserId());
+                                String FyRemark = "充值vip返佣";
+                                fanYongService.FyIncomeLogTest(2,user, FyRemark, vip.getPartnerId(), vip.getVipConsumption(), vip.getRecordId(),1);
+                            }
+                        }
+                    }
+                }
+
                 List<PartnerVipMoney> partnerVipMoneyPetrol = partnerMapperExtra.selectAllSecondPartnerSubPetrol(partnerDTO);
                 for (PartnerVipMoney partnerVipMoney : partnerVipMoneyPetrol) {
                     if (partnerVipMoney != null && partnerVipMoney.getPetrolMoney() != null) {
@@ -590,6 +604,23 @@ public class PartnerVipIncomeServiceImpl implements PartnerVipIncomeService {
                         fanYongService.FyIncomeLogTest(1,user,FyRemark,partnerVipMoney.getPartnerId(),partnerVipMoney.getPetrolMoney(),partnerVipMoney.getRecordId(),1);
                     }
                 }
+
+                //如果下级有人升级为普通合伙人导致漏算
+                List<PartnerBecomeTimeDTO> beforeBecomePetrol = partnerMapperExtra.selectBeforeBecome(partnerDTO.getUserId());
+                if (beforeBecomePetrol!=null && beforeBecomePetrol.get(0)!=null) {
+                    for (PartnerBecomeTimeDTO before : beforeBecomePetrol) {
+                        List<PartnerVipMoney> beforePetrol = partnerMapperExtra.selectByOldSuperPetrol(before);
+                        if (beforePetrol!=null && beforePetrol.size()>0){
+                            for (PartnerVipMoney vip: beforePetrol){
+                                User user = userMapper.selectByPrimaryKey(vip.getUserId());
+                                String FyRemark = "购油返佣";
+                                fanYongService.FyIncomeLogTest(1,user, FyRemark, vip.getPartnerId(), vip.getPetrolMoney(), vip.getRecordId(),1);
+                            }
+                        }
+                    }
+                }
+
+
             } else {
             }
         bufferWritter.close();
