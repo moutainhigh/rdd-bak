@@ -105,4 +105,10 @@ public interface PartnerMapperExtra {
     List<PartnerVipMoney> selectAllFirstNotBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
 
     List<PartnerVipMoney> selectAllFirstNotBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectByOldSuperVip(PartnerBecomeTimeDTO userId);
+
+    List<PartnerVipMoney> selectByOldSuperPetrol(PartnerBecomeTimeDTO userId);
+
+    List<PartnerBecomeTimeDTO> selectBeforeBecome(String userId);
 }
