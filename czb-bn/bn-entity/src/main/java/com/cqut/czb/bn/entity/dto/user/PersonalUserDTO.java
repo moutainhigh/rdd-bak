@@ -14,6 +14,16 @@ public class PersonalUserDTO {
 
     private String superiorUser;
 
+    private String avatarUrl;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
     public String getContent() {
         return content;
     }
