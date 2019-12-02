@@ -5,7 +5,7 @@ public class PayInputDTO {
     private String commodityId;
 
     //商品数量
-    private String commodityNum;
+    private Integer commodityNum;
 
     //购买者电话
     private String userPhone;
@@ -48,11 +48,11 @@ public class PayInputDTO {
         this.commodityId = commodityId;
     }
 
-    public String getCommodityNum() {
+    public Integer getCommodityNum() {
         return commodityNum;
     }
 
-    public void setCommodityNum(String commodityNum) {
+    public void setCommodityNum(Integer commodityNum) {
         this.commodityNum = commodityNum;
     }
 }

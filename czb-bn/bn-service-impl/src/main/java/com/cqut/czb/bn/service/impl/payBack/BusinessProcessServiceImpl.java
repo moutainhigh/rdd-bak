@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.food.DishOrderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsMapper;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
@@ -12,6 +13,7 @@ import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -23,6 +25,7 @@ import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +89,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     @Autowired
     WeChatCommodityOrderMapper weChatCommodityOrderMapper;
+
+    @Autowired
+    WeChatGoodsDeliveryRecordsMapper weChatGoodsDeliveryRecordsMapper;
 
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
@@ -249,6 +255,18 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         order.setPayStatus(1);
         int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
         System.out.println("更改用户订单："+(update>0));
+
+        //判断是否邮寄
+        WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
+        if(order1.getCommodityType()==1){
+            WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
+            records.setRecordId(StringUtil.createId());
+            records.setAddressId(order1.getAddressId());
+            records.setCreateAt(new Date());
+            records.setDeliveryState(0);
+            records.setOrderId(orgId);
+            weChatGoodsDeliveryRecordsMapper.insertSelective(records);
+        }
 
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);

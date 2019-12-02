@@ -47,10 +47,12 @@ public class UserServiceImpl implements IUserService {
 
     private final RedisUtil redisUtil;
 
+    private final PartnerChangeRecordMapper partnerChangeRecordMapper;
+
     private final PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil,PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil,PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra,PartnerChangeRecordMapper partnerChangeRecordMapper) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
@@ -60,6 +62,7 @@ public class UserServiceImpl implements IUserService {
         this.indicatorRecordMapper = indicatorRecordMapper;
         this.redisUtil = redisUtil;
         this.partnerVipIncomeMapperExtra = partnerVipIncomeMapperExtra;
+        this.partnerChangeRecordMapper = partnerChangeRecordMapper;
     }
 
     @Override
@@ -400,6 +403,14 @@ public class UserServiceImpl implements IUserService {
                 userInputDTO.setRoleId(roleId);
                 return this.assignRole(userInputDTO);
             }
+            //插入合伙人变更记录
+            PartnerChangeRecord partnerChangeRecord = new PartnerChangeRecord();
+            partnerChangeRecord.setRecordId(StringUtil.createId());
+            partnerChangeRecord.setUserId(userInputDTO.getUserId());
+            partnerChangeRecord.setAfterChangeLevel(userInputDTO.getPartner());
+            partnerChangeRecord.setBeforeChangeLevel(userDTO.getPartner());
+            Boolean insertChange = partnerChangeRecordMapper.insertSelective(partnerChangeRecord)>0;
+            System.out.println(userInputDTO.getUserId()+"插入合伙人变更记录成功");
             return true;
         } else {
             return false;
