@@ -123,7 +123,11 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     public Boolean updateCommodity(WxCommodityDTO wxCommodityDTO) {
         if(wxCommodityDTO.getCommodityId() == null || wxCommodityDTO.getCommodityImgId() == "")
             return false;
-        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0;
+        Boolean deleteImgs = true;
+        if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
+            deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+        }
+        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && deleteImgs;
     }
 
     @Override
@@ -165,7 +169,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
         }
         Boolean deleteImgs = true;
-        if(wxCommodityDTO.getCommodityImgId() != null && wxCommodityDTO.getDeleteIds() != ""){
+        if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
             deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
         }
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
