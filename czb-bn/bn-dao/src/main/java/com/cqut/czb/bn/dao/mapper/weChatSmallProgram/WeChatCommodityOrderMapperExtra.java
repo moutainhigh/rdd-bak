@@ -66,6 +66,7 @@ public interface WeChatCommodityOrderMapperExtra {
     /**
      * 处理订单（寄送）（后台管理系统）
      * 更新
+     *
      * @param input
      * @return
      */
@@ -73,6 +74,7 @@ public interface WeChatCommodityOrderMapperExtra {
 
     /**
      * 商家在微信小程序上确认订单
+     *
      * @param weChatCommodityComdirmOrderDTO
      * @return
      */
@@ -80,11 +82,20 @@ public interface WeChatCommodityOrderMapperExtra {
 
     /**
      * 商家获取单个订单信息（微信小程序）
+     *
      * @param userId
      * @param orderId
      * @return
      */
-    WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(@Param("userId") String userId, @Param("orderId")String orderId);
+    WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(@Param("userId") String userId, @Param("orderId") String orderId);
 
-    List<WCPCommodityOrderDTO> selectAllCommodityOrderByLeaderId(@Param("userId")String userId, @Param("orderState")Integer orderState);
+    List<WCPCommodityOrderDTO> selectAllCommodityOrderByLeaderId(@Param("userId") String userId, @Param("orderState") Integer orderState);
+
+    /**
+     * 获取销售额
+     *
+     * @param input
+     * @return
+     */
+    Double getTotalSale(WeChatCommodityOrderDTO input);
 }
