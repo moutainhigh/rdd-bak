@@ -48,6 +48,12 @@ public class PetrolManagementController {
         return new JSONResult(petrolManagementService.notSalePetrol(inputDTO.getPetrolIds()));
     }
 
+    @RequestMapping(value = "BanPetrol",method = RequestMethod.POST)
+    public JSONResult BanPetrol(@RequestBody PetrolManagementInputDTO inputDTO){
+
+        return new JSONResult(petrolManagementService.BanPetrol(inputDTO.getPetrolIds()));
+    }
+
     @RequestMapping(value = "/modifyPetrol",method = RequestMethod.POST)
     public JSONResult modifyPetrol(@RequestBody ModifyPetrolInputDTO inputDTO){
         return new JSONResult(petrolManagementService.modifyPetrol(inputDTO));
