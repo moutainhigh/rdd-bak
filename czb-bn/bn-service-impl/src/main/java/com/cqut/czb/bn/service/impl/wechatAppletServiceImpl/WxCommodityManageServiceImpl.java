@@ -96,6 +96,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean addWxCommodityImg(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException {
+        wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         if(file != null && !file.isEmpty() && wxCommodityDTO.getCommodityImgId() != null && wxCommodityDTO.getCommodityImgId() != ""){
             String address = "";
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
@@ -110,7 +111,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             FileFunction fileFunction = new FileFunction();
             fileFunction.setId(StringUtil.createId());
             fileFunction.setFileId(file1.getFileId());
-            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
             fileFunction.setGroupCode("WCCommodity");
@@ -162,7 +163,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             FileFunction fileFunction = new FileFunction();
             fileFunction.setId(StringUtil.createId());
             fileFunction.setFileId(file1.getFileId());
-            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
             fileFunction.setGroupCode("WCCommodity");
