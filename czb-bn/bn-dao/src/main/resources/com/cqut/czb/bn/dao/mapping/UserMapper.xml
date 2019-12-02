@@ -1,285 +1,295 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.UserMapper">
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.User">
-        <id column="user_id" property="userId" jdbcType="VARCHAR"/>
-        <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
-        <result column="user_psw" property="userPsw" jdbcType="VARCHAR"/>
-        <result column="user_type" property="userType" jdbcType="INTEGER"/>
-        <result column="user_rank" property="userRank" jdbcType="INTEGER"/>
-        <result column="is_identified" property="isIdentified" jdbcType="INTEGER"/>
-        <result column="superior_user" property="superiorUser" jdbcType="VARCHAR"/>
-        <result column="is_login_pc" property="isLoginPc" jdbcType="INTEGER"/>
-        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
-        <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR"/>
-        <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
-        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
-        <result column="user_yun_id" property="userYunId" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
-        <result column="commission_level_one" property="commissionLevelOne" jdbcType="VARCHAR"/>
-        <result column="commission_level_two" property="commissionLevelTwo" jdbcType="VARCHAR"/>
-        <result column="mission_start_time" property="missionStartTime" jdbcType="TIMESTAMP"/>
-        <result column="mission_end_time" property="missionEndTime" jdbcType="TIMESTAMP"/>
-        <result column="partner" property="partner" jdbcType="INTEGER"/>
-        <result column="old_superior" property="oldSuperior" jdbcType="VARCHAR"/>
-        <result column="first_level_partner" property="firstLevelPartner" jdbcType="VARCHAR"/>
-        <result column="second_level_partner" property="secondLevelPartner" jdbcType="VARCHAR"/>
-        <result column="is_vip" property="isVip" jdbcType="INTEGER"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
-    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
-    commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner, is_vip
+<mapper namespace="com.cqut.czb.bn.dao.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.User" >
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_psw" property="userPsw" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="INTEGER" />
+    <result column="user_rank" property="userRank" jdbcType="INTEGER" />
+    <result column="is_identified" property="isIdentified" jdbcType="INTEGER" />
+    <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
+    <result column="is_login_pc" property="isLoginPc" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_id_card" property="userIdCard" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="user_yun_id" property="userYunId" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="commission_level_one" property="commissionLevelOne" jdbcType="VARCHAR" />
+    <result column="commission_level_two" property="commissionLevelTwo" jdbcType="VARCHAR" />
+    <result column="mission_start_time" property="missionStartTime" jdbcType="TIMESTAMP" />
+    <result column="mission_end_time" property="missionEndTime" jdbcType="TIMESTAMP" />
+    <result column="partner" property="partner" jdbcType="INTEGER" />
+    <result column="old_superior" property="oldSuperior" jdbcType="VARCHAR" />
+    <result column="first_level_partner" property="firstLevelPartner" jdbcType="VARCHAR" />
+    <result column="second_level_partner" property="secondLevelPartner" jdbcType="VARCHAR" />
+    <result column="is_vip" property="isVip" jdbcType="INTEGER" />
+    <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user, 
+    is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted, 
+    commission_level_one, commission_level_two, mission_start_time, mission_end_time, 
+    partner, old_superior, first_level_partner, second_level_partner, is_vip, avatar_url
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        from czb_user
-        where user_id = #{userId,jdbcType=VARCHAR}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_user
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_user
     where user_id = #{userId,jdbcType=VARCHAR}
   </delete>
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.User">
-    insert into czb_user (user_id, user_account, user_psw,
-      user_type, user_rank, is_identified,
-      superior_user, is_login_pc, user_name,
-      user_id_card, create_at, update_at,
-      user_yun_id, is_deleted, commission_level_one,
-      commission_level_two, mission_start_time,
-      mission_end_time, partner, old_superior,
-      first_level_partner, second_level_partner,
-      is_vip)
-    values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR},
-      #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER},
-      #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
-      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
-      #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR},
-      #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP},
-      #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR},
-      #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR},
-      #{isVip,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.User" >
+    insert into czb_user (user_id, user_account, user_psw, 
+      user_type, user_rank, is_identified, 
+      superior_user, is_login_pc, user_name, 
+      user_id_card, create_at, update_at, 
+      user_yun_id, is_deleted, commission_level_one, 
+      commission_level_two, mission_start_time, 
+      mission_end_time, partner, old_superior, 
+      first_level_partner, second_level_partner, 
+      is_vip, avatar_url)
+    values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, 
+      #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER}, 
+      #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR}, 
+      #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP}, 
+      #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR}, 
+      #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR}, 
+      #{isVip,jdbcType=INTEGER}, #{avatarUrl,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User">
-        insert into czb_user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="userAccount != null">
-                user_account,
-            </if>
-            <if test="userPsw != null">
-                user_psw,
-            </if>
-            <if test="userType != null">
-                user_type,
-            </if>
-            <if test="userRank != null">
-                user_rank,
-            </if>
-            <if test="isIdentified != null">
-                is_identified,
-            </if>
-            <if test="superiorUser != null">
-                superior_user,
-            </if>
-            <if test="isLoginPc != null">
-                is_login_pc,
-            </if>
-            <if test="userName != null">
-                user_name,
-            </if>
-            <if test="userIdCard != null">
-                user_id_card,
-            </if>
-            <if test="createAt != null">
-                create_at,
-            </if>
-            <if test="updateAt != null">
-                update_at,
-            </if>
-            <if test="userYunId != null">
-                user_yun_id,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-            <if test="commissionLevelOne != null">
-                commission_level_one,
-            </if>
-            <if test="commissionLevelTwo != null">
-                commission_level_two,
-            </if>
-            <if test="missionStartTime != null">
-                mission_start_time,
-            </if>
-            <if test="missionEndTime != null">
-                mission_end_time,
-            </if>
-            <if test="partner != null">
-                partner,
-            </if>
-            <if test="oldSuperior != null">
-                old_superior,
-            </if>
-            <if test="firstLevelPartner != null">
-                first_level_partner,
-            </if>
-            <if test="secondLevelPartner != null">
-                second_level_partner,
-            </if>
-            <if test="isVip != null">
-                is_vip,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId,jdbcType=VARCHAR},
-            </if>
-            <if test="userAccount != null">
-                #{userAccount,jdbcType=VARCHAR},
-            </if>
-            <if test="userPsw != null">
-                #{userPsw,jdbcType=VARCHAR},
-            </if>
-            <if test="userType != null">
-                #{userType,jdbcType=INTEGER},
-            </if>
-            <if test="userRank != null">
-                #{userRank,jdbcType=INTEGER},
-            </if>
-            <if test="isIdentified != null">
-                #{isIdentified,jdbcType=INTEGER},
-            </if>
-            <if test="superiorUser != null">
-                #{superiorUser,jdbcType=VARCHAR},
-            </if>
-            <if test="isLoginPc != null">
-                #{isLoginPc,jdbcType=INTEGER},
-            </if>
-            <if test="userName != null">
-                #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="userIdCard != null">
-                #{userIdCard,jdbcType=VARCHAR},
-            </if>
-            <if test="createAt != null">
-                #{createAt,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateAt != null">
-                #{updateAt,jdbcType=TIMESTAMP},
-            </if>
-            <if test="userYunId != null">
-                #{userYunId,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=INTEGER},
-            </if>
-            <if test="commissionLevelOne != null">
-                #{commissionLevelOne,jdbcType=VARCHAR},
-            </if>
-            <if test="commissionLevelTwo != null">
-                #{commissionLevelTwo,jdbcType=VARCHAR},
-            </if>
-            <if test="missionStartTime != null">
-                #{missionStartTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="missionEndTime != null">
-                #{missionEndTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="partner != null">
-                #{partner,jdbcType=INTEGER},
-            </if>
-            <if test="oldSuperior != null">
-                #{oldSuperior,jdbcType=VARCHAR},
-            </if>
-            <if test="firstLevelPartner != null">
-                #{firstLevelPartner,jdbcType=VARCHAR},
-            </if>
-            <if test="secondLevelPartner != null">
-                #{secondLevelPartner,jdbcType=VARCHAR},
-            </if>
-            <if test="isVip != null">
-                #{isVip,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.User">
-        update czb_user
-        <set>
-            <if test="userAccount != null">
-                user_account = #{userAccount,jdbcType=VARCHAR},
-            </if>
-            <if test="userPsw != null">
-                user_psw = #{userPsw,jdbcType=VARCHAR},
-            </if>
-            <if test="userType != null">
-                user_type = #{userType,jdbcType=INTEGER},
-            </if>
-            <if test="userRank != null">
-                user_rank = #{userRank,jdbcType=INTEGER},
-            </if>
-            <if test="isIdentified != null">
-                is_identified = #{isIdentified,jdbcType=INTEGER},
-            </if>
-            <if test="superiorUser != null">
-                superior_user = #{superiorUser,jdbcType=VARCHAR},
-            </if>
-            <if test="isLoginPc != null">
-                is_login_pc = #{isLoginPc,jdbcType=INTEGER},
-            </if>
-            <if test="userName != null">
-                user_name = #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="userIdCard != null">
-                user_id_card = #{userIdCard,jdbcType=VARCHAR},
-            </if>
-            <if test="createAt != null">
-                create_at = #{createAt,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateAt != null">
-                update_at = #{updateAt,jdbcType=TIMESTAMP},
-            </if>
-            <if test="userYunId != null">
-                user_yun_id = #{userYunId,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                is_deleted = #{isDeleted,jdbcType=INTEGER},
-            </if>
-            <if test="commissionLevelOne != null">
-                commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
-            </if>
-            <if test="commissionLevelTwo != null">
-                commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
-            </if>
-            <if test="missionStartTime != null">
-                mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="missionEndTime != null">
-                mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="partner != null">
-                partner = #{partner,jdbcType=INTEGER},
-            </if>
-            <if test="oldSuperior != null">
-                old_superior = #{oldSuperior,jdbcType=VARCHAR},
-            </if>
-            <if test="firstLevelPartner != null">
-                first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
-            </if>
-            <if test="secondLevelPartner != null">
-                second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
-            </if>
-            <if test="isVip != null">
-                is_vip = #{isVip,jdbcType=INTEGER},
-            </if>
-        </set>
-        where user_id = #{userId,jdbcType=VARCHAR}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.User">
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
+    insert into czb_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userAccount != null" >
+        user_account,
+      </if>
+      <if test="userPsw != null" >
+        user_psw,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="userRank != null" >
+        user_rank,
+      </if>
+      <if test="isIdentified != null" >
+        is_identified,
+      </if>
+      <if test="superiorUser != null" >
+        superior_user,
+      </if>
+      <if test="isLoginPc != null" >
+        is_login_pc,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userIdCard != null" >
+        user_id_card,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="userYunId != null" >
+        user_yun_id,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="commissionLevelOne != null" >
+        commission_level_one,
+      </if>
+      <if test="commissionLevelTwo != null" >
+        commission_level_two,
+      </if>
+      <if test="missionStartTime != null" >
+        mission_start_time,
+      </if>
+      <if test="missionEndTime != null" >
+        mission_end_time,
+      </if>
+      <if test="partner != null" >
+        partner,
+      </if>
+      <if test="oldSuperior != null" >
+        old_superior,
+      </if>
+      <if test="firstLevelPartner != null" >
+        first_level_partner,
+      </if>
+      <if test="secondLevelPartner != null" >
+        second_level_partner,
+      </if>
+      <if test="isVip != null" >
+        is_vip,
+      </if>
+      <if test="avatarUrl != null" >
+        avatar_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userAccount != null" >
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userPsw != null" >
+        #{userPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userRank != null" >
+        #{userRank,jdbcType=INTEGER},
+      </if>
+      <if test="isIdentified != null" >
+        #{isIdentified,jdbcType=INTEGER},
+      </if>
+      <if test="superiorUser != null" >
+        #{superiorUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isLoginPc != null" >
+        #{isLoginPc,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIdCard != null" >
+        #{userIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userYunId != null" >
+        #{userYunId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="commissionLevelOne != null" >
+        #{commissionLevelOne,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionLevelTwo != null" >
+        #{commissionLevelTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="missionStartTime != null" >
+        #{missionStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="missionEndTime != null" >
+        #{missionEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partner != null" >
+        #{partner,jdbcType=INTEGER},
+      </if>
+      <if test="oldSuperior != null" >
+        #{oldSuperior,jdbcType=VARCHAR},
+      </if>
+      <if test="firstLevelPartner != null" >
+        #{firstLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondLevelPartner != null" >
+        #{secondLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null" >
+        #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="avatarUrl != null" >
+        #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
+    update czb_user
+    <set >
+      <if test="userAccount != null" >
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userPsw != null" >
+        user_psw = #{userPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userRank != null" >
+        user_rank = #{userRank,jdbcType=INTEGER},
+      </if>
+      <if test="isIdentified != null" >
+        is_identified = #{isIdentified,jdbcType=INTEGER},
+      </if>
+      <if test="superiorUser != null" >
+        superior_user = #{superiorUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isLoginPc != null" >
+        is_login_pc = #{isLoginPc,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIdCard != null" >
+        user_id_card = #{userIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userYunId != null" >
+        user_yun_id = #{userYunId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="commissionLevelOne != null" >
+        commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionLevelTwo != null" >
+        commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="missionStartTime != null" >
+        mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="missionEndTime != null" >
+        mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partner != null" >
+        partner = #{partner,jdbcType=INTEGER},
+      </if>
+      <if test="oldSuperior != null" >
+        old_superior = #{oldSuperior,jdbcType=VARCHAR},
+      </if>
+      <if test="firstLevelPartner != null" >
+        first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondLevelPartner != null" >
+        second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null" >
+        is_vip = #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="avatarUrl != null" >
+        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.User" >
     update czb_user
     set user_account = #{userAccount,jdbcType=VARCHAR},
       user_psw = #{userPsw,jdbcType=VARCHAR},
@@ -302,7 +312,8 @@
       old_superior = #{oldSuperior,jdbcType=VARCHAR},
       first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
       second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
-      is_vip = #{isVip,jdbcType=INTEGER}
+      is_vip = #{isVip,jdbcType=INTEGER},
+      avatar_url = #{avatarUrl,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
 </mapper>

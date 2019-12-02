@@ -49,6 +49,8 @@ public class User {
 
     private Integer isVip;
 
+    private String avatarUrl;
+
     public String getUserId() {
         return userId;
     }
@@ -231,5 +233,13 @@ public class User {
 
     public void setIsVip(Integer isVip) {
         this.isVip = isVip;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 }
