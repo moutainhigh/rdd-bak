@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.wechatAppletServiceImpl;
 import com.cqut.czb.bn.dao.mapper.FileFunctionMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
@@ -10,6 +11,7 @@ import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.FileFunction;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.service.wechatAppletService.WxCommodityManageService;
 import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -28,6 +30,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Autowired
     WeChatCommodityMapperExtra weChatCommodityMapperExtra;
+
+    @Autowired
+    WeChatCommodityMapper weChatCommodityMapper;
 
     @Autowired
     FileMapper fileMapper;
@@ -125,5 +130,10 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     @Override
     public Boolean haltOrOnSales(String ids, Integer type) {
         return type == 1 ? weChatCommodityMapperExtra.updateIsSale(ids, 1) > 0 : type == 2 ? weChatCommodityMapperExtra.updateIsSale(ids, 2) > 0 : false;
+    }
+
+    @Override
+    public Boolean editWeChatCommodity(WeChatCommodity weChatCommodity) {
+        return weChatCommodityMapper.updateByPrimaryKeySelective(weChatCommodity) > 0;
     }
 }
