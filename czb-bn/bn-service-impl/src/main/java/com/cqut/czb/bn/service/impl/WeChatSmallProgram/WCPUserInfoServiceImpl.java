@@ -1,8 +1,13 @@
 package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 
+import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.entity.dto.WCPAssessToken;
+import com.cqut.czb.bn.entity.dto.WCPTabbarInfo;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.entity.UserRole;
+import com.cqut.czb.bn.service.AppPersonalCenterService;
 import com.cqut.czb.bn.service.weChatSmallProgram.WCPUserInfoService;
 import com.google.gson.Gson;
 import okhttp3.Call;
@@ -16,6 +21,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -24,6 +30,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.Buffer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description
@@ -32,6 +40,12 @@ import java.nio.charset.Charset;
  */
 @Service
 public class WCPUserInfoServiceImpl implements WCPUserInfoService {
+
+    @Autowired
+    AppPersonalCenterService appPersonalCenterService;
+
+    @Autowired
+    UserRoleMapperExtra userRoleMapperExtra;
 
     @Override
     public String getRecommendQRCode(UserDTO user) {
@@ -62,6 +76,38 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<WCPTabbarInfo> getTabBarInfo(String userId) {
+        List<WCPTabbarInfo> tabbars = new ArrayList<>();
+        WCPTabbarInfo tabbarHomePage = new WCPTabbarInfo();
+        tabbarHomePage.setUrl("homePage");
+        tabbarHomePage.setImgNormal("/static/homePage.png");
+        tabbarHomePage.setImgClick("/static/homePageNo.png");
+        tabbarHomePage.setText("首页");
+        WCPTabbarInfo tabbarMine = new WCPTabbarInfo();
+        tabbarMine.setUrl("mine");
+        tabbarMine.setImgNormal("/static/mine.png");
+        tabbarMine.setImgClick("/static/mine.png");
+        tabbarMine.setText("我的");
+        tabbars.add(tabbarHomePage);
+        tabbars.add(tabbarMine);
+
+        UserRoleDTO userRole = new UserRoleDTO();
+        userRole.setUserId(userId);
+        List<UserRoleDTO> userRoles = userRoleMapperExtra.selectUserRoleName(userRole); //查询用户角色信息
+        for(UserRoleDTO roleDTO : userRoles){
+            if("微信商家".equals(roleDTO.getRoleName())){
+                WCPTabbarInfo tabbarShop = new WCPTabbarInfo();
+                tabbarShop.setUrl("shopOrder");
+                tabbarShop.setImgNormal("/static/homePage.png");
+                tabbarShop.setImgClick("/static/homePageNo.png");
+                tabbarShop.setText("订单中心");
+                tabbars.add(tabbarShop);
+            }
+        }
+        return tabbars;
     }
 
     public static String encode(byte[] binaryData) {

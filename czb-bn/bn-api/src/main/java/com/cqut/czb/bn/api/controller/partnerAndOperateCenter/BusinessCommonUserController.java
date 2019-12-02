@@ -3,9 +3,11 @@ package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.BusinessCommonUserOutputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.BusinessCommonUserService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +52,11 @@ public class BusinessCommonUserController {
         if(user.getUserId() == null) {
             return new JSONResult("没有权限", 500);
         }
-        return new JSONResult(businessCommonUserService.list(user.getUserId(),mobile,createAt,area,promotionMobile,isVip,pageDTO));
+        long start = System.currentTimeMillis();
+        PageInfo<BusinessCommonUserOutputDTO> list = businessCommonUserService.list(user.getUserId(), mobile, createAt, area, promotionMobile, isVip, pageDTO);
+        long end = System.currentTimeMillis();
+        System.out.println("执行时间"+ (end-start)+"ms");
+        return new JSONResult(list);
     }
 
 

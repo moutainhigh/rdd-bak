@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
+import com.cqut.czb.bn.entity.entity.File;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -23,7 +24,7 @@ public class WeChatCommodityOrderDetail {
     private String shopName;
     private String shopAddress;
     private String commodityImgId;
-    private List commodityImgList;
+    private List<String> commodityImgList;
     private String commoditySource;
     private Integer commodityType; // 商品类型
     private String commodityTypeContent; // 商品类目
@@ -144,11 +145,11 @@ public class WeChatCommodityOrderDetail {
         this.shopName = shopName;
     }
 
-    public List getCommodityImgList() {
+    public List<String> getCommodityImgList() {
         return commodityImgList;
     }
 
-    public void setCommodityImgList(List commodityImgList) {
+    public void setCommodityImgList(List<String> commodityImgList) {
         this.commodityImgList = commodityImgList;
     }
 

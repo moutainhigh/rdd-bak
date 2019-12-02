@@ -121,4 +121,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     public List<Category> selectAllCategory() {
         return categoryMapperExtra.selectAllCategory();
     }
+
+    @Override
+    public Boolean haltOrOnSales(String ids, Integer type) {
+        return type == 1 ? weChatCommodityMapperExtra.updateIsSale(ids, 1) > 0 : type == 2 ? weChatCommodityMapperExtra.updateIsSale(ids, 2) > 0 : false;
+    }
 }

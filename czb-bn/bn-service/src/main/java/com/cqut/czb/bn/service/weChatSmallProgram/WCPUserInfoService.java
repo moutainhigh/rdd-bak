@@ -1,6 +1,9 @@
 package com.cqut.czb.bn.service.weChatSmallProgram;
 
+import com.cqut.czb.bn.entity.dto.WCPTabbarInfo;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
+
+import java.util.List;
 
 /**
  * @Description
@@ -10,4 +13,6 @@ import com.cqut.czb.bn.entity.dto.user.UserDTO;
 public interface WCPUserInfoService {
 
     String getRecommendQRCode(UserDTO user);
+
+    List<WCPTabbarInfo> getTabBarInfo(String userId);
 }

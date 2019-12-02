@@ -46,6 +46,7 @@ public class WCPCommodityOrderDTO {
 
     private String address;
 
+    // 0 未寄送 1 已寄送 2 已签收
     private Integer deliveryState;
 
     private String deliveryNum;
@@ -74,6 +75,16 @@ public class WCPCommodityOrderDTO {
     private Date createAt;
 
     private String shopPhone;
+
+    private String shopName;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
 
     public String getShopPhone() {
         return shopPhone;

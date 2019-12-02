@@ -3,6 +3,7 @@ package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,4 +42,6 @@ public interface WeChatCommodityMapperExtra {
      * @return
      */
     String getAreas();
+
+    Integer updateIsSale(@Param("ids") String ids, @Param("isSale") Integer isSale);
 }

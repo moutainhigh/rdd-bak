@@ -10,7 +10,7 @@ public class WeChatCommodityOrderProcess {
     private String addressInfo; // 地址细节province + city + area + detail
     private Integer deliveryState; // 寄送状态
     private String deliveryCompany; // 寄送公司代码
-    private String deliveryNum; // 寄送数量
+    private String deliveryNum; // 快递单号
     private String processingTime; // 处理时间
     private String handler; // 处理人
     private Integer takeWay; // 商品取件方式
