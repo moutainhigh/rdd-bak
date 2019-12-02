@@ -277,7 +277,7 @@
     user_id = #{userId,jdbcType=VARCHAR} AND
     i.info_id=u.info_id AND
     i.type=#{type,jdbcType=INTEGER} and
-    i.amount!=0 AND i.is_settlement = 0
+    i.amount!=0 AND (i.is_settlement = 0 or i.is_settlement is null)
     ORDER BY i.create_at DESC
   </select>
 

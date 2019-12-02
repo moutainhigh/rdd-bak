@@ -337,7 +337,7 @@
         WHERE
             cu.superior_user = #{userId, jdbcType = VARCHAR}
         ) cu
-        LEFT JOIN czb_income_log cil ON cil.commission_source_user = cu.user_id
+        LEFT JOIN czb_income_log cil ON cil.info_id = cu.info_id
         AND ( cil.is_settlement = 0 OR cil.is_settlement IS NULL )
         AND ( type = 0 OR type IS NULL )
     GROUP BY

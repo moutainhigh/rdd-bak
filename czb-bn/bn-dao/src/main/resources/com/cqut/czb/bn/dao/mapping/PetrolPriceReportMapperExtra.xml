@@ -6,4 +6,16 @@
     from czb_petrol_price_report
     WHERE area= #{area,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectPetrolPriceReport" resultType="com.cqut.czb.bn.entity.entity.PetrolPriceReport" parameterType="com.cqut.czb.bn.entity.dto.PetrolPriceReportInputDTO">
+    SELECT petrol_price_report_id as petrolPriceReportId,petrol_name as petrolName,petrol_price AS petrolPrice,area
+    from czb_petrol_price_report
+    <where>
+      <if test="area != null and area != ''">
+        area like concat('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    ORDER BY area DESC
+  </select>
+
 </mapper>
