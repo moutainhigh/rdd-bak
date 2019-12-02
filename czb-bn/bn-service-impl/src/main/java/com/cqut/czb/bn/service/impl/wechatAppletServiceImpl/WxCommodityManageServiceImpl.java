@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.wechatAppletServiceImpl;
 import com.cqut.czb.bn.dao.mapper.FileFunctionMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
+import com.cqut.czb.bn.dao.mapper.ShopMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
@@ -47,6 +48,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     @Autowired
     CategoryMapperExtra categoryMapperExtra;
 
+    @Autowired
+    ShopMapperExtra shopMapperExtra;
+
     @Override
     public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
@@ -60,6 +64,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException {
+        wxCommodityDTO.setShopId(shopMapperExtra.selectShopIdByUserId(user.getUserId()));
         wxCommodityDTO.setCommodityId(StringUtil.createId());
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
