@@ -62,6 +62,16 @@ public class WxCommodityDTO {
 
     private Date updateAt;
 
+    private String deleteIds;
+
+    public String getDeleteIds() {
+        return deleteIds;
+    }
+
+    public void setDeleteIds(String deleteIds) {
+        this.deleteIds = deleteIds;
+    }
+
     public String getCommodityId() {
         return commodityId;
     }

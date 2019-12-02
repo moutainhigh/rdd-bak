@@ -19,6 +19,8 @@ public interface IPetrolManagementService {
 
     int notSalePetrol(String petrolIds);
 
+    int BanPetrol(String petrolIds);
+
     boolean modifyPetrol(ModifyPetrolInputDTO inputDTO);
 
     String getPetrolMoneyCount(GetPetrolListInputDTO inputDTO);

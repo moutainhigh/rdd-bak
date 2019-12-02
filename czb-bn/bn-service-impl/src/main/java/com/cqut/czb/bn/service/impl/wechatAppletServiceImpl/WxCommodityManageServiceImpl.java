@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.wechatAppletServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.FileFunctionMapper;
 import com.cqut.czb.bn.dao.mapper.FileMapper;
+import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
@@ -35,7 +36,13 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     WeChatCommodityMapper weChatCommodityMapper;
 
     @Autowired
+    FileMapperExtra fileMapperExtra;
+
+    @Autowired
     FileMapper fileMapper;
+
+    @Autowired
+    FileMapperExtra fileMapperExtra;
 
     @Autowired
     FileFunctionMapper fileFunctionMapper;
@@ -133,7 +140,32 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     }
 
     @Override
-    public Boolean editWeChatCommodity(WeChatCommodity weChatCommodity) {
-        return weChatCommodityMapper.updateByPrimaryKeySelective(weChatCommodity) > 0;
+    public Boolean editWeChatCommodityWithImg(String userId, WxCommodityDTO wxCommodityDTO, MultipartFile file) throws IOException {
+        Boolean insertImg = true;
+        if(file != null && !file.isEmpty() && wxCommodityDTO.getCommodityImgId() != null && wxCommodityDTO.getCommodityImgId() != ""){
+            String address = "";
+            address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            File file1 = new File();
+            file1.setFileId(StringUtil.createId());
+            file1.setFileName(file.getOriginalFilename());
+            file1.setSavePath(address);
+            file1.setUploader(userId);
+            file1.setCreateAt(new Date());
+            file1.setUpdateAt(new Date());
+
+            FileFunction fileFunction = new FileFunction();
+            fileFunction.setId(StringUtil.createId());
+            fileFunction.setFileId(file1.getFileId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setCreateAt(new Date());
+            fileFunction.setUpdateAt(new Date());
+            fileFunction.setGroupCode("WCCommodity");
+            insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
+        }
+        Boolean deleteImgs = true;
+        if(wxCommodityDTO.getCommodityImgId() != null && wxCommodityDTO.getDeleteIds() != ""){
+            deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+        }
+        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
     }
 }

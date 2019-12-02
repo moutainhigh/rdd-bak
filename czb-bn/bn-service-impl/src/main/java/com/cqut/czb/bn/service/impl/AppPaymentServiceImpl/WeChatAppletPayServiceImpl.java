@@ -60,7 +60,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setRemark(payInputDTO.getRemark());
 
         //需要生成电子码
-        weChatCommodityOrder.setElectronicCode(weChatCommodity.getShopId()+orgId+(new Date()));
+        weChatCommodityOrder.setElectronicCode(weChatCommodity.getShopId()+orgId);
 
         //0：待支付  1：支付完成待处理 2：订单完成
         weChatCommodityOrder.setOrderState(0);
@@ -69,7 +69,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setAddressId(payInputDTO.getAddressId());
 
         //插入二维码
-        weChatCommodityOrder.setQrcode(weChatCommodity.getShopId()+orgId+(new Date()));
+        weChatCommodityOrder.setQrcode(weChatCommodity.getShopId()+orgId);
 
         weChatCommodityOrder.setPhone(payInputDTO.getUserPhone());
         //来源
@@ -110,7 +110,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         /**
          * 生成起调参数串——返回给app（微信的支付订单）
          */
-        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+        String orgId = String.valueOf(System.currentTimeMillis()+(int)(1+Math.random()*(10000-1+1)));
         String nonceStrTemp = WeChatUtils.getRandomStr();
         double money= BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).doubleValue();
 
