@@ -101,4 +101,9 @@ public class CareerStatisticsController {
     public JSONResult getIncome(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         return  service.getDirectAndIndirectIncome(statisticsDevelopmentNumbers.getCondition(), statisticsDevelopmentNumbers.getUserId());
     }
+
+    @GetMapping("/initPermission")
+    public JSONResult initPermission(){
+        return service.initPermission();
+    }
 }

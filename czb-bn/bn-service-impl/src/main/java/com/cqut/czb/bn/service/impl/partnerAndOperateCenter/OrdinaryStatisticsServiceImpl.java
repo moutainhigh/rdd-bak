@@ -8,6 +8,8 @@ import com.cqut.czb.bn.service.partnerAndOperateCenter.OrdinaryStatisticsService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 
 public class OrdinaryStatisticsServiceImpl implements OrdinaryStatisticsService {
@@ -40,6 +42,8 @@ public class OrdinaryStatisticsServiceImpl implements OrdinaryStatisticsService 
         } else {
             firstData.setIndirectVipCount(0);
         }
+        firstData.setPetrol(firstData.getIndirectPetrolIncome().add(firstData.getDirectPetrolIncome()));
+        firstData.setVip(firstData.getIndirectVipIncome().add(firstData.getDirectVipIncome()));
 
         return new JSONResult("统计数据查询成功", 200, firstData);
     }
