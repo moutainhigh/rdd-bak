@@ -833,8 +833,9 @@
         SELECT
         cvrr.record_id AS recordId,
         cvrr.user_id AS userId,
-        second_level_partner AS partnerId,
-        amount AS vipConsumption
+        cu.second_level_partner AS partnerId,
+        amount AS vipConsumption,
+        cvrr.create_at as createAt
         FROM
         czb_vip_recharge_records cvrr
         LEFT JOIN  czb_user cu  ON cvrr.user_id = cu.user_id AND cvrr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP} AND cvrr.create_at>='2019-11-03'
@@ -847,8 +848,9 @@
         SELECT
         cpsr.record_id AS recordId,
         cpsr.buyer_id AS userId,
-        second_level_partner AS partnerId,
-        turnover_amount AS petrolMoney
+        cu.second_level_partner AS partnerId,
+        turnover_amount AS petrolMoney,
+        cpsr.create_at as createAt
         FROM
         czb_petrol_sales_records cpsr
         LEFT JOIN czb_user cu  ON cpsr.buyer_id = cu.user_id AND cpsr.create_at &lt;= #{createAt,jdbcType=TIMESTAMP}AND cpsr.create_at>='2019-11-03' AND cpsr.state = 1
