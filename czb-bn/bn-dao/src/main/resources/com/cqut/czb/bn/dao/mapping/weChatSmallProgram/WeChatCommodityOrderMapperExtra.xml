@@ -143,7 +143,9 @@
 	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
     WHERE
       czb_shop.user_id = #{userId, jdbcType = VARCHAR}
+    <if test="orderState != null and orderState != ''">
       AND  czb_wechat_commodity_order.order_state = #{orderState = jdbcType = INTEGER}
+    </if>
       AND pay_status = 1
     ORDER BY
       czb_wechat_commodity_order.create_at DESC
