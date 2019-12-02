@@ -32,7 +32,7 @@
                 AND czb_user.create_at like concat('%', #{createAt}, '%')
             </if>
             <if test="area != null and area != ''">
-                AND czb_vip_recharge_records.vip_area_config_id like concat('%', #{area}, '%')
+                AND czb_vip_area_config.area like concat('%', #{area}, '%')
             </if>
         </where>
         GROUP BY generalPartnerId,generalPartnerName,area,generalPartnerPhoneNumber,promotionNumbers,recommenderName,unsettledAmount,settledAmount

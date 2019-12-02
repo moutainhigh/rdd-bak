@@ -682,7 +682,7 @@
         </trim>
     </insert>
 
-    <update id="updateCommodity" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO">
+    <update id="updateCommodity" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO">
         update czb_wechat_commodity
         <set >
             <if test="shopId != null" >

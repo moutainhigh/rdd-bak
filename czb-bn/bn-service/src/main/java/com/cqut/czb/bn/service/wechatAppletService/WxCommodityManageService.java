@@ -4,7 +4,6 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category;
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,5 +27,5 @@ public interface WxCommodityManageService {
 
     Boolean haltOrOnSales(String ids, Integer type);
 
-    Boolean editWeChatCommodity(WeChatCommodity weChatCommodity);
+    Boolean editWeChatCommodityWithImg(String userId, WxCommodityDTO WxCommodityDTO, MultipartFile file) throws IOException;
 }
