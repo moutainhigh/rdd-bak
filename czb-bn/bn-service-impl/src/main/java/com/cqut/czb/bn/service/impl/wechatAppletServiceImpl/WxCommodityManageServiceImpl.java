@@ -42,9 +42,6 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     FileMapper fileMapper;
 
     @Autowired
-    FileMapperExtra fileMapperExtra;
-
-    @Autowired
     FileFunctionMapper fileFunctionMapper;
 
     @Autowired

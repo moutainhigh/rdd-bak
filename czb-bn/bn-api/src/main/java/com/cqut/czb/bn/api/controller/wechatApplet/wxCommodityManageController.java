@@ -66,7 +66,7 @@ public class wxCommodityManageController {
     }
 
     @PostMapping("/editCommodityWithImg")
-    public JSONResult editCommodityWithImg(Principal principal, WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file){
+    public JSONResult editCommodityWithImg(Principal principal, WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file) throws IOException {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.editWeChatCommodityWithImg(user.getUserId(), wxCommodityDTO, file));
     }
