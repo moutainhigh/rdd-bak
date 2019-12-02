@@ -1,9 +1,6 @@
 package com.cqut.czb.bn.service.impl.wechatAppletServiceImpl;
 
-import com.cqut.czb.bn.dao.mapper.FileFunctionMapper;
-import com.cqut.czb.bn.dao.mapper.FileMapper;
-import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
-import com.cqut.czb.bn.dao.mapper.ShopMapperExtra;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
@@ -41,6 +38,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Autowired
     FileMapper fileMapper;
+
+    @Autowired
+    FileFunctionMapperExtra fileFunctionMapperExtra;
 
     @Autowired
     FileFunctionMapper fileFunctionMapper;
@@ -126,7 +126,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             return false;
         Boolean deleteImgs = true;
         if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
-            deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+            deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && deleteImgs;
     }
@@ -171,7 +171,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         }
         Boolean deleteImgs = true;
         if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
-            deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+            deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
     }
