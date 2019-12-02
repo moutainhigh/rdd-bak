@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.DealCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,11 @@ public interface SmallProgramOrderManageService {
     /**
      * 订单详情
      *
+     * @param userId
      * @param orderId
      * @return
      */
-    JSONResult<WeChatCommodityOrderDetail> getOrderDetail(String orderId);
+    JSONResult<WeChatCommodityOrderDetail> getOrderDetail(String userId, String orderId);
 
     /**
      * 订单处理信息获取
@@ -48,5 +50,5 @@ public interface SmallProgramOrderManageService {
      * @param input
      * @return
      */
-    JSONResult<Boolean> dealOrder(WeChatCommodityOrderProcess input);
+    JSONResult<Boolean> dealOrder(String userAccount, WeChatCommodityOrderProcess input);
 }

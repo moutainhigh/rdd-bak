@@ -334,7 +334,7 @@
     LEFT JOIN czb_wechat_commodity AS commodity_table ON order_table.commodity_id = commodity_table.commodity_id
     LEFT JOIN czb_user AS user_table ON user_table.user_id = order_table.user_id
     LEFT JOIN czb_category AS category ON category.category_id = order_table.commmodity_type_id
-    LEFT JOIN czb_wechat_commodity AS commodity_table ON order_table.commodity_id = commodity_table.commodity_id
+    LEFT JOIN czb_wechat_goods_delivery_records AS delivery_table ON order_table.order_id = delivery_table.order_id
     WHERE
         order_table.order_id = #{orderId,jdbcType=VARCHAR}
   </select>
@@ -369,7 +369,7 @@
         order_table.processing_time = now(),
         order_table.`handler` = #{handler,jdbcType=VARCHAR},
         order_table.qrcode = #{qrcode,jdbcType=VARCHAR},
-        order_table.order_state = #{orderState,jdbcType=VARCHAR},
+        order_table.order_state = #{orderState,jdbcType=VARCHAR}
     WHERE
         order_table.order_id = #{orderId,jdbcType=VARCHAR}
   </update>
@@ -385,7 +385,7 @@
         order_table.qrcode = #{qrcode,jdbcType=VARCHAR},
         delivery_table.delivery_num = #{deliveryNum,jdbcType=VARCHAR},
         delivery_table.delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
-        delivery_table.delivery_state = #{deliveryState,jdbcType=INTEGER},
+        delivery_table.delivery_state = #{deliveryState,jdbcType=INTEGER}
     WHERE
         order_table.order_id = #{orderId,jdbcType=VARCHAR}
     AND
