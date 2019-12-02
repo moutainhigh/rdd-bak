@@ -24,4 +24,6 @@ public interface WxCommodityManageService {
     Boolean deleteWxCommodityImg(String fileId,String id);
 
     List<Category> selectAllCategory();
+
+    Boolean haltOrOnSales(String ids, Integer type);
 }

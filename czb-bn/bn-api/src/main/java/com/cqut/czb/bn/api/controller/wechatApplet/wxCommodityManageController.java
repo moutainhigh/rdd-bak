@@ -65,8 +65,19 @@ public class wxCommodityManageController {
         return new JSONResult(wxCommodityManageService.selectAllCategory());
     }
 
-//    @PostMapping("/haltSales")
-//    public JSONResult haltSalesById(String ids){
-//
+//    @GetMapping("/editCommodity")
+//    public JSONResult editCommodity(){
+//        return null;
 //    }
+
+    /**
+     * 后台管理系统 开停售功能
+     * @param ids
+     * @param type 1:开售 2:停售
+     * @return
+     */
+    @PostMapping("/haltSales")
+    public JSONResult haltSalesById(String ids, Integer type){
+        return new JSONResult(wxCommodityManageService.haltOrOnSales(ids, type));
+    }
 }
