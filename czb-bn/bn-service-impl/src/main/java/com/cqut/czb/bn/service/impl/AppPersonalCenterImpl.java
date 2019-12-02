@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -194,7 +195,11 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Override
     public List<MyIncomeLogDTO> selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO,User user) {
-        List<MyIncomeLogDTO> myIncomeLogDTOS=incomeLogMapperExtra.selectIncomeLog(myIncomeLogDTO);
+        List<MyIncomeLogDTO> myIncomeLogDTOS=new ArrayList<>();
+        if(myIncomeLogDTO.getType()==0)
+            myIncomeLogDTOS=incomeLogMapperExtra.selectIncomeLog(myIncomeLogDTO);
+        else
+            myIncomeLogDTOS=incomeLogMapperExtra.selectIncomeLog2(myIncomeLogDTO);
         if(myIncomeLogDTOS==null){
             return null;
         }
@@ -215,19 +220,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
             //添加来源姓名
             if(myIncomeLogDTOS.get(i).getCommissionSourceUser()==null){
-                myIncomeLogDTOS.get(i).setUserName("无实名");
                 myIncomeLogDTOS.get(i).setUserAccount("***********");
-            }
-            else
-            {
-//                User user1=userMapper.selectByPrimaryKey(myIncomeLogDTOS.get(i).getCommissionSourceUser());
-//                if(user1==null){
-//                    myIncomeLogDTOS.get(i).setUserName("无实名");
-//                    myIncomeLogDTOS.get(i).setUserAccount("***********");
-//                }else {
-//                    myIncomeLogDTOS.get(i).setUserAccount(user1.getUserAccount());
-//                    myIncomeLogDTOS.get(i).setUserName(user1.getUserName());
-//                }
             }
 
             if(myIncomeLogDTO.getType()==4)//系统补贴
