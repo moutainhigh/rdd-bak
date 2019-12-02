@@ -121,6 +121,20 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     }
 
     @Override
+    public int BanPetrol(String petrolIds) {
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            return 0;
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"-1");
+        }
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+
+    @Override
     public boolean modifyPetrol(ModifyPetrolInputDTO inputDTO) {
         boolean isRemoved = PetrolCache.clearPetrol("AllpetrolMap",inputDTO.getPetrolNum()) >=1;
         if(!isRemoved){
