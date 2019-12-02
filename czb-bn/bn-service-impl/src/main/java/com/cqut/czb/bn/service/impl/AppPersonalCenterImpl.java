@@ -194,7 +194,6 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
     @Override
     public List<MyIncomeLogDTO> selectIncomeLog(MyIncomeLogDTO myIncomeLogDTO,User user) {
-
         List<MyIncomeLogDTO> myIncomeLogDTOS=incomeLogMapperExtra.selectIncomeLog(myIncomeLogDTO);
         if(myIncomeLogDTOS==null){
             return null;
@@ -221,14 +220,14 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             }
             else
             {
-                User user1=userMapper.selectByPrimaryKey(myIncomeLogDTOS.get(i).getCommissionSourceUser());
-                if(user1==null){
-                    myIncomeLogDTOS.get(i).setUserName("无实名");
-                    myIncomeLogDTOS.get(i).setUserAccount("***********");
-                }else {
-                    myIncomeLogDTOS.get(i).setUserAccount(user1.getUserAccount());
-                    myIncomeLogDTOS.get(i).setUserName(user1.getUserName());
-                }
+//                User user1=userMapper.selectByPrimaryKey(myIncomeLogDTOS.get(i).getCommissionSourceUser());
+//                if(user1==null){
+//                    myIncomeLogDTOS.get(i).setUserName("无实名");
+//                    myIncomeLogDTOS.get(i).setUserAccount("***********");
+//                }else {
+//                    myIncomeLogDTOS.get(i).setUserAccount(user1.getUserAccount());
+//                    myIncomeLogDTOS.get(i).setUserName(user1.getUserName());
+//                }
             }
 
             if(myIncomeLogDTO.getType()==4)//系统补贴

@@ -14,9 +14,9 @@ public class MyIncomeLogDTO {
 
     private String remark;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateAt;
 
     private String withdrawTo;
