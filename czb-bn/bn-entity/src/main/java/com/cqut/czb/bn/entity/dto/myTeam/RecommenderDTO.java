@@ -10,6 +10,16 @@ public class RecommenderDTO {
 
     private Integer isVip;
 
+    private String avatatUrl;
+
+    public String getAvatatUrl() {
+        return avatatUrl;
+    }
+
+    public void setAvatatUrl(String avatatUrl) {
+        this.avatatUrl = avatatUrl;
+    }
+
     public Integer getIsVip() {
         return isVip;
     }
