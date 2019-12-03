@@ -32,4 +32,7 @@ public interface DataProcessService {
 
     //放回油卡
     int putBackPetrol(boolean isSucceed, String petrolNum);
+
+    //给用户发放补贴
+    Boolean sendSubsidies(String orgId,double money,String ownerId,String area);
 }
