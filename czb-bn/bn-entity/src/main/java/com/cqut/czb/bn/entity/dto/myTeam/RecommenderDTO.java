@@ -10,14 +10,14 @@ public class RecommenderDTO {
 
     private Integer isVip;
 
-    private String avatatUrl;
+    private String avatarUrl;
 
-    public String getAvatatUrl() {
-        return avatatUrl;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setAvatatUrl(String avatatUrl) {
-        this.avatatUrl = avatatUrl;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public Integer getIsVip() {
