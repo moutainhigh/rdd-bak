@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface WxCommodityManageService {
-    PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO);
+    PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO, String userId);
 
     Boolean deletedWxCommodity(String commodityId);
 

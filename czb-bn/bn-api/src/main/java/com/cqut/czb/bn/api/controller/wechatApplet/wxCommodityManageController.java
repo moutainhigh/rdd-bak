@@ -23,8 +23,9 @@ public class wxCommodityManageController {
     WxCommodityManageService wxCommodityManageService;
 
     @GetMapping("/getAllCommodity")
-    public JSONResult getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO){
-        return new JSONResult(wxCommodityManageService.getAllCommodity(wxCommodityDTO,pageDTO));
+    public JSONResult getAllCommodity(Principal principal, WxCommodityDTO wxCommodityDTO, PageDTO pageDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.getAllCommodity(wxCommodityDTO,pageDTO, user.getUserId()));
     }
 
     @PostMapping("/deletedWxCommodity")

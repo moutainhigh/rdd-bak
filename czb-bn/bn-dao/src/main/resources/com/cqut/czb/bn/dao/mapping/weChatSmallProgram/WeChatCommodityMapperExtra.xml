@@ -68,6 +68,7 @@
         select
         <include refid="Base_Column_List" />
         from czb_wechat_commodity
+        LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
           <if test="commodityTitle != null and commodityTitle !=''">
               AND commodity_title LIKE concat('%',#{commodityTitle,jdbcType=VARCHAR},'%')
@@ -83,6 +84,9 @@
             </if>
             <if test="takeWay != null and takeWay !=''">
                 AND take_way LIKE concat('%',#{takeWay,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="userId != null and userId !=''">
+                AND czb_shop.user_id = #{userId,jdbcType=INTEGER}
             </if>
         </where>
     </select>

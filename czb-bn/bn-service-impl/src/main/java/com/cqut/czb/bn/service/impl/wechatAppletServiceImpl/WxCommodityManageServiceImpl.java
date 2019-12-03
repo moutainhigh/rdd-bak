@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.FileFunction;
@@ -51,10 +52,24 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     @Autowired
     ShopMapperExtra shopMapperExtra;
 
+    @Autowired
+    UserRoleMapperExtra userRoleMapperExtra;
+
     @Override
-    public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO) {
+    public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO, String userId) {
+        UserRoleDTO userRole = new UserRoleDTO();
+        userRole.setUserId(userId);
+        List<UserRoleDTO> userRoles = userRoleMapperExtra.selectUserRoleName(userRole);
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
-        return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
+        for(UserRoleDTO userRoleDTO : userRoles){
+            if("管理员".equals(userRoleDTO.getRoleName())){
+                return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
+            }else if("微信商家".equals(userRoleDTO.getRoleName())){
+                wxCommodityDTO.setUserId(userId);
+                return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
+            }
+        }
+        return null;
     }
 
     @Override
@@ -128,7 +143,8 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
             deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
-        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && deleteImgs;
+        return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) >
+                0 && deleteImgs;
     }
 
     @Override

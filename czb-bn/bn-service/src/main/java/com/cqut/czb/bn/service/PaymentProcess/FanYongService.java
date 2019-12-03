@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.service.PaymentProcess;
 
+import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
+
 /**
  * author:陈德强
  * 作用：返佣操作
@@ -19,4 +21,6 @@ public interface FanYongService {
      * 洗车服务返佣操作
      */
     boolean beginWashCarFanYong(String userId);
+
+    boolean changeUserIncomeInfo(String FyRemark, String commissionSourceUser, String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId);
 }
