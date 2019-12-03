@@ -22,7 +22,10 @@
             left outer join (select czb_user.user_id,czb_user.user_name,czb_user.user_account,czb_address.receiver from czb_user left outer join czb_address on czb_user.user_id = czb_address.user_id) as user2 on user2.user_id = czb_user.superior_user
             left outer join (select count(1) as promotionNumbers,czb_user.second_level_partner from czb_user where partner = 0 and is_vip = 1 GROUP BY second_level_partner) as user3 on user3.second_level_partner = czb_user.user_id
             left outer join (select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as unsettledAmount , czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 0) as income1 on income1.partner_id = czb_user.user_id
-            left outer join(select (first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) as settledAmount, czb_partner_vip_income.partner_id FROM czb_partner_vip_income where is_settle = 1) as income2 on income2.partner_id = czb_user.user_id
+            left outer join(SELECT incomeResult.partner_id,SUM(incomeResult.settledAmount) settledAmount FROM
+        (SELECT(first_vip_income + second_vip_income + first_petrol_income + second_petrol_income) AS settledAmount,
+        czb_partner_vip_income.partner_id FROM czb_partner_vip_income WHERE is_settle = 1) incomeResult
+        GROUP BY incomeResult.partner_id) AS income2 ON income2.partner_id = czb_user.user_id
         <where>
             czb_user.first_level_partner = #{userId} and czb_user.partner = 1
             <if test="account != null and account != ''">
