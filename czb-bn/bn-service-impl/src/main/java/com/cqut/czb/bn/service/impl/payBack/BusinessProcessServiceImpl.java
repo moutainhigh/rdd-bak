@@ -37,6 +37,9 @@ import java.util.*;
 public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     @Autowired
+    DictMapperExtra dictMapperExtra;
+
+    @Autowired
     private DataProcessService dataProcessService;
 
     @Autowired
@@ -761,7 +764,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
-        //
+        //发放补贴给购卡人
+        Double sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
+        System.out.println("发放补贴"+sendMoney);
+
         if ("2".equals(payType)) {
             System.out.println("开始充值");
             //插入消费记录
@@ -769,13 +775,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             Boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
 
-            //发放补贴给购卡人
-            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
-            System.out.println("发放补贴"+sendMoney);
-
             if (beginPetrolRecharge == true){
                 //vip是1 油卡是2
-                Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
+                double money1=BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+                Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money1,2);
                 System.out.println("addVipIncome"+addVipIncome);
                 //发送购买成功推送给特定用户
                 editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId(), money);
@@ -788,14 +791,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "0", 1);
             //vip是1 油卡是2
-            Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
+            double money1=BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+            Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money1,2);
             System.out.println("addVipIncome"+addVipIncome);
 
             Boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
-
-            //发放补贴给购卡人
-            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
-            System.out.println("发放补贴"+sendMoney);
 
             Integer putBack = dataProcessService.putBackPetrol(isChange,petrolNum);
             //发送购买成功推送给特定用户
@@ -857,6 +857,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
+        //发放补贴给购卡人
+        Double sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
+        System.out.println("发放补贴"+sendMoney);
+
         //payType对应"0"为购油"1"代表的是优惠卷购买（vip未有）"2"代表的是充值
         if ("2".equals(payType)) {
             PetrolSalesRecords petrolSalesRecords = new PetrolSalesRecords();
@@ -870,14 +874,12 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
             Boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
 
-            //发放补贴给购卡人
-            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
-            System.out.println("发放补贴"+sendMoney);
-
             if (beginPetrolRecharge == true){
 
+                double money1=BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+                System.out.println("实际支付"+money1);
                 //vip是1 油卡是2
-                Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
+                Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money1,2);
                 System.out.println("addVipIncome"+addVipIncome);
                 //发送购买成功推送给特定用户
                 editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_PETROL.getNoticeId(), money);
@@ -890,8 +892,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             //插入消费记录
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
             //此处插入购油的相关信息，油卡购买记录
+            double money1=BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+            System.out.println("实际支付"+money1);
             //vip是1 油卡是2
-            Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
+            Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money1,2);
             System.out.println("addVipIncome"+addVipIncome);
 
             Boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
@@ -899,11 +903,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             Integer putBack = dataProcessService.putBackPetrol(isChange,petrolNum);
             //发送购买成功推送给特定用户
             editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId(), money);
-
-            //发放补贴给购卡人
-            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
-            System.out.println("发放补贴"+sendMoney);
-
             return putBack;
         }
 
