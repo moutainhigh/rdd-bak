@@ -230,7 +230,7 @@
   <update id="updateCommodityDeliveryState">
     UPDATE czb_wechat_goods_delivery_records,
       czb_wechat_commodity_order
-    SET delivery_state = 2, czb_wechat_commodity_order.order_state = 1
+    SET delivery_state = 2, czb_wechat_commodity_order.order_state = 2
     WHERE
 	    czb_wechat_goods_delivery_records.order_id = czb_wechat_commodity_order.order_id
 	AND czb_wechat_goods_delivery_records.order_id = #{orderId, jdbcType = VARCHAR}
@@ -240,12 +240,12 @@
 
   <update id="updateCommodityOrderState" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO">
     UPDATE czb_wechat_commodity_order
-    SET order_state = 1
+    SET order_state = 2
     WHERE
         order_id = #{orderId, jdbcType = VARCHAR}
         AND shop_id = #{shopId, jdbcType = VARCHAR}
         AND pay_status = 1
-        AND order_state = 0
+        AND order_state = 1
   </update>
 
   <!--分页查询订单（后台管理系统）-->
