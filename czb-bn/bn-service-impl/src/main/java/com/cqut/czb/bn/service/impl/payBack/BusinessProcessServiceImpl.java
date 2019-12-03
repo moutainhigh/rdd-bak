@@ -768,6 +768,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "1", 1);
             //插入消费记录
             Boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
+
+            //发放补贴给购卡人
+            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
+            System.out.println("发放补贴"+sendMoney);
+
             if (beginPetrolRecharge == true){
                 //vip是1 油卡是2
                 Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,2);
@@ -787,6 +792,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             System.out.println("addVipIncome"+addVipIncome);
 
             Boolean isChange = dataProcessService.changeInfo(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, addressId, orgId);
+
+            //发放补贴给购卡人
+            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
+            System.out.println("发放补贴"+sendMoney);
+
             Integer putBack = dataProcessService.putBackPetrol(isChange,petrolNum);
             //发送购买成功推送给特定用户
             editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId(), money);
@@ -859,6 +869,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, payType, 2);
 
             Boolean beginPetrolRecharge = petrolRecharge.beginPetrolRecharge(area,thirdOrderId, money, petrolNum, ownerId, actualPayment, orgId);
+
+            //发放补贴给购卡人
+            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
+            System.out.println("发放补贴"+sendMoney);
+
             if (beginPetrolRecharge == true){
 
                 //vip是1 油卡是2
@@ -884,6 +899,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             Integer putBack = dataProcessService.putBackPetrol(isChange,petrolNum);
             //发送购买成功推送给特定用户
             editContent(ownerId,petrolNum,MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.BUY_PETROL.getNoticeId(), money);
+
+            //发放补贴给购卡人
+            Boolean sendMoney =dataProcessService.sendSubsidies(orgId,money,ownerId,area);
+            System.out.println("发放补贴"+sendMoney);
+
             return putBack;
         }
 
