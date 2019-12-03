@@ -22,12 +22,14 @@
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
     <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+    <result column="orderState" property="orderState" jdbcType="VARCHAR" />
     <collection property="commodityImgList" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
   </resultMap>
 
   <select id="selectCurrentOrder" parameterType="java.lang.String" resultMap="OrderDetail">
     SELECT
       czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity.commodity_title commodityTitle,
       czb_wechat_commodity.commodity_info commodityInfo,
       czb_wechat_commodity_order.actual_price actualPrice,
@@ -59,7 +61,7 @@
       czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
       AND order_state = 1
       AND pay_status = 1
-      czb_wechat_commodity_order.commodity_type = 2
+      AND czb_wechat_commodity_order.commodity_type = 2
     ORDER BY
       czb_wechat_commodity_order.create_at DESC
       LIMIT 1
@@ -87,6 +89,7 @@
       czb_wechat_commodity_order.electronic_code electronicCode,
       czb_wechat_commodity_order.qrcode QRcode,
       czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
@@ -124,6 +127,7 @@
       czb_wechat_commodity_order.electronic_code electronicCode,
       czb_wechat_commodity_order.qrcode QRcode,
       czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
@@ -171,6 +175,7 @@
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
       czb_wechat_goods_delivery_records.delivery_num deliveryNum,
       czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
+      czb_wechat_commodity_order.order_state orderState,
       CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
       czb_address.contact_number contactNumber,
       czb_address.receiver receiver,
@@ -190,7 +195,7 @@
       czb_wechat_commodity_order.create_at DESC
     </select>
 
-    <select id="selectOneCommodityOrderById" resultMap="OrderDetail">
+  <select id="selectOneCommodityOrderById" resultMap="OrderDetail">
     SELECT
       czb_wechat_commodity_order.order_id orderId,
       czb_wechat_commodity.commodity_title commodityTitle,
@@ -204,6 +209,7 @@
       czb_wechat_commodity_order.phone phone,
       czb_wechat_commodity.original_price originalPrice,
       czb_wechat_commodity_order.create_at createAt,
+      czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
