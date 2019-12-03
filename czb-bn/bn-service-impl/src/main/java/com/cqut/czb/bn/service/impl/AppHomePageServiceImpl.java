@@ -317,7 +317,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
             }else if(petrolZoneDTOList.get(i).getPetrolKind()==1){
                 if(json.get("1")!=null)
                     petrolZoneDTOList.get(i).setPetrolRemark((String) json.get("1"));
-                petrolZoneDTOList.get(i).setPetrolName("中石油");
+                petrolZoneDTOList.get(i).setPetrolName("石油加油卡");
                 //插入每张油卡的折扣信息和返佣信息
                 List<petrolInfoDTO> petrolInfoDTO1= calculatePrice(petrolZoneDTOList.get(i).getPetrolPriceInfo(),FY1.getContent(),FY2.getContent());
                 if(petrolInfoDTO1!=null){
@@ -326,7 +326,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
             }else if(petrolZoneDTOList.get(i).getPetrolKind()==2) {
                 if(json.get("2")!=null)
                     petrolZoneDTOList.get(i).setPetrolRemark((String) json.get("2"));
-                petrolZoneDTOList.get(i).setPetrolName("中石化");
+                petrolZoneDTOList.get(i).setPetrolName("石化加油卡");
                 //插入每张油卡的折扣信息和返佣信息
                 List<petrolInfoDTO> petrolInfoDTO1= calculatePrice(petrolZoneDTOList.get(i).getPetrolPriceInfo(),FY1.getContent(),FY2.getContent());
                 if(petrolInfoDTO1!=null){

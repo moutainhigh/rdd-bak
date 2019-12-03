@@ -1,9 +1,6 @@
 package com.cqut.czb.bn.service.impl.wechatAppletServiceImpl;
 
-import com.cqut.czb.bn.dao.mapper.FileFunctionMapper;
-import com.cqut.czb.bn.dao.mapper.FileMapper;
-import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
-import com.cqut.czb.bn.dao.mapper.ShopMapperExtra;
+import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
@@ -41,6 +38,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Autowired
     FileMapper fileMapper;
+
+    @Autowired
+    FileFunctionMapperExtra fileFunctionMapperExtra;
 
     @Autowired
     FileFunctionMapper fileFunctionMapper;
@@ -96,6 +96,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean addWxCommodityImg(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException {
+        wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         if(file != null && !file.isEmpty() && wxCommodityDTO.getCommodityImgId() != null && wxCommodityDTO.getCommodityImgId() != ""){
             String address = "";
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
@@ -110,7 +111,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             FileFunction fileFunction = new FileFunction();
             fileFunction.setId(StringUtil.createId());
             fileFunction.setFileId(file1.getFileId());
-            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
             fileFunction.setGroupCode("WCCommodity");
@@ -125,7 +126,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             return false;
         Boolean deleteImgs = true;
         if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
-            deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+            deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && deleteImgs;
     }
@@ -162,7 +163,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             FileFunction fileFunction = new FileFunction();
             fileFunction.setId(StringUtil.createId());
             fileFunction.setFileId(file1.getFileId());
-            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
             fileFunction.setGroupCode("WCCommodity");
@@ -170,7 +171,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         }
         Boolean deleteImgs = true;
         if(wxCommodityDTO.getDeleteIds() != null && wxCommodityDTO.getDeleteIds() != ""){
-            deleteImgs = fileMapperExtra.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapper.deleteByPrimaryKey(wxCommodityDTO.getDeleteIds()) > 0;
+            deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
     }
