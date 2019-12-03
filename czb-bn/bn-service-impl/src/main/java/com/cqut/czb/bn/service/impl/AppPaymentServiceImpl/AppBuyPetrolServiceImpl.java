@@ -60,7 +60,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         if(vipAreaConfig!=null){
             petrolInputDTO.setIsHaveVip(1);
         }
-        double money=backMoney(petrol,petrolInputDTO);
+//        double money=backMoney(petrol,petrolInputDTO);
+        Double money=petrolInputDTO.getPetrolPrice();
         // 设置参数
         SortedMap<String, Object> parameters =WeChatParameterConfig.getParameters(nonceStrTemp,orgId,money,petrolInputDTO,petrol);
         //插入购买信息o
@@ -109,7 +110,8 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         //支付类型
         String payType =petrolInputDTO.getPayType();
         //支付的金额
-        Double money=backMoney( petrol,petrolInputDTO);;
+//        Double money=backMoney( petrol,petrolInputDTO);
+        Double money=petrolInputDTO.getPetrolPrice();
         //地区
         String area=petrolInputDTO.getArea();
         //购买的油卡类型

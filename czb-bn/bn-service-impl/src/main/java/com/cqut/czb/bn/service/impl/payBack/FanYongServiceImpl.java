@@ -248,7 +248,8 @@ public class FanYongServiceImpl implements FanYongService {
      * 共用方法——处理用户收益信息表
      * k为第几级：0为本人，1为上级，2为上上级
      */
-    boolean changeUserIncomeInfo(String FyRemark, String commissionSourceUser, String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId) {
+    @Override
+    public boolean changeUserIncomeInfo(String FyRemark, String commissionSourceUser, String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId) {
         String uuid = StringUtil.createId();//新生成的id号（可能要用）
         boolean ischangeUserIncomeInfo;
         //amount为变更金额

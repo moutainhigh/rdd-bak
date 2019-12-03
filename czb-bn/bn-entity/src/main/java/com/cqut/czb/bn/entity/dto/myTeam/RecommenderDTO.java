@@ -10,6 +10,16 @@ public class RecommenderDTO {
 
     private Integer isVip;
 
+    private String avatarUrl;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
     public Integer getIsVip() {
         return isVip;
     }

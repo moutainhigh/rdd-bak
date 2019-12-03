@@ -21,6 +21,9 @@ public class TeamDTO {
 
     private String avatarUrl;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createAt;
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -28,9 +31,6 @@ public class TeamDTO {
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
-
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createAt;
 
     public Date getCreateAt() {
         return createAt;

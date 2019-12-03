@@ -322,7 +322,7 @@
 	sum( amount ) AS 'amount',
 	is_vip,
 	cu.create_at create_at,
-	avatarUrl avatarUrl
+	avatar_url avatarUrl
     FROM
         (
         SELECT
@@ -332,7 +332,8 @@
             superior_user,
             info_id,
             cu.create_at,
-            is_vip
+            is_vip,
+            cu.avatar_url
         FROM
             czb_user cu
             LEFT JOIN czb_user_income_info cuii ON cu.user_id = cuii.user_id
@@ -362,7 +363,7 @@
     <!--order by amount desc-->
   <!--</select>-->
   <select id="selectRecommender" resultType="com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO">
-    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName', is_vip as 'isVip'
+    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName', is_vip as 'isVip', avatar_url as 'avatarUrl'
     from czb_user
     <where>
       user_id = (

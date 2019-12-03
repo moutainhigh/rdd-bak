@@ -22,13 +22,16 @@ import java.util.Map;
 public class DataProcessServiceImpl implements DataProcessService {
 
     @Autowired
+    private FanYongService fanYongService;
+
+    @Autowired
     private PetrolMapperExtra petrolMapperExtra;
 
     @Autowired
-    private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+    UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
 
     @Autowired
-    FanYongService fanYongService;
+    private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
     @Autowired
     PetrolRecharge petrolRecharge;
@@ -52,7 +55,16 @@ public class DataProcessServiceImpl implements DataProcessService {
     UserMapperExtra userMapperExtra;
 
     @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
+
+    @Autowired
     VipRechargeRecordsMapperExtra vipRechargeRecordsMapperExtra;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     //解析订单数据用于处理
     @Override
@@ -255,5 +267,18 @@ public class DataProcessServiceImpl implements DataProcessService {
         //成功后移除对应的卡
         PetrolCache.currentPetrolMap.remove(petrolNum);
         return 1;
+    }
+
+    @Override
+    public Boolean sendSubsidies(String orgId, double money, String ownerId ,String area) {
+        User user = userMapper.selectByPrimaryKey(ownerId);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
+            Dict dict= dictMapperExtra.selectDictByName("petrol_subsidies_rate");
+            double FYrate=Double.valueOf(dict.getContent());
+            UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(ownerId);//查出原收益信息
+            return fanYongService.changeUserIncomeInfo("购油补贴", ownerId, ownerId, 1, oldUserIncomeInfo, money, money, ownerId, 1, FYrate, orgId);
+        }
+        return true;
     }
 }
