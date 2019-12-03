@@ -28,6 +28,7 @@
   <select id="selectCurrentOrder" parameterType="java.lang.String" resultMap="OrderDetail">
     SELECT
       czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity.commodity_title commodityTitle,
       czb_wechat_commodity.commodity_info commodityInfo,
       czb_wechat_commodity_order.actual_price actualPrice,
@@ -59,7 +60,7 @@
       czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
       AND order_state = 1
       AND pay_status = 1
-      czb_wechat_commodity_order.commodity_type = 2
+      AND czb_wechat_commodity_order.commodity_type = 2
     ORDER BY
       czb_wechat_commodity_order.create_at DESC
       LIMIT 1
