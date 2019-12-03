@@ -8,7 +8,10 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
+import net.sf.json.JSON;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface SmallProgramOrderManageService {
@@ -51,4 +54,13 @@ public interface SmallProgramOrderManageService {
      * @return
      */
     JSONResult<Boolean> dealOrder(String userAccount, WeChatCommodityOrderProcess input);
+
+
+    /**
+     * 获取销售额
+     *
+     * @param input
+     * @return
+     */
+    JSONResult<Double> getTotalSale(WeChatCommodityOrderDTO input);
 }

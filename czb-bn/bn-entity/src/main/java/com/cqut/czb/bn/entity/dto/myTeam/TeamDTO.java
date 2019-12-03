@@ -19,9 +19,18 @@ public class TeamDTO {
 
     private Integer isVip;
 
+    private String avatarUrl;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public Date getCreateAt() {
         return createAt;

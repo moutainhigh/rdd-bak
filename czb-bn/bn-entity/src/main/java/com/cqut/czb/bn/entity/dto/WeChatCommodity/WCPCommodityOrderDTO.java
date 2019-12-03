@@ -74,7 +74,7 @@ public class WCPCommodityOrderDTO {
 
     private String commodityImgId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     private String shopPhone;

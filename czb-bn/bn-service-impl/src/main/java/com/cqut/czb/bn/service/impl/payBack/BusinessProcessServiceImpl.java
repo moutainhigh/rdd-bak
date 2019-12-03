@@ -253,6 +253,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         order.setThirdOrder(thirdOrderId);
         order.setUpdateAt(new Date());
         order.setPayStatus(1);
+        order.setOrderState(1);
         int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
         System.out.println("更改用户订单："+(update>0));
 

@@ -1,17 +1,16 @@
 package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 
 import com.cqut.czb.bn.dao.mapper.AddressMapper;
-import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
+import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO;
-import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.DealCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
-import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 import com.cqut.czb.bn.entity.entity.Address;
-import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
 import com.github.pagehelper.PageHelper;
@@ -29,13 +28,20 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     WeChatCommodityOrderMapperExtra weChatCommodityOrderMapperExtra;
     @Autowired
     AddressMapper addressMapper;
+    @Autowired
+    UserRoleMapperExtra userRoleMapperExtra;
 
     @Override
     public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(WeChatCommodityOrderDTO input, PageDTO page) {
-        PageHelper.startPage(page.getCurrentPage(), page.getPageSize());
         JSONResult<PageInfo<WeChatCommodityOrderDTO>> jsonResult = new JSONResult<>();
+
+        // 处理用户权限问题
+        dealUserPermission(input);
+
+        PageHelper.startPage(page.getCurrentPage(), page.getPageSize());
         List<WeChatCommodityOrderDTO> result = weChatCommodityOrderMapperExtra.getTableList(input);
         PageInfo<WeChatCommodityOrderDTO> pageInfo = new PageInfo<>(result);
+
         jsonResult.setData(pageInfo);
 
         jsonResult.setCode(200);
@@ -122,5 +128,49 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         jsonResult.setCode(200);
         jsonResult.setMessage("成功处理该订单");
         return jsonResult;
+    }
+
+    @Override
+    public JSONResult<Double> getTotalSale(WeChatCommodityOrderDTO input) {
+        JSONResult<Double> jsonResult = new JSONResult<>();
+
+        // 处理用户权限问题
+        dealUserPermission(input);
+
+        Double totalSaleNumber = weChatCommodityOrderMapperExtra.getTotalSale(input);
+
+        jsonResult.setCode(200);
+        jsonResult.setMessage("销售总额获取成功");
+        jsonResult.setData(totalSaleNumber);
+        return jsonResult;
+    }
+
+    /**
+     * 处理用户权限问题
+     * (微信小程序商家只能看到自己的订单，管理员可以看到所有订单)
+     *
+     * 逻辑：管理员设置managerId为null，普通商家不对managerId做操作，使之成为SQL筛选条件
+     *
+     * @param input
+     */
+    private void dealUserPermission(WeChatCommodityOrderDTO input) {
+        // 判断用户是否是管理员
+        UserRoleDTO user = new UserRoleDTO();
+        user.setUserId(input.getManagerId());
+        List<UserRoleDTO> roleList = userRoleMapperExtra.selectUserRoleName(user);
+
+        boolean flag = false;
+        for (UserRoleDTO userRoleDTO : roleList) {
+            if ("管理员".equals(userRoleDTO.getRoleName())) {
+                // 如果该用户拥有管理员权限，进行标识
+                flag = true;
+                break;
+            }
+        }
+        // 如果该用户有个身份是管理员
+        if (flag) {
+            // 设置userId(managerId)为空，去除SQL中的筛选条件
+            input.setManagerId(null);
+        }
     }
 }

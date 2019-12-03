@@ -120,8 +120,8 @@
         remark = #{remark,jdbcType=VARCHAR}
         where file_id = #{fileId,jdbcType=VARCHAR}
     </update>
-    <delete id="deleteByDeleteIds" parameterType="java.lang.String" >
+    <delete id="deleteByDeleteIds">
         delete from czb_file
-        where file_id = ( #{deleteIds,jdbcType=VARCHAR} )
+        where file_id in ( ${deleteIds,jdbcType=VARCHAR} )
     </delete>
 </mapper>
