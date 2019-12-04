@@ -51,6 +51,34 @@ public class WCPCommodityOutputDTO {
 
     private String posterImg;
 
+    private List<String> recommendImgs;
+
+    private List<String> guessImgs;
+
+    public List<String> getGuessImgs() {
+        return guessImgs;
+    }
+
+    public void setGuessImgs(List<String> guessImgs) {
+        this.guessImgs = guessImgs;
+    }
+
+    public String getPosterImg() {
+        return posterImg;
+    }
+
+    public void setPosterImg(String posterImg) {
+        this.posterImg = posterImg;
+    }
+
+    public List<String> getRecommendImgs() {
+        return recommendImgs;
+    }
+
+    public void setRecommendImgs(List<String> recommendImgs) {
+        this.recommendImgs = recommendImgs;
+    }
+
     public String getShopPhone() {
         return shopPhone;
     }
@@ -58,8 +86,6 @@ public class WCPCommodityOutputDTO {
     public void setShopPhone(String shopPhone) {
         this.shopPhone = shopPhone;
     }
-
-    private List<String> commodityImg;
 
     public String getIsHaveShop() {
         return isHaveShop;
@@ -91,14 +117,6 @@ public class WCPCommodityOutputDTO {
 
     public void setCommodityImgId(String commodityImgId) {
         this.commodityImgId = commodityImgId;
-    }
-
-    public List<String> getCommodityImg() {
-        return commodityImg;
-    }
-
-    public void setCommodityImg(List<String> commodityImg) {
-        this.commodityImg = commodityImg;
     }
 
     public Date getEndTimeBusiness() {

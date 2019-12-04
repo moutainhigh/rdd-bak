@@ -37,6 +37,8 @@ public class WxCommodityDTO {
 
     private Integer commodityNum;
 
+    private Double fyMoney;
+
     private Integer isSale;
 
     private Integer takeWay;
@@ -59,7 +61,11 @@ public class WxCommodityDTO {
 
     private Integer showOrder;
 
-    private List<FileFunctionDTO> imgs;
+    private List<FileFunctionDTO> recommendImgs;
+
+    private List<FileFunctionDTO> guessImgs;
+
+    private List<FileFunctionDTO> posterImgs;
 
     private Date createAt;
 
@@ -73,6 +79,38 @@ public class WxCommodityDTO {
     private Integer insertType;
 
     private String userId;
+
+    public List<FileFunctionDTO> getRecommendImgs() {
+        return recommendImgs;
+    }
+
+    public void setRecommendImgs(List<FileFunctionDTO> recommendImgs) {
+        this.recommendImgs = recommendImgs;
+    }
+
+    public List<FileFunctionDTO> getGuessImgs() {
+        return guessImgs;
+    }
+
+    public void setGuessImgs(List<FileFunctionDTO> guessImgs) {
+        this.guessImgs = guessImgs;
+    }
+
+    public List<FileFunctionDTO> getPosterImgs() {
+        return posterImgs;
+    }
+
+    public void setPosterImgs(List<FileFunctionDTO> posterImgs) {
+        this.posterImgs = posterImgs;
+    }
+
+    public Double getFyMoney() {
+        return fyMoney;
+    }
+
+    public void setFyMoney(Double fyMoney) {
+        this.fyMoney = fyMoney;
+    }
 
     public Integer getInsertType() {
         return insertType;
@@ -297,15 +335,6 @@ public class WxCommodityDTO {
     public void setShowOrder(Integer showOrder) {
         this.showOrder = showOrder;
     }
-
-    public List<FileFunctionDTO> getImgs() {
-        return imgs;
-    }
-
-    public void setImgs(List<FileFunctionDTO> imgs) {
-        this.imgs = imgs;
-    }
-
 
     public Date getCreateAt() {
         return createAt;

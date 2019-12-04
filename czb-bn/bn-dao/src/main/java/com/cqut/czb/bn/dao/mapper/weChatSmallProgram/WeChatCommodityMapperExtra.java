@@ -45,7 +45,7 @@ public interface WeChatCommodityMapperExtra {
 
     Integer updateIsSale(@Param("ids") String ids, @Param("isSale") Integer isSale);
 
-    Integer selectPosterImg(String commodityImgId);
+    Integer selectPosterImgCount(String commodityImgId);
 
     Integer updatePoster(@Param("commodityImgId")String commodityImgId,@Param("address") String address);
 }

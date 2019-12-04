@@ -29,7 +29,9 @@
         <result column="show_order" property="showOrder" jdbcType="INTEGER" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-        <collection property="imgs" select="selectImg" column="commodity_img_id"></collection>
+        <collection property="recommendImgs" select="selectRecommendImg" column="commodity_img_id"></collection>
+        <collection property="guessImgs" select="selectGuessImg" column="commodity_img_id"></collection>
+        <collection property="posterImgs" select="selectPosterImg" column="commodity_img_id"></collection>
     </resultMap>
     <sql id="Base_Column_List" >
         commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img_id,
@@ -47,7 +49,7 @@
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
-    <select id="selectImg" resultMap="functionImgsMap" >
+    <select id="selectRecommendImg" resultMap="functionImgsMap" >
         SELECT
             cff.local_id,
             cff.file_id,
@@ -57,6 +59,31 @@
             czb_file_function cff
 	    LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
         WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
+        AND group_code = 'Recommend'
+    </select>
+    <select id="selectGuessImg" resultMap="functionImgsMap" >
+        SELECT
+            cff.local_id,
+            cff.file_id,
+            cff.group_code,
+            cf.save_path
+        FROM
+            czb_file_function cff
+	    LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
+        WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
+        AND group_code = 'Guess'
+    </select>
+    <select id="selectPosterImg" resultMap="functionImgsMap" >
+        SELECT
+            cff.local_id,
+            cff.file_id,
+            cff.group_code,
+            cf.save_path
+        FROM
+            czb_file_function cff
+	    LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
+        WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
+        AND group_code = 'PosterImg'
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
@@ -430,7 +457,8 @@
         <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
-        <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
+        <collection property="recommendImgs" column="commodityImgId" javaType="list" select="selectCommodityRecommendImgs"/>
+        <collection property="guessImgs" column="commodityImgId" javaType="list" select="selectCommodityGuessImgs"/>
         <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
     </resultMap>
 
@@ -474,7 +502,7 @@
           show_order
     </select>
 
-    <select id="selectPosterImg" parameterType="java.lang.String">
+    <select id="selectPosterImgCount" parameterType="java.lang.String">
         SELECT COUNT(*)
         FROM  czb_file_function
         WHERE local_id = #{commodityImgId, jdbcType = VARCHAR}
@@ -511,6 +539,30 @@
       WHERE
 		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
 		AND group_code = 'PosterImg'
+      ORDER BY czb_file_function.create_at
+    </select>
+
+    <select id="selectCommodityRecommendImgs" resultType="java.lang.String">
+      SELECT
+	    save_path
+      FROM
+        czb_file_function
+      LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
+      WHERE
+		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+		AND group_code = 'Recommend'
+      ORDER BY czb_file_function.create_at
+    </select>
+
+    <select id="selectCommodityGuessImgs" resultType="java.lang.String">
+      SELECT
+	    save_path
+      FROM
+        czb_file_function
+      LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
+      WHERE
+		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+		AND group_code = 'Guess'
       ORDER BY czb_file_function.create_at
     </select>
 
