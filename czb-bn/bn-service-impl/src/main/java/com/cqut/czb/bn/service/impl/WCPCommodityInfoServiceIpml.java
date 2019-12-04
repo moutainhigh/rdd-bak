@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.DistanceMeter;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.service.WCPCommodityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 
     @Autowired
     WeChatCommodityMapperExtra weChatCommodityMapperExtra;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     @Override
     public List<WCPCommodityOutputDTO> getCommodity(WCPCommodityInputDTO wcpCommodityInputDTO) {
@@ -59,6 +64,10 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
                 distance = distance / 1000;
                 wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
             }
+        }
+        Dict dict = dictMapperExtra.selectDictByName("sp_fy1");
+        if(dict != null){
+            wcpCommodityOutputDTO.setFyMoney(Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getFyMoney());
         }
         return wcpCommodityOutputDTO;
     }

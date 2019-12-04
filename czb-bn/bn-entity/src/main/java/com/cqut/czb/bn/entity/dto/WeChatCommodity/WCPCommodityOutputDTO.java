@@ -49,6 +49,8 @@ public class WCPCommodityOutputDTO {
 
     private String isHaveShop;
 
+    private String posterImg;
+
     public String getShopPhone() {
         return shopPhone;
     }
