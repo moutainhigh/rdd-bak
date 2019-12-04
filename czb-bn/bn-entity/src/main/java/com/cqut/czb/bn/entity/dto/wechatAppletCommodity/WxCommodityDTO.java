@@ -67,7 +67,20 @@ public class WxCommodityDTO {
 
     private String deleteIds;
 
+    /**
+     * 1 推荐 2 猜你喜欢 3 海报图片
+     */
+    private String insertType;
+
     private String userId;
+
+    public String getInsertType() {
+        return insertType;
+    }
+
+    public void setInsertType(String insertType) {
+        this.insertType = insertType;
+    }
 
     public String getUserId() {
         return userId;
