@@ -23,4 +23,12 @@ public interface FanYongService {
     boolean beginWashCarFanYong(String userId);
 
     boolean changeUserIncomeInfo(String FyRemark, String commissionSourceUser, String commissionGotUser, double fangyongRate, UserIncomeInfo userIncomeInfo, double money, double actualPayment, String userId, int k, double FYrate, String orgId);
+
+    /**
+     * 小程序返佣
+     * 返两级vip
+     */
+    boolean AppletBeginFanYong(String userId, double money,String orgId,double fyMoney);
+
+
 }
