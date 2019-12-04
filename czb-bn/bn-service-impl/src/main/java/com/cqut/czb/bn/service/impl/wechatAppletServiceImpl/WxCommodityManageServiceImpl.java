@@ -56,9 +56,6 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     @Autowired
     UserRoleMapperExtra userRoleMapperExtra;
 
-    @Autowired
-    ShopMapperExtra shopMapperExtra;
-
     @Override
     public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO, String userId) {
         UserRoleDTO userRole = new UserRoleDTO();

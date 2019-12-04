@@ -8,9 +8,10 @@
     <result column="local_id" property="localId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, group_code, file_id, local_id, create_at, update_at
+    id, group_code, file_id, local_id, create_at, update_at, order_num
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,11 +25,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.FileFunction" >
     insert into czb_file_function (id, group_code, file_id, 
-      local_id, create_at, update_at
-      )
+      local_id, create_at, update_at, 
+      order_num)
     values (#{id,jdbcType=VARCHAR}, #{groupCode,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
-      #{localId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{localId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
+      #{orderNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.FileFunction" >
     insert into czb_file_function
@@ -51,6 +52,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -70,6 +74,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -91,6 +98,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -100,7 +110,8 @@
       file_id = #{fileId,jdbcType=VARCHAR},
       local_id = #{localId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      order_num = #{orderNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
