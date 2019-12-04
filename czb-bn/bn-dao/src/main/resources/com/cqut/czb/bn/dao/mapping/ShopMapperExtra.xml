@@ -256,6 +256,14 @@
     <!--<select id="getMajor" resultType="java.lang.String" parameterType="java.lang.String">-->
     <!--select * from major where id=#{majorId}-->
     <!--</select>-->
-
+    <select id="selectAllShopInfo" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO">
+        SELECT
+            shop_id shopId,
+            shop_name shopName,
+            user_id userId
+        FROM czb_shop
+        WHERE audit = 1
+        AND shop_type = 3
+    </select>
 
 </mapper>
