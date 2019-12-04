@@ -209,7 +209,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                 AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                 petrolBackInfoDTO.setPaymentOrder(buyPetrol);
                 Petrol petrol1=PetrolInfo.getNewPetrol(petrol);
-                petrol1.setPetrolPrice(backMoney( petrol,petrolInputDTO));
+                petrol1.setPetrolPrice(petrolInputDTO.getPetrolPrice());
                 petrolBackInfoDTO.setPetrol(petrol1);
                 info.put("0",petrolBackInfoDTO);
                 return info;
@@ -254,7 +254,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                     AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                     petrolBackInfoDTO.setPaymentOrder(buyPetrol);
                     Petrol petrol=PetrolInfo.getNewPetrol(petrol2);
-                    petrol.setPetrolPrice(backMoney( petrol2,petrolInputDTO));
+                    petrol.setPetrolPrice(petrolInputDTO.getPetrolPrice());
                     petrolBackInfoDTO.setPetrol(petrol);
                     info.put("0",petrolBackInfoDTO);
                     return info;
@@ -287,7 +287,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
                     AliPetrolBackInfoDTO petrolBackInfoDTO=new AliPetrolBackInfoDTO();
                     petrolBackInfoDTO.setPaymentOrder(buyPetrol);
                     Petrol newPetrol=PetrolInfo.getNewPetrol(petrol1);
-                    newPetrol.setPetrolPrice(backMoney( petrol1,petrolInputDTO));
+                    newPetrol.setPetrolPrice(petrolInputDTO.getPetrolPrice());
                     petrolBackInfoDTO.setPetrol(newPetrol);
                     info.put("2",petrolBackInfoDTO);
                     return info;

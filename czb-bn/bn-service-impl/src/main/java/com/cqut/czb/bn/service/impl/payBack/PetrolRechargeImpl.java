@@ -3,10 +3,13 @@ package com.cqut.czb.bn.service.impl.payBack;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
+import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class PetrolRechargeImpl implements PetrolRecharge {
@@ -19,6 +22,9 @@ public class PetrolRechargeImpl implements PetrolRecharge {
 
     @Autowired
     FanYongService fanYongService;
+
+    @Autowired
+    DataProcessService dataProcessService;
 
     @Override
     public boolean beginPetrolRecharge(String area,String thirdOrderId,double money, String petrolNum,
@@ -41,7 +47,14 @@ public class PetrolRechargeImpl implements PetrolRecharge {
 
         //开始返佣
         System.out.println("油卡充值开始返佣");
-        boolean beginFanYong= fanYongService.beginFanYong(1,area,ownerId,money,actualPayment,orgId);
+
+        //发放补贴给购卡人
+        Double sendMoney =dataProcessService.getSubsidies(orgId,money,ownerId,area);
+        System.out.println("发放补贴"+sendMoney);
+        double money1= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+        System.out.println("实际支付"+money1);
+
+        boolean beginFanYong= fanYongService.beginFanYong(1,area,ownerId,money1,money1,orgId);
 
         if(beginFanYong==true)
             return true;

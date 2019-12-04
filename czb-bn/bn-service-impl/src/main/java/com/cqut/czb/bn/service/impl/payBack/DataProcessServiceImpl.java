@@ -13,6 +13,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -239,7 +240,13 @@ public class DataProcessServiceImpl implements DataProcessService {
             System.out.println("新增油卡邮寄记录" + isInsert);
         }
 
-        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money, actualPayment, orgId);
+        //发放补贴给购卡人
+        Double sendMoney =getSubsidies(orgId,money,ownerId,area);
+        System.out.println("发放补贴"+sendMoney);
+        double money1= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+        System.out.println("实际支付"+money1);
+
+        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money1, money1, orgId);
 
         if (beginFanYong == true)
             return true;
@@ -270,15 +277,30 @@ public class DataProcessServiceImpl implements DataProcessService {
     }
 
     @Override
-    public Boolean sendSubsidies(String orgId, double money, String ownerId ,String area) {
+    public Double sendSubsidies(String orgId, double money, String ownerId, String area) {
         User user = userMapper.selectByPrimaryKey(ownerId);
         VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
         if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
             Dict dict= dictMapperExtra.selectDictByName("petrol_subsidies_rate");
             double FYrate=Double.valueOf(dict.getContent());
             UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(ownerId);//查出原收益信息
-            return fanYongService.changeUserIncomeInfo("购油补贴", ownerId, ownerId, 1, oldUserIncomeInfo, money, money, ownerId, 1, FYrate, orgId);
+            fanYongService.changeUserIncomeInfo("购油补贴", ownerId, ownerId, 1, oldUserIncomeInfo, money, money, ownerId, 1, FYrate, orgId);
+            return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
         }
-        return true;
+        return 0.0;
     }
+
+    @Override
+    public Double getSubsidies(String orgId, double money, String ownerId, String area) {
+        User user = userMapper.selectByPrimaryKey(ownerId);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
+            Dict dict= dictMapperExtra.selectDictByName("petrol_subsidies_rate");
+            double FYrate=Double.valueOf(dict.getContent());
+            return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
+        }
+        return 0.0;
+    }
+
+
 }
