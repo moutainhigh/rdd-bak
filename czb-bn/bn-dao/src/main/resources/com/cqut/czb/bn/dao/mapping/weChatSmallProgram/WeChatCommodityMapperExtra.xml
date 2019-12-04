@@ -474,6 +474,23 @@
           show_order
     </select>
 
+    <select id="selectPosterImg" parameterType="java.lang.String">
+        SELECT COUNT(*)
+        FROM  czb_file_function
+        WHERE local_id = #{commodityImgId, jdbcType = VARCHAR}
+        AND group_code = 'PosterImg'
+    </select>
+
+    <update id="updatePoster">
+        UPDATE czb_file_function,
+        czb_file
+        SET czb_file.save_path = #{address, jdbcType =  VARCHAR}
+        WHERE
+            czb_file_function.file_id = czb_file.file_id
+            AND czb_file_function.local_id = #{commodityImgId, jdbcType =  VARCHAR}
+            AND group_code = 'PosterImg'
+    </update>
+
     <select id="selectCommodityImgList" resultType="java.lang.String">
       SELECT
 	    save_path

@@ -70,15 +70,15 @@ public class WxCommodityDTO {
     /**
      * 1 推荐 2 猜你喜欢 3 海报图片
      */
-    private String insertType;
+    private Integer insertType;
 
     private String userId;
 
-    public String getInsertType() {
+    public Integer getInsertType() {
         return insertType;
     }
 
-    public void setInsertType(String insertType) {
+    public void setInsertType(Integer insertType) {
         this.insertType = insertType;
     }
 
