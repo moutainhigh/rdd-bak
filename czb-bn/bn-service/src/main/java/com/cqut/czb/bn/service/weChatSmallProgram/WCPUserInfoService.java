@@ -15,4 +15,6 @@ public interface WCPUserInfoService {
     String getRecommendQRCode(UserDTO user);
 
     List<WCPTabbarInfo> getTabBarInfo(String userId);
+
+    String getCommodityQrCode(String userId, String commodityId);
 }

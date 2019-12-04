@@ -51,6 +51,22 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
     public String getRecommendQRCode(UserDTO user) {
         if(user == null)
             return null;
+        String json = "{\"scene\":\"" + user.getUserAccount() + "\",\"path\":\"/pages/index/index\"}";
+        return initQrCodeNetWork(json);
+    }
+
+    @Override
+    public String getCommodityQrCode(String userId, String commodityId) {
+        String json = "{\"scene\":\"superiorUser=" + userId + "&id=" + commodityId + "\",\"path\":\"/pages/product/product\"}";
+        return initQrCodeNetWork(json);
+    }
+
+    /**
+     * 传入的json参数字符
+     * @param json
+     * @return
+     */
+    private String initQrCodeNetWork(String json){
         WCPAssessToken wcpAssessToken;
         WCProgramConfig config = new WCProgramConfig();
         OkHttpClient client = new OkHttpClient();
@@ -63,20 +79,18 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
         try {
             Response res = call.execute();
             wcpAssessToken = gson.fromJson(res.body().charStream(), WCPAssessToken.class);
-
             if(wcpAssessToken.getErrcode() == null && wcpAssessToken.getErrmsg() == null){
-
-                String json = "{\"scene\":\"" + user.getUserId() + "\",\"path\":\"pages/index/index\"}";
                 System.out.println(json);
                 byte[] data = this.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+wcpAssessToken.getAccess_token(),json);
                 return encode(data);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
 
     @Override
     public List<WCPTabbarInfo> getTabBarInfo(String userId) {
@@ -86,13 +100,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
         tabbarHomePage.setImgNormal("/static/homePage.png");
         tabbarHomePage.setImgClick("/static/homePageNo.png");
         tabbarHomePage.setText("首页");
-        WCPTabbarInfo tabbarMine = new WCPTabbarInfo();
-        tabbarMine.setUrl("mine");
-        tabbarMine.setImgNormal("/static/mine_cilck.png");
-        tabbarMine.setImgClick("/static/mine.png");
-        tabbarMine.setText("我的");
-        tabbars.add(tabbarHomePage);
-        tabbars.add(tabbarMine);
+
 
         UserRoleDTO userRole = new UserRoleDTO();
         userRole.setUserId(userId);
@@ -107,8 +115,18 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
                 tabbars.add(tabbarShop);
             }
         }
+
+        WCPTabbarInfo tabbarMine = new WCPTabbarInfo();
+        tabbarMine.setUrl("mine");
+        tabbarMine.setImgNormal("/static/mine_cilck.png");
+        tabbarMine.setImgClick("/static/mine.png");
+        tabbarMine.setText("我的");
+        tabbars.add(tabbarHomePage);
+        tabbars.add(tabbarMine);
         return tabbars;
     }
+
+
 
     public static String encode(byte[] binaryData) {
         try {

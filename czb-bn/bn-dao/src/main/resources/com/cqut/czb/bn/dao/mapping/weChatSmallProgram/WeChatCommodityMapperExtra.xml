@@ -74,6 +74,7 @@
         from czb_wechat_commodity
         LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
+
           <if test="commodityTitle != null and commodityTitle !=''">
               AND commodity_title LIKE concat('%',#{commodityTitle,jdbcType=VARCHAR},'%')
           </if>
@@ -792,4 +793,14 @@
         SET is_sale = #{isSale, jdbcType = INTEGER}
         WHERE czb_wechat_commodity.commodity_id in (${ids})
     </update>
+
+    <select id="selectAllShopInfo" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO">
+        SELECT
+            shop_id shopId,
+            shop_name shopName,
+            user_id userId
+        FROM czb_shop
+        WHERE audit = 1
+        AND shop_type = 3
+    </select>
 </mapper>

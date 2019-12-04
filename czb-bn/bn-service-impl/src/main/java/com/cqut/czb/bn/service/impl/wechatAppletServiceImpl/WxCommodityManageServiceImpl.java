@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.File;
@@ -55,6 +56,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     @Autowired
     UserRoleMapperExtra userRoleMapperExtra;
 
+    @Autowired
+    ShopMapperExtra shopMapperExtra;
+
     @Override
     public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO, String userId) {
         UserRoleDTO userRole = new UserRoleDTO();
@@ -78,9 +82,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     }
 
     @Override
-    public Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException {
+    public Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException, InterruptedException {
         wxCommodityDTO.setShopId(shopMapperExtra.selectShopIdByUserId(user.getUserId()));
-        wxCommodityDTO.setCommodityId(StringUtil.createId());
+        wxCommodityDTO.setCommodityId(StringUtil.createWCId());
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
         wxCommodityDTO.setUpdateAt(new Date());
@@ -190,5 +194,10 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
+    }
+
+    @Override
+    public List<ShopInfoDTO> getAllShopInfo() {
+        return shopMapperExtra.selectAllShopInfo();
     }
 }
