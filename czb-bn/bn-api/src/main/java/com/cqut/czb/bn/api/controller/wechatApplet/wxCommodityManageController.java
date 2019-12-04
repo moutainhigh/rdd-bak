@@ -40,7 +40,7 @@ public class wxCommodityManageController {
     }
 
     @PostMapping("/addWxCommodity")
-    public JSONResult addWxCommodity(WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException {
+    public JSONResult addWxCommodity(WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException, InterruptedException {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.addWxCommodity(wxCommodityDTO, file, user));
     }
@@ -81,5 +81,10 @@ public class wxCommodityManageController {
     @PostMapping("/haltSales")
     public JSONResult haltSalesById(String ids, Integer type){
         return new JSONResult(wxCommodityManageService.haltOrOnSales(ids, type));
+    }
+
+    @GetMapping("/getAllShopInfo")
+    public JSONResult getAllShopInfo(){
+        return new JSONResult(wxCommodityManageService.getAllShopInfo());
     }
 }

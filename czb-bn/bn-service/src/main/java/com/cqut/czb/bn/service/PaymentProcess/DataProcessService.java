@@ -37,4 +37,6 @@ public interface DataProcessService {
     Double sendSubsidies(String orgId,double money,String ownerId,String area);
 
     Double getSubsidies(String orgId, double money, String ownerId, String area);
+
+    Double getDenomination(double money,String ownerId, String area);
 }

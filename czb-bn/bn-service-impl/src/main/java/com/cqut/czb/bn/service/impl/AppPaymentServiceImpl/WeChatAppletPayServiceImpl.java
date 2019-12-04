@@ -60,7 +60,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setRemark(payInputDTO.getRemark());
 
         //需要生成电子码
-        weChatCommodityOrder.setElectronicCode(weChatCommodity.getShopId()+orgId);
+        weChatCommodityOrder.setElectronicCode("wx:shopId="+weChatCommodity.getShopId()+"&orderId="+orgId);
 
         //0：待支付  1：支付完成待处理 2：订单完成
         weChatCommodityOrder.setOrderState(0);
@@ -69,7 +69,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setAddressId(payInputDTO.getAddressId());
 
         //插入二维码
-        weChatCommodityOrder.setQrcode(weChatCommodity.getShopId()+orgId);
+        weChatCommodityOrder.setQrcode("wx:shopId="+weChatCommodity.getShopId()+"&orderId="+orgId);
 
         weChatCommodityOrder.setPhone(payInputDTO.getUserPhone());
         //来源

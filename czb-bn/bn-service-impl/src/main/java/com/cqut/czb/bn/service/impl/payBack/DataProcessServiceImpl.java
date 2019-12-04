@@ -222,6 +222,9 @@ public class DataProcessServiceImpl implements DataProcessService {
         petrolSalesRecords.setState(1);
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
         petrolSalesRecords.setTurnoverAmount(money);
+        //更改销售原价
+        Double petrolDenomination=getDenomination(money,ownerId,area);
+        petrolSalesRecords.setDenomination(petrolDenomination);
         petrolSalesRecords.setCurrentPrice(money);//售价
         if (petrol.getPetrolKind() == 0) {
             petrolSalesRecords.setIsRecharged(-1);
@@ -300,6 +303,21 @@ public class DataProcessServiceImpl implements DataProcessService {
             return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
         }
         return 0.0;
+    }
+
+    @Override
+    public Double getDenomination(double money,String ownerId, String area) {
+        if(area==null||area.equals("")){
+            area="重庆市";
+        }
+        User user = userMapper.selectByPrimaryKey(ownerId);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
+            Dict dict= dictMapperExtra.selectDictByName("petrol_denomination");
+            double FYrate=Double.valueOf(dict.getContent());
+            return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
+        }
+        return money;
     }
 
 

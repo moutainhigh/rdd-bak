@@ -40,6 +40,9 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         //更改油卡购买信息的状态
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
         petrolSalesRecords.setState(1);
+        //更改用户的面额
+        Double petrolDenomination=dataProcessService.getDenomination(money,ownerId,area);
+        petrolSalesRecords.setDenomination(petrolDenomination);
         petrolSalesRecords.setTurnoverAmount(money);
         petrolSalesRecords.setCurrentPrice(money);//售价
         boolean update=petrolSalesRecordsMapperExtra.updateByPrimaryKeySelective(petrolSalesRecords)>0;
@@ -47,14 +50,7 @@ public class PetrolRechargeImpl implements PetrolRecharge {
 
         //开始返佣
         System.out.println("油卡充值开始返佣");
-
-        //发放补贴给购卡人
-        Double sendMoney =dataProcessService.getSubsidies(orgId,money,ownerId,area);
-        System.out.println("发放补贴"+sendMoney);
-        double money1= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
-        System.out.println("实际支付"+money1);
-
-        boolean beginFanYong= fanYongService.beginFanYong(1,area,ownerId,money1,money1,orgId);
+        boolean beginFanYong= fanYongService.beginFanYong(1,area,ownerId,money,actualPayment,orgId);
 
         if(beginFanYong==true)
             return true;
