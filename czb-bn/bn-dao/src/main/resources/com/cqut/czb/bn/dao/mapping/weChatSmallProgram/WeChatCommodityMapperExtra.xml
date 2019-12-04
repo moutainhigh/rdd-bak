@@ -68,7 +68,7 @@
         select
         commodity_id, czb_shop.shop_id, commodity_title, commodity_info, discount, commodity_img_id,
         cost_price, original_price, sale_price, commmodity_type_id, czb_wechat_commodity.starting_time_business,
-        czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_wechat_commodity.shop_name,
+        czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_shop.shop_name,
         czb_wechat_commodity.shop_phone, czb_wechat_commodity.shop_content, czb_wechat_commodity.shop_address, czb_wechat_commodity.longitude, czb_wechat_commodity.latitude, is_have_shop, show_place,
         show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at
         from czb_wechat_commodity

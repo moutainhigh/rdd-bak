@@ -4,7 +4,6 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.WCPUserInfoService;
-import net.sf.json.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,5 +36,11 @@ public class WCPUserInfoController {
     public JSONResult getTabBarInfo(Principal principal){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         return new JSONResult(wcpUserInfoService.getTabBarInfo(user.getUserId()));
+    }
+
+    @GetMapping("/getWCPCommodityCode")
+    public JSONResult getWCPCommodityQrCode(Principal principal, String CommodityId){
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        return new JSONResult(wcpUserInfoService.getCommodityQrCode(user.getUserId(), CommodityId));
     }
 }

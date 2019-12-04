@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageShopDTO;
 import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO;
@@ -30,4 +31,6 @@ public interface ShopMapperExtra {
     List<String> selectImg(@Param("shopId") String shopId);
 
     String selectShopIdByUserId(String userId);
+
+    List<ShopInfoDTO> selectAllShopInfo();
 }

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.wechatAppletService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category;
@@ -15,7 +16,7 @@ public interface WxCommodityManageService {
 
     Boolean deletedWxCommodity(String commodityId);
 
-    Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException;
+    Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException, InterruptedException;
 
     Boolean addWxCommodityImg(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException;
 
@@ -28,4 +29,6 @@ public interface WxCommodityManageService {
     Boolean haltOrOnSales(String ids, Integer type);
 
     Boolean editWeChatCommodityWithImg(String userId, WxCommodityDTO WxCommodityDTO, MultipartFile file) throws IOException;
+
+    List<ShopInfoDTO> getAllShopInfo();
 }
