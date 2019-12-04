@@ -431,6 +431,7 @@
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
         <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
+        <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
     </resultMap>
 
     <select id="selectAllCommodityByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
@@ -481,6 +482,18 @@
       LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
       WHERE
 		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+      ORDER BY czb_file_function.create_at
+    </select>
+
+    <select id="selectCommodityPosterImg" resultType="java.lang.String">
+      SELECT
+	    save_path
+      FROM
+        czb_file_function
+      LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
+      WHERE
+		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+		AND group_code = 'PosterImg'
       ORDER BY czb_file_function.create_at
     </select>
 
