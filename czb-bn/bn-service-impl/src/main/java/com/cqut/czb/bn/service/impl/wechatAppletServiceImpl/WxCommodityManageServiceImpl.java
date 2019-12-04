@@ -58,19 +58,19 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public PageInfo<WxCommodityDTO> getAllCommodity(WxCommodityDTO wxCommodityDTO, PageDTO pageDTO, String userId) {
-        UserRoleDTO userRole = new UserRoleDTO();
-        userRole.setUserId(userId);
-        List<UserRoleDTO> userRoles = userRoleMapperExtra.selectUserRoleName(userRole);
+//        UserRoleDTO userRole = new UserRoleDTO();
+//        userRole.setUserId(userId);
+//        List<UserRoleDTO> userRoles = userRoleMapperExtra.selectUserRoleName(userRole);
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
-        for(UserRoleDTO userRoleDTO : userRoles){
-            if("管理员".equals(userRoleDTO.getRoleName())){
-                return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
-            }else if("微信商家".equals(userRoleDTO.getRoleName())){
-                wxCommodityDTO.setUserId(userId);
-                return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
-            }
-        }
-        return null;
+//        for(UserRoleDTO userRoleDTO : userRoles){
+//            if("管理员".equals(userRoleDTO.getRoleName())){
+//                return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
+//            }else if("微信商家".equals(userRoleDTO.getRoleName())){
+//                wxCommodityDTO.setUserId(userId);
+//                return
+//            }
+//        }
+        return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
     }
 
     @Override
@@ -183,8 +183,23 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
-            fileFunction.setGroupCode("WCCommodity");
-            insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
+            if(wxCommodityDTO.getInsertType() == 1){
+                fileFunction.setGroupCode("Recommend");
+                insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
+            }else if(wxCommodityDTO.getInsertType() == 2){
+                fileFunction.setGroupCode("Guess");
+                insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
+            }else if(wxCommodityDTO.getInsertType() == 3){
+                //如果有海报图片
+                if(weChatCommodityMapperExtra.selectPosterImg(wxCommodityDTO.getCommodityImgId()) != null){
+                    insertImg = weChatCommodityMapperExtra.updatePoster(wxCommodityDTO.getCommodityImgId(), address) > 0;
+                }else{ //如果没有海报图片
+                    fileFunction.setGroupCode("PosterImg");
+                    insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
+                }
+            }else{
+                insertImg = false;
+            }
         }
         Boolean deleteImgs = true;
         if(wxCommodityDTO.getDeleteIds() != null && !"".equals(wxCommodityDTO.getDeleteIds()) ){
