@@ -170,10 +170,10 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
-    public Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO) {
+    public Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO) throws InterruptedException {
         if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return false;
         User user = BeanMapper.map(personalUserDTO, User.class);
-        user.setUserId(StringUtil.createId());
+        user.setUserId(StringUtil.createWCId());
         user.setUserType(2);
         user.setUserPsw(bCryptPasswordEncoder.encode("000000"));
         user.setCreateAt(new Date());

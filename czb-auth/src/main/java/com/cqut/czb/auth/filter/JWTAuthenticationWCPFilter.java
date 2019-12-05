@@ -123,7 +123,11 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 if(userDetailService == null){
                     userDetailService = SpringUtils.getBean(UserDetailService.class);
                 }
-                userDetailService.registerWCProgramUser(personalUserDTO);
+                try {
+                    userDetailService.registerWCProgramUser(personalUserDTO);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(wcpLoginBack.getOpenid(), Config.initPsw, new ArrayList<>())

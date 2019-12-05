@@ -8,7 +8,7 @@ import com.cqut.czb.bn.entity.entity.User;
 public interface UserDetailService {
     String registerPersonalUser(PersonalUserDTO personalUserDTO);
     String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO);
-    Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO);
+    Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO) throws InterruptedException;
     Boolean checkAccount(User user);
     User loadUserByUsername(String account);
 
