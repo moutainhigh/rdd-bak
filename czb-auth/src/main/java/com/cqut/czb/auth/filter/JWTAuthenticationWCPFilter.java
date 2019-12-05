@@ -117,7 +117,9 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 PersonalUserDTO personalUserDTO = new PersonalUserDTO();
                 personalUserDTO.setUserAccount(wcpLoginBack.getOpenid());
                 personalUserDTO.setUserPsw(Config.initPsw);
-                personalUserDTO.setSuperiorUser(superiorUser);
+                if (superiorUser != null && !"".equals(superiorUser) && !"null".equals(superiorUser)) {
+                    personalUserDTO.setSuperiorUser(superiorUser);
+                }
                 personalUserDTO.setUserName(nickName);
                 personalUserDTO.setAvatarUrl(avatarUrl);
                 if(userDetailService == null){
