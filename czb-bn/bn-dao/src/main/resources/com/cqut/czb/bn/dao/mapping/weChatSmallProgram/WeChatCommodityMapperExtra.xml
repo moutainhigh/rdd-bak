@@ -468,6 +468,7 @@
         czb_wechat_commodity.fy_money fyMoney,
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
+        czb_wechat_commodity.commodity_introduce commodityIntroduce,
         IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
@@ -549,6 +550,7 @@
         czb_wechat_commodity.fy_money fyMoney,
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
+        czb_wechat_commodity.commodity_introduce commodityIntroduce,
         IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity

@@ -49,6 +49,16 @@ public class WCPCommodityOutputDTO {
 
     private String isHaveShop;
 
+    private String commodityIntroduce;
+
+    public String getCommodityIntroduce() {
+        return commodityIntroduce;
+    }
+
+    public void setCommodityIntroduce(String commodityIntroduce) {
+        this.commodityIntroduce = commodityIntroduce;
+    }
+
     public String getPosterImg() {
         return posterImg;
     }
