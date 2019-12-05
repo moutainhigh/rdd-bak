@@ -457,8 +457,7 @@
         <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
-        <collection property="recommendImgs" column="commodityImgId" javaType="list" select="selectCommodityRecommendImgs"/>
-        <collection property="guessImgs" column="commodityImgId" javaType="list" select="selectCommodityGuessImgs"/>
+        <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
         <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
     </resultMap>
 
@@ -490,6 +489,7 @@
         WHERE
         czb_wechat_commodity.is_sale = 1
         AND ( pay_status = 1 OR pay_status IS NULL )
+        AND czb_wechat_commodity.end_time_business &gt;= now()
         <if test = "area != null and area != '' ">
             AND area = #{area, jdbcType = VARCHAR}
         </if>
@@ -542,30 +542,6 @@
       ORDER BY czb_file_function.create_at
     </select>
 
-    <select id="selectCommodityRecommendImgs" resultType="java.lang.String">
-      SELECT
-	    save_path
-      FROM
-        czb_file_function
-      LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
-      WHERE
-		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
-		AND group_code = 'Recommend'
-      ORDER BY czb_file_function.create_at
-    </select>
-
-    <select id="selectCommodityGuessImgs" resultType="java.lang.String">
-      SELECT
-	    save_path
-      FROM
-        czb_file_function
-      LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
-      WHERE
-		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
-		AND group_code = 'Guess'
-      ORDER BY czb_file_function.create_at
-    </select>
-
     <select id="selectCommodityById" parameterType="java.lang.String" resultMap="WCPCommodityInfoType">
         SELECT
         czb_wechat_commodity.commodity_id commodityId,
@@ -594,6 +570,7 @@
         WHERE
         czb_wechat_commodity.is_sale = 1
         AND ( pay_status = 1 OR pay_status IS NULL )
+        AND czb_wechat_commodity.end_time_business &gt;= now()
         AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
         GROUP BY
         commodityId
