@@ -184,10 +184,10 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
             if(wxCommodityDTO.getInsertType() == 1){
-                fileFunction.setGroupCode("Recommend");
+                fileFunction.setGroupCode("WCCommodity");
                 insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
             }else if(wxCommodityDTO.getInsertType() == 2){
-                fileFunction.setGroupCode("Guess");
+                fileFunction.setGroupCode("WCCommodity");
                 insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
             }else if(wxCommodityDTO.getInsertType() == 3){
                 //如果有海报图片

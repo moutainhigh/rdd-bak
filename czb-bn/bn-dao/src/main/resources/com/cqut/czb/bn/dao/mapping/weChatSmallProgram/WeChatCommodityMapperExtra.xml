@@ -29,8 +29,7 @@
         <result column="show_order" property="showOrder" jdbcType="INTEGER" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-        <collection property="recommendImgs" select="selectRecommendImg" column="commodity_img_id"></collection>
-        <collection property="guessImgs" select="selectGuessImg" column="commodity_img_id"></collection>
+        <collection property="imgs" select="selectImgs" column="commodity_img_id"></collection>
         <collection property="posterImgs" select="selectPosterImg" column="commodity_img_id"></collection>
     </resultMap>
     <sql id="Base_Column_List" >
@@ -49,7 +48,7 @@
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
-    <select id="selectRecommendImg" resultMap="functionImgsMap" >
+    <select id="selectImgs" resultMap="functionImgsMap" >
         SELECT
             cff.local_id,
             cff.file_id,
@@ -59,19 +58,7 @@
             czb_file_function cff
 	    LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
         WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
-        AND group_code = 'Recommend'
-    </select>
-    <select id="selectGuessImg" resultMap="functionImgsMap" >
-        SELECT
-            cff.local_id,
-            cff.file_id,
-            cff.group_code,
-            cf.save_path
-        FROM
-            czb_file_function cff
-	    LEFT JOIN czb_file cf ON cff.file_id = cf.file_id
-        WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
-        AND group_code = 'Guess'
+        AND group_code = 'WCCommodity'
     </select>
     <select id="selectPosterImg" resultMap="functionImgsMap" >
         SELECT
