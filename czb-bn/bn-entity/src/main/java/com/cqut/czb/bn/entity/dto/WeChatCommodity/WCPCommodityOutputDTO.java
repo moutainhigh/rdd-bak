@@ -49,6 +49,14 @@ public class WCPCommodityOutputDTO {
 
     private String isHaveShop;
 
+    public String getPosterImg() {
+        return posterImg;
+    }
+
+    public void setPosterImg(String posterImg) {
+        this.posterImg = posterImg;
+    }
+
     private String posterImg;
 
     public String getShopPhone() {
