@@ -353,7 +353,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
                 }
                 BigDecimal vipFee = BigDecimal.valueOf(petrolInfoDTO1.get(j).getDiscount()).multiply(new BigDecimal(petrolInfoDTO1.get(j).getPetrolPrice()));
                 double money= vipFee.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                petrolInfoDTO1.get(j).setVipPrice(money);
+                petrolInfoDTO1.get(j).setVipPrice(petrolInfoDTO1.get(j).getPetrolPrice());
                 if(fangyong1!=null)
                 {
                     //算出一级返佣的钱
