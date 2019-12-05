@@ -39,8 +39,8 @@ public class WCPUserInfoController {
     }
 
     @GetMapping("/getWCPCommodityCode")
-    public JSONResult getWCPCommodityQrCode(Principal principal, String CommodityId){
+    public JSONResult getWCPCommodityQrCode(Principal principal, String commodityId){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
-        return new JSONResult(wcpUserInfoService.getCommodityQrCode(user.getUserId(), CommodityId));
+        return new JSONResult(wcpUserInfoService.getCommodityQrCode(user.getUserId(), commodityId));
     }
 }
