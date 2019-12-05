@@ -63,7 +63,7 @@ CREATE TABLE `czb_wechat_commodity`  (
   `sale_price` double(10,2) NULL DEFAULT NULL,
   `commmodity_type_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `starting_time_business` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
-  `end_time_business` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  `end_time_business` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `commodity_source` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `commodity_num` int NULL DEFAULT NULL,
   `is_sale` int(1) NULL DEFAULT NULL,
