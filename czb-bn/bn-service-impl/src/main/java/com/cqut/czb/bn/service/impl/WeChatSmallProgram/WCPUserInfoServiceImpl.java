@@ -6,9 +6,9 @@ import com.cqut.czb.bn.entity.dto.WCPTabbarInfo;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
-import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
 import com.cqut.czb.bn.service.weChatSmallProgram.WCPUserInfoService;
+import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.google.gson.Gson;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -24,10 +24,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.Buffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -52,13 +49,13 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
         if(user == null)
             return null;
         String json = "{\"scene\":\"" + user.getUserAccount() + "\",\"path\":\"/pages/index/index\"}";
-        return initQrCodeNetWork(json);
+        return encode(initQrCodeNetWork(json));
     }
 
     @Override
     public String getCommodityQrCode(String userId, String commodityId) {
-        String json = "{\"scene\":\"superiorUser=" + userId + "&id=" + commodityId + "\",\"path\":\"/pages/product/product\"}";
-        return initQrCodeNetWork(json);
+        String json = "{\"scene\":\"s=" + 1 + "&id=" + 2 + "\",\"path\":\"/pages/product/product\"}";
+        return FileUploadUtil.putObject("小程序码.png", new ByteArrayInputStream(initQrCodeNetWork(json)));
     }
 
     /**
@@ -66,7 +63,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
      * @param json
      * @return
      */
-    private String initQrCodeNetWork(String json){
+    private byte[] initQrCodeNetWork(String json){
         WCPAssessToken wcpAssessToken;
         WCProgramConfig config = new WCProgramConfig();
         OkHttpClient client = new OkHttpClient();
@@ -82,7 +79,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
             if(wcpAssessToken.getErrcode() == null && wcpAssessToken.getErrmsg() == null){
                 System.out.println(json);
                 byte[] data = this.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+wcpAssessToken.getAccess_token(),json);
-                return encode(data);
+                return data;
             }
         } catch (IOException e) {
             e.printStackTrace();
