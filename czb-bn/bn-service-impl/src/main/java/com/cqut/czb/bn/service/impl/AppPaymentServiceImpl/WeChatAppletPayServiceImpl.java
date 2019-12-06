@@ -60,7 +60,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setRemark(payInputDTO.getRemark());
 
         //需要生成电子码
-        weChatCommodityOrder.setElectronicCode("wx:shopId="+weChatCommodity.getShopId()+"&orderId="+orgId);
+        weChatCommodityOrder.setElectronicCode(orgId);
 
         //0：待支付  1：支付完成待处理 2：订单完成
         weChatCommodityOrder.setOrderState(0);
