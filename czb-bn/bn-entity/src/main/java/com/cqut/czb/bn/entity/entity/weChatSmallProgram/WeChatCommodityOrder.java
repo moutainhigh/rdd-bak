@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.entity.weChatSmallProgram;
 
 import java.util.Date;
 
-public class WechatCommodityOrder {
+public class WeChatCommodityOrder {
     private String orderId;
 
     private String userId;
