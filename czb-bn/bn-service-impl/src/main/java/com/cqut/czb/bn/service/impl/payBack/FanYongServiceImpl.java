@@ -308,7 +308,7 @@ public class FanYongServiceImpl implements FanYongService {
 
         //查出返佣比例
         Dict rate1 = dictMapperExtra.selectDictByName("applet_fy1_rate");
-        Dict rate2 = dictMapperExtra.selectDictByName("applet_fy1_rate");
+        Dict rate2 = dictMapperExtra.selectDictByName("applet_fy2_rate");
         Double fyMoney1=Double.valueOf(rate1.getContent());
         System.out.println("fyMoney1"+fyMoney1);
         Double fyMoney2=Double.valueOf(rate2.getContent());
@@ -329,6 +329,7 @@ public class FanYongServiceImpl implements FanYongService {
                     }else if(count==2){
                         changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney2, orgId);
                     }
+                    userId=user.getSuperiorUser();
                     count++;
                     if(count>2){
                         return true;
