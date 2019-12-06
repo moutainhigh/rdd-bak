@@ -98,7 +98,13 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
         tabbarHomePage.setImgClick("/static/homePageNo.png");
         tabbarHomePage.setText("首页");
 
-
+        WCPTabbarInfo tabbarMine = new WCPTabbarInfo();
+        tabbarMine.setUrl("mine");
+        tabbarMine.setImgNormal("/static/mine_cilck.png");
+        tabbarMine.setImgClick("/static/mine.png");
+        tabbarMine.setText("我的");
+        tabbars.add(tabbarHomePage);
+        tabbars.add(tabbarMine);
         UserRoleDTO userRole = new UserRoleDTO();
         userRole.setUserId(userId);
         List<UserRoleDTO> userRoles = userRoleMapperExtra.selectUserRoleName(userRole); //查询用户角色信息
@@ -112,14 +118,6 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
                 tabbars.add(tabbarShop);
             }
         }
-
-        WCPTabbarInfo tabbarMine = new WCPTabbarInfo();
-        tabbarMine.setUrl("mine");
-        tabbarMine.setImgNormal("/static/mine_cilck.png");
-        tabbarMine.setImgClick("/static/mine.png");
-        tabbarMine.setText("我的");
-        tabbars.add(tabbarHomePage);
-        tabbars.add(tabbarMine);
         return tabbars;
     }
 
