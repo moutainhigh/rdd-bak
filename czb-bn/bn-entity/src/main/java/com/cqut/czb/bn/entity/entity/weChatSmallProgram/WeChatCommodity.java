@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.entity.weChatSmallProgram;
 
 import java.util.Date;
 
-public class WeChatCommodity {
+public class WechatCommodity {
     private String commodityId;
 
     private String shopId;
@@ -60,6 +60,8 @@ public class WeChatCommodity {
     private Date createAt;
 
     private Date updateAt;
+
+    private String commodityIntroduce;
 
     public String getCommodityId() {
         return commodityId;
@@ -291,5 +293,13 @@ public class WeChatCommodity {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getCommodityIntroduce() {
+        return commodityIntroduce;
+    }
+
+    public void setCommodityIntroduce(String commodityIntroduce) {
+        this.commodityIntroduce = commodityIntroduce == null ? null : commodityIntroduce.trim();
     }
 }

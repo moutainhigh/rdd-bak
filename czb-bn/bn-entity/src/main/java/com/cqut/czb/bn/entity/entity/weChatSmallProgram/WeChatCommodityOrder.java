@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.entity.weChatSmallProgram;
 
 import java.util.Date;
 
-public class WeChatCommodityOrder {
+public class WechatCommodityOrder {
     private String orderId;
 
     private String userId;
@@ -52,6 +52,10 @@ public class WeChatCommodityOrder {
     private Date updateAt;
 
     private Integer isSettlement;
+
+    private Integer isHaveSettled;
+
+    private String settledRecordId;
 
     public String getOrderId() {
         return orderId;
@@ -251,5 +255,21 @@ public class WeChatCommodityOrder {
 
     public void setIsSettlement(Integer isSettlement) {
         this.isSettlement = isSettlement;
+    }
+
+    public Integer getIsHaveSettled() {
+        return isHaveSettled;
+    }
+
+    public void setIsHaveSettled(Integer isHaveSettled) {
+        this.isHaveSettled = isHaveSettled;
+    }
+
+    public String getSettledRecordId() {
+        return settledRecordId;
+    }
+
+    public void setSettledRecordId(String settledRecordId) {
+        this.settledRecordId = settledRecordId == null ? null : settledRecordId.trim();
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WechatCommodityMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodity" >
     <id column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
     <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
@@ -31,13 +31,14 @@
     <result column="show_order" property="showOrder" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="commodity_introduce" property="commodityIntroduce" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     commodity_id, shop_id, area, commodity_title, commodity_info, discount, commodity_img_id, 
     cost_price, original_price, sale_price, commmodity_type_id, starting_time_business, 
     end_time_business, commodity_source, commodity_num, is_sale, take_way, shop_name, 
     shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, fy_money, 
-    show_place, show_order, create_at, update_at
+    show_place, show_order, create_at, update_at, commodity_introduce
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -49,7 +50,7 @@
     delete from czb_wechat_commodity
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodity" >
     insert into czb_wechat_commodity (commodity_id, shop_id, area, 
       commodity_title, commodity_info, discount, 
       commodity_img_id, cost_price, original_price, 
@@ -59,7 +60,8 @@
       shop_phone, shop_content, shop_address, 
       longitude, latitude, is_have_shop, 
       fy_money, show_place, show_order, 
-      create_at, update_at)
+      create_at, update_at, commodity_introduce
+      )
     values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
       #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, 
       #{commodityImgId,jdbcType=VARCHAR}, #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, 
@@ -69,9 +71,10 @@
       #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER}, 
       #{fyMoney,jdbcType=DOUBLE}, #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{commodityIntroduce,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodity" >
     insert into czb_wechat_commodity
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="commodityId != null" >
@@ -160,6 +163,9 @@
       </if>
       <if test="updateAt != null" >
         update_at,
+      </if>
+      <if test="commodityIntroduce != null" >
+        commodity_introduce,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -250,9 +256,12 @@
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="commodityIntroduce != null" >
+        #{commodityIntroduce,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodity" >
     update czb_wechat_commodity
     <set >
       <if test="shopId != null" >
@@ -339,10 +348,13 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="commodityIntroduce != null" >
+        commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
+      </if>
     </set>
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodity" >
     update czb_wechat_commodity
     set shop_id = #{shopId,jdbcType=VARCHAR},
       area = #{area,jdbcType=VARCHAR},
@@ -371,7 +383,8 @@
       show_place = #{showPlace,jdbcType=VARCHAR},
       show_order = #{showOrder,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
 </mapper>
