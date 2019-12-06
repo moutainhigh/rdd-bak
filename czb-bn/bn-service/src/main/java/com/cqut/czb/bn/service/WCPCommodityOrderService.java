@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,5 +24,5 @@ public interface WCPCommodityOrderService {
 
     WCPCommodityOrderDTO getOneCommodityOrderByShop(String userId, String orderId);
 
-    List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState);
+    List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(@Param("userId") String userId,@Param("orderState") Integer orderState);
 }
