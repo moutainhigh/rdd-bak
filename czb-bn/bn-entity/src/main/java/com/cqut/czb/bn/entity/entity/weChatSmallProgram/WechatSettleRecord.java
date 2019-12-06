@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.entity.weChatSmallProgram;
 
 import java.util.Date;
 
-public class WechatSettleRecord {
+public class WeChatSettleRecord {
     private String recordId;
 
     private String settleUserId;

@@ -1,17 +1,17 @@
 package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatSettleRecord;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatSettleRecord;
 
-public interface WechatSettleRecordMapper {
+public interface WeChatSettleRecordMapper {
     int deleteByPrimaryKey(String recordId);
 
-    int insert(WechatSettleRecord record);
+    int insert(WeChatSettleRecord record);
 
-    int insertSelective(WechatSettleRecord record);
+    int insertSelective(WeChatSettleRecord record);
 
-    WechatSettleRecord selectByPrimaryKey(String recordId);
+    WeChatSettleRecord selectByPrimaryKey(String recordId);
 
-    int updateByPrimaryKeySelective(WechatSettleRecord record);
+    int updateByPrimaryKeySelective(WeChatSettleRecord record);
 
-    int updateByPrimaryKey(WechatSettleRecord record);
+    int updateByPrimaryKey(WeChatSettleRecord record);
 }

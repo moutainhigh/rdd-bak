@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WechatSettleRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatSettleRecord" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatSettleRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatSettleRecord" >
     <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="settle_user_id" property="settleUserId" jdbcType="VARCHAR" />
     <result column="settled_user_id" property="settledUserId" jdbcType="VARCHAR" />
@@ -25,7 +25,7 @@
     delete from czb_wechat_settle_record
     where record_id = #{recordId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatSettleRecord" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatSettleRecord" >
     insert into czb_wechat_settle_record (record_id, settle_user_id, settled_user_id, 
       shop_id, total_amount, settle_time, 
       create_at, update_at)
@@ -33,7 +33,7 @@
       #{shopId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DOUBLE}, #{settleTime,jdbcType=TIMESTAMP}, 
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatSettleRecord" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatSettleRecord" >
     insert into czb_wechat_settle_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -88,7 +88,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatSettleRecord" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatSettleRecord" >
     update czb_wechat_settle_record
     <set >
       <if test="settleUserId != null" >
@@ -115,7 +115,7 @@
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatSettleRecord" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatSettleRecord" >
     update czb_wechat_settle_record
     set settle_user_id = #{settleUserId,jdbcType=VARCHAR},
       settled_user_id = #{settledUserId,jdbcType=VARCHAR},
