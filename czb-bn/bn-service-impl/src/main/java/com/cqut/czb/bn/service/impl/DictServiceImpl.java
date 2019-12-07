@@ -90,8 +90,8 @@ public class DictServiceImpl implements IDictService {
                 || "1.1.0".equals(version)
                 || "1.1.1".equals(version)
                 || "1.1.2".equals(version)
-                || version == null
-                || version == "") {
+                || "".equals(version)
+                || version == null) {
             appInfoDTO.setIsUpdate(true);
         } else {
             appInfoDTO.setIsUpdate(false);
