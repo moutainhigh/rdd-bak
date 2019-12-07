@@ -76,6 +76,16 @@ public class WxCommodityDTO {
 
     private String userId;
 
+    private FileFunctionDTO posterImg;
+
+    public FileFunctionDTO getPosterImg() {
+        return posterImg;
+    }
+
+    public void setPosterImg(FileFunctionDTO posterImg) {
+        this.posterImg = posterImg;
+    }
+
     public Double getFyMoney() {
         return fyMoney;
     }
