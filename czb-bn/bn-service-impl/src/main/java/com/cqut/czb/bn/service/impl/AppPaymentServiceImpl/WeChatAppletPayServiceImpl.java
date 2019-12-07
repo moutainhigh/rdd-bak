@@ -60,7 +60,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setRemark(payInputDTO.getRemark());
 
         //需要生成电子码
-        weChatCommodityOrder.setElectronicCode("wx:shopId="+weChatCommodity.getShopId()+"&orderId="+orgId);
+        weChatCommodityOrder.setElectronicCode(orgId);
 
         //0：待支付  1：支付完成待处理 2：订单完成
         weChatCommodityOrder.setOrderState(0);
@@ -78,7 +78,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         //返佣金额
         Dict dict1=dictMapperExtra.selectDictByName("sp_fy1");
         Dict dict2=dictMapperExtra.selectDictByName("sp_fy2");
-        double money=BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).multiply(BigDecimal.valueOf(Integer.valueOf(dict1.getContent())).add(BigDecimal.valueOf(Integer.valueOf(dict2.getContent())))).doubleValue();
+        double money=BigDecimal.valueOf(weChatCommodity.getFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).doubleValue();
         weChatCommodityOrder.setFyMoney(money);
 
         //成本价格

@@ -27,12 +27,14 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="is_settlement" property="isSettlement" jdbcType="INTEGER" />
+    <result column="is_have_settled" property="isHaveSettled" jdbcType="INTEGER" />
+    <result column="settled_record_id" property="settledRecordId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     order_id, user_id, commodity_id, shop_id, actual_price, third_order, pay_status, 
     pay_method, remark, electronic_code, order_state, address_id, qrcode, phone, commodity_source, 
     fy_money, cost_price, commodity_type, commmodity_type_id, processing_time, handler, 
-    commodity_num, create_at, update_at, is_settlement
+    commodity_num, create_at, update_at, is_settlement, is_have_settled, settled_record_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -53,7 +55,8 @@
       fy_money, cost_price, commodity_type, 
       commmodity_type_id, processing_time, handler, 
       commodity_num, create_at, update_at, 
-      is_settlement)
+      is_settlement, is_have_settled, settled_record_id
+      )
     values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
       #{shopId,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DOUBLE}, #{thirdOrder,jdbcType=VARCHAR}, 
       #{payStatus,jdbcType=INTEGER}, #{payMethod,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
@@ -62,7 +65,8 @@
       #{fyMoney,jdbcType=DOUBLE}, #{costPrice,jdbcType=DOUBLE}, #{commodityType,jdbcType=INTEGER}, 
       #{commmodityTypeId,jdbcType=VARCHAR}, #{processingTime,jdbcType=TIMESTAMP}, #{handler,jdbcType=VARCHAR}, 
       #{commodityNum,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{isSettlement,jdbcType=INTEGER})
+      #{isSettlement,jdbcType=INTEGER}, #{isHaveSettled,jdbcType=INTEGER}, #{settledRecordId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder" >
     insert into czb_wechat_commodity_order
@@ -142,6 +146,12 @@
       <if test="isSettlement != null" >
         is_settlement,
       </if>
+      <if test="isHaveSettled != null" >
+        is_have_settled,
+      </if>
+      <if test="settledRecordId != null" >
+        settled_record_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -218,6 +228,12 @@
       </if>
       <if test="isSettlement != null" >
         #{isSettlement,jdbcType=INTEGER},
+      </if>
+      <if test="isHaveSettled != null" >
+        #{isHaveSettled,jdbcType=INTEGER},
+      </if>
+      <if test="settledRecordId != null" >
+        #{settledRecordId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -296,6 +312,12 @@
       <if test="isSettlement != null" >
         is_settlement = #{isSettlement,jdbcType=INTEGER},
       </if>
+      <if test="isHaveSettled != null" >
+        is_have_settled = #{isHaveSettled,jdbcType=INTEGER},
+      </if>
+      <if test="settledRecordId != null" >
+        settled_record_id = #{settledRecordId,jdbcType=VARCHAR},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
@@ -324,7 +346,9 @@
       commodity_num = #{commodityNum,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      is_settlement = #{isSettlement,jdbcType=INTEGER}
+      is_settlement = #{isSettlement,jdbcType=INTEGER},
+      is_have_settled = #{isHaveSettled,jdbcType=INTEGER},
+      settled_record_id = #{settledRecordId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>

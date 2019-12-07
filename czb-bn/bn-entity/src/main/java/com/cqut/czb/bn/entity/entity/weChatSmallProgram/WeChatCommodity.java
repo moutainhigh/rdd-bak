@@ -61,6 +61,8 @@ public class WeChatCommodity {
 
     private Date updateAt;
 
+    private String commodityIntroduce;
+
     public String getCommodityId() {
         return commodityId;
     }
@@ -291,5 +293,13 @@ public class WeChatCommodity {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getCommodityIntroduce() {
+        return commodityIntroduce;
+    }
+
+    public void setCommodityIntroduce(String commodityIntroduce) {
+        this.commodityIntroduce = commodityIntroduce == null ? null : commodityIntroduce.trim();
     }
 }

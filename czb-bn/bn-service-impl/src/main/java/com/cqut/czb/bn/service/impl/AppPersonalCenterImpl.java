@@ -147,6 +147,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
 
         if(personalCenterUserDTO==null){
             personalCenterUserDTO = new PersonalCenterUserDTO();
+            personalCenterUserDTO.setUserId(user.getUserId());
             personalCenterUserDTO.setUserName(user1.getUserName());
             personalCenterUserDTO.setUserAccount(user1.getUserAccount());
             personalCenterUserDTO.setUserType(user1.getUserType());
