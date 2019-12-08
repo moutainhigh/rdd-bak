@@ -80,7 +80,6 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean addWxCommodity(WxCommodityDTO wxCommodityDTO, MultipartFile file, User user) throws IOException, InterruptedException {
-        wxCommodityDTO.setShopId(shopMapperExtra.selectShopIdByUserId(user.getUserId()));
         wxCommodityDTO.setCommodityId(StringUtil.createWCId());
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
