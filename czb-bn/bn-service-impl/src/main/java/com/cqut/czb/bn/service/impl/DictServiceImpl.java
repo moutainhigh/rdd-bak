@@ -80,7 +80,18 @@ public class DictServiceImpl implements IDictService {
         }
         Random random = new Random();
 
-        if("1.0.8".equals(version) || "1.0.7".equals(version) || "1.0.6".equals(version) ||"1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.5".equals(version) || version == null || version == "" || "1.0.9".equals(version) || "1.0.10".equals(version) || "1.1.0".equals(version) || "1.1.1".equals(version)){
+        if ("1.0.8".equals(version) || "1.0.7".equals(version)
+                || "1.0.6".equals(version)
+                || "1.0.3".equals(version)
+                || "1.0.4".equals(version)
+                || "1.0.5".equals(version)
+                || "1.0.9".equals(version)
+                || "1.0.10".equals(version)
+                || "1.1.0".equals(version)
+                || "1.1.1".equals(version)
+                || "1.1.2".equals(version)
+                || "".equals(version)
+                || version == null) {
             appInfoDTO.setIsUpdate(true);
         }else {
             appInfoDTO.setIsUpdate(false);

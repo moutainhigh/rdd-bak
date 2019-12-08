@@ -100,7 +100,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             FileFunction fileFunction = new FileFunction();
             fileFunction.setId(StringUtil.createId());
             fileFunction.setFileId(file1.getFileId());
-            fileFunction.setLocalId(wxCommodityDTO.getCommodityId());
+            fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
             fileFunction.setGroupCode("WCCommodity");
@@ -190,7 +190,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
                 insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
             }else if(wxCommodityDTO.getInsertType() == 3){
                 //如果有海报图片
-                if(weChatCommodityMapperExtra.selectPosterImgCount(wxCommodityDTO.getCommodityImgId()) != null){
+                if(weChatCommodityMapperExtra.selectPosterImgCount(wxCommodityDTO.getCommodityImgId()) != null || weChatCommodityMapperExtra.selectPosterImgCount(wxCommodityDTO.getCommodityImgId()) != 0){
                     insertImg = weChatCommodityMapperExtra.updatePoster(wxCommodityDTO.getCommodityImgId(), address) > 0;
                 }else{ //如果没有海报图片
                     fileFunction.setGroupCode("PosterImg");

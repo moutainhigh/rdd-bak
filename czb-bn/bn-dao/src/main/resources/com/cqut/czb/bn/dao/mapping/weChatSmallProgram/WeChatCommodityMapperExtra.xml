@@ -29,8 +29,9 @@
         <result column="show_order" property="showOrder" jdbcType="INTEGER" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="fyMoney" property="fyMoney" jdbcType="VARCHAR" />
         <collection property="imgs" select="selectImgs" column="commodity_img_id"></collection>
-        <collection property="posterImgs" select="selectPosterImg" column="commodity_img_id"></collection>
+        <collection property="posterImg" select="selectPosterImg" column="commodity_img_id"></collection>
     </resultMap>
     <sql id="Base_Column_List" >
         commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img_id,
@@ -84,7 +85,7 @@
         cost_price, original_price, sale_price, commmodity_type_id, czb_wechat_commodity.starting_time_business,
         czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_shop.shop_name,
         czb_wechat_commodity.shop_phone, czb_wechat_commodity.shop_content, czb_wechat_commodity.shop_address, czb_wechat_commodity.longitude, czb_wechat_commodity.latitude, is_have_shop, show_place,
-        show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at
+        show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney
         from czb_wechat_commodity
         LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
@@ -390,6 +391,9 @@
             <if test="updateAt != null" >
                 update_at = #{updateAt,jdbcType=TIMESTAMP},
             </if>
+            <if test="fyMoney != null" >
+                fy_money = #{fyMoney,jdbcType=VARCHAR},
+            </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>
@@ -490,7 +494,7 @@
           show_order
     </select>
 
-    <select id="selectPosterImgCount" parameterType="java.lang.String">
+    <select id="selectPosterImgCount" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM  czb_file_function
         WHERE local_id = #{commodityImgId, jdbcType = VARCHAR}
@@ -651,6 +655,9 @@
             <if test="updateAt != null" >
                 update_at,
             </if>
+            <if test="fyMoney != null" >
+                fy_money,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -733,6 +740,9 @@
             </if>
             <if test="updateAt != null" >
                 #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fyMoney != null" >
+                #{fyMoney,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -817,6 +827,9 @@
             </if>
             <if test="updateAt != null" >
                 update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fyMoney != null" >
+                fy_money = #{fyMoney,jdbcType=VARCHAR},
             </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
