@@ -46,6 +46,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
+        if(request.getRequestURI().startsWith("/api/WCPCommodityInfo")
+    || request.getRequestURI().startsWith("/api/AppHomePage")){
+            chain.doFilter(request, response);
+            return;
+        }
+
         if(null == tokenHeader || "".equals(tokenHeader)) {
             throw new SecurityException("登录信息不能为空");
         }
