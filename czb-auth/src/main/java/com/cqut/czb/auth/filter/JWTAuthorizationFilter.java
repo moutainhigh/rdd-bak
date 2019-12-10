@@ -45,9 +45,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return;
         }
-
         if(request.getRequestURI().startsWith("/api/WCPCommodityInfo")
-            || request.getRequestURI().startsWith("/api/AppHomePage")){
+            || request.getRequestURI().startsWith("/api/AppHomePage/selectAnnouncement")){
             chain.doFilter(request, response);
             return;
         }
