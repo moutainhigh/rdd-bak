@@ -35,4 +35,7 @@ public interface IUserService {
     boolean changePartner(UserInputDTO userInputDTO);
 
     boolean updateTest();
+
+
+    boolean bindingUser(UserInputDTO userInputDTO);
 }

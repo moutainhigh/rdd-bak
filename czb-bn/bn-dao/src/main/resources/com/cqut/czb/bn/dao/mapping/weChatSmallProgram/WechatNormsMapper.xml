@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WechatNormsMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatNorms" >
+    <id column="norms_id" property="normsId" jdbcType="VARCHAR" />
+    <result column="origin_price" property="originPrice" jdbcType="DOUBLE" />
+    <result column="norms_type" property="normsType" jdbcType="VARCHAR" />
+    <result column="norms_content" property="normsContent" jdbcType="VARCHAR" />
+    <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    norms_id, origin_price, norms_type, norms_content, sale_price, file_id, order_num, 
+    create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_wechat_norms
+    where norms_id = #{normsId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_wechat_norms
+    where norms_id = #{normsId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatNorms" >
+    insert into czb_wechat_norms (norms_id, origin_price, norms_type, 
+      norms_content, sale_price, file_id, 
+      order_num, create_at, update_at
+      )
+    values (#{normsId,jdbcType=VARCHAR}, #{originPrice,jdbcType=DOUBLE}, #{normsType,jdbcType=VARCHAR}, 
+      #{normsContent,jdbcType=VARCHAR}, #{salePrice,jdbcType=DOUBLE}, #{fileId,jdbcType=VARCHAR}, 
+      #{orderNum,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatNorms" >
+    insert into czb_wechat_norms
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="normsId != null" >
+        norms_id,
+      </if>
+      <if test="originPrice != null" >
+        origin_price,
+      </if>
+      <if test="normsType != null" >
+        norms_type,
+      </if>
+      <if test="normsContent != null" >
+        norms_content,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="normsId != null" >
+        #{normsId,jdbcType=VARCHAR},
+      </if>
+      <if test="originPrice != null" >
+        #{originPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="normsType != null" >
+        #{normsType,jdbcType=VARCHAR},
+      </if>
+      <if test="normsContent != null" >
+        #{normsContent,jdbcType=VARCHAR},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatNorms" >
+    update czb_wechat_norms
+    <set >
+      <if test="originPrice != null" >
+        origin_price = #{originPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="normsType != null" >
+        norms_type = #{normsType,jdbcType=VARCHAR},
+      </if>
+      <if test="normsContent != null" >
+        norms_content = #{normsContent,jdbcType=VARCHAR},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where norms_id = #{normsId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatNorms" >
+    update czb_wechat_norms
+    set origin_price = #{originPrice,jdbcType=DOUBLE},
+      norms_type = #{normsType,jdbcType=VARCHAR},
+      norms_content = #{normsContent,jdbcType=VARCHAR},
+      sale_price = #{salePrice,jdbcType=DOUBLE},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where norms_id = #{normsId,jdbcType=VARCHAR}
+  </update>
+</mapper>

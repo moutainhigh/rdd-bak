@@ -170,6 +170,7 @@
     <id column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="INTEGER" />
     <result column="enterprise_name" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="user_rank" property="userRank" jdbcType="INTEGER" />
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
@@ -180,10 +181,10 @@
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at
+    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at
     from
     (select
-    cu.user_id, user_account, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at
+    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>

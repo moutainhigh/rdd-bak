@@ -18,6 +18,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 @Transactional
@@ -51,8 +51,10 @@ public class UserServiceImpl implements IUserService {
 
     private final PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil,PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra,PartnerChangeRecordMapper partnerChangeRecordMapper) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
@@ -63,6 +65,7 @@ public class UserServiceImpl implements IUserService {
         this.redisUtil = redisUtil;
         this.partnerVipIncomeMapperExtra = partnerVipIncomeMapperExtra;
         this.partnerChangeRecordMapper = partnerChangeRecordMapper;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -347,7 +350,7 @@ public class UserServiceImpl implements IUserService {
             }
             userInputDTO.setIsLoginPc(1);
         }
-        
+
         if(isUpdateIndicatorRecord) {
             User user = userMapper.selectByPrimaryKey(userInputDTO.getUserId());
             userMapperExtra.insertAllSubUser(userInputDTO.getUserId());
@@ -437,5 +440,16 @@ public class UserServiceImpl implements IUserService {
         List<User> userList = userMapperExtra.getTest();
         Boolean update = userMapperExtra.updateTest(userList)>0;
         return update;
+    }
+
+    @Override
+    public boolean bindingUser(UserInputDTO userInputDTO) {
+        String password_ = bCryptPasswordEncoder.encode(userInputDTO.getPassword());
+        List<UserDTO> userDTOS = userMapperExtra.selectUser(userInputDTO);
+        if(userDTOS != null){
+            UserDTO userDTO = userDTOS.get(1);
+            return userDTO.getUserPsw().equals(password_);
+        }
+        return false;
     }
 }

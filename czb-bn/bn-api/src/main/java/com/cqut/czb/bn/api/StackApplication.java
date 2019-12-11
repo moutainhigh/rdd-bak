@@ -40,52 +40,40 @@ public class StackApplication {
     /**
      * it's for set http url auto change to https
      */
-//    @Bean
-//    public EmbeddedServletContainerFactory servletContainer(){
-//        TomcatEmbeddedServletContainerFactory tomcat=new TomcatEmbeddedServletContainerFactory(){
-//            @Override
-//            protected void postProcessContext(Context context) {
-//                //不需要强制使用https
-////                SecurityConstraint securityConstraint=new SecurityConstraint();
-////                securityConstraint.setUserConstraint("CONFIDENTIAL");//confidential
-////                SecurityCollection collection=new SecurityCollection();
-////                collection.addPattern("/*");
-////                securityConstraint.addCollection(collection);
-////                context.addConstraint(securityConstraint);
-//            }
-//        };
-////        tomcat.addAdditionalTomcatConnectors(httpConnector());
-//        tomcat.addAdditionalTomcatConnectors(createStandardConnector()); // 添加http
-//        return tomcat;
-//    }
-//
-//    // 配置http
-//    private Connector createStandardConnector() {
-//        // 默认协议为org.apache.coyote.http11.Http11NioProtocol
-//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//        connector.setSecure(false);
-//        connector.setScheme("http");
-//        connector.setPort(port);
-//        connector.setRedirectPort(httpsPort); // 当http重定向到https时的https端口号
-//        return connector;
-//    }
-//
-//    @Value("${server.http.port}")
-//    private Integer port;
-//
-//    @Value("${server.port}")
-//    private Integer httpsPort;
+    @Bean
+    public EmbeddedServletContainerFactory servletContainer(){
+        TomcatEmbeddedServletContainerFactory tomcat=new TomcatEmbeddedServletContainerFactory(){
+            @Override
+            protected void postProcessContext(Context context) {
+                //不需要强制使用https
+//                SecurityConstraint securityConstraint=new SecurityConstraint();
+//                securityConstraint.setUserConstraint("CONFIDENTIAL");//confidential
+//                SecurityCollection collection=new SecurityCollection();
+//                collection.addPattern("/*");
+//                securityConstraint.addCollection(collection);
+//                context.addConstraint(securityConstraint);
+            }
+        };
+//        tomcat.addAdditionalTomcatConnectors(httpConnector());
+        tomcat.addAdditionalTomcatConnectors(createStandardConnector()); // 添加http
+        return tomcat;
+    }
 
+    // 配置http
+    private Connector createStandardConnector() {
+        // 默认协议为org.apache.coyote.http11.Http11NioProtocol
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setSecure(false);
+        connector.setScheme("http");
+        connector.setPort(port);
+        connector.setRedirectPort(httpsPort); // 当http重定向到https时的https端口号
+        return connector;
+    }
 
-//    @Bean
-//    public Connector httpConnector(){
-//        Connector connector=new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//        connector.setScheme("http");
-//        //Connector监听的http的端口号
-//        connector.setPort(8899);
-//        connector.setSecure(true);
-//        //监听到http的端口号后转向到的https的端口号
-//        connector.setRedirectPort(888);
-//        return connector;
-//    }
+    @Value("${server.http.port}")
+    private Integer port;
+
+    @Value("${server.port}")
+    private Integer httpsPort;
+
 }

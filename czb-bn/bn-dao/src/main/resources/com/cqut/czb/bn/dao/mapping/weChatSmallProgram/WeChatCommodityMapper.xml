@@ -32,13 +32,14 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="commodity_introduce" property="commodityIntroduce" jdbcType="VARCHAR" />
+    <result column="norms_id" property="normsId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     commodity_id, shop_id, area, commodity_title, commodity_info, discount, commodity_img_id, 
     cost_price, original_price, sale_price, commmodity_type_id, starting_time_business, 
     end_time_business, commodity_source, commodity_num, is_sale, take_way, shop_name, 
     shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, fy_money, 
-    show_place, show_order, create_at, update_at, commodity_introduce
+    show_place, show_order, create_at, update_at, commodity_introduce, norms_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -60,8 +61,8 @@
       shop_phone, shop_content, shop_address, 
       longitude, latitude, is_have_shop, 
       fy_money, show_place, show_order, 
-      create_at, update_at, commodity_introduce
-      )
+      create_at, update_at, commodity_introduce, 
+      norms_id)
     values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
       #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, 
       #{commodityImgId,jdbcType=VARCHAR}, #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, 
@@ -71,8 +72,8 @@
       #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER}, 
       #{fyMoney,jdbcType=DOUBLE}, #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{commodityIntroduce,jdbcType=VARCHAR}
-      )
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{commodityIntroduce,jdbcType=VARCHAR}, 
+      #{normsId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
     insert into czb_wechat_commodity
@@ -167,6 +168,9 @@
       <if test="commodityIntroduce != null" >
         commodity_introduce,
       </if>
+      <if test="normsId != null" >
+        norms_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="commodityId != null" >
@@ -258,6 +262,9 @@
       </if>
       <if test="commodityIntroduce != null" >
         #{commodityIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="normsId != null" >
+        #{normsId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -351,6 +358,9 @@
       <if test="commodityIntroduce != null" >
         commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
       </if>
+      <if test="normsId != null" >
+        norms_id = #{normsId,jdbcType=VARCHAR},
+      </if>
     </set>
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
@@ -384,7 +394,8 @@
       show_order = #{showOrder,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR}
+      commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
+      norms_id = #{normsId,jdbcType=VARCHAR}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
 </mapper>
