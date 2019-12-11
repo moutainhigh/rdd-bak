@@ -10,11 +10,9 @@ import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.security.Principal;
 
 /**
@@ -107,4 +105,14 @@ public class UserManagementController {
             return new JSONResult(ResponseCodeConstants.FAILURE, "更换合伙人类型失败");
         }
     }
+
+    @PostMapping("/bindingUser")
+    public JSONResult bingingUser(UserInputDTO userInputDTO){
+        boolean bindingFlag = userService.bindingUser(userInputDTO);
+        if(bindingFlag){
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定成功");
+        }
+        return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定失败");
+    }
+
 }
