@@ -52,7 +52,7 @@ public class wxCommodityManageController {
     }
 
     @PostMapping("/updateWxCommodity")
-    public JSONResult updateWxCommodityInfo(WxCommodityDTO wxCommodityDTO){
+    public JSONResult updateWxCommodityInfo(@RequestBody WxCommodityDTO wxCommodityDTO){
         return new JSONResult(wxCommodityManageService.updateCommodity(wxCommodityDTO));
     }
 
