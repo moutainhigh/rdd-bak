@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,7 +81,7 @@ public class UserManagementController {
      *  我的团队接口
      * */
     @RequestMapping(value = "/selectTeam", method = RequestMethod.GET)
-    public  JSONResult selectTeam(Principal principal, String userId){
+    public  JSONResult selectTeam(Principal principal,@Param("userId") String userId){
         if(null == userId || "".equals(userId)) {
             User user = (User) redisUtils.get(principal.getName());
             return new JSONResult(userService.selectTeam(user.getUserId()));

@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class WeChatCommodityOrderDTO {
     private String managerId; // 管理人员的userId(管理员or微信商家)
-
+    private String userName;
     private String orderId; // 订单id
     private String thirdOrder; // 第三方订单号
     private Integer orderState; // 订单状态
@@ -25,9 +25,17 @@ public class WeChatCommodityOrderDTO {
     private Date startTime; // 开始时间(查询使用)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime; // 结束时间(查询使用)
-
     private Integer takeWay;
     private Integer deliveryState;
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getManagerId() {
         return managerId;
