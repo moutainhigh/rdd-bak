@@ -78,6 +78,16 @@ public class WxCommodityDTO {
 
     private FileFunctionDTO posterImg;
 
+    private String commodityIntroduce;
+
+    public String getCommodityIntroduce() {
+        return commodityIntroduce;
+    }
+
+    public void setCommodityIntroduce(String commodityIntroduce) {
+        this.commodityIntroduce = commodityIntroduce;
+    }
+
     public FileFunctionDTO getPosterImg() {
         return posterImg;
     }

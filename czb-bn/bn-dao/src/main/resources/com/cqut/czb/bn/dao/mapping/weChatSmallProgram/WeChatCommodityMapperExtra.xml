@@ -519,6 +519,7 @@
       LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
       WHERE
 		czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+		AND group_code = 'WCCommodity'
       ORDER BY czb_file_function.create_at
     </select>
 
@@ -658,6 +659,9 @@
             <if test="fyMoney != null" >
                 fy_money,
             </if>
+            <if test="commodityIntroduce != null" >
+                commodity_introduce,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -743,6 +747,9 @@
             </if>
             <if test="fyMoney != null" >
                 #{fyMoney,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityIntroduce != null" >
+                #{commodityIntroduce,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -830,6 +837,9 @@
             </if>
             <if test="fyMoney != null" >
                 fy_money = #{fyMoney,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityIntroduce != null" >
+                commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
             </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}

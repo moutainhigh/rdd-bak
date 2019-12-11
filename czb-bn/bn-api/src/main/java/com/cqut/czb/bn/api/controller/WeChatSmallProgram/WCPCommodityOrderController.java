@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrder
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WCPCommodityOrderService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,7 +85,7 @@ public class WCPCommodityOrderController {
     }
 
     @GetMapping("/getOneCommodityOrderByShop")
-    public JSONResult getOneCommodityOrderByShop(Principal principal, String orderId){
+    public JSONResult getOneCommodityOrderByShop(Principal principal,String orderId){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         return new JSONResult(wcpCommodityOrderService.getOneCommodityOrderByShop(user.getUserId(), orderId));
     }

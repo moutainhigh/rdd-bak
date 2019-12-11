@@ -19,6 +19,7 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,6 +68,9 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
         String code = request.getParameter("code");
         String superiorUser = request.getParameter("superiorUser");
         String nickName = request.getParameter("nickName");
+        if(nickName!=null) {
+            nickName = filterEmoji(nickName);
+        }
         String avatarUrl = request.getParameter("avatarUrl");
         String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
         //使用Token登录
@@ -207,5 +211,41 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    public static String filterEmoji(String source) {
+        if (StringUtils.isBlank(source)) {
+            return source;
+        }
+        StringBuilder buf = null;
+        int len = source.length();
+        for (int i = 0; i < len; i++) {
+            char codePoint = source.charAt(i);
+            if (isEmojiCharacter(codePoint)) {
+                if (buf == null) {
+                    buf = new StringBuilder(source.length());
+                }
+                buf.append(codePoint);
+            }
+        }
+        if (buf == null) {
+            return source;
+        } else {
+            if (buf.length() == len) {
+                buf = null;
+                return source;
+            } else {
+                return buf.toString();
+            }
+        }
+    }
+
+    private static boolean isEmojiCharacter(char codePoint) {
+        return (codePoint == 0x0) || (codePoint == 0x9) || (codePoint == 0xA)
+                || (codePoint == 0xD)
+                || ((codePoint >= 0x20) && (codePoint <= 0xD7FF))
+                || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD))
+                || ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF));
     }
 }

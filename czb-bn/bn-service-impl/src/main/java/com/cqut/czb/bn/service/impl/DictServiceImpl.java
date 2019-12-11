@@ -57,8 +57,8 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public AppInfoDTO selectAndroidInfo(User user, String version, String DeviceToken) {
-        if (DeviceToken != null) {
+    public AppInfoDTO selectAndroidInfo(User user, String version,String DeviceToken) {
+        if(DeviceToken != null) {
             dealDeviceToken(user.getUserId(), DeviceToken, 1);
         }
         AppInfoDTO appInfoDTO = new AppInfoDTO();
@@ -67,14 +67,14 @@ public class DictServiceImpl implements IDictService {
         dictInputDTO.setName(name);
         List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
         ArrayList<String> url = new ArrayList<>();
-        for (Dict dict : dictList) {
-            if ("android_version".equals(dict.getName())) {
+        for(Dict dict: dictList) {
+            if("android_version".equals(dict.getName())) {
                 appInfoDTO.setVersion(dict.getContent());
             }
-            if ("android_description".equals(dict.getName())) {
+            if("android_description".equals(dict.getName())) {
                 appInfoDTO.setDescription(dict.getContent());
             }
-            if (dict.getName().startsWith("android_url")) {
+            if(dict.getName().startsWith("android_url")) {
                 url.add(dict.getContent());
             }
         }
@@ -93,24 +93,24 @@ public class DictServiceImpl implements IDictService {
                 || "".equals(version)
                 || version == null) {
             appInfoDTO.setIsUpdate(true);
-        } else {
+        }else {
             appInfoDTO.setIsUpdate(false);
         }
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         //记录用户登录信息
-        recordLoginInfo(name, user.getUserId(), version);
+        recordLoginInfo(name,user.getUserId(),version);
 
         return appInfoDTO;
     }
 
     //记录用户登录信息
-    public void recordLoginInfo(String deviceType, String userId, String version) {
+    public void recordLoginInfo(String deviceType,String userId,String version){
         //检查是否插入过信息
-        int num = 0;
-        num = loginInfoMapperExtra.selectIsExist(userId, deviceType);
-        if (num > 0) {
+        int num=0;
+        num=loginInfoMapperExtra.selectIsExist(userId,deviceType);
+        if(num>0){
             //更改信息
-            LoginInfo loginInfo = new LoginInfo();
+            LoginInfo loginInfo=new LoginInfo();
             loginInfo.setDeviceType(deviceType);//登录设备类型
             loginInfo.setLatitude("");//登录地点经度
             loginInfo.setLongitude("");//登录地点的纬度
@@ -119,9 +119,9 @@ public class DictServiceImpl implements IDictService {
             loginInfo.setUserId(userId);//用户id
             loginInfo.setUpdateAt(new Date());
             loginInfoMapperExtra.updateByUserIdSelective(loginInfo);
-        } else {
+        }else {
             //插入版本信息
-            LoginInfo loginInfo = new LoginInfo();
+            LoginInfo loginInfo=new LoginInfo();
             loginInfo.setRecordId(StringUtil.createId());
             loginInfo.setDeviceType(deviceType);//登录设备类型
             loginInfo.setLatitude("");//登录地点经度
@@ -138,10 +138,10 @@ public class DictServiceImpl implements IDictService {
 
 
     @Override
-    public AppInfoDTO selectIOSInfo(User user, String version, String DeviceToken) {
+    public AppInfoDTO selectIOSInfo(User user,String version, String DeviceToken) {
 
         //处理IOSDeviceToken
-        if (DeviceToken != null) {
+        if(DeviceToken != null) {
             dealDeviceToken(user.getUserId(), DeviceToken, 2);
         }
         AppInfoDTO appInfoDTO = new AppInfoDTO();
@@ -151,48 +151,48 @@ public class DictServiceImpl implements IDictService {
         List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
 
         ArrayList<String> url = new ArrayList<>();
-        for (Dict dict : dictList) {
-            if ("ios_version".equals(dict.getName())) {
+        for(Dict dict: dictList) {
+            if("ios_version".equals(dict.getName())) {
                 appInfoDTO.setVersion(dict.getContent());
             }
-            if ("ios_description".equals(dict.getName())) {
+            if("ios_description".equals(dict.getName())) {
                 appInfoDTO.setDescription(dict.getContent());
             }
-            if (dict.getName().startsWith("ios_url")) {
+            if(dict.getName().startsWith("ios_url")) {
                 url.add(dict.getContent());
             }
         }
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
-        if ("1.0.0".equals(version) || "1.0.1".equals(version) || "1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.2".equals(version) || "1.0.5".equals(version) || "1.0.6".equals(version) || "1.0.7".equals(version) || "1.0.8".equals(version) || "1.0.9".equals(version) || "1.0.10".equals(version)) {
+        if("1.0.0".equals(version) || "1.0.1".equals(version) || "1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.2".equals(version) || "1.0.5".equals(version) || "1.0.6".equals(version) || "1.0.7".equals(version) || "1.0.8".equals(version) || "1.0.9".equals(version) || "1.0.10".equals(version) || "1.1.0".equals(version)){
             appInfoDTO.setIsUpdate(true);
-        } else {
+        }else {
             appInfoDTO.setIsUpdate(false);
         }
 
 
         //记录用户登录信息
-        recordLoginInfo(name, user.getUserId(), version);
+        recordLoginInfo(name,user.getUserId(),version);
         return appInfoDTO;
     }
 
-    public void dealDeviceToken(String userId, String DeviceToken, Integer type) {
+    public void dealDeviceToken(String userId, String DeviceToken,Integer type){
         RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
-        if (remotePush != null) {
-            if (DeviceToken != null || DeviceToken != "") {
-                if (!DeviceToken.equals(remotePush.getDeviceToken())) {
+        if ( remotePush != null ){
+            if (DeviceToken != null || DeviceToken != ""){
+                if ( !DeviceToken.equals(remotePush.getDeviceToken()) ){
                     remotePush.setDeviceToken(DeviceToken);
                     remotePush.setDeviceType(type);
                     remotePushMapper.updateByPrimaryKey(remotePush);
                 }
             }
-        } else {
+        }else{
             RemotePush model = new RemotePush();
             model.setDeviceId(StringUtil.createId());
             model.setDeviceToken(DeviceToken);
-            if (type == 1) {
+            if (type==1){
                 model.setDeviceType(1);
-            } else {
+            }else {
                 model.setDeviceType(2);
             }
             model.setUserId(userId);
@@ -220,6 +220,6 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public Dict getDicByName(DictInputDTO dictInputDTO) {
-        return dictMapperExtra.selectDictByName(dictInputDTO.getName());
+        return dictMapperExtra.selectDictByName(dictInputDTO.getName()) ;
     }
 }
