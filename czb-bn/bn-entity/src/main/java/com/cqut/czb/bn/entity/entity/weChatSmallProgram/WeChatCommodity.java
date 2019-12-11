@@ -63,6 +63,8 @@ public class WeChatCommodity {
 
     private String commodityIntroduce;
 
+    private String normsId;
+
     public String getCommodityId() {
         return commodityId;
     }
@@ -301,5 +303,13 @@ public class WeChatCommodity {
 
     public void setCommodityIntroduce(String commodityIntroduce) {
         this.commodityIntroduce = commodityIntroduce == null ? null : commodityIntroduce.trim();
+    }
+
+    public String getNormsId() {
+        return normsId;
+    }
+
+    public void setNormsId(String normsId) {
+        this.normsId = normsId == null ? null : normsId.trim();
     }
 }
