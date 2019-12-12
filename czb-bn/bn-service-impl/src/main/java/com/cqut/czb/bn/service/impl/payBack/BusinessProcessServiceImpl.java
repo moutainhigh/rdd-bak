@@ -10,6 +10,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsM
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
@@ -275,10 +276,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             records.setDeliveryState(0);
             records.setOrderId(orgId);
             weChatGoodsDeliveryRecordsMapper.insertSelective(records);
+        }else {
+            // 发送短信
+            WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
+            PhoneCode.sendAppletShopMessage(order1.getPhone(),weChatCommodity.getCommodityTitle(),order1.getCommodityNum(),order1.getElectronicCode());
         }
-
-        // 发送短信
-        WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
 
        //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);

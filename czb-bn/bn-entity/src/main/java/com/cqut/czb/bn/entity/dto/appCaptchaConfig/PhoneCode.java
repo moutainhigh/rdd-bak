@@ -37,7 +37,7 @@ public class PhoneCode {
 
     public static   void main(String[] args) {
         String phone = "15730353007"; //此处可输入你的手机号码进行测试
-        new PhoneCode().sendAppletShopMessage(phone,"(韩版学生宽松棉袄加厚外套冬天潮)","1","111575463022185");
+        new PhoneCode().sendAppletShopMessage(phone,"(韩版学生宽松棉袄加厚外套冬天潮)",1,"111575463022185");
     }
 
     /**
@@ -251,7 +251,7 @@ public class PhoneCode {
     }
 
     //微信小程序购物发送短信
-    public String sendAppletShopMessage(String userAccount, String commodityTitle, String commodityNum, String electronicCode){
+    public static String sendAppletShopMessage(String userAccount, String commodityTitle, Integer commodityNum, String electronicCode){
         // 设置超时时间-可自行调整
         System.setProperty(VcodeConfig.defaultConnectTimeout, VcodeConfig.Timeout);
         System.setProperty(VcodeConfig.defaultReadTimeout, VcodeConfig.Timeout);
