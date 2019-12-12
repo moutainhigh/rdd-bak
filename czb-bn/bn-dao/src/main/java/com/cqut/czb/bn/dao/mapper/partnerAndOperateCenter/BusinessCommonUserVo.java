@@ -10,6 +10,13 @@ public class BusinessCommonUserVo {
     private String promotionMobile;
     private Integer isVip;
 
+    public BusinessCommonUserVo(String mobile,Date createAt,String area){
+        this.mobile = mobile;
+        this.createAt = createAt;
+        this.area = area;
+    }
+
+
     public BusinessCommonUserVo(String userId, String mobile, Date createAt, String area,String promotionMobile,Integer isVip) {
         this.userId = userId;
         this.mobile = mobile;
