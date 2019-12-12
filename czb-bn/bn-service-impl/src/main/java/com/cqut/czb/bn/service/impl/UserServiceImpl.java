@@ -113,7 +113,13 @@ public class UserServiceImpl implements IUserService {
     public PageInfo<UserDTO> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
         List<UserDTO> userList = userMapperExtra.selectUser(userInputDTO);
-
+        //如果是小程序用户,并且绑定了app账号那么查询绑定的app账号的信息
+        for(UserDTO user: userList){
+            if(user.getBindingId()!=null){
+                User user1 = userMapper.selectByPrimaryKey(user.getBindingId());
+                user.setUserAccount(user1.getUserAccount());
+            }
+        }
         return new PageInfo<>(userList);
     }
 
@@ -462,22 +468,28 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean bindingUser(UserInputDTO userInputDTO,String userId) {
+    public String bindingUser(UserInputDTO userInputDTO,String userId) {
         //检验密码是否一致。
         User checkUser = userMapperExtra.findUserByAccount(userInputDTO.getUserAccount());//通过电话号码来查询
         boolean isLike=bCryptPasswordEncoder.matches(userInputDTO.getUserName(), checkUser.getUserPsw());
         if (!isLike) {
-            System.out.println("错误");
-            return false;
+            return "您的账号或密码输入错误";
         } else {
+            if(checkUser.getBindingId()!=null){
+                return "该账号已经被绑定了";
+            }
             UserInputDTO user = new UserInputDTO();
             user.setUserId(userId);
             user.setBindingId(checkUser.getUserId());
+            UserInputDTO userCheck = new UserInputDTO();
+            userCheck.setUserId(checkUser.getUserId());
+            userCheck.setBindingId(userId);
             int i = userMapperExtra.updateUser(user);
-            if(i>0){
-                return true;
+            int j = userMapperExtra.updateUser(userCheck);
+            if(i>0 && j >0){
+                return "绑定成功";
             }
-            return false;
+            return "绑定失败:请联系管理员";
         }
     }
 }

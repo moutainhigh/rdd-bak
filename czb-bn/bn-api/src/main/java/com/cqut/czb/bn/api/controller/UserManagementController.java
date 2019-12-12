@@ -114,12 +114,10 @@ public class UserManagementController {
              user = (User) redisUtils.get(principal.getName());
         }
         if(userInputDTO.getUserName() == null || userInputDTO.getUserAccount() == null)
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "请输入正确的账号密码");
-        boolean bindingFlag = userService.bindingUser(userInputDTO, user.getUserId());
-        if(bindingFlag){
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定成功");
-        }
-        return new JSONResult(ResponseCodeConstants.SUCCESS, "账号或密码错误");
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "您的账号或密码错误");
+        String bindingFlag = userService.bindingUser(userInputDTO, user.getUserId());
+
+        return  new JSONResult(bindingFlag);
     }
 
 }

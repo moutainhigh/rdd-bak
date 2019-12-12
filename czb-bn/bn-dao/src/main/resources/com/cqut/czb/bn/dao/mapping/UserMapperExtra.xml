@@ -30,7 +30,7 @@
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner, is_vip
+    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingId
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
@@ -184,10 +184,10 @@
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at
+    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at,u.bindingId
     from
     (select
-    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at
+    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingId
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
@@ -197,7 +197,8 @@
     left join czb_user cu on u.superior_user = cu.user_id
       <where>
         <if test="userAccount != null and userAccount != ''">
-            and u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            and (u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            or u.user_name like concat('%',#{userAccount},'%'))
         </if>
         <if test="userName != null and userName != ''">
             and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')

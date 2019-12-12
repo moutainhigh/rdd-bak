@@ -51,6 +51,8 @@ public class User {
 
     private String avatarUrl;
 
+    private String bindingId;
+
     public String getUserId() {
         return userId;
     }
@@ -241,5 +243,13 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
+    }
+
+    public String getBindingId() {
+        return bindingId;
+    }
+
+    public void setBindingId(String bindingId) {
+        this.bindingId = bindingId;
     }
 }
