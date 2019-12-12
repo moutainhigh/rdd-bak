@@ -8,13 +8,12 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.security.Principal;
 
 /**
@@ -80,7 +79,7 @@ public class UserManagementController {
      *  我的团队接口
      * */
     @RequestMapping(value = "/selectTeam", method = RequestMethod.GET)
-    public  JSONResult selectTeam(Principal principal, String userId){
+    public  JSONResult selectTeam(Principal principal,@Param("userId") String userId){
         if(null == userId || "".equals(userId)) {
             User user = (User) redisUtils.get(principal.getName());
             return new JSONResult(userService.selectTeam(user.getUserId()));
@@ -107,4 +106,14 @@ public class UserManagementController {
             return new JSONResult(ResponseCodeConstants.FAILURE, "更换合伙人类型失败");
         }
     }
+
+    @PostMapping("/bindingUser")
+    public JSONResult bingingUser(UserInputDTO userInputDTO){
+        boolean bindingFlag = userService.bindingUser(userInputDTO);
+        if(bindingFlag){
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定成功");
+        }
+        return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定失败");
+    }
+
 }

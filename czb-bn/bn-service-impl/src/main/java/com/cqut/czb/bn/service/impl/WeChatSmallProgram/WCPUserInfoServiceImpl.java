@@ -122,7 +122,6 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
     }
 
 
-
     public static String encode(byte[] binaryData) {
         try {
             return new String(Base64.encodeBase64(binaryData), "UTF-8");

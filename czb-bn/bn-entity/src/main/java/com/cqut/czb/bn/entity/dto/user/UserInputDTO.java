@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -13,7 +15,12 @@ public class UserInputDTO {
 
     private String userId;
 
+
+
     private String userAccount;
+
+    @JsonIgnore
+    private String password;
 
     private String userName;
 
@@ -197,5 +204,13 @@ public class UserInputDTO {
 
     public void setSecondLevelPartner(String secondLevelPartner) {
         this.secondLevelPartner = secondLevelPartner;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

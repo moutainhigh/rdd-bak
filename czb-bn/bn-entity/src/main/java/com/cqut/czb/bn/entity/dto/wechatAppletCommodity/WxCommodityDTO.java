@@ -63,8 +63,20 @@ public class WxCommodityDTO {
 
     private List<FileFunctionDTO> imgs;
 
+    private List<FileFunctionDTO> posterImgs;
+
+    public List<FileFunctionDTO> getPosterImgs() {
+        return posterImgs;
+    }
+
+    public void setPosterImgs(List<FileFunctionDTO> posterImgs) {
+        this.posterImgs = posterImgs;
+    }
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateAt;
 
     private String deleteIds;
