@@ -1,12 +1,16 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.BecomeBusinessmanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * @ClassName: BecomeBusinessmanController
@@ -22,8 +26,12 @@ public class BecomeBusinessmanController {
     @Autowired
     private BecomeBusinessmanService becomeBusinessman;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @PostMapping("/addBusinessman")
-    public JSONResult addBusinessman(ShopDTO shopDTO){
-        return new JSONResult(becomeBusinessman.addBusinessman(shopDTO));
+    public JSONResult addBusinessman(ShopDTO shopDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(becomeBusinessman.addBusinessman(shopDTO,user));
     }
 }

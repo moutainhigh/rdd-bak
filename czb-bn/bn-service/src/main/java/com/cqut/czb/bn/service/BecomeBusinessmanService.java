@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
+import com.cqut.czb.bn.entity.entity.User;
 
 /**
  * @ClassName: BecomeBusinessmanService
@@ -10,5 +11,5 @@ import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
  * @version: v1.0
  */
 public interface BecomeBusinessmanService {
-    int addBusinessman(ShopDTO shopDTO);
+    int addBusinessman(ShopDTO shopDTO, User user);
 }
