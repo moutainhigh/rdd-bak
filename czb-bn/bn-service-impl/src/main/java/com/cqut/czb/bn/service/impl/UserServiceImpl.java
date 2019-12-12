@@ -443,13 +443,22 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean bindingUser(UserInputDTO userInputDTO) {
-        String password_ = bCryptPasswordEncoder.encode(userInputDTO.getPassword());
-        List<UserDTO> userDTOS = userMapperExtra.selectUser(userInputDTO);
-        if(userDTOS != null){
-            UserDTO userDTO = userDTOS.get(1);
-            return userDTO.getUserPsw().equals(password_);
+    public boolean bindingUser(UserInputDTO userInputDTO,String userId) {
+        //检验密码是否一致。
+        User checkUser = userMapperExtra.findUserByAccount(userInputDTO.getUserAccount());//通过电话号码来查询
+        boolean isLike=bCryptPasswordEncoder.matches(userInputDTO.getUserName(), checkUser.getUserPsw());
+        if (!isLike) {
+            System.out.println("错误");
+            return false;
+        } else {
+            UserInputDTO user = new UserInputDTO();
+            user.setUserId(userId);
+            user.setBindingId(checkUser.getUserId());
+            int i = userMapperExtra.updateUser(user);
+            if(i>0){
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 }
