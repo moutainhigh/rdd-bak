@@ -244,13 +244,64 @@
     </where>
   </update>
 
+  <!--根据条件开售油卡-->
+  <update id="saleSomePetrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO">
+    update czb_petrol
+    <set>
+      state = 1
+    </set>
+    <where>
+      state in (3,0)
+      <if test="petrolNum != null and petrolNum !=''" >
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolKind != null and petrolKind !=''" >
+        AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' " >
+        AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}
+      </if>
+      <if test="petrolPrice != null and petrolPrice != ''" >
+        AND petrol_price = #{petrolPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="area != null and area != ''" >
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+  </update>
+
   <update id="notSaleAllPetrol" parameterType="java.lang.String">
     update czb_petrol
     <set>
       state = 3
     </set>
     <where>
-      and state = 1
+      state = 1
+    </where>
+  </update>
+
+  <update id="notSaleSomePetrols" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO">
+    update czb_petrol
+    <set>
+      state = 3
+    </set>
+    <where>
+      state = 1
+      <if test="petrolNum != null and petrolNum !=''" >
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolKind != null and petrolKind !=''" >
+        AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' " >
+        AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}
+      </if>
+      <if test="petrolPrice != null and petrolPrice != ''" >
+        AND petrol_price = #{petrolPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="area != null and area != ''" >
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
     </where>
   </update>
 
