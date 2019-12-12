@@ -4,14 +4,17 @@ import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.dao.mapper.food.DishOrderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsMapper;
 import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -35,6 +38,9 @@ import java.util.*;
 
 @Service
 public class BusinessProcessServiceImpl implements BusinessProcessService {
+
+    @Autowired
+    WeChatCommodityMapper weChatCommodityMapper;
 
     @Autowired
     DictMapperExtra dictMapperExtra;
@@ -270,9 +276,13 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             records.setDeliveryState(0);
             records.setOrderId(orgId);
             weChatGoodsDeliveryRecordsMapper.insertSelective(records);
+        }else {
+            // 发送短信
+            WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
+            PhoneCode.sendAppletShopMessage(order1.getPhone(),weChatCommodity.getCommodityTitle(),order1.getCommodityNum(),order1.getElectronicCode());
         }
 
-        //查询是否为首次消费
+       //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
         Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());

@@ -105,7 +105,10 @@ public class UserServiceImpl implements IUserService {
                 userInputDTO.setFirstLevelPartner(superior.getUserId());
             }
             return userMapperExtra.updateUser(userInputDTO) > 0;
+        }else if(null!=userInputDTO.getIsVip()){
+            return userMapperExtra.updateUser(userInputDTO) > 0;
         }
+
         return false;
     }
 
