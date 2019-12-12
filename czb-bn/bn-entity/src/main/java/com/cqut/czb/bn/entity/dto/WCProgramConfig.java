@@ -14,4 +14,14 @@ public class WCProgramConfig {
 
     //授权类型，此处只需填写 authorization_code
     public static final String grant_type = "authorization_code";
+
+    // 微信小程序提现API_KEY
+    public static final String WECHAT_WITHDRAW_API_KEY = "jD1qNX96o5KSPomZ4xv8cdelsMhz9nnL";
+
+    // 微信小程序提现接口
+    public static final String WECHAT_WITHDRAW_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+
+    // 微信商户号(重庆人多多科技有限公司)
+    public static final String mchid = "1566253131";
+
 }

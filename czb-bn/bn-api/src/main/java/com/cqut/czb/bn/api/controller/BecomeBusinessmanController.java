@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.BecomeBusinessmanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +31,7 @@ public class BecomeBusinessmanController {
     private RedisUtils redisUtils;
 
     @PostMapping("/addBusinessman")
-    public JSONResult addBusinessman(ShopDTO shopDTO, Principal principal){
+    public JSONResult addBusinessman(@RequestBody ShopDTO shopDTO, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(becomeBusinessman.addBusinessman(shopDTO,user));
     }
