@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.AgentCenterBusinessPartnerMapperExtra">
+
+    <select id="list" parameterType="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.BusinessCommonUserVo" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.AgentCenterBusinessPartnerDto">
+        select
+            cu.user_id userId,
+            cu.user_account userAccount,
+            ca.receiver userName,
+            cvac.area area,
+            cu.create_at createAt,
+            opu.total commonPartner,
+            bpu.total commonUser
+        from
+            czb_user cu
+                left outer join czb_vip_recharge_records cvrr on cvrr.user_id = cu.user_id
+                left outer join czb_vip_area_config cvac on cvac.vip_area_config_id = cvrr.vip_area_config_id
+                left  join czb_address ca ON cu.user_id = ca.user_id
+                left outer join (select czb_user.first_level_partner,count(1) total from czb_user where partner = 1 and first_level_partner != '' and first_level_partner is not null group by first_level_partner) opu on opu.first_level_partner = cu.user_id
+                left outer join (select czb_user.first_level_partner,count(1) total from czb_user where partner = 0 and first_level_partner != '' and first_level_partner is not null group by first_level_partner) bpu on bpu.first_level_partner = cu.user_id
+        where partner = 2
+        <if test="mobile!=null and mobile!=''">
+            AND  cu.user_account like concat('%',#{mobile},'%')
+        </if>
+        <if test="createAt!=null">
+            AND  cu.create_at BETWEEN #{createAt} AND  DATE_ADD(#{createAt},INTERVAL 1 DAY)
+        </if>
+        <if test="area!= null and area!= ''">
+            AND cvac.area like concat('%',#{area},'%')
+        </if>
+    </select>
+</mapper>

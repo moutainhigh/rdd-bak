@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service;
 
+import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementPageDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO;
+import com.cqut.czb.bn.entity.entity.Shop;
 import com.github.pagehelper.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,12 @@ import javax.servlet.http.HttpServletResponse;
  * @create 2019-07-28 14:48
  */
 public interface ShopManagementService {
+
+    /**
+     * 新增店铺
+     */
+    boolean addShop(Shop Shop);
+
     /**
      * 服务商管理列表获取
      */

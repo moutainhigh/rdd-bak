@@ -7,11 +7,13 @@ import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
+import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.IUserService;
+import com.cqut.czb.bn.service.ShopManagementService;
 import com.cqut.czb.bn.util.RedisUtil;
 import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -22,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,8 +56,10 @@ public class UserServiceImpl implements IUserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final ShopManagementService shopManagementService;
+
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder, ShopManagementService shopManagementService) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
@@ -66,6 +71,7 @@ public class UserServiceImpl implements IUserService {
         this.partnerVipIncomeMapperExtra = partnerVipIncomeMapperExtra;
         this.partnerChangeRecordMapper = partnerChangeRecordMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.shopManagementService = shopManagementService;
     }
 
     @Override
@@ -144,7 +150,20 @@ public class UserServiceImpl implements IUserService {
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(0);
                                 userMapperExtra.updateUser(user);
-                            }else {
+                            }else if("微信商家".equals(roleList.get(0).getRoleName())){
+                                Shop shop = new Shop();
+                                shop.setShopId(StringUtil.createId());
+                                shop.setUserId(userInputDTO.getUserId());
+                                shop.setShopName(userInputDTO.getUserName());
+                                shop.setShopPhone(userInputDTO.getUserAccount());
+                                shop.setCreateAt(new Date());
+                                shop.setAudit(1);
+                                shop.setShopType(3);//微信商家
+                                boolean flag = shopManagementService.addShop(shop);
+                                if(!flag){
+                                    return false;
+                                }
+                            } else {
                                 UserInputDTO user = new UserInputDTO();
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(1);
@@ -443,13 +462,22 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean bindingUser(UserInputDTO userInputDTO) {
-        String password_ = bCryptPasswordEncoder.encode(userInputDTO.getPassword());
-        List<UserDTO> userDTOS = userMapperExtra.selectUser(userInputDTO);
-        if(userDTOS != null){
-            UserDTO userDTO = userDTOS.get(1);
-            return userDTO.getUserPsw().equals(password_);
+    public boolean bindingUser(UserInputDTO userInputDTO,String userId) {
+        //检验密码是否一致。
+        User checkUser = userMapperExtra.findUserByAccount(userInputDTO.getUserAccount());//通过电话号码来查询
+        boolean isLike=bCryptPasswordEncoder.matches(userInputDTO.getUserName(), checkUser.getUserPsw());
+        if (!isLike) {
+            System.out.println("错误");
+            return false;
+        } else {
+            UserInputDTO user = new UserInputDTO();
+            user.setUserId(userId);
+            user.setBindingId(checkUser.getUserId());
+            int i = userMapperExtra.updateUser(user);
+            if(i>0){
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 }

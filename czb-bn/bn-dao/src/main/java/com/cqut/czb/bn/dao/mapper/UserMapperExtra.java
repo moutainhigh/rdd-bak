@@ -95,4 +95,6 @@ public interface UserMapperExtra {
     List<User> getTest();
 
     int updateTest(List<User> userList);
+
+    User selectPassword(UserInputDTO userInputDTO);
 }

@@ -62,6 +62,8 @@ public class UserInputDTO {
 
     private String secondLevelPartner;
 
+    private String bindingId;
+
     public Date getCreateAt() {
         return createAt;
     }
@@ -212,5 +214,13 @@ public class UserInputDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getBindingId() {
+        return bindingId;
+    }
+
+    public void setBindingId(String bindingId) {
+        this.bindingId = bindingId;
     }
 }
