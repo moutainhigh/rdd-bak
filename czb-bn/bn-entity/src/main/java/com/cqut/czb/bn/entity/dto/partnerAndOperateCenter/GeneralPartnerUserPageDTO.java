@@ -20,6 +20,8 @@ public class GeneralPartnerUserPageDTO extends PageDTO {
     private String area = null;
     private String superiorUserAccount = null;
     private Integer isVip = null;
+    private Integer startPage = null;
+    private String right = null;
 
     public String getUserId() {
         return userId;
@@ -67,5 +69,25 @@ public class GeneralPartnerUserPageDTO extends PageDTO {
 
     public void setIsVip(Integer isVip) {
         this.isVip = isVip;
+    }
+
+    public Integer getStartPage() {
+        return (getCurrentPage() -1) * getPageSize();
+    }
+
+    public void setStartPage(Integer startPage) {
+        this.startPage = startPage;
+    }
+
+    public String getRight() {
+        if(!"".equals(getArea()) && null != getArea()){
+            return "right";
+        }else{
+            return "";
+        }
+    }
+
+    public void setRight(String right) {
+        this.right = right;
     }
 }
