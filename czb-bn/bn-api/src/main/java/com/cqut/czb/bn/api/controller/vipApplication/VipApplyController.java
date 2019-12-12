@@ -48,7 +48,7 @@ public class VipApplyController {
      * @return
      */
     @PostMapping("/applyWCPVip")
-    public JSONResult applyWCPVip(Principal principal, @Valid WeChatVipApply weChatVipApply){
+    public JSONResult applyWCPVip(Principal principal,@RequestBody @Valid WeChatVipApply weChatVipApply){
         return new JSONResult(vipApplyService.applyWCPVip(weChatVipApply, principal));
     }
 }

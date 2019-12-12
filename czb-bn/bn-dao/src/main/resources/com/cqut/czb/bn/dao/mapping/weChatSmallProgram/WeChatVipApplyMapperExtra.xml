@@ -50,4 +50,11 @@
 	    czb_user.user_id = #{vipId,jdbcType=VARCHAR}
 	    AND czb_wechat_vip_apply.user_id = #{vipId,jdbcType=VARCHAR}
     </update>
+
+    <update id="updateUserVip" parameterType="java.lang.String">
+        UPDATE czb_user
+        SET czb_user.is_vip = 1
+        WHERE
+	    czb_user.user_id = #{userId,jdbcType=VARCHAR}
+    </update>
 </mapper>

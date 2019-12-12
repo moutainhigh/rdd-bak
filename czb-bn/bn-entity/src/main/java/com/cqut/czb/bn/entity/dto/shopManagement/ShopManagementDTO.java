@@ -27,6 +27,11 @@ public class ShopManagementDTO extends PageDTO {
     private String shopName;
 
     /**
+     * 店鋪類型
+     */
+    private Integer shopType;
+
+    /**
      * 商铺联系人名称
      */
     private String userName;
@@ -87,6 +92,14 @@ public class ShopManagementDTO extends PageDTO {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
+    }
+
+    public Integer getShopType() {
+        return shopType;
+    }
+
+    public void setShopType(Integer shopType) {
+        this.shopType = shopType;
     }
 
     public String getUserName() {
