@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
@@ -107,10 +108,42 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     }
 
     @Override
+    public int saleSomePetrol(PetrolManagementInputDTO inputDTO) {
+        String petrolIds=inputDTO.getPetrolIds();
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.saleSomePetrol(inputDTO);
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"1");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    @Override
     public int notSalePetrol(String petrolIds) {
         int result=0;
         if (petrolIds==null || petrolIds.length() == 0){
             result = petrolMapperExtra.notSaleAllPetrol();
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"3");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    @Override
+    public int notSaleSomePetrol(PetrolManagementInputDTO inputDTO) {
+
+        String petrolIds=inputDTO.getPetrolIds();
+
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.notSaleSomePetrols(inputDTO);
         }else {
             String[] ids = petrolIds.split(",");
             result = petrolMapperExtra.changePetrolState(ids,"3");
