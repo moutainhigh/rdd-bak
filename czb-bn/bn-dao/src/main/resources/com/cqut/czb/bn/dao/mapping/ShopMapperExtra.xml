@@ -32,6 +32,9 @@
         LEFT JOIN  czb_user b ON a.user_id = b.user_id
         LEFT JOIN czb_file cf ON a.shop_img = cf.file_id
         where a.user_id = #{userId,jdbcType=VARCHAR}
+        <if test="shopId !=null and shopId !=''">
+            AND shop_id = #{shopId,jdbcType=VARCHAR}
+        </if>
     </select>
 
     <update id="updateShopInfo" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
