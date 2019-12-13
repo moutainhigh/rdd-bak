@@ -54,7 +54,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
 
     @Override
     public String getCommodityQrCode(String userId, String commodityId) {
-        String json = "{\"scene\":\"s=" + userId + "&id=" + commodityId + "\",\"path\":\"/pages/product/product\"}";
+        String json = "{\"scene\":\"s=" + userId + "&id=" + commodityId + "\",\"page\":\"/pages/product/product\"}";
         return FileUploadUtil.putObject("小程序码.png", new ByteArrayInputStream(initQrCodeNetWork(json)));
     }
 
