@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
