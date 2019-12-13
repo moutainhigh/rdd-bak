@@ -200,7 +200,7 @@
       <where>
         <if test="userAccount != null and userAccount != ''">
             and (u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
-            or u.user_name like concat('%',#{userAccount},'%'))
+            or u.bindingid in ( select user_id from czb_user where user_account  like concat('%',#{userAccount},'%' )))
         </if>
         <if test="userName != null and userName != ''">
             and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
