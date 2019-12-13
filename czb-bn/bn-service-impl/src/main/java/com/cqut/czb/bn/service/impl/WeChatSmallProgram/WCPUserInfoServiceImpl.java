@@ -48,13 +48,13 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
     public String getRecommendQRCode(UserDTO user) {
         if(user == null)
             return null;
-        String json = "{\"scene\":\"" + user.getUserId() + "\",\"path\":\"/pages/index/index\"}";
+        String json = "{\"scene\":\"" + user.getUserId() + "\",\"page\":\"pages/index/index\"}";
         return encode(initQrCodeNetWork(json));
     }
 
     @Override
     public String getCommodityQrCode(String userId, String commodityId) {
-        String json = "{\"scene\":\"s=" + userId + "&id=" + commodityId + "\",\"page\":\"/pages/product/product\"}";
+        String json = "{\"scene\":\"s=" + userId + "&id=" + commodityId + "\",\"page\":\"pages/product/product\"}";
         return FileUploadUtil.putObject("小程序码.png", new ByteArrayInputStream(initQrCodeNetWork(json)));
     }
 
