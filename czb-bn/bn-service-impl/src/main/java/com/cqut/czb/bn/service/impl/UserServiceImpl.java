@@ -472,6 +472,9 @@ public class UserServiceImpl implements IUserService {
     public String bindingUser(UserInputDTO userInputDTO,String userId) {
         //检验密码是否一致。
         User checkUser = userMapperExtra.findUserByAccount(userInputDTO.getUserAccount());//通过电话号码来查询
+        if(checkUser == null){
+            return "您的账号或密码输入错误";
+        }
         boolean isLike=bCryptPasswordEncoder.matches(userInputDTO.getUserName(), checkUser.getUserPsw());
         if (!isLike) {
             return "您的账号或密码输入错误";
