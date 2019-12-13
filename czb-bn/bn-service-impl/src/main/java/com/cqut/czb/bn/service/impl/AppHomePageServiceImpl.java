@@ -394,7 +394,20 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     @Override
     public List<AppRouterDTO> selectHomePageRouters(AppRouterDTO appRouterDTO) {
-        return appRouterMapperExtra.selectAppRouters(appRouterDTO);
+
+        List<AppRouterDTO> appRouter = appRouterMapperExtra.selectAppRouters(appRouterDTO);
+
+        List<AppRouterDTO> subAppRouter = new ArrayList<>();
+        for (int i=0;i<appRouter.size();i++){
+            if (appRouter.get(i).getOrder()!=6){
+                subAppRouter.add(appRouter.get(i));
+            }
+        }
+        if (appRouterDTO.getBindingType()==1){
+            return appRouter;
+        }else {
+            return subAppRouter;
+        }
     }
 
     @Override
