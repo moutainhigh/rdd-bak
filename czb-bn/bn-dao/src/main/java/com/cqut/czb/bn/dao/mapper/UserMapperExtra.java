@@ -98,5 +98,5 @@ public interface UserMapperExtra {
 
     User selectPassword(UserInputDTO userInputDTO);
 
-    String selectBindingAccount(String bindingId);
+    String selectBindingAccount(String bindingid);
 }

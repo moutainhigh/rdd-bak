@@ -30,7 +30,7 @@
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingId
+    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
@@ -155,8 +155,8 @@
       <if test="secondLevelPartner != null">
         second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
       </if>
-      <if test="bindingId != null">
-        bindingId = #{bindingId,jdbcType=VARCHAR}
+      <if test="bindingid != null">
+        bindingid = #{bindingid,jdbcType=VARCHAR}
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
@@ -186,10 +186,10 @@
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at,u.bindingId
+    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at,u.bindingid
     from
     (select
-    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingId
+    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingid
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
@@ -499,6 +499,6 @@
         </foreach>
   </update>
   <select id="selectBindingAccount" parameterType="java.lang.String" resultType="java.lang.String">
-    select user_account from czb_user where user_id = #{bindingId,jdbcType=VARCHAR};
+    select user_account from czb_user where user_id = #{bindingid,jdbcType=VARCHAR};
   </select>
 </mapper>
