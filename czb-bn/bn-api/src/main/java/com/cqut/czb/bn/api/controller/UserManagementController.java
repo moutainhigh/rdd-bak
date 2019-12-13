@@ -108,12 +108,16 @@ public class UserManagementController {
     }
 
     @PostMapping("/bindingUser")
-    public JSONResult bingingUser(UserInputDTO userInputDTO){
-        boolean bindingFlag = userService.bindingUser(userInputDTO);
-        if(bindingFlag){
-            return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定成功");
+    public JSONResult bingingUser(Principal principal,@RequestBody UserInputDTO userInputDTO){
+        User user = null;
+        if(principal!=null){
+             user = (User) redisUtils.get(principal.getName());
         }
-        return new JSONResult(ResponseCodeConstants.SUCCESS, "账号绑定失败");
+        if(userInputDTO.getUserName() == null || userInputDTO.getUserAccount() == null)
+            return new JSONResult(ResponseCodeConstants.SUCCESS, "您的账号或密码错误");
+        String bindingFlag = userService.bindingUser(userInputDTO, user.getUserId());
+
+        return  new JSONResult(bindingFlag);
     }
 
 }

@@ -260,6 +260,7 @@
           parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO"
           resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO">
     SELECT
+    user_table.user_name as userName,
     user_account as userAccount,
     order_table.order_id as orderId,
     third_order as thirdOrder,
@@ -292,8 +293,8 @@
         AND shop_table.user_id = #{managerId,jdbcType=VARCHAR}
       </if>
 
-      <if test="userAccount != null and userAccount != ''">
-        AND user_table.user_account like concat('%', #{userAccount}, '%')
+      <if test="userName != null and userName != ''">
+        AND user_table.user_name like concat('%', #{userName}, '%')
       </if>
       <if test="orderId != null and orderId != ''">
         AND order_table.order_id like concat('%', #{orderId}, '%')

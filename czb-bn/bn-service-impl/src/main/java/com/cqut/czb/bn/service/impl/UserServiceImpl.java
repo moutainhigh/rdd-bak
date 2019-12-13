@@ -12,6 +12,7 @@ import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.IUserService;
+import com.cqut.czb.bn.service.ShopManagementService;
 import com.cqut.czb.bn.util.RedisUtil;
 import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -53,8 +54,10 @@ public class UserServiceImpl implements IUserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final ShopManagementService shopManagementService;
+
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder, ShopManagementService shopManagementService) {
         this.userMapper = userMapper;
         this.userMapperExtra = userMapperExtra;
         this.userRoleMapperExtra = userRoleMapperExtra;
@@ -66,6 +69,7 @@ public class UserServiceImpl implements IUserService {
         this.partnerVipIncomeMapperExtra = partnerVipIncomeMapperExtra;
         this.partnerChangeRecordMapper = partnerChangeRecordMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.shopManagementService = shopManagementService;
     }
 
     @Override
@@ -99,7 +103,10 @@ public class UserServiceImpl implements IUserService {
                 userInputDTO.setFirstLevelPartner(superior.getUserId());
             }
             return userMapperExtra.updateUser(userInputDTO) > 0;
+        }else if(null!=userInputDTO.getIsVip()){
+            return userMapperExtra.updateUser(userInputDTO) > 0;
         }
+
         return false;
     }
 
@@ -107,7 +114,13 @@ public class UserServiceImpl implements IUserService {
     public PageInfo<UserDTO> selectUser(UserInputDTO userInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
         List<UserDTO> userList = userMapperExtra.selectUser(userInputDTO);
-
+        //如果是小程序用户,并且绑定了app账号那么查询绑定的app账号的信息
+        for(UserDTO user: userList){
+            if(!"".equals(user.getBindingid())&& user.getBindingid() != null){
+                User user1 = userMapper.selectByPrimaryKey(user.getBindingid());
+                user.setUserAccount(user1.getUserAccount());
+            }
+        }
         return new PageInfo<>(userList);
     }
 
@@ -144,7 +157,20 @@ public class UserServiceImpl implements IUserService {
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(0);
                                 userMapperExtra.updateUser(user);
-                            }else {
+                            }else if("微信商家".equals(roleList.get(0).getRoleName())){
+                                Shop shop = new Shop();
+                                shop.setShopId(StringUtil.createId());
+                                shop.setUserId(userInputDTO.getUserId());
+                                shop.setShopName(userInputDTO.getUserName());
+                                shop.setShopPhone(userInputDTO.getUserAccount());
+                                shop.setCreateAt(new Date());
+                                shop.setAudit(1);
+                                shop.setShopType(3);//微信商家
+                                boolean flag = shopManagementService.addShop(shop);
+                                if(!flag){
+                                    return false;
+                                }
+                            } else {
                                 UserInputDTO user = new UserInputDTO();
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(1);
@@ -443,13 +469,31 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean bindingUser(UserInputDTO userInputDTO) {
-        String password_ = bCryptPasswordEncoder.encode(userInputDTO.getPassword());
-        List<UserDTO> userDTOS = userMapperExtra.selectUser(userInputDTO);
-        if(userDTOS != null){
-            UserDTO userDTO = userDTOS.get(1);
-            return userDTO.getUserPsw().equals(password_);
+    public String bindingUser(UserInputDTO userInputDTO,String userId) {
+        //检验密码是否一致。
+        User checkUser = userMapperExtra.findUserByAccount(userInputDTO.getUserAccount());//通过电话号码来查询
+        if(checkUser == null){
+            return "您的账号或密码输入错误";
         }
-        return false;
+        boolean isLike=bCryptPasswordEncoder.matches(userInputDTO.getUserName(), checkUser.getUserPsw());
+        if (!isLike) {
+            return "您的账号或密码输入错误";
+        } else {
+            if(checkUser.getBindingid()!=null){
+                return "该账号已经被绑定了";
+            }
+            UserInputDTO user = new UserInputDTO();
+            user.setUserId(userId);
+            user.setBindingid(checkUser.getUserId());
+            UserInputDTO userCheck = new UserInputDTO();
+            userCheck.setUserId(userId);
+            userCheck.setBindingid(checkUser.getUserId());
+            int i = userMapperExtra.updateUser(user);
+            int j = userMapperExtra.updateUser(userCheck);
+            if(i>0 && j >0){
+                return "绑定成功";
+            }
+            return "绑定失败:请联系管理员";
+        }
     }
 }

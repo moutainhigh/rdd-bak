@@ -9,4 +9,6 @@ public interface WeChatVipApplyMapperExtra {
     List<VIPApply> selectVipApply(VIPApply vipApply);
 
     boolean updateVipApply(VIPApply vipApply);
+
+    Boolean updateUserVip(String userId);
 }

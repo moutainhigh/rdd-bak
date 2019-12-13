@@ -37,5 +37,5 @@ public interface IUserService {
     boolean updateTest();
 
 
-    boolean bindingUser(UserInputDTO userInputDTO);
+    String bindingUser(UserInputDTO userInputDTO,String userId);
 }

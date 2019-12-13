@@ -6,10 +6,20 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
+import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.*;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.impl.personCenterImpl.entity.ResultEntity;
+import com.cqut.czb.bn.service.impl.personCenterImpl.entity.TransfersDto;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
+import com.cqut.czb.bn.util.MD5Utils;
+import com.cqut.czb.bn.util.md5.MD5Util;
+import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -17,10 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
 
 @Service
 public class MyWalletImpl implements MyWallet {
@@ -31,15 +45,15 @@ public class MyWalletImpl implements MyWallet {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public BalanceAndInfoIdDTO getBalance(String userId){
+    public BalanceAndInfoIdDTO getBalance(String userId) {
         BalanceAndInfoIdDTO balance = myWalletMapper.getUserAllIncome(userId);
 
-        if(balance == null){
+        if (balance == null) {
             InsertIncomeInfo info = new InsertIncomeInfo();
             info.setInfoId(StringUtil.createId());
             info.setUserId(userId);
             int success = myWalletMapper.insertIncomeInfo(info);
-            if (success > 0){
+            if (success > 0) {
                 balance = new BalanceAndInfoIdDTO();
                 balance.setBalance(new BigDecimal(0));
                 return balance;
@@ -57,42 +71,42 @@ public class MyWalletImpl implements MyWallet {
 
         List<String> yearMonths = new ArrayList<>();
 
-        for(WithDrawLogDTO data:withDrawLogs){
-            data.setCreateTime(data.getCreateTime().replace(".0",""));
-            if(yearMonths.size() ==  0){
+        for (WithDrawLogDTO data : withDrawLogs) {
+            data.setCreateTime(data.getCreateTime().replace(".0", ""));
+            if (yearMonths.size() == 0) {
                 yearMonths.add(data.getYearMonth());
                 continue;
             }
             boolean ifExsits = false;
-            for(int i = 0; i<yearMonths.size(); i++){
-                if(yearMonths.get(i).equals(data.getYearMonth())){
+            for (int i = 0; i < yearMonths.size(); i++) {
+                if (yearMonths.get(i).equals(data.getYearMonth())) {
                     ifExsits = true;
                     continue;
                 }
             }
-            if(!ifExsits)
+            if (!ifExsits)
                 yearMonths.add(data.getYearMonth());
         }
 
         yearMonths.sort(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                o1 = o1.replace("-","");
-                o2 = o2.replace("-","");
+                o1 = o1.replace("-", "");
+                o2 = o2.replace("-", "");
 
                 return o2.compareTo(o1);
             }
         });
 
-        for(int i = 0; i<yearMonths.size(); i++){
+        for (int i = 0; i < yearMonths.size(); i++) {
             JSONObject json = new JSONObject();
             json.put("yearMonth", yearMonths.get(i));
             JSONArray jsonArray = new JSONArray();
 
-            for(WithDrawLogDTO data:withDrawLogs){
-                if(data.getYearMonth().equals(yearMonths.get(i))){
+            for (WithDrawLogDTO data : withDrawLogs) {
+                if (data.getYearMonth().equals(yearMonths.get(i))) {
                     JSONObject jsonOneLog = new JSONObject();
-                    jsonOneLog.put("money", "-" + data.getMoney() );
+                    jsonOneLog.put("money", "-" + data.getMoney());
                     System.out.println(data.getCreateTime());
                     jsonOneLog.put("createTime", data.getCreateTime());
                     System.out.println(data.getCreateTime());
@@ -111,22 +125,22 @@ public class MyWalletImpl implements MyWallet {
     @Override
     public synchronized JSONResult withDraw(AlipayRecordDTO alipayRecordDTO, String userId) {
 
-        if(!bCryptPasswordEncoder.matches(alipayRecordDTO.getKeyWord(), myWalletMapper.getPsw(userId))){
+        if (!bCryptPasswordEncoder.matches(alipayRecordDTO.getKeyWord(), myWalletMapper.getPsw(userId))) {
             return new JSONResult("账户密码错误", 200, "账户密码错误");
         }
 
-        if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal(0)) < 0){
+        if (alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal(0)) < 0) {
             return new JSONResult("提现金额不能是负数", 200, "提现金额不能是负数");
         }
 
-        if(alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal("0.1")) < 0){
+        if (alipayRecordDTO.getPaymentAmount().compareTo(new BigDecimal("0.1")) < 0) {
             return new JSONResult("提现金额不能低于0.1元", 200, "提现金额不能低于0.1元");
         }
 
         // 取出余额，进行对比
         BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(userId);
 
-        if(alipayRecordDTO.getPaymentAmount().compareTo(balanceAndInfoId.getBalance()) > 0){
+        if (alipayRecordDTO.getPaymentAmount().compareTo(balanceAndInfoId.getBalance()) > 0) {
             return new JSONResult("提现金额超出余额", 200, "提现金额超出余额");
         }
 
@@ -190,5 +204,204 @@ public class MyWalletImpl implements MyWallet {
             return new JSONResult("提现过程中出先未知错误", 200, string);
         }
 
+    }
+
+
+    /**
+     * 微信小程序提现到微信
+     *
+     * @param paymentAmount
+     * @param user
+     * @return
+     */
+    @Override
+    public synchronized JSONResult wspWithDrawToWeChat(BigDecimal paymentAmount, User user) {
+        return new JSONResult("该功能暂未上线", 200, null);
+        /**
+        if (paymentAmount == null) {
+            return new JSONResult("提现金额不能为空", 200, null);
+        }
+        if (paymentAmount.compareTo(new BigDecimal(0)) < 0) {
+            return new JSONResult("提现金额不能是负数", 200, null);
+        }
+
+        if (paymentAmount.compareTo(new BigDecimal(10)) < 0) {
+            return new JSONResult("提现金额不能低于10元", 200, null);
+        }
+
+        // 取出余额，进行对比
+        BalanceAndInfoIdDTO balanceAndInfoId = myWalletMapper.getUserAllIncome(user.getUserId());
+
+        if (paymentAmount.compareTo(balanceAndInfoId.getBalance()) > 0) {
+            return new JSONResult("提现金额超出余额", 200, null);
+        }
+
+        // 设置提现记录基本信息
+        IncomeLogDTO incomeLog = new IncomeLogDTO();
+        incomeLog.setInfoId(balanceAndInfoId.getInfoId());
+        incomeLog.setAmount((paymentAmount.doubleValue()));
+        incomeLog.setBeforeChangeIncome(balanceAndInfoId.getBalance().doubleValue());
+        // 生成提现记录id，并且该id作为提现请求的：商户订单号
+        String incomeLogRecordId = StringUtil.createId();
+        incomeLog.setRecordId(incomeLogRecordId);
+        incomeLog.setRemark("微信小程序提现到微信");
+        // 设置类型为提现
+        incomeLog.setType(1);
+        incomeLog.setWithdrawAmount(paymentAmount.doubleValue());
+        // 设置提现到款账户为微信openId
+        incomeLog.setWithdrawTo(user.getUserAccount());
+        // 使用微信名(昵称)
+        incomeLog.setWithdrawName(user.getUserName());
+
+        // 微信参数设置
+        String appkey = WCProgramConfig.WECHAT_WITHDRAW_API_KEY;// 微信商户秘钥
+        String certPath = "D:\\Project\\Server\\czb-server\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\apiclient_cert.p12";// 微信商户证书路径, 根据实际情况填写
+
+        TransfersDto model = new TransfersDto();// 微信接口请求参数
+        model.setMch_appid(WCProgramConfig.app_id); // 申请商户号的appid或商户号绑定的appid
+        model.setMchid(WCProgramConfig.mchid); // 商户号
+        model.setMch_name("商户A"); // 商户名称
+        model.setOpenid(user.getUserAccount()); // 商户appid下，某用户的openid
+        model.setAmount(paymentAmount.doubleValue()); // 企业付款金额，这里单位为元
+        model.setDesc("囧途宝盒提现");
+        model.setPartner_trade_no(incomeLogRecordId); // 商户订单号
+
+        // 微信官方API文档 https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_2
+        ResultEntity iResult = WechatpayUtil.doTransfers(appkey, certPath, model);
+        System.out.println(iResult);
+        try {
+//            // 进行请求
+//            response = alipayClient.execute(request1);
+//            string = response.getBody().toString();
+//
+//            // 是否成功的后续操作
+//            if (response.isSuccess()) {
+//                com.alibaba.fastjson.JSONObject jso = com.alibaba.fastjson.JSONObject.parseObject(response.getBody());
+//                String orderId = jso.getJSONObject("alipay_fund_trans_toaccount_transfer_response")
+//                        .getString("order_id");
+//                // 更新用户已提现金额
+//                int updateBalance = myWalletMapper.increaseWithdrawed(balanceAndInfoId.getInfoId(), alipayRecordDTO.getPaymentAmount().toString());
+//
+//                if (updateBalance != 1)
+//                    return new JSONResult("提现成功，但更新用户余额失败", 500, "提现成功");
+//                System.out.println(updateBalance);
+//
+//                // 设置提现记录的sourceId为支付宝返回的单号
+//                incomeLog.setSourceId(orderId);
+//                // 插入提现记录
+//                int insertSuccess = myWalletMapper.insertIncomeLog(incomeLog);
+//                System.out.println(insertSuccess);
+//                if (insertSuccess != 1)
+//                    return new JSONResult("提现成功，但插入提现记录出错", 500, "提现成功");
+//                return new JSONResult("提现成功", 200, "提现成功");
+//            } else {
+//                return new JSONResult("支付宝提现请求失败", 200, "支付宝提现请求失败");
+//            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONResult("提现过程中出先未知错误", 200, null);
+        }
+        return null;
+         */
+    }
+
+    /**
+     * 获取微信提现接口所需要的签名
+     *
+     * @param characterEncoding
+     * @param parameters
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static String createSign(String characterEncoding, Map<String, String> parameters) {
+        StringBuilder sb = new StringBuilder();
+        Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）
+        Iterator it = es.iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String k = (String) entry.getKey();
+            Object v = entry.getValue();
+            if (null != v && !"".equals(v)
+                    && !"sign".equals(k) && !"key".equals(k)) {
+                sb.append(k).append("=").append(v).append("&");
+            }
+        }
+        sb.append("key=" + WCProgramConfig.WECHAT_WITHDRAW_API_KEY);
+        return MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
+    }
+
+    /**
+     * 向指定 URL 发送POST方法的请求
+     * @param url 发送请求的 URL
+     * @param params 请求的参数集合
+     * @return 远程资源的响应结果
+     */
+    @SuppressWarnings("unused")
+    private String sendPost(String url, Map<String, String> params) {
+        OutputStreamWriter out = null;
+        BufferedReader in = null;
+        StringBuilder result = new StringBuilder();
+        try {
+            URL realUrl = new URL(url);
+            HttpURLConnection conn =(HttpURLConnection) realUrl.openConnection();
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // POST方法
+            conn.setRequestMethod("POST");
+            // 设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+//            conn.setRequestProperty("user-agent",
+//                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+//            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Content-Type", "text/xml");
+            conn.connect();
+            // 获取URLConnection对象对应的输出流
+            out = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+            // 发送请求参数(xml)
+            if (params != null) {
+                StringBuilder param = new StringBuilder();
+                param.append("<xml>");
+
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    param.append("<").append(entry.getKey()).append(">");
+                    param.append(entry.getValue());
+                    param.append("</").append(entry.getKey()).append(">");
+                }
+                param.append("</xml>");
+
+                //System.out.println("param:"+param.toString());
+                out.write(param.toString());
+            }
+            // flush输出流的缓冲
+            out.flush();
+            // 定义BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result.append(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //使用finally块来关闭输出流、输入流
+        finally{
+            try{
+                if(out!=null){
+                    out.close();
+                }
+                if(in!=null){
+                    in.close();
+                }
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }
+        System.out.println(result);
+        return result.toString();
     }
 }

@@ -32,6 +32,10 @@ public class PersonalCenterUserDTO {
 
     private List<UserRoleDTO> roleNameList;
 
+    private String bindingid;
+
+    private String bindingAccount;
+
     public List<UserRoleDTO> getRoleNameList() {
         return roleNameList;
     }
@@ -126,5 +130,21 @@ public class PersonalCenterUserDTO {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getBindingid() {
+        return bindingid;
+    }
+
+    public void setBindingid(String bindingid) {
+        this.bindingid = bindingid;
+    }
+
+    public String getBindingAccount() {
+        return bindingAccount;
+    }
+
+    public void setBindingAccount(String bindingAccount) {
+        this.bindingAccount = bindingAccount;
     }
 }

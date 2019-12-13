@@ -28,6 +28,8 @@ public class AppRouterDTO {
 
     private String isVipPath;
 
+    private int bindingType;
+
     public String getIsVipPath() {
         return isVipPath;
     }
@@ -130,5 +132,13 @@ public class AppRouterDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public int getBindingType() {
+        return bindingType;
+    }
+
+    public void setBindingType(int bindingType) {
+        this.bindingType = bindingType;
     }
 }

@@ -33,7 +33,7 @@ public interface UserMapperExtra {
 
     int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
 
-    List<TeamDTO> selectTeam(String userId);
+    List<TeamDTO> selectTeam(@Param("userId") String userId);
 
     RecommenderDTO selectRecommender(String userId);
 
@@ -95,4 +95,8 @@ public interface UserMapperExtra {
     List<User> getTest();
 
     int updateTest(List<User> userList);
+
+    User selectPassword(UserInputDTO userInputDTO);
+
+    String selectBindingAccount(String bindingid);
 }
