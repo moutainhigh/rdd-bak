@@ -6,7 +6,6 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.UserRole;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -153,9 +151,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             personalCenterUserDTO.setUserType(user1.getUserType());
             personalCenterUserDTO.setUserRank(user1.getUserRank());
             personalCenterUserDTO.setIsVip(user1.getIsVip());
-            personalCenterUserDTO.setBindingId(user1.getBindingId());
-            if (personalCenterUserDTO.getBindingId()!=null){
-                personalCenterUserDTO.setBindingAccount(userMapperExtra.selectBindingAccount(personalCenterUserDTO.getBindingId()));
+            personalCenterUserDTO.setBindingid(user1.getBindingid());
+            if (personalCenterUserDTO.getBindingid()!=null){
+                personalCenterUserDTO.setBindingAccount(userMapperExtra.selectBindingAccount(personalCenterUserDTO.getBindingid()));
             }else {
                 personalCenterUserDTO.setBindingAccount(null);
             }
