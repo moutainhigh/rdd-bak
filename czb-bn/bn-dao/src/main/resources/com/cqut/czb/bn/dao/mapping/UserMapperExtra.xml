@@ -230,7 +230,7 @@
   </resultMap>
   <select id="selectRole" resultMap="RoleResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
     select
-    cr.rol  9e_id, cr.role_name
+    cr.role_id, cr.role_name
     from czb_role cr
     left join czb_user_role cur on cr.role_id = cur.role_id
     <where>
