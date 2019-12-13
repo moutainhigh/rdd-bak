@@ -116,7 +116,7 @@ public class UserServiceImpl implements IUserService {
         List<UserDTO> userList = userMapperExtra.selectUser(userInputDTO);
         //如果是小程序用户,并且绑定了app账号那么查询绑定的app账号的信息
         for(UserDTO user: userList){
-            if(user.getBindingid()!=null){
+            if(!"".equals(user.getBindingid())&& user.getBindingid() != null){
                 User user1 = userMapper.selectByPrimaryKey(user.getBindingid());
                 user.setUserAccount(user1.getUserAccount());
             }
@@ -486,8 +486,8 @@ public class UserServiceImpl implements IUserService {
             user.setUserId(userId);
             user.setBindingid(checkUser.getUserId());
             UserInputDTO userCheck = new UserInputDTO();
-            userCheck.setUserId(checkUser.getUserId());
-            userCheck.setBindingid(userId);
+            userCheck.setUserId(userId);
+            userCheck.setBindingid(checkUser.getUserId());
             int i = userMapperExtra.updateUser(user);
             int j = userMapperExtra.updateUser(userCheck);
             if(i>0 && j >0){
