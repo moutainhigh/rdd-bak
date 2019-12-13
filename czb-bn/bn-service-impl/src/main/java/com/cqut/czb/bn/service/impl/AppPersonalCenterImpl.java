@@ -155,7 +155,7 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             personalCenterUserDTO.setIsVip(user1.getIsVip());
             personalCenterUserDTO.setBindingId(user1.getBindingId());
             if (personalCenterUserDTO.getBindingId()!=null){
-                personalCenterUserDTO.setBindingAccount(userMapper.selectBindingAccount(personalCenterUserDTO.getBindingId()));
+                personalCenterUserDTO.setBindingAccount(userMapperExtra.selectBindingAccount(personalCenterUserDTO.getBindingId()));
             }else {
                 personalCenterUserDTO.setBindingAccount(null);
             }

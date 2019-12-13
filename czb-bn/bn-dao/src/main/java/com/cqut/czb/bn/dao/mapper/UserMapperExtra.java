@@ -97,4 +97,6 @@ public interface UserMapperExtra {
     int updateTest(List<User> userList);
 
     User selectPassword(UserInputDTO userInputDTO);
+
+    String selectBindingAccount(String bindingId);
 }

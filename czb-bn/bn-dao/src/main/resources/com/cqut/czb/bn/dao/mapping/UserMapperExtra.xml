@@ -498,5 +498,7 @@
           #{item.userId, jdbcType=VARCHAR}
         </foreach>
   </update>
-
+  <select id="selectBindingAccount" parameterType="java.lang.String" resultType="java.lang.String">
+    select user_account from czb_user where user_id = #{bindingId,jdbcType=VARCHAR};
+  </select>
 </mapper>

@@ -15,5 +15,4 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    String selectBindingAccount(String bindingId);
 }
