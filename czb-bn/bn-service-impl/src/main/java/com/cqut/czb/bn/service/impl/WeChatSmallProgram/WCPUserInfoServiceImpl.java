@@ -48,7 +48,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
     public String getRecommendQRCode(UserDTO user) {
         if(user == null)
             return null;
-        String json = "{\"scene\":\"" + user.getUserAccount() + "\",\"path\":\"/pages/index/index\"}";
+        String json = "{\"scene\":\"" + user.getUserId() + "\",\"path\":\"/pages/index/index\"}";
         return encode(initQrCodeNetWork(json));
     }
 
