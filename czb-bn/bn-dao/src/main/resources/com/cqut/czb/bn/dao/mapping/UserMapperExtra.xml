@@ -30,7 +30,7 @@
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner, is_vip
+    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
@@ -116,6 +116,9 @@
   <update id="updateUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     update czb_user
     <set >
+      <if test="isVip != null" >
+        is_vip = #{isVip,jdbcType=INTEGER},
+      </if>
       <if test="userAccount != null and userAccount != ''" >
         user_account = #{userAccount,jdbcType=VARCHAR},
       </if>
@@ -131,7 +134,6 @@
       <if test="userName != null and userName != ''" >
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-
       <if test="partner != null" >
         partner = #{partner,jdbcType=INTEGER},
       </if>
@@ -153,8 +155,8 @@
       <if test="secondLevelPartner != null">
         second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
       </if>
-      <if test="bindingId != null">
-        bindingId = #{bindingId,jdbcType=VARCHAR},
+      <if test="bindingid != null">
+        bindingid = #{bindingid,jdbcType=VARCHAR}
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
@@ -184,10 +186,10 @@
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at
+    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.enterprise_name, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at,u.bindingid
     from
     (select
-    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at
+    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingid
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
@@ -197,7 +199,8 @@
     left join czb_user cu on u.superior_user = cu.user_id
       <where>
         <if test="userAccount != null and userAccount != ''">
-            and u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            and (u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            or u.bindingid in ( select user_id from czb_user where user_account  like concat('%',#{userAccount},'%' )))
         </if>
         <if test="userName != null and userName != ''">
             and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
@@ -495,5 +498,7 @@
           #{item.userId, jdbcType=VARCHAR}
         </foreach>
   </update>
-
+  <select id="selectBindingAccount" parameterType="java.lang.String" resultType="java.lang.String">
+    select user_account from czb_user where user_id = #{bindingid,jdbcType=VARCHAR};
+  </select>
 </mapper>

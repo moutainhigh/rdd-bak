@@ -153,6 +153,12 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             personalCenterUserDTO.setUserType(user1.getUserType());
             personalCenterUserDTO.setUserRank(user1.getUserRank());
             personalCenterUserDTO.setIsVip(user1.getIsVip());
+            personalCenterUserDTO.setBindingid(user1.getBindingid());
+            if (personalCenterUserDTO.getBindingid()!=null){
+                personalCenterUserDTO.setBindingAccount(userMapperExtra.selectBindingAccount(personalCenterUserDTO.getBindingid()));
+            }else {
+                personalCenterUserDTO.setBindingAccount(null);
+            }
             if (userRoles!=null && userRoles.size()!=0 && userRoles.get(0).getRoleName()!=null){  //加入用户角色信息
                 personalCenterUserDTO.setRoleName(userRoles.get(0).getRoleName());
                 personalCenterUserDTO.setRoleNameList(userRoles);

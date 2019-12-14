@@ -1,4 +1,4 @@
-alter table czb_user add bindingId varchar(20) character  set utf8 collate utf8_general_ci null default null COMMENT '微信用户绑定的人多多用户账号电话id';
+alter table czb_user add bindingid varchar(20) character  set utf8 collate utf8_general_ci null default null COMMENT '微信用户绑定的人多多用户账号电话id';
 alter table czb_wechat_commodity add norms_id varchar(20) character  set utf8 collate utf8_general_ci null default null COMMENT '分类id';
 
 -- ----------------------------

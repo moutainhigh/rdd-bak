@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.BecomeBusinessmanMapperExtra;
 import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.BecomeBusinessmanService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -27,7 +28,8 @@ public class BecomeBusinessmanServiceImpl implements BecomeBusinessmanService {
      * @return
      */
     @Override
-    public int addBusinessman(ShopDTO shopDTO) {
+    public int addBusinessman(ShopDTO shopDTO, User user) {
+        shopDTO.setUserId(user.getUserId());
         String shopId = StringUtil.createId();
         shopDTO.setShopId(shopId);
         return mapper.insertShop(shopDTO);

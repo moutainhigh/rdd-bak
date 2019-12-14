@@ -15,7 +15,7 @@ import java.security.Principal;
 
 /**
  * author:De-Qiang Chen
- * function:app's messages management (app消息管理)
+ * function:app'a messages management (app消息管理)
  */
 
 @RestController
@@ -65,7 +65,7 @@ public class AppMsgManageController {
 
 
     /**
-     * app's Modify information status(修改信息状态)
+     * app'a Modify information status(修改信息状态)
      */
     @RequestMapping(value = "/ModifyInfoStatus", method = RequestMethod.GET)
     public JSONResult ModifyInfoStatus(Principal principal, ModifyInfoDTO modifyInfoDTO) {

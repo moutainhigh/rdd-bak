@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.appHomePage.PetrolStock;
 import com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import org.apache.ibatis.annotations.Param;
 
@@ -53,7 +54,11 @@ public interface PetrolMapperExtra {
 
     int saleAllPetrol();
 
+    int saleSomePetrol(PetrolManagementInputDTO inputDTO);
+
     int notSaleAllPetrol();
+
+    int notSaleSomePetrols(PetrolManagementInputDTO inputDTO);
 
     String sumOfPetrolMoney(GetPetrolListInputDTO getPetrolListInputDTO);
 
