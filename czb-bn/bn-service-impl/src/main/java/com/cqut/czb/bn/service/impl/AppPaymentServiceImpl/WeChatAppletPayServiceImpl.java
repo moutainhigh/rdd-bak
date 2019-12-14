@@ -53,7 +53,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setCommodityId(weChatCommodity.getCommodityId());
         weChatCommodityOrder.setShopId(weChatCommodity.getShopId());
 
-        weChatCommodityOrder.setActualPrice(BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).doubleValue());
+        weChatCommodityOrder.setActualPrice(BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
         weChatCommodityOrder.setPayStatus(0);
         weChatCommodityOrder.setPayMethod(2);
@@ -76,13 +76,12 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setCommoditySource("本地商家");
 
         //返佣金额
-        Dict dict1=dictMapperExtra.selectDictByName("sp_fy1");
-        Dict dict2=dictMapperExtra.selectDictByName("sp_fy2");
-        double money=BigDecimal.valueOf(weChatCommodity.getFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).doubleValue();
+        double money=BigDecimal.valueOf(weChatCommodity.getFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
         weChatCommodityOrder.setFyMoney(money);
 
         //成本价格
-        weChatCommodityOrder.setCostPrice(weChatCommodity.getCostPrice()*Integer.valueOf(payInputDTO.getCommodityNum()));
+        double costMoney=BigDecimal.valueOf(weChatCommodity.getCostPrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        weChatCommodityOrder.setCostPrice(costMoney);
 
         //商品类型 1:寄送 2：核销
         if(weChatCommodity.getTakeWay()==1){
