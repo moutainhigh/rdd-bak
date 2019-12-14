@@ -70,9 +70,10 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
         if(dict != null){
             Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getFyMoney();
             BigDecimal bd = new BigDecimal(num);
-            wcpCommodityOutputDTO.setFyMoney(bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            wcpCommodityOutputDTO.setFyMoney(bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
         return wcpCommodityOutputDTO;
+
     }
 
     @Override
