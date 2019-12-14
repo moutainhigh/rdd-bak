@@ -10,6 +10,7 @@ import com.cqut.czb.bn.service.WCPCommodityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -67,9 +68,19 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
         }
         Dict dict = dictMapperExtra.selectDictByName("sp_fy1");
         if(dict != null){
-            wcpCommodityOutputDTO.setFyMoney(Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getFyMoney());
+            Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getTotalFyMoney();
+            BigDecimal bd = new BigDecimal(num);
+            wcpCommodityOutputDTO.setFyMoney((int)bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
         return wcpCommodityOutputDTO;
+
+    }
+
+    public static void main(String[] args){
+        Double num = 69.56345;
+        BigDecimal bd = new BigDecimal(num);
+        num = bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println(num);
     }
 
     @Override
