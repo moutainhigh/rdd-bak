@@ -68,12 +68,19 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
         }
         Dict dict = dictMapperExtra.selectDictByName("sp_fy1");
         if(dict != null){
-            Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getFyMoney();
+            Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getTotalFyMoney();
             BigDecimal bd = new BigDecimal(num);
-            wcpCommodityOutputDTO.setFyMoney(bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
+            wcpCommodityOutputDTO.setFyMoney((int)bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
         return wcpCommodityOutputDTO;
 
+    }
+
+    public static void main(String[] args){
+        Double num = 69.56345;
+        BigDecimal bd = new BigDecimal(num);
+        num = bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println(num);
     }
 
     @Override

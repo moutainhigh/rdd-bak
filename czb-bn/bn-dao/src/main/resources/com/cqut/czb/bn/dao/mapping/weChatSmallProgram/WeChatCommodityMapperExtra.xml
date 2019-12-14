@@ -444,7 +444,7 @@
         <result column="startingTimeBusiness" property="startingTimeBusiness" jdbcType="VARCHAR" />
         <result column="endTimeBusiness" property="endTimeBusiness" jdbcType="VARCHAR" />
         <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
-        <result column="fyMoney" property="fyMoney" jdbcType="VARCHAR" />
+        <result column="totalFyMoney" property="totalFyMoney" jdbcType="VARCHAR" />
         <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
@@ -469,7 +469,7 @@
         czb_shop.latitude,
         is_have_shop isHaveShop,
         czb_shop.shop_phone shopPhone,
-        czb_wechat_commodity.fy_money fyMoney,
+        czb_wechat_commodity.fy_money totalFyMoney,
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
@@ -552,7 +552,7 @@
         czb_shop.latitude,
         is_have_shop isHaveShop,
         czb_shop.shop_phone shopPhone,
-        czb_wechat_commodity.fy_money fyMoney,
+        czb_wechat_commodity.fy_money totalFyMoney,
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
