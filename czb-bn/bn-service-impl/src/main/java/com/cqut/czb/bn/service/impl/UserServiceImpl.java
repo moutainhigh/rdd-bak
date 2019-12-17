@@ -7,7 +7,6 @@ import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
-import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
@@ -24,7 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -118,8 +116,8 @@ public class UserServiceImpl implements IUserService {
         List<UserDTO> userList = userMapperExtra.selectUser(userInputDTO);
         //如果是小程序用户,并且绑定了app账号那么查询绑定的app账号的信息
         for(UserDTO user: userList){
-            if(user.getBindingId()!=null){
-                User user1 = userMapper.selectByPrimaryKey(user.getBindingId());
+            if(!"".equals(user.getBindingid())&& user.getBindingid() != null){
+                User user1 = userMapper.selectByPrimaryKey(user.getBindingid());
                 user.setUserAccount(user1.getUserAccount());
             }
         }
@@ -474,19 +472,22 @@ public class UserServiceImpl implements IUserService {
     public String bindingUser(UserInputDTO userInputDTO,String userId) {
         //检验密码是否一致。
         User checkUser = userMapperExtra.findUserByAccount(userInputDTO.getUserAccount());//通过电话号码来查询
+        if(checkUser == null){
+            return "您的账号或密码输入错误";
+        }
         boolean isLike=bCryptPasswordEncoder.matches(userInputDTO.getUserName(), checkUser.getUserPsw());
         if (!isLike) {
             return "您的账号或密码输入错误";
         } else {
-            if(checkUser.getBindingId()!=null){
+            if(checkUser.getBindingid()!=null){
                 return "该账号已经被绑定了";
             }
             UserInputDTO user = new UserInputDTO();
             user.setUserId(userId);
-            user.setBindingId(checkUser.getUserId());
+            user.setBindingid(checkUser.getUserId());
             UserInputDTO userCheck = new UserInputDTO();
-            userCheck.setUserId(checkUser.getUserId());
-            userCheck.setBindingId(userId);
+            userCheck.setUserId(userId);
+            userCheck.setBindingid(checkUser.getUserId());
             int i = userMapperExtra.updateUser(user);
             int j = userMapperExtra.updateUser(userCheck);
             if(i>0 && j >0){

@@ -37,9 +37,6 @@ public class StackApplication {
         return factory.createMultipartConfig();
     }
 
-    /**
-     * it's for set http url auto change to https
-     */
     @Bean
     public EmbeddedServletContainerFactory servletContainer(){
         TomcatEmbeddedServletContainerFactory tomcat=new TomcatEmbeddedServletContainerFactory(){

@@ -151,7 +151,7 @@ public class WeChatParameterConfig {
         parameters.put("detail","微信小程序支付");//支付的类容备注
         String attach=getAttachApplet(orgId,userId,money,weChatCommodity.getCommodityId());
         parameters.put("attach",attach);
-        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
+        parameters.put("sign", WeChatUtils.createRddSign("UTF-8", parameters));//编码格式
         return parameters;
     }
 
@@ -262,7 +262,7 @@ public class WeChatParameterConfig {
     public static SortedMap<String, Object> getParametersApplet(){
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters.put("appid", WeChatPayConfig.sapp_id);
-        parameters.put("mch_id", WeChatPayConfig.mch_id);
+        parameters.put("mch_id", WeChatPayConfig.smch_id);
         parameters.put("device_info", WeChatPayConfig.device_info);
         parameters.put("sign_type", WeChatPayConfig.sign_type);
         parameters.put("body", WeChatPayConfig.body);

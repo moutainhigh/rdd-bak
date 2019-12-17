@@ -51,7 +51,7 @@ public class User {
 
     private String avatarUrl;
 
-    private String bindingId;
+    private String bindingid;
 
     public String getUserId() {
         return userId;
@@ -245,11 +245,11 @@ public class User {
         this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 
-    public String getBindingId() {
-        return bindingId;
+    public String getBindingid() {
+        return bindingid;
     }
 
-    public void setBindingId(String bindingId) {
-        this.bindingId = bindingId;
+    public void setBindingid(String bindingid) {
+        this.bindingid = bindingid;
     }
 }

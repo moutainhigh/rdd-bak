@@ -7,7 +7,9 @@ import com.cqut.czb.bn.dao.mapper.ShopMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatBackDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatParameterConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
@@ -15,13 +17,12 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
+import com.cqut.czb.bn.util.md5.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.SortedMap;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
@@ -53,7 +54,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setCommodityId(weChatCommodity.getCommodityId());
         weChatCommodityOrder.setShopId(weChatCommodity.getShopId());
 
-        weChatCommodityOrder.setActualPrice(BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).doubleValue());
+        weChatCommodityOrder.setActualPrice(BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
         weChatCommodityOrder.setPayStatus(0);
         weChatCommodityOrder.setPayMethod(2);
@@ -76,13 +77,12 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setCommoditySource("本地商家");
 
         //返佣金额
-        Dict dict1=dictMapperExtra.selectDictByName("sp_fy1");
-        Dict dict2=dictMapperExtra.selectDictByName("sp_fy2");
-        double money=BigDecimal.valueOf(weChatCommodity.getFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).doubleValue();
+        double money=BigDecimal.valueOf(weChatCommodity.getFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
         weChatCommodityOrder.setFyMoney(money);
 
         //成本价格
-        weChatCommodityOrder.setCostPrice(weChatCommodity.getCostPrice()*Integer.valueOf(payInputDTO.getCommodityNum()));
+        double costMoney=BigDecimal.valueOf(weChatCommodity.getCostPrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        weChatCommodityOrder.setCostPrice(costMoney);
 
         //商品类型 1:寄送 2：核销
         if(weChatCommodity.getTakeWay()==1){
@@ -101,7 +101,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
     }
 
     @Override
-    public JSONObject WeChatAppletBuyCommodity(User user, PayInputDTO payInputDTO) {
+    public WeChatBackDTO WeChatAppletBuyCommodity(User user, PayInputDTO payInputDTO) {
         //查出商品信息
         WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(payInputDTO.getCommodityId());
         if(weChatCommodity==null){
@@ -118,6 +118,18 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         inputOrder( orgId, weChatCommodity, user,  payInputDTO);
         // 设置参数
         SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersApplet(user.getUserAccount(),money,nonceStrTemp,orgId,user.getUserId(),weChatCommodity);
-        return WeChatParameterConfig.getSign( parameters, nonceStrTemp);
+        JSONObject jsonObject= WeChatParameterConfig.getSign( parameters, nonceStrTemp);
+        return   getBackObject(jsonObject);
+    }
+
+    public WeChatBackDTO getBackObject(JSONObject jsonObject){
+        String string="appId="+jsonObject.get("appid")+"&nonceStr="+jsonObject.get("noncestr")+
+                "&package=prepay_id="+jsonObject.get("prepayid")+"&signType=MD5&timeStamp="+jsonObject.get("timestamp")+
+                "&key="+ WeChatPayConfig.skey;
+        String paySignStr= MD5Util.MD5Encode(string,"UTF-8");
+        WeChatBackDTO weChatBackDTO=new WeChatBackDTO();
+        weChatBackDTO.setJsonObject(jsonObject);
+        weChatBackDTO.setPaySignStr(paySignStr);
+        return weChatBackDTO;
     }
 }
