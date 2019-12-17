@@ -57,6 +57,8 @@ public class WeChatCommodityOrder {
 
     private String settledRecordId;
 
+    private String attrInfo;
+
     public String getOrderId() {
         return orderId;
     }
@@ -271,5 +273,13 @@ public class WeChatCommodityOrder {
 
     public void setSettledRecordId(String settledRecordId) {
         this.settledRecordId = settledRecordId == null ? null : settledRecordId.trim();
+    }
+
+    public String getAttrInfo() {
+        return attrInfo;
+    }
+
+    public void setAttrInfo(String attrInfo) {
+        this.attrInfo = attrInfo == null ? null : attrInfo.trim();
     }
 }
