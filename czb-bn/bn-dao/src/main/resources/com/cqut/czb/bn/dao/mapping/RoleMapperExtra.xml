@@ -10,16 +10,19 @@
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <collection property="menuList" column="role_id" javaType="list" select="selectMenuList"/>
   </resultMap>
-  <select id="selectRole" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
+  <select id="selectRole" resultMap="BaseResultMap">
     select
     role_id, role_name
     from czb_role
     <where>
-      <if test="roleName != null and roleName != ''">
-        role_name like concat('%',#{roleName,jdbcType=VARCHAR},'%')
+      <if test="roleInputDTO.roleName != null and roleInputDTO.roleName != ''">
+        role_name like concat('%',#{roleInputDTO.roleName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="roleId != null and roleId != ''">
-        role_id = #{roleId,jdbcType=VARCHAR}
+      <if test="roleInputDTO.roleId != null and roleInputDTO.roleId != ''">
+        role_id in
+        <trim prefix="("  suffix=")" suffixOverrides="" prefixOverrides="">
+          ${roleInputDTO.roleId}
+        </trim>
       </if>
     </where>
   </select>
@@ -35,6 +38,13 @@
       </if>
     </where>
   </select>
+
+  <select id="selectRoleIdByRoleName" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT czb_role.role_id
+    FROM czb_role
+    WHERE czb_role.role_name = #{roleName, jdbcType = VARCHAR}
+  </select>
+
   <select id="findRole" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.role.RoleInputDTO" >
     select
     count(role_name)
@@ -72,5 +82,23 @@
     select
     role_id as roleId, role_name as roleName
     from czb_role
+  </select>
+
+  <select id="getRoleToPage" resultType="com.cqut.czb.bn.entity.entity.Role">
+    SELECT
+			cr.role_name roleName
+		FROM
+			(
+				SELECT
+					cur.role_id,
+					cur.create_at
+				FROM
+					czb_user_role cur
+				WHERE
+					user_id = #{userId}
+				ORDER BY
+					cur.create_at
+			) result
+		LEFT JOIN czb_role cr ON cr.role_id = result.role_id
   </select>
 </mapper>

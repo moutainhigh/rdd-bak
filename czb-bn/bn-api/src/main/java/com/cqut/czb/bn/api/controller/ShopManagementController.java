@@ -40,4 +40,9 @@ public class ShopManagementController {
     public JSONResult settleOrder(HttpServletResponse response, HttpServletRequest request, @Validated SettlementDTO settlementDTO){
         return new JSONResult(shopManagementService.settleOrder(response, request, settlementDTO));
     }
+
+    @PostMapping("/auditShop")
+    public JSONResult auditShop(ShopManagementDTO shopManagementDTO){
+        return new JSONResult(shopManagementService.auditShop(shopManagementDTO));
+    }
 }

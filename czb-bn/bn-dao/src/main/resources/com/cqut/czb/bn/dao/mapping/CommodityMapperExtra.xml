@@ -8,6 +8,7 @@
 	shop_name shopName,
 	shop_address shopAddress,
 	commodity_title commodityTitle,
+	is_pay isPay,
 	commodity_price commodityPrice,
 	usage_count usageCount,
 	usage_count - count(czb_commodity_usage_record.order_id) surplusCount,
@@ -25,7 +26,7 @@
 	AND
 	czb_order.state = #{state,jdbcType=INTEGER}
     GROUP BY
-	czb_order.id
+	czb_order.id and czb_order.is_pay = 1
 	ORDER BY czb_order.create_at DESC
   </select>
 
@@ -33,7 +34,7 @@
         select
         commodity_id as commodityId, shop_id as shopId, commodity_title as commodityTitle, commodity_info as commodityInfo,
         discount as discount, save_path as commodityImg,commodity_price as commodityPrice, classification as classification,
-        usage_count as usageCount, czb_commodity.create_at as createAt, czb_commodity.update_at as updateAt
+        usage_count as usageCount,czb_commodity.is_pay AS isPay,czb_commodity.create_at as createAt, czb_commodity.update_at as updateAt
         from czb_commodity,czb_file
         <where>
             <if test="classification!=null and classification!=''">
@@ -49,7 +50,8 @@
         discount, save_path as commodityImg,
         commodity_price as commodityPrice, classification, usage_count as usageCount,
         shop_address as shopAddress,shop_content as shopContent,shop_name as shopName,
-        shop_phone as shopPhone
+        shop_phone as shopPhone,
+        is_pay AS isPay
         from
         czb_commodity,czb_shop,czb_file
         WHERE
@@ -131,6 +133,7 @@
             commodity_price AS commodityPrice,
             classification AS classification,
             usage_count AS usageCount,
+            is_pay AS isPay,
             a.create_at AS createAt,
             a.update_at AS updateAt
         FROM
@@ -188,6 +191,9 @@
             <if test="updateAt != null" >
                 update_at,
             </if>
+            <if test="isPay != null" >
+                is_pay
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -223,6 +229,9 @@
             <if test="updateAt != null" >
                 #{updateAt,jdbcType=TIMESTAMP},
             </if>
+            <if test="isPay != null" >
+               #{isPay,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
@@ -231,6 +240,9 @@
         <set >
             <if test="shopId != null" >
                 shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="isPay != null" >
+                is_pay = #{isPay,jdbcType=INTEGER},
             </if>
             <if test="commodityTitle != null" >
                 commodity_title = #{commodityTitle,jdbcType=VARCHAR},

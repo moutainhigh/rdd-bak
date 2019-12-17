@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushNoticeMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticesDTO" >
+    <id column="notice_id" property="noticeId" jdbcType="VARCHAR" />
+    <result column="notice_content" property="noticeContent" jdbcType="VARCHAR" />
+    <result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
+    <result column="app_router_id" property="appRouterId" jdbcType="VARCHAR" />
+    <result column="deadline" property="deadline" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="menu_name" property="title" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    notice_id, notice_content, notice_title, app_router_id, deadline, notice.create_at,
+    notice.update_at, router.menu_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_remote_push_notice notice
+    left join czb_app_router router on router.router_id = notice.app_router_id
+      <where>
+        <if test="noticeTitle != null">
+          and notice_title like concat('%', #{noticeTitle}, '%')
+        </if>
+        <if test="noticeId != null">
+          and notice_id like concat('%', #{noticeId}, '%')
+        </if>
+      </where>
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    notice_id, notice_content, notice_title, app_router_id, deadline, create_at,
+    update_at
+    from czb_remote_push_notice
+    <where>
+        notice_id = #{noticeId,jdbcType=VARCHAR}
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_remote_push_notice
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
+    insert into czb_remote_push_notice (notice_id, notice_content,
+      notice_title, app_router_id, deadline,
+      create_at)
+    values (#{noticeId,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR},
+      #{noticeTitle,jdbcType=VARCHAR}, #{appRouterId,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP},
+      CURRENT_TIMESTAMP)
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
+    insert into czb_remote_push_notice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="noticeId != null" >
+        notice_id,
+      </if>
+      <if test="noticeContent != null" >
+        notice_content,
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title,
+      </if>
+      <if test="appRouterId != null" >
+        app_router_id,
+      </if>
+      <if test="deadline != null" >
+        deadline,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="noticeId != null" >
+        #{noticeId,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null" >
+        #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null" >
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="appRouterId != null" >
+        #{appRouterId,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null" >
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
+    update czb_remote_push_notice
+    <set >
+      <if test="noticeContent != null" >
+        notice_content = #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="appRouterId != null" >
+        app_router_id = #{appRouterId,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null" >
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RemotePushNotice" >
+    update czb_remote_push_notice
+    set notice_content = #{noticeContent,jdbcType=VARCHAR},
+      notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      app_router_id = #{appRouterId,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

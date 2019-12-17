@@ -40,16 +40,30 @@ public class PetrolManagementController {
     @RequestMapping(value = "salePetrol",method = RequestMethod.POST)
     public JSONResult salePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 
-        return new JSONResult(petrolManagementService.salePetrol(inputDTO.getPetrolIds()));
+        return new JSONResult(petrolManagementService.saleSomePetrol(inputDTO));
     }
     @RequestMapping(value = "notSalePetrol",method = RequestMethod.POST)
     public JSONResult notSalePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 
-        return new JSONResult(petrolManagementService.notSalePetrol(inputDTO.getPetrolIds()));
+        return new JSONResult(petrolManagementService.notSaleSomePetrol(inputDTO));
+    }
+
+    @RequestMapping(value = "BanPetrol",method = RequestMethod.POST)
+    public JSONResult BanPetrol(@RequestBody PetrolManagementInputDTO inputDTO){
+
+        return new JSONResult(petrolManagementService.BanPetrol(inputDTO.getPetrolIds()));
     }
 
     @RequestMapping(value = "/modifyPetrol",method = RequestMethod.POST)
     public JSONResult modifyPetrol(@RequestBody ModifyPetrolInputDTO inputDTO){
         return new JSONResult(petrolManagementService.modifyPetrol(inputDTO));
     }
+
+    @RequestMapping(value = "/payManage",method = RequestMethod.GET)
+    public JSONResult payManage(){
+        return new JSONResult(petrolManagementService.getPayInstruction());
+    }
+
+
+
 }

@@ -15,6 +15,8 @@ public class FileFunction {
 
     private Date updateAt;
 
+    private Integer orderNum;
+
     public String getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class FileFunction {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
     }
 }

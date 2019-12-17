@@ -1,5 +1,9 @@
 package com.cqut.czb.bn.entity.dto.myTeam;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+
 /**
  *  受邀请者DTO
  * */
@@ -13,7 +17,38 @@ public class TeamDTO {
 
     private Double amount;
 
-//    private List<TeamDTO> teamDTOList;
+    private Integer isVip;
+
+    private String avatarUrl;
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createAt;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
+    //    private List<TeamDTO> teamDTOList;
 
     public String getUserId() {
         return userId;

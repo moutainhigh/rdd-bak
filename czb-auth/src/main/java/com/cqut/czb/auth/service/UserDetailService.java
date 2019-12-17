@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.entity.User;
 public interface UserDetailService {
     String registerPersonalUser(PersonalUserDTO personalUserDTO);
     String registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO);
+    Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO) throws InterruptedException;
     Boolean checkAccount(User user);
     User loadUserByUsername(String account);
 
@@ -17,6 +18,12 @@ public interface UserDetailService {
      * @return
      */
     Boolean insertVerificationCode(String phone);
+
+
+    /**
+     * 插入游客登录验证码
+     */
+    Boolean insertVCode(VerificationCodeDTO verificationCodeDTO);
 
     /**
      * 查询出数据库中的验证码

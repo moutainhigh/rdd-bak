@@ -16,10 +16,11 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="commission" property="commission" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price, 
-    state, discount, area, owner_id, petrol_type, create_at, update_at, commission
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -36,12 +37,14 @@
       petrol_kind, petrol_denomination, petrol_price, 
       state, discount, area, 
       owner_id, petrol_type, create_at, 
-      update_at, commission)
+      update_at, commission, remark
+      )
     values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR}, 
       #{petrolKind,jdbcType=INTEGER}, #{petrolDenomination,jdbcType=DOUBLE}, #{petrolPrice,jdbcType=DOUBLE}, 
       #{state,jdbcType=INTEGER}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=VARCHAR}, 
       #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{commission,jdbcType=DOUBLE})
+      #{updateAt,jdbcType=TIMESTAMP}, #{commission,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
     insert into czb_petrol
@@ -88,6 +91,9 @@
       <if test="commission != null" >
         commission,
       </if>
+      <if test="remark != null" >
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="petrolId != null" >
@@ -131,6 +137,9 @@
       </if>
       <if test="commission != null" >
         #{commission,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -176,6 +185,9 @@
       <if test="commission != null" >
         commission = #{commission,jdbcType=DOUBLE},
       </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
     </set>
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>
@@ -193,7 +205,8 @@
       petrol_type = #{petrolType,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      commission = #{commission,jdbcType=DOUBLE}
+      commission = #{commission,jdbcType=DOUBLE},
+      remark = #{remark,jdbcType=VARCHAR}
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>
 </mapper>

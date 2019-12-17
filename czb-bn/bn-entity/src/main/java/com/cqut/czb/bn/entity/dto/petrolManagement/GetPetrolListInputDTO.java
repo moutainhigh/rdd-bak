@@ -15,6 +15,10 @@ public class GetPetrolListInputDTO extends PageDTO {
     private String area;//所属地区
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endTime;
     public Date getCreateAt() {
         return createAt;
     }
@@ -23,7 +27,21 @@ public class GetPetrolListInputDTO extends PageDTO {
         this.createAt = createAt;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
 
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 
     public String getPetrolNum() {
         return petrolNum;

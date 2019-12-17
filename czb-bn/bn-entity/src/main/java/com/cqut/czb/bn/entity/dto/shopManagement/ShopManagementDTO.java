@@ -1,6 +1,9 @@
 package com.cqut.czb.bn.entity.dto.shopManagement;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 /**
  * @Description
@@ -22,6 +25,11 @@ public class ShopManagementDTO extends PageDTO {
      * 商铺名称
      */
     private String shopName;
+
+    /**
+     * 店鋪類型
+     */
+    private Integer shopType;
 
     /**
      * 商铺联系人名称
@@ -47,6 +55,12 @@ public class ShopManagementDTO extends PageDTO {
      * 未结算订单个数
      */
     private Integer numberOfOutstandingAccounts;
+
+    private Integer audit;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date updateAt;
 
     public String getUserId() {
         return userId;
@@ -80,6 +94,14 @@ public class ShopManagementDTO extends PageDTO {
         this.shopName = shopName;
     }
 
+    public Integer getShopType() {
+        return shopType;
+    }
+
+    public void setShopType(Integer shopType) {
+        this.shopType = shopType;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -110,5 +132,29 @@ public class ShopManagementDTO extends PageDTO {
 
     public void setTotalHistoricalTransactions(Double totalHistoricalTransactions) {
         this.totalHistoricalTransactions = totalHistoricalTransactions;
+    }
+
+    public Integer getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Integer audit) {
+        this.audit = audit;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.OrdinaryStatisticsMapperExtra" >
+    <select id="statistics" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryStatisticsDTO">
+           SELECT
+            result.balance,
+            result.directPetrolIncome,
+            result.directVipIncome,
+            result.indirectPetrolIncome,
+            result.indirectVipIncome,
+            (
+                result.directPetrolIncome + result.directVipIncome + result.indirectPetrolIncome + result.indirectVipIncome
+            ) AS allCommissionIncome,
+            result.withdrawed
+        FROM
+            (
+                SELECT
+                    sum(
+
+                        IF (
+                            income.is_settle = 0,
+                            income.first_vip_income + income.second_vip_income + income.first_petrol_income + income.second_petrol_income,
+                            0
+                        )
+                    ) balance,
+                    sum(
+
+                        IF (
+                            income.is_settle = 1,
+                            income.first_vip_income + income.second_vip_income + income.first_petrol_income + income.second_petrol_income,
+                            0
+                        )
+                    ) withdrawed,
+                    sum(income.first_petrol_income) AS directPetrolIncome,
+                    sum(income.first_vip_income) AS directVipIncome,
+                    sum(
+                        income.second_petrol_income
+                    ) AS indirectPetrolIncome,
+                    sum(income.second_vip_income) AS indirectVipIncome
+                FROM
+                    czb_partner_vip_income income
+                WHERE
+                    income.partner_id = #{userId}
+            ) AS result
+  </select>
+
+    <select id="getUsers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryStatisticsDTO">
+        SELECT
+            count(IF(vip = 1, 1, NULL)) AS ordinaryUserCount,
+            count(IF(vip = 0, 1, NULL)) AS ordinaryUser,
+            count(
+
+                IF (
+                    vip = 1
+                    AND superior = #{userId},
+                    1,
+                    NULL
+                )
+            ) AS directVipCount,
+            count(
+
+                IF (
+                    vip = 1
+                    AND superior != #{userId},
+                    1,
+                    NULL
+                )
+            ) AS indirectVipCount
+        FROM
+            (
+                SELECT
+                    users.user_id userId,
+                    users.is_vip vip,
+                    users.partner,
+                    users.superior_user superior
+                FROM
+                    czb_user users
+                WHERE
+                    second_level_partner = #{userId}
+            ) AS allUser
+  </select>
+
+    <select id="getNumberOfDevelopment" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryStatisticsDTO">
+       select
+		sum(case
+		when second_level_partner = superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		then 1 else 0
+		end) as firstDirectNumber,
+		sum(
+		case when second_level_partner != superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		 then 1 else 0 end) as firstIndirectNumber,
+		sum(case
+		when second_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0
+		end) as secondDirectNumber,
+		sum(
+		case when second_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0 end) as secondIndirectNumber,
+		sum(case
+		when second_level_partner = superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0
+		end) as thirdDirectNumber,
+		sum(
+		case when second_level_partner != superior_user
+		and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0 end) as thirdIndirectNumber
+      from
+		czb_user
+      where
+		second_level_partner = #{userId}
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.ServerStandardMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
+    <id column="server_id" property="serverId" jdbcType="VARCHAR" />
+    <result column="server_name" property="serverName" jdbcType="VARCHAR" />
+    <result column="server_type" property="serverType" jdbcType="VARCHAR" />
+    <result column="server_price" property="serverPrice" jdbcType="DOUBLE" />
+    <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
+    <result column="server_explain" property="serverExplain" jdbcType="VARCHAR" />
+    <result column="server_discount" property="serverDiscount" jdbcType="REAL" />
+    <result column="server_vehicle_type" property="serverVehicleType" jdbcType="TINYINT" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    server_id, server_name, server_type, server_price, vip_price, server_explain, server_discount,
+    server_vehicle_type, create_at, update_at, file_id
+  </sql>
+  <select id="selectServiceInfo" resultType="com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO">
+    select
+       server_id as serverId, server_name as  serverName, server_type as  serverType, server_price as  serverPrice, vip_price as  vipPrice,
+       server_explain as  serverExplain, server_discount as  serverDiscount, server_vehicle_type as serverVehicleType, save_path as filePath,current_price as  currentPrice
+    from
+       czb_server_standard ,czb_file
+    WHERE
+       czb_file.file_id=czb_server_standard.file_id
+    ORDER BY czb_server_standard.create_at DESC
+  </select>
+
+  <select id="selectOneService" resultType="com.cqut.czb.bn.entity.dto.appCarWash.ServiceCommodityDTO">
+    select
+       server_id as serverId, server_name as  serverName, server_type as  serverType, server_price as  serverPrice, vip_price as  vipPrice,
+       server_explain as  serverExplain, server_discount as  serverDiscount, server_vehicle_type as serverVehicleType, save_path as filePath,current_price as currentPrice
+    from
+       czb_server_standard ,czb_file
+    WHERE
+       czb_file.file_id=czb_server_standard.file_id and
+       server_id = #{serverId,jdbcType=VARCHAR}
+  </select>
+</mapper>

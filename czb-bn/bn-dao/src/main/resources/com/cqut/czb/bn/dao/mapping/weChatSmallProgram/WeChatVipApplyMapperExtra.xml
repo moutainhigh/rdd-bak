@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatVipApplyMapperExtra" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, user_id, phone_num, user_name, remark, create_at, update_at, status
+  </sql>
+
+  <select id="selectVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply" resultType="com.cqut.czb.bn.entity.entity.VIPApply">
+         SELECT
+        U.user_account AS vipAccount,
+        WVP.user_name AS vipName,
+        U.user_id as vipID,
+        WVP.STATUS AS audit,
+        WVP.phone_num AS phoneNum
+    FROM
+        czb_wechat_vip_apply AS WVP,
+        czb_user AS U
+      <where>
+          WVP.user_id = U.user_id
+          <if test="vipAccount != null and vipAccount != ''">
+              and U.user_account like concat('%', #{vipAccount}, '%')
+          </if>
+          <if test="vipName != null and vipName != ''">
+              and WVP.user_name like concat('%', #{vipName,jdbcType=VARCHAR}, '%')
+          </if>
+          <if test="audit != null and audit != 3 ">
+              and WVP.STATUS = #{audit,jdbcType=INTEGER}
+          </if>
+      </where>
+    ORDER BY
+        WVP.create_at DESC
+    </select>
+
+    <update id="updateVipApply" parameterType="com.cqut.czb.bn.entity.entity.VIPApply">
+        UPDATE czb_wechat_vip_apply,
+        czb_user
+        SET czb_wechat_vip_apply.`status` = #{audit,jdbcType=CHAR},
+        czb_user.is_vip = #{isVip,jdbcType=CHAR}
+        WHERE
+	    czb_user.user_id = #{vipId,jdbcType=VARCHAR}
+	    AND czb_wechat_vip_apply.user_id = #{vipId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateUserVip" parameterType="java.lang.String">
+        UPDATE czb_user
+        SET czb_user.is_vip = 1
+        WHERE
+	    czb_user.user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+</mapper>

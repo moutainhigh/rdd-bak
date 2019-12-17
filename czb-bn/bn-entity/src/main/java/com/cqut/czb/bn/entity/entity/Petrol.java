@@ -31,6 +31,8 @@ public class Petrol {
 
     private Double commission;
 
+    private String remark;
+
     private long endTime;
 
     public long getEndTime() {
@@ -151,5 +153,13 @@ public class Petrol {
 
     public void setCommission(Double commission) {
         this.commission = commission;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

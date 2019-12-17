@@ -31,18 +31,17 @@ public class DictController {
     }
 
     @RequestMapping(value = "/selectAndroidInfo",method = RequestMethod.GET)
-    public JSONResult selectAndroidInfo(Principal principal, @Param("version")String version){
+    public JSONResult selectAndroidInfo(Principal principal, @Param("version")String version,@Param("DeviceToken")String DeviceToken){
         User user = (User)redisUtils.get(principal.getName());
 
-        return new JSONResult(dictService.selectAndroidInfo(user,version));
+        return new JSONResult(dictService.selectAndroidInfo(user,version,DeviceToken));
     }
 
+
     @RequestMapping(value = "/selectIOSInfo",method = RequestMethod.GET)
-    public JSONResult selectIOSInfo(Principal principal,@Param("version")String version){
-
+    public JSONResult selectIOSInfo(Principal principal,@Param("version")String version, @Param("DeviceToken")String DeviceToken){
         User user = (User)redisUtils.get(principal.getName());
-
-        return new JSONResult(dictService.selectIOSInfo(user,version));
+        return new JSONResult(dictService.selectIOSInfo(user,version, DeviceToken));
     }
 
     @RequestMapping(value = "/selectDictList",method = RequestMethod.GET)

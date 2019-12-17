@@ -1,10 +1,19 @@
 package com.cqut.czb.bn.service.impl.petrolDeliveryRecords;
 
 import com.cqut.czb.bn.dao.mapper.PetrolDeliveryRecordsMapperExtra;
+import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryMessageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
+import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.service.MessageManagementService;
 import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
+import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
+import com.cqut.czb.bn.util.config.SendMesConfig.MessageModelInfo;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /** 油卡邮寄功能
  *
@@ -29,9 +40,22 @@ import java.util.Map;
 @Transactional
 public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsService {
 
-
     @Autowired
     PetrolDeliveryRecordsMapperExtra petrolDeliveryRecordsMapperExtra;
+
+    @Autowired
+    PetrolMapperExtra petrolMapperExtra;
+
+    @Autowired
+    MessageManagementService messageManagementService;
+
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
+
+    @Autowired
+    UserMapperExtra userMapperExtra;
+
+    private final ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);
 
     @Override
     public PageInfo<PetrolDeliveryDTO> selectPetrolDelivery(DeliveryInput deliveryInput, PageDTO pageDTO) {
@@ -41,13 +65,43 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
     }
 
     @Override
+    public Boolean deleteByPrimaryKey(String recordId) {
+        return petrolDeliveryRecordsMapperExtra.deleteByPrimaryKey(recordId)>0;
+    }
+
+    @Override
     public Boolean updatePetrolDelivery(DeliveryInput deliveryInput) {
         if (deliveryInput.getDeliveryNum()!=null&&deliveryInput.getDeliveryNum()!=""&&deliveryInput.getDeliveryCompany()!=null&&deliveryInput.getDeliveryCompany()!=""){
             deliveryInput.setDeliveryState(1);
         }else {
             deliveryInput.setDeliveryState(0);
         }
-        return (petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0);
+        Boolean updateDeliveryRecord = petrolDeliveryRecordsMapperExtra.updateByPrimaryKey(deliveryInput)>0;
+//        if(updateDeliveryRecord){
+//            PhoneCode phoneCode = new PhoneCode();
+//            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
+//            phoneCode.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), messageDTO.getDeliveryNum());
+//        }
+        if(updateDeliveryRecord){
+            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessage(deliveryInput.getRecordId());
+            Petrol petrol =  petrolMapperExtra.selectPetrolByDeliveryRecordId(deliveryInput.getRecordId());
+            Map<String,String> content = new HashMap<>();
+            if(1 == petrol.getPetrolKind()){
+                content.put("petrolKind", "中国石油加油卡");
+            }else if(2 == petrol.getPetrolKind()){
+                content.put("petrolKind", "中国石化加油卡");
+            }else {
+                content.put("petrolKind", " ");
+            }
+            serverOrderService.sendMessage(petrol.getOwnerId(), MesInfo.noticeId.DELIVERY_PETROL_USER.getNoticeId(),content);
+            content.put("petrolNum", messageDTO.getPetrolNum());
+            content.put("deliveryNum", messageDTO.getDeliveryNum());
+            content.put("msgModelId", MessageModelInfo.DELIVERY_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+            content.put("receiverId", petrol.getOwnerId());
+            content.put("userAccount", messageDTO.getUserAccount());
+            messageManagementService.sendMessageToOne(content, "123456");
+        }
+        return updateDeliveryRecord;
     }
 
     @Override
@@ -117,6 +171,7 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
         try{
             workbook = new SXSSFWorkbook(petrolDeliveryDTOS.size());
         } catch (Exception e) {
+            e.printStackTrace();
                throw new Exception("Excel数据量过大，请缩短时间间隔");
            }
            Sheet sheet = workbook.createSheet("导出寄送记录");//创建工作表
@@ -134,11 +189,11 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                 row = sheet.createRow(i+1);
 
                 row.createCell(count++).setCellValue(petrolDeliveryDTOS.get(i).getPetrolNum());
-                if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
+                if (petrolDeliveryDTOS.get(i).getPetrolKind()==0)
                     row.createCell(count++).setCellValue("国通");
-                else if(petrolDeliveryDTOS.get(i).getDeliveryState()==1)
+                else if(petrolDeliveryDTOS.get(i).getPetrolKind()==1)
                     row.createCell(count++).setCellValue("中石油");
-                else if (petrolDeliveryDTOS.get(i).getDeliveryState()==2)
+                else if (petrolDeliveryDTOS.get(i).getPetrolKind()==2)
                     row.createCell(count++).setCellValue("中石化");
 
                 if (petrolDeliveryDTOS.get(i).getDeliveryState()==0)
@@ -197,8 +252,40 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
             }
         }
         List<PetrolDeliveryDTO> petrolListNoRepeat = new ArrayList<>();
-        for(PetrolDeliveryDTO p:petrolMap.values()){
+//        for(PetrolDeliveryDTO p:petrolMap.values()){
+//            PhoneCode code = new PhoneCode();
+//            DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
+//            code.getDeliveryMessage(messageDTO.getUserAccount(), messageDTO.getPetrolNum(), p.getDeliveryNum());
+//            petrolListNoRepeat.add(p);
+//        }
+        for (PetrolDeliveryDTO p:petrolMap.values()) {
             petrolListNoRepeat.add(p);
+            fixedThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        DeliveryMessageDTO messageDTO  = petrolDeliveryRecordsMapperExtra.selectDeliveryMessageByPetrolNum(p.getPetrolNum());
+                        Petrol petrol =  petrolMapperExtra.selectPetrolByNum( p.getPetrolNum());
+                        Map<String,String> content = new HashMap<>();
+                        if(1 == petrol.getPetrolKind()){
+                            content.put("petrolKind", "中国石油加油卡");
+                        }else if(2 == petrol.getPetrolKind()){
+                            content.put("petrolKind", "中国石化加油卡");
+                        }else {
+                            content.put("petrolKind", " ");
+                        }
+                        serverOrderService.sendMessage(petrol.getOwnerId(), MesInfo.noticeId.DELIVERY_PETROL_USER.getNoticeId(),content);
+                        content.put("petrolNum", p.getPetrolNum());
+                        content.put("deliveryNum", p.getDeliveryNum());
+                        content.put("msgModelId", MessageModelInfo.DELIVERY_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+                        content.put("receiverId", petrol.getOwnerId());
+                        content.put("userAccount", messageDTO.getUserAccount());
+                        messageManagementService.sendMessageToOne(content, "123456");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         int countForInsert = petrolDeliveryRecordsMapperExtra.updateImportRecords(petrolListNoRepeat);
         return countForInsert;

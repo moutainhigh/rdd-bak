@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.appPersonalCenter;
 
+import java.util.List;
+
 /**
  * 创建人：陈德强
  * 作用：个人中心——返回用户表和企业表的信息
@@ -25,6 +27,22 @@ public class PersonalCenterUserDTO {
     private Integer isVip;
 
     private Integer haveVip;
+
+    private String roleName;  //新增，用户的角色
+
+    private List<UserRoleDTO> roleNameList;
+
+    private String bindingid;
+
+    private String bindingAccount;
+
+    public List<UserRoleDTO> getRoleNameList() {
+        return roleNameList;
+    }
+
+    public void setRoleNameList(List<UserRoleDTO> roleNameList) {
+        this.roleNameList = roleNameList;
+    }
 
     public Integer getHaveVip() {
         return haveVip;
@@ -106,4 +124,27 @@ public class PersonalCenterUserDTO {
         this.userName = userName == null ? null : userName.trim();
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getBindingid() {
+        return bindingid;
+    }
+
+    public void setBindingid(String bindingid) {
+        this.bindingid = bindingid;
+    }
+
+    public String getBindingAccount() {
+        return bindingAccount;
+    }
+
+    public void setBindingAccount(String bindingAccount) {
+        this.bindingAccount = bindingAccount;
+    }
 }

@@ -1,11 +1,21 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerBecomeTimeDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.SubPartnerDTO;
+import com.cqut.czb.bn.entity.dto.partnerVipIncome.VipCountDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface PartnerMapperExtra {
+    //普通合伙人查询下级
+    PartnerDTO selectSubVipSecond(PartnerDTO partnerDTO);
+    //事业合伙人查询下级
+    PartnerDTO selectSubVipFirst(PartnerDTO partnerDTO);
+    //事业合伙人查询被普通合伙人分走的下级
+    PartnerDTO selectSubVipThird(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectAllPartnerManage(PartnerDTO partnerDTO);
 
@@ -16,6 +26,8 @@ public interface PartnerMapperExtra {
     List<PartnerDTO> selectChildMoneyByName(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectChildByName(PartnerDTO partnerDTO);
+
+    List<PartnerDTO> selectAllPartner();
 
     int addChildPromotion (PartnerDTO partner);
 
@@ -31,6 +43,8 @@ public interface PartnerMapperExtra {
 
      PartnerDTO selectPartner(PartnerDTO partnerDTO);
 
+     PartnerDTO selectMyPartner(String userId);
+
      PartnerDTO selectHistoryInfo(PartnerDTO partnerDTO);
 
     List<PartnerDTO> selectPartnerChildInfoWithTime(@Param("list")List<PartnerDTO> children ,@Param("partner") PartnerDTO partnerDTO);
@@ -43,5 +57,58 @@ public interface PartnerMapperExtra {
 
     List<PartnerDTO> selectNextChild(PartnerDTO partnerDTO);
 
-    List<PartnerDTO> selectNextChildMoney(PartnerDTO partnerDTO);
+    List<PartnerDTO> selectNextChildMoney1(PartnerDTO partnerDTO);
+
+
+//合伙人vip收益初始化数据用方法
+    List<PartnerBecomeTimeDTO> selectPartnerBecomeTime();
+
+    PartnerBecomeTimeDTO selectPartnerBecomeTimeOne(String userId);
+
+    PartnerBecomeTimeDTO selectOldPartnerBecomeTimeOne(String userId);
+
+    List<SubPartnerDTO> selectSubPartner(String userId);
+
+    PartnerVipMoney selectFirstPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    PartnerVipMoney selectFirstPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    PartnerVipMoney selectSecondPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    PartnerVipMoney selectSecondPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    PartnerVipMoney selectFirstBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstNotBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    PartnerVipMoney selectFirstNotBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    VipCountDTO selectFirstPartnerSubVipCount(String userId);
+
+    VipCountDTO selectSecondPartnerSubVipCount(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+//初始化用
+    List<PartnerVipMoney> selectAllFirstPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllFirstPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllSecondPartnerSubVip(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllSecondPartnerSubPetrol(PartnerBecomeTimeDTO partnerBecomeTimeDTO);
+
+    List<PartnerVipMoney> selectAllFirstBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectAllFirstBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectAllFirstNotBySecondPartnerSubVip(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectAllFirstNotBySecondPartnerSubPetrol(SubPartnerDTO subPartnerDTO);
+
+    List<PartnerVipMoney> selectByOldSuperVip(PartnerBecomeTimeDTO userId);
+
+    List<PartnerVipMoney> selectByOldSuperPetrol(PartnerBecomeTimeDTO userId);
+
+    List<PartnerBecomeTimeDTO> selectBeforeBecome(String userId);
 }

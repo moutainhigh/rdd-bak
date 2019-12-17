@@ -27,6 +27,8 @@
         <result column="delivery_company" property="deliveryCompany" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+        <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
     </resultMap>
     <sql id="Base_Column_List" >
         record_id, petrol_num, address_id, delivery_state, delivery_num, delivery_company,
@@ -48,7 +50,9 @@
             c.area,
             detail,
             a.create_at,
-            a.update_at
+            a.update_at,
+            b.petrol_denomination,
+            b.petrol_price
         FROM
             czb_petrol_delivery_records as a
         LEFT JOIN czb_petrol as b ON a.petrol_num = b.petrol_num
@@ -57,17 +61,23 @@
            <if test="petrolNum!=null and petrolNum!=''">
                a.petrol_num  like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
            </if>
+           <if test="contactNumber!=null and contactNumber!=''">
+               contact_number  like concat('%',#{contactNumber,jdbcType=VARCHAR},'%')
+           </if>
            <if test="petrolKind!=null">
                AND petrol_kind = #{petrolKind, jdbcType=INTEGER}
            </if>
            <if test="deliveryState!=null">
                AND delivery_state = #{deliveryState, jdbcType=INTEGER}
            </if>
-           <if test="startTime!=null  and endTime!=null ">
-               AND a.create_at >=#{startTime,jdbcType=VARCHAR}
-               and #{endTime,jdbcType=VARCHAR}>=a.create_at
+           <if test="startTime != null">
+               AND a.create_at &gt;= #{startTime,jdbcType = TIMESTAMP}
+           </if>
+           <if test="endTime != null">
+               AND a.create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
            </if>
        </where>
+        order by   a.create_at desc
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_petrol_delivery_records
@@ -243,4 +253,34 @@
         </where>
         limit 1
     </select>
+
+    <select id="selectDeliveryMessage" resultType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryMessageDTO" parameterType="java.lang.String">
+    SELECT
+        user_account as userAccount,
+        czb_petrol_delivery_records.petrol_num petrolNum,
+        czb_petrol_delivery_records.delivery_num deliveryNum
+    FROM
+        czb_petrol_delivery_records
+        LEFT JOIN czb_petrol ON czb_petrol_delivery_records.petrol_num = czb_petrol.petrol_num
+        LEFT JOIN czb_user ON czb_petrol.owner_id = czb_user.user_id
+    WHERE
+        record_id = #{recordId, jdbcType=VARCHAR}
+        AND czb_petrol.state = 2
+        AND czb_petrol_delivery_records.delivery_state = 1
+    </select>
+
+    <select id="selectDeliveryMessageByPetrolNum" resultType="com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryMessageDTO" parameterType="java.lang.String">
+        SELECT
+        user_account as userAccount,
+        czb_petrol_delivery_records.petrol_num petrolNum,
+        czb_petrol_delivery_records.delivery_num deliveryNum
+    FROM
+        czb_petrol_delivery_records
+        LEFT JOIN czb_petrol ON czb_petrol_delivery_records.petrol_num = czb_petrol.petrol_num
+        LEFT JOIN czb_user ON czb_petrol.owner_id = czb_user.user_id
+    WHERE
+        czb_petrol.petrol_num = #{petrolNum, jdbcType=VARCHAR}
+        AND czb_petrol.state = 2
+    </select>
 </mapper>
+

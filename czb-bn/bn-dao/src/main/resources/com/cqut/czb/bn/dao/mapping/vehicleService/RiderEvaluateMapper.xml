@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.RiderEvaluateMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
+    <id column="evaluate_id" property="evaluateId" jdbcType="CHAR" />
+    <result column="evaluate_rider_id" property="evaluateRiderId" jdbcType="CHAR" />
+    <result column="evaluate_level" property="evaluateLevel" jdbcType="REAL" />
+    <result column="evaluate_message" property="evaluateMessage" jdbcType="CHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="evaluate_user_id" property="evaluateUserId" jdbcType="VARCHAR" />
+    <result column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    evaluate_id, evaluate_rider_id, evaluate_level, evaluate_message, create_at, update_at,
+    evaluate_user_id, server_order_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_rider_evaluate
+    where evaluate_id = #{evaluateId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_rider_evaluate
+    where evaluate_id = #{evaluateId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
+    insert into czb_rider_evaluate (evaluate_id, evaluate_rider_id, evaluate_level,
+      evaluate_message, create_at, update_at,
+      evaluate_user_id, server_order_id)
+    values (#{evaluateId,jdbcType=CHAR}, #{evaluateRiderId,jdbcType=CHAR}, #{evaluateLevel,jdbcType=REAL},
+      #{evaluateMessage,jdbcType=CHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+      #{evaluateUserId,jdbcType=VARCHAR}, #{serverOrderId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
+    insert into czb_rider_evaluate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="evaluateId != null" >
+        evaluate_id,
+      </if>
+      <if test="evaluateRiderId != null" >
+        evaluate_rider_id,
+      </if>
+      <if test="evaluateLevel != null" >
+        evaluate_level,
+      </if>
+      <if test="evaluateMessage != null" >
+        evaluate_message,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="evaluateUserId != null" >
+        evaluate_user_id,
+      </if>
+      <if test="serverOrderId != null" >
+        server_order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="evaluateId != null" >
+        #{evaluateId,jdbcType=CHAR},
+      </if>
+      <if test="evaluateRiderId != null" >
+        #{evaluateRiderId,jdbcType=CHAR},
+      </if>
+      <if test="evaluateLevel != null" >
+        #{evaluateLevel,jdbcType=REAL},
+      </if>
+      <if test="evaluateMessage != null" >
+        #{evaluateMessage,jdbcType=CHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evaluateUserId != null" >
+        #{evaluateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="serverOrderId != null" >
+        #{serverOrderId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
+    update czb_rider_evaluate
+    <set >
+      <if test="evaluateRiderId != null" >
+        evaluate_rider_id = #{evaluateRiderId,jdbcType=CHAR},
+      </if>
+      <if test="evaluateLevel != null" >
+        evaluate_level = #{evaluateLevel,jdbcType=REAL},
+      </if>
+      <if test="evaluateMessage != null" >
+        evaluate_message = #{evaluateMessage,jdbcType=CHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evaluateUserId != null" >
+        evaluate_user_id = #{evaluateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="serverOrderId != null" >
+        server_order_id = #{serverOrderId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where evaluate_id = #{evaluateId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.RiderEvaluate" >
+    update czb_rider_evaluate
+    set evaluate_rider_id = #{evaluateRiderId,jdbcType=CHAR},
+      evaluate_level = #{evaluateLevel,jdbcType=REAL},
+      evaluate_message = #{evaluateMessage,jdbcType=CHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      evaluate_user_id = #{evaluateUserId,jdbcType=VARCHAR},
+      server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    where evaluate_id = #{evaluateId,jdbcType=CHAR}
+  </update>
+</mapper>

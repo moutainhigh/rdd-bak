@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        <id column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="coupon_id" property="couponId" jdbcType="VARCHAR" />
+        <result column="rider_id" property="riderId" jdbcType="VARCHAR" />
+        <result column="rider_name" property="riderName" jdbcType="VARCHAR" />
+        <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
+        <result column="vehicle_color" property="vehicleColor" jdbcType="VARCHAR" />
+        <result column="vehicle_series" property="vehicleSeries" jdbcType="VARCHAR" />
+        <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
+        <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+        <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
+        <result column="vehicle_id" property="vehicleId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userPhone" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="license_number" property="licenseNumber" jdbcType="VARCHAR" />
+        <result column="customer_service_phone" property="customerServicePhone" jdbcType="VARCHAR" />
+        <result column="process_status" property="processStatus" jdbcType="TINYINT" />
+        <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
+        <result column="cancel_person_id" property="cancelPersonId" jdbcType="VARCHAR" />
+        <result column="cancel_reason" property="cancelReason" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="BaseResultMapOrderManage" type="com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO" >
+        <id column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
+        <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+        <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
+        <result column="process_status" property="processStatus" jdbcType="TINYINT" />
+        <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
+        <result column="cancel_reason" property="cancelReason" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="server_name" property="serverName" jdbcType="VARCHAR" />
+        <result column="user_name" property="firstName" jdbcType="VARCHAR" />
+        <result column="license_number" property="carNum" jdbcType="VARCHAR" />
+        <result column="vehicle_type" property="carType" jdbcType="VARCHAR" />
+        <result column="vehicle_series" property="carXi" jdbcType="VARCHAR" />
+        <result column="vehicle_color" property="color" jdbcType="VARCHAR" />
+        <result column="rider_name" property="riderName" jdbcType="VARCHAR" />
+        <result column="service_location" property="location" jdbcType="VARCHAR" />
+        <result column="pay_method" property="payMethod" jdbcType="TINYINT" />
+        <result column="contact_number" property="riderPhone" jdbcType="VARCHAR" />
+        <result column="coupon_id" property="couponId" jdbcType="VARCHAR" />
+        <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        server_order_id, czb_vehicle_clean_order.user_id,user_account,czb_vehicle_clean_order.user_name,vehicle_color,vehicle_series,rider_name,contact_number, czb_vehicle_clean_order.rider_id, third_order, pay_status, actual_price, czb_vehicle_clean_order.vehicle_id,license_number,
+        process_status, cancel_time, cancel_person_id, cancel_reason,(SELECT content FROM czb_dict WHERE `name`= 'customerServicePhone' ) customer_service_phone,czb_vehicle_clean_order.coupon_id,  czb_vehicle_clean_order.create_at, czb_vehicle_clean_order.update_at
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vehicle_clean_order
+        LEFT JOIN czb_user ON czb_vehicle_clean_order.user_id = czb_user.user_id
+        LEFT JOIN czb_clean_rider ON czb_vehicle_clean_order.rider_id = czb_clean_rider.rider_id
+        <where>
+            czb_vehicle_clean_order.pay_status = 1
+        <if test="userId!=null and userId!=''">
+           AND czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
+        </if>
+        <if test="serverOrderId!=null and serverOrderId!=''">
+           AND server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+        </if>
+        </where>
+        ORDER BY czb_vehicle_clean_order.create_at DESC
+    </select>
+
+    <select id="selectByServerOrderId" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        SELECT
+            server_order_id,
+            pay_status,
+            process_status
+        FROM
+            czb_vehicle_clean_order
+        WHERE
+            pay_status = 1
+        AND process_status = 0
+        AND server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByStatus" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vehicle_clean_order
+        LEFT JOIN czb_user ON czb_vehicle_clean_order.user_id = czb_user.user_id
+        LEFT JOIN czb_clean_rider ON czb_vehicle_clean_order.rider_id = czb_clean_rider.rider_id
+        where czb_vehicle_clean_order.user_id = #{userId,jdbcType=VARCHAR}
+        AND (process_status = 1 OR process_status = 0 or process_status = 2)
+        AND pay_status = 1
+        ORDER BY
+        czb_vehicle_clean_order.create_at DESC LIMIT 0,1
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_vehicle_clean_order
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCleanRider" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider" resultType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider">
+        SELECT
+        rider.rider_id riderId,
+        rider.`status`
+        from czb_clean_rider rider
+        where rider_name = #{riderName}  and contact_number = #{contactNumber}
+    </select>
+
+    <select id="getCleanRiders" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider" resultType="com.cqut.czb.bn.entity.entity.vehicleService.CleanRider">
+        SELECT
+        rider.rider_id riderId,
+        rider.`status`,
+        rider.rider_name riderName,
+        rider.contact_number contactNumber
+        from czb_clean_rider rider
+        where status = 0
+    </select>
+
+    <update id="updateRiderStatus" parameterType="java.lang.String">
+        update czb_clean_rider
+        set status = #{status}
+        where rider_id = #{riderId}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from czb_vehicle_clean_order
+        where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO" >
+        insert into czb_vehicle_clean_order (server_order_id, user_id, rider_id,
+        third_order, pay_status, actual_price,
+        vehicle_id, process_status, cancel_time,
+        cancel_person_id, cancel_reason, create_at,
+        update_at,server_id,pay_method,user_name,license_number,
+        vehicle_color,vehicle_series,service_location,phone)
+        values (#{serverOrderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{riderId,jdbcType=VARCHAR},
+        #{thirdOrder,jdbcType=VARCHAR}, #{payStatus,jdbcType=TINYINT}, #{actualPrice,jdbcType=DOUBLE},
+        #{vehicleId,jdbcType=VARCHAR}, #{processStatus,jdbcType=TINYINT}, #{cancelTime,jdbcType=TIMESTAMP},
+        #{cancelPersonId,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, now(),
+        now(),#{serverId,jdbcType=VARCHAR},#{payMethod,jdbcType=TINYINT},#{userName,jdbcType=VARCHAR},#{licenseNumber,jdbcType=VARCHAR},
+        #{vehicleColor,jdbcType=VARCHAR},#{vehicleSeries,jdbcType=VARCHAR},#{serviceLocation,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
+        insert into czb_vehicle_clean_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="serverOrderId != null" >
+                server_order_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="riderId != null" >
+                rider_id,
+            </if>
+            <if test="thirdOrder != null" >
+                third_order,
+            </if>
+            <if test="payStatus != null" >
+                pay_status,
+            </if>
+            <if test="actualPrice != null" >
+                actual_price,
+            </if>
+            <if test="vehicleId != null" >
+                vehicle_id,
+            </if>
+            <if test="processStatus != null" >
+                process_status,
+            </if>
+            <if test="cancelTime != null" >
+                cancel_time,
+            </if>
+            <if test="cancelPersonId != null" >
+                cancel_person_id,
+            </if>
+            <if test="cancelReason != null" >
+                cancel_reason,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="serverOrderId != null" >
+                #{serverOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="riderId != null" >
+                #{riderId,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdOrder != null" >
+                #{thirdOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="payStatus != null" >
+                #{payStatus,jdbcType=TINYINT},
+            </if>
+            <if test="actualPrice != null" >
+                #{actualPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="vehicleId != null" >
+                #{vehicleId,jdbcType=VARCHAR},
+            </if>
+            <if test="processStatus != null" >
+                #{processStatus,jdbcType=TINYINT},
+            </if>
+            <if test="cancelTime != null" >
+                #{cancelTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cancelPersonId != null" >
+                #{cancelPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelReason != null" >
+                #{cancelReason,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.VehicleCleanOrder" >
+        update czb_vehicle_clean_order
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="riderId != null" >
+                rider_id = #{riderId,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdOrder != null" >
+                third_order = #{thirdOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="payStatus != null" >
+                pay_status = #{payStatus,jdbcType=TINYINT},
+            </if>
+            <if test="actualPrice != null" >
+                actual_price = #{actualPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="vehicleId != null" >
+                vehicle_id = #{vehicleId,jdbcType=VARCHAR},
+            </if>
+            <if test="processStatus != null" >
+                process_status = #{processStatus,jdbcType=TINYINT},
+            </if>
+            <if test="cancelTime != null" >
+                cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cancelPersonId != null" >
+                cancel_person_id = #{cancelPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelReason != null" >
+                cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateOrderStateCancel" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+    update czb_vehicle_clean_order
+    set
+    pay_status = #{payStatus,jdbcType=TINYINT},
+    process_status = #{processStatus,jdbcType=TINYINT},
+    cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+    cancel_person_id = #{cancelPersonId,jdbcType=VARCHAR},
+    cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+    update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+</update>
+    <update id="updateOrderStateComplete" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO" >
+        update czb_vehicle_clean_order
+        set
+        process_status = #{processStatus,jdbcType=TINYINT},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="search" resultMap="BaseResultMapOrderManage" parameterType="com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO">
+        SELECT
+            orders.server_order_id,
+            servers.server_name,
+            orders.user_name ,
+            orders.license_number ,
+            orders.vehicle_series ,
+            orders.vehicle_color ,
+            orders.phone phone,
+            orders.service_location,
+            orders.pay_method,
+            vehicles.vehicle_type ,
+            riders.rider_name ,
+            riders.rider_id riderId,
+            riders.contact_number ,
+            orders.user_id userId,
+            orders.pay_status ,
+            orders.process_status ,
+            orders.actual_price ,
+            orders.cancel_time ,
+            orders.cancel_reason ,
+            orders.create_at,
+            orders.third_order,
+            orders.coupon_id
+        FROM
+            czb_vehicle_clean_order orders
+        LEFT JOIN czb_server_standard servers ON servers.server_id = orders.server_id
+        LEFT JOIN czb_clean_server_vehicle vehicles ON vehicles.vehicle_id = orders.vehicle_id
+        LEFT JOIN czb_clean_rider riders ON riders.rider_id = orders.rider_id
+        <where>
+            orders.pay_status != 0
+            <if test="serverOrderId != null and serverOrderId != ''">
+               AND server_order_id like concat('%', #{serverOrderId}, '%')
+            </if>
+            <if test="carNum != null and carNum != ''" >
+                AND
+                vehicles.license_number like concat('%', #{carNum}, '%')
+            </if>
+            <if test="firstName != null and firstName != ''">
+                AND
+                vehicles.user_name like concat ('%',#{firstName},'%')
+            </if>
+            <if test="riderPhone != null and riderPhone != ''">
+                AND
+                riders.contact_number like concat('%', #{riderPhone}, '%')
+            </if>
+            <if test="riderName != null and riderName != ''">
+                AND
+                riders.rider_name  like concat('%', #{riderName}, '%')
+            </if>
+            <if test="processStatus != null and processStatus != '' || processStatus == 0 ">
+                AND
+                orders.process_status = #{processStatus}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND
+                vehicles.phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND
+                orders.create_at BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        order by orders.create_at desc
+    </select>
+
+
+    <update id="updateMyBackOrder" parameterType="com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO" >
+        update czb_vehicle_clean_order
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="riderId != null" >
+                rider_id = #{riderId,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdOrder != null" >
+                third_order = #{thirdOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="payStatus != null" >
+                pay_status = #{payStatus,jdbcType=TINYINT},
+            </if>
+            <if test="actualPrice != null" >
+                actual_price = #{actualPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="vehicleId != null" >
+                vehicle_id = #{vehicleId,jdbcType=VARCHAR},
+            </if>
+            <if test="processStatus != null" >
+                process_status = #{processStatus,jdbcType=TINYINT},
+            </if>
+            <if test="cancelTime != null" >
+                cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cancelPersonId != null" >
+                cancel_person_id = #{cancelPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelReason != null" >
+                cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = now(),
+            </if>
+            <if test="serverId != null" >
+                server_id = #{serverId,jdbcType=VARCHAR},
+            </if>
+            <if test="couponId !=null">
+                coupon_id = #{couponId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </update>
+    <!--查找洗车前或洗车后id-->
+    <select id="getUrls" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.vehicleService.ImageInfoDTO">
+        SELECT
+            file.save_path path,
+            file.file_id fileId
+        FROM
+            czb_file file
+        LEFT JOIN czb_compared_pic pic ON pic.server_order_id = #{serverOrderId}
+        AND pic. STATUS = #{status}
+        WHERE
+            file.file_id = pic.file_id
+    </select>
+
+    <delete id="deleteImageRelation" parameterType="java.lang.String">
+        delete from czb_compared_pic
+        where file_id = #{fileId}
+    </delete>
+
+    <insert id="insertImageRelation" parameterType="java.lang.String">
+        insert into czb_compared_pic
+        (
+        compared_pic_id,
+        server_order_id,
+        file_id,
+        status,
+        create_at
+        )
+        VALUES
+        (
+        #{relationId},
+        #{serverOrderId},
+        #{fileId},
+        #{status},
+        CURRENT_TIMESTAMP
+        )
+        )
+    </insert>
+
+    <update id="updateCouponStatus" parameterType="java.lang.String">
+        UPDATE czb_server_coupon
+        SET `status` = 0
+        WHERE
+        coupon_id = #{couponId}
+    </update>
+</mapper>

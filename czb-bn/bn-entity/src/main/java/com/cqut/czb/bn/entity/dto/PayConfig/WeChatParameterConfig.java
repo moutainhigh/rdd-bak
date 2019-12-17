@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.util.string.StringUtil;
 
 import java.math.BigDecimal;
@@ -43,7 +44,7 @@ public class WeChatParameterConfig {
     /**
      * 购买油卡（微信）
      */
-    public static SortedMap<String, Object> getParameters(String nonceStrTemp,String orgId, PetrolInputDTO petrolInputDTO, Petrol petrol) {
+    public static SortedMap<String, Object> getParameters(String nonceStrTemp,String orgId, double money, PetrolInputDTO petrolInputDTO, Petrol petrol) {
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters.put("appid", WeChatPayConfig.app_id);
         parameters.put("mch_id", WeChatPayConfig.mch_id);
@@ -53,13 +54,7 @@ public class WeChatParameterConfig {
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("out_trade_no", orgId);
         BigInteger totalFee;
-        if (petrolInputDTO.getIsHaveVip()!=null&&petrol.getDiscount()!=null&&petrolInputDTO.getIsVip()!=null&&petrolInputDTO.getIsVip()==1&&petrolInputDTO.getIsHaveVip()==1){
-            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).multiply(new BigDecimal(petrol.getDiscount()))
-                    .toBigInteger();
-        }else{
-            totalFee = BigDecimal.valueOf(petrolInputDTO.getPetrolPrice()).multiply(new BigDecimal(100)).toBigInteger();
-        }
-
+        totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
         System.out.println(totalFee);
         parameters.put("total_fee", totalFee);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
@@ -143,6 +138,23 @@ public class WeChatParameterConfig {
         return parameters;
     }
 
+    //微信小程序用
+    public static SortedMap<String, Object> getParametersApplet(String userAccount,Double money,String nonceStrTemp, String orgId, String userId, WeChatCommodity weChatCommodity) {
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters=getParametersApplet();
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("out_trade_no", orgId);
+        parameters.put("openid",userAccount);
+        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("total_fee", totalFee);
+        parameters.put("notify_url", WeChatPayConfig.applet_url);//通用一个接口（购买和充值）
+        parameters.put("detail","微信小程序支付");//支付的类容备注
+        String attach=getAttachApplet(orgId,userId,money,weChatCommodity.getCommodityId());
+        parameters.put("attach",attach);
+        parameters.put("sign", WeChatUtils.createRddSign("UTF-8", parameters));//编码格式
+        return parameters;
+    }
+
     /**
      * 微信支付——订单格外数据(充值vip）
      */
@@ -155,6 +167,83 @@ public class WeChatParameterConfig {
         return StringUtil.transMapToStringOther(pbp);
     }
 
+    /**
+     * 微信支付——微信小程序购买商品
+     */
+    public static String getAttachApplet(String orgId,String userId,double money,String commodityId){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
+        pbp.put("commodityId",commodityId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     * 购买洗车服务
+     */
+    public static SortedMap<String, Object> getParametersBuyCarWash(String couponId,Double couponMoney,String nonceStrTemp, String orgId, String userId,double money,String serviceId) {
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters.put("appid", WeChatPayConfig.app_id);
+        parameters.put("mch_id", WeChatPayConfig.mch_id);
+        parameters.put("device_info", WeChatPayConfig.device_info);
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("sign_type", WeChatPayConfig.sign_type);
+        parameters.put("body", WeChatPayConfig.body);
+        parameters.put("out_trade_no", orgId);
+        BigInteger totalFee = (BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(couponMoney))).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("total_fee", totalFee);
+        parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
+        parameters.put("notify_url", WeChatPayConfig.BuyCarWash_url);//通用一个接口（购买和充值）
+        parameters.put("trade_type", WeChatPayConfig.trade_type);
+        parameters.put("detail","微信支付购买服务");//支付的类容备注
+        String attach=getAttachBuyCarWash(couponId,orgId,userId,serviceId,money);
+        parameters.put("attach",attach);
+        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
+        return parameters;
+    }
+
+    public static String getAttachBuyCarWash(String couponId,String orgId,String userId,String serverId,double money ){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("serverId",serverId);
+        pbp.put("money",money);
+        pbp.put("couponId",couponId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     *  点餐
+     */
+    public static SortedMap<String, Object> getParametersBuyDish(String nonceStrTemp, String orgId, String userId,double money) {
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters.put("appid", WeChatPayConfig.app_id);
+        parameters.put("mch_id", WeChatPayConfig.mch_id);
+        parameters.put("device_info", WeChatPayConfig.device_info);
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("sign_type", WeChatPayConfig.sign_type);
+        parameters.put("body", WeChatPayConfig.body);
+        parameters.put("out_trade_no", orgId);
+        BigInteger totalFee = (BigDecimal.valueOf(money).multiply(new BigDecimal(100))).toBigInteger();
+        parameters.put("total_fee", totalFee);
+        parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
+        parameters.put("notify_url", WeChatPayConfig.BuyDish_url);//点餐
+        parameters.put("trade_type", WeChatPayConfig.trade_type);
+        parameters.put("detail","微信支付点餐");//支付的类容备注
+        String attach=getAttachBuyDish(orgId,userId,money);
+        parameters.put("attach",attach);
+        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
+        return parameters;
+    }
+
+    public static String getAttachBuyDish(String orgId,String userId,double money ){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
+        return StringUtil.transMapToStringOther(pbp);
+    }
 
     //封装parameters
     public static SortedMap<String, Object> getParameters(){
@@ -166,6 +255,19 @@ public class WeChatParameterConfig {
         parameters.put("body", WeChatPayConfig.body);
         parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
         parameters.put("trade_type", WeChatPayConfig.trade_type);
+        return parameters;
+    }
+
+    //封装parameters——微信小程序用
+    public static SortedMap<String, Object> getParametersApplet(){
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters.put("appid", WeChatPayConfig.sapp_id);
+        parameters.put("mch_id", WeChatPayConfig.smch_id);
+        parameters.put("device_info", WeChatPayConfig.device_info);
+        parameters.put("sign_type", WeChatPayConfig.sign_type);
+        parameters.put("body", WeChatPayConfig.body);
+        parameters.put("spbill_create_ip", WeChatPayConfig.spbill_create_ip);
+        parameters.put("trade_type", WeChatPayConfig.WeChat_applet_trade_type);
         return parameters;
     }
 }

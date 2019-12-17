@@ -61,7 +61,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     synchronized public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
-        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return "该用户已存在";
+        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return "亲，您的手机号已注册，换一个吧";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
@@ -170,6 +170,37 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
+    public Boolean registerWCProgramUser(PersonalUserDTO personalUserDTO) throws InterruptedException {
+        if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return false;
+        User user = BeanMapper.map(personalUserDTO, User.class);
+        user.setUserId(StringUtil.createWCId());
+        user.setUserType(2);
+        user.setUserPsw(bCryptPasswordEncoder.encode("000000"));
+        user.setCreateAt(new Date());
+        user.setIsDeleted(0);
+        user.setIsIdentified(0);
+        user.setIsLoginPc(0);
+        user.setUserRank(0);
+        if(null != personalUserDTO.getSuperiorUser() && !"".equals(personalUserDTO.getSuperiorUser())) {
+            user.setSuperiorUser(personalUserDTO.getSuperiorUser());
+        }
+        UserIncomeInfo userIncomeInfo = new UserIncomeInfo();
+        userIncomeInfo.setUserId(user.getUserId());
+        userIncomeInfo.setInfoId(StringUtil.createId());
+        userIncomeInfo.setFanyongIncome(0.00);
+        userIncomeInfo.setShareIncome(0.00);
+        userIncomeInfo.setGotTotalRent(0.00);
+        userIncomeInfo.setOtherIncome(0.00);
+        userIncomeInfo.setPayTotalRent(0.00);
+        userIncomeInfo.setWithdrawed(0.00);
+        userIncomeInfo.setCreateAt(new Date());
+        if(userIncomeInfoMapper.insertSelective(userIncomeInfo) > 0 && userMapper.insertSelective(user) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Boolean checkAccount(User user) {
         return userMapperExtra.checkAccount(user.getUserAccount());
     }
@@ -205,6 +236,12 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     @Override
+    public Boolean insertVCode(VerificationCodeDTO verificationCodeDTO) {
+        verificationCodeDTO.setVerificationCodeId(StringUtil.createId());
+        return verificationCodeMapperExtra.insert(verificationCodeDTO) > 0;
+    }
+
+    @Override
     public boolean checkVerificationCode(VerificationCodeDTO verificationCodeDTO) {
         //判断信息是否为空
         if (verificationCodeDTO == null)
@@ -233,7 +270,6 @@ public class UserDetailServiceImpl implements UserDetailService {
     public boolean changePWD(User user, String oldPWD, String newPWD) {
         //检验密码是否一致。
         User checkUser = userMapperExtra.findUserByAccount(user.getUserAccount());//通过电话号码来查询
-        System.out.println(checkUser.getUserPsw());
         boolean isLike=bCryptPasswordEncoder.matches(oldPWD, checkUser.getUserPsw());
         if (!isLike) {
             System.out.println("错误");

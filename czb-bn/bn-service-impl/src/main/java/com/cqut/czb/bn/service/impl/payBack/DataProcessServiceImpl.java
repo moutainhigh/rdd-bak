@@ -13,6 +13,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -22,13 +23,16 @@ import java.util.Map;
 public class DataProcessServiceImpl implements DataProcessService {
 
     @Autowired
+    private FanYongService fanYongService;
+
+    @Autowired
     private PetrolMapperExtra petrolMapperExtra;
 
     @Autowired
-    private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+    UserIncomeInfoMapperExtra userIncomeInfoMapperExtra;
 
     @Autowired
-    FanYongService fanYongService;
+    private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
     @Autowired
     PetrolRecharge petrolRecharge;
@@ -52,7 +56,16 @@ public class DataProcessServiceImpl implements DataProcessService {
     UserMapperExtra userMapperExtra;
 
     @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
+
+    @Autowired
     VipRechargeRecordsMapperExtra vipRechargeRecordsMapperExtra;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     //解析订单数据用于处理
     @Override
@@ -155,7 +168,7 @@ public class DataProcessServiceImpl implements DataProcessService {
         consumptionRecord.setLocalOrderId(orgId);//本地订单号
         consumptionRecord.setThirdOrderId(thirdOrderId);//第三方订单号
         consumptionRecord.setMoney(money);
-        consumptionRecord.setType(Integer.valueOf(businessType));//0为油卡购买，1为油卡充值,2购买服务,3vip充值
+        consumptionRecord.setType(Integer.valueOf(businessType));//0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务
         consumptionRecord.setUserId(ownerId);
         consumptionRecord.setOriginalAmount(money);//油卡面额
         consumptionRecord.setPayMethod(payMethod);//1为支付宝2为微信
@@ -209,6 +222,10 @@ public class DataProcessServiceImpl implements DataProcessService {
         petrolSalesRecords.setState(1);
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
         petrolSalesRecords.setTurnoverAmount(money);
+        //更改销售原价
+        Double petrolDenomination=getDenomination(money,ownerId,area);
+        petrolSalesRecords.setDenomination(petrolDenomination);
+        petrolSalesRecords.setCurrentPrice(money);//售价
         if (petrol.getPetrolKind() == 0) {
             petrolSalesRecords.setIsRecharged(-1);
         }
@@ -226,7 +243,13 @@ public class DataProcessServiceImpl implements DataProcessService {
             System.out.println("新增油卡邮寄记录" + isInsert);
         }
 
-        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money, actualPayment, orgId);
+        //发放补贴给购卡人
+        Double sendMoney =getSubsidies(orgId,money,ownerId,area);
+        System.out.println("发放补贴"+sendMoney);
+        double money1= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+        System.out.println("实际支付"+money1);
+
+        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money1, money1, orgId);
 
         if (beginFanYong == true)
             return true;
@@ -255,4 +278,47 @@ public class DataProcessServiceImpl implements DataProcessService {
         PetrolCache.currentPetrolMap.remove(petrolNum);
         return 1;
     }
+
+    @Override
+    public Double sendSubsidies(String orgId, double money, String ownerId, String area) {
+        User user = userMapper.selectByPrimaryKey(ownerId);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
+            Dict dict= dictMapperExtra.selectDictByName("petrol_subsidies_rate");
+            double FYrate=Double.valueOf(dict.getContent());
+            UserIncomeInfo oldUserIncomeInfo = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(ownerId);//查出原收益信息
+            fanYongService.changeUserIncomeInfo("购油补贴", ownerId, ownerId, 1, oldUserIncomeInfo, money, money, ownerId, 1, FYrate, orgId);
+            return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
+        }
+        return 0.0;
+    }
+
+    @Override
+    public Double getSubsidies(String orgId, double money, String ownerId, String area) {
+        User user = userMapper.selectByPrimaryKey(ownerId);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
+            Dict dict= dictMapperExtra.selectDictByName("petrol_subsidies_rate");
+            double FYrate=Double.valueOf(dict.getContent());
+            return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
+        }
+        return 0.0;
+    }
+
+    @Override
+    public Double getDenomination(double money,String ownerId, String area) {
+        if(area==null||area.equals("")){
+            area="重庆市";
+        }
+        User user = userMapper.selectByPrimaryKey(ownerId);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipAreaConfigByArea(area);
+        if (vipAreaConfig != null && user != null && user.getIsVip() == 1) {
+            Dict dict= dictMapperExtra.selectDictByName("petrol_denomination");
+            double FYrate=Double.valueOf(dict.getContent());
+            return BigDecimal.valueOf(money).multiply(BigDecimal.valueOf(FYrate)).doubleValue();
+        }
+        return money;
+    }
+
+
 }

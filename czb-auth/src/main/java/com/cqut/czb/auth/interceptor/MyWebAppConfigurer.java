@@ -23,6 +23,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 
         registry.addInterceptor(interceptor).addPathPatterns("/**");
 
+
 //        registry.addInterceptor(privilegeInterceptor).addPathPatterns("/api/**");
 
         super.addInterceptors(registry);

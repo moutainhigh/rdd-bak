@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.DishSystemMapperExtra">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.ManageFood.Food">
+    <id column="dish_id" jdbcType="VARCHAR" property="dishId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="dish_type" jdbcType="INTEGER" property="dishType" />
+    <result column="supply_time" jdbcType="VARCHAR" property="supplyTime" />
+    <result column="is_sale" jdbcType="INTEGER" property="isSale" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="original_price" jdbcType="DOUBLE" property="originalPrice" />
+    <result column="current_price" jdbcType="DOUBLE" property="currentPrice" />
+    <result column="vip_price" jdbcType="DOUBLE" property="vipPrice" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="save_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
+    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, original_price,
+    current_price, vip_price, file_id, create_at, update_at
+  </sql>
+  <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
+    SELECT
+    dish_id, shop_id, dish_name, dish_type, supply_time, is_sale, label, dish_content, is_recommend,
+    original_price, file.save_path, current_price, vip_price, dish.file_id, dish.create_at, dish.update_at
+    from czb_dish dish
+    left join czb_file file on file.file_id = dish.file_id
+    <where>
+      <if test="dishId != null and dishId != ''" >
+        AND
+        dish_id = #{dishId}
+      </if>
+      <if test="dishName != null and dishName != ''" >
+        AND
+        dish_name like concat("%", #{dishName}, "%")
+      </if>
+      <if test="dishType != null and dishType != '' || dishType == 0" >
+        AND
+        dish_type = #{dishType}
+      </if>
+      <if test="label != null and label != ''" >
+        AND
+        label like concat("%", #{label}, "%")
+      </if>
+      <if test="true">
+        AND
+        shop_id = #{shopId}
+        AND
+        dish.is_delete = 0
+      </if>
+    </where>
+  </select>
+  <select id="getSetInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.ManageFood.SetInfo">
+      SELECT
+          relationId,
+          set_meal_id setMealId,
+          relaSingleId singleId,
+          dish.dish_name dishName,
+          original_price originalPrice,
+          current_price currentPrice,
+          vip_price vipPrice
+      FROM
+          czb_dish dish,
+          (
+              SELECT
+                  rela.single_product_id AS relaSingleId,
+                  dish_relationship_id relationId,
+                  set_meal_id
+              FROM
+                  czb_dish_relationship rela
+              WHERE
+                  rela.set_meal_id = #{setMealId}
+          ) relation
+      WHERE
+          relation.relaSingleId = dish.dish_id;
+  </select>
+  <insert id="insertSets" parameterType="java.util.List">
+    insert into czb_dish_relationship
+    (
+      dish_relationship_id,
+      set_meal_id,
+      single_product_id,
+      create_at
+    )
+    VALUES
+    <foreach collection="list" item="item" separator="," index="index">
+      (
+      #{item.relationId},
+      #{item.setMealId},
+      #{item.singleId},
+      CURRENT_TIMESTAMP
+      )
+    </foreach>
+  </insert>
+  <delete id="deleteList" parameterType="java.util.List">
+    delete from czb_dish_relationship
+    where dish_relationship_id in
+    <foreach collection="list" item="item" open="(" separator="," index="index" close=")">
+      #{item.relationId}
+    </foreach>
+  </delete>
+  <select id="getShopId" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT shop_id
+    from czb_shop
+    where user_id = #{userId}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_dish
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </select>
+  <update id="delete" parameterType="java.lang.String">
+    UPDATE czb_dish
+    set is_delete = 1
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </update>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
+    insert into czb_dish
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
+        dish_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="dishName != null">
+        dish_name,
+      </if>
+      <if test="dishType != null">
+        dish_type,
+      </if>
+      <if test="supplyTime != null">
+        supply_time,
+      </if>
+      <if test="isSale != null">
+        is_sale,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="originalPrice != null">
+        original_price,
+      </if>
+      <if test="currentPrice != null">
+        current_price,
+      </if>
+      <if test="vipPrice != null">
+        vip_price,
+      </if>
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+      <if test="dishContent != null">
+        dish_content,
+      </if>
+      <if test="isRecommend != null">
+        is_recommend,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
+        #{dishId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="dishName != null">
+        #{dishName,jdbcType=VARCHAR},
+      </if>
+      <if test="dishType != null">
+        #{dishType,jdbcType=INTEGER},
+      </if>
+      <if test="supplyTime != null">
+        #{supplyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isSale != null">
+        #{isSale,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null">
+        #{originalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null">
+        #{currentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vipPrice != null">
+        #{vipPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishContent != null">
+        #{dishContent},
+      </if>
+      <if test="isRecommend != null">
+        #{isRecommend},
+      </if>
+    </trim>
+  </insert>
+  <update id="edit" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
+    update czb_dish
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="dishName != null">
+        dish_name = #{dishName,jdbcType=VARCHAR},
+      </if>
+      <if test="dishType != null">
+        dish_type = #{dishType,jdbcType=INTEGER},
+      </if>
+      <if test="supplyTime != null">
+        supply_time = #{supplyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isSale != null">
+        is_sale = #{isSale,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null">
+        original_price = #{originalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currentPrice != null">
+        current_price = #{currentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vipPrice != null">
+        vip_price = #{vipPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null">
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishContent != null">
+        dish_content = #{dishContent},
+      </if>
+      <if test="isRecommend != null">
+        is_recommend = #{isRecommend},
+      </if>
+    </set>
+    where dish_id = #{dishId,jdbcType=VARCHAR}
+  </update>
+  <select id="getShops" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo" resultType="com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo">
+    SELECT shop_id as shopId, shop_name as shopName, shop_address as shopAddress, shop_phone as shopPhone, file.save_path as shopPath
+    FROM czb_shop shop
+    LEFT  JOIN czb_file file on file.file_id = shop.shop_img
+    <where>
+      <if test="true">
+        AND
+        shop_type = 2
+      </if>
+      <if test="shopName != null and shopName != ''">
+        AND
+        shop_name like concat('%', #{shopName},'%')
+      </if>
+      <if test="shopPhone != null and shopPhone != ''">
+        AND
+        shop_phone like concat('%', #{shopPhone},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

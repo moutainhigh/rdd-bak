@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapperExtra" >
+  <resultMap id="OrderDetail" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO">
+    <id column="orderId" property="orderId" jdbcType="VARCHAR" />
+    <result column="commodityTitle" property="commodityTitle" jdbcType="VARCHAR" />
+    <result column="commodityInfo" property="commodityInfo" jdbcType="VARCHAR" />
+    <result column="actualPrice" property="actualPrice" jdbcType="DOUBLE" />
+    <result column="commodityId" property="commodityId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="commodityNum" property="commodityNum" jdbcType="INTEGER" />
+    <result column="electronicCode" property="electronicCode" jdbcType="VARCHAR" />
+    <result column="QRcode" property="QRcode" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="commoditySource" property="commoditySource" jdbcType="VARCHAR" />
+    <result column="commodityType" property="commodityType" jdbcType="INTEGER" />
+    <result column="deliveryState" property="deliveryState" jdbcType="INTEGER" />
+    <result column="deliveryNum" property="deliveryNum" jdbcType="VARCHAR" />
+    <result column="deliveryCompany" property="deliveryCompany" jdbcType="VARCHAR" />
+    <result column="addressDetail" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
+    <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+    <result column="orderState" property="orderState" jdbcType="VARCHAR" />
+    <collection property="commodityImgList" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
+  </resultMap>
+
+  <select id="selectCurrentOrder" parameterType="java.lang.String" resultMap="OrderDetail">
+    SELECT
+      czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity_order.order_state orderState,
+      czb_wechat_commodity.commodity_title commodityTitle,
+      czb_wechat_commodity.commodity_info commodityInfo,
+      czb_wechat_commodity_order.actual_price actualPrice,
+      czb_wechat_commodity_order.commodity_id commodityId,
+      czb_wechat_commodity_order.remark remark,
+      czb_wechat_commodity_order.commodity_num commodityNum,
+      czb_wechat_commodity_order.electronic_code electronicCode,
+      czb_wechat_commodity_order.qrcode QRcode,
+      czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
+      czb_wechat_commodity_order.commodity_source commoditySource,
+      czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_goods_delivery_records.delivery_state deliveryState,
+      czb_wechat_goods_delivery_records.delivery_num deliveryNum,
+      czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
+      CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
+      czb_address.contact_number contactNumber,
+      czb_address.receiver receiver,
+      commodity_img_id commodityImgId,
+      czb_shop.shop_name shopName
+    FROM
+	  czb_wechat_commodity_order
+	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+	  LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+	  LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+      czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
+      AND order_state = 1
+      AND pay_status = 1
+      AND czb_wechat_commodity_order.commodity_type = 2
+    ORDER BY
+      czb_wechat_commodity_order.create_at DESC
+      LIMIT 1
+  </select>
+
+  <select id="selectCommodityImgList" resultType="java.lang.String">
+    SELECT
+      save_path
+    FROM
+      czb_file_function
+    LEFT JOIN czb_file on czb_file_function.file_id = czb_file.file_id
+    WHERE
+      czb_file_function.local_id = #{commodityImgId, jdbcType = VARCHAR}
+  </select>
+
+  <select id="selectAllCommodityOrder" parameterType="java.lang.String" resultMap="OrderDetail">
+    SELECT
+      czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity.commodity_title commodityTitle,
+      czb_wechat_commodity.commodity_info commodityInfo,
+      czb_wechat_commodity_order.actual_price actualPrice,
+      czb_wechat_commodity_order.commodity_id commodityId,
+      czb_wechat_commodity_order.remark remark,
+      czb_wechat_commodity_order.commodity_num commodityNum,
+      czb_wechat_commodity_order.electronic_code electronicCode,
+      czb_wechat_commodity_order.qrcode QRcode,
+      czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity_order.order_state orderState,
+      czb_wechat_commodity_order.commodity_source commoditySource,
+      czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_goods_delivery_records.delivery_state deliveryState,
+      czb_wechat_goods_delivery_records.delivery_num deliveryNum,
+      czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
+      CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
+      czb_address.contact_number contactNumber,
+      czb_address.receiver receiver,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
+      commodity_img_id commodityImgId,
+      czb_shop.shop_name shopName
+    FROM
+	  czb_wechat_commodity_order
+	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+	  LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+	  LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+      czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
+      AND pay_status = 1
+    ORDER BY
+      czb_wechat_commodity_order.create_at DESC
+  </select>
+  
+  <select id="selectAllCommodityOrderByLeaderId" resultMap="OrderDetail">
+    SELECT
+      czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity.commodity_title commodityTitle,
+      czb_wechat_commodity.commodity_info commodityInfo,
+      czb_wechat_commodity_order.actual_price actualPrice,
+      czb_wechat_commodity_order.commodity_id commodityId,
+      czb_wechat_commodity_order.remark remark,
+      czb_wechat_commodity_order.commodity_num commodityNum,
+      czb_wechat_commodity_order.electronic_code electronicCode,
+      czb_wechat_commodity_order.qrcode QRcode,
+      czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity_order.order_state orderState,
+      czb_wechat_commodity_order.commodity_source commoditySource,
+      czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_goods_delivery_records.delivery_state deliveryState,
+      czb_wechat_goods_delivery_records.delivery_num deliveryNum,
+      czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
+      CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
+      czb_address.contact_number contactNumber,
+      czb_address.receiver receiver,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
+      commodity_img_id commodityImgId,
+      czb_shop.shop_name shopName
+    FROM
+	  czb_wechat_commodity_order
+	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+	  LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+	  LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+      czb_shop.user_id = #{userId, jdbcType = VARCHAR}
+    <if test="orderState != null and orderState != ''">
+      AND  czb_wechat_commodity_order.order_state = #{orderState, jdbcType = INTEGER}
+    </if>
+      AND pay_status = 1
+    ORDER BY
+      czb_wechat_commodity_order.create_at DESC
+  </select>
+
+    <select id="selectOneCommodityOrderByShopUserId" resultMap="OrderDetail">
+    SELECT
+      czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity.commodity_title commodityTitle,
+      czb_wechat_commodity.commodity_info commodityInfo,
+      czb_wechat_commodity_order.actual_price actualPrice,
+      czb_wechat_commodity_order.commodity_id commodityId,
+      czb_wechat_commodity_order.remark remark,
+      czb_wechat_commodity_order.commodity_num commodityNum,
+      czb_wechat_commodity_order.electronic_code electronicCode,
+      czb_wechat_commodity_order.qrcode QRcode,
+      czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
+      czb_wechat_commodity_order.commodity_source commoditySource,
+      czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_goods_delivery_records.delivery_state deliveryState,
+      czb_wechat_goods_delivery_records.delivery_num deliveryNum,
+      czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
+      czb_wechat_commodity_order.order_state orderState,
+      CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
+      czb_address.contact_number contactNumber,
+      czb_address.receiver receiver,
+      commodity_img_id commodityImgId,
+      czb_shop.shop_name shopName
+    FROM
+	  czb_wechat_commodity_order
+	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+	  LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+	  LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+      czb_shop.user_id = #{userId, jdbcType = VARCHAR}
+      AND pay_status = 1
+      AND czb_wechat_commodity_order.order_id = #{orderId, jdbcType = VARCHAR}
+    ORDER BY
+      czb_wechat_commodity_order.create_at DESC
+    </select>
+
+  <select id="selectOneCommodityOrderById" resultMap="OrderDetail">
+    SELECT
+      czb_wechat_commodity_order.order_id orderId,
+      czb_wechat_commodity.commodity_title commodityTitle,
+      czb_wechat_commodity.commodity_info commodityInfo,
+      czb_wechat_commodity_order.actual_price actualPrice,
+      czb_wechat_commodity_order.commodity_id commodityId,
+      czb_wechat_commodity_order.remark remark,
+      czb_wechat_commodity_order.commodity_num commodityNum,
+      czb_wechat_commodity_order.electronic_code electronicCode,
+      czb_wechat_commodity_order.qrcode QRcode,
+      czb_wechat_commodity_order.phone phone,
+      czb_wechat_commodity.original_price originalPrice,
+      czb_wechat_commodity_order.create_at createAt,
+      czb_wechat_commodity_order.order_state orderState,
+      czb_wechat_commodity_order.commodity_source commoditySource,
+      czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_goods_delivery_records.delivery_state deliveryState,
+      czb_wechat_goods_delivery_records.delivery_num deliveryNum,
+      czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
+      CONCAT_WS( ' ', czb_address.province, czb_address.city, czb_address.area, czb_address.detail ) addressDetail,
+      czb_address.contact_number contactNumber,
+      czb_address.receiver receiver,
+      commodity_img_id commodityImgId,
+      czb_shop.shop_name shopName
+    FROM
+	  czb_wechat_commodity_order
+	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+	  LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+	  LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+	  LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+      czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
+      AND pay_status = 1
+      AND czb_wechat_commodity_order.order_id = #{orderId, jdbcType = VARCHAR}
+    ORDER BY
+      czb_wechat_commodity_order.create_at DESC
+    </select>
+
+  <update id="updateCommodityDeliveryState">
+    UPDATE czb_wechat_goods_delivery_records,
+      czb_wechat_commodity_order
+    SET delivery_state = 2, czb_wechat_commodity_order.order_state = 2
+    WHERE
+	    czb_wechat_goods_delivery_records.order_id = czb_wechat_commodity_order.order_id
+	AND czb_wechat_goods_delivery_records.order_id = #{orderId, jdbcType = VARCHAR}
+	AND czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
+	AND czb_wechat_goods_delivery_records.delivery_state = 1
+  </update>
+
+  <update id="updateCommodityOrderState" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO">
+    UPDATE czb_wechat_commodity_order
+    SET order_state = 2
+    WHERE
+        order_id = #{orderId, jdbcType = VARCHAR}
+        AND shop_id = #{shopId, jdbcType = VARCHAR}
+        AND pay_status = 1
+        AND order_state = 1
+  </update>
+
+  <!--分页查询订单（后台管理系统）-->
+  <select id="getTableList"
+          parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO"
+          resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO">
+    SELECT
+    user_table.user_name as userName,
+    user_account as userAccount,
+    order_table.order_id as orderId,
+    third_order as thirdOrder,
+    order_state as orderState,
+    order_table.commodity_id as commodityId,
+    commodity_table.commodity_title as commodityTitle,
+    order_table.commodity_num as commodityNum,
+    order_table.actual_price as actualPrice,
+    pay_status as payStatus,
+    pay_method as payMethod,
+    order_table.create_at as createAt,
+    commodity_table.take_way as takeWay,
+    delivery_table.delivery_state as deliveryState
+    FROM czb_wechat_commodity_order as order_table
+    LEFT JOIN czb_wechat_commodity as commodity_table
+    ON order_table.commodity_id = commodity_table.commodity_id
+    LEFT JOIN czb_user as user_table
+    ON user_table.user_id = order_table.user_id
+    LEFT JOIN czb_wechat_goods_delivery_records AS delivery_table
+    ON order_table.order_id = delivery_table.order_id
+--     将czb_shop加入进来，
+    <if test="managerId != null and managerId != ''">
+      LEFT JOIN czb_shop as shop_table
+      ON order_table.shop_id = shop_table.shop_id
+    </if>
+    <where>
+      order_table.order_state != 0 -- 不查询未支付订单
+      -- 商户的userId与后台登录用户userId要一致
+      <if test="managerId != null and managerId != ''">
+        AND shop_table.user_id = #{managerId,jdbcType=VARCHAR}
+      </if>
+
+      <if test="userName != null and userName != ''">
+        AND user_table.user_name like concat('%', #{userName}, '%')
+      </if>
+      <if test="orderId != null and orderId != ''">
+        AND order_table.order_id like concat('%', #{orderId}, '%')
+      </if>
+      <if test="thirdOrder != null and thirdOrder != ''" >
+        AND order_table.third_order like concat('%', #{thirdOrder}, '%')
+      </if>
+      <if test="orderState != null and orderState != ''">
+        AND order_state = #{orderState}
+      </if>
+      <if test="payStatus != null and payStatus != ''">
+        AND pay_status = #{payStatus}
+      </if>
+      <if test="commodityTitle != null and commodityTitle != ''">
+        AND commodity_table.commodity_title  like concat('%', #{commodityTitle}, '%')
+      </if>
+      <if test="actualPrice != null and actualPrice != ''">
+        AND order_table.actual_price = #{actualPrice}
+      </if>
+      <if test="payMethod != null and payMethod != ''">
+        AND pay_method = #{payMethod}
+      </if>
+      <if test="startTime != null and endTime != null">
+        AND order_table.create_at BETWEEN #{startTime} AND #{endTime}
+      </if>
+    </where>
+    order by order_table.create_at desc
+  </select>
+
+  <!--作废订单（后台管理系统）-->
+  <update id="obsoleteOrder" parameterType="java.lang.String">
+    update czb_wechat_commodity_order
+    set order_state = 3 -- 3，标识订单作废
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+
+  <resultMap id="ManageOrderDetail" type="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail" >
+    <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="third_order" property="thirdOrder" jdbcType="VARCHAR" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+    <result column="commodity_title" property="commodityTitle" jdbcType="VARCHAR" />
+    <result column="actual_price" property="actualPrice" jdbcType="DOUBLE" />
+    <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+    <result column="pay_method" property="payMethod" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
+    <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
+    <result column="commodity_source" property="commoditySource" jdbcType="VARCHAR" />
+    <result column="commodity_type" property="commodityType" jdbcType="INTEGER" />
+    <result column="content" property="commodityTypeContent" jdbcType="VARCHAR" />
+    <result column="take_way" property="takeWay" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--订单详情页面（后台管理系统）-->
+  <select id="getOrderDetail" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail">
+    SELECT
+        order_table.order_id AS orderId,
+        order_table.third_order AS thirdOrder,
+        order_table.order_state AS orderState,
+        order_table.commodity_id AS commodityId,
+        commodity_table.commodity_title AS commodityTitle,
+        order_table.actual_price AS actualPrice,
+        order_table.pay_status AS payStatus,
+        order_table.pay_method AS payMethod,
+        order_table.user_id AS userId,
+        user_table.user_account AS userAccount,
+        order_table.shop_id AS shopId,
+        order_table.create_at AS createAt,
+        commodity_table.shop_name AS shopName,
+        commodity_table.shop_address AS shopAddress,
+        commodity_table.commodity_img_id AS commodityImgId,
+        order_table.commodity_source AS commoditySource,
+        order_table.commodity_type AS commodityType,
+        category.content AS content,
+        commodity_table.take_way AS takeWay,
+        delivery_table.delivery_state as deliveryState,
+        order_table.remark AS remark
+    FROM
+        czb_wechat_commodity_order AS order_table
+    LEFT JOIN czb_wechat_commodity AS commodity_table ON order_table.commodity_id = commodity_table.commodity_id
+    LEFT JOIN czb_user AS user_table ON user_table.user_id = order_table.user_id
+    LEFT JOIN czb_category AS category ON category.category_id = order_table.commmodity_type_id
+    LEFT JOIN czb_wechat_goods_delivery_records AS delivery_table ON order_table.order_id = delivery_table.order_id
+    WHERE
+        order_table.order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+
+  <!--获取订单处理信息（后台管理系统）-->
+  <select id="getOrderProcessInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess">
+    SELECT
+        order_table.order_id as orderId,
+        order_table.qrcode as qrcode,
+        order_table.electronic_code as electronicCode,
+        delivery_table.record_id as recordId,
+        order_table.address_id as addressId,
+        delivery_table.delivery_state as deliveryState,
+        delivery_table.delivery_company as deliveryCompany,
+        delivery_table.delivery_num as deliveryNum,
+        order_table.processing_time as processingTime,
+        order_table.handler as handler,
+        commodity_table.take_way as takeWay
+    FROM
+        czb_wechat_commodity_order AS order_table
+    LEFT JOIN czb_wechat_goods_delivery_records AS delivery_table ON order_table.order_id = delivery_table.order_id
+    LEFT JOIN czb_wechat_commodity AS commodity_table ON order_table.commodity_id = commodity_table.commodity_id
+    WHERE
+        order_table.order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+
+  <!--处理订单(核销)（后台管理系统）-->
+  <update id="dealOrderEl" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess">
+    UPDATE
+        czb_wechat_commodity_order AS order_table
+    SET
+        order_table.processing_time = now(),
+        order_table.`handler` = #{handler,jdbcType=VARCHAR},
+        order_table.qrcode = #{qrcode,jdbcType=VARCHAR},
+        order_table.order_state = #{orderState,jdbcType=VARCHAR}
+    WHERE
+        order_table.order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+
+  <!--处理订单(寄送)（后台管理系统）-->
+  <update id="dealOrderSend" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess">
+    UPDATE
+        czb_wechat_commodity_order AS order_table,
+        czb_wechat_goods_delivery_records AS delivery_table
+    SET
+        order_table.processing_time = now(),
+        order_table.`handler` = #{handler,jdbcType=VARCHAR},
+        order_table.qrcode = #{qrcode,jdbcType=VARCHAR},
+        delivery_table.delivery_num = #{deliveryNum,jdbcType=VARCHAR},
+        delivery_table.delivery_company = #{deliveryCompany,jdbcType=VARCHAR},
+        delivery_table.delivery_state = #{deliveryState,jdbcType=INTEGER}
+    WHERE
+        order_table.order_id = #{orderId,jdbcType=VARCHAR}
+    AND
+        delivery_table.order_id = order_table.order_id
+  </update>
+
+  <!--获取销售额-->
+  <select id="getTotalSale"  parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO"
+          resultType="java.lang.Double">
+    SELECT
+        sum(order_table.actual_price)
+    FROM czb_wechat_commodity_order as order_table
+    LEFT JOIN czb_wechat_commodity as commodity_table
+    ON order_table.commodity_id = commodity_table.commodity_id
+    LEFT JOIN czb_user as user_table
+    ON user_table.user_id = order_table.user_id
+    --     将czb_shop加入进来，
+    <if test="managerId != null and managerId != ''">
+      LEFT JOIN czb_shop as shop_table
+      ON order_table.shop_id = shop_table.shop_id
+    </if>
+    <where>
+      order_table.order_state != 0  -- 不查询未支付订单
+      -- 商户的userId与后台登录用户userId要一致
+      <if test="managerId != null and managerId != ''">
+        AND shop_table.user_id = #{managerId,jdbcType=VARCHAR}
+      </if>
+
+      <if test="userAccount != null and userAccount != ''">
+        AND user_table.user_account like concat('%', #{userAccount}, '%')
+      </if>
+      <if test="orderId != null and orderId != ''">
+        AND order_table.order_id like concat('%', #{orderId}, '%')
+      </if>
+      <if test="thirdOrder != null and thirdOrder != ''" >
+        AND order_table.third_order like concat('%', #{thirdOrder}, '%')
+      </if>
+      <if test="orderState != null and orderState != ''">
+        AND order_state = #{orderState}
+      </if>
+      <if test="payStatus != null and payStatus != ''">
+        AND pay_status = #{payStatus}
+      </if>
+      <if test="commodityTitle != null and commodityTitle != ''">
+        AND commodity_table.commodity_title  like concat('%', #{commodityTitle}, '%')
+      </if>
+      <if test="actualPrice != null and actualPrice != ''">
+        AND order_table.actual_price = #{actualPrice}
+      </if>
+      <if test="payMethod != null and payMethod != ''">
+        AND pay_method = #{payMethod}
+      </if>
+      <if test="startTime != null and endTime != null">
+        AND order_table.create_at BETWEEN #{startTime} AND #{endTime}
+      </if>
+    </where>
+  </select>
+</mapper>

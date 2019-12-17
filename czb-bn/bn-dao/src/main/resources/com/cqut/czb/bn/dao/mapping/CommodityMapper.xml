@@ -13,10 +13,18 @@
     <result column="usage_count" property="usageCount" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="is_examine" property="isExamine" jdbcType="TINYINT" />
+    <result column="is_pay" property="isPay" jdbcType="INTEGER" />
+    <result column="commmodity_type" property="commmodityType" jdbcType="INTEGER" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />
+    <result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img, 
-    commodity_price, classification, usage_count, create_at, update_at
+    commodity_price, classification, usage_count, create_at, update_at, is_examine, is_pay, 
+    commmodity_type, longitude, latitude, starting_time_business, end_time_business
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -32,11 +40,17 @@
     insert into czb_commodity (commodity_id, shop_id, commodity_title, 
       commodity_info, discount, commodity_img, 
       commodity_price, classification, usage_count, 
-      create_at, update_at)
+      create_at, update_at, is_examine, 
+      is_pay, commmodity_type, longitude, 
+      latitude, starting_time_business, end_time_business
+      )
     values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR}, 
       #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, #{commodityImg,jdbcType=VARCHAR}, 
       #{commodityPrice,jdbcType=DOUBLE}, #{classification,jdbcType=VARCHAR}, #{usageCount,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{isExamine,jdbcType=TINYINT}, 
+      #{isPay,jdbcType=INTEGER}, #{commmodityType,jdbcType=INTEGER}, #{longitude,jdbcType=DOUBLE}, 
+      #{latitude,jdbcType=DOUBLE}, #{startingTimeBusiness,jdbcType=TIMESTAMP}, #{endTimeBusiness,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Commodity" >
     insert into czb_commodity
@@ -74,6 +88,27 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="isExamine != null" >
+        is_examine,
+      </if>
+      <if test="isPay != null" >
+        is_pay,
+      </if>
+      <if test="commmodityType != null" >
+        commmodity_type,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="startingTimeBusiness != null" >
+        starting_time_business,
+      </if>
+      <if test="endTimeBusiness != null" >
+        end_time_business,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="commodityId != null" >
@@ -108,6 +143,27 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isExamine != null" >
+        #{isExamine,jdbcType=TINYINT},
+      </if>
+      <if test="isPay != null" >
+        #{isPay,jdbcType=INTEGER},
+      </if>
+      <if test="commmodityType != null" >
+        #{commmodityType,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="startingTimeBusiness != null" >
+        #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTimeBusiness != null" >
+        #{endTimeBusiness,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -144,6 +200,27 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="isExamine != null" >
+        is_examine = #{isExamine,jdbcType=TINYINT},
+      </if>
+      <if test="isPay != null" >
+        is_pay = #{isPay,jdbcType=INTEGER},
+      </if>
+      <if test="commmodityType != null" >
+        commmodity_type = #{commmodityType,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="startingTimeBusiness != null" >
+        starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTimeBusiness != null" >
+        end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
@@ -158,7 +235,14 @@
       classification = #{classification,jdbcType=VARCHAR},
       usage_count = #{usageCount,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      is_examine = #{isExamine,jdbcType=TINYINT},
+      is_pay = #{isPay,jdbcType=INTEGER},
+      commmodity_type = #{commmodityType,jdbcType=INTEGER},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
 </mapper>

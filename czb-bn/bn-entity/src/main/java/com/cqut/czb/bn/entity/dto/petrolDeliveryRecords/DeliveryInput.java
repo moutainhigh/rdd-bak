@@ -1,5 +1,9 @@
 package com.cqut.czb.bn.entity.dto.petrolDeliveryRecords;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class DeliveryInput {
 
     private String recordId;
@@ -12,6 +16,8 @@ public class DeliveryInput {
 
     private String deliveryNum;
 
+    private String contactNumber;
+
     private String deliveryCompany;
 //    //京东物流查询专用
 //    private String customerName;
@@ -21,6 +27,20 @@ public class DeliveryInput {
     private String startTime;
 
     private String endTime;
+
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date startTime;
+//
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date endTime;
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
 
     public String getRecordId() {
         return recordId;
@@ -86,6 +106,23 @@ public class DeliveryInput {
 //        this.customerName = customerName;
 //    }
 //
+//    public String getStartTime() {
+//        return startTime;
+//    }
+//
+//    public void setStartTime(String startTime) {
+//        this.startTime = startTime;
+//    }
+//
+//    public String getEndTime() {
+//        return endTime;
+//    }
+//
+//    public void setEndTime(String endTime) {
+//        this.endTime = endTime;
+//    }
+
+
     public String getStartTime() {
         return startTime;
     }

@@ -33,4 +33,9 @@ public interface IUserService {
     RecommenderDTO selectRecommender(String userId);
 
     boolean changePartner(UserInputDTO userInputDTO);
+
+    boolean updateTest();
+
+
+    String bindingUser(UserInputDTO userInputDTO,String userId);
 }

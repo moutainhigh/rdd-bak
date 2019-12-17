@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.BusinessCommonUserMapperExtra">
+    <cache/>
+    <select id="list" parameterType="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.BusinessCommonUserVo" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.BusinessCommonUserOutputDTO">
+        select
+        czb_user.user_id as userId,
+        czb_address.receiver as realName,
+        czb_user.user_account as mobile,
+        czb_vip_area_config.area,
+        czb_user.create_at as createAt,
+        DATE_ADD(max(czb_vip_recharge_records.create_at),INTERVAL 1 YEAR) as expireTime,
+        CASE WHEN superior_user = #{userId} THEN 1 ELSE 0 END AS promotionType,
+        superior_user as superiorUser,
+        user2.receiver as spreadName,
+        user2.user_account as promotionMobile,
+        income.total_price as petrolMoney,
+        income.my_income as myProfit
+        from
+        czb_user
+        left  join czb_vip_recharge_records
+        on czb_user.user_id = czb_vip_recharge_records.user_id
+        left join czb_address
+        on czb_user.user_id = czb_address.user_id
+        left  join czb_vip_area_config
+        on czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+        left  join
+        (select
+        czb_user.user_id,czb_address.receiver,czb_user.user_account
+        from czb_user
+        left outer join czb_address
+        on czb_user.user_id = czb_address.user_id)
+        as user2
+        on user2.user_id = czb_user.superior_user
+        left outer join
+        (select czb_user.user_id,
+        czb_petrol_sales_records.buyer_id,
+        sum(czb_petrol_sales_records.current_price) as total_price,
+        sum(czb_petrol_sales_records.current_price) * 0.0045 as my_income
+        from czb_user
+        join czb_petrol_sales_records
+        on czb_user.user_id = czb_petrol_sales_records.buyer_id
+        group by czb_petrol_sales_records.buyer_id)
+        as income
+        on czb_user.user_id = income.buyer_id
+        WHERE
+        czb_user.first_level_partner = #{userId} AND partner = 0
+        <if test="mobile!=null and mobile!=''">
+            AND  czb_user.user_account like concat('%',#{mobile},'%')
+        </if>
+        <if test="createAt!=null">
+            AND  czb_user.create_at BETWEEN #{createAt} AND  DATE_ADD(#{createAt},INTERVAL 1 DAY)
+        </if>
+        <if test="area!= null and area!= ''">
+            AND czb_vip_area_config.area like concat('%',#{area},'%')
+        </if>
+        <if test="promotionMobile!= null and promotionMobile!= ''">
+            AND user2.user_account like concat('%',#{promotionMobile},'%')
+        </if>
+        <if test="isVip!= null">
+            AND czb_user.is_vip = #{isVip}
+        </if>
+        group by userId,realName,mobile,czb_vip_area_config.area,promotionType,superiorUser,spreadName,promotionMobile,petrolMoney,myProfit
+        order by petrolMoney desc, expireTime desc
+    </select>
+
+   <!-- <resultMap id="SelectResultMapStep" type="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.BusinessCommonUserOutputDTO">
+        <id column="userId" property="userId" jdbcType="VARCHAR" />
+        <result column="realName" property="realName" jdbcType="VARCHAR" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="createAt" property="createAt" jdbcType="VARCHAR" />
+        <result column="expireTime" property="expireTime" jdbcType="VARCHAR" />
+        <result column="promotionType" property="promotionType" jdbcType="VARCHAR" />
+        <result column="superiorUser" property="superiorUser" jdbcType="VARCHAR" />
+        <result column="spreadName" property="spreadName" jdbcType="VARCHAR" />
+        <result column="promotionMobile" property="promotionMobile" jdbcType="VARCHAR" />
+        <collection property="petrolMoney" select="selectPetrolMoney" column="user_id"/>
+    </resultMap>
+    <select id="list_new" resultMap="SelectResultMapStep">
+        SELECT
+            czb_user.user_id AS userId,
+            czb_address.receiver AS realName,
+            czb_user.user_account AS mobile,
+            czb_vip_area_config.area,
+            czb_user.create_at AS createAt,
+            DATE_ADD( max( czb_vip_recharge_records.create_at ), INTERVAL 1 YEAR ) AS expireTime,
+            CASE
+                WHEN czb_user.superior_user = '155888669469738' THEN 1 ELSE 0 END AS promotionType,
+            czb_user.superior_user AS superiorUser,
+            ca.receiver AS spreadName,
+            cu.user_account AS promotionMobile
+        FROM
+            czb_user
+                LEFT JOIN czb_vip_recharge_records ON czb_user.user_id = czb_vip_recharge_records.user_id
+                LEFT JOIN czb_address ON czb_user.user_id = czb_address.user_id
+                LEFT JOIN czb_vip_area_config ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
+                LEFT JOIN czb_address ca ON czb_user.superior_user = ca.user_id
+                LEFT JOIN czb_user cu on czb_user.superior_user = cu.user_id
+        WHERE
+            czb_user.first_level_partner = '155888669469738'
+          AND czb_user.partner = 0
+        GROUP BY
+            userId,
+            realName,
+            mobile,
+            czb_vip_area_config.area,
+            promotionType,
+            superiorUser,
+            spreadName,
+            promotionMobile
+    </select>
+
+    <select id="selectPetrolMoney" >
+        select
+    </select>-->
+</mapper>

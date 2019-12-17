@@ -20,26 +20,36 @@ public class AlipayClientConfig {
 	}
 
 	public synchronized  static AlipayClientConfig getInstance(String operationType) {
-		if (operationType=="0") {//"0"为购油
+		if (operationType.equals("0")) {//"0"为购油
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
-		} else if(operationType=="1"){//"1"代表的是充值vip
+		} else if(operationType.equals("1")){//"1"代表的是充值vip
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
-		}else if(operationType=="2"){//"2"代表的是充值
+		}else if(operationType.equals("2")){//"2"代表的是充值
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
-		}else if(operationType=="3"){//"3"代表的是购买服务
+		}else if(operationType.equals("3")){//"3"代表的是购买服务
 			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.BuyService_url);
+		}else if(operationType.equals("4")){//"4"代表的是洗车服务
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+			instance.setCallBackUrl(AliPayConfig.BuyCarWash_url);
+		}else if(operationType.equals("5")){//"5"代表的是点餐
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+			instance.setCallBackUrl(AliPayConfig.BuyDish_url);
 		}
 		return instance;
 	}

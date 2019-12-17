@@ -5,6 +5,8 @@ import com.cqut.czb.bn.entity.entity.MsgModel;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Description
  * @auther nihao
@@ -18,5 +20,9 @@ public interface MessageManagementService {
 
     Boolean createMsgModel(MsgModel msgModel);
 
+    Boolean editMsgModel(MsgModel msgModel);
+
     Boolean sendMessage(String msgModelId);
+
+    boolean sendMessageToOne(Map<String, String> maps, String userId);
 }

@@ -45,6 +45,11 @@ public class PetrolDeliveryRecordsController {
         return new JSONResult(petrolDeliveryRecordsService.selectPetrolDelivery(deliveryInput,pageDTO));
     }
 
+    @PostMapping("/deleteRecord")
+    public JSONResult deleteRecord(@RequestBody DeliveryInput deliveryInput){
+        return new JSONResult(petrolDeliveryRecordsService.deleteByPrimaryKey(deliveryInput.getRecordId()));
+    }
+
     /**
      * 确认收货（批量）
      * @param deliveryInput
@@ -107,6 +112,7 @@ public class PetrolDeliveryRecordsController {
         } catch (IOException e) {
             message = "导出Excel数据失败，请稍后再试";
         } catch (Exception e1) {
+            e1.printStackTrace();
             message = "Excel数据量过大，请缩短导出文件的时间间隔";
         }
         result.put("message", message);
@@ -134,7 +140,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/selectLogistics")
-    public JSONResult selectLogisticsOnPC(DeliveryInput deliveryInput){
+    public JSONResult selectLogisticsOnPC(@RequestBody DeliveryInput deliveryInput){
         String logistics = petrolDeliveryRecordsService.selectLogistics(deliveryInput);
         if (logistics==null||logistics.equals("")){
             return new JSONResult(ResponseCodeConstants.FAILURE,"查询失败");}

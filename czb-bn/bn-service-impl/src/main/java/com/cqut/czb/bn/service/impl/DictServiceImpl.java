@@ -2,12 +2,15 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.LoginInfoMapperExtra;
+import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapper;
+import com.cqut.czb.bn.dao.mapper.vehicleService.RemotePushMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.AppInfoDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.LoginInfo;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +32,15 @@ public class DictServiceImpl implements IDictService {
     @Autowired
     LoginInfoMapperExtra loginInfoMapperExtra;
 
+//    @Autowired
+//    RemotePushService remotePushService;
+
+    @Autowired
+    RemotePushMapperExtra remotePushMapperExtra;
+
+    @Autowired
+    RemotePushMapper remotePushMapper;
+
     @Override
     public PageInfo<Dict> selectDictList(DictInputDTO dictInputDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
@@ -45,8 +57,10 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public AppInfoDTO selectAndroidInfo(User user, String version) {
-
+    public AppInfoDTO selectAndroidInfo(User user, String version,String DeviceToken) {
+        if(DeviceToken != null) {
+            dealDeviceToken(user.getUserId(), DeviceToken, 1);
+        }
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "android";
@@ -65,7 +79,23 @@ public class DictServiceImpl implements IDictService {
             }
         }
         Random random = new Random();
-        appInfoDTO.setIsUpdate(false);
+
+        if ("1.0.8".equals(version) || "1.0.7".equals(version)
+                || "1.0.6".equals(version)
+                || "1.0.3".equals(version)
+                || "1.0.4".equals(version)
+                || "1.0.5".equals(version)
+                || "1.0.9".equals(version)
+                || "1.0.10".equals(version)
+                || "1.1.0".equals(version)
+                || "1.1.1".equals(version)
+                || "1.1.2".equals(version)
+                || "".equals(version)
+                || version == null) {
+            appInfoDTO.setIsUpdate(true);
+        }else {
+            appInfoDTO.setIsUpdate(false);
+        }
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
         //记录用户登录信息
         recordLoginInfo(name,user.getUserId(),version);
@@ -108,13 +138,18 @@ public class DictServiceImpl implements IDictService {
 
 
     @Override
-    public AppInfoDTO selectIOSInfo(User user,String version) {
+    public AppInfoDTO selectIOSInfo(User user,String version, String DeviceToken) {
 
+        //处理IOSDeviceToken
+        if(DeviceToken != null) {
+            dealDeviceToken(user.getUserId(), DeviceToken, 2);
+        }
         AppInfoDTO appInfoDTO = new AppInfoDTO();
         DictInputDTO dictInputDTO = new DictInputDTO();
         String name = "ios";
         dictInputDTO.setName(name);
         List<Dict> dictList = dictMapperExtra.selectDict(dictInputDTO);
+
         ArrayList<String> url = new ArrayList<>();
         for(Dict dict: dictList) {
             if("ios_version".equals(dict.getName())) {
@@ -129,14 +164,42 @@ public class DictServiceImpl implements IDictService {
         }
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
-        if("1.0.0".equals(version) || "1.0.1".equals(version)){
+        if("1.0.0".equals(version) || "1.0.1".equals(version) || "1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.2".equals(version) || "1.0.5".equals(version) || "1.0.6".equals(version) || "1.0.7".equals(version) || "1.0.8".equals(version) || "1.0.9".equals(version) || "1.0.10".equals(version) || "1.1.0".equals(version)){
             appInfoDTO.setIsUpdate(true);
+        }else {
+            appInfoDTO.setIsUpdate(false);
         }
-        appInfoDTO.setIsUpdate(false);
+
 
         //记录用户登录信息
         recordLoginInfo(name,user.getUserId(),version);
         return appInfoDTO;
+    }
+
+    public void dealDeviceToken(String userId, String DeviceToken,Integer type){
+        RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
+        if ( remotePush != null ){
+            if (DeviceToken != null || DeviceToken != ""){
+                if ( !DeviceToken.equals(remotePush.getDeviceToken()) ){
+                    remotePush.setDeviceToken(DeviceToken);
+                    remotePush.setDeviceType(type);
+                    remotePushMapper.updateByPrimaryKey(remotePush);
+                }
+            }
+        }else{
+            RemotePush model = new RemotePush();
+            model.setDeviceId(StringUtil.createId());
+            model.setDeviceToken(DeviceToken);
+            if (type==1){
+                model.setDeviceType(1);
+            }else {
+                model.setDeviceType(2);
+            }
+            model.setUserId(userId);
+            model.setCreateAt(new Date());
+            model.setUpdateAt(new Date());
+            remotePushMapper.insertSelective(model);
+        }
     }
 
     @Override

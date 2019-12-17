@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO;
 import com.cqut.czb.bn.entity.entity.MsgModel;
 import com.cqut.czb.bn.entity.entity.MsgRecord;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.MessageManagementService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -14,9 +15,7 @@ import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @Description
@@ -63,6 +62,11 @@ public class MessageManagementServiceImpl implements MessageManagementService {
     }
 
     @Override
+    public Boolean editMsgModel(MsgModel msgModel) {
+        return msgModelMapper.updateByPrimaryKeySelective(msgModel) > 0;
+    }
+
+    @Override
     public Boolean sendMessage(String msgModelId) {
         try{
             //创建多个ID，使用纳秒级的时间戳
@@ -71,15 +75,17 @@ public class MessageManagementServiceImpl implements MessageManagementService {
             if(1 == msgModel.getIsSend()){
                 return false;
             }
+            String idPrex = String.valueOf(System.currentTimeMillis());
             List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId,msgModel.getReceiverType());
-            for(MsgRecord msgRecord: msgRecordList){
-                msgRecord.setMsgRecordId(createId());
-                msgRecord.setMsgModelId(msgModelId);
+            for(int i = 0; i < msgRecordList.size(); i++){
+                msgRecordList.get(i).setMsgRecordId(idPrex + String.valueOf(i));
+                msgRecordList.get(i).setMsgModelId(msgModelId);
             }
             msgModel.setIsSend(1);
             msgModelMapper.updateByPrimaryKey(msgModel);
             return msgModelMapperExtra.insertMessages(msgRecordList) > 0;
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -90,5 +96,49 @@ public class MessageManagementServiceImpl implements MessageManagementService {
 
     public static String createId() {
         return createMillisTimestamp() + "" + random.nextInt(10) + "" + random.nextInt(10);
+    }
+
+
+    @Override
+    public boolean sendMessageToOne(Map<String, String> maps, String userId) {
+        String msgModelId = maps.get("msgModelId");
+        String receiverId = maps.get("receiverId");
+        if(msgModelId == null || userId == null || receiverId == null) {
+            return false;
+        }
+        if(sendMsg(msgModelId, maps, userId, receiverId))
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     *
+     * @param msgModelId
+     * @param content
+     * @return
+     */
+    public boolean sendMsg(String msgModelId, Map<String, String> content, String announcerId, String receiverId) {
+        MsgModel msgModel = msgModelMapper.selectByPrimaryKey(msgModelId);
+        for(Map.Entry<String, String> entry : content.entrySet()){
+            String mapKey = entry.getKey();
+            String mapValue = entry.getValue();
+            mapKey = "${" + mapKey + "}";
+            if(msgModel.getMsgContent().contains(mapKey)) {
+                msgModel.setMsgContent(msgModel.getMsgContent().replace(mapKey, mapValue));
+            }
+        }
+
+        List<MsgRecord> msgRecordList = new ArrayList<>();
+        MsgRecord record = new MsgRecord();
+        record.setMsgRecordId(createId());
+        record.setMsgModelId(msgModelId);
+        record.setAlert(msgModel.getAltert());
+        record.setMsgState(1);
+        record.setMsgAnnouncerId(announcerId);
+        record.setMsgReceiverId(receiverId);
+        record.setContent(msgModel.getMsgContent());
+        msgRecordList.add(record);
+        return msgModelMapperExtra.insertRecord(msgRecordList) > 0;
     }
 }

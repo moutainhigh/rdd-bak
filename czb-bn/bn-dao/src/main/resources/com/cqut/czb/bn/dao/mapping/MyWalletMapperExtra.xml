@@ -14,6 +14,12 @@
         WHERE info_id = #{infoId}
     </update>
 
+    <update id="increaseOtherMoney" parameterType="java.lang.String">
+        UPDATE czb_user_income_info
+        SET other_income = other_income + #{money}
+        WHERE info_id = #{infoId}
+    </update>
+
     <select id="getPsw" parameterType="java.lang.String" resultType="java.lang.String">
         select user_psw
         FROM czb_user
@@ -94,5 +100,58 @@
                 CURRENT_TIMESTAMP
             )
     </insert>
+
+    <select id="getUserIncomeInfo" parameterType="com.cqut.czb.bn.entity.entity.withDrawed.IncomeInputDTO" resultType="com.cqut.czb.bn.entity.entity.withDrawed.Income">
+        SELECT
+            info.info_id,
+            (
+                info.fanyong_income + share_income + got_total_rent + other_income
+            ) AS balance,
+            withdrawed,
+            (
+                info.fanyong_income + share_income + got_total_rent + other_income + withdrawed
+            ) AS allAmount,
+            users.user_account account,
+            count(log.info_id) withdrawedAmount
+        FROM
+            czb_user_income_info info
+        LEFT JOIN czb_user users ON users.user_id = info.user_id
+        LEFT JOIN czb_income_log log ON log.info_id = info.info_id
+        AND log.type = 1
+        <where>
+            <if test="account != null and account != ''">
+                AND
+                users.user_account like concat('%', #{account},'%')
+            </if>
+        </where>
+        GROUP BY
+            info.info_id
+        ORDER BY
+            allAmount DESC
+    </select>
+
+    <select id="getAllInfo" resultType="com.cqut.czb.bn.entity.entity.withDrawed.IncomeOutputDTO">
+        SELECT
+            sum(
+                (
+                    fanyong_income + share_income + got_total_rent + other_income
+                ) - withdrawed
+            ) allAbleWithdrawed,
+            sum(withdrawed) allWithdrawed
+        FROM
+            czb_user_income_info info
+    </select>
+
+    <select id="todayAllInfo" parameterType="com.cqut.czb.bn.entity.entity.withDrawed.IncomeInputDTO" resultType="com.cqut.czb.bn.entity.entity.withDrawed.IncomeOutputDTO">
+        SELECT
+            COALESCE(sum(amount),0.0) todayWithdrawed,
+            count(info_id) todayWithdrawedTimes
+        FROM
+            czb_income_log log
+        WHERE
+            type = 1
+        AND create_at BETWEEN #{startTime}
+        AND #{endTime}
+    </select>
 
 </mapper>

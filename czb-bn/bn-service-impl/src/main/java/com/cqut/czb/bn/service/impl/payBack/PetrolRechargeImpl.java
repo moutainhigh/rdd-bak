@@ -3,10 +3,13 @@ package com.cqut.czb.bn.service.impl.payBack;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
+import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class PetrolRechargeImpl implements PetrolRecharge {
@@ -19,6 +22,9 @@ public class PetrolRechargeImpl implements PetrolRecharge {
 
     @Autowired
     FanYongService fanYongService;
+
+    @Autowired
+    DataProcessService dataProcessService;
 
     @Override
     public boolean beginPetrolRecharge(String area,String thirdOrderId,double money, String petrolNum,
@@ -34,7 +40,11 @@ public class PetrolRechargeImpl implements PetrolRecharge {
         //更改油卡购买信息的状态
         petrolSalesRecords.setThirdOrderId(thirdOrderId);
         petrolSalesRecords.setState(1);
+        //更改用户的面额
+        Double petrolDenomination=dataProcessService.getDenomination(money,ownerId,area);
+        petrolSalesRecords.setDenomination(petrolDenomination);
         petrolSalesRecords.setTurnoverAmount(money);
+        petrolSalesRecords.setCurrentPrice(money);//售价
         boolean update=petrolSalesRecordsMapperExtra.updateByPrimaryKeySelective(petrolSalesRecords)>0;
         System.out.println("更改购买信息:"+update);
 

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.ModifyInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -8,14 +9,13 @@ import com.cqut.czb.bn.service.AppMessageManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
 /**
  * author:De-Qiang Chen
- * function:app's messages management (app消息管理)
+ * function:app'a messages management (app消息管理)
  */
 
 @RestController
@@ -35,7 +35,7 @@ public class AppMsgManageController {
     public JSONResult getMsgNum(Principal principal) {
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();
-//        user.setUserId("156225046615657");
+//        user.setUserId("155937282021834");
         return new JSONResult(appMessageManageService.getMsgNum(user));
     }
 
@@ -43,11 +43,11 @@ public class AppMsgManageController {
      * app get all the Messages of the person(获取个人近期的所有信息)
      */
     @RequestMapping(value = "/getMessages", method = RequestMethod.GET)
-    public JSONResult getMessages(Principal principal) {
+    public JSONResult getMessages(Principal principal, PageDTO pageDTO) {
         User user = (User)redisUtils.get(principal.getName());
 //        User user=new User();
 //        user.setUserId("156225046615657");
-        return new JSONResult(appMessageManageService.getMessages(user));
+        return new JSONResult(appMessageManageService.getMessages(user, pageDTO));
     }
 
     /**
@@ -65,14 +65,11 @@ public class AppMsgManageController {
 
 
     /**
-     * app's Modify information status(修改信息状态)
+     * app'a Modify information status(修改信息状态)
      */
     @RequestMapping(value = "/ModifyInfoStatus", method = RequestMethod.GET)
     public JSONResult ModifyInfoStatus(Principal principal, ModifyInfoDTO modifyInfoDTO) {
         User user = (User)redisUtils.get(principal.getName());
-//        User user=new User();
-//        user.setUserId("156225046615657");
-//        modifyInfoDTO.setMsgRecordId("9");
         return new JSONResult(appMessageManageService.modifyMessage(user,modifyInfoDTO));
     }
 

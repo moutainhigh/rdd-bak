@@ -13,9 +13,13 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserMapperExtra {
+    User selectByPrimaryKey(String userId);
+
     User findUserByAccount(String account);
 
     UserDTO findUserDTOByAccount(String account);
+
+    UserDTO findUserDTOById(String id);
 
     Boolean checkAccount(@Param("account") String account);
 
@@ -25,9 +29,11 @@ public interface UserMapperExtra {
 
     List<UserDTO> selectUser(UserInputDTO userInputDTO);
 
+    List<User> selectByPartner(UserInputDTO userInputDTO);
+
     int updateUserPSW(VerificationCodeDTO verificationCodeDTO);
 
-    List<TeamDTO> selectTeam(String userId);
+    List<TeamDTO> selectTeam(@Param("userId") String userId);
 
     RecommenderDTO selectRecommender(String userId);
 
@@ -70,4 +76,27 @@ public interface UserMapperExtra {
      */
     int UpdateToVip(@Param("userId") String userId);
 
+    /**
+     * 递归查询最近的一个vip
+     */
+    String selectVipUser(@Param("userId") String userId);
+
+
+    List<User> getOldSubUserPartner(String userId);
+
+    List<User> getOldSubUser(String userId);
+
+    /**
+     * 批量修改superiorUser
+     */
+    int updateSuperUser(List<User> userList);
+
+
+    List<User> getTest();
+
+    int updateTest(List<User> userList);
+
+    User selectPassword(UserInputDTO userInputDTO);
+
+    String selectBindingAccount(String bindingid);
 }

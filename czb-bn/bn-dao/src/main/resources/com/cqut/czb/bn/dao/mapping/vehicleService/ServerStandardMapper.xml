@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.ServerStandardMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
+    <id column="server_id" property="serverId" jdbcType="VARCHAR" />
+    <result column="server_name" property="serverName" jdbcType="VARCHAR" />
+    <result column="server_type" property="serverType" jdbcType="VARCHAR" />
+    <result column="server_price" property="serverPrice" jdbcType="DOUBLE" />
+    <result column="vip_price" property="vipPrice" jdbcType="DOUBLE" />
+    <result column="server_explain" property="serverExplain" jdbcType="VARCHAR" />
+    <result column="server_discount" property="serverDiscount" jdbcType="REAL" />
+    <result column="server_vehicle_type" property="serverVehicleType" jdbcType="TINYINT" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+      <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="current_price" property="currentPrice" jdbcType="VARCHAR" />
+    <result column="save_path" property="iconPath" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    server_id, server_name, server_type, server_price, vip_price, server_explain, server_discount, 
+    server_vehicle_type, create_at, update_at, czb_server_standard.file_id
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_server_standard
+    where server_id = #{serverId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard">
+    SELECT
+      server_id, server_name, server_type, server_price, vip_price, server_explain, server_discount,
+      server_vehicle_type, czb_server_standard.create_at, czb_server_standard.update_at, czb_server_standard.file_id,
+      file.save_path, current_price
+    from czb_server_standard
+    left join czb_file file on file.file_id = czb_server_standard.file_id
+    <where>
+      <if test="serverId != null and serverId != ''" >
+        AND
+        server_id = #{serverId}
+      </if>
+      <if test="serverName != null and serverName != ''" >
+        AND
+        server_name like concat("%", #{serverName}, "%")
+      </if>
+      <if test="serverVehicleType != null and serverVehicleType != '' || serverVehicleType == 0" >
+        AND
+        server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_server_standard
+    where server_id = #{serverId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
+    insert into czb_server_standard (server_id, server_name, server_type, 
+      server_price, vip_price, server_explain, 
+      server_discount, server_vehicle_type, create_at, 
+      update_at)
+    values (#{serverId,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, #{serverType,jdbcType=VARCHAR}, 
+      #{serverPrice,jdbcType=DOUBLE}, #{vipPrice,jdbcType=DOUBLE}, #{serverExplain,jdbcType=VARCHAR}, 
+      #{serverDiscount,jdbcType=REAL}, #{serverVehicleType,jdbcType=TINYINT}, #{createAt,jdbcType=TIMESTAMP},
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
+    insert into czb_server_standard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serverId != null" >
+        server_id,
+      </if>
+      <if test="serverName != null" >
+        server_name,
+      </if>
+      <if test="serverType != null" >
+        server_type,
+      </if>
+      <if test="serverPrice != null" >
+        server_price,
+      </if>
+      <if test="vipPrice != null" >
+        vip_price,
+      </if>
+      <if test="serverExplain != null" >
+        server_explain,
+      </if>
+      <if test="serverDiscount != null" >
+        server_discount,
+      </if>
+      <if test="serverVehicleType != null" >
+        server_vehicle_type,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="currentPrice != null" >
+        current_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serverId != null" >
+        #{serverId,jdbcType=VARCHAR},
+      </if>
+      <if test="serverName != null" >
+        #{serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="serverType != null" >
+        #{serverType,jdbcType=VARCHAR},
+      </if>
+      <if test="serverPrice != null" >
+        #{serverPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vipPrice != null" >
+        #{vipPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="serverExplain != null" >
+        #{serverExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="serverDiscount != null" >
+        #{serverDiscount,jdbcType=REAL},
+      </if>
+      <if test="serverVehicleType != null" >
+        #{serverVehicleType,jdbcType=TINYINT},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileId != null" >
+        #{fileId},
+      </if>
+      <if test="currentPrice != null" >
+        #{currentPrice},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
+    update czb_server_standard
+    <set >
+      <if test="serverName != null" >
+        server_name = #{serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="serverType != null" >
+        server_type = #{serverType,jdbcType=VARCHAR},
+      </if>
+      <if test="serverPrice != null" >
+        server_price = #{serverPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="vipPrice != null" >
+        vip_price = #{vipPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="serverExplain != null" >
+        server_explain = #{serverExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="serverDiscount != null" >
+        server_discount = #{serverDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="serverVehicleType != null" >
+        server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentPrice != null" >
+        current_price = #{currentPrice},
+      </if>
+    </set>
+    where server_id = #{serverId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.vehicleService.ServerStandard" >
+    update czb_server_standard
+    set server_name = #{serverName,jdbcType=VARCHAR},
+      server_type = #{serverType,jdbcType=VARCHAR},
+      server_price = #{serverPrice,jdbcType=DOUBLE},
+      vip_price = #{vipPrice,jdbcType=DOUBLE},
+      server_explain = #{serverExplain,jdbcType=VARCHAR},
+      server_discount = #{serverDiscount,jdbcType=REAL},
+      server_vehicle_type = #{serverVehicleType,jdbcType=TINYINT},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      current_price = #{currentPrice},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where server_id = #{serverId,jdbcType=VARCHAR}
+  </update>
+</mapper>

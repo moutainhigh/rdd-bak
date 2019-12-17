@@ -1,9 +1,20 @@
 package com.cqut.czb.bn.service.impl.petrolRecharge;
 
+import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
+import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
+import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.service.MessageManagementService;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
+import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
+import com.cqut.czb.bn.util.config.SendMesConfig.MessageModelInfo;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,12 +24,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
+
+    @Autowired
+    PetrolSalesRecordsMapper petrolSalesRecordsMapper;
+
+    @Autowired
+    MessageManagementService messageManagementService;
 
     @Override
     public PageInfo<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO) {
@@ -28,9 +51,38 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
     }
 
     @Override
-    public boolean recharge(String record) {
-
-        return petrolSalesRecordsMapperExtra.recharge(record)>0;
+    public boolean recharge(PetrolRechargeInputDTO record) {
+        boolean isRecharge = petrolSalesRecordsMapperExtra.recharge(record.getRecordId()) > 0;
+        //充值油卡更新卡号操作
+        if(isRecharge && record.getUpdatePetrolNum() != null && "".equals(record.getUpdatePetrolNum())){
+            // 判断要更新的油卡卡号是否跟数据库中的卡号重复
+            List<Petrol> repeatPetrol = petrolSalesRecordsMapperExtra.judgePetrolNumRepeat(record.getUpdatePetrolNum());
+            if (repeatPetrol != null && repeatPetrol.size() > 0) {
+                return false;
+            }
+            // 管理员修改卡号，加前缀S
+            if(!record.getUpdatePetrolNum().startsWith("S")){
+                record.setUpdatePetrolNum("S" + record.getUpdatePetrolNum());
+            }
+            petrolSalesRecordsMapperExtra.updatePetrolNum(record);
+        }
+//        PhoneCode phoneCode = new PhoneCode();
+//        if("true".equals(phoneCode.getRechargeMessage(record.getUserAccount(), record.getPetrolNum(), record.getPetrolDenomination()))){
+//            System.out.println("充值油卡发送成功");
+//        }
+        //发送APP内部消息 和 推送
+        PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
+        Map<String,String> content = new HashMap<>();
+        content.put("petrolKind", record.getPetrolKind());
+        content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
+        serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
+        content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+        content.put("receiverId", petrolSalesRecords.getBuyerId());
+        content.put("userAccount", record.getUserAccount());
+        content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
+        content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
+        messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
+        return isRecharge;
     }
 
     @Override
@@ -61,7 +113,6 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         for (int i = 0 ; i<list.size(); i++){
             int count = 0;
             row = sheet.createRow(i+1);
-            row.createCell(count++).setCellValue(list.get(i).getUserName());
             row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
             if ("1".equals(list.get(i).getPetrolKind())){
                 row.createCell(count++).setCellValue("中石油");
@@ -74,8 +125,11 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
             row.createCell(count++).setCellValue(list.get(i).getUserPhone());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getPurchaseTime()));
-            if ("0".equals(list.get(i).getBuyWay()))
-            row.createCell(count++).setCellValue("支付宝");
+            if ("1".equals(list.get(i).getBuyWay())) {
+                row.createCell(count++).setCellValue("支付宝");
+            }else if ("2".equals(list.get(i).getBuyWay())){
+                row.createCell(count++).setCellValue("微信");
+            }
         }
         return workbook;
     }

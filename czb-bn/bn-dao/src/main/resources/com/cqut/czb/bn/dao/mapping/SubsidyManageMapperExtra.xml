@@ -64,7 +64,7 @@
             ) big
         LEFT JOIN czb_income_log logtwo ON logtwo.info_id = big.info and unix_timestamp(
         logtwo.create_at
-        ) 	&lt;
+        ) 	>
         unix_timestamp(
         big.missionTime
         )
@@ -122,6 +122,7 @@
                 mission.mission_id = #{account}
             </if>
         </where>
+        order by createAt DESC
     </select>
 
     <insert id="inserLog" parameterType="java.util.List">
@@ -253,14 +254,14 @@
 
     <select id="seeTableData" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.subsidyManage.SeeSubsidy">
         SELECT
-            `user`.user_account account,
+            users.user_account account,
             mission.money_type type,
-            `user`.partner,
+            users.partner,
             subuser.amount
         FROM
             czb_subsidy_user subuser
         LEFT JOIN czb_subsidy_mission mission ON mission.mission_id = #{missionId}
-        LEFT JOIN czb_user USER ON `user`.user_id = subuser.user_id
+        LEFT JOIN czb_user users ON users.user_id = subuser.user_id
         WHERE
             subuser.mission_id = #{missionId}
     </select>

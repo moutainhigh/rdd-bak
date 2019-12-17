@@ -12,6 +12,26 @@ public class SaleInfoOutputDTO {
     private Date transactionTime;//交易时间
     private String area;//地区
     private String turnoverAmount;
+    private Date createAt;
+    private String remark;
+    private Integer recordType; // 是否第一次购买
+    private String thirdOrderId;
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
+    }
+
+    public Integer getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(Integer recordType) {
+        this.recordType = recordType;
+    }
 
     public String getTurnoverAmount() {
         return turnoverAmount;
@@ -83,5 +103,21 @@ public class SaleInfoOutputDTO {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.ShopMapper;
 import com.cqut.czb.bn.dao.mapper.ShopMapperExtra;
+import com.cqut.czb.bn.entity.dto.shop.ShopDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementPageDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO;
@@ -13,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +39,15 @@ public class ShopManagementServiceImpl implements ShopManagementService {
 
     @Autowired
     ShopMapper shopMapper;
+
+    @Override
+    public boolean addShop(Shop shop) {
+        int insert = shopMapper.insert(shop);
+        if(insert > 0 ){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public PageInfo getShopList(ShopManagementDTO shopManagementDTO) {
@@ -97,6 +108,11 @@ public class ShopManagementServiceImpl implements ShopManagementService {
         }catch (Exception e){
             return "导出失败";
         }
+    }
+
+    @Override
+    public Boolean auditShop(ShopManagementDTO shopManagementDTO) {
+        return shopMapperExtra.updateShopAudit(shopManagementDTO)>0;
     }
 
     public static Workbook getSettlementDTOListWorkBook(List<SettlementDTO> settlementDTOS, double totalUnsettledAmoun){

@@ -32,6 +32,8 @@ public class CommodityDTO {
 
     private Date updateAt;
 
+    private Integer isPay;
+
     private String deleteIds; //被删除的采集信息id
 
     private String infoIds; //采集信息的id
@@ -172,5 +174,13 @@ public class CommodityDTO {
 
     public void setInfoIds(String infoIds) {
         this.infoIds = infoIds;
+    }
+
+    public Integer getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(Integer isPay) {
+        this.isPay = isPay;
     }
 }

@@ -17,4 +17,6 @@ public interface MsgModelMapperExtra {
     public List<MsgRecord> getMessageRecordList(@Param("msgModelId") String msgModelId,@Param("receiverType") Integer receiverType);
 
     public int insertMessages(List<MsgRecord> msgRecords);
+
+    int insertRecord(List<MsgRecord> msgRecords);
 }

@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -43,7 +45,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
 
     @Override
     public ShopDTO getShopInfo(ShopDTO shopDTO, User user) {
-        if (shopDTO.getUserId()==null||"".equals(shopDTO.getUserId())){
+        if (shopDTO.getUserId()==null || "".equals(shopDTO.getUserId())){
             shopDTO.setUserId(user.getUserId());
         }
         ShopDTO shop = shopMapperExtra.selectShop(shopDTO);
@@ -51,6 +53,16 @@ public class ShopSettledServiceImpl implements ShopSettledService {
             shop.setCode(shopDTO.getCode());
             List<FileFunctionDTO> file = fileFunctionMapperExtra.selectFile(shop);
             shop.setFileList(file);
+        } else {
+            ShopDTO newShop = new ShopDTO();
+            newShop.setShopId(StringUtil.createId());
+            newShop.setUserId(user.getUserId());
+            newShop.setCreateAt(new Date());
+            newShop.setAudit(0);
+            newShop.setIsRecommend(0);
+            newShop.setOrderWriteOff(0);
+            shopMapperExtra.insert(newShop);
+            shop = shopMapperExtra.selectShop(shopDTO);
         }
         return shop;
 
@@ -61,7 +73,10 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
             return null;
         }
-        if (shopDTO.getDeleteId()!=null&&"".equals(shopDTO.getDeleteId())){
+        if (shopDTO.getIsLabelImg()==null){
+            return false;
+        }
+        if (shopDTO.getDeleteId() != null && !"".equals(shopDTO.getDeleteId())){
             String[] ids = shopDTO.getDeleteId().split(",");
             List<FileFunctionDTO> deleteFile = new ArrayList<>();
             if (ids.length!=0&&ids!=null){
@@ -73,7 +88,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
                 }
             }
             fileFunctionMapperExtra.deleteByIds(deleteFile);
- //           fileMapperExtra.deleteByShop(deleteFile);
+ //           fileMapperExtra.deleteByShop(deleteFile);   //可能有图片的复用
         }
         String address="";
         try {
@@ -85,15 +100,23 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         }
         File file1 = setFile(file.getOriginalFilename(),address,shopDTO.getUserId(),new Date());
         fileMapperExtra.insert(file1);
-        FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
-        fileFunctionDTO.setId(StringUtil.createId());
-        fileFunctionDTO.setFileId(file1.getFileId());
-        fileFunctionDTO.setGroupCode(shopDTO.getCode());
-        fileFunctionDTO.setLocalId(shopDTO.getShopId());
-        fileFunctionDTO.setSrc(file1.getSavePath());
-        fileFunctionDTO.setCreateAt(new Date());
-        fileFunctionDTO.setUpdateAt(new Date());
-        fileFunctionMapperExtra.insertFile(fileFunctionDTO);
+        if (!shopDTO.getIsLabelImg()){
+            FileFunctionDTO fileFunctionDTO = new FileFunctionDTO();
+            fileFunctionDTO.setId(StringUtil.createId());
+            fileFunctionDTO.setFileId(file1.getFileId());
+            fileFunctionDTO.setGroupCode(shopDTO.getCode());
+            fileFunctionDTO.setLocalId(shopDTO.getShopId());
+            fileFunctionDTO.setSrc(file1.getSavePath());
+            fileFunctionDTO.setCreateAt(new Date());
+            fileFunctionDTO.setUpdateAt(new Date());
+            fileFunctionMapperExtra.insertFile(fileFunctionDTO);
+        }else if (shopDTO.getIsLabelImg()){
+//            fileMapperExtra.deleteByPrimaryKey(shopDTO.getShopImg());
+            if (shopDTO.getShopImg()!=null){
+                fileMapperExtra.deleteByPrimaryKey(shopDTO.getShopImg());
+            }
+            shopDTO.setShopImg(file1.getFileId());
+        }
         shopDTO.setUpdateAt(new Date());
         return shopMapperExtra.updateShopInfo(shopDTO)>0;
     }
@@ -103,6 +126,8 @@ public class ShopSettledServiceImpl implements ShopSettledService {
         if (shopDTO.getCode()==null||"".equals(shopDTO.getCode())){  //特征码不能为空
             return null;
         }
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = df.format(shopDTO.getStartingTimeBusiness());
         if (shopDTO.getDeleteId()!=null&&!"".equals(shopDTO.getDeleteId())){
             String[] ids = shopDTO.getDeleteId().split(",");
             List<FileFunctionDTO> deleteFile = new ArrayList<>();
@@ -181,7 +206,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
                 return null;
             }
         }
-        if (!"".equals(commodityDTO.getInfos())){
+        if (commodityDTO.getInfos()!=null &&!"".equals(commodityDTO.getInfos())){
             String[] infos = commodityDTO.getInfos().split(";");
             String[][] mes =new String[infos.length][3];
             CommodityUserInfoCollectionDTO[] info = new CommodityUserInfoCollectionDTO[infos.length];
@@ -247,7 +272,7 @@ public class ShopSettledServiceImpl implements ShopSettledService {
             delecteCount = deleted.length;
             commodityUserInfoCollectionMapperExtra.deleteInfo(deleted);
         }
-        if (commodityDTO.getInfoIds()!=null||"".equals(commodityDTO.getInfoIds())){
+        if (commodityDTO.getInfoIds()!=null&&!"".equals(commodityDTO.getInfoIds())){
             String[] ids = commodityDTO.getInfoIds().split(",");
             if (commodityDTO.getInfos()!=null||"".equals(commodityDTO.getInfos())) {
                 String[] infos = commodityDTO.getInfos().split(";");  //解析信息收集数组

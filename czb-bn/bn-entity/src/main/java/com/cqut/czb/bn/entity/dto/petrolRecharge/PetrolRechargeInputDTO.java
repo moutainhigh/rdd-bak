@@ -3,10 +3,55 @@ package com.cqut.czb.bn.entity.dto.petrolRecharge;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 
 public class PetrolRechargeInputDTO extends PageDTO {
+    private String userId;
     private String petrolNum;
     private String isRecharged;
     private String petrolKind;
     private String recordId;
+    private String updatePetrolNum;
+    private double petrolDenomination;
+    private String userAccount;
+    private Integer bindingType; //1 公司匹配 2 线下匹配 3 绑定过的卡
+
+    public Integer getBindingType() {
+        return bindingType;
+    }
+
+    public void setBindingType(Integer bindingType) {
+        this.bindingType = bindingType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public double getPetrolDenomination() {
+        return petrolDenomination;
+    }
+
+    public void setPetrolDenomination(double petrolDenomination) {
+        this.petrolDenomination = petrolDenomination;
+    }
+
+    public String getUpdatePetrolNum() {
+        return updatePetrolNum;
+    }
+
+    public void setUpdatePetrolNum(String updatePetrolNum) {
+        this.updatePetrolNum = updatePetrolNum;
+    }
 
     public String getRecordId() {
         return recordId;

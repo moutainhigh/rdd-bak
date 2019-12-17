@@ -33,17 +33,17 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public PageInfo allPartnerManage(PartnerDTO partnerDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         List<PartnerDTO> partnerDTOList =  partnerMapperExtra.selectAllPartnerManage(partnerDTO);
-        List<PartnerDTO> childCount = partnerMapperExtra.selectAllPartnerCount(partnerDTO);
-        if (partnerDTOList.size()!=0&&partnerDTOList!=null&&childCount!=null&&childCount.size()!=0) {
-            for (int i = 0; i < partnerDTOList.size(); i++) {
-                for (int j=0; j<childCount.size(); j++){
-                    if (partnerDTOList.get(i).getUserId().equals(childCount.get(j).getUserId())){
-                        partnerDTOList.get(i).setTotalCount(childCount.get(j).getTotalCount());
-                        break;
-                    }
-                }
-            }
-        }
+//        List<PartnerDTO> childCount = partnerMapperExtra.selectAllPartnerCount(partnerDTO);
+//        if (partnerDTOList.size()!=0&&partnerDTOList!=null&&childCount!=null&&childCount.size()!=0) {
+//            for (int i = 0; i < partnerDTOList.size(); i++) {
+//                for (int j=0; j<childCount.size(); j++){
+//                    if (partnerDTOList.get(i).getUserId().equals(childCount.get(j).getUserId())){
+//                        partnerDTOList.get(i).setTotalCount(childCount.get(j).getTotalCount());
+//                        break;
+//                    }
+//                }
+//            }
+//        }
         return new PageInfo<>(partnerDTOList);
     }
 
@@ -73,16 +73,16 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
     public PageInfo<PartnerDTO> getNextChildInfo(PartnerDTO partnerDTO, PageDTO pageDTO) {       //查询下一级的列表及每个子级的下一级人数
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         List<PartnerDTO> nextChild = partnerMapperExtra.selectNextChild(partnerDTO);
-        List<PartnerDTO> nextChildMoney = partnerMapperExtra.selectNextChildMoney(partnerDTO);
-        for(int i=0;i<nextChild.size();i++){
-            for (int j=0;j<nextChildMoney.size();j++){
-                if (nextChild.get(i).getUserId().equals(nextChildMoney.get(j).getUserId())){
-                    nextChild.get(i).setTotalMoney(nextChildMoney.get(j).getTotalMoney());
-                    nextChild.get(i).setNearTime(nextChildMoney.get(j).getNearTime());
-                    break;
-                }
-            }
-        }
+//        List<PartnerDTO> nextChildMoney = partnerMapperExtra.selectNextChildMoney1(partnerDTO);
+//        for(int i=0;i<nextChild.size();i++){
+//            for (int j=0;j<nextChildMoney.size();j++){
+//                if (nextChild.get(i).getUserId().equals(nextChildMoney.get(j).getUserId())){
+//                    nextChild.get(i).setTotalMoney(nextChildMoney.get(j).getTotalMoney());
+//                    nextChild.get(i).setNearTime(nextChildMoney.get(j).getNearTime());
+//                    break;
+//                }
+//            }
+//        }
         return new PageInfo<>(nextChild);
     }
 
@@ -140,7 +140,7 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
             partner.setTotalMoney(0.00);
         }
         Double nextTotalMoney = 0.00;
-        List<PartnerDTO> nextChildMoney = partnerMapperExtra.selectNextChildMoney(partnerDTO);
+        List<PartnerDTO> nextChildMoney = partnerMapperExtra.selectNextChildMoney1(partnerDTO);
         if (nextChildMoney!=null&&nextChildMoney.size()!=0) {
             for (int i = 0; i < nextChildMoney.size(); i++) {
                 if (nextChildMoney.get(i).getTotalMoney() != null) {
@@ -275,6 +275,14 @@ public class InfoSpreadServiceImpl implements InfoSpreadService{
         BigDecimal b = new BigDecimal(num);
         num = b.setScale(2, BigDecimal.ROUND_DOWN).doubleValue(); //直接去掉金额小数点两位后面的数
         return num;
+    }
+
+    //Double与Double进行乘法，如直接相乘容易精度缺失
+    public Double mul (Double num1,Double num2){
+        BigDecimal mul1 = new BigDecimal(Double.toString(num1));
+        BigDecimal mul2 = new BigDecimal(Double.toString(num2));
+        double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        return mul;
     }
 
 }

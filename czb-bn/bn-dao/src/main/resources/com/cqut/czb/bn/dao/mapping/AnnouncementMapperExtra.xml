@@ -174,4 +174,14 @@
     where is_show=1 AND a.img_file_id=c.file_id
     AND a.location_code=#{locationCode,jdbcType=VARCHAR}
   </select>
+
+    <select id="selectPic" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO">
+        select
+        save_path AS savePath,
+        remark
+        from czb_announcement as a,czb_file as c
+        where is_show=1 AND a.img_file_id=c.file_id
+        AND a.location_code=#{locationCode,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

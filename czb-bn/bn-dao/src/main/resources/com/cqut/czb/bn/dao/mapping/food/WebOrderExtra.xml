@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.food.WebOrderMapperExtra">
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="dish_id" jdbcType="VARCHAR" property="dishId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="actual_price" jdbcType="DOUBLE" property="actualPrice" />
+    <result column="third_order" jdbcType="VARCHAR" property="thirdOrder" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="pey_method" jdbcType="INTEGER" property="peyMethod" />
+    <result column="dining_status" jdbcType="INTEGER" property="diningStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+      <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+  </resultMap>
+
+  <select id="search" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder">
+    SELECT
+    order_id, orders.user_id, orders.dish_id, orders.shop_id, actual_price, third_order, pay_status, pey_method,
+    dining_status, remark, orders.create_at, orders.update_at, dish.dish_name, czb_user.user_account
+    from czb_dish_order orders
+    LEFT  JOIN czb_dish dish on orders.dish_id = dish.dish_id
+      LEFT JOIN czb_user on orders.user_id = czb_user.user_id
+    <where>
+      orders.pay_status != 0
+      <if test="orderId != null and orderId != ''" >
+        AND
+        order_id = #{orderId}
+      </if>
+      <if test="thirdOrder != null and thirdOrder != ''" >
+        AND
+        third_order = #{thirdOrder}
+      </if>
+      <if test="diningStatus != null and diningStatus != '' || diningStatus == 0" >
+        AND
+        dining_status = #{diningStatus}
+      </if>
+        <if test="true">
+            AND
+          orders.shop_id = #{shopId}
+        </if>
+      <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        AND
+        orders.create_at BETWEEN #{startTime} AND #{endTime}
+      </if>
+    </where>
+    order BY orders.create_at DESC
+  </select>
+
+  <select id="getOrderDishes" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.ManageFood.Food">
+    SELECT
+    dish_id dishId
+    FROM
+    czb_order_dishes
+    where order_id = #{orderId}
+  </select>
+
+  <select id="getFood" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.ManageFood.SetInfo">
+    SELECT
+    dish_name dishName
+    FROM
+    czb_dish
+    where dish_id = #{dishId}
+  </select>
+
+  <update id="sureOrder" parameterType="java.lang.String">
+    update czb_dish_order
+    set dining_status = 2
+    where order_id = #{orderId}
+  </update>
+
+  <update id="cancelOrder" parameterType="java.lang.String">
+    update czb_dish_order
+    set dining_status = -1
+    pay_status = -1
+    where order_id = #{orderId} AND pay_status = 1
+  </update>
+</mapper>

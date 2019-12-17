@@ -1,78 +1,156 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.ShopMapperExtra" >
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
-        <id column="shop_id" property="shopId" jdbcType="VARCHAR" />
-        <result column="user_id" property="userId" jdbcType="VARCHAR" />
-        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
-        <result column="user_name" property="userName" jdbcType="VARCHAR" />
-        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
-        <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR" />
-        <result column="shop_content" property="shopContent" jdbcType="VARCHAR" />
-        <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
-        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+<mapper namespace="com.cqut.czb.bn.dao.mapper.ShopMapperExtra">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
+        <id column="shop_id" property="shopId" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
+        <result column="shop_phone" property="shopPhone" jdbcType="VARCHAR"/>
+        <result column="shop_content" property="shopContent" jdbcType="VARCHAR"/>
+        <result column="shop_address" property="shopAddress" jdbcType="VARCHAR"/>
+        <result column="save_path" property="savePath" jdbcType="VARCHAR"/>
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
+        <result column="audit" property="audit" jdbcType="INTEGER" />
+        <result column="shop_type" property="shopType" jdbcType="INTEGER" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />
+        <result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />
+        <result column="shop_img" property="shopImg" jdbcType="VARCHAR" />
+        <result column="order_write_off" property="orderWriteOff" jdbcType="INTEGER" />
+        <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
     </resultMap>
-    <select id="selectShop" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
+    <select id="selectShop" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
         select
-        shop_id, a.user_id, user_account,user_name, shop_name, shop_phone, shop_content, shop_address, a.create_at, a.update_at
+        shop_id, a.user_id, user_account,user_name, shop_name,save_path, shop_phone, shop_content, shop_address, a.create_at, a.update_at,
+    a.audit, shop_type, a.longitude, a.latitude, starting_time_business, end_time_business,
+    shop_img, order_write_off, a.is_recommend
         from czb_shop a
         LEFT JOIN  czb_user b ON a.user_id = b.user_id
+        LEFT JOIN czb_file cf ON a.shop_img = cf.file_id
         where a.user_id = #{userId,jdbcType=VARCHAR}
+        <if test="shopId !=null and shopId !=''">
+            AND shop_id = #{shopId,jdbcType=VARCHAR}
+        </if>
     </select>
 
-    <update id="updateShopInfo" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO" >
-            update czb_shop
-            <set>
-                <if test="shopName != null" >
-                    shop_name = #{shopName,jdbcType=VARCHAR},
-                </if>
-                <if test="shopPhone != null" >
-                    shop_phone = #{shopPhone,jdbcType=VARCHAR},
-                </if>
-                <if test="shopContent != null" >
-                    shop_content = #{shopContent,jdbcType=VARCHAR},
-                </if>
-                <if test="shopAddress != null" >
-                    shop_address = #{shopAddress,jdbcType=VARCHAR},
-                </if>
-                <if test="createAt != null" >
-                    create_at = #{createAt,jdbcType=TIMESTAMP},
-                </if>
-                <if test="updateAt != null" >
-                    update_at = #{updateAt,jdbcType=TIMESTAMP},
-                </if>
-            </set>
-            where shop_id = #{shopId,jdbcType=VARCHAR}
-        </update>
+    <update id="updateShopInfo" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
+        update czb_shop
+        <set>
+            <if test="shopName != null">
+                shop_name = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopPhone != null">
+                shop_phone = #{shopPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopContent != null">
+                shop_content = #{shopContent,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddress != null">
+                shop_address = #{shopAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="shopType != null" >
+                shop_type = #{shopType,jdbcType=INTEGER},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude,jdbcType=DOUBLE},
+            </if>
+            <if test="startingTimeBusiness != null" >
+                starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTimeBusiness != null" >
+                end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shopImg != null" >
+                shop_img = #{shopImg,jdbcType=VARCHAR},
+            </if>
+            <if test="orderWriteOff != null" >
+                order_write_off = #{orderWriteOff,jdbcType=INTEGER},
+            </if>
+            <if test="isRecommend != null" >
+                is_recommend = #{isRecommend,jdbcType=INTEGER},
+            </if>
+            <if test="orderWriteOff != null" >
+                order_write_off = #{orderWriteOff,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where shop_id = #{shopId,jdbcType=VARCHAR}
+    </update>
 
-    <select id="selectShopManageDTO" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO" resultType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO">
-    SELECT
+    <update id="updateShopAudit" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO">
+        update czb_shop
+        set
+        <if test="audit != null">
+            audit = #{audit,jdbcType=INTEGER},
+        </if>
+        update_at = now()
+        where shop_id = #{shopId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.shop.ShopDTO">
+        insert into czb_shop (shop_id, user_id, shop_name,
+        shop_phone, shop_content, shop_address,
+        create_at, update_at, audit
+        )
+        values (#{shopId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR},
+        #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR},
+      now(),now(), #{audit,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="selectShopManageDTO" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO"
+            resultType="com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO">
+        SELECT
         czb_shop.shop_id shopId,
         czb_shop.user_id userId,
         shop_name shopName,
+        shop_type shopType,
         user_name userName,
         shop_phone shopPhone,
         shop_address shopAddress,
-        SUM( CASE WHEN czb_order.is_settlement = 0 THEN 1 ELSE 0 END ) numberOfOutstandingAccounts,
-        SUM( CASE WHEN czb_order.is_settlement = 1 THEN czb_order.actual_price ELSE 0 END) totalHistoricalTransactions
-    FROM
+        audit audit,
+        SUM( CASE WHEN czb_order.is_settlement = 0 AND czb_order.state = 1 THEN 1 ELSE 0 END )
+        numberOfOutstandingAccounts,
+        SUM( CASE WHEN czb_order.is_settlement = 1 AND czb_order.state = 1 THEN czb_order.actual_price ELSE 0 END)
+        totalHistoricalTransactions,
+        czb_shop.create_at createAt,
+        czb_shop.update_at updateAt
+        FROM
         czb_shop
         LEFT JOIN czb_user ON czb_user.user_id = czb_shop.user_id
         LEFT JOIN czb_order ON czb_order.shop_id = czb_shop.shop_id
-    where
-        state = 1
-        <if test="shopName != null and shopName != ''">
-        AND shop_name like concat('%',#{shopName,jdbcType = VARCHAR},'%')
-        </if>
-        <if test="userName != null and userName != ''">
-        AND user_name like concat('%',#{userName,jdbcType = VARCHAR},'%')
-        </if>
-    GROUP BY
+        <where>
+            <if test="shopName != null and shopName != ''">
+                AND shop_name like concat('%',#{shopName,jdbcType = VARCHAR},'%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND user_name like concat('%',#{userName,jdbcType = VARCHAR},'%')
+            </if>
+            <if test="shopType != null and shopType != ''">
+                AND shop_type = #{shopType,jdbcType = INTEGER}
+            </if>
+            <if test="shopPhone != null and shopPhone != ''">
+                AND shop_phone like concat('%',#{shopPhone,jdbcType = VARCHAR},'%')
+            </if>
+        </where>
+        GROUP BY
         czb_shop.shop_id
     </select>
 
-    <select id="selectSettlementDTO" resultType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO">
+    <select id="selectSettlementDTO" resultType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO"
+            parameterType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO">
         SELECT
         czb_order.id orderId,
         czb_order.shop_id shopId,
@@ -105,7 +183,7 @@
     </select>
     <update id="updateSettlementOrder" parameterType="com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO">
         UPDATE
-            czb_order
+        czb_order
         SET czb_order.is_settlement = 1
         where
         czb_order.state = 1
@@ -119,4 +197,80 @@
             AND czb_order.id LIKE concat('%', #{orderId, jdbcType = VARCHAR} ,'%')
         </if>
     </update>
+
+    <!--查出点餐页面的餐店信息selectOrderShopInfo-->
+    <select id="selectOrderShopInfo" parameterType="java.lang.String"
+            resultType="com.cqut.czb.bn.entity.dto.food.AppOrderPage.OrderPageShopDTO">
+        SELECT
+         shop_id AS shopId, user_id AS userId, shop_name AS shopName, shop_phone AS shopPhone, shop_content AS shopContent,
+         shop_address AS shopAddress,audit, shop_type AS shopType, longitude, latitude,
+         starting_time_business AS startingTimeBusiness, end_time_business AS endTimeBusiness, save_path AS shopImg
+        FROM
+         czb_shop,czb_file
+        WHERE
+         shop_id=#{shopId, jdbcType = VARCHAR}
+         and
+         czb_file.file_id=czb_shop.shop_img
+    </select>
+
+    <select id="selectImg" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT  save_path as shopImg
+        from czb_file_function ,czb_shop,czb_file
+        WHERE
+        shop_id=local_id
+        AND
+        czb_file.file_id=czb_file_function.file_id
+        AND
+        shop_id=#{shopId, jdbcType = VARCHAR}
+    </select>
+
+    <select id="selectShopIdByUserId" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT czb_shop.shop_id
+        FROM czb_shop
+        WHERE czb_shop.user_id = #{userId, jdbcType = VARCHAR}
+    </select>
+
+    <!--一对多查询-->
+    <!--<select id="getStuAndMajor" resultMap="stuAndMajor" parameterType="String">-->
+    <!--SELECT-->
+    <!--shop_id, user_id, shop_name, shop_phone, shop_content, shop_address,-->
+    <!--audit, shop_type, longitude, latitude, starting_time_business, end_time_business,save_path-->
+    <!--FROM-->
+    <!--czb_shop,czb_file-->
+    <!--WHERE-->
+    <!--shop_id=#{shopId, jdbcType = VARCHAR}-->
+    <!--and-->
+    <!--czb_file.file_id=czb_shop.shop_img-->
+    <!--</select>-->
+
+    <!--<resultMap type="Stuinfo" id="stuAndMajor">-->
+    <!--<id column="shop_id" property="shopId" jdbcType="VARCHAR" />-->
+    <!--<result column="user_id" property="userId" jdbcType="VARCHAR" />-->
+    <!--<result column="shop_name" property="shopName" jdbcType="VARCHAR" />-->
+    <!--<result column="shop_phone" property="shopPhone" jdbcType="VARCHAR" />-->
+    <!--<result column="shop_content" property="shopContent" jdbcType="VARCHAR" />-->
+    <!--<result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />-->
+    <!--<result column="audit" property="audit" jdbcType="INTEGER" />-->
+    <!--<result column="shop_type" property="shopType" jdbcType="INTEGER" />-->
+    <!--<result column="longitude" property="longitude" jdbcType="DOUBLE" />-->
+    <!--<result column="latitude" property="latitude" jdbcType="DOUBLE" />-->
+    <!--<result column="starting_time_business" property="startingTimeBusiness" jdbcType="TIMESTAMP" />-->
+    <!--<result column="end_time_business" property="endTimeBusiness" jdbcType="TIMESTAMP" />-->
+    <!--<result column="save_path" property="shopImg" jdbcType="VARCHAR" />-->
+    <!--<association property="topImg" javaType="java.lang.String" select="getMajor" column="shop_id"/>-->
+    <!--</resultMap>-->
+
+    <!--<select id="getMajor" resultType="java.lang.String" parameterType="java.lang.String">-->
+    <!--select * from major where id=#{majorId}-->
+    <!--</select>-->
+    <select id="selectAllShopInfo" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO">
+        SELECT
+            shop_id shopId,
+            shop_name shopName,
+            user_id userId
+        FROM czb_shop
+        WHERE audit = 1
+        AND shop_type = 3
+    </select>
+
 </mapper>

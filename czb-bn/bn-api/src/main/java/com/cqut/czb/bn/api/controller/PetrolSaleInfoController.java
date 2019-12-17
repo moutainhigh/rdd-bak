@@ -1,10 +1,9 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
-import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
-import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
+import com.cqut.czb.bn.entity.global.DateDealWith;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
@@ -12,18 +11,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/petrolSaleInfo")
+
+
 public class PetrolSaleInfoController {
     @Autowired
     IPetrolManagementService petrolManagementService;
@@ -35,21 +31,31 @@ public class PetrolSaleInfoController {
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolSaleInfoList(inputDTO));
         dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO));
+        //获取今日销售数据
+        GetPetrolSaleInfoInputDTO inputDTO2=new GetPetrolSaleInfoInputDTO();
+        inputDTO2.setStartTime(DateDealWith.backStartTime());
+        inputDTO2.setEndTime(DateDealWith.backEndTime());
+        dataWithCountOutputDTO.setTodayCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO2));
+        dataWithCountOutputDTO.setTodayNum(petrolManagementService.getPetrolSaleInfoList(inputDTO2).getSize()+"");
         return new JSONResult(dataWithCountOutputDTO);
+    }
+
+    @RequestMapping(value = "/changePetrolNum",method = RequestMethod.GET)
+    public JSONResult changePetrolNum(PetrolRechargeInputDTO inputDTO){
+        return petrolManagementService.changePetrolNum(inputDTO);
     }
 
     @RequestMapping(value = "/getPetrolRechargeList",method = RequestMethod.GET)
     public JSONResult getPetrolRechargeList(PetrolRechargeInputDTO inputDTO){
-
         return new JSONResult(petrolRechargeService.getPetrolRechargeList(inputDTO));
     }
 
     @RequestMapping(value ="/recharge",method = RequestMethod.POST)
     public JSONResult recharge(@RequestBody PetrolRechargeInputDTO inputDTO ){
-        return new JSONResult(petrolRechargeService.recharge(inputDTO.getRecordId()));
+        return new JSONResult(petrolRechargeService.recharge(inputDTO));
     }
 
-    @GetMapping("/exportRecords")
+    @PostMapping("/exportRecords")
     public JSONResult exportRechargeRecord(HttpServletResponse response,
                                            PetrolRechargeInputDTO inputDTO) {
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.vehicleService.ComparedPicMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.vehicleService.ComparedPicDTO" >
+        <id column="compared_pic_id" property="comparedPicId" jdbcType="VARCHAR" />
+        <result column="server_order_id" property="serverOrderId" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+        <result column="save_path" property="savePath" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        compared_pic_id, server_order_id, status, a.file_id,save_path, a.create_at, a.update_at
+    </sql>
+    <select id="selectByOrder" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_compared_pic a
+        LEFT JOIN czb_file b ON a.file_id = b.file_id
+        where server_order_id = #{serverOrderId,jdbcType=VARCHAR}
+    </select>
+</mapper>

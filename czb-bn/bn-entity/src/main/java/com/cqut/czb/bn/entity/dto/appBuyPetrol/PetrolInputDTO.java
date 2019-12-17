@@ -2,6 +2,8 @@ package com.cqut.czb.bn.entity.dto.appBuyPetrol;
 
 public class PetrolInputDTO {
 
+    private String remark;
+
     private String ownerId;
 
     private Integer petrolKind;
@@ -25,6 +27,14 @@ public class PetrolInputDTO {
     private Integer isVip;
 
     private Integer isHaveVip;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Integer getIsHaveVip() {
         return isHaveVip;

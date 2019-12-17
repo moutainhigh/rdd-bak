@@ -1,25 +1,31 @@
 package com.cqut.czb.bn.service.impl.petrolManagement;
 
+import com.cqut.czb.bn.dao.mapper.DictMapper;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class PetrolManagementServiceImpl implements IPetrolManagementService {
@@ -32,6 +38,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     AppHomePageService appHomePageService;
 //    @Autowired
 //    PetrolMapper petrolMapper;
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     /**
      * 获取油卡列表
@@ -105,18 +113,64 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     }
 
     @Override
+    public int saleSomePetrol(PetrolManagementInputDTO inputDTO) {
+        String petrolIds=inputDTO.getPetrolIds();
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.saleSomePetrol(inputDTO);
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"1");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    @Override
     public int notSalePetrol(String petrolIds) {
         int result=0;
         if (petrolIds==null || petrolIds.length() == 0){
             result = petrolMapperExtra.notSaleAllPetrol();
         }else {
             String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"-1");
+            result = petrolMapperExtra.changePetrolState(ids,"3");
         }
 
         appHomePageService.selectAllPetrol();
         return result;
     }
+
+    @Override
+    public int notSaleSomePetrol(PetrolManagementInputDTO inputDTO) {
+
+        String petrolIds=inputDTO.getPetrolIds();
+
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            result = petrolMapperExtra.notSaleSomePetrols(inputDTO);
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"3");
+        }
+
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
+    @Override
+    public int BanPetrol(String petrolIds) {
+        int result=0;
+        if (petrolIds==null || petrolIds.length() == 0){
+            return 0;
+        }else {
+            String[] ids = petrolIds.split(",");
+            result = petrolMapperExtra.changePetrolState(ids,"-1");
+        }
+        appHomePageService.selectAllPetrol();
+        return result;
+    }
+
 
     @Override
     public boolean modifyPetrol(ModifyPetrolInputDTO inputDTO) {
@@ -159,5 +213,29 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             }
         }
         return petrolListNoRepeatForDB;
+    }
+
+    public JSONResult changePetrolNum(PetrolRechargeInputDTO record){
+        boolean isSuccess = false;
+        if(record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") {
+            if(!record.getUpdatePetrolNum().startsWith("S")){
+                record.setUpdatePetrolNum("S" + record.getUpdatePetrolNum());
+            }
+            isSuccess = petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
+        }
+        if(isSuccess)
+            return new JSONResult("修改成功",200);
+        else
+            return new JSONResult("修改失敗",500);
+    }
+
+    @Override
+    public List<Dict> getPayInstruction() {
+        Dict dict2=dictMapperExtra.selectDictByName("weChat");
+        Dict dict1=dictMapperExtra.selectDictByName("alipay");
+        List<Dict> dicts=new ArrayList<>();
+        dicts.add(dict1);
+        dicts.add(dict2);
+        return dicts;
     }
 }

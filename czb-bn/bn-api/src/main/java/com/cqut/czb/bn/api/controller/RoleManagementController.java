@@ -1,17 +1,18 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IRoleService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 /**
  * RoleManagementController 角色管理接口
@@ -24,6 +25,9 @@ public class RoleManagementController {
 
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @RequestMapping(value = "/insertRole",method = RequestMethod.POST)
     public JSONResult insertRole(@Validated @RequestBody RoleInputDTO roleInputDTO){
@@ -59,6 +63,16 @@ public class RoleManagementController {
     public JSONResult selectRole(@Validated RoleInputDTO roleInputDTO, PageDTO pageDTO){
 
         return new JSONResult(roleService.selectRole(roleInputDTO, pageDTO));
+    }
+
+    @GetMapping("/RoleToPage")
+    public JSONResult RoleToPage(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user==null||"".equals(user.getUserId())){
+            return new JSONResult();
+        }
+
+        return new JSONResult(roleService.getRoleToPage(user));
     }
 }
 

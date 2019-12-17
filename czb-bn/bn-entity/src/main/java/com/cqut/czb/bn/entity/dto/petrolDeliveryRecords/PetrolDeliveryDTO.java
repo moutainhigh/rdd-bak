@@ -33,6 +33,26 @@ public class PetrolDeliveryDTO {
 
     private Date updateAt;
 
+    private double petrolDenomination;
+
+    private double petrolPrice;
+
+    public double getPetrolDenomination() {
+        return petrolDenomination;
+    }
+
+    public void setPetrolDenomination(double petrolDenomination) {
+        this.petrolDenomination = petrolDenomination;
+    }
+
+    public double getPetrolPrice() {
+        return petrolPrice;
+    }
+
+    public void setPetrolPrice(double petrolPrice) {
+        this.petrolPrice = petrolPrice;
+    }
+
     public String getRecordId() {
         return recordId;
     }

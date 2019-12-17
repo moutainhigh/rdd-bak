@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PartnerVipIncomeMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO" >
+        <id column="partner_vip_income_id" property="partnerVipIncomeId" jdbcType="VARCHAR" />
+        <result column="partner_id" property="partnerId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="partner_type" property="partnerType" jdbcType="INTEGER" />
+        <result column="is_settle" property="isSettle" jdbcType="INTEGER" />
+        <result column="vip_add_count" property="vipAddCount" jdbcType="INTEGER" />
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="vip_add_income" property="vipAddIncome" jdbcType="DOUBLE" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="first_vip_income" property="firstVipIncome" jdbcType="DOUBLE" />
+        <result column="second_vip_income" property="secondVipIncome" jdbcType="DOUBLE" />
+        <result column="first_petrol_income" property="firstPetrolIncome" jdbcType="DOUBLE" />
+        <result column="second_petrol_income" property="secondPetrolIncome" jdbcType="DOUBLE" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+       partner_vip_income_id, partner_id, partner_type, is_settle, vip_add_count, start_time,
+    end_time, vip_add_income, create_at, update_at, first_vip_income, second_vip_income,
+    first_petrol_income, second_petrol_income
+    </sql>
+    <select id="selectVipIncomeList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        partner_vip_income_id,
+        partner_id,
+        user_account,
+        user_name,
+        cpvi.partner_type,
+        is_settle,
+        vip_add_count,
+        start_time,
+        end_time,
+        vip_add_income,
+        cpvi.create_at,
+        cpvi.update_at
+        FROM czb_partner_vip_income cpvi
+        LEFT JOIN czb_user cu ON cpvi.partner_id = cu.user_id
+        <where>
+            <if test="partnerType!=null">
+               AND cpvi.partner_type = #{partnerType,jdbcType=INTEGER}
+            </if>
+            <if test="isSettle!=null">
+                AND is_settle =#{isSettle,jdbcType=INTEGER}
+            </if>
+            <if test="userAccount!=null and userAccount!=''">
+                AND user_account LIKE concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!=null">
+                AND start_time >= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime!=null">
+                AND end_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+      ORDER BY create_at DESC
+    </select>
+
+    <select id="selectVipIncomeById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+            czb_partner_vip_income
+        WHERE
+            partner_vip_income_id = #{partnerVipIncomeId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectVipIncomeByPartnerId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        czb_partner_vip_income
+        WHERE
+        partner_id = #{partnerId,jdbcType=VARCHAR} AND is_settle= 0 limit 1
+    </select>
+
+    <select id="selectVipIncomeByIds" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        czb_partner_vip_income
+        WHERE
+        partner_vip_income_id IN
+        <foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+    <update id="settleVipIncomeRecords" parameterType="java.lang.String" >
+        update czb_partner_vip_income
+        set
+        is_settle = 1,
+        end_time = NOW(),
+        update_at = NOW()
+        where
+        is_settle = 0 AND
+        partner_vip_income_id IN
+        <foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateVipIncomeByAdd" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+        update czb_partner_vip_income
+        set
+        vip_add_income = vip_add_income + #{vipAddIncome,jdbcType=DOUBLE},
+        <if test="vipAddCount != null">
+            vip_add_count = vip_add_count + #{vipAddCount,jdbcType=INTEGER},
+        </if>
+        <if test="firstVipIncome != null" >
+            first_vip_income = first_vip_income + #{firstVipIncome,jdbcType=DOUBLE},
+        </if>
+        <if test="secondVipIncome != null" >
+            second_vip_income = second_vip_income + #{secondVipIncome,jdbcType=DOUBLE},
+        </if>
+        <if test="firstPetrolIncome != null" >
+            first_petrol_income = first_petrol_income + #{firstPetrolIncome,jdbcType=DOUBLE},
+        </if>
+        <if test="secondPetrolIncome != null" >
+            second_petrol_income = second_petrol_income + #{secondPetrolIncome,jdbcType=DOUBLE},
+        </if>
+        update_at = now()
+        where
+        is_settle = 0 AND
+        partner_id = #{partnerId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertIncome" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+        insert into czb_partner_vip_income
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="partnerVipIncomeId != null" >
+                partner_vip_income_id,
+            </if>
+            <if test="partnerId != null" >
+                partner_id,
+            </if>
+            <if test="partnerType != null" >
+                partner_type,
+            </if>
+            <if test="isSettle != null" >
+                is_settle,
+            </if>
+            <if test="vipAddCount != null" >
+                vip_add_count,
+            </if>
+            <if test="startTime != null" >
+                start_time,
+            </if>
+            <if test="endTime != null" >
+                end_time,
+            </if>
+            <if test="vipAddIncome != null" >
+                vip_add_income,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+            <if test="firstVipIncome != null" >
+                first_vip_income,
+            </if>
+            <if test="secondVipIncome != null" >
+                second_vip_income,
+            </if>
+            <if test="firstPetrolIncome != null" >
+                first_petrol_income,
+            </if>
+            <if test="secondPetrolIncome != null" >
+                second_petrol_income,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="partnerVipIncomeId != null" >
+                #{partnerVipIncomeId,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerId != null" >
+                #{partnerId,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerType != null" >
+                #{partnerType,jdbcType=INTEGER},
+            </if>
+            <if test="isSettle != null" >
+                #{isSettle,jdbcType=INTEGER},
+            </if>
+            <if test="vipAddCount != null" >
+                #{vipAddCount,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null" >
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null" >
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="vipAddIncome != null" >
+                #{vipAddIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstVipIncome != null" >
+                #{firstVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondVipIncome != null" >
+                #{secondVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="firstPetrolIncome != null" >
+                #{firstPetrolIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondPetrolIncome != null" >
+                #{secondPetrolIncome,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PartnerVipIncome" >
+        update czb_partner_vip_income
+        <set >
+            <if test="partnerId != null" >
+                partner_id = #{partnerId,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerType != null" >
+                partner_type = #{partnerType,jdbcType=INTEGER},
+            </if>
+            <if test="isSettle != null" >
+                is_settle = #{isSettle,jdbcType=INTEGER},
+            </if>
+            <if test="vipAddCount != null" >
+                vip_add_count = #{vipAddCount,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null" >
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="vipAddIncome != null" >
+                vip_add_income = #{vipAddIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstVipIncome != null" >
+                first_vip_income = #{firstVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondVipIncome != null" >
+                second_vip_income = #{secondVipIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="firstPetrolIncome != null" >
+                first_petrol_income = #{firstPetrolIncome,jdbcType=DOUBLE},
+            </if>
+            <if test="secondPetrolIncome != null" >
+                second_petrol_income = #{secondPetrolIncome,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where partner_id = #{partnerId,jdbcType=VARCHAR} AND is_settle = 0
+    </update>
+
+</mapper>

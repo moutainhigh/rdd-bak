@@ -6,6 +6,8 @@
         msg_model_id messageModelId,
         msg_title messageTitle,
         msg_content messageContent,
+          msg_type msgType,
+          end_time endTime,
         czb_msg_model.create_at messageSendTime,
         czb_msg_model.altert 'alter',
         czb_msg_model.receiver_type receiverType,
@@ -14,9 +16,12 @@
         czb_msg_model
         WHERE
         1 = 1
-        <if test=" messageListDTO.messageTitle != null">
-          AND msg_title LIKE concat('%',#{messageListDTO.messageTitle,jdbcType = VARCHAR},'%')
+        <if test=" messageListDTO.messageModelId != null and messageListDTO.messageModelId != ''">
+          AND msg_model_id = #{messageListDTO.messageModelId,jdbcType = VARCHAR}
         </if>
+          <if test=" messageListDTO.messageTitle != null">
+              AND msg_title LIKE concat('%',#{messageListDTO.messageTitle,jdbcType = VARCHAR},'%')
+          </if>
         <if test="messageListDTO.messageStartTime != null">
           AND czb_msg_model.create_at &gt;= #{messageListDTO.messageStartTime, jdbcType = TIMESTAMP}
         </if>
@@ -38,10 +43,11 @@
         0 msgState,
         0 'alert',
         NOW( ) createAt,
-        NOW( ) updateAt
+        NOW( ) updateAt,
+        msg_content content
         FROM
         czb_user
-        JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} AND is_send = 0 ) AS msgModel
+        JOIN ( SELECT msg_model_id msgRecordId, announcer_id msgAnnouncerId, msg_content FROM czb_msg_model WHERE czb_msg_model.msg_model_id = #{msgModelId, jdbcType = VARCHAR} AND is_send = 0 ) AS msgModel
         where
         <if test="receiverType == 0">
         1 = 1
@@ -64,7 +70,8 @@
         `msg_receiver_id`,
         `msg_state`, `alert`,
         `create_at`,
-        `update_at`
+        `update_at`,
+        `content`
         )
         VALUES
             <foreach collection="list" item="item" index="index" separator=",">
@@ -76,8 +83,37 @@
                     0,
                     0,
                     now(),
-                    NOW()
+                    NOW(),
+                    #{item.content}
                 )
             </foreach>
+    </insert>
+    <insert id="insertRecord" parameterType="java.util.List">
+        INSERT INTO `czb`.`czb_msg_record`
+        (
+        `msg_record_id`,
+        `msg_model_id`,
+        `msg_announcer_id`,
+        `msg_receiver_id`,
+        `msg_state`,
+        `alert`,
+        `content`,
+        `create_at`,
+        `update_at`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.msgRecordId},
+            #{item.msgModelId},
+            #{item.msgAnnouncerId},
+            #{item.msgReceiverId},
+            0,
+            0,
+            #{item.content},
+            now(),
+            NOW()
+            )
+        </foreach>
     </insert>
 </mapper>

@@ -10,6 +10,7 @@
     <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
     <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
@@ -19,8 +20,26 @@
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area, owner_id, petrol_type, create_at, update_at, commission
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission,remark
   </sql>
+
+  <select id="selectUserPetrol" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolPriceDTO">
+   select
+      DISTINCT petrol_kind as petrolKind,remark
+     from czb_petrol
+        where
+        owner_id=#{userId,jdbcType=VARCHAR} and
+        area=#{area,jdbcType=VARCHAR} and
+        state=2 and
+        petrol_kind=1 or
+        owner_id=#{userId,jdbcType=VARCHAR} and
+        area=#{area,jdbcType=VARCHAR} and
+        state=2 and
+        petrol_kind=2
+    ORDER BY petrol_kind
+  </select>
+
+
   <select id="getPetrolList" resultMap="BaseResultMap" resultType="com.cqut.czb.bn.entity.entity.Petrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO">
     select <include refid="Base_Column_List"/> from czb_petrol
     <where>
@@ -43,18 +62,24 @@
         AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
       </if>
       <if test="petrolType != null and petrolType != ''" >
-      AND petrol_type = #{petrolType,jdbcType=INTEGER}
-    </if>
-    <if test="createAt != null" >
-      AND create_at &gt;= #{createAt,jdbcType=TIMESTAMP}
-    </if>
-  </where>
+        AND petrol_type = #{petrolType,jdbcType=INTEGER}
+      </if>
+      <if test="createAt != null" >
+        AND create_at &gt;= #{createAt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="startTime != null">
+        AND create_at &gt;= #{startTime,jdbcType = TIMESTAMP}
+      </if>
+      <if test="endTime != null">
+        AND create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
+      </if>
+    </where>
   </select>
 
   <insert id="insertPetrolList" parameterType="java.util.List">
     insert into czb_petrol (petrol_id, petrol_num, petrol_psw,
     petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area,
+    state, discount, area,remark,
     petrol_type, create_at) values
     <foreach collection="list" item="item" index="index" separator=",">
       (
@@ -67,6 +92,7 @@
       #{item.state,jdbcType = INTEGER},
       #{item.discount,jdbcType = DOUBLE},
       #{item.area,jdbcType = VARCHAR},
+      #{item.remark,jdbcType = VARCHAR},
       #{item.petrolType,jdbcType = INTEGER},
       NOW()
       )
@@ -91,10 +117,10 @@
 
   <select id="SelectPetrolPriceInfo" resultType="com.cqut.czb.bn.entity.dto.appHomePage.petrolInfoDTO">
      select
-     petrol_price as 'petrolPrice' ,petrol_denomination as 'petrolDenomination',`discount`
+     petrol_price as 'petrolPrice' ,petrol_denomination as 'petrolDenomination',`discount`,remark
      from czb_petrol
      WHERE petrol_kind=#{petrolKind} and  `state`=1 and area=#{area}
-     GROUP BY petrol_price,petrol_denomination,discount
+     GROUP BY petrol_price,petrol_denomination,discount,remark
      order by
      petrol_price desc
   </select>
@@ -175,9 +201,19 @@
     FROM czb_petrol
     WHERE czb_petrol.state=2 AND
     czb_petrol.owner_id=#{ownerId,jdbcType=VARCHAR} AND
-    petrol_kind=#{petrolKind,jdbcType=INTEGER}
+    petrol_kind=#{petrolKind,jdbcType=INTEGER} and
+    remark=#{remark,jdbcType=VARCHAR}
     order by
     create_at desc
+    limit 1
+  </select>
+
+  <select id="selectPetrolByNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE
+    czb_petrol.petrol_num=#{petrolNum,jdbcType=VARCHAR}
     limit 1
   </select>
 
@@ -208,13 +244,64 @@
     </where>
   </update>
 
+  <!--根据条件开售油卡-->
+  <update id="saleSomePetrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO">
+    update czb_petrol
+    <set>
+      state = 1
+    </set>
+    <where>
+      state in (3,0)
+      <if test="petrolNum != null and petrolNum !=''" >
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolKind != null and petrolKind !=''" >
+        AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' " >
+        AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}
+      </if>
+      <if test="petrolPrice != null and petrolPrice != ''" >
+        AND petrol_price = #{petrolPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="area != null and area != ''" >
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+  </update>
+
   <update id="notSaleAllPetrol" parameterType="java.lang.String">
     update czb_petrol
     <set>
       state = 3
     </set>
     <where>
-      and state = 1
+      state = 1
+    </where>
+  </update>
+
+  <update id="notSaleSomePetrols" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO">
+    update czb_petrol
+    <set>
+      state = 3
+    </set>
+    <where>
+      state = 1
+      <if test="petrolNum != null and petrolNum !=''" >
+        AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolKind != null and petrolKind !=''" >
+        AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' " >
+        AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}
+      </if>
+      <if test="petrolPrice != null and petrolPrice != ''" >
+        AND petrol_price = #{petrolPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="area != null and area != ''" >
+        AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
     </where>
   </update>
 
@@ -249,4 +336,45 @@
     </where>
   </select>
 
+  <select id="selectPetrolStock" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolStock">
+    SELECT
+	  czb_petrol.petrol_kind petrolKind,
+	  count( * ) total
+    FROM
+	  czb_petrol
+    LEFT JOIN czb_petrol_sale_config
+    ON czb_petrol.petrol_kind = czb_petrol_sale_config.petrol_type
+    WHERE
+	  czb_petrol.state = 1
+	  AND czb_petrol.area = #{area, jdbcType = VARCHAR}
+	  AND czb_petrol_sale_config.area  = #{area, jdbcType = VARCHAR}
+	  AND czb_petrol_sale_config.sale_state = 1
+    GROUP BY
+	  czb_petrol.petrol_kind
+    ORDER BY
+	  czb_petrol.petrol_kind
+  </select>
+
+  <select id="selectPetrolByDeliveryRecordId" resultType="com.cqut.czb.bn.entity.entity.Petrol">
+    SELECT
+        petrol_id petrolId,
+        czb_petrol_delivery_records.petrol_num petrolNum,
+        petrol_psw petrolPsw,
+        petrol_kind petrolKind,
+        petrol_denomination petrolDenomination,
+        petrol_price petrolPrice,
+        state,
+        discount,
+        area,
+        owner_id ownerId,
+        petrol_type petrolType,
+        commission,
+        remark
+    FROM
+        czb_petrol
+        LEFT JOIN czb_petrol_delivery_records ON czb_petrol.petrol_num = czb_petrol_delivery_records.petrol_num
+    WHERE
+        czb_petrol_delivery_records.record_id = #{recordId, jdbcType = VARCHAR}
+    limit 1
+  </select>
 </mapper>

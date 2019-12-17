@@ -55,6 +55,14 @@ public class PartnerDTO {
 
     private String order;    //排序方式
 
+    private Integer isVip;   //是否Vip
+
+    private Integer vipCount;  //下级vip数量
+
+    private Integer vipAddCount;  //每月Vip新增数量
+
+    private Double vipMoney;  //每月通过Vip的获利金额
+
     public String getUserId() {
         return userId;
     }
@@ -253,5 +261,37 @@ public class PartnerDTO {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
+    public Integer getVipCount() {
+        return vipCount;
+    }
+
+    public void setVipCount(Integer vipCount) {
+        this.vipCount = vipCount;
+    }
+
+    public Integer getVipAddCount() {
+        return vipAddCount;
+    }
+
+    public void setVipAddCount(Integer vipAddCount) {
+        this.vipAddCount = vipAddCount;
+    }
+
+    public Double getVipMoney() {
+        return vipMoney;
+    }
+
+    public void setVipMoney(Double vipMoney) {
+        this.vipMoney = vipMoney;
     }
 }

@@ -117,4 +117,62 @@ public class VerifyAsynNoticeInfoController {
 		}
 	}
 
+	/**
+	 * 购买洗车服务：（支付宝）
+	 */
+	@RequestMapping(value="/verifyBuyCarWashInfoAiHu", method= RequestMethod.POST)
+	public synchronized void verifyBuyCarWashInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("支付宝回调——充值接口");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		try {
+			System.out.println("充值vip购买成功");
+			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"CarWash"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 购买服务)：验证异步通知信息(微信)
+	 */
+	@RequestMapping(value="/verifyBuyCarWashInfoWeChat", method=RequestMethod.POST)
+	public synchronized void verifyBuyCarWashInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("微信购买服务成功回调");
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/xml");
+		try {
+			response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"CarWash"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	  点餐：支付宝
+	 */
+	@RequestMapping(value="/verifyBuyDishInfoAiHu", method= RequestMethod.POST)
+	public synchronized void verifyBuyDishInfoAiHu(HttpServletRequest request, HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		try {
+			response.getWriter().print(paymentRecordService.AliOrderPayNotify(request,"Dish"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+		点餐：微信
+	 */
+	@RequestMapping(value="/verifyBuyDishInfoWeChat", method=RequestMethod.POST)
+	public synchronized void verifyBuyDishInfoWeChat(HttpServletRequest request, HttpServletResponse response) {
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/xml");
+		try {
+			response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"Dish"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

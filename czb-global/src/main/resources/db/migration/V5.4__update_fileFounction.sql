@@ -1,0 +1,1 @@
+alter table czb_file_function add order_num INTEGER(3) DEFAULT 1 COMMENT '图片顺序';

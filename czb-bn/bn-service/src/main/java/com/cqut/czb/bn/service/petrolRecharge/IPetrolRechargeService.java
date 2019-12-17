@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 public interface IPetrolRechargeService {
     PageInfo<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO);
 
-    boolean recharge(String record);
+    boolean recharge(PetrolRechargeInputDTO record);
 
     Workbook exportRechargeRecords(PetrolRechargeInputDTO inputDTO) throws Exception;
 }

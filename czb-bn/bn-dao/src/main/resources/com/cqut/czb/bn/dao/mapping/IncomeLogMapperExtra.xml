@@ -28,7 +28,7 @@
     select 
     <include refid="Base_Column_List" />
     from czb_income_log
-    where record_id = #{recordId,jdbcType=VARCHAR}
+    where record_id = #{recordId,jdbcType=VARCHAR} AND is_settlement = 0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_income_log
@@ -40,15 +40,36 @@
       souse_id, create_at, update_at, 
       withdraw_to, withdraw_name, withdraw_account,
         commission_source_user, commission_got_user,
-        commission_level
+        commission_level, target_year_month, is_settlement,
+      partner_commission_level
       )
     values (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
       #{infoId,jdbcType=VARCHAR}, #{beforeChangeIncome,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
       #{souseId,jdbcType=VARCHAR}, now(), now(),
       #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE},
       #{commissionSourceUser,jdbcType=VARCHAR}, #{commissionGotUser,jdbcType=VARCHAR}
-      ,#{commissionLevel,jdbcType=INTEGER})
+      ,#{commissionLevel,jdbcType=INTEGER}, #{targetYearMonth,jdbcType=TIMESTAMP}, #{isSettlement,jdbcType=INTEGER},
+      #{partnerCommissionLevel,jdbcType=INTEGER})
   </insert>
+
+  <insert id="insertTest" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
+    insert into czb_income_log (record_id, amount, type,
+    info_id, before_change_income, remark,
+    souse_id, create_at, update_at,
+    withdraw_to, withdraw_name, withdraw_account,
+    commission_source_user, commission_got_user,
+    commission_level, target_year_month, is_settlement,
+      partner_commission_level
+    )
+    values (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER},
+    #{infoId,jdbcType=VARCHAR}, #{beforeChangeIncome,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR},
+    #{souseId,jdbcType=VARCHAR},  #{createAt,jdbcType=TIMESTAMP}, now(),
+    #{withdrawTo,jdbcType=VARCHAR}, #{withdrawName,jdbcType=VARCHAR}, #{withdrawAccount,jdbcType=DOUBLE},
+    #{commissionSourceUser,jdbcType=VARCHAR}, #{commissionGotUser,jdbcType=VARCHAR}
+    ,#{commissionLevel,jdbcType=INTEGER}, #{targetYearMonth,jdbcType=TIMESTAMP}, #{isSettlement,jdbcType=INTEGER},
+      #{partnerCommissionLevel,jdbcType=INTEGER})
+  </insert>
+
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" >
     insert into czb_income_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -88,6 +109,24 @@
       <if test="withdrawAccount != null" >
         withdraw_account,
       </if>
+      <if test="commissionSourceUser != null" >
+        commission_source_user,
+      </if>
+      <if test="commissionGotUser != null" >
+        commission_got_user,
+      </if>
+      <if test="commissionLevel != null" >
+        commission_level,
+      </if>
+      <if test="targetYearMonth != null" >
+        target_year_month,
+      </if>
+      <if test="isSettlement != null" >
+        is_settlement,
+      </if>
+      <if test="partnerCommissionLevel != null" >
+        partner_commission_level,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -125,6 +164,24 @@
       </if>
       <if test="withdrawAccount != null" >
         #{withdrawAccount,jdbcType=DOUBLE},
+      </if>
+      <if test="commissionSourceUser != null" >
+        #{commissionSourceUser,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionGotUser != null" >
+        #{commissionGotUser,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionLevel != null" >
+        #{commissionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="targetYearMonth != null" >
+        #{targetYearMonth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSettlement != null" >
+        #{isSettlement,jdbcType=INTEGER},
+      </if>
+      <if test="partnerCommissionLevel != null" >
+        #{partnerCommissionLevel,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -164,6 +221,24 @@
       <if test="withdrawAccount != null" >
         withdraw_account = #{withdrawAccount,jdbcType=DOUBLE},
       </if>
+      <if test="commissionSourceUser != null" >
+        commission_source_user = #{commissionSourceUser,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionGotUser != null" >
+        commission_got_user = #{commissionGotUser,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionLevel != null" >
+        commission_level = #{commissionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="targetYearMonth != null" >
+        target_year_month = #{targetYearMonth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSettlement != null" >
+        is_settlement = #{isSettlement,jdbcType=INTEGER},
+      </if>
+      <if test="partnerCommissionLevel != null" >
+        partner_commission_level = #{partnerCommissionLevel,jdbcType=INTEGER},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -194,15 +269,67 @@
     withdraw_name as withdrawName,
 	commission_level as commissionLevel,
 	commission_got_user as commissionGotUser,
-	commission_source_user as commissionSourceUser
+	commission_source_user as commissionSourceUser,
+	czb_user.user_account as userAccount,
+	czb_user.user_name as userName
+    from
+    czb_income_log as i,
+    czb_user_income_info as u,
+    czb_user
+    WHERE
+    czb_user.user_id = commission_source_user AND
+    u.user_id = #{userId,jdbcType=VARCHAR} AND
+    i.info_id=u.info_id AND
+    i.type=#{type,jdbcType=INTEGER} and
+    i.amount!=0 AND (i.is_settlement = 0 or i.is_settlement is null)
+    ORDER BY i.create_at DESC
+  </select>
+
+  <select id="selectIncomeLog2" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO" parameterType="com.cqut.czb.bn.entity.dto.appPersonalCenter.MyIncomeLogDTO" >
+    SELECT
+    amount,
+    before_change_income as beforeChangeIncome,
+    remark ,
+    i.update_at as updateAt,
+    i.create_at as createAt,
+    withdraw_to as withdrawTo,
+    withdraw_account as withdrawAccount,
+    withdraw_name as withdrawName,
+    commission_level as commissionLevel,
+    commission_got_user as commissionGotUser,
+    commission_source_user as commissionSourceUser
     from
     czb_income_log as i,
     czb_user_income_info as u
     WHERE
     user_id = #{userId,jdbcType=VARCHAR} AND
     i.info_id=u.info_id AND
-    i.type=#{type,jdbcType=INTEGER}
+    i.type=#{type,jdbcType=INTEGER} and
+    i.amount!=0 AND (i.is_settlement = 0 or i.is_settlement is null)
     ORDER BY i.create_at DESC
-  </select>
+</select>
 
+
+  <!--后台管理-提现记录-->
+  <select id="getLogData" parameterType="com.cqut.czb.bn.entity.entity.IncomeLog" resultType="com.cqut.czb.bn.entity.entity.IncomeLog">
+    SELECT
+        log.amount,
+        log.before_change_income beforeChangeIncome,
+        log.remark,
+        log.souse_id souseId,
+        log.create_at createAt,
+        log.withdraw_to withdrawTo,
+        log.withdraw_name withdrawName
+    FROM
+        czb_income_log log
+    WHERE
+        log.type = 1 AND is_settlement = 0
+        <if test="withdrawTo != null and withdrawTo != ''">
+           AND withdraw_to like concat('%', #{withdrawTo},'%')
+        </if>
+        <if test="withdrawName != null and withdrawName != ''">
+          AND withdraw_name LIKE concat('%', #{withdrawName},'%')
+        </if>
+    ORDER  BY createAt DESC
+  </select>
 </mapper>

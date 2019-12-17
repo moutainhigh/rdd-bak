@@ -13,6 +13,8 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.service.impl.DictServiceImpl;
+import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
+import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 该类是注册的api接口，密码使用BCryptPasswordEncoder加密
@@ -27,6 +31,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
     @Autowired
     UserDetailService userDetailService;
 
@@ -38,6 +43,9 @@ public class AuthController {
 
     @Autowired
     IDictService dictService;
+
+    @Autowired
+    ServerOrderServiceImpl serverOrderService;
 
     /**
      *  个人用户注册
@@ -52,6 +60,9 @@ public class AuthController {
             jsonResult.setData(false);
             return jsonResult;
         } else {
+            Map<String,String> content = new HashMap<>();
+            content.put("userAccount",personalUserDTO.getUserAccount());
+            serverOrderService.sendMessage(MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.REGISTER.getNoticeId(),content);
             jsonResult.setCode(ResponseCodeConstants.SUCCESS);
             jsonResult.setMessage(result);
             jsonResult.setData(true);
@@ -225,6 +236,23 @@ public class AuthController {
         }
     }
 
+
+    /**
+     * 游客登录直接插入验证码 Visitors to login
+     */
+    @PostMapping("/insertVCode")
+    public  JSONResult insertVCode(@Validated @RequestBody VerificationCodeDTO verificationCodeDTO){
+        //判断电话号码是否为空
+        if(verificationCodeDTO == null || verificationCodeDTO.getUserAccount() == null){
+            return new JSONResult(false);
+        }
+        boolean sendVerificationCode = userDetailService.insertVCode(verificationCodeDTO);
+        if(sendVerificationCode) {
+            return new JSONResult(true);
+        } else {
+            return new JSONResult(false);
+        }
+    }
 
 }
 

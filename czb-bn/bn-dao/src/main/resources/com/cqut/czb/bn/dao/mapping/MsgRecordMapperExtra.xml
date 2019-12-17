@@ -5,8 +5,8 @@
   <select id="selectMsgRecords" resultType="com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO" parameterType="java.lang.String" >
   select
         msg_announcer_id as msgAnnouncerId, msg_receiver_id as msgReceiverId,msg_record_id as msgRecordId,
-        msg_state as msgState, msg_title as msgTitle, msg_content as msgContent,czb_msg_model.msg_type AS msgType,
-        czb_msg_model.create_at as createAt
+        msg_state as msgState, msg_title as msgTitle, czb_msg_record.content as msgContent,czb_msg_model.msg_type AS msgType,
+        czb_msg_record.create_at as createAt
   from
           czb_msg_record,czb_msg_model
   WHERE
@@ -15,7 +15,7 @@
           msg_receiver_id = #{msgReceiverId,jdbcType=VARCHAR}
           AND
 		  czb_msg_record.create_at>UNIX_TIMESTAMP()
-		  ORDER BY msg_state ASC,msg_type ASC,czb_msg_model.create_at DESC
+		  ORDER BY msg_state ASC, msg_type DESC, czb_msg_record.create_at DESC
   </select>
 
     <select id="selectMsgNum" resultType="java.lang.Integer" parameterType="java.lang.String" >

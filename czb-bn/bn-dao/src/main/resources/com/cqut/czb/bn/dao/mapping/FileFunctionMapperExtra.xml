@@ -32,4 +32,8 @@
         )
     </insert>
 
+    <delete id="deleteByDeleteIds" >
+        delete from czb_file_function
+        where file_id in ( ${deleteIds} )
+    </delete>
 </mapper>

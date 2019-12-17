@@ -18,6 +18,16 @@ public class petrolInfoDTO {
 
     private double FYmoney2;//一级返佣的钱
 
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public double getVipPrice() {
         return vipPrice;
     }

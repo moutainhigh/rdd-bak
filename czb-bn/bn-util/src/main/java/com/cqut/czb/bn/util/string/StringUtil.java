@@ -10,6 +10,7 @@ public class StringUtil {
 
     private static final int DEFAULT_MAX_NUM = 100;
     private static Random random = new Random();
+    private static long lastWCUserId = 0;
 
     // 根据系统时间生成的字符串
     private static String timesString = "";
@@ -85,6 +86,20 @@ public class StringUtil {
         return returnTimesString + "" + random.nextInt(10) + "" + random.nextInt(10);
     }
 
+    /**
+     * 生成微信UserId
+     * @return
+     */
+
+    public synchronized static String createWCId() throws InterruptedException {
+        long wcUserId = System.currentTimeMillis();
+        while(wcUserId == lastWCUserId){
+            Thread.sleep(2);
+            wcUserId = System.currentTimeMillis();
+        }
+        lastWCUserId = wcUserId;
+        return String.valueOf(wcUserId);
+    }
 
     /**
      * 方法名称:transMapToString
