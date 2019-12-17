@@ -265,12 +265,16 @@
     <!--</select>-->
     <select id="selectAllShopInfo" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO">
         SELECT
-            shop_id shopId,
-            shop_name shopName,
-            user_id userId
-        FROM czb_shop
-        WHERE audit = 1
+	      shop_id shopId,
+	      shop_name shopName,
+	      czb_shop.user_id userId
+        FROM
+	      czb_shop
+	    LEFT JOIN czb_user ON czb_user.user_id = czb_shop.user_id
+        WHERE
+        audit = 1
         AND shop_type = 3
+        AND czb_user.user_type = 2
     </select>
 
 </mapper>
