@@ -555,14 +555,13 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
         LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
-        AND ( pay_status = 1 OR pay_status IS NULL )
         AND czb_wechat_commodity.end_time_business &gt;= now()
         AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
         GROUP BY
