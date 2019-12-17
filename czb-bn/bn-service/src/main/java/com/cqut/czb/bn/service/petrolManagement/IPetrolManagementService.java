@@ -6,11 +6,13 @@ import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
 import java.io.InputStream;
+import java.util.List;
 
 public interface IPetrolManagementService {
     PageInfo<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO);
@@ -33,5 +35,7 @@ public interface IPetrolManagementService {
     String getPetrolSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO);
 
     JSONResult changePetrolNum(PetrolRechargeInputDTO inputDTO);
+
+    List<Dict> getPayInstruction();
 
 }

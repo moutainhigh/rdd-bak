@@ -7,19 +7,23 @@ package com.cqut.czb.bn.entity.dto.PayConfig;
  */
 public class WeChatPayConfig {
 
-	// 密钥key
+	// 密钥key（爱动）
 	public static final String key = "CHONGQINGAiDonginformation201808";
+
+	//小程序（人多多）
+	public static final String skey="jD1qNX96o5KSPomZ4xv8cdelsMhz9nnL";
 
 	// 公众账号ID
 	public static final String app_id = "wxec50dac5d04a0c9f";
 
+	//人多多小程序
 	public static final String sapp_id = "wxd2d0171429ac208f";
 
-	// 商户号
+	// app商户号
 	public static final String mch_id = "1512674051";
 
 	// 小程序商户号
-	public static final String smch_id = "1518310071";
+	public static final String smch_id = "1566253131";
 
 	// 签名类型
 	public static final String sign_type = "MD5";

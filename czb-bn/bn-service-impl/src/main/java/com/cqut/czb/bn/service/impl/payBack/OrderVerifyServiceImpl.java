@@ -148,8 +148,11 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		for (Map.Entry<String, Object> entry : restmap.entrySet()) {
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
-		String signnow = WeChatUtils.createSign(characterEncoding, sortedMap);
-		if (sign.equals(signnow)) {
+		//爱动key
+		String signNow = WeChatUtils.createSign(characterEncoding, sortedMap);
+		//人多多key
+		String signNowRdd = WeChatUtils.createRddSign(characterEncoding, sortedMap);
+		if (sign.equals(signNow)||sign.equals(signNowRdd)) {
 			return true;
 		} else {
 			return false;
