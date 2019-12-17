@@ -51,15 +51,16 @@ public class AppRechargeVipController {
      */
     @RequestMapping(value = "/WeChatRechargeVip", method = RequestMethod.POST)
     public JSONResult WeChatRechargeVip(Principal principal,@RequestBody RechargeVipDTO rechargeVipDTO) {
-        User user = (User)redisUtils.get(principal.getName());
-//        User user=new User();
-//        user.setUserId("155892403286206");
-//        rechargeVipDTO.setArea("重庆市");
-        JSONObject info =appRechargeVipService.WeChatRechargeVip(user,rechargeVipDTO);
-        if(info==null){
-            return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
-        }else {
-            return  new JSONResult("购买成功",200,info);
-        }
+        return new JSONResult("暂不支持微信支付",ResponseCodeConstants.FAILURE);
+        //        User user = (User)redisUtils.get(principal.getName());
+////        User user=new User();
+////        user.setUserId("155892403286206");
+////        rechargeVipDTO.setArea("重庆市");
+//        JSONObject info =appRechargeVipService.WeChatRechargeVip(user,rechargeVipDTO);
+//        if(info==null){
+//            return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
+//        }else {
+//            return  new JSONResult("购买成功",200,info);
+//        }
     }
 }
