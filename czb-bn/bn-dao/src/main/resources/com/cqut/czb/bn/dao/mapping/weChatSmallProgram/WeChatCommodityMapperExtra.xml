@@ -555,7 +555,7 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
