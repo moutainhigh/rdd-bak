@@ -62,14 +62,6 @@ public class WCPCommodityAttrContent {
         this.extraSaleMoney = extraSaleMoney;
     }
 
-    public String getSrc() {
-        return src;
-    }
-
-    public void setSrc(String src) {
-        this.src = src;
-    }
-
     public String getName() {
         return name;
     }
