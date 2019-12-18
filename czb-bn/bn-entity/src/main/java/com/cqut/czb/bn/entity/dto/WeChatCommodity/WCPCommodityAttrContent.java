@@ -22,6 +22,14 @@ public class WCPCommodityAttrContent {
 
     private String content;
 
+    public String getSavePath() {
+        return savePath;
+    }
+
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
+    }
+
     public String getCommodityAttrId() {
         return commodityAttrId;
     }
