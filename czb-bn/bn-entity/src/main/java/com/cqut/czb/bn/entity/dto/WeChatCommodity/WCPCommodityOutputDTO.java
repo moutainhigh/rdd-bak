@@ -53,6 +53,16 @@ public class WCPCommodityOutputDTO {
 
     private String commodityIntroduce;
 
+    List<WCPCommodityAttrName> attrs;
+
+    public List<WCPCommodityAttrName> getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(List<WCPCommodityAttrName> attrs) {
+        this.attrs = attrs;
+    }
+
     public Double getTotalFyMoney() {
         return totalFyMoney;
     }

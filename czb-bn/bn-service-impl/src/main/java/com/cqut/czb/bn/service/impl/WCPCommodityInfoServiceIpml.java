@@ -66,7 +66,7 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 //            }
 //        }
         Dict dict = dictMapperExtra.selectDictByName("sp_fy1");
-        if(dict != null){
+        if(dict != null && wcpCommodityOutputDTO != null){
             Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getTotalFyMoney();
             BigDecimal bd = new BigDecimal(num);
             wcpCommodityOutputDTO.setFyMoney((int)bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
