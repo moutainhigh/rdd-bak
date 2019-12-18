@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WechatCommodityAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
+    <id column="commodity_attr_id" property="commodityAttrId" jdbcType="VARCHAR" />
+    <result column="extra_fy_money" property="extraFyMoney" jdbcType="DOUBLE" />
+    <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+    <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+    <result column="extra_sale_money" property="extraSaleMoney" jdbcType="DOUBLE" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="attr_order" property="attrOrder" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    commodity_attr_id, extra_fy_money, commodity_id, attribute_id, extra_sale_money, 
+    file_id, attr_order, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_wechat_commodity_attr
+    where commodity_attr_id = #{commodityAttrId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_wechat_commodity_attr
+    where commodity_attr_id = #{commodityAttrId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
+    insert into czb_wechat_commodity_attr (commodity_attr_id, extra_fy_money, commodity_id, 
+      attribute_id, extra_sale_money, file_id, 
+      attr_order, create_at, update_at
+      )
+    values (#{commodityAttrId,jdbcType=VARCHAR}, #{extraFyMoney,jdbcType=DOUBLE}, #{commodityId,jdbcType=VARCHAR}, 
+      #{attributeId,jdbcType=VARCHAR}, #{extraSaleMoney,jdbcType=DOUBLE}, #{fileId,jdbcType=VARCHAR}, 
+      #{attrOrder,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
+    insert into czb_wechat_commodity_attr
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commodityAttrId != null" >
+        commodity_attr_id,
+      </if>
+      <if test="extraFyMoney != null" >
+        extra_fy_money,
+      </if>
+      <if test="commodityId != null" >
+        commodity_id,
+      </if>
+      <if test="attributeId != null" >
+        attribute_id,
+      </if>
+      <if test="extraSaleMoney != null" >
+        extra_sale_money,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="attrOrder != null" >
+        attr_order,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commodityAttrId != null" >
+        #{commodityAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="extraFyMoney != null" >
+        #{extraFyMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityId != null" >
+        #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null" >
+        #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="extraSaleMoney != null" >
+        #{extraSaleMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrOrder != null" >
+        #{attrOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
+    update czb_wechat_commodity_attr
+    <set >
+      <if test="extraFyMoney != null" >
+        extra_fy_money = #{extraFyMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityId != null" >
+        commodity_id = #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null" >
+        attribute_id = #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="extraSaleMoney != null" >
+        extra_sale_money = #{extraSaleMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrOrder != null" >
+        attr_order = #{attrOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where commodity_attr_id = #{commodityAttrId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
+    update czb_wechat_commodity_attr
+    set extra_fy_money = #{extraFyMoney,jdbcType=DOUBLE},
+      commodity_id = #{commodityId,jdbcType=VARCHAR},
+      attribute_id = #{attributeId,jdbcType=VARCHAR},
+      extra_sale_money = #{extraSaleMoney,jdbcType=DOUBLE},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      attr_order = #{attrOrder,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where commodity_attr_id = #{commodityAttrId,jdbcType=VARCHAR}
+  </update>
+</mapper>

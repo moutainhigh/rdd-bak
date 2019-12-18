@@ -279,7 +279,13 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         }else {
             // 发送短信
             WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
-            PhoneCode.sendAppletShopMessage(order1.getPhone(),weChatCommodity.getCommodityTitle(),order1.getCommodityNum(),order1.getElectronicCode());
+            String title="";
+            if(weChatCommodity.getCommodityTitle().length()>20){
+                title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
+            }else {
+                title=weChatCommodity.getCommodityTitle();
+            }
+            PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode());
         }
 
        //查询是否为首次消费

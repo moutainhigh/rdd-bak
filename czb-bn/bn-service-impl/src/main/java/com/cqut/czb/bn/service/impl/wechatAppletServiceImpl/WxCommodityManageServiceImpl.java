@@ -25,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class WxCommodityManageServiceImpl implements WxCommodityManageService {
@@ -84,6 +86,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
         wxCommodityDTO.setUpdateAt(new Date());
+        //将富文本编辑器中的图片url改为http请求
+        if (wxCommodityDTO.getCommodityIntroduce()!=null)
+        wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
         String address = "";
         if (file != null && !file.isEmpty()) {
             //插入图片
@@ -137,9 +142,32 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean updateCommodity(WxCommodityDTO wxCommodityDTO) {
-        if(wxCommodityDTO.getCommodityId() == null || wxCommodityDTO.getCommodityImgId() == "")
+        if(wxCommodityDTO.getCommodityId() == null ||   "".equals(wxCommodityDTO.getCommodityImgId()) )
             return false;
         Boolean deleteImgs = true;
+        if (wxCommodityDTO.getCommodityIntroduce()!=null){
+            //将富文本编辑器中的图片url改为http请求
+            wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
+            String pattern = "(<img)(.*?)(/>)";
+            // 创建 Pattern 对象
+            Pattern r = Pattern.compile(pattern);
+            // 创建 matcher 对象
+            Matcher m = r.matcher(wxCommodityDTO.getCommodityIntroduce());
+            //将所有img标签没有style的都加上宽度
+            while(m.find())
+            {
+                System.out.println(m.group());
+                String exp = m.group();
+                if (exp.indexOf("style=\"")<0) {
+                    StringBuffer str = new StringBuffer(exp);
+                    str.insert(4," style=\"width:100%\" ");
+                    wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace(exp,str));
+                }
+
+
+            }
+        }
+
         if(wxCommodityDTO.getDeleteIds() != null && !"".equals(wxCommodityDTO.getDeleteIds())){
             deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
@@ -182,6 +210,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
+            //将富文本编辑器中的图片url改为http请求
+            if (wxCommodityDTO.getCommodityIntroduce()!=null)
+                wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
             if(wxCommodityDTO.getInsertType() == 1){
                 fileFunction.setGroupCode("WCCommodity");
                 insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;

@@ -22,6 +22,7 @@
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
     <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+    <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
     <result column="orderState" property="orderState" jdbcType="VARCHAR" />
     <collection property="commodityImgList" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
   </resultMap>
@@ -50,7 +51,8 @@
       czb_address.contact_number contactNumber,
       czb_address.receiver receiver,
       commodity_img_id commodityImgId,
-      czb_shop.shop_name shopName
+      czb_shop.shop_name shopName,
+      czb_shop.shop_phone shopPhone
     FROM
 	  czb_wechat_commodity_order
 	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -101,7 +103,8 @@
       czb_wechat_commodity.original_price originalPrice,
       czb_wechat_commodity_order.create_at createAt,
       commodity_img_id commodityImgId,
-      czb_shop.shop_name shopName
+      czb_shop.shop_name shopName,
+      czb_shop.shop_phone shopPhone
     FROM
 	  czb_wechat_commodity_order
 	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -139,7 +142,8 @@
       czb_wechat_commodity.original_price originalPrice,
       czb_wechat_commodity_order.create_at createAt,
       commodity_img_id commodityImgId,
-      czb_shop.shop_name shopName
+      czb_shop.shop_name shopName,
+      czb_shop.shop_phone shopPhone
     FROM
 	  czb_wechat_commodity_order
 	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -180,7 +184,8 @@
       czb_address.contact_number contactNumber,
       czb_address.receiver receiver,
       commodity_img_id commodityImgId,
-      czb_shop.shop_name shopName
+      czb_shop.shop_name shopName,
+      czb_shop.shop_phone shopPhone
     FROM
 	  czb_wechat_commodity_order
 	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -219,7 +224,8 @@
       czb_address.contact_number contactNumber,
       czb_address.receiver receiver,
       commodity_img_id commodityImgId,
-      czb_shop.shop_name shopName
+      czb_shop.shop_name shopName,
+      czb_shop.shop_phone shopPhone
     FROM
 	  czb_wechat_commodity_order
 	  LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
