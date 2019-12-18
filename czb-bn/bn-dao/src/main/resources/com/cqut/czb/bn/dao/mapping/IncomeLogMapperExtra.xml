@@ -330,6 +330,9 @@
         <if test="withdrawName != null and withdrawName != ''">
           AND withdraw_name LIKE concat('%', #{withdrawName},'%')
         </if>
+        <if test="infoId != null and infoId != ''">
+          AND log.info_id = #{infoId}
+        </if>
     ORDER  BY createAt DESC
   </select>
 </mapper>

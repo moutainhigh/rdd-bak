@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatWithdrawMapperExtra" >
+    <select id="selectWithdrawList" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO">
+		SELECT
+		  a.user_id userId,
+		  a.user_account account,
+		  a.user_name name ,
+		  a.create_at createAt,
+		  ( fanyong_income + share_income + other_income - withdrawed ) withdraw,
+		  withdrawed withdrawed,
+		  info_id infoId
+		FROM
+		  (
+		SELECT
+			c.user_id,
+			c.user_name,
+			c.create_at,
+			c.user_type,
+			b.user_account
+		FROM
+			czb_user c
+			LEFT JOIN ( SELECT d.user_id, d.user_account FROM czb_user d ) AS b ON c.bindingId = b.user_id
+		) AS a
+		   LEFT OUTER JOIN czb_user_income_info ON a.user_id = czb_user_income_info.user_id
+
+			<where>
+			    a.user_type = 2
+				<if test="name != null and name != ''">
+				    and	a.user_name like concat('%', #{name},'%')
+				</if>
+				<if test="account != null and account != ''">
+					and a.user_account like concat('%', #{account},'%')
+				</if>
+				<if test="startTime != null and endTime != ''">
+					and a.create_at between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+				</if>
+
+			</where>
+		ORDER BY a.create_at DESC
+    </select>
+	<select id="getBalance"  resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatBalanceRecord">
+		select ( fanyong_income + share_income + other_income - withdrawed ) balance
+		from czb_user_income_info
+		where info_id = #{infoId,jdbcType=VARCHAR}
+	</select>
+	<update id="increaseWithdrawed" parameterType="java.lang.String">
+        UPDATE czb_user_income_info
+        SET withdrawed = withdrawed + #{paymentAmount}
+        WHERE info_id = #{infoId}
+    </update>
+	<insert id="insertIncomeLog" parameterType="com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO">
+        INSERT INTO czb.czb_income_log (
+            record_id,
+            amount,
+            type,
+            info_id,
+            before_change_income,
+            remark,
+            souse_id,
+            withdraw_to,
+            withdraw_name,
+            withdraw_account,
+            create_at,
+            update_at
+        )
+        VALUES
+            (
+                #{recordId},
+                #{amount},
+                #{type},
+                #{infoId},
+                #{beforeChangeIncome},
+                #{remark},
+                #{sourceId},
+                #{withdrawTo},
+                #{withdrawName},
+                #{withdrawAmount},
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP
+            );
+    </insert>
+</mapper>
