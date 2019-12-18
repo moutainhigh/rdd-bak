@@ -2,7 +2,7 @@ package com.cqut.czb.bn.entity.entity.weChatSmallProgram;
 
 import java.util.Date;
 
-public class WechatCommodityAttr {
+public class WeChatCommodityAttr {
     private String commodityAttrId;
 
     private Double extraFyMoney;
