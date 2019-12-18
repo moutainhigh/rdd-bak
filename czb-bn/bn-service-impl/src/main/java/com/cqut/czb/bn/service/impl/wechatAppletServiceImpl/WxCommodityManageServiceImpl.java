@@ -84,6 +84,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
         wxCommodityDTO.setUpdateAt(new Date());
+        //将富文本编辑器中的图片url改为http请求
+        if (wxCommodityDTO.getCommodityIntroduce()!=null)
+        wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
         String address = "";
         if (file != null && !file.isEmpty()) {
             //插入图片
@@ -137,9 +140,12 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public Boolean updateCommodity(WxCommodityDTO wxCommodityDTO) {
-        if(wxCommodityDTO.getCommodityId() == null || wxCommodityDTO.getCommodityImgId() == "")
+        if(wxCommodityDTO.getCommodityId() == null ||   "".equals(wxCommodityDTO.getCommodityImgId()) )
             return false;
         Boolean deleteImgs = true;
+        //将富文本编辑器中的图片url改为http请求
+        if (wxCommodityDTO.getCommodityIntroduce()!=null)
+            wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
         if(wxCommodityDTO.getDeleteIds() != null && !"".equals(wxCommodityDTO.getDeleteIds())){
             deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
@@ -182,6 +188,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             fileFunction.setLocalId(wxCommodityDTO.getCommodityImgId());
             fileFunction.setCreateAt(new Date());
             fileFunction.setUpdateAt(new Date());
+            //将富文本编辑器中的图片url改为http请求
+            if (wxCommodityDTO.getCommodityIntroduce()!=null)
+                wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
             if(wxCommodityDTO.getInsertType() == 1){
                 fileFunction.setGroupCode("WCCommodity");
                 insertImg = fileFunctionMapper.insertSelective(fileFunction) > 0 && fileMapper.insertSelective(file1) > 0;
