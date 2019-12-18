@@ -16,7 +16,7 @@ public class WCPCommodityAttrContent {
 
     private String extraSaleMoney;
 
-    private String src;
+    private String savePath;
 
     private String name;
 
