@@ -106,10 +106,10 @@
   </select>
 
   <select id="selectRoleList" resultType="java.lang.String">
-    SELECT czb_user_role.role_id
+    SELECT czb_role.role_name
     FROM czb_user
-    LEFT JOIN czb_user_role
-    ON czb_user.user_id = czb_user_role.user_id
+    LEFT JOIN czb_user_role ON czb_user.user_id = czb_user_role.user_id
+    LEFT JOIN czb_role ON czb_user_role.role_id = czb_role.role_id
     WHERE czb_user_role.user_id = #{userId, jdbcType=VARCHAR}
   </select>
 
