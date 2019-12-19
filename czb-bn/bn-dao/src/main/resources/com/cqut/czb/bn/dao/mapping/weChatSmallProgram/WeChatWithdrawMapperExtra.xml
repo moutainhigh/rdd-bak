@@ -33,11 +33,11 @@
 					and a.user_account like concat('%', #{account},'%')
 				</if>
 				<if test="startTime != null and endTime != ''">
-					and a.create_at between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+					and a.create_at between #{startTime} and #{endTime}
 				</if>
 
 			</where>
-		ORDER BY a.create_at DESC
+		ORDER BY withdraw DESC
     </select>
 	<select id="getBalance"  resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatBalanceRecord">
 		select ( fanyong_income + share_income + other_income - withdrawed ) balance

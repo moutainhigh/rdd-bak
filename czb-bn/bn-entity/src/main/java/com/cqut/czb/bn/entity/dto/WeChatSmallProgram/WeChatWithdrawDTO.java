@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -14,7 +15,8 @@ public class WeChatWithdrawDTO extends PageDTO {
 
     private String name;
 
-    private String createAt;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date createAt;
 
     private double withdrawed;
 
@@ -88,11 +90,11 @@ public class WeChatWithdrawDTO extends PageDTO {
         this.endTime = endTime;
     }
 
-    public String getCreateAt() {
+    public Date getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(String createAt) {
+    public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
 }
