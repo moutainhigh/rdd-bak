@@ -97,9 +97,28 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
         wxCommodityDTO.setUpdateAt(new Date());
-        //将富文本编辑器中的图片url改为http请求
-        if (wxCommodityDTO.getCommodityIntroduce()!=null)
-        wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
+        if (wxCommodityDTO.getCommodityIntroduce()!=null){
+            //将富文本编辑器中的图片url改为http请求
+            wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
+            String pattern = "(<img)(.*?)(/>)";
+            // 创建 Pattern 对象
+            Pattern r = Pattern.compile(pattern);
+            // 创建 matcher 对象
+            Matcher m = r.matcher(wxCommodityDTO.getCommodityIntroduce());
+            //将所有img标签没有style的都加上宽度
+            while(m.find())
+            {
+                System.out.println(m.group());
+                String exp = m.group();
+                if (exp.indexOf("style=\"")<0) {
+                    StringBuffer str = new StringBuffer(exp);
+                    str.insert(4," style=\"width:100%\" ");
+                    wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace(exp,str));
+                }
+
+
+            }
+        }
         String address = "";
         if (file != null && !file.isEmpty()) {
             //插入图片
