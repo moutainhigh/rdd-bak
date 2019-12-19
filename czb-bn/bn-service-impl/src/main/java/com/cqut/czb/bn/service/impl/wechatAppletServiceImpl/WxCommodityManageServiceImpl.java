@@ -6,13 +6,12 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
-import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
+import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.FileFunction;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category;
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.service.wechatAppletService.WxCommodityManageService;
 import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -73,6 +72,18 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 //            }
 //        }
         return new PageInfo<>(weChatCommodityMapperExtra.selectAllCommodity(wxCommodityDTO));
+    }
+
+    /**
+     * 获取商品属性信息
+     * @param commodityId
+     * @param pageDTO
+     * @return
+     */
+    @Override
+    public PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, String userId) {
+        PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
+        return new PageInfo<>(weChatCommodityMapperExtra.selectAllWxAttribute(WxAttributeDTO));
     }
 
     @Override
@@ -140,6 +151,16 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         return false;
     }
 
+    /**
+     * 获取商品类型的ID
+     * @param wxAttributeDTO
+     * @return
+     */
+    @Override
+    public String getAttributeId(WxAttributeDTO wxAttributeDTO) {
+        return weChatCommodityMapperExtra.getAttributeId(wxAttributeDTO);
+    }
+
     @Override
     public Boolean updateCommodity(WxCommodityDTO wxCommodityDTO) {
         if(wxCommodityDTO.getCommodityId() == null ||   "".equals(wxCommodityDTO.getCommodityImgId()) )
@@ -184,6 +205,8 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     public List<Category> selectAllCategory() {
         return categoryMapperExtra.selectAllCategory();
     }
+
+
 
     @Override
     public Boolean haltOrOnSales(String ids, Integer type) {
@@ -241,5 +264,22 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     @Override
     public List<ShopInfoDTO> getAllShopInfo() {
         return shopMapperExtra.selectAllShopInfo();
+    }
+
+    /**
+     * 新增商品属性
+     * @param wxAttributeDTO
+     * @param user
+     * @return
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    @Override
+    public Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, User user) throws InterruptedException, IOException {
+        wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
+        wxAttributeDTO.setCommodityId(StringUtil.createWCId());
+        wxAttributeDTO.setCreateAt(new Date());
+        wxAttributeDTO.setUpdateAt(new Date());
+        return weChatCommodityMapperExtra.insertAttrbute(wxAttributeDTO) > 0;
     }
 }
