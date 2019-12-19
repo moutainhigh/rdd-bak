@@ -201,7 +201,7 @@ public class MyWalletImpl implements MyWallet {
 
         } catch (AlipayApiException e) {
             e.printStackTrace();
-            return new JSONResult("提现过程中出先未知错误", 200, string);
+            return new JSONResult("提现过程中出现未知错误", 200, string);
         }
 
     }

@@ -2,7 +2,9 @@ package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
+import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -34,6 +36,26 @@ public interface WeChatCommodityMapperExtra {
     WCPCommodityOutputDTO selectCommodityById(String commodityId);
 
     Integer insertCommodity(WxCommodityDTO wxCommodityDTO);
+
+    /**
+     * 新增商品属性
+     * @param wxAttributeDTO
+     * @return
+     */
+    Integer insertAttrbute(WxAttributeDTO wxAttributeDTO);
+
+    /**
+     * 获取商品属性ID
+     * @param wxAttributeDTO
+     * @return
+     */
+    String getAttributeId(WxAttributeDTO wxAttributeDTO);
+
+    /**
+     * 读取全部数据
+     * @return
+     */
+    List<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO wxAttributeDTO);
 
     Integer updateCommodity(WxCommodityDTO wxCommodityDTO);
 

@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.AddressMapperExtra;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.ShopMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.CategoryMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatBackDTO;
@@ -15,6 +16,7 @@ import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
 import com.cqut.czb.bn.util.md5.MD5Util;
@@ -45,6 +47,9 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
 
     @Autowired
     CategoryMapperExtra categoryMapperExtra;
+
+    @Autowired
+    WeChatCommodityAttrMapperExtra weChatCommodityAttrMapperExtra;
 
     public Boolean inputOrder(String orgId,WeChatCommodity weChatCommodity,User user, PayInputDTO payInputDTO){
         //插入预支付订单
@@ -102,6 +107,11 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
 
     @Override
     public WeChatBackDTO WeChatAppletBuyCommodity(User user, PayInputDTO payInputDTO) {
+
+        if (payInputDTO==null){
+            return null;
+        }
+
         //查出商品信息
         WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(payInputDTO.getCommodityId());
         if(weChatCommodity==null){
@@ -112,7 +122,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
          */
         String orgId = String.valueOf(System.currentTimeMillis()+(int)(1+Math.random()*(10000-1+1)));
         String nonceStrTemp = WeChatUtils.getRandomStr();
-        double money= BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).doubleValue();
+        double money= BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
         //插入订单
         inputOrder( orgId, weChatCommodity, user,  payInputDTO);
@@ -132,4 +142,39 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatBackDTO.setPaySignStr(paySignStr);
         return weChatBackDTO;
     }
+
+    //计算价格
+    public Map getPayMoney(WeChatCommodity weChatCommodity,PayInputDTO payInputDTO){
+
+        Map map=new HashMap();
+
+        Double money= BigDecimal.valueOf(weChatCommodity.getSalePrice()).multiply(BigDecimal.valueOf(Integer.valueOf(payInputDTO.getCommodityNum()))).doubleValue();
+
+        Double fyMoney=BigDecimal.valueOf(weChatCommodity.getFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum())).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        if(payInputDTO.getCommodityAttrIds().size()==0){
+            map.put("money",money);
+            map.put("fyMoney",fyMoney);
+            return map;
+        }
+
+        //存在属性值
+        List<WeChatCommodityAttr> weChatCommodityAttrs= weChatCommodityAttrMapperExtra.selectByPrimaryKeys(payInputDTO.getCommodityAttrIds());
+
+        if(weChatCommodityAttrs==null){
+            map.put("money",money);
+            map.put("fyMoney",fyMoney);
+            return map;
+        }
+
+        for (int i=0;i<weChatCommodityAttrs.size();i++){
+            fyMoney=BigDecimal.valueOf(fyMoney).add(BigDecimal.valueOf(weChatCommodityAttrs.get(i).getExtraFyMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            money=BigDecimal.valueOf(money).add(BigDecimal.valueOf(weChatCommodityAttrs.get(i).getExtraSaleMoney()).multiply(BigDecimal.valueOf(payInputDTO.getCommodityNum()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        }
+
+        map.put("money",money);
+        map.put("fyMoney",fyMoney);
+        return map;
+    }
+
 }

@@ -16,11 +16,19 @@ public class WCPCommodityAttrContent {
 
     private String extraSaleMoney;
 
-    private String src;
+    private String savePath;
 
     private String name;
 
     private String content;
+
+    public String getSavePath() {
+        return savePath;
+    }
+
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
+    }
 
     public String getCommodityAttrId() {
         return commodityAttrId;
@@ -60,14 +68,6 @@ public class WCPCommodityAttrContent {
 
     public void setExtraSaleMoney(String extraSaleMoney) {
         this.extraSaleMoney = extraSaleMoney;
-    }
-
-    public String getSrc() {
-        return src;
-    }
-
-    public void setSrc(String src) {
-        this.src = src;
     }
 
     public String getName() {
