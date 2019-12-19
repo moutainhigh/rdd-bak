@@ -109,6 +109,25 @@
             </if>
         </where>
     </select>
+
+    <select id="selectAllWxAttribute" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
+            SELECT
+                czb_wechat_commodity_attr.commodity_attr_id AS commmodityAttrId,
+                czb_wechat_commodity_attr.extra_fy_money AS extraFyMoney,
+                czb_wechat_commodity_attr.commodity_id,
+                czb_wechat_commodity_attr.attribute_id AS attributeId,
+                czb_wechat_commodity_attr.extra_sale_money AS extraSaleMoney,
+                czb_wechat_commodity_attr.file_id AS fileId,
+                czb_wechat_commodity_attr.attr_order AS attrOrder,
+                czb_attribute.`name`,
+                czb_attribute.content
+            FROM
+                czb_wechat_commodity_attr,
+                czb_attribute
+            WHERE
+                commodity_id = #{commodityId}
+                AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id;
+    </select>
     <!--获取提供服务的地区列表-->
     <select id="getAreas" resultType="java.lang.String">
         select content
@@ -748,6 +767,77 @@
             </if>
             <if test="commodityIntroduce != null" >
                 #{commodityIntroduce,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getAttributeId" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultType="java.lang.String">
+        SELECT
+            attribute_id
+        FROM
+            czb_attribute
+        WHERE
+            content = #{content};
+    </select>
+
+    <insert id="insertAttrbute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
+        insert into czb_wechat_commodity_attr
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="commmodityAttrId != null" >
+                commodity_attr_id,
+            </if>
+            <if test="extraFyMoney != null" >
+                extra_fy_money,
+            </if>
+            <if test="commodityId != null" >
+                commodity_id,
+            </if>
+            <if test="attributeId != null" >
+                attribute_id,
+            </if>
+            <if test="extraSaleMoney != null" >
+                extra_sale_money,
+            </if>
+            <if test="fileId != null" >
+                file_id,
+            </if>
+            <if test="attrOrder != null" >
+                attr_order,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="commmodityAttrId != null" >
+                #{commmodityAttrId,jdbcType=VARCHAR},
+            </if>
+            <if test="extraFyMoney != null" >
+                #{extraFyMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityId != null" >
+                #{commodityId,jdbcType=VARCHAR},
+            </if>
+            <if test="attributeId != null" >
+                #{attributeId,jdbcType=INTEGER},
+            </if>
+            <if test="extraSaleMoney != null" >
+                #{extraSaleMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="fileId != null" >
+                #{fileId,jdbcType=VARCHAR},
+            </if>
+            <if test="attrOrder != null" >
+                #{attrOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
