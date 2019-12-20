@@ -1,17 +1,17 @@
 package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr;
 
 public interface WechatCommodityAttrMapper {
     int deleteByPrimaryKey(String commodityAttrId);
 
-    int insert(WechatCommodityAttr record);
+    int insert(WeChatCommodityAttr record);
 
-    int insertSelective(WechatCommodityAttr record);
+    int insertSelective(WeChatCommodityAttr record);
 
-    WechatCommodityAttr selectByPrimaryKey(String commodityAttrId);
+    WeChatCommodityAttr selectByPrimaryKey(String commodityAttrId);
 
-    int updateByPrimaryKeySelective(WechatCommodityAttr record);
+    int updateByPrimaryKeySelective(WeChatCommodityAttr record);
 
-    int updateByPrimaryKey(WechatCommodityAttr record);
+    int updateByPrimaryKey(WeChatCommodityAttr record);
 }

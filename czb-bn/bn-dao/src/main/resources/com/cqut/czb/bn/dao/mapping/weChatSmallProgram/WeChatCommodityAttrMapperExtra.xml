@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapperExtra" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
     <id column="commodity_attr_id" property="commodityAttrId" jdbcType="VARCHAR" />
     <result column="extra_fy_money" property="extraFyMoney" jdbcType="DOUBLE" />
     <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />

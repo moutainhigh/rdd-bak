@@ -115,7 +115,7 @@
         cost_price, original_price, sale_price, commmodity_type_id, czb_wechat_commodity.starting_time_business,
         czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_shop.shop_name,
         czb_wechat_commodity.shop_phone, czb_wechat_commodity.shop_content, czb_wechat_commodity.shop_address, czb_wechat_commodity.longitude, czb_wechat_commodity.latitude, is_have_shop, show_place,
-        show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney, czb_wechat_commodity.commodity_introduce commodityIntroduce
+        show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney, czb_wechat_commodity.commodity_introduce commodityIntroduce, area,sales_volume salesVolume
         from czb_wechat_commodity
         LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
@@ -500,8 +500,10 @@
         <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
+        <result column="salesVolume" property="salesVolume" jdbcType="INTEGER" />
         <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
         <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
+        <collection property="attrs" column="commodityId" javaType="list" select="selectCommodityAttrs"></collection>
     </resultMap>
 
     <select id="selectAllCommodityByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
@@ -525,7 +527,7 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
+        czb_wechat_commodity.sales_volume salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -543,6 +545,44 @@
           commodityId
         ORDER BY
           show_order
+    </select>
+
+    <resultMap id="attrsMap" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrName">
+        <result column="commodityId" property="commodityId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <collection property="contentList" column="{`name` = name, commodityId = commodityId}" javaType="list" select="selectAttrsByName"/>
+    </resultMap>
+
+    <select id="selectAttrsByName" resultType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrContent">
+        SELECT
+            czb_wechat_commodity_attr.attribute_id attributeId,
+            czb_wechat_commodity_attr.extra_fy_money extraFyMoney,
+            czb_wechat_commodity_attr.commodity_id commodityId,
+            czb_attribute.attribute_id attributeId,
+            czb_wechat_commodity_attr.extra_sale_money extraSaleMoney,
+            czb_file.save_path savePath,
+            czb_attribute.`name` `name`,
+            czb_attribute.content content
+        FROM
+            czb_wechat_commodity_attr
+            LEFT JOIN czb_attribute ON czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id
+            LEFT JOIN czb_file ON czb_wechat_commodity_attr.file_id = czb_file.file_id
+        WHERE
+            czb_wechat_commodity_attr.commodity_id = #{commodityId, jdbcType = VARCHAR}
+            AND czb_attribute.`name` = #{`name`, jdbcType = VARCHAR}
+        order by
+            czb_wechat_commodity_attr.attr_order
+    </select>
+
+    <select id="selectCommodityAttrs" parameterType="java.lang.String" resultMap="attrsMap">
+        SELECT DISTINCT
+            czb_attribute.`name` `name`,
+            czb_wechat_commodity_attr.commodity_id commodityId
+        FROM
+            czb_wechat_commodity_attr
+            LEFT JOIN czb_attribute ON czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id
+        WHERE
+            czb_wechat_commodity_attr.commodity_id = #{commodityId, jdbcType = VARCHAR}
     </select>
 
     <select id="selectPosterImgCount" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -607,7 +647,7 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
+        czb_wechat_commodity.sales_volume salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -712,6 +752,9 @@
             <if test="commodityIntroduce != null" >
                 commodity_introduce,
             </if>
+            <if test="area != null" >
+                area,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -800,6 +843,9 @@
             </if>
             <if test="commodityIntroduce != null" >
                 #{commodityIntroduce,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                #{area,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -962,6 +1008,12 @@
             </if>
             <if test="commodityIntroduce != null" >
                 commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="salesVolume != null" >
+                sales_volume = #{salesVolume,jdbcType=INTEGER},
             </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}

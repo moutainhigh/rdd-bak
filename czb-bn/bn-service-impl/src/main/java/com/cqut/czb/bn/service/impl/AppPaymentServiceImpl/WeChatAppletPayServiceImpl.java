@@ -15,7 +15,7 @@ import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
 import com.cqut.czb.bn.util.md5.MD5Util;
@@ -158,7 +158,7 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         }
 
         //存在属性值
-        List<WechatCommodityAttr> weChatCommodityAttrs= weChatCommodityAttrMapperExtra.selectByPrimaryKeys(payInputDTO.getCommodityAttrIds());
+        List<WeChatCommodityAttr> weChatCommodityAttrs= weChatCommodityAttrMapperExtra.selectByPrimaryKeys(payInputDTO.getCommodityAttrIds());
 
         if(weChatCommodityAttrs==null){
             map.put("money",money);
