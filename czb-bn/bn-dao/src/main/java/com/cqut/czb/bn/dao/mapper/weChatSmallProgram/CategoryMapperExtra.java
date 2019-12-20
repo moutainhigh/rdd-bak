@@ -18,6 +18,4 @@ public interface CategoryMapperExtra {
     int updateByPrimaryKey(Category record);
 
     List<Category> selectAllCategory();
-
-
 }

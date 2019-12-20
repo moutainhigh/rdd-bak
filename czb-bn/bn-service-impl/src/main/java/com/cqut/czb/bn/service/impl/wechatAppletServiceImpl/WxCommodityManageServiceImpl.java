@@ -76,11 +76,12 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     /**
      * 获取商品属性信息
+     * @param WxAttributeDTO
      * @param pageDTO
      * @return
      */
     @Override
-    public PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, String userId) {
+    public PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, User user) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
         return new PageInfo<>(weChatCommodityMapperExtra.selectAllWxAttribute(WxAttributeDTO));
     }
@@ -114,6 +115,8 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
                     str.insert(4," style=\"width:100%\" ");
                     wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace(exp,str));
                 }
+
+
             }
         }
         String address = "";
@@ -307,17 +310,43 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     /**
      * 新增商品属性
      * @param wxAttributeDTO
-     * @param user
      * @return
      * @throws InterruptedException
      * @throws IOException
      */
     @Override
-    public Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, User user) throws InterruptedException, IOException {
+    public Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws InterruptedException, IOException {
+        wxAttributeDTO.setCommmodityAttrId(StringUtil.createWCId());
+        wxAttributeDTO.setFileId(StringUtil.createId());
         wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
-        wxAttributeDTO.setCommodityId(StringUtil.createWCId());
         wxAttributeDTO.setCreateAt(new Date());
         wxAttributeDTO.setUpdateAt(new Date());
+        if(file != null && !file.isEmpty() && wxAttributeDTO.getFileId() != null && wxAttributeDTO.getFileId() != ""){
+            String address = "";
+            address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            File file1 = new File();
+            file1.setFileId(StringUtil.createId());
+            file1.setFileName(file.getOriginalFilename());
+            file1.setSavePath(address);
+            file1.setUploader(user.getUserId());
+            file1.setCreateAt(new Date());
+            file1.setUpdateAt(new Date());
+
+            FileFunction fileFunction = new FileFunction();
+            fileFunction.setId(StringUtil.createId());
+            fileFunction.setFileId(file1.getFileId());
+            fileFunction.setLocalId(wxAttributeDTO.getFileId());
+            fileFunction.setCreateAt(new Date());
+            fileFunction.setUpdateAt(new Date());
+            fileFunction.setGroupCode("WxAttribute");
+            fileFunctionMapper.insertSelective(fileFunction);
+        }
         return weChatCommodityMapperExtra.insertAttrbute(wxAttributeDTO) > 0;
+    }
+
+    @Override
+    public Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO) {
+        wxAttributeDTO.setUpdateAt(new Date());
+        return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO);
     }
 }

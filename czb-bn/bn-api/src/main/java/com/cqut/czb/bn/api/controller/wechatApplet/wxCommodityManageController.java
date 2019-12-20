@@ -38,10 +38,13 @@ public class wxCommodityManageController {
      * @param pageDTO
      * @return
      */
-        @GetMapping("/getAllWxAttribute")
+    @GetMapping("/getAllWxAttribute")
     public JSONResult getAllWxAttribute(Principal principal, WxAttributeDTO WxAttributeDTO, PageDTO pageDTO){
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(wxCommodityManageService.selectAllWxAttribute(WxAttributeDTO, pageDTO, user.getUserId()));
+        return new JSONResult(wxCommodityManageService.selectAllWxAttribute(WxAttributeDTO, pageDTO, user));
     }
 
     @PostMapping("/deletedWxCommodity")
@@ -57,6 +60,9 @@ public class wxCommodityManageController {
 
     @PostMapping("/addWxCommodity")
     public JSONResult addWxCommodity(WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException, InterruptedException {
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.addWxCommodity(wxCommodityDTO, file, user));
     }
@@ -75,9 +81,12 @@ public class wxCommodityManageController {
      * @throws IOException
      */
     @PostMapping("/addWxAttribute")
-    public JSONResult addWxAttribute(WxAttributeDTO wxAttributeDTO, Principal principal) throws IOException, InterruptedException {
+    public JSONResult addWxAttribute(WxAttributeDTO wxAttributeDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException, InterruptedException {
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(wxCommodityManageService.addWxAttribute(wxAttributeDTO, user));
+        return new JSONResult(wxCommodityManageService.addWxAttribute(wxAttributeDTO, file, user));
     }
 
     @PostMapping("/updateWxCommodity")
@@ -97,6 +106,7 @@ public class wxCommodityManageController {
 
     @PostMapping("/editCommodityWithImg")
     public JSONResult editCommodityWithImg(Principal principal, WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file) throws IOException {
+
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.editWeChatCommodityWithImg(user.getUserId(), wxCommodityDTO, file));
     }
@@ -115,5 +125,10 @@ public class wxCommodityManageController {
     @GetMapping("/getAllShopInfo")
     public JSONResult getAllShopInfo(){
         return new JSONResult(wxCommodityManageService.getAllShopInfo());
+    }
+
+    @PostMapping("/updateWxAttribute")
+    public JSONResult updateWxAttribute(@RequestBody WxAttributeDTO wxAttributeDTO){
+        return new JSONResult(wxCommodityManageService.updateWxAttribute(wxAttributeDTO));
     }
 }

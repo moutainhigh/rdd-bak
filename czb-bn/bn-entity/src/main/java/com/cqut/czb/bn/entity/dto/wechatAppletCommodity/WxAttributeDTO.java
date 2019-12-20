@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.entity.dto.wechatAppletCommodity;
 
+import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class WxAttributeDTO {
     private String commmodityAttrId;
@@ -14,6 +16,7 @@ public class WxAttributeDTO {
     private String attributeId;
     private String name;
     private String content;
+    private List<FileFunctionDTO> imgs;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
@@ -107,5 +110,13 @@ public class WxAttributeDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public List<FileFunctionDTO> getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(List<FileFunctionDTO> imgs) {
+        this.imgs = imgs;
     }
 }

@@ -29,7 +29,7 @@ public interface WxCommodityManageService {
 
     List<Category> selectAllCategory();
 
-    PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, String userId);
+    PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, User user);
 
     Boolean haltOrOnSales(String ids, Integer type);
 
@@ -37,5 +37,7 @@ public interface WxCommodityManageService {
 
     List<ShopInfoDTO> getAllShopInfo();
 
-    Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, User user) throws InterruptedException, IOException;
+    Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws InterruptedException, IOException;
+
+    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
 }
