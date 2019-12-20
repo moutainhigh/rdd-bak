@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WechatCommodityAttrMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
     <id column="commodity_attr_id" property="commodityAttrId" jdbcType="VARCHAR" />
     <result column="extra_fy_money" property="extraFyMoney" jdbcType="DOUBLE" />
     <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
     delete from czb_wechat_commodity_attr
     where commodity_attr_id = #{commodityAttrId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
     insert into czb_wechat_commodity_attr (commodity_attr_id, extra_fy_money, commodity_id, 
       attribute_id, extra_sale_money, file_id, 
       attr_order, create_at, update_at
@@ -36,7 +36,7 @@
       #{attrOrder,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
     insert into czb_wechat_commodity_attr
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="commodityAttrId != null" >
@@ -97,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
     update czb_wechat_commodity_attr
     <set >
       <if test="extraFyMoney != null" >
@@ -127,7 +127,7 @@
     </set>
     where commodity_attr_id = #{commodityAttrId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WechatCommodityAttr" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr" >
     update czb_wechat_commodity_attr
     set extra_fy_money = #{extraFyMoney,jdbcType=DOUBLE},
       commodity_id = #{commodityId,jdbcType=VARCHAR},
