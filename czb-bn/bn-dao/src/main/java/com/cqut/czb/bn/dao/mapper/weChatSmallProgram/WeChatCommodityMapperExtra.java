@@ -72,4 +72,6 @@ public interface WeChatCommodityMapperExtra {
     Integer updatePoster(@Param("commodityImgId")String commodityImgId,@Param("address") String address);
 
     Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
+
+
 }

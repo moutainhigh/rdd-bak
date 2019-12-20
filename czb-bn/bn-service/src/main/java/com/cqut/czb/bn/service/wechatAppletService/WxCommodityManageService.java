@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.wechatAppletService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
+import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -28,6 +29,7 @@ public interface WxCommodityManageService {
     Boolean deleteWxCommodityImg(String fileId,String id);
 
     List<Category> selectAllCategory();
+
 
     PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, User user);
 

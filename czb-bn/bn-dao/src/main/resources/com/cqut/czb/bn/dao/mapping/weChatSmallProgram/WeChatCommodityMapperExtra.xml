@@ -33,6 +33,19 @@
         <collection property="imgs" select="selectImgs" column="commodity_img_id"></collection>
         <collection property="posterImg" select="selectPosterImg" column="commodity_img_id"></collection>
     </resultMap>
+
+    <resultMap id="BaseAttributeMap" type="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" >
+        <id column="commodity_attr_id" property="commmodityAttrId" jdbcType="VARCHAR" />
+        <result column="extra_fy_money" property="extraFyMoney" jdbcType="DOUBLE" />
+        <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+        <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+        <result column="extra_sale_money" property="extraSaleMoney" jdbcType="DOUBLE" />
+        <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+        <result column="attr_order" property="attrOrder" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <collection property="imgs" select="selectAllImgs" column="file_id"></collection>
+    </resultMap>
     <sql id="Base_Column_List" >
         commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img_id,
         cost_price, original_price, sale_price, commmodity_type_id, starting_time_business,
@@ -61,6 +74,23 @@
         WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
         AND group_code = 'WCCommodity'
     </select>
+
+    <select id="selectAllImgs" resultMap="functionImgsMap" >
+        SELECT
+            czb_file_function.id,
+            czb_file_function.group_code,
+            czb_file_function.file_id,
+            czb_file_function.local_id,
+            czb_file.save_path,
+            czb_file_function.create_at,
+            czb_file_function.update_at
+        FROM
+            czb_file,
+            czb_file_function
+        WHERE
+            czb_file_function.local_id = #{file_id, jdbcType=VARCHAR}
+    </select>
+
     <select id="selectPosterImg" resultMap="functionImgsMap" >
         SELECT
             cff.local_id,
@@ -110,15 +140,15 @@
         </where>
     </select>
 <!-- 查询商品属性信息-->
-    <select id="selectAllWxAttribute" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
+    <select id="selectAllWxAttribute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultMap="BaseAttributeMap">
             SELECT
-                czb_wechat_commodity_attr.commodity_attr_id AS commmodityAttrId,
-                czb_wechat_commodity_attr.extra_fy_money AS extraFyMoney,
+                czb_wechat_commodity_attr.commodity_attr_id,
+                czb_wechat_commodity_attr.extra_fy_money,
                 czb_wechat_commodity_attr.commodity_id,
-                czb_wechat_commodity_attr.attribute_id AS attributeId,
-                czb_wechat_commodity_attr.extra_sale_money AS extraSaleMoney,
-                czb_wechat_commodity_attr.file_id AS fileId,
-                czb_wechat_commodity_attr.attr_order AS attrOrder,
+                czb_wechat_commodity_attr.attribute_id,
+                czb_wechat_commodity_attr.extra_sale_money,
+                czb_wechat_commodity_attr.file_id,
+                czb_wechat_commodity_attr.attr_order,
                 czb_attribute.`name`,
                 czb_attribute.content
             FROM
