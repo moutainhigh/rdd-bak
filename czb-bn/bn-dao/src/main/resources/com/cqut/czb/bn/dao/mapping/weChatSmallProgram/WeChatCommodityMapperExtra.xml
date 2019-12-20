@@ -109,7 +109,7 @@
             </if>
         </where>
     </select>
-
+<!-- 查询商品属性信息-->
     <select id="selectAllWxAttribute" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
             SELECT
                 czb_wechat_commodity_attr.commodity_attr_id AS commmodityAttrId,
@@ -126,8 +126,11 @@
                 czb_attribute
             WHERE
                 commodity_id = #{commodityId}
-                AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id;
+                AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id
+            ORDER BY czb_wechat_commodity_attr.create_at DESC;
     </select>
+
+
     <!--获取提供服务的地区列表-->
     <select id="getAreas" resultType="java.lang.String">
         select content
@@ -771,6 +774,7 @@
         </trim>
     </insert>
 
+<!--    获取商品属性的id-->
     <select id="getAttributeId" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultType="java.lang.String">
         SELECT
             attribute_id
@@ -779,7 +783,7 @@
         WHERE
             content = #{content};
     </select>
-
+<!-- 新增商品属性信息-->
     <insert id="insertAttrbute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
         insert into czb_wechat_commodity_attr
         <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -937,5 +941,18 @@
         update czb_wechat_commodity
         SET is_sale = #{isSale, jdbcType = INTEGER}
         WHERE czb_wechat_commodity.commodity_id in (${ids})
+    </update>
+
+<!--    编辑商品属性信息-->
+    <update id="updateWxAttribute">
+        UPDATE czb_attribute, czb_wechat_commodity_attr
+	    SET czb_wechat_commodity_attr.extra_fy_money = #{extraFyMoney, jdbcType = VARCHAR},
+		czb_wechat_commodity_attr.extra_sale_money = #{extraSaleMoney},
+		czb_wechat_commodity_attr.file_id = #{fileId},
+		czb_wechat_commodity_attr.update_at = #{updateAt},
+		czb_attribute.`name` = #{name},
+		czb_attribute.content = #{content}
+	WHERE czb_wechat_commodity_attr.commodity_attr_id = #{commmodityAttrId}
+	    AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id;
     </update>
 </mapper>

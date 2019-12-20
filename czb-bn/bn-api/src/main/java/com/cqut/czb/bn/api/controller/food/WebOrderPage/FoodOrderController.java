@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.food.WebOrderPage;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.ManageFood.ManageOrder.FoodOrder;
 import com.cqut.czb.bn.entity.dto.PageDTO;
@@ -43,6 +44,7 @@ public class FoodOrderController {
      * @param orderId
      * @return
      */
+    @PermissionCheck(role = "管理员, 服务商")
     @GetMapping("/sureOrder")
     public JSONResult sureOrder(@Param("orderId") String orderId) {
         return service.sureOrder(orderId);
@@ -53,6 +55,7 @@ public class FoodOrderController {
      * @param orderId
      * @return
      */
+    @PermissionCheck(role = "管理员, 服务商")
     @GetMapping("/cancelOrder")
     public JSONResult cancelOrder(@Param("orderId") String orderId) {
         return service.cancelOrder(orderId);

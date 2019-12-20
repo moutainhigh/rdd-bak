@@ -70,4 +70,6 @@ public interface WeChatCommodityMapperExtra {
     Integer selectPosterImgCount(String commodityImgId);
 
     Integer updatePoster(@Param("commodityImgId")String commodityImgId,@Param("address") String address);
+
+    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
 }
