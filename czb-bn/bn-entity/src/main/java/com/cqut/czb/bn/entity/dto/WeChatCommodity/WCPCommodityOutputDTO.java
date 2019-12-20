@@ -43,13 +43,33 @@ public class WCPCommodityOutputDTO {
 
     private Date startingTimeBusiness;
 
-    private Double fyMoney;
+    private Integer fyMoney;
+
+    private Double totalFyMoney;
 
     private String salesVolume;
 
     private String isHaveShop;
 
     private String commodityIntroduce;
+
+    List<WCPCommodityAttrName> attrs;
+
+    public List<WCPCommodityAttrName> getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(List<WCPCommodityAttrName> attrs) {
+        this.attrs = attrs;
+    }
+
+    public Double getTotalFyMoney() {
+        return totalFyMoney;
+    }
+
+    public void setTotalFyMoney(Double totalFyMoney) {
+        this.totalFyMoney = totalFyMoney;
+    }
 
     public String getCommodityIntroduce() {
         return commodityIntroduce;
@@ -95,11 +115,11 @@ public class WCPCommodityOutputDTO {
         this.salesVolume = salesVolume;
     }
 
-    public Double getFyMoney() {
+    public Integer getFyMoney() {
         return fyMoney;
     }
 
-    public void setFyMoney(Double fyMoney) {
+    public void setFyMoney(Integer fyMoney) {
         this.fyMoney = fyMoney;
     }
 

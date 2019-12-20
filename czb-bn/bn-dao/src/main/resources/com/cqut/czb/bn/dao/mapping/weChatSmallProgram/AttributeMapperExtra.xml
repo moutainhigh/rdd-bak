@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.AttributeMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.AttributeDTO" >
+        <id column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        attribute_id, name, content, create_at, update_at
+    </sql>
+    <select id="selectAttribute" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_attribute
+        <where>
+            <if test="name!=null and name!=''">
+               AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="content!=null and content!=''">
+                AND content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+    <delete id="deleteById" parameterType="java.lang.String" >
+        delete from czb_attribute
+        where attribute_id = #{attributeId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Attribute" >
+        insert into czb_attribute (attribute_id, name, content,
+        create_at, update_at)
+        values (#{attributeId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+        #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Attribute" >
+        insert into czb_attribute
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="attributeId != null" >
+                attribute_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="attributeId != null" >
+                #{attributeId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Attribute" >
+        update czb_attribute
+        <set >
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where attribute_id = #{attributeId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.Attribute" >
+        update czb_attribute
+        set name = #{name,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where attribute_id = #{attributeId,jdbcType=VARCHAR}
+    </update>
+</mapper>

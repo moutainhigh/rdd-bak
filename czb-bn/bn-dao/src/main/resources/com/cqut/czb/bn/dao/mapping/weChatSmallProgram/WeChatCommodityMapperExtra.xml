@@ -109,6 +109,25 @@
             </if>
         </where>
     </select>
+
+    <select id="selectAllWxAttribute" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
+            SELECT
+                czb_wechat_commodity_attr.commodity_attr_id AS commmodityAttrId,
+                czb_wechat_commodity_attr.extra_fy_money AS extraFyMoney,
+                czb_wechat_commodity_attr.commodity_id,
+                czb_wechat_commodity_attr.attribute_id AS attributeId,
+                czb_wechat_commodity_attr.extra_sale_money AS extraSaleMoney,
+                czb_wechat_commodity_attr.file_id AS fileId,
+                czb_wechat_commodity_attr.attr_order AS attrOrder,
+                czb_attribute.`name`,
+                czb_attribute.content
+            FROM
+                czb_wechat_commodity_attr,
+                czb_attribute
+            WHERE
+                commodity_id = #{commodityId}
+                AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id;
+    </select>
     <!--获取提供服务的地区列表-->
     <select id="getAreas" resultType="java.lang.String">
         select content
@@ -444,7 +463,7 @@
         <result column="startingTimeBusiness" property="startingTimeBusiness" jdbcType="VARCHAR" />
         <result column="endTimeBusiness" property="endTimeBusiness" jdbcType="VARCHAR" />
         <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
-        <result column="fyMoney" property="fyMoney" jdbcType="VARCHAR" />
+        <result column="totalFyMoney" property="totalFyMoney" jdbcType="VARCHAR" />
         <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
@@ -469,18 +488,17 @@
         czb_shop.latitude,
         is_have_shop isHaveShop,
         czb_shop.shop_phone shopPhone,
-        czb_wechat_commodity.fy_money fyMoney,
+        czb_wechat_commodity.fy_money totalFyMoney,
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
         LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
-        AND ( pay_status = 1 OR pay_status IS NULL )
         AND czb_wechat_commodity.end_time_business &gt;= now()
         <if test = "area != null and area != '' ">
             AND area = #{area, jdbcType = VARCHAR}
@@ -552,18 +570,17 @@
         czb_shop.latitude,
         is_have_shop isHaveShop,
         czb_shop.shop_phone shopPhone,
-        czb_wechat_commodity.fy_money fyMoney,
+        czb_wechat_commodity.fy_money totalFyMoney,
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( czb_wechat_commodity_order.commodity_num ), 0 ) salesVolume
+        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
         LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
-        AND ( pay_status = 1 OR pay_status IS NULL )
         AND czb_wechat_commodity.end_time_business &gt;= now()
         AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
         GROUP BY
@@ -750,6 +767,77 @@
             </if>
             <if test="commodityIntroduce != null" >
                 #{commodityIntroduce,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getAttributeId" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultType="java.lang.String">
+        SELECT
+            attribute_id
+        FROM
+            czb_attribute
+        WHERE
+            content = #{content};
+    </select>
+
+    <insert id="insertAttrbute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
+        insert into czb_wechat_commodity_attr
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="commmodityAttrId != null" >
+                commodity_attr_id,
+            </if>
+            <if test="extraFyMoney != null" >
+                extra_fy_money,
+            </if>
+            <if test="commodityId != null" >
+                commodity_id,
+            </if>
+            <if test="attributeId != null" >
+                attribute_id,
+            </if>
+            <if test="extraSaleMoney != null" >
+                extra_sale_money,
+            </if>
+            <if test="fileId != null" >
+                file_id,
+            </if>
+            <if test="attrOrder != null" >
+                attr_order,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="commmodityAttrId != null" >
+                #{commmodityAttrId,jdbcType=VARCHAR},
+            </if>
+            <if test="extraFyMoney != null" >
+                #{extraFyMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="commodityId != null" >
+                #{commodityId,jdbcType=VARCHAR},
+            </if>
+            <if test="attributeId != null" >
+                #{attributeId,jdbcType=INTEGER},
+            </if>
+            <if test="extraSaleMoney != null" >
+                #{extraSaleMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="fileId != null" >
+                #{fileId,jdbcType=VARCHAR},
+            </if>
+            <if test="attrOrder != null" >
+                #{attrOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>

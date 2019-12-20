@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.service.impl.petrolManagement;
 
+import com.cqut.czb.bn.dao.mapper.DictMapper;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
@@ -8,6 +10,7 @@ import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -35,6 +38,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     AppHomePageService appHomePageService;
 //    @Autowired
 //    PetrolMapper petrolMapper;
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     /**
      * 获取油卡列表
@@ -222,5 +227,15 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             return new JSONResult("修改成功",200);
         else
             return new JSONResult("修改失敗",500);
+    }
+
+    @Override
+    public List<Dict> getPayInstruction() {
+        Dict dict2=dictMapperExtra.selectDictByName("weChat");
+        Dict dict1=dictMapperExtra.selectDictByName("alipay");
+        List<Dict> dicts=new ArrayList<>();
+        dicts.add(dict1);
+        dicts.add(dict2);
+        return dicts;
     }
 }

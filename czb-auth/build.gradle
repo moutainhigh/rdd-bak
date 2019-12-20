@@ -27,12 +27,10 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.12.RELEASE'
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-
     compile group: 'org.springframework.boot', name : 'spring-boot-starter-web', version: '1.5.12.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '1.5.12.RELEASE'
-
+    compile 'org.springframework.boot:spring-boot-starter-aop'
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
-
     compile project(':czb-bn:bn-dao')
     compile project(':czb-bn:bn-entity')
     compile project(':czb-bn:bn-service-impl')

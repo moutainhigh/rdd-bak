@@ -157,18 +157,22 @@ public class UserServiceImpl implements IUserService {
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(0);
                                 userMapperExtra.updateUser(user);
-                            }else if("微信商家".equals(roleList.get(0).getRoleName())){
-                                Shop shop = new Shop();
-                                shop.setShopId(StringUtil.createId());
-                                shop.setUserId(userInputDTO.getUserId());
-                                shop.setShopName(userInputDTO.getUserName());
-                                shop.setShopPhone(userInputDTO.getUserAccount());
-                                shop.setCreateAt(new Date());
-                                shop.setAudit(1);
-                                shop.setShopType(3);//微信商家
-                                boolean flag = shopManagementService.addShop(shop);
-                                if(!flag){
-                                    return false;
+                            }else if(roleList.size() > 0){
+                                for(RoleDTO temp : roleList){
+                                    if("微信商家".equals(temp.getRoleName())){
+                                        Shop shop = new Shop();
+                                        shop.setShopId(StringUtil.createId());
+                                        shop.setUserId(userInputDTO.getUserId());
+                                        shop.setShopName(userInputDTO.getUserName());
+                                        shop.setShopPhone(userInputDTO.getUserAccount());
+                                        shop.setCreateAt(new Date());
+                                        shop.setAudit(1);
+                                        shop.setShopType(3);//微信商家
+                                        boolean flag = shopManagementService.addShop(shop);
+                                        if(!flag){
+                                            return false;
+                                        }
+                                    }
                                 }
                             } else {
                                 UserInputDTO user = new UserInputDTO();
@@ -177,12 +181,10 @@ public class UserServiceImpl implements IUserService {
                                 userMapperExtra.updateUser(user);
                             }
                             UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
-
                             if(redisUtil.hasKey(user.getUserAccount())) {
                                 redisUtil.remove(user.getUserAccount());
                                 redisUtil.put(user.getUserAccount(), user);
                             }
-
                         }
                     }
                 }

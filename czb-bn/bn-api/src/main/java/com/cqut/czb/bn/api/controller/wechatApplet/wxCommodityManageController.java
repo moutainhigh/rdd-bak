@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.wechatApplet;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -24,8 +25,23 @@ public class wxCommodityManageController {
 
     @GetMapping("/getAllCommodity")
     public JSONResult getAllCommodity(Principal principal, WxCommodityDTO wxCommodityDTO, PageDTO pageDTO){
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.getAllCommodity(wxCommodityDTO,pageDTO, user.getUserId()));
+    }
+
+    /**
+     * 获取商品属性信息
+     * @param WxAttributeDTO
+     * @param pageDTO
+     * @return
+     */
+        @GetMapping("/getAllWxAttribute")
+    public JSONResult getAllWxAttribute(Principal principal, WxAttributeDTO WxAttributeDTO, PageDTO pageDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.selectAllWxAttribute(WxAttributeDTO, pageDTO, user.getUserId()));
     }
 
     @PostMapping("/deletedWxCommodity")
@@ -49,6 +65,19 @@ public class wxCommodityManageController {
     public JSONResult addWxCommodityImg(WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.addWxCommodityImg(wxCommodityDTO, file, user));
+    }
+
+    /**
+     * 新增商品属性
+     * @param wxAttributeDTO
+     * @param principal
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/addWxAttribute")
+    public JSONResult addWxAttribute(WxAttributeDTO wxAttributeDTO, Principal principal) throws IOException, InterruptedException {
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.addWxAttribute(wxAttributeDTO, user));
     }
 
     @PostMapping("/updateWxCommodity")

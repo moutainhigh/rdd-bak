@@ -58,4 +58,12 @@ public class PetrolManagementController {
     public JSONResult modifyPetrol(@RequestBody ModifyPetrolInputDTO inputDTO){
         return new JSONResult(petrolManagementService.modifyPetrol(inputDTO));
     }
+
+    @RequestMapping(value = "/payManage",method = RequestMethod.GET)
+    public JSONResult payManage(){
+        return new JSONResult(petrolManagementService.getPayInstruction());
+    }
+
+
+
 }
