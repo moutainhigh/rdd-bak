@@ -47,7 +47,7 @@ public class WCPCommodityOutputDTO {
 
     private Double totalFyMoney;
 
-    private String salesVolume;
+    private Integer salesVolume;
 
     private String isHaveShop;
 
@@ -107,11 +107,11 @@ public class WCPCommodityOutputDTO {
         this.isHaveShop = isHaveShop;
     }
 
-    public String getSalesVolume() {
+    public Integer getSalesVolume() {
         return salesVolume;
     }
 
-    public void setSalesVolume(String salesVolume) {
+    public void setSalesVolume(Integer salesVolume) {
         this.salesVolume = salesVolume;
     }
 

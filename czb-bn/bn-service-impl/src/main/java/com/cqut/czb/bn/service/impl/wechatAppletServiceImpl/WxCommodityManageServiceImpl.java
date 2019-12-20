@@ -76,7 +76,6 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     /**
      * 获取商品属性信息
-     * @param commodityId
      * @param pageDTO
      * @return
      */
@@ -115,8 +114,6 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
                     str.insert(4," style=\"width:100%\" ");
                     wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace(exp,str));
                 }
-
-
             }
         }
         String address = "";
