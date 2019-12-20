@@ -25,6 +25,9 @@ public class wxCommodityManageController {
 
     @GetMapping("/getAllCommodity")
     public JSONResult getAllCommodity(Principal principal, WxCommodityDTO wxCommodityDTO, PageDTO pageDTO){
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.getAllCommodity(wxCommodityDTO,pageDTO, user.getUserId()));
     }
