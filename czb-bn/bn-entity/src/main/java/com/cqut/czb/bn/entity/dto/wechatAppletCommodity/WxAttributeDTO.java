@@ -16,13 +16,15 @@ public class WxAttributeDTO {
     private String attributeId;
     private String name;
     private String content;
-    private List<FileFunctionDTO> imgs;
+    private FileFunctionDTO imgs;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateAt;
+
+    private String deleteIds;
 
     public String getCommmodityAttrId() {
         return commmodityAttrId;
@@ -112,11 +114,19 @@ public class WxAttributeDTO {
         this.updateAt = updateAt;
     }
 
-    public List<FileFunctionDTO> getImgs() {
+    public FileFunctionDTO getImgs() {
         return imgs;
     }
 
-    public void setImgs(List<FileFunctionDTO> imgs) {
+    public void setImgs(FileFunctionDTO imgs) {
         this.imgs = imgs;
+    }
+
+    public String getDeleteIds() {
+        return deleteIds;
+    }
+
+    public void setDeleteIds(String deleteIds) {
+        this.deleteIds = deleteIds;
     }
 }

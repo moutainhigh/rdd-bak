@@ -128,7 +128,11 @@ public class wxCommodityManageController {
     }
 
     @PostMapping("/updateWxAttribute")
-    public JSONResult updateWxAttribute(@RequestBody WxAttributeDTO wxAttributeDTO){
-        return new JSONResult(wxCommodityManageService.updateWxAttribute(wxAttributeDTO));
+    public JSONResult updateWxAttribute(WxAttributeDTO wxAttributeDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException {
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.updateWxAttribute(wxAttributeDTO, file, user));
     }
 }

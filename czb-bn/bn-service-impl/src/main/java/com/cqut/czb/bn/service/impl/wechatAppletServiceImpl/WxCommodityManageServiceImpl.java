@@ -347,8 +347,18 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     }
 
     @Override
-    public Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO) {
+    public Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws IOException {
         wxAttributeDTO.setUpdateAt(new Date());
-        return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO);
+        wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
+        Boolean insertImg = true;
+        if(file != null && !file.isEmpty() && wxAttributeDTO.getFileId() != null && wxAttributeDTO.getFileId() != "")
+        {
+            String address = "";
+            address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO) && weChatCommodityMapperExtra.updaFile(wxAttributeDTO.getImgs().getFileId(),file.getOriginalFilename(), address, new Date());
+        }
+        else {
+            return false;
+        }
     }
 }

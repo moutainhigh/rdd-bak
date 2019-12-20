@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -74,4 +75,5 @@ public interface WeChatCommodityMapperExtra {
     Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
 
 
+    Boolean updaFile(String id, String originalFilename, String address, Date date);
 }

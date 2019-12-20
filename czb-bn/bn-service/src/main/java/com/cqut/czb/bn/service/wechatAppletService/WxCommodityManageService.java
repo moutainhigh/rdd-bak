@@ -41,5 +41,5 @@ public interface WxCommodityManageService {
 
     Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws InterruptedException, IOException;
 
-    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
+    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws IOException;
 }
