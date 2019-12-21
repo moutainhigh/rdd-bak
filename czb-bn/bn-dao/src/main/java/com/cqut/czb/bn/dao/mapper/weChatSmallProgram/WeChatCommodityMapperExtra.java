@@ -64,7 +64,7 @@ public interface WeChatCommodityMapperExtra {
      * 获取开启服务地区列表
      * @return
      */
-    String getAreas();
+    List<String> getAreas();
 
     Integer updateIsSale(@Param("ids") String ids, @Param("isSale") Integer isSale);
 
