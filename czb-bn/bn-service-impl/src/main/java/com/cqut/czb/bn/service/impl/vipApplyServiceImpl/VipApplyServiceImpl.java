@@ -58,6 +58,10 @@ public class VipApplyServiceImpl implements VipApplyService {
         }
         try{
             User user = (User) redisUtil.get(principal.getName());
+            weChatVipApply.setRecordId(StringUtil.createId());
+            weChatVipApply.setStatus(1);
+            weChatVipApply.setUserId(user.getUserId());
+            weChatVipApplyMapper.insertSelective(weChatVipApply);
             vipApplyMapper.updateUserVip(user.getUserId());
             if(redisUtil.hasKey(user.getUserAccount())) {
                 redisUtil.remove(user.getUserAccount());
