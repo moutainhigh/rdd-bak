@@ -38,7 +38,7 @@ public class FileUploadUtil {
 
             PutObjectResult result = ossClient.putObject(bucketName, key, inputStream, meta);
 
-            url = ossClient.generatePresignedUrl(bucketName, key, new Date(new Date().getTime() + 3600l * 1000 * 24 * 365 * 100)).toURI().toString();
+            url = ossClient.generatePresignedUrl(bucketName, key, new Date(new Date().getTime() + 3600l * 1000 * 24 * 365 * 100)).toURI().toString().replaceFirst("http", "https");
         } catch (Exception e) {
             e.printStackTrace();
         }
