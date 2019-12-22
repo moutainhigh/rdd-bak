@@ -550,7 +550,7 @@
         WHERE
         czb_wechat_commodity.is_sale = 1
         AND czb_wechat_commodity.end_time_business &gt;= now()
-        <if test = "area != null and area != '' ">
+        <if test = "area != null and area != '' and area != '重庆市'">
             AND area = #{area, jdbcType = VARCHAR}
         </if>
         <if test = "shopPlace != null and shopPlace != '' ">
