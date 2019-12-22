@@ -14,6 +14,7 @@ public class VcodeConfig {
     final static String accessKeySecret = "cAwmmIGtUAmfrY9bbpAWV197NuW9fj";
     final static String SignName = "人多多认证";
     final static String RechargeSignName = "爱动体育文化传播";
+    final static String WCPRechargeSignName = "囧途宝盒";
 
     final static String TemplateCode = "SMS_166325722";
 
