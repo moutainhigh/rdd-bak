@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.AppRouter;
@@ -31,6 +32,7 @@ public class AppRouterManageController {
     }
 
     //修改数据+修改图标
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateAppRouter")
     public JSONResult updateAppRouter(AppRouter appRouter, Principal principal,@RequestParam("file")MultipartFile file) throws  Exception{
         User user = (User)redisUtils.get(principal.getName());
@@ -38,17 +40,20 @@ public class AppRouterManageController {
     }
 
     //修改数据
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateAppRouterNoFile")
     public JSONResult updateAppRouter(@RequestBody AppRouter appRouter){
         return new JSONResult(appRouterManageService.updateMenuNoFile(appRouter));
     }
 
     //删除
+    @PermissionCheck(role = "管理员")
     @PostMapping("/deleteAppRouter")
     public JSONResult deleteAppRouter(@RequestBody AppRouter appRouter){
         return new JSONResult(appRouterManageService.deleteMenu(appRouter));
     }
     //新增
+    @PermissionCheck(role = "管理员")
     @PostMapping("/insertAppRouter")
     public JSONResult insertAppRouter(AppRouter appRouter,Principal principal,@RequestParam("file")MultipartFile file) throws Exception{
         User user = (User)redisUtils.get(principal.getName());

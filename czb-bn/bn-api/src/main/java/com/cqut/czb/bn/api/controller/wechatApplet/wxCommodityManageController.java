@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.wechatAppletService.WxCommodityManageService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -106,7 +107,6 @@ public class wxCommodityManageController {
 
     @PostMapping("/editCommodityWithImg")
     public JSONResult editCommodityWithImg(Principal principal, WxCommodityDTO wxCommodityDTO, @RequestParam("file")MultipartFile file) throws IOException {
-
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.editWeChatCommodityWithImg(user.getUserId(), wxCommodityDTO, file));
     }
@@ -128,7 +128,43 @@ public class wxCommodityManageController {
     }
 
     @PostMapping("/updateWxAttribute")
-    public JSONResult updateWxAttribute(@RequestBody WxAttributeDTO wxAttributeDTO){
-        return new JSONResult(wxCommodityManageService.updateWxAttribute(wxAttributeDTO));
+    public JSONResult updateWxAttribute(WxAttributeDTO wxAttributeDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException {
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.updateWxAttribute(wxAttributeDTO, file, user));
+    }
+
+    @PostMapping("/updateWxAttributeFile")
+    public JSONResult updateWxAttributeFile(WxAttributeDTO wxAttributeDTO, Principal principal) throws IOException {
+        if (principal==null || principal.getName()==null){
+            return new JSONResult(500,"token为空");
+        }
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(wxCommodityManageService.updateWxAttributeFile(wxAttributeDTO, user));
+    }
+
+    @GetMapping("/getAttributeName")
+    public JSONResult getAttributeName(){
+
+        return new JSONResult(wxCommodityManageService.getAttributeName());
+    }
+
+    @GetMapping("/getAttributeContent")
+    public JSONResult getAttributeContent(String name){
+        return new JSONResult(wxCommodityManageService.getAttributeContent(name));
+    }
+
+    /**
+     * 删除商品属性
+     * @param wxAttributeDTO
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    @PostMapping("/deleteWxAttribute")
+    public JSONResult deleteWxAttribute(WxAttributeDTO wxAttributeDTO) throws IOException, InterruptedException {
+        return new JSONResult(wxCommodityManageService.deleteWxAttribute(wxAttributeDTO));
     }
 }

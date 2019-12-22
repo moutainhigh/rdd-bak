@@ -2,10 +2,12 @@ package com.cqut.czb.bn.service.wechatAppletService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
+import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,7 @@ public interface WxCommodityManageService {
 
     List<Category> selectAllCategory();
 
+
     PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, User user);
 
     Boolean haltOrOnSales(String ids, Integer type);
@@ -39,5 +42,14 @@ public interface WxCommodityManageService {
 
     Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws InterruptedException, IOException;
 
-    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
+    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws IOException;
+
+    Boolean updateWxAttributeFile(WxAttributeDTO wxAttributeDTO, User user) throws IOException;
+
+    List<String> getAttributeName();
+
+    List<String> getAttributeContent(String name);
+
+
+    Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO);
 }

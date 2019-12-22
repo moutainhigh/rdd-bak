@@ -83,7 +83,7 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     }
 
     @Override
-    public String getAreas() {
+    public List<String> getAreas() {
         return weChatCommodityMapperExtra.getAreas();
     }
 }
