@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
@@ -29,6 +30,7 @@ public class RiderManageController {
         return new JSONResult(riderService.deleteByPrimaryKey(riderId));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/insert")
     public JSONResult insertSelective(CleanRider cleanRider) {
 
@@ -73,6 +75,7 @@ public class RiderManageController {
         return jsonResult;
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateById")
     public JSONResult updateByPrimaryKeySelective(CleanRider cleanRider) {
         return new JSONResult(riderService.updateByPrimaryKeySelective(cleanRider));
@@ -83,6 +86,7 @@ public class RiderManageController {
      * @param cleanRider
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @GetMapping("/getRider")
     public JSONResult getRider(@RequestParam(name = "pageSize") Integer pageSize, @RequestParam(name = "currentPage") Integer currentPage, CleanRider cleanRider) {
         return new JSONResult(riderService.getRider(pageSize, currentPage, cleanRider));

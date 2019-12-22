@@ -13,7 +13,6 @@ import com.cqut.czb.bn.entity.dto.PayConfig.WeChatParameterConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
-import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr;

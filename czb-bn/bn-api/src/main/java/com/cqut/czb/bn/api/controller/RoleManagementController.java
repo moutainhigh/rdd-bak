@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.role.RoleIdDTO;
@@ -29,6 +30,7 @@ public class RoleManagementController {
     @Autowired
     RedisUtils redisUtils;
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/insertRole",method = RequestMethod.POST)
     public JSONResult insertRole(@Validated @RequestBody RoleInputDTO roleInputDTO){
         boolean isInsert = roleService.insertRole(roleInputDTO);
@@ -39,6 +41,7 @@ public class RoleManagementController {
         }
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/deleteRole",method = RequestMethod.POST)
     public JSONResult deleteRole(@Validated @RequestBody RoleIdDTO roleIdDTO){
         boolean isDelete = roleService.deleteRole(roleIdDTO);
@@ -49,6 +52,7 @@ public class RoleManagementController {
         }
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updateRole",method = RequestMethod.POST)
     public JSONResult updateRole(@Validated  @RequestBody RoleInputDTO roleInputDTO){
         boolean isUpdate = roleService.updateRole(roleInputDTO);

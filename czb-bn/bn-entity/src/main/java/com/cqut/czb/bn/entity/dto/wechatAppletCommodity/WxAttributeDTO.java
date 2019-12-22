@@ -1,10 +1,13 @@
 package com.cqut.czb.bn.entity.dto.wechatAppletCommodity;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
-public class WxAttributeDTO {
+public class WxAttributeDTO extends PageDTO  {
     private String commmodityAttrId;
     private double extraFyMoney;
     private String commodityId;
@@ -14,12 +17,15 @@ public class WxAttributeDTO {
     private String attributeId;
     private String name;
     private String content;
+    private FileFunctionDTO imgs;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateAt;
+
+    private String deleteIds;
 
     public String getCommmodityAttrId() {
         return commmodityAttrId;
@@ -107,5 +113,21 @@ public class WxAttributeDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public FileFunctionDTO getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(FileFunctionDTO imgs) {
+        this.imgs = imgs;
+    }
+
+    public String getDeleteIds() {
+        return deleteIds;
+    }
+
+    public void setDeleteIds(String deleteIds) {
+        this.deleteIds = deleteIds;
     }
 }

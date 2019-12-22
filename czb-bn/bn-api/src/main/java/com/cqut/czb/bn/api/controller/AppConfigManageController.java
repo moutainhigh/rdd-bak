@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.announcement.AnnouncementDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.Announcement;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -28,16 +30,17 @@ public class AppConfigManageController {
     /**
      * 公告新增
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/addAnnouncement")
-    //
     public JSONResult addAnnouncement( Announcement announcement,Principal principal,@RequestParam("file") MultipartFile file) throws Exception {
-        User user = (User) redisUtils.get(principal.getName());
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         return new JSONResult(announcementService.addAnnouncement(announcement,file,user));
     }
 
     /**
      * 公告删除
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping ("/deleteAnnouncement")
     public JSONResult deletAnnouncement(@RequestBody Announcement announcement){
         return new JSONResult(announcementService.deleteAnnouncement(announcement.getAnnouncementId() ));
@@ -46,6 +49,7 @@ public class AppConfigManageController {
     /**
      * 公告修改+修改上传图片
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateAnnouncementFile")
     //Principal principal,
     public JSONResult updateAnnouncementFile(Announcement announcement,Principal principal,@RequestParam("file")MultipartFile file) throws Exception{
@@ -56,6 +60,7 @@ public class AppConfigManageController {
     /**
      * 公告修改
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateAnnouncement")
     public JSONResult updateAnnouncement( @RequestBody Announcement announcement){
         return new JSONResult(announcementService.updateAnnouncement(announcement));
