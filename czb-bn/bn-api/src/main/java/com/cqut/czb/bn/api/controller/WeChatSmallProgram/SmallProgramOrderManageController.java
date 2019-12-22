@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.DealCommodityInputDTO;
@@ -40,6 +41,7 @@ public class SmallProgramOrderManageController {
      * @param page
      * @return
      */
+    @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/getTableList")
     public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(Principal principal, @RequestBody WeChatCommodityOrderDTO weChatCommodityOrderDTO, PageDTO page) {
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
@@ -56,6 +58,7 @@ public class SmallProgramOrderManageController {
      * @param orderId
      * @return
      */
+    @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/obsoleteOrder")
     public JSONResult<Boolean> obsoleteOrder(@RequestBody String orderId) {
         return orderManageService.obsoleteOrder(orderId);
@@ -68,6 +71,7 @@ public class SmallProgramOrderManageController {
      * @param orderId
      * @return
      */
+    @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/getOrderDetail")
     public JSONResult<WeChatCommodityOrderDetail> getOrderDetail(Principal principal, String orderId) {
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
@@ -83,6 +87,7 @@ public class SmallProgramOrderManageController {
      * @param orderId
      * @return
      */
+    @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/getOrderProcessInfo")
     public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(@RequestBody String orderId) {
         return orderManageService.getOrderProcessInfo(orderId);
@@ -95,6 +100,7 @@ public class SmallProgramOrderManageController {
      * @param input
      * @return
      */
+    @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/dealOrder")
     public JSONResult<Boolean> dealOrder(Principal principal, WeChatCommodityOrderProcess input) {
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
@@ -112,6 +118,7 @@ public class SmallProgramOrderManageController {
      * @param page
      * @return
      */
+    @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/getTotalSale")
     public JSONResult<Double> getTotalSale(Principal principal, @RequestBody WeChatCommodityOrderDTO weChatCommodityOrderDTO, PageDTO page) {
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());

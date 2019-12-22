@@ -161,6 +161,10 @@
             ORDER BY czb_wechat_commodity_attr.create_at DESC;
     </select>
 
+    <delete id="deleteWxAttribute" parameterType="java.lang.String">
+        delete from czb_wechat_commodity_attr
+        where commodity_attr_id = #{commmodityAttrId}
+    </delete>
 
     <!--获取提供服务的地区列表-->
     <select id="getAreas" resultType="java.lang.String">
@@ -1036,6 +1040,19 @@
         WHERE czb_wechat_commodity.commodity_id in (${ids})
     </update>
 
+    <select id="getAttributeName" resultType="java.lang.String">
+        SELECT name
+        FROM  czb_attribute
+        GROUP BY name;
+    </select>
+
+    <select id="getAttributeContent" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT content
+        FROM `czb_attribute`
+        WHERE name =#{name}
+        GROUP BY content;
+    </select>
+
 <!--    编辑商品属性信息-->
     <update id="updateWxAttribute">
         UPDATE czb_wechat_commodity_attr
@@ -1048,10 +1065,10 @@
 
     <update id="updaFile">
         UPDATE czb_file
-        SET file_name = #{originalFilename},
-            save_path = #{address}
+        SET file_name = #{fileName, jdbcType = VARCHAR},
+            save_path = #{address},
             update_at = #{date}
         WHERE
-            file_id = #{id};
+            file_id  IN ( SELECT file_id FROM czb_file_function WHERE local_id = #{id});
     </update>
 </mapper>

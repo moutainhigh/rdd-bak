@@ -58,6 +58,13 @@ public interface WeChatCommodityMapperExtra {
      */
     List<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO wxAttributeDTO);
 
+    /**
+     * 删除商品属性
+     * @param wxAttributeDTO
+     * @return
+     */
+    Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO);
+
     Integer updateCommodity(WxCommodityDTO wxCommodityDTO);
 
     /**
@@ -74,6 +81,8 @@ public interface WeChatCommodityMapperExtra {
 
     Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
 
+    List<String> getAttributeName();
 
-    Boolean updaFile(String id, String originalFilename, String address, Date date);
+    Boolean updaFile(@Param("id")String id, @Param("fileName")String fileName, @Param("address")String address, @Param("date")Date date);
+    List<String> getAttributeContent(String name);
 }

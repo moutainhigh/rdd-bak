@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.Category;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,4 +43,13 @@ public interface WxCommodityManageService {
     Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws InterruptedException, IOException;
 
     Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws IOException;
+
+    Boolean updateWxAttributeFile(WxAttributeDTO wxAttributeDTO, User user) throws IOException;
+
+    List<String> getAttributeName();
+
+    List<String> getAttributeContent(String name);
+
+
+    Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO);
 }

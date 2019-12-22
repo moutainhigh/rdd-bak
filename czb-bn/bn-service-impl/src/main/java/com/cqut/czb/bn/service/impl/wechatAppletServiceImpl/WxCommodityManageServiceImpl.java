@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.cqut.czb.bn.entity.global.JSONResult;
 
 import java.io.IOException;
 import java.util.Date;
@@ -307,6 +308,16 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         return shopMapperExtra.selectAllShopInfo();
     }
 
+    @Override
+    public List<String> getAttributeName() {
+        return weChatCommodityMapperExtra.getAttributeName();
+    }
+
+    @Override
+    public List<String> getAttributeContent(String name) {
+        return weChatCommodityMapperExtra.getAttributeContent(name);
+    }
+
     /**
      * 新增商品属性
      * @param wxAttributeDTO
@@ -351,14 +362,26 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         wxAttributeDTO.setUpdateAt(new Date());
         wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
         Boolean insertImg = true;
-        if(file != null && !file.isEmpty() && wxAttributeDTO.getFileId() != null && wxAttributeDTO.getFileId() != "")
+        if(file != null && !file.isEmpty())
         {
             String address = "";
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
-            return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO) && weChatCommodityMapperExtra.updaFile(wxAttributeDTO.getImgs().getFileId(),file.getOriginalFilename(), address, new Date());
+            String fileName = file.getOriginalFilename();
+            return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO) && weChatCommodityMapperExtra.updaFile(wxAttributeDTO.getFileId(),fileName, address, wxAttributeDTO.getUpdateAt());
         }
         else {
-            return false;
+            return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO);
         }
+
+    }
+
+    @Override
+    public Boolean updateWxAttributeFile(WxAttributeDTO wxAttributeDTO,  User user) throws IOException {
+        wxAttributeDTO.setUpdateAt(new Date());
+        wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
+        return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO);
+    }
+    public Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO) {
+        return weChatCommodityMapperExtra.deleteWxAttribute(wxAttributeDTO);
     }
 }

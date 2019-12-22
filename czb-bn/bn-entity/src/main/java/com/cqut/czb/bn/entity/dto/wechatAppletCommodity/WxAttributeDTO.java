@@ -1,12 +1,13 @@
 package com.cqut.czb.bn.entity.dto.wechatAppletCommodity;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
 
-public class WxAttributeDTO {
+public class WxAttributeDTO extends PageDTO  {
     private String commmodityAttrId;
     private double extraFyMoney;
     private String commodityId;
