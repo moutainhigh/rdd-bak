@@ -49,7 +49,7 @@ public class WCPUserInfoServiceImpl implements WCPUserInfoService {
         if(user == null)
             return null;
         String json = "{\"scene\":\"" + user.getUserId() + "\",\"page\":\"pages/index/index\"}";
-        return FileUploadUtil.putObject("小程序个人码.png", new ByteArrayInputStream(initQrCodeNetWork(json)));
+        return FileUploadUtil.putObject("小程序个人码.png", new ByteArrayInputStream(initQrCodeNetWork(json))).replaceFirst("https", "http");
     }
 
     @Override
