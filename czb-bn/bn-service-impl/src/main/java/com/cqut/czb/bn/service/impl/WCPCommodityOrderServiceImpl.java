@@ -57,7 +57,7 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
             if(interval <= 10){
                 UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
                 weChatCommodityComdirmOrderDTO.setUserId(userDTO.getBindingid());
-                weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userId));
+                weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userDTO.getBindingid()));
                 return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
             }
             return false;
