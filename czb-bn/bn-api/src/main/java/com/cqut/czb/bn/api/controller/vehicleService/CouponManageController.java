@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
@@ -21,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/couponManage")
+
 public class CouponManageController {
 
     @Autowired
@@ -85,6 +87,7 @@ public class CouponManageController {
      * @return
      */
     @PostMapping("/insertCoupon")
+    @PermissionCheck(role = "管理员")
     public JSONResult insertCoupon(CouponStandard couponStandard){
         return new JSONResult(couponManageService.insertCouponStandard(couponStandard));
     }
@@ -95,6 +98,7 @@ public class CouponManageController {
      * @return
      */
     @PostMapping("/updateCoupon")
+    @PermissionCheck(role = "管理员")
     public JSONResult updateCoupon(CouponStandard couponStandard){
         return new JSONResult(couponManageService.updateCouponStandard(couponStandard));
     }
@@ -105,6 +109,7 @@ public class CouponManageController {
      * @return
      */
     @PostMapping("/deleteCoupon")
+    @PermissionCheck(role = "管理员")
     public JSONResult deleteCoupon(CouponStandard couponStandard) {
         return new JSONResult(couponManageService.deleteCouponStandard(couponStandard));
     }
@@ -124,6 +129,7 @@ public class CouponManageController {
      * @return
      */
     @PostMapping("issueCoupon")
+    @PermissionCheck(role = "管理员")
     public JSONResult issueCoupon(IssueServerCouponDTO issueServerCouponDTO){
         return new JSONResult(couponManageService.issueCoupon(issueServerCouponDTO));
     }

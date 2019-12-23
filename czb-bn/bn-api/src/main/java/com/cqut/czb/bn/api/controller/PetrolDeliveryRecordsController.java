@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
@@ -46,6 +47,7 @@ public class PetrolDeliveryRecordsController {
     }
 
     @PostMapping("/deleteRecord")
+    @PermissionCheck(role = "管理员")
     public JSONResult deleteRecord(@RequestBody DeliveryInput deliveryInput){
         return new JSONResult(petrolDeliveryRecordsService.deleteByPrimaryKey(deliveryInput.getRecordId()));
     }
@@ -56,6 +58,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/receivePetrolDelivery")
+    @PermissionCheck(role = "管理员")
     public JSONResult receivePetrolDelivery(@RequestBody DeliveryInput deliveryInput){
         return new JSONResult(petrolDeliveryRecordsService.receivePetrolDelivery(deliveryInput.getIds()));
     }
@@ -66,6 +69,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/updateRecords")
+    @PermissionCheck(role = "管理员")
     public JSONResult updateRecords(@RequestBody DeliveryInput deliveryInput){
         return new JSONResult(petrolDeliveryRecordsService.updatePetrolDelivery(deliveryInput));
     }
@@ -78,6 +82,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/exportRecords")
+    @PermissionCheck(role = "管理员")
     public JSONResult exportPertrolRecord(HttpServletResponse response, HttpServletRequest request,
                                                         DeliveryInput deliveryInput) {
         Map<String, Object> result = new HashMap<>();
@@ -126,6 +131,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("importRecords")
+    @PermissionCheck(role = "管理员")
     public JSONResult importRecords(MultipartFile file){
         try {
             petrolDeliveryRecordsService.ImportDeliveryRecords(file);
@@ -140,6 +146,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/selectLogistics")
+    @PermissionCheck(role = "管理员")
     public JSONResult selectLogisticsOnPC(@RequestBody DeliveryInput deliveryInput){
         String logistics = petrolDeliveryRecordsService.selectLogistics(deliveryInput);
         if (logistics==null||logistics.equals("")){

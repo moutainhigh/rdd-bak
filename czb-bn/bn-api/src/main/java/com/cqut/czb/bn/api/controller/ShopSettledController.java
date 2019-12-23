@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityUserInfoCollectionDTO;
@@ -58,6 +59,7 @@ public class ShopSettledController {
      * @param shopDTO
      * @return
      */
+
     @PostMapping("/updateShopInfoNoFile")
     public JSONResult updateShopInfoNoFile(ShopDTO shopDTO){
         return new JSONResult(shopSettledService.updateShopInfoNoFile(shopDTO));
@@ -94,6 +96,7 @@ public class ShopSettledController {
      * @param commodityUserInfoCollectionDTO
      * @return
      */
+    @PermissionCheck(role = "管理员,服务商")
     @PostMapping("/getCollectionInfo")
     public JSONResult getCollectionInfo(@RequestBody CommodityUserInfoCollectionDTO[] commodityUserInfoCollectionDTO){
         return new JSONResult(shopSettledService.selectInfo(commodityUserInfoCollectionDTO));
@@ -109,6 +112,7 @@ public class ShopSettledController {
      * @param commodityDTO
      * @return
      */
+    @PermissionCheck(role = "管理员,服务商")
     @PostMapping("/insertCommodity")
     public JSONResult insertCommodity( CommodityDTO commodityDTO,@RequestParam("file") MultipartFile file,Principal principal){
         User user = (User) redisUtil.get(principal.getName());
@@ -123,6 +127,7 @@ public class ShopSettledController {
      * @param commodityDTO
      * @return
      */
+    @PermissionCheck(role = "管理员,服务商")
     @PostMapping("updateCommodity")
     public JSONResult updateCommodity(CommodityDTO commodityDTO,@RequestParam("file") MultipartFile file){
         return new JSONResult(shopSettledService.updateCommodity(commodityDTO,file));
@@ -133,6 +138,7 @@ public class ShopSettledController {
      * @param commodityDTO
      * @return
      */
+    @PermissionCheck(role = "管理员,服务商")
     @PostMapping("updateCommodityNoFile")
     public JSONResult updateCommodity(@RequestBody CommodityDTO commodityDTO){
         return new JSONResult(shopSettledService.updateCommodityNoFile(commodityDTO));
