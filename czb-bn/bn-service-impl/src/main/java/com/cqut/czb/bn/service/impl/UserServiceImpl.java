@@ -32,6 +32,7 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements IUserService {
 
+
     private final UserMapper userMapper;
 
     private final UserMapperExtra userMapperExtra;
@@ -56,6 +57,7 @@ public class UserServiceImpl implements IUserService {
 
     private final ShopManagementService shopManagementService;
 
+    @Autowired
     private ShopMapperExtra shopMapperExtra;
 
     @Autowired
@@ -162,7 +164,7 @@ public class UserServiceImpl implements IUserService {
                             }else {
                                 for(RoleDTO temp : roleList){
                                     if("微信商家".equals(temp.getRoleName())){
-                                        if(userInputDTO.getBindingid() != null && userInputDTO.getBindingid() != "") {
+                                        if(userInputDTO.getBindingid() != null && "".equals(userInputDTO.getBindingid())) {
                                             if(shopMapperExtra.selectShopCount(userInputDTO.getBindingid()) == 0){
                                                 Shop shop = new Shop();
                                                 shop.setShopId(StringUtil.createId());
@@ -172,7 +174,7 @@ public class UserServiceImpl implements IUserService {
                                                 shop.setCreateAt(new Date());
                                                 shop.setAudit(1);
                                                 shop.setShopType(3);//微信商家
-                                                return shopManagementService.addShop(shop);
+                                                shopManagementService.addShop(shop);
                                             }
                                         }
                                     }
