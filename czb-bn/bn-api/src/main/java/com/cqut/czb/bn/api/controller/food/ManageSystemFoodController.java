@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.api.controller.food;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.ManageFood.Food;
 import com.cqut.czb.bn.entity.dto.ManageFood.ShopInfo;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.food.ManageSystemFoodService;
@@ -36,6 +38,7 @@ public class ManageSystemFoodController {
      * @return
      */
     @PostMapping("/add")
+    @PermissionCheck(role = "管理员,服务商")
     public JSONResult add(Food food, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
         return service.add(food, file, user);
@@ -47,6 +50,7 @@ public class ManageSystemFoodController {
      * @return
      */
     @PostMapping("/delete")
+    @PermissionCheck(role = "管理员,服务商")
     public JSONResult delete(Food food) {
         return service.delete(food);
     }
@@ -59,6 +63,7 @@ public class ManageSystemFoodController {
      * @return
      */
     @PostMapping("/change")
+    @PermissionCheck(role = "管理员,服务商")
     public JSONResult change(Food food, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
         return service.change(food, file, user);
@@ -70,6 +75,7 @@ public class ManageSystemFoodController {
      * @return
      */
     @PostMapping("/changeWithoutImage")
+    @PermissionCheck(role = "管理员,服务商")
     public JSONResult changeWithoutImage(@RequestBody Food food) {
         return service.changeWithoutImage(food);
     }
@@ -83,7 +89,7 @@ public class ManageSystemFoodController {
      */
     @GetMapping("/search")
     public JSONResult search(Food food, PageDTO pageDTO, Principal principal) {
-        User user = (User) redisUtils.get(principal.getName());
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         if( null == user) {
             return new JSONResult("没有权限");
         }

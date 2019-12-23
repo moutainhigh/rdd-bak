@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
@@ -50,18 +51,21 @@ public class DictController {
         return new JSONResult(dictService.selectDictList(dictInputDTO, pageDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updateDict",method = RequestMethod.POST)
     public JSONResult updateDict(DictInputDTO dictInputDTO){
 
         return new JSONResult(dictService.updateDict(dictInputDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/deleteDict",method = RequestMethod.POST)
     public JSONResult deleteDict(DictInputDTO dictInputDTO){
 
         return new JSONResult(dictService.deleteDict(dictInputDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/insertDict",method = RequestMethod.POST)
     public JSONResult insertDict(DictInputDTO dictInputDTO){
 

@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.TuiKuanDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.VehicleOrderManageDTO;
@@ -41,12 +43,14 @@ public class ServerOrderController {
      * @param cleanOrderDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/complete")
     public JSONResult complete(@RequestBody VehicleCleanOrderDTO cleanOrderDTO) {
         return service.complete(cleanOrderDTO);
     }
 
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/change")
     public JSONResult change() {
         return service.change();
@@ -68,6 +72,7 @@ public class ServerOrderController {
         return service.getRiders();
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/tuiKuan")
     public JSONResult tuiKuan(@RequestBody TuiKuanDTO tuiKuanDTO) {
         return service.tuiKuan(tuiKuanDTO);
@@ -78,14 +83,16 @@ public class ServerOrderController {
         return service.getUrls(serverOrderId);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/deleteImage")
     public JSONResult deleteImage(@Param("fileId") String fileId, @Param("type") String type) {
         return service.deleteImage(fileId, type);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/uploadImage")
     public JSONResult uploadImage(@Param("status") String status, @Param("serverOrderId") String serverOrderId, Principal principal, @RequestParam("file")MultipartFile file) {
-        User user = (User)redisUtils.get(principal.getName());
+        UserDTO user = (UserDTO)redisUtils.get(principal.getName());
         return service.uploadImage(status, serverOrderId ,user.getUserId(), file);
     }
 }
