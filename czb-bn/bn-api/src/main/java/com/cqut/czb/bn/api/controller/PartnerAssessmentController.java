@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.IndicatorRecord.IndicatorRecordDTO;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
@@ -30,11 +31,13 @@ public class PartnerAssessmentController {
         return new JSONResult(indicatorRecordService.getIndicatorRecordList(input,pageDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/comfirmCompliance",method = RequestMethod.POST)
     public JSONResult comfirmComplianceByRecordIds(@NotNull(message = "确认ID不能为空")String recordIds){
         return new JSONResult(indicatorRecordService.ConfirmComplianceByState(recordIds));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping(value = "/exportExaminationRecords")
     public JSONResult exportExaminationRecords(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input){
         return new JSONResult(indicatorRecordService.exportExaminationRecords(response,request,input));

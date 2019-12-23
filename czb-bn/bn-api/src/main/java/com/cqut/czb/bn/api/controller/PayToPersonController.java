@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.payToPerson.PayToPersonDTO;
 import com.cqut.czb.bn.entity.dto.platformIncomeRecords.PlatformIncomeRecordsDTO;
@@ -102,6 +103,7 @@ public class PayToPersonController {
      * @return
      * @throws Exception
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/importPayRecords")
     public JSONResult importPayRecords(@Param("file")MultipartFile file) throws Exception{
         try{

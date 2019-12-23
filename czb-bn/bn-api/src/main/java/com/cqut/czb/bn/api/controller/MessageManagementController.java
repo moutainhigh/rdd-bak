@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO;
 import com.cqut.czb.bn.entity.entity.MsgModel;
@@ -33,12 +34,13 @@ public class MessageManagementController {
         return new JSONResult(messageManagementService.getMessageList(messageListDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/deleteMsgModelById")
     public JSONResult deleteMsgModelById(@Param("msgModelId")String msgModelId){
         return new JSONResult(messageManagementService.deleteMsgModelById(msgModelId));
     }
 
-
+    @PermissionCheck(role = "管理员")
     @PostMapping("/createMsgModel")
     public JSONResult createMsgModel(@RequestBody MsgModel msgModel, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
@@ -46,6 +48,7 @@ public class MessageManagementController {
         return new JSONResult(messageManagementService.createMsgModel(msgModel));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/editMsgModel")
     public JSONResult editMsgModel(@RequestBody MsgModel msgModel, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
@@ -53,6 +56,7 @@ public class MessageManagementController {
         return new JSONResult(messageManagementService.editMsgModel(msgModel));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/sendMessage")
     public JSONResult sendMessage(@Param("msgModelId")String msgModelId){
         return new JSONResult(messageManagementService.sendMessage(msgModelId));
