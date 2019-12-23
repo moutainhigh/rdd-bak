@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.ShopMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrderDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.service.WCPCommodityOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
 
     @Autowired
     ShopMapperExtra shopMapperExtra;
+
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     @Override
     public WCPCommodityOrderDTO getCurrentOrder(String userId) {
@@ -61,11 +66,13 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
 
     @Override
     public WCPCommodityOrderDTO getOneCommodityOrderByShop(String userId, String orderId) {
-        return weChatCommodityOrderMapperExtra.selectOneCommodityOrderByShopUserId(userId, orderId);
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
+        return weChatCommodityOrderMapperExtra.selectOneCommodityOrderByShopUserId(userDTO.getBindingid(), orderId);
     }
 
     @Override
     public List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState) {
-        return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userId, orderState);
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
+        return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState);
     }
 }

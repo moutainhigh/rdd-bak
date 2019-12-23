@@ -75,13 +75,6 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 
     }
 
-    public static void main(String[] args){
-        Double num = 69.56345;
-        BigDecimal bd = new BigDecimal(num);
-        num = bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue();
-        System.out.println(num);
-    }
-
     @Override
     public List<String> getAreas() {
         return weChatCommodityMapperExtra.getAreas();
