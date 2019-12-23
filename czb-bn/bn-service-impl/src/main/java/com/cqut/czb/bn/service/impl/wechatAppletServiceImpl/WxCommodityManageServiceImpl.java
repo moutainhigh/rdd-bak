@@ -213,6 +213,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         if(wxCommodityDTO.getDeleteIds() != null && !"".equals(wxCommodityDTO.getDeleteIds())){
             deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
+        wxCommodityDTO.setEndTimeBusiness(wxCommodityDTO.getEndTimeBusiness().substring(0,19));
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) >
                 0 && deleteImgs;
     }
@@ -300,6 +301,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
             }
         }
+        wxCommodityDTO.setEndTimeBusiness(wxCommodityDTO.getEndTimeBusiness().substring(0,19));
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
     }
 
