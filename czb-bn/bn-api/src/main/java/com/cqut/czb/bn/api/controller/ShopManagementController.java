@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.shopManagement.SettlementDTO;
 import com.cqut.czb.bn.entity.dto.shopManagement.ShopManagementDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -36,11 +37,13 @@ public class ShopManagementController {
         return new JSONResult(shopManagementService.getSettlement(settlementDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/settleOrder")
     public JSONResult settleOrder(HttpServletResponse response, HttpServletRequest request, @Validated SettlementDTO settlementDTO){
         return new JSONResult(shopManagementService.settleOrder(response, request, settlementDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/auditShop")
     public JSONResult auditShop(ShopManagementDTO shopManagementDTO){
         return new JSONResult(shopManagementService.auditShop(shopManagementDTO));

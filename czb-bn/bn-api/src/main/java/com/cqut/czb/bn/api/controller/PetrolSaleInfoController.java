@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
@@ -50,6 +51,7 @@ public class PetrolSaleInfoController {
         return new JSONResult(petrolRechargeService.getPetrolRechargeList(inputDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value ="/recharge",method = RequestMethod.POST)
     public JSONResult recharge(@RequestBody PetrolRechargeInputDTO inputDTO ){
         return new JSONResult(petrolRechargeService.recharge(inputDTO));

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.PushDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.RemotePushNoticeDTO;
@@ -20,21 +21,25 @@ public class RemotePushNoticeController {
         return service.search(notice, pageDTO);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("add")
     public JSONResult add(@RequestBody RemotePushNotice notice) {
         return service.add(notice);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("edit")
     public JSONResult edit(@RequestBody RemotePushNotice notice) {
         return service.edit(notice);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("delete")
     public JSONResult delete(@RequestBody RemotePushNoticeDTO notice) {
         return service.delete(notice);
     }
 
+    @PermissionCheck(role = "管理员")
     @GetMapping("getRemotePushNoticeType")
     public JSONResult getRemotePushNoticeType(RemotePushNotice notice) {
         return new JSONResult(service.getRemotePushNoticeType(notice)) ;

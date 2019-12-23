@@ -6,6 +6,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.ShopInfoDTO;
+import com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.cqut.czb.bn.entity.entity.File;
@@ -20,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.cqut.czb.bn.entity.global.JSONResult;
 
 import java.io.IOException;
 import java.util.Date;
@@ -76,14 +78,14 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     /**
      * 获取商品属性信息
-     * @param commodityId
+     * @param wxAttributeDTO
      * @param pageDTO
      * @return
      */
     @Override
-    public PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO WxAttributeDTO, PageDTO pageDTO, String userId) {
+    public PageInfo<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO wxAttributeDTO, PageDTO pageDTO, User user) {
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize());
-        return new PageInfo<>(weChatCommodityMapperExtra.selectAllWxAttribute(WxAttributeDTO));
+        return new PageInfo<>(weChatCommodityMapperExtra.selectAllWxAttribute(wxAttributeDTO));
     }
 
     @Override
@@ -97,9 +99,28 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         wxCommodityDTO.setCommodityImgId(StringUtil.createId());
         wxCommodityDTO.setCreateAt(new Date());
         wxCommodityDTO.setUpdateAt(new Date());
-        //将富文本编辑器中的图片url改为http请求
-        if (wxCommodityDTO.getCommodityIntroduce()!=null)
-        wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
+        if (wxCommodityDTO.getCommodityIntroduce()!=null){
+            //将富文本编辑器中的图片url改为http请求
+            wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace("https","http"));
+            String pattern = "(<img)(.*?)(/>)";
+            // 创建 Pattern 对象
+            Pattern r = Pattern.compile(pattern);
+            // 创建 matcher 对象
+            Matcher m = r.matcher(wxCommodityDTO.getCommodityIntroduce());
+            //将所有img标签没有style的都加上宽度
+            while(m.find())
+            {
+                System.out.println(m.group());
+                String exp = m.group();
+                if (exp.indexOf("style=\"")<0) {
+                    StringBuffer str = new StringBuffer(exp);
+                    str.insert(4," style=\"width:100%\" ");
+                    wxCommodityDTO.setCommodityIntroduce(wxCommodityDTO.getCommodityIntroduce().replace(exp,str));
+                }
+
+
+            }
+        }
         String address = "";
         if (file != null && !file.isEmpty()) {
             //插入图片
@@ -192,6 +213,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         if(wxCommodityDTO.getDeleteIds() != null && !"".equals(wxCommodityDTO.getDeleteIds())){
             deleteImgs = fileMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0 && fileFunctionMapperExtra.deleteByDeleteIds(wxCommodityDTO.getDeleteIds()) > 0;
         }
+        wxCommodityDTO.setEndTimeBusiness(wxCommodityDTO.getEndTimeBusiness().substring(0,19));
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) >
                 0 && deleteImgs;
     }
@@ -205,7 +227,6 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     public List<Category> selectAllCategory() {
         return categoryMapperExtra.selectAllCategory();
     }
-
 
 
     @Override
@@ -280,6 +301,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
             }
         }
+        wxCommodityDTO.setEndTimeBusiness(wxCommodityDTO.getEndTimeBusiness().substring(0,19));
         return weChatCommodityMapperExtra.updateCommodity(wxCommodityDTO) > 0 && insertImg && deleteImgs;
     }
 
@@ -288,20 +310,85 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
         return shopMapperExtra.selectAllShopInfo();
     }
 
+    @Override
+    public List<String> getAttributeName() {
+        return weChatCommodityMapperExtra.getAttributeName();
+    }
+
+    @Override
+    public List<String> getAttributeContent(String name) {
+        return weChatCommodityMapperExtra.getAttributeContent(name);
+    }
+
     /**
      * 新增商品属性
      * @param wxAttributeDTO
-     * @param user
      * @return
      * @throws InterruptedException
      * @throws IOException
      */
     @Override
-    public Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, User user) throws InterruptedException, IOException {
+    public Boolean addWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws InterruptedException, IOException {
+        wxAttributeDTO.setCommmodityAttrId(StringUtil.createWCId());
+        wxAttributeDTO.setFileId(StringUtil.createId());
         wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
-        wxAttributeDTO.setCommodityId(StringUtil.createWCId());
         wxAttributeDTO.setCreateAt(new Date());
         wxAttributeDTO.setUpdateAt(new Date());
+        String address = "";
+        if (file != null && !file.isEmpty()) {
+            //插入图片
+            address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            File file1 = new File();
+            file1.setFileId(StringUtil.createId());
+            file1.setFileName(file.getOriginalFilename());
+            file1.setSavePath(address);
+            file1.setUploader(user.getUserId());
+            file1.setCreateAt(new Date());
+            file1.setUpdateAt(new Date());
+            fileMapper.insertSelective(file1);
+
+            FileFunction fileFunction = new FileFunction();
+            fileFunction.setId(StringUtil.createId());
+            fileFunction.setFileId(file1.getFileId());
+            fileFunction.setLocalId(wxAttributeDTO.getFileId());
+            fileFunction.setCreateAt(new Date());
+            fileFunction.setUpdateAt(new Date());
+            fileFunction.setGroupCode("WxAttribute");
+            fileFunctionMapper.insertSelective(fileFunction);
+        }
         return weChatCommodityMapperExtra.insertAttrbute(wxAttributeDTO) > 0;
+    }
+
+    @Override
+    public Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO, MultipartFile file, User user) throws IOException {
+        wxAttributeDTO.setUpdateAt(new Date());
+        wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
+        Boolean insertImg = true;
+        if(file != null && !file.isEmpty())
+        {
+            String address = "";
+            address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
+            String fileName = file.getOriginalFilename();
+            return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO) && weChatCommodityMapperExtra.updaFile(wxAttributeDTO.getFileId(),fileName, address, wxAttributeDTO.getUpdateAt());
+        }
+        else {
+            return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO);
+        }
+
+    }
+
+    @Override
+    public Boolean updateWxAttributeFile(WxAttributeDTO wxAttributeDTO,  User user) throws IOException {
+        wxAttributeDTO.setUpdateAt(new Date());
+        wxAttributeDTO.setAttributeId(getAttributeId(wxAttributeDTO));
+        return weChatCommodityMapperExtra.updateWxAttribute(wxAttributeDTO);
+    }
+    public Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO) {
+        return weChatCommodityMapperExtra.deleteWxAttribute(wxAttributeDTO);
+    }
+
+    @Override
+    public List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO) {
+        return weChatCommodityMapperExtra.checkWxAttribute(wxAttributeDTO);
     }
 }

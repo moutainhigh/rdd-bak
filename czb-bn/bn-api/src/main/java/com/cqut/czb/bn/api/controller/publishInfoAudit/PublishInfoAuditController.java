@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.publishInfoAudit;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.publishInfoAudit.PublishInfoId;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -31,6 +32,7 @@ public class PublishInfoAuditController {
      * @param publishInfoId
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/changeIsExamine")
     public JSONResult changeIsExamine(@RequestBody  PublishInfoId publishInfoId){
         return publishInfoAuditService.changeIsExamine(publishInfoId.getInfoId());

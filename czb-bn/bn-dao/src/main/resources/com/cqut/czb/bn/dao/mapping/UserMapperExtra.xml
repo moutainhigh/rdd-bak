@@ -216,6 +216,9 @@
         <if test="isVip != null">
           and u.is_vip = #{isVip,jdbcType=INTEGER}
         </if>
+        <if test="userType != null">
+          and u.user_type = #{userType,jdbcType=INTEGER}
+        </if>
         <if test="superiorUser != null and superiorUser != ''">
             and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
         </if>

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuIdDTO;
 import com.cqut.czb.bn.entity.dto.menu.MenuInputDTO;
@@ -25,6 +26,7 @@ public class MenuManagementController {
     @Autowired
     IMenuService menuService;
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/insertMenu",method = RequestMethod.POST)
     public JSONResult insertMenu(@Validated @RequestBody MenuInputDTO menuInputDTO){
         boolean isInsert = menuService.insertMenu(menuInputDTO);
@@ -35,6 +37,7 @@ public class MenuManagementController {
         }
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/deleteMenu",method = RequestMethod.POST)
     public JSONResult deleteMenu(@Validated @RequestBody MenuIdDTO menuIdDTO){
 
@@ -46,6 +49,7 @@ public class MenuManagementController {
         }
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updateMenu",method = RequestMethod.POST)
     public JSONResult updateMenu(@Validated @RequestBody MenuInputDTO menuInputDTO){
         boolean isUpdate = menuService.updateMenu(menuInputDTO);

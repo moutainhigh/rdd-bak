@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -57,17 +58,33 @@ public interface WeChatCommodityMapperExtra {
      */
     List<WxAttributeDTO> selectAllWxAttribute(WxAttributeDTO wxAttributeDTO);
 
+    /**
+     * 删除商品属性
+     * @param wxAttributeDTO
+     * @return
+     */
+    Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO);
+
     Integer updateCommodity(WxCommodityDTO wxCommodityDTO);
 
     /**
      * 获取开启服务地区列表
      * @return
      */
-    String getAreas();
+    List<String> getAreas();
 
     Integer updateIsSale(@Param("ids") String ids, @Param("isSale") Integer isSale);
 
     Integer selectPosterImgCount(String commodityImgId);
 
     Integer updatePoster(@Param("commodityImgId")String commodityImgId,@Param("address") String address);
+
+    Boolean updateWxAttribute(WxAttributeDTO wxAttributeDTO);
+
+    List<String> getAttributeName();
+
+    Boolean updaFile(@Param("id")String id, @Param("fileName")String fileName, @Param("address")String address, @Param("date")Date date);
+    List<String> getAttributeContent(String name);
+
+    List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO);
 }

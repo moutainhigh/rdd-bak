@@ -33,6 +33,19 @@
         <collection property="imgs" select="selectImgs" column="commodity_img_id"></collection>
         <collection property="posterImg" select="selectPosterImg" column="commodity_img_id"></collection>
     </resultMap>
+
+    <resultMap id="BaseAttributeMap" type="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" >
+        <id column="commodity_attr_id" property="commmodityAttrId" jdbcType="VARCHAR" />
+        <result column="extra_fy_money" property="extraFyMoney" jdbcType="DOUBLE" />
+        <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+        <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+        <result column="extra_sale_money" property="extraSaleMoney" jdbcType="DOUBLE" />
+        <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+        <result column="attr_order" property="attrOrder" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <collection property="imgs" select="selectAllImgs" column="file_id"></collection>
+    </resultMap>
     <sql id="Base_Column_List" >
         commodity_id, shop_id, commodity_title, commodity_info, discount, commodity_img_id,
         cost_price, original_price, sale_price, commmodity_type_id, starting_time_business,
@@ -61,6 +74,24 @@
         WHERE cff.local_id = #{commodity_img_id,jdbcType=VARCHAR}
         AND group_code = 'WCCommodity'
     </select>
+
+    <select id="selectAllImgs" resultMap="functionImgsMap" >
+        SELECT
+            czb_file_function.id,
+            czb_file_function.group_code,
+            czb_file_function.file_id,
+            czb_file_function.local_id,
+            czb_file.save_path,
+            czb_file_function.create_at,
+            czb_file_function.update_at
+        FROM
+            czb_file,
+            czb_file_function
+        WHERE
+            czb_file_function.local_id = #{file_id, jdbcType=VARCHAR}
+            and czb_file_function.file_id = czb_file.file_id
+    </select>
+
     <select id="selectPosterImg" resultMap="functionImgsMap" >
         SELECT
             cff.local_id,
@@ -85,7 +116,7 @@
         cost_price, original_price, sale_price, commmodity_type_id, czb_wechat_commodity.starting_time_business,
         czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_shop.shop_name,
         czb_wechat_commodity.shop_phone, czb_wechat_commodity.shop_content, czb_wechat_commodity.shop_address, czb_wechat_commodity.longitude, czb_wechat_commodity.latitude, is_have_shop, show_place,
-        show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney, czb_wechat_commodity.commodity_introduce commodityIntroduce
+        show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney, czb_wechat_commodity.commodity_introduce commodityIntroduce, area,sales_volume salesVolume
         from czb_wechat_commodity
         LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
@@ -109,16 +140,16 @@
             </if>
         </where>
     </select>
-
-    <select id="selectAllWxAttribute" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
+<!-- 查询商品属性信息-->
+    <select id="selectAllWxAttribute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultMap="BaseAttributeMap">
             SELECT
-                czb_wechat_commodity_attr.commodity_attr_id AS commmodityAttrId,
-                czb_wechat_commodity_attr.extra_fy_money AS extraFyMoney,
+                czb_wechat_commodity_attr.commodity_attr_id,
+                czb_wechat_commodity_attr.extra_fy_money,
                 czb_wechat_commodity_attr.commodity_id,
-                czb_wechat_commodity_attr.attribute_id AS attributeId,
-                czb_wechat_commodity_attr.extra_sale_money AS extraSaleMoney,
-                czb_wechat_commodity_attr.file_id AS fileId,
-                czb_wechat_commodity_attr.attr_order AS attrOrder,
+                czb_wechat_commodity_attr.attribute_id,
+                czb_wechat_commodity_attr.extra_sale_money,
+                czb_wechat_commodity_attr.file_id,
+                czb_wechat_commodity_attr.attr_order,
                 czb_attribute.`name`,
                 czb_attribute.content
             FROM
@@ -126,13 +157,30 @@
                 czb_attribute
             WHERE
                 commodity_id = #{commodityId}
-                AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id;
+                AND czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id
+            ORDER BY czb_wechat_commodity_attr.create_at DESC;
     </select>
+
+    <delete id="deleteWxAttribute" parameterType="java.lang.String">
+        delete from czb_wechat_commodity_attr
+        where commodity_attr_id = #{commmodityAttrId}
+    </delete>
+
     <!--获取提供服务的地区列表-->
     <select id="getAreas" resultType="java.lang.String">
-        select content
-        from czb_dict
-        where name='bussiness_area'
+--         select content
+--         from czb_dict
+--         where name='bussiness_area'
+        SELECT
+            area
+        FROM
+            czb_wechat_commodity
+        WHERE
+            area IS NOT NULL
+        AND area != ''
+        AND area != 'null'
+        GROUP BY
+            area
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
         delete from czb_wechat_commodity
@@ -467,8 +515,10 @@
         <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
+        <result column="salesVolume" property="salesVolume" jdbcType="INTEGER" />
         <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
         <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
+        <collection property="attrs" column="commodityId" javaType="list" select="selectCommodityAttrs"></collection>
     </resultMap>
 
     <select id="selectAllCommodityByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
@@ -492,7 +542,7 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
+        czb_wechat_commodity.sales_volume salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -500,7 +550,7 @@
         WHERE
         czb_wechat_commodity.is_sale = 1
         AND czb_wechat_commodity.end_time_business &gt;= now()
-        <if test = "area != null and area != '' ">
+        <if test = "area != null and area != '' and area != '重庆市'">
             AND area = #{area, jdbcType = VARCHAR}
         </if>
         <if test = "shopPlace != null and shopPlace != '' ">
@@ -510,6 +560,44 @@
           commodityId
         ORDER BY
           show_order
+    </select>
+
+    <resultMap id="attrsMap" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrName">
+        <result column="commodityId" property="commodityId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <collection property="contentList" column="{`name` = name, commodityId = commodityId}" javaType="list" select="selectAttrsByName"/>
+    </resultMap>
+
+    <select id="selectAttrsByName" resultType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrContent">
+        SELECT
+            czb_wechat_commodity_attr.attribute_id attributeId,
+            czb_wechat_commodity_attr.extra_fy_money extraFyMoney,
+            czb_wechat_commodity_attr.commodity_id commodityId,
+            czb_attribute.attribute_id attributeId,
+            czb_wechat_commodity_attr.extra_sale_money extraSaleMoney,
+            czb_file.save_path savePath,
+            czb_attribute.`name` `name`,
+            czb_attribute.content content
+        FROM
+            czb_wechat_commodity_attr
+            LEFT JOIN czb_attribute ON czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id
+            LEFT JOIN czb_file ON czb_wechat_commodity_attr.file_id = czb_file.file_id
+        WHERE
+            czb_wechat_commodity_attr.commodity_id = #{commodityId, jdbcType = VARCHAR}
+            AND czb_attribute.`name` = #{`name`, jdbcType = VARCHAR}
+        order by
+            czb_wechat_commodity_attr.attr_order
+    </select>
+
+    <select id="selectCommodityAttrs" parameterType="java.lang.String" resultMap="attrsMap">
+        SELECT DISTINCT
+            czb_attribute.`name` `name`,
+            czb_wechat_commodity_attr.commodity_id commodityId
+        FROM
+            czb_wechat_commodity_attr
+            LEFT JOIN czb_attribute ON czb_wechat_commodity_attr.attribute_id = czb_attribute.attribute_id
+        WHERE
+            czb_wechat_commodity_attr.commodity_id = #{commodityId, jdbcType = VARCHAR}
     </select>
 
     <select id="selectPosterImgCount" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -574,7 +662,7 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        IFNULL( SUM( IF(czb_wechat_commodity_order.pay_status = 1,czb_wechat_commodity_order.commodity_num,0) ), 0 ) salesVolume
+        czb_wechat_commodity.sales_volume salesVolume
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -679,6 +767,9 @@
             <if test="commodityIntroduce != null" >
                 commodity_introduce,
             </if>
+            <if test="area != null" >
+                area,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -768,9 +859,13 @@
             <if test="commodityIntroduce != null" >
                 #{commodityIntroduce,jdbcType=VARCHAR},
             </if>
+            <if test="area != null" >
+                #{area,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
+<!--    获取商品属性的id-->
     <select id="getAttributeId" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultType="java.lang.String">
         SELECT
             attribute_id
@@ -779,7 +874,7 @@
         WHERE
             content = #{content};
     </select>
-
+<!-- 新增商品属性信息-->
     <insert id="insertAttrbute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO">
         insert into czb_wechat_commodity_attr
         <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -929,6 +1024,12 @@
             <if test="commodityIntroduce != null" >
                 commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
             </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="salesVolume != null" >
+                sales_volume = #{salesVolume,jdbcType=INTEGER},
+            </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>
@@ -938,4 +1039,69 @@
         SET is_sale = #{isSale, jdbcType = INTEGER}
         WHERE czb_wechat_commodity.commodity_id in (${ids})
     </update>
+
+    <select id="getAttributeName" resultType="java.lang.String">
+        SELECT name
+        FROM  czb_attribute
+        GROUP BY name;
+    </select>
+
+    <select id="getAttributeContent" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT content
+        FROM `czb_attribute`
+        WHERE name =#{name}
+        GROUP BY content;
+    </select>
+
+<!--    编辑商品属性信息-->
+    <update id="updateWxAttribute">
+        UPDATE czb_wechat_commodity_attr
+	    SET extra_fy_money = #{extraFyMoney, jdbcType = VARCHAR},
+		extra_sale_money = #{extraSaleMoney},
+		update_at = #{updateAt},
+		attribute_id = #{attributeId}
+	WHERE commodity_attr_id = #{commmodityAttrId};
+    </update>
+
+    <update id="updaFile">
+        UPDATE czb_file
+        SET file_name = #{fileName, jdbcType = VARCHAR},
+            save_path = #{address},
+            update_at = #{date}
+        WHERE
+            file_id  IN ( SELECT file_id FROM czb_file_function WHERE local_id = #{id});
+    </update>
+
+    <select id="checkWxAttribute" resultMap="BaseAttributeMap">
+        SELECT
+            czb_wechat_commodity_attr.commodity_attr_id,
+            czb_wechat_commodity_attr.extra_fy_money,
+            czb_wechat_commodity_attr.commodity_id,
+            czb_wechat_commodity_attr.attribute_id,
+            czb_wechat_commodity_attr.extra_sale_money,
+            czb_wechat_commodity_attr.file_id,
+            czb_wechat_commodity_attr.attr_order,
+            czb_attribute.`name`,
+            czb_attribute.content
+        FROM
+            czb_wechat_commodity_attr,
+            czb_attribute
+        WHERE
+            czb_wechat_commodity_attr.attribute_id IN (
+            SELECT attribute_id FROM czb_attribute
+            WHERE
+            <if test = "name != null">
+                NAME = #{name}
+            </if>
+            <if test = "content != null">
+                content = #{content}
+            </if>
+            )
+            <if test = "content != null">
+                AND czb_attribute.content = #{content}
+            </if>
+            <if test = "name != null">
+                AND czb_attribute.`name` = #{name}
+            </if>
+    </select>
 </mapper>
