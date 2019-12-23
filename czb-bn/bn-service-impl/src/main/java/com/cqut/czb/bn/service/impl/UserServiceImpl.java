@@ -157,24 +157,25 @@ public class UserServiceImpl implements IUserService {
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(0);
                                 userMapperExtra.updateUser(user);
-                            }else if(roleList.size() > 0){
+                            }else {
                                 for(RoleDTO temp : roleList){
                                     if("微信商家".equals(temp.getRoleName())){
-                                        Shop shop = new Shop();
-                                        shop.setShopId(StringUtil.createId());
-                                        shop.setUserId(userInputDTO.getUserId());
-                                        shop.setShopName(userInputDTO.getUserName());
-                                        shop.setShopPhone(userInputDTO.getUserAccount());
-                                        shop.setCreateAt(new Date());
-                                        shop.setAudit(1);
-                                        shop.setShopType(3);//微信商家
-                                        boolean flag = shopManagementService.addShop(shop);
-                                        if(!flag){
-                                            return false;
+                                        if(userInputDTO.getBindingid() != null && userInputDTO.getBindingid() != "") {
+                                            Shop shop = new Shop();
+                                            shop.setShopId(StringUtil.createId());
+                                            shop.setUserId(userInputDTO.getBindingid());
+                                            shop.setShopName(userInputDTO.getUserName());
+                                            shop.setShopPhone(userInputDTO.getUserAccount());
+                                            shop.setCreateAt(new Date());
+                                            shop.setAudit(1);
+                                            shop.setShopType(3);//微信商家
+                                            boolean flag = shopManagementService.addShop(shop);
+                                            if (!flag) {
+                                                return false;
+                                            }
                                         }
                                     }
                                 }
-                            } else {
                                 UserInputDTO user = new UserInputDTO();
                                 user.setUserId(userInputDTO.getUserId());
                                 user.setIsLoginPc(1);
@@ -481,9 +482,6 @@ public class UserServiceImpl implements IUserService {
         if (!isLike) {
             return "您的账号或密码输入错误";
         } else {
-            if(checkUser.getBindingid()!=null){
-                return "该账号已经被绑定了";
-            }
             UserInputDTO user = new UserInputDTO();
             user.setUserId(userId);
             user.setBindingid(checkUser.getUserId());
@@ -491,8 +489,8 @@ public class UserServiceImpl implements IUserService {
             userCheck.setUserId(userId);
             userCheck.setBindingid(checkUser.getUserId());
             int i = userMapperExtra.updateUser(user);
-            int j = userMapperExtra.updateUser(userCheck);
-            if(i>0 && j >0){
+//            int j = userMapperExtra.updateUser(userCheck);
+            if(i>0){
                 return "绑定成功";
             }
             return "绑定失败:请联系管理员";
