@@ -85,7 +85,7 @@ public class wxCommodityManageController {
      * @throws IOException
      */
     @PostMapping("/addWxAttribute")
-    public JSONResult addWxAttribute(WxAttributeDTO wxAttributeDTO, Principal principal) throws IOException, InterruptedException {
+    public JSONResult addWxAttribute(WxAttributeDTO wxAttributeDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException, InterruptedException {
         if (principal==null || principal.getName()==null){
             return new JSONResult(500,"token为空");
         }
