@@ -65,7 +65,7 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 //                wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
 //            }
 //        }
-        Dict dict = dictMapperExtra.selectDictByName("sp_fy1");
+        Dict dict = dictMapperExtra.selectDictByName("applet_fy1_rate");
         if(dict != null && wcpCommodityOutputDTO != null){
             Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getTotalFyMoney();
             BigDecimal bd = new BigDecimal(num);

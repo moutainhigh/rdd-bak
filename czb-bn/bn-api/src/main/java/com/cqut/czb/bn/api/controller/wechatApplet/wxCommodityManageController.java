@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.wechatApplet;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
@@ -48,6 +49,7 @@ public class wxCommodityManageController {
         return new JSONResult(wxCommodityManageService.selectAllWxAttribute(WxAttributeDTO, pageDTO, user));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/deletedWxCommodity")
     public JSONResult deletedWxCommodity(String commodityId){
         Boolean deleted = wxCommodityManageService.deletedWxCommodity(commodityId);
@@ -84,6 +86,7 @@ public class wxCommodityManageController {
      * @return
      * @throws IOException
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/addWxAttribute")
     public JSONResult addWxAttribute(WxAttributeDTO wxAttributeDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException, InterruptedException {
         if (principal==null || principal.getName()==null){
@@ -133,6 +136,7 @@ public class wxCommodityManageController {
         return new JSONResult(wxCommodityManageService.getAllShopInfo());
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateWxAttribute")
     public JSONResult updateWxAttribute(WxAttributeDTO wxAttributeDTO, @RequestParam("file")MultipartFile file, Principal principal) throws IOException {
         if (principal==null || principal.getName()==null){
@@ -142,6 +146,7 @@ public class wxCommodityManageController {
         return new JSONResult(wxCommodityManageService.updateWxAttribute(wxAttributeDTO, file, user));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateWxAttributeFile")
     public JSONResult updateWxAttributeFile(WxAttributeDTO wxAttributeDTO, Principal principal) throws IOException {
         if (principal==null || principal.getName()==null){
@@ -150,13 +155,12 @@ public class wxCommodityManageController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(wxCommodityManageService.updateWxAttributeFile(wxAttributeDTO, user));
     }
-
+    @PermissionCheck(role = "管理员")
     @GetMapping("/getAttributeName")
     public JSONResult getAttributeName(){
-
         return new JSONResult(wxCommodityManageService.getAttributeName());
     }
-
+    @PermissionCheck(role = "管理员")
     @GetMapping("/getAttributeContent")
     public JSONResult getAttributeContent(String name){
         return new JSONResult(wxCommodityManageService.getAttributeContent(name));
@@ -169,8 +173,22 @@ public class wxCommodityManageController {
      * @throws IOException
      * @throws InterruptedException
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/deleteWxAttribute")
     public JSONResult deleteWxAttribute(WxAttributeDTO wxAttributeDTO) throws IOException, InterruptedException {
         return new JSONResult(wxCommodityManageService.deleteWxAttribute(wxAttributeDTO));
+    }
+
+    /**
+     * 查询
+     * @param wxAttributeDTO
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    @PermissionCheck(role = "管理员")
+    @PostMapping("/checkWxAttribute")
+    public JSONResult checkWxAttribute(WxAttributeDTO wxAttributeDTO)throws IOException, InterruptedException {
+        return new JSONResult(wxCommodityManageService.checkWxAttribute(wxAttributeDTO));
     }
 }

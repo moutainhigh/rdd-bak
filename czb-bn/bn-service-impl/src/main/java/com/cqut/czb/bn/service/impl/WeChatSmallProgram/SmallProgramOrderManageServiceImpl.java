@@ -149,7 +149,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
      * 处理用户权限问题
      * (微信小程序商家只能看到自己的订单，管理员可以看到所有订单)
      *
-     * 逻辑：管理员设置managerId为null，普通商家不对managerId做操作，使之成为SQL筛选条件
+     * 逻辑：管理员设置managerId为null，普通商家的managerId就是userId做操作，使之成为SQL筛选条件
      *
      * @param input
      */
@@ -159,7 +159,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         user.setUserId(input.getManagerId());
         List<UserRoleDTO> roleList = userRoleMapperExtra.selectUserRoleName(user);
 
-        boolean flag = false;
+        boolean flag = false; // 使用标识是为了处理多角色情况
         for (UserRoleDTO userRoleDTO : roleList) {
             if ("管理员".equals(userRoleDTO.getRoleName())) {
                 // 如果该用户拥有管理员权限，进行标识

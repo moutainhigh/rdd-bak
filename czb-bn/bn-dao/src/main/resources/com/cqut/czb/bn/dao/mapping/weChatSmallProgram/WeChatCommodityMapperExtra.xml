@@ -1071,4 +1071,37 @@
         WHERE
             file_id  IN ( SELECT file_id FROM czb_file_function WHERE local_id = #{id});
     </update>
+
+    <select id="checkWxAttribute" resultMap="BaseAttributeMap">
+        SELECT
+            czb_wechat_commodity_attr.commodity_attr_id,
+            czb_wechat_commodity_attr.extra_fy_money,
+            czb_wechat_commodity_attr.commodity_id,
+            czb_wechat_commodity_attr.attribute_id,
+            czb_wechat_commodity_attr.extra_sale_money,
+            czb_wechat_commodity_attr.file_id,
+            czb_wechat_commodity_attr.attr_order,
+            czb_attribute.`name`,
+            czb_attribute.content
+        FROM
+            czb_wechat_commodity_attr,
+            czb_attribute
+        WHERE
+            czb_wechat_commodity_attr.attribute_id IN (
+            SELECT attribute_id FROM czb_attribute
+            WHERE
+            <if test = "name != null">
+                NAME = #{name}
+            </if>
+            <if test = "content != null">
+                content = #{content}
+            </if>
+            )
+            <if test = "content != null">
+                AND czb_attribute.content = #{content}
+            </if>
+            <if test = "name != null">
+                AND czb_attribute.`name` = #{name}
+            </if>
+    </select>
 </mapper>
