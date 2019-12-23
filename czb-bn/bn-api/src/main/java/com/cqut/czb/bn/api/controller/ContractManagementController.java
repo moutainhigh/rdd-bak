@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.contractManagement.ContractInputDTO;
@@ -111,6 +112,7 @@ public class ContractManagementController {
     /**
      *  修改合同状态
      * */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/changeContractState",method = RequestMethod.POST)
     public JSONResult changeContractState(ContractInputDTO contractInputDTO){
 
@@ -120,6 +122,7 @@ public class ContractManagementController {
     /**
      *  下载合同
      * */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/downloadContract",method = RequestMethod.POST)
     public JSONResult downloadContract(String contractId, HttpServletResponse response){
 

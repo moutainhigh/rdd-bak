@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.order.OrderDTO;
@@ -26,6 +27,7 @@ public class OrderManageController {
         return new JSONResult(orderManageService.getOrderList(orderDTO,pageDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/updateOrder")
     public JSONResult updateOrder( OrderDTO orderDTO){
         return new JSONResult(orderManageService.updateOrderState(orderDTO));
