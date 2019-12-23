@@ -27,11 +27,9 @@ public class WxCommodityDTO {
 
     private String commmodityTypeId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startingTimeBusiness;
+    private String startingTimeBusiness;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTimeBusiness;
+    private String endTimeBusiness;
 
     private String commoditySource;
 
@@ -240,19 +238,19 @@ public class WxCommodityDTO {
         this.commmodityTypeId = commmodityTypeId == null ? null : commmodityTypeId.trim();
     }
 
-    public Date getStartingTimeBusiness() {
+    public String getStartingTimeBusiness() {
         return startingTimeBusiness;
     }
 
-    public void setStartingTimeBusiness(Date startingTimeBusiness) {
+    public void setStartingTimeBusiness(String startingTimeBusiness) {
         this.startingTimeBusiness = startingTimeBusiness;
     }
 
-    public Date getEndTimeBusiness() {
+    public String getEndTimeBusiness() {
         return endTimeBusiness;
     }
 
-    public void setEndTimeBusiness(Date endTimeBusiness) {
+    public void setEndTimeBusiness(String endTimeBusiness) {
         this.endTimeBusiness = endTimeBusiness;
     }
 
