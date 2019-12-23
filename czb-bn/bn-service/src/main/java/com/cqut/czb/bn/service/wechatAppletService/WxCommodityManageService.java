@@ -52,4 +52,6 @@ public interface WxCommodityManageService {
 
 
     Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO);
+
+    List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO);
 }

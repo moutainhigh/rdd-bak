@@ -158,7 +158,6 @@ public class wxCommodityManageController {
     @PermissionCheck(role = "管理员")
     @GetMapping("/getAttributeName")
     public JSONResult getAttributeName(){
-
         return new JSONResult(wxCommodityManageService.getAttributeName());
     }
     @PermissionCheck(role = "管理员")
@@ -178,5 +177,18 @@ public class wxCommodityManageController {
     @PostMapping("/deleteWxAttribute")
     public JSONResult deleteWxAttribute(WxAttributeDTO wxAttributeDTO) throws IOException, InterruptedException {
         return new JSONResult(wxCommodityManageService.deleteWxAttribute(wxAttributeDTO));
+    }
+
+    /**
+     * 查询
+     * @param wxAttributeDTO
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    @PermissionCheck(role = "管理员")
+    @PostMapping("/checkWxAttribute")
+    public JSONResult checkWxAttribute(WxAttributeDTO wxAttributeDTO)throws IOException, InterruptedException {
+        return new JSONResult(wxCommodityManageService.checkWxAttribute(wxAttributeDTO));
     }
 }
