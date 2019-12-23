@@ -386,4 +386,9 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
     public Boolean deleteWxAttribute(WxAttributeDTO wxAttributeDTO) {
         return weChatCommodityMapperExtra.deleteWxAttribute(wxAttributeDTO);
     }
+
+    @Override
+    public List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO) {
+        return weChatCommodityMapperExtra.checkWxAttribute(wxAttributeDTO);
+    }
 }

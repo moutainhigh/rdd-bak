@@ -65,7 +65,7 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 //                wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
 //            }
 //        }
-        Dict dict = dictMapperExtra.selectDictByName("sp_fy1");
+        Dict dict = dictMapperExtra.selectDictByName("applet_fy1_rate");
         if(dict != null && wcpCommodityOutputDTO != null){
             Double num = Double.valueOf(dict.getContent()) * wcpCommodityOutputDTO.getTotalFyMoney();
             BigDecimal bd = new BigDecimal(num);
@@ -73,13 +73,6 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
         }
         return wcpCommodityOutputDTO;
 
-    }
-
-    public static void main(String[] args){
-        Double num = 69.56345;
-        BigDecimal bd = new BigDecimal(num);
-        num = bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue();
-        System.out.println(num);
     }
 
     @Override

@@ -85,4 +85,6 @@ public interface WeChatCommodityMapperExtra {
 
     Boolean updaFile(@Param("id")String id, @Param("fileName")String fileName, @Param("address")String address, @Param("date")Date date);
     List<String> getAttributeContent(String name);
+
+    List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO);
 }

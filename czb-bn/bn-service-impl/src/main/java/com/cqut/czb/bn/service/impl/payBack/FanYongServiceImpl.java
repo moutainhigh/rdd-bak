@@ -316,7 +316,8 @@ public class FanYongServiceImpl implements FanYongService {
 
         //更改usrid
         userId=userSelf.getSuperiorUser();
-
+        String firstVipUserId="";
+        UserIncomeInfo oldUserIncomeInfoUp1=null;
         while (true) {
             User user = userMapper.selectByPrimaryKey(userId);
             if (user != null) {
@@ -325,6 +326,8 @@ public class FanYongServiceImpl implements FanYongService {
                     UserIncomeInfo oldUserIncomeInfoUp = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getUserId());//查出原收益信息
                     //对上级用户的(收益信息表，收益变更记录表)进行操作
                     if(count==1){
+                        firstVipUserId=user.getUserId();
+                        oldUserIncomeInfoUp1=oldUserIncomeInfoUp;
                         changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney1, orgId);
                     }else if(count==2){
                         changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney2, orgId);
@@ -338,11 +341,20 @@ public class FanYongServiceImpl implements FanYongService {
                     if (user.getSuperiorUser() != null && !user.getSuperiorUser().equals("")) {
                         userId = user.getSuperiorUser();
                         continue;
-                    } else {
+                    }else if(user.getSuperiorUser()==null){
+                        if(count==2){
+                            changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
+                        }
+                        return true;
+                    }
+                    else {
                         return true;
                     }
                 }
             } else {
+                if(count==2){
+                    changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
+                }
                 return true;
             }
         }
