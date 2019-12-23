@@ -33,4 +33,6 @@ public interface ShopMapperExtra {
     String selectShopIdByUserId(String userId);
 
     List<ShopInfoDTO> selectAllShopInfo();
+
+    int selectShopCount(String userId);
 }

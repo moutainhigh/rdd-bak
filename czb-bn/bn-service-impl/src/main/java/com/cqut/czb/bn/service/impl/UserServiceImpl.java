@@ -56,6 +56,8 @@ public class UserServiceImpl implements IUserService {
 
     private final ShopManagementService shopManagementService;
 
+    private ShopMapperExtra shopMapperExtra;
+
     @Autowired
     public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder, ShopManagementService shopManagementService) {
         this.userMapper = userMapper;
@@ -161,17 +163,16 @@ public class UserServiceImpl implements IUserService {
                                 for(RoleDTO temp : roleList){
                                     if("微信商家".equals(temp.getRoleName())){
                                         if(userInputDTO.getBindingid() != null && userInputDTO.getBindingid() != "") {
-                                            Shop shop = new Shop();
-                                            shop.setShopId(StringUtil.createId());
-                                            shop.setUserId(userInputDTO.getBindingid());
-                                            shop.setShopName(userInputDTO.getUserName());
-                                            shop.setShopPhone(userInputDTO.getUserAccount());
-                                            shop.setCreateAt(new Date());
-                                            shop.setAudit(1);
-                                            shop.setShopType(3);//微信商家
-                                            boolean flag = shopManagementService.addShop(shop);
-                                            if (!flag) {
-                                                return false;
+                                            if(shopMapperExtra.selectShopCount(userInputDTO.getBindingid()) == 0){
+                                                Shop shop = new Shop();
+                                                shop.setShopId(StringUtil.createId());
+                                                shop.setUserId(userInputDTO.getBindingid());
+                                                shop.setShopName(userInputDTO.getUserName());
+                                                shop.setShopPhone(userInputDTO.getUserAccount());
+                                                shop.setCreateAt(new Date());
+                                                shop.setAudit(1);
+                                                shop.setShopType(3);//微信商家
+                                                return shopManagementService.addShop(shop);
                                             }
                                         }
                                     }
