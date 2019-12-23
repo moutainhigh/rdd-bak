@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.vehicleService;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -36,6 +37,7 @@ public class CleanServerStandardController {
      * @param file
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/add")
     public JSONResult add(ServerStandard serverStandard, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
@@ -47,6 +49,7 @@ public class CleanServerStandardController {
      * @param serverId
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/delete")
     public JSONResult delete(@Param("serverId") String serverId) {
         return service.delete(serverId);
@@ -59,6 +62,7 @@ public class CleanServerStandardController {
      * @param file
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/change")
     public JSONResult change(ServerStandard serverStandard, Principal principal, @RequestParam("file")MultipartFile file) {
         User user = (User)redisUtils.get(principal.getName());
@@ -70,6 +74,7 @@ public class CleanServerStandardController {
      * @param serverStandard
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/changeWithoutImage")
     public JSONResult changeWithoutImage(@RequestBody ServerStandard serverStandard) {
         return service.changeWithoutImage(serverStandard);
