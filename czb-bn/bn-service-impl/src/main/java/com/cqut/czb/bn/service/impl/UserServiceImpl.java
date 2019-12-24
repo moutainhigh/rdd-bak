@@ -164,7 +164,7 @@ public class UserServiceImpl implements IUserService {
                             }else {
                                 for(RoleDTO temp : roleList){
                                     if("微信商家".equals(temp.getRoleName())){
-                                        if(userInputDTO.getBindingid() != null && "".equals(userInputDTO.getBindingid())) {
+                                        if(userInputDTO.getBindingid() != null && !"".equals(userInputDTO.getBindingid())) {
                                             if(shopMapperExtra.selectShopCount(userInputDTO.getBindingid()) == 0){
                                                 Shop shop = new Shop();
                                                 shop.setShopId(StringUtil.createId());
