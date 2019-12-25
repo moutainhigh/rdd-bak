@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
@@ -24,6 +25,7 @@ public class PetrolManagementController {
         return new JSONResult(dataWithCountOutputDTO);
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value="/uploadPetrol",method=RequestMethod.POST)
     public JSONResult uploadPetrol(MultipartFile file){
         System.out.println(file.getOriginalFilename());
@@ -37,17 +39,20 @@ public class PetrolManagementController {
         return new JSONResult(successResult);
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "salePetrol",method = RequestMethod.POST)
     public JSONResult salePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 
         return new JSONResult(petrolManagementService.saleSomePetrol(inputDTO));
     }
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "notSalePetrol",method = RequestMethod.POST)
     public JSONResult notSalePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 
         return new JSONResult(petrolManagementService.notSaleSomePetrol(inputDTO));
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "BanPetrol",method = RequestMethod.POST)
     public JSONResult BanPetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 

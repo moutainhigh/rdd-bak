@@ -52,17 +52,17 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
 
     @Override
     public Boolean comfirmCommodityOrder(String userId, WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO) {
-        if(weChatCommodityComdirmOrderDTO.getTime() != null){
-            Long interval =  (System.currentTimeMillis() - weChatCommodityComdirmOrderDTO.getTime().getTime()) / (1000 * 60);
-            if(interval <= 10){
-                UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
-                weChatCommodityComdirmOrderDTO.setUserId(userDTO.getBindingid());
-                weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userDTO.getBindingid()));
-                return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
-            }
-            return false;
-        }
-        return false;
+//        if(weChatCommodityComdirmOrderDTO.getTime() != null){
+//            Long interval =  (System.currentTimeMillis() - weChatCommodityComdirmOrderDTO.getTime().getTime()) / (1000 * 60);
+//            if(interval <= 10){
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
+        weChatCommodityComdirmOrderDTO.setUserId(userDTO.getBindingid());
+//        weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userDTO.getBindingid()));
+        return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
+//            }
+//            return false;
+//        }
+//        return false;
     }
 
     @Override

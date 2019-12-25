@@ -256,7 +256,6 @@
     SET order_state = 2
     WHERE
         order_id = #{orderId, jdbcType = VARCHAR}
-        AND shop_id = #{shopId, jdbcType = VARCHAR}
         AND pay_status = 1
         AND order_state = 1
   </update>
