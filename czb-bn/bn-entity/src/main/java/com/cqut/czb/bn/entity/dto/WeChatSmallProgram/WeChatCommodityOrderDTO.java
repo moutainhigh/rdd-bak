@@ -11,6 +11,7 @@ public class WeChatCommodityOrderDTO {
     private String thirdOrder; // 第三方订单号
     private Integer orderState; // 订单状态
     private String commodityId; // 商品id
+    private String phone;
     private String commodityTitle; // 商品名
     private Integer commodityNum; // 商品数量
     private Double actualPrice; // 实际支付价格
@@ -28,6 +29,13 @@ public class WeChatCommodityOrderDTO {
     private Integer takeWay;
     private Integer deliveryState;
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getUserName() {
         return userName;

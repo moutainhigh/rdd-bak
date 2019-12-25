@@ -58,6 +58,10 @@ public class VipApplyServiceImpl implements VipApplyService {
         }
         try{
             User user = (User) redisUtil.get(principal.getName());
+            UserDTO userDTO = userMapperExtra.findUserDTOById(user.getUserId());
+            if (userDTO==null || userDTO.getIsVip()==1){
+                return false;
+            }
             weChatVipApply.setRecordId(StringUtil.createId());
             weChatVipApply.setStatus(1);
             weChatVipApply.setUserId(user.getUserId());
