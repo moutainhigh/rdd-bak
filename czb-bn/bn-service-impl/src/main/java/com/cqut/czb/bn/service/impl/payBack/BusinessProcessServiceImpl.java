@@ -296,12 +296,16 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //更改商品数量
         WeChatCommodity commodity=new WeChatCommodity();
         commodity.setCommodityId(order1.getCommodityId());
+        //计算商品的总库存量
         int num=weChatCommodity.getCommodityNum()-order1.getCommodityNum();
         if(num>=0){
             commodity.setCommodityNum(num);
         }else {
             commodity.setCommodityNum(0);
         }
+        //计算商品的总销售量
+        int saleNum=weChatCommodity.getSalesVolume()+order1.getCommodityNum();
+        commodity.setSalesVolume(saleNum);
         weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
 
        //查询是否为首次消费
