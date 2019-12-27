@@ -13,7 +13,9 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     private String shopId;          // 店铺id
 
-    private double totalAccount;   // 订单数量
+    private double totalAccount;   // 结算金额
+
+    private int count;             // 订单数量
 
     private Date settleTime;      // 结算时间
 
@@ -113,5 +115,13 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

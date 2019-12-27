@@ -14,7 +14,7 @@ public class WxSettelRcordController {
     @GetMapping(value ="/selectSettleRcord")
     public JSONResult selectSettleRcord(WxSettleRcordDTO pageDTO){
         return wxSettelRcordService.getSettleRcord(pageDTO);
-}
+    }
 
     @PostMapping("/settleRecord")
     public JSONResult settleRecord(@RequestBody String recordId){
