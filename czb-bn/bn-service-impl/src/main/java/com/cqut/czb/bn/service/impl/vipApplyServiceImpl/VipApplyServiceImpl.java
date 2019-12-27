@@ -57,7 +57,7 @@ public class VipApplyServiceImpl implements VipApplyService {
             return false;
         }
         try{
-            User user = (User) redisUtil.get(principal.getName());
+            UserDTO user = (UserDTO) redisUtil.get(principal.getName());
             UserDTO userDTO = userMapperExtra.findUserDTOById(user.getUserId());
             if (userDTO==null || userDTO.getIsVip()==1){
                 return false;
