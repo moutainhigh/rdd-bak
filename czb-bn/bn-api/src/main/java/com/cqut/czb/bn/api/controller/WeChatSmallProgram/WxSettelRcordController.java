@@ -20,12 +20,12 @@ public class WxSettelRcordController {
     }
 
     @PostMapping("/settleRecord")
-    public JSONResult settleRecord(@RequestBody String recordId){
-        return  wxSettelRcordService.settleRecord(recordId);
+    public JSONResult settleRecord(@RequestBody WxSettleRcordDTO wxSettleRcordDTO){
+        return  wxSettelRcordService.settleRecord(wxSettleRcordDTO);
     }
 
     @PostMapping("/deleteSettleRecord")
-    public JSONResult deleteSettleRecord(@RequestBody String recordId){
-        return  wxSettelRcordService.deleteSettleRecord(recordId);
+    public JSONResult deleteSettleRecord(@RequestBody WxSettleRcordDTO wxSettleRcordDTO){
+        return  wxSettelRcordService.deleteSettleRecord(wxSettleRcordDTO);
     }
 }
