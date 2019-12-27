@@ -76,4 +76,5 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
         UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
         return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState);
     }
+
 }

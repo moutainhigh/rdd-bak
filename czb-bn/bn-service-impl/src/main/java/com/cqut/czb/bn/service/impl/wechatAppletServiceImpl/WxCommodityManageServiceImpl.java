@@ -317,6 +317,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public List<String> getAttributeContent(String name) {
+
         return weChatCommodityMapperExtra.getAttributeContent(name);
     }
 
@@ -389,6 +390,11 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO) {
-        return weChatCommodityMapperExtra.checkWxAttribute(wxAttributeDTO);
+        if ((wxAttributeDTO.getContent()==null || wxAttributeDTO.getContent()=="") && (wxAttributeDTO.getName()==null || wxAttributeDTO.getName()=="")){
+            return weChatCommodityMapperExtra.selectAllWxAttribute(wxAttributeDTO);
+        }
+        else{
+            return weChatCommodityMapperExtra.checkWxAttribute(wxAttributeDTO);
+        }
     }
 }

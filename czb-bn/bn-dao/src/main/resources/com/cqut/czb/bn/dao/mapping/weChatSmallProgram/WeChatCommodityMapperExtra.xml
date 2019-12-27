@@ -1087,21 +1087,26 @@
             czb_wechat_commodity_attr,
             czb_attribute
         WHERE
-            czb_wechat_commodity_attr.attribute_id IN (
+            czb_wechat_commodity_attr.commodity_id = #{commodityId}
+            <if test = "content != null">
+                AND czb_attribute.content = #{content}
+            </if>
+            <if test = "name != null">
+                AND  czb_attribute.`name` = #{name}
+            </if>
+            AND czb_wechat_commodity_attr.attribute_id IN (
             SELECT attribute_id FROM czb_attribute
             WHERE
             <if test = "name != null">
-                NAME = #{name}
+                `name` = #{name}
+            </if>
+            <if test = "name != null and content != null">
+                and
             </if>
             <if test = "content != null">
                 content = #{content}
             </if>
             )
-            <if test = "content != null">
-                AND czb_attribute.content = #{content}
-            </if>
-            <if test = "name != null">
-                AND czb_attribute.`name` = #{name}
-            </if>
+
     </select>
 </mapper>

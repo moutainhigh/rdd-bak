@@ -100,4 +100,5 @@ public class WCPCommodityOrderController {
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         return new JSONResult(wcpCommodityOrderService.comfirmCommodityOrder(user.getUserId(), weChatCommodityComdirmOrderDTO));
     }
+
 }
