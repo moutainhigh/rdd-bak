@@ -4,11 +4,14 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.WxSettelRcordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/WxSettelRcord")
 public class WxSettelRcordController {
+
+    @Autowired
     WxSettelRcordService wxSettelRcordService;
 
     @GetMapping(value ="/selectSettleRcord")

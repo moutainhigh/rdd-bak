@@ -35,8 +35,8 @@
             <if test="userAccount != null and userAccount != ''">
                 AND USER.user_account = #{userAccount, jdbcType=VARCHAR}
             </if>
-            <if test="isSettlement != null and isSettlement != ''">
-                AND record.is_settlement = #{isSettlement, jbdcType = INTEGER}
+            <if test="isSettlement != null and isSettlement != '' and isSettlement != 3">
+                AND record.is_settlement = #{isSettlement}
             </if>
             <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
                 AND ( record.create_at BETWEEN #{startTime} AND #{endTime} )
