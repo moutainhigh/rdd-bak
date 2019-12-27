@@ -31,19 +31,27 @@
     <result column="show_order" property="showOrder" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-    <result column="commodity_introduce" property="commodityIntroduce" jdbcType="VARCHAR" />
     <result column="norms_id" property="normsId" jdbcType="VARCHAR" />
+    <result column="sales_volume" property="salesVolume" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" extends="BaseResultMap" >
+    <result column="commodity_introduce" property="commodityIntroduce" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     commodity_id, shop_id, area, commodity_title, commodity_info, discount, commodity_img_id, 
     cost_price, original_price, sale_price, commmodity_type_id, starting_time_business, 
     end_time_business, commodity_source, commodity_num, is_sale, take_way, shop_name, 
     shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, fy_money, 
-    show_place, show_order, create_at, update_at, commodity_introduce, norms_id
+    show_place, show_order, create_at, update_at, norms_id, sales_volume
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <sql id="Blob_Column_List" >
+    commodity_introduce
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from czb_wechat_commodity
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </select>
@@ -61,8 +69,8 @@
       shop_phone, shop_content, shop_address, 
       longitude, latitude, is_have_shop, 
       fy_money, show_place, show_order, 
-      create_at, update_at, commodity_introduce, 
-      norms_id)
+      create_at, update_at, norms_id, 
+      sales_volume, commodity_introduce)
     values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
       #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, 
       #{commodityImgId,jdbcType=VARCHAR}, #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, 
@@ -72,8 +80,8 @@
       #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER}, 
       #{fyMoney,jdbcType=DOUBLE}, #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{commodityIntroduce,jdbcType=VARCHAR}, 
-      #{normsId,jdbcType=VARCHAR})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{normsId,jdbcType=VARCHAR}, 
+      #{salesVolume,jdbcType=INTEGER}, #{commodityIntroduce,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
     insert into czb_wechat_commodity
@@ -165,11 +173,14 @@
       <if test="updateAt != null" >
         update_at,
       </if>
-      <if test="commodityIntroduce != null" >
-        commodity_introduce,
-      </if>
       <if test="normsId != null" >
         norms_id,
+      </if>
+      <if test="salesVolume != null" >
+        sales_volume,
+      </if>
+      <if test="commodityIntroduce != null" >
+        commodity_introduce,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -260,11 +271,14 @@
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="commodityIntroduce != null" >
-        #{commodityIntroduce,jdbcType=VARCHAR},
-      </if>
       <if test="normsId != null" >
         #{normsId,jdbcType=VARCHAR},
+      </if>
+      <if test="salesVolume != null" >
+        #{salesVolume,jdbcType=INTEGER},
+      </if>
+      <if test="commodityIntroduce != null" >
+        #{commodityIntroduce,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -355,13 +369,51 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="commodityIntroduce != null" >
-        commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
-      </if>
       <if test="normsId != null" >
         norms_id = #{normsId,jdbcType=VARCHAR},
       </if>
+      <if test="salesVolume != null" >
+        sales_volume = #{salesVolume,jdbcType=INTEGER},
+      </if>
+      <if test="commodityIntroduce != null" >
+        commodity_introduce = #{commodityIntroduce,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
+    update czb_wechat_commodity
+    set shop_id = #{shopId,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+      commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DOUBLE},
+      commodity_img_id = #{commodityImgId,jdbcType=VARCHAR},
+      cost_price = #{costPrice,jdbcType=DOUBLE},
+      original_price = #{originalPrice,jdbcType=DOUBLE},
+      sale_price = #{salePrice,jdbcType=DOUBLE},
+      commmodity_type_id = #{commmodityTypeId,jdbcType=VARCHAR},
+      starting_time_business = #{startingTimeBusiness,jdbcType=TIMESTAMP},
+      end_time_business = #{endTimeBusiness,jdbcType=TIMESTAMP},
+      commodity_source = #{commoditySource,jdbcType=VARCHAR},
+      commodity_num = #{commodityNum,jdbcType=INTEGER},
+      is_sale = #{isSale,jdbcType=INTEGER},
+      take_way = #{takeWay,jdbcType=INTEGER},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_phone = #{shopPhone,jdbcType=VARCHAR},
+      shop_content = #{shopContent,jdbcType=VARCHAR},
+      shop_address = #{shopAddress,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      is_have_shop = #{isHaveShop,jdbcType=INTEGER},
+      fy_money = #{fyMoney,jdbcType=DOUBLE},
+      show_place = #{showPlace,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      norms_id = #{normsId,jdbcType=VARCHAR},
+      sales_volume = #{salesVolume,jdbcType=INTEGER},
+      commodity_introduce = #{commodityIntroduce,jdbcType=LONGVARCHAR}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
@@ -394,8 +446,8 @@
       show_order = #{showOrder,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
-      commodity_introduce = #{commodityIntroduce,jdbcType=VARCHAR},
-      norms_id = #{normsId,jdbcType=VARCHAR}
+      norms_id = #{normsId,jdbcType=VARCHAR},
+      sales_volume = #{salesVolume,jdbcType=INTEGER}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
 </mapper>

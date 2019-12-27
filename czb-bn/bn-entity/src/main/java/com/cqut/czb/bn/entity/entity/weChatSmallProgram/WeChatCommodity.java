@@ -61,9 +61,11 @@ public class WeChatCommodity {
 
     private Date updateAt;
 
-    private String commodityIntroduce;
-
     private String normsId;
+
+    private Integer salesVolume;
+
+    private String commodityIntroduce;
 
     public String getCommodityId() {
         return commodityId;
@@ -297,19 +299,27 @@ public class WeChatCommodity {
         this.updateAt = updateAt;
     }
 
-    public String getCommodityIntroduce() {
-        return commodityIntroduce;
-    }
-
-    public void setCommodityIntroduce(String commodityIntroduce) {
-        this.commodityIntroduce = commodityIntroduce == null ? null : commodityIntroduce.trim();
-    }
-
     public String getNormsId() {
         return normsId;
     }
 
     public void setNormsId(String normsId) {
         this.normsId = normsId == null ? null : normsId.trim();
+    }
+
+    public Integer getSalesVolume() {
+        return salesVolume;
+    }
+
+    public void setSalesVolume(Integer salesVolume) {
+        this.salesVolume = salesVolume;
+    }
+
+    public String getCommodityIntroduce() {
+        return commodityIntroduce;
+    }
+
+    public void setCommodityIntroduce(String commodityIntroduce) {
+        this.commodityIntroduce = commodityIntroduce == null ? null : commodityIntroduce.trim();
     }
 }
