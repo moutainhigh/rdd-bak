@@ -6,6 +6,8 @@ import com.cqut.czb.bn.service.weChatSmallProgram.WxOrderWithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/WxOrderWithdraw")
 public class WxOrderWithdrawController {
@@ -21,8 +23,8 @@ public class WxOrderWithdrawController {
         return wxOrderWithdrawService.toGetAllOrder(wxOrderWithdrawDTO);
     }
 
-    @PostMapping("/toWithDraw")
-    public JSONResult toWithDraw(@RequestBody WxOrderWithdrawDTO wxOrderWithdrawDTO){
-        return wxOrderWithdrawService.toWithDraw(wxOrderWithdrawDTO);
+    @GetMapping("/toWithDraw")
+    public JSONResult toWithDraw(Principal principal,WxOrderWithdrawDTO wxOrderWithdrawDTO){
+        return wxOrderWithdrawService.toWithDraw(principal.getName(),wxOrderWithdrawDTO);
     }
 }

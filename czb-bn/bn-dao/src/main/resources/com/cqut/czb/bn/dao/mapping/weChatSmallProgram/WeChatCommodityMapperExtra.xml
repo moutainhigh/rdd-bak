@@ -570,6 +570,7 @@
 
     <select id="selectAttrsByName" resultType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrContent">
         SELECT
+            czb_wechat_commodity_attr.commodity_attr_id commodityAttrId,
             czb_wechat_commodity_attr.attribute_id attributeId,
             czb_wechat_commodity_attr.extra_fy_money extraFyMoney,
             czb_wechat_commodity_attr.commodity_id commodityId,
