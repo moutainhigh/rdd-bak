@@ -7,9 +7,9 @@ import java.util.List;
 public interface WxSettelRcordMapperExtra {
     List<WxSettleRcordDTO> selectSettleRcord(WxSettleRcordDTO pageDTO);
 
-    boolean settleRecord(String recordId);
+    boolean settleRecord(WxSettleRcordDTO wxSettleRcordDTO);
 
-    boolean deleteSettleRecord(String recordId);
+    boolean deleteSettleRecord(WxSettleRcordDTO wxSettleRcordDTO);
 
-    boolean updateSettleRecord(String recordId);
+    boolean updateSettleRecord(WxSettleRcordDTO wxSettleRcordDTO);
 }

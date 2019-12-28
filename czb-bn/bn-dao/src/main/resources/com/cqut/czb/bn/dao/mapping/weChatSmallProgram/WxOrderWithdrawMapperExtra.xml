@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WxOrderWithdrawMapperExtra" >
+    <select id="toGetAllOrder" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.GetWxOrderWithdrawDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO">
+      select   order_id orderId,
+	           user_name userName,
+                phone phone,
+				commodity_title commodityName,
+				c.shop_name shopName,
+                a.cost_price costPrice,
+                third_order thirdOrder,
+                order_state orderState,
+                is_have_settled isHaveSettled
+           FROM czb_wechat_commodity_order a LEFT JOIN czb_user AS b ON a.user_id = b.user_id LEFT JOIN
+					 czb_shop c ON a.shop_id = c.shop_id LEFT JOIN czb_wechat_commodity d ON a.commodity_id = d.commodity_id
+            <where>
+                a.is_have_settled = 0
+                <if test="startTime != null and endTime != ''">
+                    and a.create_at between #{startTime} and #{endTime}
+                </if>
+                <if test="shopId != null and shopId != ''">
+                    and a.shop_id = #{shopId}
+                </if>
+            </where>
+    </select>
+</mapper>

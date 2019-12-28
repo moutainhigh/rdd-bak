@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/WxSettelRcord")
 public class WxSettelRcordController {
+
     @Autowired
     WxSettelRcordService wxSettelRcordService;
 
@@ -28,13 +30,13 @@ public class WxSettelRcordController {
     }
 
     @PostMapping("/settleRecord")
-    public JSONResult settleRecord(@RequestBody String recordId){
-        return  wxSettelRcordService.settleRecord(recordId);
+    public JSONResult settleRecord(@RequestBody WxSettleRcordDTO wxSettleRcordDTO){
+        return  wxSettelRcordService.settleRecord(wxSettleRcordDTO);
     }
 
     @PostMapping("/deleteSettleRecord")
-    public JSONResult deleteSettleRecord(@RequestBody String recordId){
-        return  wxSettelRcordService.deleteSettleRecord(recordId);
+    public JSONResult deleteSettleRecord(@RequestBody WxSettleRcordDTO wxSettleRcordDTO){
+        return  wxSettelRcordService.deleteSettleRecord(wxSettleRcordDTO);
     }
 
     /**

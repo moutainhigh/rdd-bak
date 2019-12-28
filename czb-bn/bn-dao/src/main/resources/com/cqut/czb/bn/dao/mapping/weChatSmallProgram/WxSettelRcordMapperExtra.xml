@@ -17,21 +17,26 @@
 
     <select id="selectSettleRcord" resultMap="BaseResultMap">
         SELECT
-
+            record.record_id,
+            record.settle_user_id,
             record.total_amount,
-            ( SELECT COUNT( czb_wechat_commodity_order.settled_record_id ) FROM czb_wechat_commodity_order WHERE czb_wechat_commodity_order.settled_record_id = record.settle_user_id ) AS count,
+            record.shop_id,
+            ( SELECT COUNT( czb_wechat_commodity_order.settled_record_id ) FROM czb_wechat_commodity_order WHERE czb_wechat_commodity_order.settled_record_id = record.record_id and czb_wechat_commodity_order.pay_status = 1) AS count,
             record.is_settlement,
-            USER.user_account
+            USER.user_account,
+            record.settle_time,
+            record.create_at,
+            record.update_at
         FROM
             czb_wechat_settle_record AS record,
             czb_user AS USER
         WHERE
             USER.user_id = record.settle_user_id
             <if test="userAccount != null and userAccount != ''">
-                AND USER.user_account = #{userAccount, jdbcType=VARCHAR}
+                AND USER.user_account = #{userAccount}
             </if>
-            <if test="isSettlement != null and isSettlement != ''">
-                AND record.is_settlement = #{isSettlement, jbdcType = INTEGER}
+            <if test="isSettlement != null and isSettlement != '' and isSettlement != 2">
+                AND record.is_settlement = #{isSettlement}
             </if>
             <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
                 AND ( record.create_at BETWEEN #{startTime} AND #{endTime} )
@@ -40,21 +45,21 @@
             record.update_at DESC
     </select>
 
-    <update id="settleRecord" parameterType="java.lang.String">
-        <if test="record != null">
+    <update id="settleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
+        <if test="recordId != null">
             UPDATE czb_wechat_settle_record
             SET is_settlement = 1
             WHERE record_id = #{recordId}
         </if>
     </update>
 
-    <update id="deleteSettleRecord">
+    <update id="deleteSettleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
         UPDATE czb_wechat_commodity_order
         SET settled_record_id = null
         WHERE settled_record_id = #{recordId}
     </update>
 
-    <delete id="updateSettleRecord">
+    <delete id="updateSettleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
         DELETE FROM czb_wechat_settle_record
         WHERE record_id = #{recordId}
     </delete>

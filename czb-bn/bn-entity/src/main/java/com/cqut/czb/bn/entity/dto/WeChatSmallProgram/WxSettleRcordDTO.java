@@ -15,11 +15,11 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     private double totalAccount;   // 订单数量
 
-    private Date settleTime;      // 结算时间
+    private String settleTime;      // 结算时间
 
-    private Date creatAt;        // 创建时间
+    private String createAt;        // 创建时间
 
-    private Date updateAt;       // 更新时间
+    private String updateAt;       // 更新时间
 
     private String startTime;     // 开始时间
 
@@ -67,27 +67,27 @@ public class WxSettleRcordDTO extends PageDTO  {
         this.totalAccount = totalAccount;
     }
 
-    public Date getSettleTime() {
+    public String getSettleTime() {
         return settleTime;
     }
 
-    public void setSettleTime(Date settleTime) {
+    public void setSettleTime(String settleTime) {
         this.settleTime = settleTime;
     }
 
-    public Date getCreatAt() {
-        return creatAt;
+    public String getCreateAt() {
+        return createAt;
     }
 
-    public void setCreatAt(Date creatAt) {
-        this.creatAt = creatAt;
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
     }
 
-    public Date getUpdateAt() {
+    public String getUpdateAt() {
         return updateAt;
     }
 
-    public void setUpdateAt(Date updateAt) {
+    public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
     }
 
