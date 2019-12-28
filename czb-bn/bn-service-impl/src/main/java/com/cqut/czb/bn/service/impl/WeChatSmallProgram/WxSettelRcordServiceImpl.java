@@ -25,16 +25,16 @@ public class WxSettelRcordServiceImpl implements WxSettelRcordService{
     }
 
     @Override
-    public JSONResult settleRecord(String recordId) {
-        if(wxSettelRcordMapperExtra.settleRecord(recordId))
+    public JSONResult settleRecord(WxSettleRcordDTO wxSettleRcordDTO) {
+        if(wxSettelRcordMapperExtra.settleRecord(wxSettleRcordDTO))
             return new JSONResult("结算成功", 200, true);
         else
             return new JSONResult("结算失败", 500, false);
     }
 
     @Override
-    public JSONResult deleteSettleRecord(String recordId) {
-        if(wxSettelRcordMapperExtra.deleteSettleRecord(recordId) && wxSettelRcordMapperExtra.updateSettleRecord(recordId))
+    public JSONResult deleteSettleRecord(WxSettleRcordDTO wxSettleRcordDTO) {
+        if(wxSettelRcordMapperExtra.deleteSettleRecord(wxSettleRcordDTO) && wxSettelRcordMapperExtra.updateSettleRecord(wxSettleRcordDTO))
             return new JSONResult("删除成功", 200, true);
         else
             return new JSONResult("删除失败", 500, false);

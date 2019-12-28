@@ -19,13 +19,13 @@ public class PayInputDTO {
     private String addressId;
 
     //属性id
-    private List<String> commodityAttrIds;
+    private String commodityAttrIds;
 
-    public List<String> getCommodityAttrIds() {
+    public String getCommodityAttrIds() {
         return commodityAttrIds;
     }
 
-    public void setCommodityAttrIds(List<String> commodityAttrIds) {
+    public void setCommodityAttrIds(String commodityAttrIds) {
         this.commodityAttrIds = commodityAttrIds;
     }
 

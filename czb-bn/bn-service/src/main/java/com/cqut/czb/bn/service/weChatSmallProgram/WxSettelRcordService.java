@@ -8,7 +8,7 @@ import java.util.List;
 public interface WxSettelRcordService {
     JSONResult getSettleRcord(WxSettleRcordDTO pageDTO);
 
-    JSONResult settleRecord(String recordId);
+    JSONResult settleRecord(WxSettleRcordDTO wxSettleRcordDTO);
 
-    JSONResult deleteSettleRecord(String recordId);
+    JSONResult deleteSettleRecord(WxSettleRcordDTO wxSettleRcordDTO);
 }
