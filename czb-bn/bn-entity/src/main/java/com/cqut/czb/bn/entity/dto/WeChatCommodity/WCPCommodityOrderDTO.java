@@ -81,6 +81,16 @@ public class WCPCommodityOrderDTO {
 
     private String shopName;
 
+    private String attrInfo;
+
+    public String getAttrInfo() {
+        return attrInfo;
+    }
+
+    public void setAttrInfo(String attrInfo) {
+        this.attrInfo = attrInfo;
+    }
+
     public String getShopName() {
         return shopName;
     }

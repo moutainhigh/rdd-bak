@@ -6,7 +6,9 @@ import java.util.List;
 
 public class WxOrderWithdrawDTO extends PageDTO {
 
+    private String settleUserId;
     private List<String> shopIds;
+    private String recordId;
     private String shopId;
     private String orderId;
     private String userName;
@@ -122,5 +124,21 @@ public class WxOrderWithdrawDTO extends PageDTO {
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
+    }
+
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
+    }
+
+    public String getSettleUserId() {
+        return settleUserId;
+    }
+
+    public void setSettleUserId(String settleUserId) {
+        this.settleUserId = settleUserId;
     }
 }
