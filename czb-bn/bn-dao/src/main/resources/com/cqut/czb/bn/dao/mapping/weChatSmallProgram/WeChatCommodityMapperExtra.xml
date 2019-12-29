@@ -75,21 +75,16 @@
         AND group_code = 'WCCommodity'
     </select>
 
-    <select id="selectAllImgs" resultMap="functionImgsMap" >
+    <select id="selectAllImgs" resultType="com.cqut.czb.bn.entity.dto.shop.FileFunctionDTO">
         SELECT
-            czb_file_function.id,
-            czb_file_function.group_code,
-            czb_file_function.file_id,
-            czb_file_function.local_id,
-            czb_file.save_path,
-            czb_file_function.create_at,
-            czb_file_function.update_at
+            file_id as fileId,
+            save_path as src,
+            create_at as createAt,
+            update_at as updateAt
         FROM
-            czb_file,
-            czb_file_function
+            czb_file
         WHERE
-            czb_file_function.local_id = #{file_id, jdbcType=VARCHAR}
-            and czb_file_function.file_id = czb_file.file_id
+            file_id = #{file_id}
     </select>
 
     <select id="selectPosterImg" resultMap="functionImgsMap" >
@@ -1070,7 +1065,7 @@
             save_path = #{address},
             update_at = #{date}
         WHERE
-            file_id  IN ( SELECT file_id FROM czb_file_function WHERE local_id = #{id});
+            file_id  = #{id};
     </update>
 
     <select id="checkWxAttribute" resultMap="BaseAttributeMap">

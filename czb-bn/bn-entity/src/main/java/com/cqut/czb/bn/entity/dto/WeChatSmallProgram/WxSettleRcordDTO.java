@@ -17,7 +17,6 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     private int count;             // 订单数量
 
-
     private String settleTime;      // 结算时间
 
     private String createAt;        // 创建时间
