@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.WxOrderWithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/WxOrderWithdraw")
 public class WxOrderWithdrawController {
+    @Autowired
+    RedisUtils redisUtils;
 
     @Autowired
     WxOrderWithdrawService wxOrderWithdrawService;
@@ -25,6 +29,7 @@ public class WxOrderWithdrawController {
 
     @GetMapping("/toWithDraw")
     public JSONResult toWithDraw(Principal principal,WxOrderWithdrawDTO wxOrderWithdrawDTO){
-        return wxOrderWithdrawService.toWithDraw(principal.getName(),wxOrderWithdrawDTO);
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        return wxOrderWithdrawService.toWithDraw(user.getUserId(),wxOrderWithdrawDTO);
     }
 }

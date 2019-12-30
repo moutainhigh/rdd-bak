@@ -2,12 +2,13 @@ package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WxOrderWithdrawDTO extends PageDTO {
 
     private String settleUserId;
-    private List<String> shopIds;
+    private List<String> shopIds = new ArrayList<>();
     private String recordId;
     private String shopId;
     private String orderId;
@@ -21,6 +22,9 @@ public class WxOrderWithdrawDTO extends PageDTO {
     private int isHaveSettled;
     private String endTime;
     private String startTime;
+    private String attrInfo;
+    private int commodityNum;
+    private double actualPrice;
 
     public String getOrderId() {
         return orderId;
@@ -140,5 +144,29 @@ public class WxOrderWithdrawDTO extends PageDTO {
 
     public void setSettleUserId(String settleUserId) {
         this.settleUserId = settleUserId;
+    }
+
+    public String getAttrInfo() {
+        return attrInfo;
+    }
+
+    public void setAttrInfo(String attrInfo) {
+        this.attrInfo = attrInfo;
+    }
+
+    public int getCommodityNum() {
+        return commodityNum;
+    }
+
+    public void setCommodityNum(int commodityNum) {
+        this.commodityNum = commodityNum;
+    }
+
+    public double getActualPrice() {
+        return actualPrice;
+    }
+
+    public void setActualPrice(double actualPrice) {
+        this.actualPrice = actualPrice;
     }
 }

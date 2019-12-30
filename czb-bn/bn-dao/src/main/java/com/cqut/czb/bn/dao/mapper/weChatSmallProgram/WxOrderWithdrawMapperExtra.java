@@ -15,7 +15,7 @@ public interface WxOrderWithdrawMapperExtra {
 
     int insertWithdraw(WeChatSettleRecord weChatSettleRecord);
 
-    double getTotalAmount(@Param("shopId") String shopId);
+    Double getTotalAmount(@Param("shopId") String shopId);
 
     int toBangding(@Param("orderId") String orderId, @Param("settledRecordId") String settled_record_id);
 }

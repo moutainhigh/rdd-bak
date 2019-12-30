@@ -13,7 +13,9 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     private String shopId;          // 店铺id
 
-    private double totalAccount;   // 订单数量
+    private double totalAccount;   // 结算金额
+
+    private int count;             // 订单数量
 
     private String settleTime;      // 结算时间
 
@@ -26,6 +28,16 @@ public class WxSettleRcordDTO extends PageDTO  {
     private String endTime;       // 结束时间
 
     private int isSettlement;   // 结算状态
+
+   private String attrInfo;
+
+    public String getAttrInfo() {
+        return attrInfo;
+    }
+
+    public void setAttrInfo(String attrInfo) {
+        this.attrInfo = attrInfo;
+    }
 
     public String getRecordId() {
         return recordId;
@@ -113,5 +125,13 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     public void setIsSettlement(int isSettlement) {
         this.isSettlement = isSettlement;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

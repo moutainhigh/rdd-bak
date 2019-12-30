@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
 public class GetWxOrderWithdrawDTO {
+    private String recordId;
     private String shopId;
     private String endTime;
     private String startTime;
@@ -27,5 +28,13 @@ public class GetWxOrderWithdrawDTO {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
 }
