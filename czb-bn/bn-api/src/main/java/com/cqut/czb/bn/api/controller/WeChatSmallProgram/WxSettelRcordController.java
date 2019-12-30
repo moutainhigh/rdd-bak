@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO;
@@ -32,16 +33,19 @@ public class WxSettelRcordController {
     @Autowired
     WxSettelRcordService wxSettelRcordService;
 
+    @PermissionCheck(role = "管理员")
     @GetMapping(value ="/selectSettleRcord")
     public JSONResult selectSettleRcord(WxSettleRcordDTO pageDTO){
         return wxSettelRcordService.getSettleRcord(pageDTO);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/settleRecord")
     public JSONResult settleRecord(@RequestBody WxSettleRcordDTO wxSettleRcordDTO){
         return  wxSettelRcordService.settleRecord(wxSettleRcordDTO);
     }
 
+    @PermissionCheck(role = "管理员")
     @PostMapping("/deleteSettleRecord")
     public JSONResult deleteSettleRecord(@RequestBody WxSettleRcordDTO wxSettleRcordDTO){
         return  wxSettelRcordService.deleteSettleRecord(wxSettleRcordDTO);
