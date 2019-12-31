@@ -3,7 +3,6 @@ package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WxSettelRcordMapperExtra;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO;
-import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.WxSettelRcordService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -11,12 +10,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -70,23 +67,67 @@ public class WxSettelRcordServiceImpl implements WxSettelRcordService{
         Row row =sheet.createRow(0);//创建行从第0行开始
         CellStyle style = workbook.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
         for (int i = 0; i < petrolDeliveryRecordHeader.length; i++) {
             Cell cell = row.createCell(i);
             cell.setCellValue(petrolDeliveryRecordHeader[i]);
             cell.setCellStyle(style);
             sheet.setColumnWidth(i, (short) 6000); // 设置列宽
         }
+        sheet.setColumnWidth(1,(short)4000);
+        sheet.setColumnWidth(6,(short)4000);
+        sheet.setColumnWidth(7,(short)8000);
+        int startRow=1;
+        int addRow=0;
+        double total=0;
+        String flag=wxOrderWithdrawDTOS.get(0).getShopName();
         for (int i = 0 ; i<wxOrderWithdrawDTOS.size(); i++){
             int count = 0;
             row = sheet.createRow(i+1);
-            row.createCell(count).setCellType(CellType.STRING);
-            row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+            Cell cell = row.createCell(count);
+            cell.setCellStyle(style);
+            cell.setCellType(CellType.STRING);
+            cell.setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+            count++;
+            total=total+wxOrderWithdrawDTOS.get(i).getActualPrice();
+            if (wxOrderWithdrawDTOS.get(i).getShopName().equals(flag)){
+                addRow++;
+            }
+            else if (addRow==0){
+                flag=wxOrderWithdrawDTOS.get(i).getShopName();
+                startRow=startRow+1;
+            }
+            else{
+                flag=wxOrderWithdrawDTOS.get(i).getShopName();
+                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 0, (short) 0));
+                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 1, (short) 1));
+                startRow=startRow+addRow;
+                addRow=1;
+            }
 
-//            CellRangeAddress region1 = new CellRangeAddress(0, 1, (short) 0, (short) 12);
-//            //参数1：起始行 参数2：终止行 参数3：起始列 参数4：终止列
-//            sheet.addMergedRegion(region1);
-//            SXSSFRow headTitle = (SXSSFRow) sheet.createRow(0);
-//            headTitle.createCell(0).setCellValue("重点工程项目计划表");
+            if (i==wxOrderWithdrawDTOS.size()-1){
+                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 0, (short) 0));
+                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 1, (short) 1));
+                Row row1 = sheet.getRow(startRow);
+                Cell cell1 = row1.createCell(count);
+                cell1.setCellStyle(style);
+                cell1.setCellValue(total);
+                count++;
+                total=0;
+            }
+            else if (!wxOrderWithdrawDTOS.get(i+1).getShopName().equals(flag)){
+                Row row1 = sheet.getRow(startRow);
+                Cell cell1 = row1.createCell(count);
+                cell1.setCellStyle(style);
+                cell1.setCellValue(total);
+                count++;
+                total=0;
+            }
+            else{
+                count++;
+            }
+
+
 
             row.createCell(count).setCellType(CellType.STRING);
             row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getOrderId());

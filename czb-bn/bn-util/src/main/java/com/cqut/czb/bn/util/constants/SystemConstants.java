@@ -88,7 +88,7 @@ public class SystemConstants {
     /**
      * 导出订单结算Excel的头部
      */
-    public static final String[] OREDER_SETTEL_EXCEL_HEAD = {"订单号","用户昵称","用户手机号","商品名","商店名","支付价格","第三方订单号","订单状态","结算状态","属性"};
+    public static final String[] OREDER_SETTEL_EXCEL_HEAD = {"商店名","结算金额(元)","订单号","用户昵称","用户手机号","商品名","支付价格(元)","第三方订单号","订单状态","结算状态","属性"};
 
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;

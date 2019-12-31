@@ -75,7 +75,8 @@
         third_order thirdOrder,
         order_state orderState,
         is_have_settled isHaveSettled,
-        a.attr_info attrInfo
+        a.attr_info attrInfo,
+        a.actual_price actualPrice
         FROM czb_wechat_commodity_order a LEFT JOIN czb_user AS b ON a.user_id = b.user_id LEFT JOIN
         czb_shop c ON a.shop_id = c.shop_id LEFT JOIN czb_wechat_commodity d ON a.commodity_id = d.commodity_id
         <where>
