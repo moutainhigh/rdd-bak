@@ -1,23 +1,14 @@
 package com.cqut.czb.auth.filter;
 
-import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.jwt.JwtTool;
-import com.cqut.czb.auth.jwt.JwtUser;
-import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
-import com.cqut.czb.bn.entity.dto.user.LoginUser;
-import com.cqut.czb.bn.entity.dto.user.UserDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,114 +18,70 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * 该类用于登录，登录成功后设置token信息
+ * 该类用于对要求安全认证的接口进行身份认证
  */
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    private AuthenticationManager authenticationManager;
+public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Autowired
     private RedisUtils redisUtils;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-        //设置登录接口的api
-        super.setFilterProcessesUrl("/auth/login");
+        super(authenticationManager);
     }
 
-    //登录方法
+    //身份认证函数
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException {
-        LoginUser loginUser = new LoginUser();
-        loginUser.setAccount(request.getParameter("account"));
-        loginUser.setPassword(request.getParameter("password"));
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws IOException, ServletException {
+        //获取token值
         String tokenHeader = request.getHeader(AuthConfig.TOKEN_HEADER);
-        if((null == loginUser.getAccount() || "".equals(loginUser.getAccount())) && (null != tokenHeader && tokenHeader.startsWith(AuthConfig.TOKEN_PREFIX))) {
-            if(redisUtils == null){
-                redisUtils = SpringUtils.getBean(RedisUtils.class);
-            }
-            String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
-            if(!tokenHeader.equals(redisUtils.get(JwtTool.getUsername(token) + AuthConfig.TOKEN))) {
-                response.setCharacterEncoding("utf-8");
-                response.setHeader("Content-Type", "application/json;charset=utf-8");
-                JSONObject result = new JSONObject();
-                result.put(AuthConfig.FAILED_REASON, "身份验证已过期，请重新登录");
-                result.put(AuthConfig.STATUS, false);
-                try {
-                    response.getWriter().write(result.toJSONString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-            if(userDetailsService == null){
-                userDetailsService = SpringUtils.getBean(AuthUserServiceImpl.class);
-            }
-            loginUser.setAccount(JwtTool.getUsername(token));
-            UserDetails userDetails =  userDetailsService.loadUserByUsername(loginUser.getAccount());
-            loginUser.setPassword(userDetails.getPassword());
-        }
-        if(loginUser.getAccount() == null || loginUser.getAccount() == "") {
-            try {
-                loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if("" == loginUser.getPassword()) {
-            loginUser.setPassword(null);
-        }
-
-        return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginUser.getAccount(), loginUser.getPassword(), new ArrayList<>())
-        );
-    }
-
-    //登录成功后设置token
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
-
-        // 调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
-        // 所以就是JwtUser啦
-        JwtUser jwtUser = (JwtUser) authResult.getPrincipal();
-        String token = JwtTool.createToken(jwtUser.getAccount(), false);
-
         if(redisUtils == null){
             redisUtils = SpringUtils.getBean(RedisUtils.class);
         }
 
-        UserDTO user=jwtUser.getUser();
-//        redisUtil.put(AuthConfig.TOKEN_PREFIX + token, user);
-        redisUtils.put(jwtUser.getAccount(), user);
-        if(redisUtils.hasKey(jwtUser.getAccount()+AuthConfig.TOKEN)) {
-            redisUtils.remove(jwtUser.getAccount()+AuthConfig.TOKEN);
+        // 如果请求头中没有Authorization信息则直接放行了
+        if (!request.getRequestURI().startsWith("/api")) {
+            chain.doFilter(request, response);
+            return;
         }
-        redisUtils.put(jwtUser.getAccount()+AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
+        if(request.getRequestURI().startsWith("/api/WCPCommodityInfo")
+            || request.getRequestURI().startsWith("/api/AppHomePage/selectAnnouncement")
+            || request.getRequestURI().startsWith("/api/AppHomePage/selectHomePageRouters")){
+            chain.doFilter(request, response);
+            return;
+        }
 
-        // 返回创建成功的token
-        response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-Type", "application/json;charset=utf-8");
-        JSONObject result = new JSONObject();
-        result.put(AuthConfig.TOKEN, AuthConfig.TOKEN_PREFIX + token);
-        result.put(AuthConfig.STATUS, true);
-        response.getWriter().write(result.toJSONString());
+        if(null == tokenHeader || "".equals(tokenHeader)) {
+            throw new SecurityException("登录信息不能为空");
+        }
+        try {
+            String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
+            String username = JwtTool.getUsername(token);
+            if(redisUtils.get(username + AuthConfig.TOKEN).equals(tokenHeader)) {
+                // 验证token信息正确性，并设置到SecurityContextHolder认证信息中
+                SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
+                //验证SecurityContextHolder认证信息，有当前请求的信息认证则通过
+
+                super.doFilterInternal(request, response, chain);
+            } else {
+                throw new SecurityException("身份验证过期");
+//                chain.doFilter(request, response);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new SecurityException("身份验证过期");
+        }
     }
 
-    // 这是验证失败时候调用的方法
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-Type", "application/json;charset=utf-8");
-        JSONObject result = new JSONObject();
-        result.put(AuthConfig.FAILED_REASON, failed.getMessage());
-        result.put(AuthConfig.STATUS, false);
-        response.getWriter().write(result.toJSONString());
+    // 这里从token中获取用户信息，返回认证信息
+    private UsernamePasswordAuthenticationToken getAuthentication(String tokenHeader) {
+        String token = tokenHeader.replace(AuthConfig.TOKEN_PREFIX, "");
+        String username = JwtTool.getUsername(token);
+        if (username != null){
+            return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+        }
+        return null;
     }
 }
+
