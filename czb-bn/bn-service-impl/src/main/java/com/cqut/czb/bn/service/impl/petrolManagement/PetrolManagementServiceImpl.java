@@ -1,9 +1,12 @@
 package com.cqut.czb.bn.service.impl.petrolManagement;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.dao.mapper.DictMapper;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
@@ -237,5 +240,38 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         dicts.add(dict1);
         dicts.add(dict2);
         return dicts;
+    }
+
+    @Override
+    public String getPetrolPrice() {
+        try{
+            //获取字典信息
+            Dict dict = dictMapperExtra.selectDictByName("petrolPrice");
+            //解析价格
+            JSONObject json = JSON.parseObject(dict.getContent());
+            String content = (String) json.get("汽油");
+            return content;
+        } catch (Exception e){
+            e.printStackTrace();
+            return "获取失败，请勿操作";
+        }
+    }
+
+    @Override
+    public boolean updatePetrolPrices(String petrolPrices) {
+        //获取字典信息
+        if(petrolPrices == null || "".equals(petrolPrices)){
+            return false;
+        }
+        Dict dict = dictMapperExtra.selectDictByName("petrolPrice");
+        //解析价格
+        JSONObject json = JSON.parseObject(dict.getContent());
+        json.put("汽油", petrolPrices);
+        json.toJSONString();
+        DictInputDTO dictInputDTO = new DictInputDTO();
+        dictInputDTO.setDictId(dict.getDictId());
+        dictInputDTO.setName(dict.getName());
+        dictInputDTO.setContent(json.toJSONString());
+        return dictMapperExtra.updateDict(dictInputDTO) > 0;
     }
 }

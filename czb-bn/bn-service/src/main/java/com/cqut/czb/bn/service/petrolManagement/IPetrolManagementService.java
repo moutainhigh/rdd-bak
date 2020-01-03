@@ -38,4 +38,7 @@ public interface IPetrolManagementService {
 
     List<Dict> getPayInstruction();
 
+    String getPetrolPrice();
+
+    boolean updatePetrolPrices(String petrolPrices);
 }
