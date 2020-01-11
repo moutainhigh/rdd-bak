@@ -208,7 +208,7 @@
     limit 1
   </select>
 
-  <select id="isBuyPetrol" parameterType="java.lang.String">
+  <select id="isBuyPetrol" parameterType="java.lang.String" resultType="java.lang.Integer">
     SELECT
     COUNT(*)
     FROM czb_petrol
