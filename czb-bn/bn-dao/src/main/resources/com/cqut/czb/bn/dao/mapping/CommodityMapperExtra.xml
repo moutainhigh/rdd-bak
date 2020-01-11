@@ -51,7 +51,9 @@
         commodity_price as commodityPrice, classification, usage_count as usageCount,
         shop_address as shopAddress,shop_content as shopContent,shop_name as shopName,
         shop_phone as shopPhone,
-        is_pay AS isPay
+        is_pay AS isPay,
+        czb_shop.longitude,
+        czb_shop.latitude
         from
         czb_commodity,czb_shop,czb_file
         WHERE

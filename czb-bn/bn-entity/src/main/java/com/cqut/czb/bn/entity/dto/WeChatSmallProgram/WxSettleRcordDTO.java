@@ -29,6 +29,16 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     private int isSettlement;   // 结算状态
 
+   private String attrInfo;
+
+    public String getAttrInfo() {
+        return attrInfo;
+    }
+
+    public void setAttrInfo(String attrInfo) {
+        this.attrInfo = attrInfo;
+    }
+
     public String getRecordId() {
         return recordId;
     }
@@ -43,6 +53,14 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     public void setSettleUserId(String settleUserId) {
         this.settleUserId = settleUserId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 
     public String getShopId() {
@@ -107,14 +125,6 @@ public class WxSettleRcordDTO extends PageDTO  {
 
     public void setIsSettlement(int isSettlement) {
         this.isSettlement = isSettlement;
-    }
-
-    public String getUserAccount() {
-        return userAccount;
-    }
-
-    public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount;
     }
 
     public int getCount() {

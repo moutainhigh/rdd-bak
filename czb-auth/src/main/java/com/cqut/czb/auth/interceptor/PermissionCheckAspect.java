@@ -60,7 +60,6 @@ public class PermissionCheckAspect {
                     UserDTO userDTO = (UserDTO) redisUtils.get(username);
                     for(String roleName : userDTO.getRoles()){
                         if(role.contains(roleName)){
-                            System.out.println("AOP权限角色校验通过，进入业务层处理！");
                             return pjp.proceed();
                         }
                     }

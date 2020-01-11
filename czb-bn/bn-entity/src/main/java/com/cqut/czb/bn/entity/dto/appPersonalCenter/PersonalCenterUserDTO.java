@@ -28,13 +28,16 @@ public class PersonalCenterUserDTO {
 
     private Integer haveVip;
 
+    private String bindingAccount;
+
+
+
     private String roleName;  //新增，用户的角色
 
     private List<UserRoleDTO> roleNameList;
 
     private String bindingid;
 
-    private String bindingAccount;
 
     public List<UserRoleDTO> getRoleNameList() {
         return roleNameList;

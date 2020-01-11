@@ -25,4 +25,5 @@ public interface WCPCommodityOrderService {
     WCPCommodityOrderDTO getOneCommodityOrderByShop(String userId, String orderId);
 
     List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(@Param("userId") String userId,@Param("orderState") Integer orderState);
+
 }

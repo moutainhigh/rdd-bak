@@ -23,6 +23,7 @@
                 AND content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
             </if>
         </where>
+        ORDER BY name
     </select>
     <delete id="deleteById" parameterType="java.lang.String" >
         delete from czb_attribute

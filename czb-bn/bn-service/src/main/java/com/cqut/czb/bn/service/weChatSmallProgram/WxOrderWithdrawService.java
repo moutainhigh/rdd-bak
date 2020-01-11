@@ -7,5 +7,5 @@ public interface WxOrderWithdrawService {
 
     JSONResult toGetAllOrder(WxOrderWithdrawDTO wxOrderWithdrawDTO);
 
-    JSONResult toWithDraw(WxOrderWithdrawDTO wxOrderWithdrawDTO);
+    JSONResult toWithDraw(String id,WxOrderWithdrawDTO wxOrderWithdrawDTO);
 }

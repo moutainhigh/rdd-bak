@@ -317,6 +317,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public List<String> getAttributeContent(String name) {
+
         return weChatCommodityMapperExtra.getAttributeContent(name);
     }
 
@@ -339,22 +340,13 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             //插入图片
             address = FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream());//返回图片储存路径
             File file1 = new File();
-            file1.setFileId(StringUtil.createId());
+            file1.setFileId(wxAttributeDTO.getFileId());
             file1.setFileName(file.getOriginalFilename());
             file1.setSavePath(address);
             file1.setUploader(user.getUserId());
             file1.setCreateAt(new Date());
             file1.setUpdateAt(new Date());
             fileMapper.insertSelective(file1);
-
-            FileFunction fileFunction = new FileFunction();
-            fileFunction.setId(StringUtil.createId());
-            fileFunction.setFileId(file1.getFileId());
-            fileFunction.setLocalId(wxAttributeDTO.getFileId());
-            fileFunction.setCreateAt(new Date());
-            fileFunction.setUpdateAt(new Date());
-            fileFunction.setGroupCode("WxAttribute");
-            fileFunctionMapper.insertSelective(fileFunction);
         }
         return weChatCommodityMapperExtra.insertAttrbute(wxAttributeDTO) > 0;
     }
@@ -389,6 +381,11 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
 
     @Override
     public List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO) {
-        return weChatCommodityMapperExtra.checkWxAttribute(wxAttributeDTO);
+        if ((wxAttributeDTO.getContent()==null || wxAttributeDTO.getContent()=="") && (wxAttributeDTO.getName()==null || wxAttributeDTO.getName()=="")){
+            return weChatCommodityMapperExtra.selectAllWxAttribute(wxAttributeDTO);
+        }
+        else{
+            return weChatCommodityMapperExtra.checkWxAttribute(wxAttributeDTO);
+        }
     }
 }
