@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService{
+public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService {
 
     @Autowired
     WxOrderWithdrawMapperExtra wxOrderWithdrawMapperExtra;
