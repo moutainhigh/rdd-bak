@@ -157,6 +157,10 @@ public class AppHomePageController {
         return new JSONResult(appHomePageService.getPetrolStock(area));
     }
 
-
+    @GetMapping("/isBuyPetrol")
+    public JSONResult isBuyPetrol(Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(appHomePageService.isBuyPetrol(user));
+    }
 
 }
