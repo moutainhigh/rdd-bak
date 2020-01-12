@@ -50,6 +50,13 @@ public interface PetrolMapperExtra {
      */
     Petrol selectDifferentPetrol(PetrolInputDTO petrolInputDTO);
 
+    /**
+     * 判断是否买过中石油
+     * @param userId
+     * @return
+     */
+    Integer isBuyPetrol(@Param("userId") String userId);
+
     int changePetrolState(@Param("ids")String[] id,@Param("state")String state);
 
     int saleAllPetrol();

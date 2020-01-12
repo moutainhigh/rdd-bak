@@ -208,6 +208,19 @@
     limit 1
   </select>
 
+  <select id="isBuyPetrol" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    COUNT(*)
+    FROM czb_petrol
+    WHERE czb_petrol.state=2 AND
+    czb_petrol.owner_id=#{userId,jdbcType=VARCHAR} AND
+    petrol_kind=1 and
+    remark="汽油"
+    order by
+    create_at desc
+    limit 1
+  </select>
+
   <select id="selectPetrolByNum" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
