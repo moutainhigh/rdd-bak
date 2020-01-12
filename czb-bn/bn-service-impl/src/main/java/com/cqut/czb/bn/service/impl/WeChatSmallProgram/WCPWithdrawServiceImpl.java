@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatWithdrawMapperExtra;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatBalanceRecord;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatGetDetailedDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatTOWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.IncomeLogDTO;
@@ -73,5 +74,13 @@ public class WCPWithdrawServiceImpl implements WCPWithdrawService {
             return new JSONResult("提现成功", 200, "提现成功");
         }
 
+    }
+
+    @Override
+    public JSONResult getDetailed(WeChatGetDetailedDTO weChatGetDetailedDTO) {
+        PageHelper.startPage(weChatGetDetailedDTO.getCurrentPage(), weChatGetDetailedDTO.getPageSize(),true);
+        List<WeChatGetDetailedDTO> weChatGetDetailedDTOList = weChatWithdrawMapperExtra.selectDetaileds(weChatGetDetailedDTO);
+        PageInfo<WeChatGetDetailedDTO> pageInfo = new PageInfo<>(weChatGetDetailedDTOList);
+        return new JSONResult("列表数据查询成功", 200, pageInfo);
     }
 }
