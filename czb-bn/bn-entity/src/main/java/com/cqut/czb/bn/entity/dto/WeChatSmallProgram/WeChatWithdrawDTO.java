@@ -26,6 +26,10 @@ public class WeChatWithdrawDTO extends PageDTO {
 
     private String endTime;
 
+    private String phoneName;
+
+    private String phoneNumber;
+
     public String getUserId() {
         return userId;
     }
@@ -96,5 +100,21 @@ public class WeChatWithdrawDTO extends PageDTO {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
+    }
+
+    public String getPhoneName() {
+        return phoneName;
+    }
+
+    public void setPhoneName(String phoneName) {
+        this.phoneName = phoneName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

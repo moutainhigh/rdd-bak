@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatSettleRecord;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatSmallProgram.WxOrderWithdrawService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService{
+public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService {
 
     @Autowired
     WxOrderWithdrawMapperExtra wxOrderWithdrawMapperExtra;
@@ -24,21 +25,7 @@ public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService{
     public JSONResult toGetAllOrder(WxOrderWithdrawDTO wxOrderWithdrawDTO) {
         List<WxOrderWithdrawDTO> list = new ArrayList<>();
         PageHelper.startPage(wxOrderWithdrawDTO.getCurrentPage(), wxOrderWithdrawDTO.getPageSize(),true);
-        if (wxOrderWithdrawDTO.getShopIds().size() > 0) {
-            for (int i = 0; i < wxOrderWithdrawDTO.getShopIds().size(); i++) {
-                GetWxOrderWithdrawDTO getWxOrderWithdrawDTO = new GetWxOrderWithdrawDTO();
-                getWxOrderWithdrawDTO.setShopId(wxOrderWithdrawDTO.getShopIds().get(i));
-                getWxOrderWithdrawDTO.setStartTime(wxOrderWithdrawDTO.getStartTime());
-                getWxOrderWithdrawDTO.setEndTime(wxOrderWithdrawDTO.getEndTime());
-                List<WxOrderWithdrawDTO> withdrawList = wxOrderWithdrawMapperExtra.toGetAllOrder(getWxOrderWithdrawDTO);
-                System.out.println(wxOrderWithdrawDTO.getShopIds().size());
-                list.addAll(withdrawList);
-            }
-        } else {
-            GetWxOrderWithdrawDTO getWxOrderWithdrawDTO = new GetWxOrderWithdrawDTO();
-            getWxOrderWithdrawDTO.setRecordId(wxOrderWithdrawDTO.getRecordId());
-            list = wxOrderWithdrawMapperExtra.toGetAllOrder(getWxOrderWithdrawDTO);
-        }
+        list = wxOrderWithdrawMapperExtra.toGetAllOrder(wxOrderWithdrawDTO);
         PageInfo<WxOrderWithdrawDTO> pageInfo = new PageInfo<>(list);
         return new JSONResult("查询成功",200,pageInfo);
     }
@@ -48,20 +35,10 @@ public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService{
     public JSONResult toWithDraw(String id, WxOrderWithdrawDTO wxOrderWithdrawDTO) {
         WeChatSettleRecord weChatSettleRecord = new WeChatSettleRecord();
         List<WxOrderWithdrawDTO> list = new ArrayList<>();
-        for (int i = 0; i < wxOrderWithdrawDTO.getShopIds().size(); i++) {
-            GetWxOrderWithdrawDTO getWxOrderWithdrawDTO = new GetWxOrderWithdrawDTO();
-            getWxOrderWithdrawDTO.setShopId(wxOrderWithdrawDTO.getShopIds().get(i));
-            getWxOrderWithdrawDTO.setStartTime(wxOrderWithdrawDTO.getStartTime());
-            getWxOrderWithdrawDTO.setEndTime(wxOrderWithdrawDTO.getEndTime());
-            List<WxOrderWithdrawDTO> withdrawList = wxOrderWithdrawMapperExtra.toGetAllOrder(getWxOrderWithdrawDTO);
-            System.out.println(wxOrderWithdrawDTO.getShopIds().size());
-            list.addAll(withdrawList);
-        }
-        String[] ids = {"0","1","2","3","4","5","6","7","8","9"};
+        list = wxOrderWithdrawMapperExtra.toGetAllOrder(wxOrderWithdrawDTO);
+        List<String> orderList = new ArrayList<>();
         String theId = "";
-        for (int i = 0; i < 11; i++) {
-            theId += ids[(int)(Math.random()*10)];
-        }
+        theId = StringUtil.createId();
         weChatSettleRecord.setRecordId(theId);
         weChatSettleRecord.setSettleUserId(id);
         Double amount = 0.0;
@@ -73,8 +50,9 @@ public class WxOrderWithdrawServiceImpl implements WxOrderWithdrawService{
         int insertNum =  wxOrderWithdrawMapperExtra.insertWithdraw(weChatSettleRecord);
         System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
-            int bangding = wxOrderWithdrawMapperExtra.toBangding(list.get(i).getOrderId(),theId);
+            orderList.add(list.get(i).getOrderId());
         }
+        int bangding = wxOrderWithdrawMapperExtra.toBangding(orderList,theId);
         return new JSONResult("查询成功",200,"");
     }
 }

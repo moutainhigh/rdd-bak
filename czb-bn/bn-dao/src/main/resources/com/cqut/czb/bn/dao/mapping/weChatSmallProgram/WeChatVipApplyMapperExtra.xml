@@ -21,7 +21,8 @@
         WVP.user_name AS vipName,
         U.user_id as vipID,
         WVP.STATUS AS audit,
-        WVP.phone_num AS phoneNum
+        WVP.phone_num AS phoneNum,
+        WVP.create_at AS createAt
     FROM
         czb_wechat_vip_apply AS WVP,
         czb_user AS U

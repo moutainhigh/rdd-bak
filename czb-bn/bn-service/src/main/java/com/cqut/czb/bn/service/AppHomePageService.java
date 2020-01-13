@@ -81,5 +81,11 @@ public interface AppHomePageService {
 
     boolean inputDate(PaymentProcessDTO paymentProcessDTO);
 
+    /**
+     * 判断是否购买过中石油油卡
+     * @param user
+     * @return
+     */
+    boolean isBuyPetrol(User user);
 
 }

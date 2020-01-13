@@ -512,6 +512,14 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         return false;
     }
 
+    @Override
+    public boolean isBuyPetrol(User user) {
+        if(user==null){
+            return false;
+        }
+        return petrolMapperExtra.isBuyPetrol(user.getUserId())>0;
+    }
+
     public boolean updatePetrol(Petrol petrol) {
         return petrolMapperExtra.updateByPrimaryKeySelective(petrol) > 0;
     }
