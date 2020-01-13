@@ -2,8 +2,6 @@ package com.cqut.czb.bn.entity.entity;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 
-import java.util.Date;
-
 public class VIPApply extends PageDTO {
     private String vipAccount;
 
@@ -16,6 +14,8 @@ public class VIPApply extends PageDTO {
     private String phoneNum;
 
     private Integer isVip;
+
+    private String createAt;
 
     /**
      * get方法
@@ -45,6 +45,10 @@ public class VIPApply extends PageDTO {
         return vipId;
     }
 
+    public String getCreateAt() {
+        return createAt;
+    }
+
     /**
      * set方法
      * @param vipAccount
@@ -70,5 +74,9 @@ public class VIPApply extends PageDTO {
     }
     public void setVipId(String vipId) {
         this.vipId = vipId;
+    }
+
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
     }
 }

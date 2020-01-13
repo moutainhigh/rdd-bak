@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatGetDetailedDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatTOWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -39,5 +40,10 @@ public class WCPWithdrawController {
     @GetMapping(value ="/toWithdraw")
     public JSONResult toWithdraw(WeChatTOWithdrawDTO weChatTOWithdrawDTO){
         return withdrawService.toWithdraw(weChatTOWithdrawDTO);
+    }
+
+    @GetMapping(value = "/getDetailed")
+    public JSONResult getDetailed(WeChatGetDetailedDTO weChatGetDetailedDTO){
+        return withdrawService.getDetailed(weChatGetDetailedDTO);
     }
 }

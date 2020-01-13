@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WxOrderWithdrawMapperExtra" >
-    <select id="toGetAllOrder" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.GetWxOrderWithdrawDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO">
+    <select id="toGetAllOrder" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO">
       select   order_id orderId,
 	           user_name userName,
                 phone phone,
@@ -20,9 +20,15 @@
                 <if test="startTime != null and endTime != ''">
                     and a.create_at between #{startTime} and #{endTime}
                 </if>
-                <if test="shopId != null and shopId != ''">
-                    and a.shop_id = #{shopId}
+                <if test="shopIds != null and shopIds.size() > 0">
+                    and a.shop_id in
+                        <foreach item="item" collection="shopIds" separator="," open="(" close=")" index="index">
+                            #{item}
+                        </foreach>
                     and a.is_have_settled = 0
+                </if>
+                <if test="shopIds.size == 0">
+                    and a.shop_id = ""
                 </if>
                 <if test="recordId != null and recordId != ''">
                     and a.settled_record_id = #{recordId}
@@ -65,7 +71,10 @@
     <update id="toBangding">
         update czb_wechat_commodity_order
         set is_have_settled = 1,settled_record_id = #{settledRecordId}
-        where order_id = #{orderId}
+        where order_id in
+             <foreach item="item" collection="orderId" separator="," open="(" close=")" index="index">
+                #{item}
+             </foreach>
     </update>
 
 </mapper>

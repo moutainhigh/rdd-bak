@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.entity.entity.partnerAndOperateCenter;
 
-public class statisticsDevelopmentNumbers {
+public class StatisticsDevelopmentNumbers {
 
     //用户ID
     private String userId;

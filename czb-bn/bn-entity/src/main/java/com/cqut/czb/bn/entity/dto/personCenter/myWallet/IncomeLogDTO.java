@@ -7,6 +7,10 @@ public class IncomeLogDTO {
     private String recordId;
 
     /**
+     * 用户
+     */
+    private String commissionGotUser;
+    /**
      * 变更类型
      */
     private Integer type;
@@ -57,6 +61,14 @@ public class IncomeLogDTO {
 
     public void setRecordId(String recordId) {
         this.recordId = recordId;
+    }
+
+    public String getCommissionGotUser() {
+        return commissionGotUser;
+    }
+
+    public void setCommissionGotUser(String commissionGotUser) {
+        this.commissionGotUser = commissionGotUser;
     }
 
     public Integer getType() {
