@@ -55,6 +55,7 @@ public class WCPWithdrawServiceImpl implements WCPWithdrawService {
         incomeLog.setBeforeChangeIncome(weChatBalanceRecord.getBalance().doubleValue());
         incomeLog.setRecordId(StringUtil.createId());
         incomeLog.setSourceId(StringUtil.createId());
+        incomeLog.setCommissionGotUser(weChatTOWithdrawDTO.getUserId());
         incomeLog.setRemark("提现");
         incomeLog.setType(1);
         incomeLog.setWithdrawAmount(weChatTOWithdrawDTO.getMoney().doubleValue());
