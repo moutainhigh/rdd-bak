@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.service.partnerAndOperateCenter;
 
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
 /**
@@ -11,5 +11,5 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 public interface OrdinaryStatisticsService {
     JSONResult statistics(String userId);
 
-    JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers);
+    JSONResult getNumberOfDevelopment(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers);
 }

@@ -4,7 +4,7 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectInputDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.OrdinaryStatisticsService;
@@ -73,7 +73,7 @@ public class CareerStatisticsController {
      * @return
      */
     @GetMapping("/getNumberOfDevelopment")
-    public JSONResult getNumberOfDevelopment(Principal principal, statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+    public JSONResult getNumberOfDevelopment(Principal principal, StatisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         User user =  (User)redisUtils.get(principal.getName());
         if(user.getUserId() == null){
             return new JSONResult("没有权限", 500);
@@ -88,7 +88,7 @@ public class CareerStatisticsController {
      * @return
      */
     @GetMapping("/getDevelopment")
-    public JSONResult getDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+    public JSONResult getDevelopment(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         return statisticsService.getNumberOfDevelopment(statisticsDevelopmentNumbers);
     }
 
@@ -98,7 +98,7 @@ public class CareerStatisticsController {
      * @return
      */
     @GetMapping("/getIncome")
-    public JSONResult getIncome(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+    public JSONResult getIncome(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         return  service.getDirectAndIndirectIncome(statisticsDevelopmentNumbers.getCondition(), statisticsDevelopmentNumbers.getUserId());
     }
 

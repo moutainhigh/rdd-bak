@@ -2,7 +2,7 @@ package com.cqut.czb.bn.api.controller.partnerAndOperateCenter;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.OrdinaryStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class OrdinaryStatisticsController {
      * @return
      */
     @GetMapping("/getNumberOfDevelopment")
-    public JSONResult getNumberOfDevelopment(Principal principal, statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+    public JSONResult getNumberOfDevelopment(Principal principal, StatisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         User user =  (User)redisUtils.get(principal.getName());
         if(user.getUserId() == null){
             return new JSONResult("没有权限", 500);

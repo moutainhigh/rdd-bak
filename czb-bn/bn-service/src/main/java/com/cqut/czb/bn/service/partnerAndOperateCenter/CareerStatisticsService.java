@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.service.partnerAndOperateCenter;
 
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
 public interface CareerStatisticsService {
@@ -10,7 +10,7 @@ public interface CareerStatisticsService {
 
     JSONResult getOrdinaryDirectNum(int type,String userId);
 
-    JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers);
+    JSONResult getNumberOfDevelopment(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers);
 
     JSONResult initPermission();
 }

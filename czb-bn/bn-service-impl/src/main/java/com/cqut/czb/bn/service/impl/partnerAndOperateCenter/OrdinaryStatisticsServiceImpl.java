@@ -2,7 +2,7 @@ package com.cqut.czb.bn.service.impl.partnerAndOperateCenter;
 
 import com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.OrdinaryStatisticsMapperExtra;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryStatisticsDTO;
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.OrdinaryStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class OrdinaryStatisticsServiceImpl implements OrdinaryStatisticsService 
     }
 
     @Override
-    public JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+    public JSONResult getNumberOfDevelopment(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         OrdinaryStatisticsDTO numberOfDevelopment = mapperExtra.getNumberOfDevelopment(statisticsDevelopmentNumbers);
         return new JSONResult("发展人数数据查询成功", 200, numberOfDevelopment);
     }
