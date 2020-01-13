@@ -89,7 +89,7 @@ public interface WeChatCommodityOrderMapperExtra {
      */
     WCPCommodityOrderDTO selectOneCommodityOrderByShopUserId(@Param("userId") String userId, @Param("orderId") String orderId);
 
-    List<WCPCommodityOrderDTO> selectAllCommodityOrderByLeaderId(@Param("userId") String userId, @Param("orderState") Integer orderState);
+    List<WCPCommodityOrderDTO> selectAllCommodityOrderByLeaderId(@Param("userId") String userId, @Param("orderState") Integer orderState,@Param("pageSize1") Integer pageSize1,@Param("pageSize2") Integer pageSize2);
 
     /**
      * 获取销售额
@@ -98,4 +98,12 @@ public interface WeChatCommodityOrderMapperExtra {
      * @return
      */
     Double getTotalSale(WeChatCommodityOrderDTO input);
+
+    /**
+     * 获取订单总金额
+     * @param userId
+     * @param orderState
+     * @return
+     */
+    Double selectTotalPrice(@Param("userId") String userId,@Param("orderState") Integer orderState);
 }

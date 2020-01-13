@@ -55,11 +55,22 @@ public class WCPCommodityOrderController {
      * @return
      */
     @GetMapping("/getAllCommodityOrderByLeader")
-    public JSONResult getAllCommodityOrderByLeader(Principal principal,Integer orderState){
+    public JSONResult getAllCommodityOrderByLeader(Principal principal,Integer orderState,Integer page){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
-        return new JSONResult(wcpCommodityOrderService.getAllCommodityOrderByLeader(user.getUserId(), orderState));
+        return new JSONResult(wcpCommodityOrderService.getAllCommodityOrderByLeader(user.getUserId(), orderState,page));
     }
 
+    /**
+     * 获取商家所有订单金额
+     * @param principal
+     * @return
+     */
+    @GetMapping("/getTotalPrice")
+    public JSONResult getTotalPrice(Principal principal,Integer orderState){
+        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
+        double x = wcpCommodityOrderService.getTotalPrice(user.getUserId(), orderState);
+        return new JSONResult(wcpCommodityOrderService.getTotalPrice(user.getUserId(), orderState));
+    }
     /**
      * 确认收货(小程序寄送订单)
      * @param principal

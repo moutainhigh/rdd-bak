@@ -72,9 +72,17 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
     }
 
     @Override
-    public List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState) {
+    public List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState,Integer page) {
         UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
-        return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState);
+        Integer pageSize1=10*(page-1);
+        Integer pageSize2=10*page;
+        return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState,pageSize1,pageSize2);
+    }
+
+    @Override
+    public Double getTotalPrice(String userId, Integer orderState) {
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
+        return weChatCommodityOrderMapperExtra.selectTotalPrice(userDTO.getBindingid(), orderState);
     }
 
 }
