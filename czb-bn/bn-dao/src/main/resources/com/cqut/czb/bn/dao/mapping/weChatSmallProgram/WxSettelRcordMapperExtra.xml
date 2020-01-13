@@ -48,7 +48,7 @@
     <update id="settleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
         <if test="recordId != null">
             UPDATE czb_wechat_settle_record
-            SET is_settlement = 0
+            SET is_have_settled = 0
             WHERE record_id = #{recordId}
         </if>
     </update>
