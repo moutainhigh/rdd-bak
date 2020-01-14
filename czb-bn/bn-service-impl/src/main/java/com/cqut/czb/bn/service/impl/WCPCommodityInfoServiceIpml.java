@@ -65,8 +65,8 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     }
 
     @Override
-    public List<WCPCommodityOutputDTO> getClassification(WCPCommodityInputDTO wcpCommodityInputDTO) {
-        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityInputDTO);
+    public List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO) {
+        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
         return list;
     }
 }
