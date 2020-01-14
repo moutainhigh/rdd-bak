@@ -37,4 +37,9 @@ public class WCPCommodityInfoController {
     public JSONResult getAreas(){
         return new JSONResult(wcpCommodityInfoService.getAreas());
     }
+
+    @GetMapping("/getClassification")
+    public JSONResult getClassification(WCPCommodityInputDTO wcpCommodityInputDTO){
+        return new JSONResult(wcpCommodityInfoService.getClassification(wcpCommodityInputDTO));
+    }
 }
