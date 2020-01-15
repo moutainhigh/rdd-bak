@@ -162,6 +162,26 @@
       AND pay_status = 1
     ORDER BY
       czb_wechat_commodity_order.create_at DESC
+    LIMIT #{pageSize1, jdbcType = INTEGER},#{pageSize2, jdbcType = INTEGER}
+  </select>
+
+  <select id="selectTotalPrice" resultType="java.lang.Double">
+    SELECT
+    SUM(czb_wechat_commodity_order.actual_price) as totalPrice
+    FROM
+    czb_wechat_commodity_order
+    LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+    LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+    LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+    LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+    czb_shop.user_id = #{userId, jdbcType = VARCHAR}
+    <if test="orderState != null and orderState != ''">
+      AND  czb_wechat_commodity_order.order_state = #{orderState, jdbcType = INTEGER}
+    </if>
+    AND pay_status = 1
+    ORDER BY
+    czb_wechat_commodity_order.create_at DESC
   </select>
 
     <select id="selectOneCommodityOrderByShopUserId" resultMap="OrderDetail">

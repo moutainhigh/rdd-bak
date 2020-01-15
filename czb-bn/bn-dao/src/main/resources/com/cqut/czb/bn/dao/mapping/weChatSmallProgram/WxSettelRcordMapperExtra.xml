@@ -56,7 +56,7 @@
     <update id="deleteSettleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
         UPDATE czb_wechat_commodity_order
         SET settled_record_id = null,
-        is_have_settled = 1
+        is_have_settled = 0
         WHERE settled_record_id = #{recordId}
     </update>
 
@@ -71,7 +71,7 @@
         phone phone,
         commodity_title commodityName,
         c.shop_name shopName,
-        a.cost_price costPrice,
+        a.actual_price costPrice,
         third_order thirdOrder,
         order_state orderState,
         is_have_settled isHaveSettled,
@@ -83,7 +83,9 @@
             <if test="recordId != null and recordId != ''">
                 a.settled_record_id = #{recordId}
             </if>
+            and  a.pay_status = 1
         </where>
+        ORDER BY c.shop_name
     </select>
 
 

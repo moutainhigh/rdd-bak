@@ -29,22 +29,6 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     @Override
     public List<WCPCommodityOutputDTO> getCommodity(WCPCommodityInputDTO wcpCommodityInputDTO) {
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityByArea(wcpCommodityInputDTO);
-//        if(wcpCommodityInputDTO.getLatitude() != null && wcpCommodityInputDTO.getLatitude() != "" && wcpCommodityInputDTO.getLongitude() != "" && wcpCommodityInputDTO.getLongitude() != null) {
-//            Double longtitude = Double.valueOf(wcpCommodityInputDTO.getLongitude());
-//            Double latitude = Double.valueOf(wcpCommodityInputDTO.getLatitude());
-//            for (WCPCommodityOutputDTO wcpCommodityOutputDTO : list) {
-//                Double wcpLongtitude = Double.valueOf(wcpCommodityOutputDTO.getLongitude());
-//                Double wcpLatitude = Double.valueOf(wcpCommodityOutputDTO.getLatitude());
-//                Double distance = DistanceMeter.InputDistance(latitude, longtitude, wcpLatitude, wcpLongtitude);
-//                //对距离的格式化
-//                if(distance < 1000){
-//                    wcpCommodityOutputDTO.setDistance(String.valueOf(distance) + "m");
-//                }else if(distance > 1000){
-//                    distance = distance / 1000;
-//                    wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
-//                }
-//            }
-//        }
         return list;
     }
 
@@ -78,5 +62,29 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     @Override
     public List<String> getAreas() {
         return weChatCommodityMapperExtra.getAreas();
+    }
+
+    @Override
+    public List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO) {
+        String commodityTitle = wcpCommodityOutputDTO.getCommodityTitle();
+        if(commodityTitle != null && commodityTitle != ""){
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append("%");
+
+            for (int i = 0; i < commodityTitle.length(); i++){
+                char c = commodityTitle.charAt(i);
+                stringBuffer.append(c);
+                stringBuffer.append("%");
+            }
+
+            wcpCommodityOutputDTO.setCommodityTitle(commodityTitle);
+        }
+        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
+        return list;
+    }
+
+    @Override
+    public List<String> getContent() {
+        return weChatCommodityMapperExtra.getContent();
     }
 }

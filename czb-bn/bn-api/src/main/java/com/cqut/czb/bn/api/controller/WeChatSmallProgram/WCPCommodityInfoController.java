@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.WeChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
+import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WCPCommodityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,15 @@ public class WCPCommodityInfoController {
     @GetMapping("/getAreas")
     public JSONResult getAreas(){
         return new JSONResult(wcpCommodityInfoService.getAreas());
+    }
+
+    @GetMapping("/getClassification")
+    public JSONResult getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO){
+        return new JSONResult(wcpCommodityInfoService.getClassification(wcpCommodityOutputDTO));
+    }
+
+    @GetMapping("/getContent")
+    public JSONResult getContent(){
+        return new JSONResult(wcpCommodityInfoService.getContent());
     }
 }

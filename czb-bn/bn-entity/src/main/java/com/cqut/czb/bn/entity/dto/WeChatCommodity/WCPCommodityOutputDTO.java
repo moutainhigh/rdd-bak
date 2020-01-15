@@ -53,6 +53,26 @@ public class WCPCommodityOutputDTO {
 
     private String commodityIntroduce;
 
+    private String content;
+
+    private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     List<WCPCommodityAttrName> attrs;
 
     public List<WCPCommodityAttrName> getAttrs() {

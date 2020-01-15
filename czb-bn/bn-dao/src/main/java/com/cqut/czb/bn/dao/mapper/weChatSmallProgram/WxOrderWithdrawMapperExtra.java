@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface WxOrderWithdrawMapperExtra {
 
-    List<WxOrderWithdrawDTO> toGetAllOrder(GetWxOrderWithdrawDTO getWxOrderWithdrawDTO);
+    List<WxOrderWithdrawDTO> toGetAllOrder(WxOrderWithdrawDTO wxOrderWithdrawDTO);
 
     List<WxOrderWithdrawDTO> selectWithDraw(WxOrderWithdrawDTO wxOrderWithdrawDTO);
 
@@ -17,5 +17,5 @@ public interface WxOrderWithdrawMapperExtra {
 
     Double getTotalAmount(@Param("shopId") String shopId);
 
-    int toBangding(@Param("orderId") String orderId, @Param("settledRecordId") String settled_record_id);
+    int toBangding(@Param("orderId") List orderId, @Param("settledRecordId") String settled_record_id);
 }

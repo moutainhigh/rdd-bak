@@ -16,4 +16,8 @@ public interface WCPCommodityInfoService {
     WCPCommodityOutputDTO getOneCommodityById(WCPCommodityInputDTO wcpCommodityInputDTO);
 
     List<String> getAreas();
+
+    List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO);
+
+    List<String> getContent();
 }

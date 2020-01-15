@@ -1,7 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter;
 
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryStatisticsDTO;
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrdinaryStatisticsMapperExtra {
@@ -9,5 +9,5 @@ public interface OrdinaryStatisticsMapperExtra {
 
     OrdinaryStatisticsDTO getUsers(@Param("userId") String userId);
 
-    OrdinaryStatisticsDTO getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers);
+    OrdinaryStatisticsDTO getNumberOfDevelopment(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers);
 }

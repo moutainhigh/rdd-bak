@@ -93,21 +93,30 @@ public class WxSettelRcordServiceImpl implements WxSettelRcordService{
             if (wxOrderWithdrawDTOS.get(i).getShopName().equals(flag)){
                 addRow++;
             }
-            else if (addRow==0){
+            else if (addRow==startRow){
                 flag=wxOrderWithdrawDTOS.get(i).getShopName();
                 startRow=startRow+1;
+                addRow=addRow+1;
             }
             else{
                 flag=wxOrderWithdrawDTOS.get(i).getShopName();
-                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 0, (short) 0));
-                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 1, (short) 1));
-                startRow=startRow+addRow;
-                addRow=1;
+                sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 0, (short) 0));
+                sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 1, (short) 1));
+                startRow=addRow+1;
+                addRow=addRow+1;
             }
 
-            if (i==wxOrderWithdrawDTOS.size()-1){
-                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 0, (short) 0));
-                sheet.addMergedRegion(new CellRangeAddress(startRow, startRow+addRow-1, (short) 1, (short) 1));
+            if (i==wxOrderWithdrawDTOS.size()-1 && addRow==startRow){
+                Row row1 = sheet.getRow(startRow);
+                Cell cell1 = row1.createCell(count);
+                cell1.setCellStyle(style);
+                cell1.setCellValue(total);
+                count++;
+                total=0;
+            }
+            else if (i==wxOrderWithdrawDTOS.size()-1){
+                sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 0, (short) 0));
+                sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 1, (short) 1));
                 Row row1 = sheet.getRow(startRow);
                 Cell cell1 = row1.createCell(count);
                 cell1.setCellStyle(style);
@@ -117,6 +126,9 @@ public class WxSettelRcordServiceImpl implements WxSettelRcordService{
             }
             else if (!wxOrderWithdrawDTOS.get(i+1).getShopName().equals(flag)){
                 Row row1 = sheet.getRow(startRow);
+                if (row1==null){
+                    row1 = sheet.createRow(startRow);
+                }
                 Cell cell1 = row1.createCell(count);
                 cell1.setCellStyle(style);
                 cell1.setCellValue(total);
@@ -143,9 +155,9 @@ public class WxSettelRcordServiceImpl implements WxSettelRcordService{
             row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getThirdOrder());
 
             row.createCell(count).setCellType(CellType.STRING);
-            if (wxOrderWithdrawDTOS.get(i).getOrderState()==0)
+            if (wxOrderWithdrawDTOS.get(i).getOrderState()==1)
                 row.createCell(count++).setCellValue("未使用");
-            else if(wxOrderWithdrawDTOS.get(i).getOrderState()==1)
+            else if(wxOrderWithdrawDTOS.get(i).getOrderState()==2)
                 row.createCell(count++).setCellValue("已使用");
             else
                 row.createCell(count++).setCellValue("");
