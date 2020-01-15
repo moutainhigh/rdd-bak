@@ -631,7 +631,7 @@
         <if test="distance == 1">
             ORDER BY distance ASC
         </if>
-        LIMIT (#{page} - 1) * parseInt(#{pageSize}), #{pageSize}
+        LIMIT #{page}, #{pageSize}
     </select>
 
     <select id="getContent" resultType="java.lang.String">
