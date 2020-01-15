@@ -65,6 +65,8 @@ public class VipApplyServiceImpl implements VipApplyService {
             weChatVipApply.setRecordId(StringUtil.createId());
             weChatVipApply.setStatus(1);
             weChatVipApply.setUserId(user.getUserId());
+            weChatVipApply.setCreateAt(new Date());
+            weChatVipApply.setUpdateAt(new Date());
             weChatVipApplyMapper.insertSelective(weChatVipApply);
             vipApplyMapper.updateUserVip(user.getUserId());
             if(redisUtil.hasKey(user.getUserAccount())) {
