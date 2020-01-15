@@ -593,6 +593,9 @@
         <if test = "content != null and content != '' ">
             AND czb_wechat_commodity.commmodity_type_id IN ( SELECT category_id FROM czb_category WHERE content = #{content} )
         </if>
+        <if test="commodityTitle != null and commodityTitle != ''">
+            AND commodity_title LIKE #{commodityTitle}
+        </if>
         <if test="salesVolume == 1">
             ORDER BY  czb_wechat_commodity.sales_volume DESC
         </if>
