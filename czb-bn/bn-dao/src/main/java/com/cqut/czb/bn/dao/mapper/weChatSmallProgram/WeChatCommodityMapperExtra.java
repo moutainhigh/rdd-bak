@@ -88,5 +88,5 @@ public interface WeChatCommodityMapperExtra {
 
     List<WxAttributeDTO> checkWxAttribute(WxAttributeDTO wxAttributeDTO);
 
-    List<WCPCommodityOutputDTO> selectClassification(WCPCommodityInputDTO wcpCommodityInputDTO);
+    List<WCPCommodityOutputDTO> selectClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO);
 }
