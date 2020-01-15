@@ -27,7 +27,7 @@
                         </foreach>
                     and a.is_have_settled = 0
                 </if>
-                <if test="shopIds.size == 0">
+                <if test="shopIds.size == 0 and (recordId == null or recordId == '')">
                     and a.shop_id = ""
                 </if>
                 <if test="recordId != null and recordId != ''">

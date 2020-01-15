@@ -65,16 +65,6 @@ public class WxCommodityDTO {
 
     private String area;
 
-    private Integer salesVolume;
-
-    public Integer getSalesVolume() {
-        return salesVolume;
-    }
-
-    public void setSalesVolume(Integer salesVolume) {
-        this.salesVolume = salesVolume;
-    }
-
     public String getArea() {
         return area;
     }
