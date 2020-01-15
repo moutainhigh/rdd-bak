@@ -14,40 +14,54 @@ public class sendNotification {
     public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?"
             + "grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
-    public void sendMessage() throws IOException {
+    public  static void sendMessage() throws IOException {
 
         // 获取token
         String token = getAccessToken();
 
-        String postUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + token;
+//        subscribeState(token);
+
+        String postUrl = "https://api.weixin.qq.com/cgi-bin/message/template/subscribe?access_token=" + token;
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("touser", "otVKI5K7GYwBjx5JR0bfaA0l9d2I");   // openid
-        jsonObject.put("template_id", "你的模板id");
-        jsonObject.put("url", "http://www.baidu.com");
-
+        jsonObject.put("template_id", "BQSxLKET6Pp-jqHg06CwsO1eo4ncTP3Kp_5QO3q1hQk");
+        jsonObject.put("appid",WCProgramConfig.app_id);
+        jsonObject.put("pagepath","pages/homePage/homePage");
+        jsonObject.put("scene", "585");
+        jsonObject.put("title", "订单下单提醒");
         JSONObject data = new JSONObject();
-        JSONObject first = new JSONObject();
-        first.put("value", "hello");
-        first.put("color", "#173177");
-        JSONObject keyword1 = new JSONObject();
-        keyword1.put("value", "hello");
-        keyword1.put("color", "#173177");
-        JSONObject keyword2 = new JSONObject();
-        keyword2.put("value", "hello");
-        keyword2.put("color", "#173177");
-        JSONObject keyword3 = new JSONObject();
-        keyword3.put("value", "hello");
-        keyword3.put("color", "#173177");
-        JSONObject remark = new JSONObject();
-        remark.put("value", "hello");
-        remark.put("color", "#173177");
 
-        data.put("first", first);
-        data.put("keyword1", keyword1);
-        data.put("keyword2", keyword2);
-        data.put("keyword3", keyword3);
-        data.put("remark", remark);
+//        订单号
+        JSONObject character_string2 = new JSONObject();
+        character_string2.put("value", "89745612");
+        character_string2.put("color", "#173177");
+
+//        商品详情
+        JSONObject thing4 = new JSONObject();
+        thing4.put("value", "hello");
+        thing4.put("color", "#173177");
+
+//        支付金额
+        JSONObject amount1 = new JSONObject();
+        amount1.put("value", "hello");
+        amount1.put("color", "#173177");
+
+//        收益佣金
+        JSONObject amount5 = new JSONObject();
+        amount5.put("value", "hello");
+        amount5.put("color", "#173177");
+
+//        支付时间
+        JSONObject date3 = new JSONObject();
+        date3.put("value", "hello");
+        date3.put("color", "#173177");
+
+        data.put("character_string2", character_string2);
+        data.put("thing4", thing4);
+        data.put("amount1", amount1);
+        data.put("amount5", amount5);
+        data.put("date3", date3);
 
         jsonObject.put("data", data);
 
@@ -87,6 +101,22 @@ public class sendNotification {
 
     public static void main(String[] args) throws Exception {
         System.out.println();
-        System.out.println("token:"+getAccessToken());
+        sendMessage();
     }
+
+    public static Integer subscribeState(String token){
+        String tmpurl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+token +"&openid=otVKI5K7GYwBjx5JR0bfaA0l9d2I";
+        net.sf.json.JSONObject result = HttpUtil.doGetstr(tmpurl);
+        JSONObject resultJson = new JSONObject(result);
+//        System.out.println("获取用户是否订阅 errcode:{} errmsg:{}", resultJson.getInteger("errcode"), resultJson.getString("errmsg"));
+        String errmsg = (String) resultJson.get("errmsg");
+        System.out.println(errmsg);
+        if(errmsg==null){
+            //用户是否订阅该公众号标识（0代表此用户没有关注该公众号 1表示关注了该公众号）。
+            Integer subscribe = (Integer) resultJson.get("subscribe");
+            return subscribe;
+        }
+        return -1;
+    }
+
 }
