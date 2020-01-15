@@ -613,6 +613,13 @@
         </if>
     </select>
 
+    <select id="getContent" resultType="java.lang.String">
+        SELECT
+            content
+        FROM
+            czb_category
+    </select>
+
     <resultMap id="attrsMap" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrName">
         <result column="commodityId" property="commodityId" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />

@@ -82,4 +82,9 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
         return list;
     }
+
+    @Override
+    public List<String> getContent() {
+        return weChatCommodityMapperExtra.getContent();
+    }
 }

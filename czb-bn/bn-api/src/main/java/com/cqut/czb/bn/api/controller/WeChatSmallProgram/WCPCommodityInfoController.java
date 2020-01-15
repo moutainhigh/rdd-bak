@@ -43,4 +43,9 @@ public class WCPCommodityInfoController {
     public JSONResult getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO){
         return new JSONResult(wcpCommodityInfoService.getClassification(wcpCommodityOutputDTO));
     }
+
+    @GetMapping("/getContent")
+    public JSONResult getContent(){
+        return new JSONResult(wcpCommodityInfoService.getContent());
+    }
 }
