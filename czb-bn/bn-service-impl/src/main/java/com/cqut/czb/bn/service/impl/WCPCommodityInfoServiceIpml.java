@@ -67,6 +67,19 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 
     @Override
     public List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO) {
+        String commodityTitle = wcpCommodityOutputDTO.getCommodityTitle();
+        if(commodityTitle != null && commodityTitle != ""){
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append("%");
+
+            for (int i = 0; i < commodityTitle.length(); i++){
+                char c = commodityTitle.charAt(i);
+                stringBuffer.append(c);
+                stringBuffer.append("%");
+            }
+
+            wcpCommodityOutputDTO.setCommodityTitle(commodityTitle);
+        }
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
         return list;
     }
@@ -75,5 +88,10 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     public JSONResult getCommodityTitle() {
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityTitleByArea();
         return new JSONResult("商品查询成功", 200, list);
+    }
+
+    @Override
+    public List<String> getContent() {
+        return weChatCommodityMapperExtra.getContent();
     }
 }

@@ -613,6 +613,9 @@
         <if test = "content != null and content != '' ">
             AND czb_wechat_commodity.commmodity_type_id IN ( SELECT category_id FROM czb_category WHERE content = #{content} )
         </if>
+        <if test="commodityTitle != null and commodityTitle != ''">
+            AND commodity_title LIKE #{commodityTitle}
+        </if>
         <if test="salesVolume == 1">
             ORDER BY  czb_wechat_commodity.sales_volume DESC
         </if>
@@ -628,6 +631,14 @@
         <if test="distance == 1">
             ORDER BY distance ASC
         </if>
+        LIMIT (#{page} - 1) * parseInt(#{pageSize}), #{pageSize}
+    </select>
+
+    <select id="getContent" resultType="java.lang.String">
+        SELECT
+            content
+        FROM
+            czb_category
     </select>
 
     <resultMap id="attrsMap" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityAttrName">

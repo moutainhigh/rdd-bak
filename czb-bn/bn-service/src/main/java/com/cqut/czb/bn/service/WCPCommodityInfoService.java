@@ -20,5 +20,7 @@ public interface WCPCommodityInfoService {
 
     List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO);
 
+    List<String> getContent();
+
     JSONResult getCommodityTitle();
 }
