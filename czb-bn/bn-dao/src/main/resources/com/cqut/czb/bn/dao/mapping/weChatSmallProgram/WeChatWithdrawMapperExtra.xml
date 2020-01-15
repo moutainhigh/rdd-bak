@@ -5,6 +5,7 @@
 		SELECT
 			a.user_id userId,
 			a.user_account account,
+		    a.user_name name,
 			a.create_at createAt,
 			( fanyong_income + share_income + other_income - withdrawed ) withdraw,
 			withdrawed withdrawed,
