@@ -32,8 +32,8 @@
         (select czb_user.user_id,czb_user.user_account,czb_address.receiver,czb_user.create_at,czb_user.superior_user,czb_user.is_vip,price.total
         from czb_user
         left outer join
-        (select d.buyer_id,sum(d.current_price) as total from czb_petrol_sales_records d group by buyer_id) as price on czb_user.user_id = 	price.		 buyer_id
-        left join czb_address on czb_user.user_id = czb_address.user_id
+        (select d.buyer_id,sum(d.current_price) as total from czb_petrol_sales_records d group by buyer_id) as price on czb_user.user_id = price.buyer_id
+        left join (select * from czb_address where czb_address.is_default = 1) czb_address on czb_user.user_id = czb_address.user_id
         <where>
             partner = 0
             <if test="account != null and account != ''">
@@ -50,7 +50,7 @@
         order by price.total desc) c
         on a.user_id = c.user_id
         -- 推荐人表
-        left outer join (select czb_user.user_account,czb_user.user_id,czb_address.receiver from czb_address join czb_user on czb_user.user_id = czb_address.user_id
+        left outer join (select czb_user.user_account,czb_user.user_id,czb_address.receiver from (select * from czb_address where czb_address.is_default = 1) czb_address join czb_user on czb_user.user_id = czb_address.user_id
         group by czb_user.user_id,czb_user.user_account,czb_address.receiver
         )e on e.user_id = c.superior_user
         <where>
