@@ -29,8 +29,7 @@ public class HttpClientUtils {
             return sendPost(url);
         }
         String resp = "";
-        StringEntity entityStr = new StringEntity(jsonString,
-                ContentType.create("text/plain", "UTF-8"));
+        StringEntity entityStr = new StringEntity(jsonString, ContentType.create("text/plain", "UTF-8"));
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         httpPost.setEntity(entityStr);

@@ -80,6 +80,7 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 
             wcpCommodityOutputDTO.setCommodityTitle(commodityTitle);
         }
+        wcpCommodityOutputDTO.setPageSize((wcpCommodityOutputDTO.getPage() - 1) * wcpCommodityOutputDTO.getPageSize());
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
         return list;
     }
