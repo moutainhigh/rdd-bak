@@ -187,7 +187,7 @@
         AND #{endTime}
   </select>
 
-    <select id="getNumberOfDevelopment" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO">
+    <select id="getNumberOfDevelopment" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO">
        select
 		sum(case
 		when first_level_partner = superior_user and create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')

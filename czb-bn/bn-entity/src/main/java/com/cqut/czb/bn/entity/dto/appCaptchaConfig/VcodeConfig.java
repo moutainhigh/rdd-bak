@@ -22,7 +22,7 @@ public class VcodeConfig {
 
     final static String DeliveryCode = "SMS_175539137";
 
-    final static String AppletShopCode="SMS_180048722";
+    final static String AppletShopCode="SMS_181191133";
 
 
 }

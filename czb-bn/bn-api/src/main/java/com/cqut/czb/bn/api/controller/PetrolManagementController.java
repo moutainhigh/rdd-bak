@@ -40,6 +40,18 @@ public class PetrolManagementController {
     }
 
     @PermissionCheck(role = "管理员")
+    @RequestMapping(value="/getPetrolPrices",method=RequestMethod.GET)
+    public JSONResult getPetrolPrices(){
+        return new JSONResult(petrolManagementService.getPetrolPrice());
+    }
+
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value="/updatePetrolPrices",method=RequestMethod.POST)
+    public JSONResult updatePetrolPrices(String petrolPrices){
+        return new JSONResult(petrolManagementService.updatePetrolPrices(petrolPrices));
+    }
+
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "salePetrol",method = RequestMethod.POST)
     public JSONResult salePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
 

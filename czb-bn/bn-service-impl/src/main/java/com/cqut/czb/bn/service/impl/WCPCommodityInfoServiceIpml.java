@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WCPCommodityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,22 +30,6 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     @Override
     public List<WCPCommodityOutputDTO> getCommodity(WCPCommodityInputDTO wcpCommodityInputDTO) {
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityByArea(wcpCommodityInputDTO);
-//        if(wcpCommodityInputDTO.getLatitude() != null && wcpCommodityInputDTO.getLatitude() != "" && wcpCommodityInputDTO.getLongitude() != "" && wcpCommodityInputDTO.getLongitude() != null) {
-//            Double longtitude = Double.valueOf(wcpCommodityInputDTO.getLongitude());
-//            Double latitude = Double.valueOf(wcpCommodityInputDTO.getLatitude());
-//            for (WCPCommodityOutputDTO wcpCommodityOutputDTO : list) {
-//                Double wcpLongtitude = Double.valueOf(wcpCommodityOutputDTO.getLongitude());
-//                Double wcpLatitude = Double.valueOf(wcpCommodityOutputDTO.getLatitude());
-//                Double distance = DistanceMeter.InputDistance(latitude, longtitude, wcpLatitude, wcpLongtitude);
-//                //对距离的格式化
-//                if(distance < 1000){
-//                    wcpCommodityOutputDTO.setDistance(String.valueOf(distance) + "m");
-//                }else if(distance > 1000){
-//                    distance = distance / 1000;
-//                    wcpCommodityOutputDTO.setDistance(String.format("%.1f",distance) + "km");
-//                }
-//            }
-//        }
         return list;
     }
 
@@ -78,5 +63,36 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     @Override
     public List<String> getAreas() {
         return weChatCommodityMapperExtra.getAreas();
+    }
+
+    @Override
+    public List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO) {
+        String commodityTitle = wcpCommodityOutputDTO.getCommodityTitle();
+        if(commodityTitle != null && commodityTitle != ""){
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append("%");
+
+            for (int i = 0; i < commodityTitle.length(); i++){
+                char c = commodityTitle.charAt(i);
+                stringBuffer.append(c);
+                stringBuffer.append("%");
+            }
+
+            wcpCommodityOutputDTO.setCommodityTitle(commodityTitle);
+        }
+        wcpCommodityOutputDTO.setPage((wcpCommodityOutputDTO.getPage() - 1) * wcpCommodityOutputDTO.getPageSize());
+        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
+        return list;
+    }
+
+    @Override
+    public JSONResult getCommodityTitle() {
+        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityTitleByArea();
+        return new JSONResult("商品查询成功", 200, list);
+    }
+
+    @Override
+    public List<String> getContent() {
+        return weChatCommodityMapperExtra.getContent();
     }
 }

@@ -75,7 +75,8 @@ public class JWTAuthenticationPCFilter extends UsernamePasswordAuthenticationFil
                 userDetailService = SpringUtils.getBean(UserDetailServiceImpl.class);
             }
             loginUser.setAccount(JwtTool.getUsername(token));
-            User user =  userDetailService.loadUserByUsername(loginUser.getAccount());
+            User user =  userDetailService.
+                    loadUserByUsername(loginUser.getAccount());
             loginUser.setPassword(user.getUserPsw());
         }
         if(loginUser.getAccount() == null || loginUser.getAccount() == "") {

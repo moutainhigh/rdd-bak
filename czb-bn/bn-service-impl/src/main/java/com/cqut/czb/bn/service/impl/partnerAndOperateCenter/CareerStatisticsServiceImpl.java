@@ -5,7 +5,7 @@ import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.CareerStatisticsDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectDTO;
 import com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.OrdinaryUserDirectDTO;
 import com.cqut.czb.bn.entity.entity.UserRole;
-import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.statisticsDevelopmentNumbers;
+import com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.partnerAndOperateCenter.CareerStatisticsService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -214,7 +214,7 @@ public class CareerStatisticsServiceImpl implements CareerStatisticsService {
     }
 
     @Override
-    public JSONResult getNumberOfDevelopment(statisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
+    public JSONResult getNumberOfDevelopment(StatisticsDevelopmentNumbers statisticsDevelopmentNumbers) {
         CareerStatisticsDTO numberOfDevelopment = mapperExtra.getNumberOfDevelopment(statisticsDevelopmentNumbers);
         return new JSONResult("发展人数数据查询成功", 200, numberOfDevelopment);
     }

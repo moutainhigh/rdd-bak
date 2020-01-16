@@ -24,6 +24,7 @@
     <result column="shopName" property="shopName" jdbcType="VARCHAR" />
     <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
     <result column="orderState" property="orderState" jdbcType="VARCHAR" />
+    <result column="attr_info" property="attrInfo" jdbcType="VARCHAR" />
     <collection property="commodityImgList" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
   </resultMap>
 
@@ -44,6 +45,7 @@
       czb_wechat_commodity_order.create_at createAt,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_commodity_order.attr_info,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
       czb_wechat_goods_delivery_records.delivery_num deliveryNum,
       czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
@@ -94,6 +96,7 @@
       czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_commodity_order.attr_info,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
       czb_wechat_goods_delivery_records.delivery_num deliveryNum,
       czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
@@ -133,6 +136,7 @@
       czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_commodity_order.attr_info,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
       czb_wechat_goods_delivery_records.delivery_num deliveryNum,
       czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
@@ -158,6 +162,26 @@
       AND pay_status = 1
     ORDER BY
       czb_wechat_commodity_order.create_at DESC
+    LIMIT #{pageSize1, jdbcType = INTEGER},#{pageSize2, jdbcType = INTEGER}
+  </select>
+
+  <select id="selectTotalPrice" resultType="java.lang.Double">
+    SELECT
+    SUM(czb_wechat_commodity_order.actual_price) as totalPrice
+    FROM
+    czb_wechat_commodity_order
+    LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+    LEFT JOIN czb_wechat_goods_delivery_records ON czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+    LEFT JOIN czb_address ON czb_address.address_id = czb_wechat_commodity_order.address_id
+    LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+    WHERE
+    czb_shop.user_id = #{userId, jdbcType = VARCHAR}
+    <if test="orderState != null and orderState != ''">
+      AND  czb_wechat_commodity_order.order_state = #{orderState, jdbcType = INTEGER}
+    </if>
+    AND pay_status = 1
+    ORDER BY
+    czb_wechat_commodity_order.create_at DESC
   </select>
 
     <select id="selectOneCommodityOrderByShopUserId" resultMap="OrderDetail">
@@ -176,6 +200,7 @@
       czb_wechat_commodity_order.create_at createAt,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_commodity_order.attr_info,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
       czb_wechat_goods_delivery_records.delivery_num deliveryNum,
       czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
@@ -217,6 +242,7 @@
       czb_wechat_commodity_order.order_state orderState,
       czb_wechat_commodity_order.commodity_source commoditySource,
       czb_wechat_commodity_order.commodity_type commodityType,
+      czb_wechat_commodity_order.attr_info,
       czb_wechat_goods_delivery_records.delivery_state deliveryState,
       czb_wechat_goods_delivery_records.delivery_num deliveryNum,
       czb_wechat_goods_delivery_records.delivery_company deliveryCompany,
@@ -256,7 +282,6 @@
     SET order_state = 2
     WHERE
         order_id = #{orderId, jdbcType = VARCHAR}
-        AND shop_id = #{shopId, jdbcType = VARCHAR}
         AND pay_status = 1
         AND order_state = 1
   </update>
@@ -269,6 +294,7 @@
     user_table.user_name as userName,
     user_account as userAccount,
     order_table.order_id as orderId,
+    order_table.phone as phone,
     third_order as thirdOrder,
     order_state as orderState,
     order_table.commodity_id as commodityId,

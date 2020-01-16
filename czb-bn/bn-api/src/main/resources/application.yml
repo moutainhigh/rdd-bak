@@ -24,12 +24,12 @@ spring:
 #    host: 172.16.43.86
 #    port: 5259
 #    password: r2Z0@WJM
-    host: 39.98.250.45
-    port: 6379
-    password: TTfF9Pfj3lL2qBS8
-#    host: localhost
+#    host: 39.98.250.45
 #    port: 6379
-#    password: root
+#    password: TTfF9Pfj3lL2qBS8
+    host: localhost
+    port: 6379
+    password: root
     jedis:
       pool:
         max-active: 200
@@ -87,5 +87,6 @@ jwt:
   token_prefix: Bearer
   secret: cqut.czb
   iss: echisan
+
   expiration: 3600
   expiration_prmember: 604800

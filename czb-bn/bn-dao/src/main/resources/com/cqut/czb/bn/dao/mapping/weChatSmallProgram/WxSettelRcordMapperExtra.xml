@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WxSettelRcordMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO" >
+        <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+        <result column="settle_user_id" property="settleUserId" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+        <result column="total_amount" property="totalAccount" jdbcType="DOUBLE" />
+        <result column="settle_time" property="settleTime" jdbcType="TIMESTAMP" />
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="is_settlement" property="isSettlement" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="selectSettleRcord" resultMap="BaseResultMap">
+        SELECT
+            record.record_id,
+            record.settle_user_id,
+            record.total_amount,
+            record.shop_id,
+            ( SELECT COUNT( czb_wechat_commodity_order.settled_record_id ) FROM czb_wechat_commodity_order WHERE czb_wechat_commodity_order.settled_record_id = record.record_id and czb_wechat_commodity_order.pay_status = 1) AS count,
+            record.is_settlement,
+            USER.user_account,
+            record.settle_time,
+            record.create_at,
+            record.update_at
+        FROM
+            czb_wechat_settle_record AS record,
+            czb_user AS USER
+        WHERE
+            USER.user_id = record.settle_user_id
+            <if test="userAccount != null and userAccount != ''">
+                AND USER.user_account = #{userAccount}
+            </if>
+            <if test="isSettlement != null and isSettlement != '' and isSettlement != 2">
+                AND record.is_settlement = #{isSettlement}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND ( record.create_at BETWEEN #{startTime} AND #{endTime} )
+            </if>
+        ORDER BY
+            record.update_at DESC
+    </select>
+
+    <update id="settleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
+        <if test="recordId != null">
+            UPDATE czb_wechat_settle_record
+            SET is_settlement = 1
+            WHERE record_id = #{recordId}
+        </if>
+    </update>
+
+    <update id="deleteSettleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
+        UPDATE czb_wechat_commodity_order
+        SET settled_record_id = null,
+        is_have_settled = 0
+        WHERE settled_record_id = #{recordId}
+    </update>
+
+    <delete id="updateSettleRecord" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO">
+        DELETE FROM czb_wechat_settle_record
+        WHERE record_id = #{recordId}
+    </delete>
+    
+    <select id="selectByPrimaryKey" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO">
+        select   order_id orderId,
+        user_name userName,
+        phone phone,
+        commodity_title commodityName,
+        c.shop_name shopName,
+        a.actual_price costPrice,
+        third_order thirdOrder,
+        order_state orderState,
+        is_have_settled isHaveSettled,
+        a.attr_info attrInfo,
+        a.actual_price actualPrice
+        FROM czb_wechat_commodity_order a LEFT JOIN czb_user AS b ON a.user_id = b.user_id LEFT JOIN
+        czb_shop c ON a.shop_id = c.shop_id LEFT JOIN czb_wechat_commodity d ON a.commodity_id = d.commodity_id
+        <where>
+            <if test="recordId != null and recordId != ''">
+                a.settled_record_id = #{recordId}
+            </if>
+            and  a.pay_status = 1
+        </where>
+        ORDER BY c.shop_name
+    </select>
+
+
+</mapper>

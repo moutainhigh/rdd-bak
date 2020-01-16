@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WxOrderWithdrawMapperExtra" >
+    <select id="toGetAllOrder" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO">
+      select   order_id orderId,
+	           user_name userName,
+                phone phone,
+				commodity_title commodityName,
+				c.shop_name shopName,
+                a.actual_price actualPrice,
+                a.commodity_num commodityNum,
+                third_order thirdOrder,
+                order_state orderState,
+                is_have_settled isHaveSettled,
+                a.attr_info attrInfo
+           FROM czb_wechat_commodity_order a LEFT JOIN czb_user AS b ON a.user_id = b.user_id LEFT JOIN
+					 czb_shop c ON a.shop_id = c.shop_id LEFT JOIN czb_wechat_commodity d ON a.commodity_id = d.commodity_id
+            <where>
+                a.pay_status = 1
+                <if test="startTime != null and endTime != ''">
+                    and a.create_at between #{startTime} and #{endTime}
+                </if>
+                <if test="shopIds != null and shopIds.size() > 0">
+                    and a.shop_id in
+                        <foreach item="item" collection="shopIds" separator="," open="(" close=")" index="index">
+                            #{item}
+                        </foreach>
+                    and a.is_have_settled = 0
+                </if>
+                <if test="shopIds.size == 0 and (recordId == null or recordId == '')">
+                    and a.shop_id = ""
+                </if>
+                <if test="recordId != null and recordId != ''">
+                    and a.settled_record_id = #{recordId}
+                </if>
+
+            </where>
+    </select>
+
+    <insert id="insertWithdraw" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatSettleRecord" >
+        INSERT INTO czb_wechat_settle_record (
+            record_id,
+            settle_user_id,
+            shop_id,
+            total_amount,
+            update_at,
+            is_settlement
+        )
+        VALUES
+            (
+                #{recordId},
+                #{settleUserId},
+                #{shopId},
+                #{totalAmount},
+                 #{updateAt},
+                0
+            );
+    </insert>
+    
+    <select id="getTotalAmount" resultType="java.lang.Double">
+         SELECT
+            IFNULL(sum( actual_price ) ,0)
+        FROM
+            czb_wechat_commodity_order
+        WHERE
+            shop_id = #{shopId}
+            AND pay_status = 1
+            AND is_have_settled = 0
+    </select>
+
+    <update id="toBangding">
+        update czb_wechat_commodity_order
+        set is_have_settled = 1,settled_record_id = #{settledRecordId}
+        where order_id in
+             <foreach item="item" collection="orderId" separator="," open="(" close=")" index="index">
+                #{item}
+             </foreach>
+    </update>
+
+</mapper>
+

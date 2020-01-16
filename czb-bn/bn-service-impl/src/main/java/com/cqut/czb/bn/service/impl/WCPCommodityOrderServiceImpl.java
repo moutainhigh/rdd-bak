@@ -52,17 +52,17 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
 
     @Override
     public Boolean comfirmCommodityOrder(String userId, WeChatCommodityComdirmOrderDTO weChatCommodityComdirmOrderDTO) {
-        if(weChatCommodityComdirmOrderDTO.getTime() != null){
-            Long interval =  (System.currentTimeMillis() - weChatCommodityComdirmOrderDTO.getTime().getTime()) / (1000 * 60);
-            if(interval <= 10){
-                UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
-                weChatCommodityComdirmOrderDTO.setUserId(userDTO.getBindingid());
-                weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userDTO.getBindingid()));
-                return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
-            }
-            return false;
-        }
-        return false;
+//        if(weChatCommodityComdirmOrderDTO.getTime() != null){
+//            Long interval =  (System.currentTimeMillis() - weChatCommodityComdirmOrderDTO.getTime().getTime()) / (1000 * 60);
+//            if(interval <= 10){
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
+        weChatCommodityComdirmOrderDTO.setUserId(userDTO.getBindingid());
+//        weChatCommodityComdirmOrderDTO.setShopId(shopMapperExtra.selectShopIdByUserId(userDTO.getBindingid()));
+        return weChatCommodityOrderMapperExtra.updateCommodityOrderState(weChatCommodityComdirmOrderDTO) > 0;
+//            }
+//            return false;
+//        }
+//        return false;
     }
 
     @Override
@@ -72,8 +72,21 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
     }
 
     @Override
-    public List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState) {
+    public List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState,Integer page) {
         UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
-        return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState);
+        Integer pageSize1 = 0;
+        Integer pageSize2 = 1000;
+        if(page != null){
+            pageSize1 = 10*(page-1);
+            pageSize2 = 10*page;
+        }
+        return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState,pageSize1,pageSize2);
     }
+
+    @Override
+    public Double getTotalPrice(String userId, Integer orderState) {
+        UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
+        return weChatCommodityOrderMapperExtra.selectTotalPrice(userDTO.getBindingid(), orderState);
+    }
+
 }

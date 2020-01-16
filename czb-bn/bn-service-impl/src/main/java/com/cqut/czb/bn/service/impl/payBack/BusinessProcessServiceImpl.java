@@ -102,6 +102,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     WeChatGoodsDeliveryRecordsMapper weChatGoodsDeliveryRecordsMapper;
 
+    @Autowired
+    ShopMapper shopMapper;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
@@ -268,6 +271,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
         //判断是否邮寄
         WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
+        WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
         if(order1.getCommodityType()==1){
             WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
             records.setRecordId(StringUtil.createId());
@@ -278,15 +282,31 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             weChatGoodsDeliveryRecordsMapper.insertSelective(records);
         }else {
             // 发送短信
-            WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
+            //查出商家电话
+            Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
             String title="";
             if(weChatCommodity.getCommodityTitle().length()>20){
                 title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
             }else {
                 title=weChatCommodity.getCommodityTitle();
             }
-            PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode());
+            PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode(),shop.getShopPhone());
         }
+
+        //更改商品数量
+        WeChatCommodity commodity=new WeChatCommodity();
+        commodity.setCommodityId(order1.getCommodityId());
+        //计算商品的总库存量
+        int num=weChatCommodity.getCommodityNum()-order1.getCommodityNum();
+        if(num>=0){
+            commodity.setCommodityNum(num);
+        }else {
+            commodity.setCommodityNum(0);
+        }
+        //计算商品的总销售量
+        int saleNum=weChatCommodity.getSalesVolume()+order1.getCommodityNum();
+        commodity.setSalesVolume(saleNum);
+        weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
 
        //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);

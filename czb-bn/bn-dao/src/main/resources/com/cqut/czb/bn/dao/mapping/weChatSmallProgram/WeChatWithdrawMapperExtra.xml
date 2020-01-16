@@ -3,28 +3,31 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatWithdrawMapperExtra" >
     <select id="selectWithdrawList" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatWithdrawDTO">
 		SELECT
-		  a.user_id userId,
-		  a.user_account account,
-		  a.user_name name ,
-		  a.create_at createAt,
-		  ( fanyong_income + share_income + other_income - withdrawed ) withdraw,
-		  withdrawed withdrawed,
-		  info_id infoId
+			a.user_id userId,
+			a.user_account account,
+		    a.user_name name,
+			a.create_at createAt,
+			( fanyong_income + share_income + other_income - withdrawed ) withdraw,
+			withdrawed withdrawed,
+			info_id infoId,
+			czb_wechat_vip_apply.user_name phoneName,
+			czb_wechat_vip_apply.phone_num phoneNumber
 		FROM
-		  (
-		SELECT
-			c.user_id,
-			c.user_name,
-			c.create_at,
-			c.user_type,
-			b.user_account
-		FROM
+			(
+			SELECT
+				c.user_id,
+				c.create_at,
+				c.user_type,
+				c.bindingId,
+				c.user_name,
+				b.user_account
+			FROM
 			czb_user c
-			LEFT JOIN ( SELECT d.user_id, d.user_account FROM czb_user d ) AS b ON c.bindingId = b.user_id
-		) AS a
-		   LEFT OUTER JOIN czb_user_income_info ON a.user_id = czb_user_income_info.user_id
-
-			<where>
+			LEFT JOIN ( SELECT d.user_id, d.user_account,d.user_name FROM czb_user d ) AS b ON c.bindingId = b.user_id
+			) AS a
+			LEFT OUTER JOIN czb_user_income_info ON a.user_id = czb_user_income_info.user_id
+			LEFT OUTER JOIN czb_wechat_vip_apply on a.user_id = czb_wechat_vip_apply.user_id
+		<where>
 			    a.user_type = 2
 				<if test="name != null and name != ''">
 				    and	a.user_name like concat('%', #{name},'%')
@@ -32,10 +35,12 @@
 				<if test="account != null and account != ''">
 					and a.user_account like concat('%', #{account},'%')
 				</if>
-				<if test="startTime != null and endTime != ''">
+				<if test="phoneNumber != null and phoneNumber != ''">
+					and czb_wechat_vip_apply.phone_num  like concat('%', #{phoneNumber},'%')
+				</if>
+				<if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
 					and a.create_at between #{startTime} and #{endTime}
 				</if>
-
 			</where>
 		ORDER BY withdraw DESC
     </select>
@@ -61,6 +66,7 @@
             withdraw_to,
             withdraw_name,
             withdraw_account,
+            commission_got_user,
             create_at,
             update_at
         )
@@ -76,8 +82,36 @@
                 #{withdrawTo},
                 #{withdrawName},
                 #{withdrawAmount},
+                #{commissionGotUser},
                 CURRENT_TIMESTAMP,
                 CURRENT_TIMESTAMP
             );
     </insert>
+	<select id="selectDetaileds" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatGetDetailedDTO" resultType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatGetDetailedDTO">
+		SELECT
+			a.info_id infoId,
+			a.amount,
+			a.type,
+			a.before_change_income beforeChangeIncome,
+			a.remark,
+			a.create_at createAt,
+			b.user_name sourceUser,
+			c.user_name gotUser
+		FROM czb_income_log as a
+		LEFT OUTER JOIN czb_user as b ON a.commission_source_user = b.user_id
+		LEFT OUTER JOIN  czb_user as c  ON a.commission_got_user = c.user_id
+		<where>
+		 a.info_id = #{infoId,jdbcType=VARCHAR}
+		 <if test="sourceUser !=null and sourceUser != '' ">
+		 	and b.user_name like concat('%', #{sourceUser},'%')
+		 </if>
+		 <if test="type != null and type != -1 ">
+		    and a.type = #{type,jdbcType=INTEGER}
+		 </if>
+		<if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+			and a.create_at between #{startTime} and #{endTime}
+		</if>
+		</where>
+		ORDER BY a.create_at DESC
+	</select>
 </mapper>

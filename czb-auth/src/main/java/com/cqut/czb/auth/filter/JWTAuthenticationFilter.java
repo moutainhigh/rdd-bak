@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * 该类用于登录，登录成功后设置token信息
  */
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class  JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
 
