@@ -5,6 +5,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WCPCommodityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,8 +80,15 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 
             wcpCommodityOutputDTO.setCommodityTitle(commodityTitle);
         }
+        wcpCommodityOutputDTO.setPageSize((wcpCommodityOutputDTO.getPage() - 1) * wcpCommodityOutputDTO.getPageSize());
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
         return list;
+    }
+
+    @Override
+    public JSONResult getCommodityTitle() {
+        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityTitleByArea();
+        return new JSONResult("商品查询成功", 200, list);
     }
 
     @Override

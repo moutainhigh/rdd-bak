@@ -544,7 +544,6 @@
         LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
-        AND czb_wechat_commodity.end_time_business &gt;= now()
         <if test = "area != null and area != '' and area != '重庆市'">
             AND area = #{area, jdbcType = VARCHAR}
         </if>
@@ -555,6 +554,27 @@
           commodityId
         ORDER BY
           show_order
+    </select>
+    <select id="selectAllCommodityTitleByArea"  resultMap="WCPCommodityInfoType">
+        SELECT
+        czb_wechat_commodity.commodity_id commodityId,
+        commodity_title commodityTitle,
+        commodity_info commodityInfo,
+        commodity_img_id commodityImgId,
+        czb_shop.shop_name shopName,
+        czb_shop.shop_content shopContent,
+        czb_shop.shop_address shopAddress,
+        czb_shop.shop_phone shopPhone
+        FROM
+        czb_wechat_commodity czb_wechat_commodity
+        LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+        LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+        WHERE
+        czb_wechat_commodity.is_sale = 1
+        GROUP BY
+        commodityId
+        ORDER BY
+        show_order
     </select>
 
     <select id="selectClassification" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
@@ -611,6 +631,7 @@
         <if test="distance == 1">
             ORDER BY distance ASC
         </if>
+        LIMIT #{page}, #{pageSize}
     </select>
 
     <select id="getContent" resultType="java.lang.String">
@@ -728,7 +749,6 @@
         LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
-        AND czb_wechat_commodity.end_time_business &gt;= now()
         AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
         GROUP BY
         commodityId

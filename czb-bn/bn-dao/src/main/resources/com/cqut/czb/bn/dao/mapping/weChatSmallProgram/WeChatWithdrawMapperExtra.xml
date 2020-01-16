@@ -5,6 +5,7 @@
 		SELECT
 			a.user_id userId,
 			a.user_account account,
+		    a.user_name name,
 			a.create_at createAt,
 			( fanyong_income + share_income + other_income - withdrawed ) withdraw,
 			withdrawed withdrawed,
@@ -33,6 +34,9 @@
 				</if>
 				<if test="account != null and account != ''">
 					and a.user_account like concat('%', #{account},'%')
+				</if>
+				<if test="phoneNumber != null and phoneNumber != ''">
+					and czb_wechat_vip_apply.phone_num  like concat('%', #{phoneNumber},'%')
 				</if>
 				<if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
 					and a.create_at between #{startTime} and #{endTime}

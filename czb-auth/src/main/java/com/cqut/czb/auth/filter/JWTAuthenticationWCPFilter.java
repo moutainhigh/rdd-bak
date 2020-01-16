@@ -8,6 +8,7 @@ import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.WCPLoginBack;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
@@ -54,6 +55,8 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
 
     @Autowired
     private UserMapperExtra userMapperExtra;
+
+    private UserMapper userMapper;
 
     public JWTAuthenticationWCPFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -115,7 +118,7 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
             if(userMapperExtra == null){
                 userMapperExtra = SpringUtils.getBean(UserMapperExtra.class);
             }
-            User user = userMapperExtra.findUserByAccount(code);
+            User user = userMapperExtra.findUserByAccount(wcpLoginBack.getOpenid());
             //首次登录用户，注册用户
             if (user == null){
                 PersonalUserDTO personalUserDTO = new PersonalUserDTO();
@@ -134,6 +137,20 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }else{
+                //更新用户信息
+                if(userMapper == null){
+                    userMapper = SpringUtils.getBean(UserMapper.class);
+                }
+                //如果有用户信息改变就更新用户信息
+                if(!user.getUserName().equals(nickName) || !user.getAvatarUrl().equals(avatarUrl)){
+                    User update = new User();
+                    update.setUserId(user.getUserId());
+                    update.setUserName(nickName);
+                    update.setAvatarUrl(avatarUrl);
+                    userMapper.updateByPrimaryKeySelective(update);
+                }
+
             }
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(wcpLoginBack.getOpenid(), Config.initPsw, new ArrayList<>())

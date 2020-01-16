@@ -90,5 +90,7 @@ public interface WeChatCommodityMapperExtra {
 
     List<WCPCommodityOutputDTO> selectClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO);
 
+    List<WCPCommodityOutputDTO> selectAllCommodityTitleByArea();
+
     List<String> getContent();
 }
