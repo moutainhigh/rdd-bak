@@ -35,7 +35,7 @@
             (select
                 czb_user.user_id,czb_address.receiver,czb_user.user_account
             from czb_user
-            left outer join czb_address
+            left outer join (select * from czb_address where czb_address.is_default = 1) czb_address
                 on czb_user.user_id = czb_address.user_id)
             as user2
         on user2.user_id = czb_user.superior_user
