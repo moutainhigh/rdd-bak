@@ -587,10 +587,10 @@
         czb_wechat_commodity.is_sale = 1
         AND
         czb_wechat_commodity.shop_id = czb_shop.shop_id
-        <if test = "area != null and area != ''">
+        <if test = "area != null and area != '' and area != '重庆市'">
             AND czb_wechat_commodity.area = #{area, jdbcType = VARCHAR}
         </if>
-        <if test = "content != null and content != '' ">
+        <if test = "content != null and content != '' and content != '全部'">
             AND czb_wechat_commodity.commmodity_type_id IN ( SELECT category_id FROM czb_category WHERE content = #{content} )
         </if>
         <if test="commodityTitle != null and commodityTitle != ''">
