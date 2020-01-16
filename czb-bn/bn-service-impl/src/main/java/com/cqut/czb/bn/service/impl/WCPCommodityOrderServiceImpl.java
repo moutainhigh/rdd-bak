@@ -74,8 +74,12 @@ public class WCPCommodityOrderServiceImpl implements WCPCommodityOrderService {
     @Override
     public List<WCPCommodityOrderDTO> getAllCommodityOrderByLeader(String userId, Integer orderState,Integer page) {
         UserDTO userDTO = userMapperExtra.findUserDTOById(userId);
-        Integer pageSize1=10*(page-1);
-        Integer pageSize2=10*page;
+        Integer pageSize1 = 0;
+        Integer pageSize2 = 1000;
+        if(page != null){
+            pageSize1 = 10*(page-1);
+            pageSize2 = 10*page;
+        }
         return weChatCommodityOrderMapperExtra.selectAllCommodityOrderByLeaderId(userDTO.getBindingid(), orderState,pageSize1,pageSize2);
     }
 
