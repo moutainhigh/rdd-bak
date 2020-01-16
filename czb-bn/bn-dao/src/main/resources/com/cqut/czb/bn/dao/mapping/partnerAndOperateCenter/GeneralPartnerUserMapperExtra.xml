@@ -64,12 +64,6 @@
             <if test="area != null and area != ''">
             and czb_vip_area_config.area like concat('%',#{area},'%')
             </if>
-            <if test="superiorUserAccount != null and superiorUserAccount != ''">
-            and user2.user_account like concat('%',#{superiorUserAccount},'%')
-            </if>
-            <if test="isVip != null ">
-            and czb_user.is_vip = #{isVip}
-            </if>
         </where>
         group by userId,userName,userAccount,czb_vip_area_config.area,promotionType,superiorUser,superiorUserName,						superiorUserAccount,accumulatedConsumptionAmount,myIncome
         order by accumulatedConsumptionAmount desc
