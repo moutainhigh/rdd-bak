@@ -577,7 +577,7 @@
         show_order
     </select>
 
-    <select id="selectClassification" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
+    <select id="selectClassification" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO" resultMap="WCPCommodityInfoType">
         SELECT
             czb_wechat_commodity.commodity_id commodityId,
             commodity_title commodityTitle,
