@@ -20,11 +20,4 @@ public interface OrdinaryManagementMapperExtra {
      * @return
      */
     List<GeneralPartnerUser> getAllUser(GeneralPartnerUserPageDTO pageDTO);
-
-    /**
-     * 获取总数
-     * @return
-     * @param pageDTO
-     */
-    int getTotalNumber(GeneralPartnerUserPageDTO pageDTO);
 }
