@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.ManagerStaticsMapperExtra">
+    <select id="statistics" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.ManagerStaticsDTO">
+        SELECT
+            result.directPetrolIncome,
+            result.directVipIncome,
+            result.indirectPetrolIncome,
+            result.indirectVipIncome,
+            (
+                result.directPetrolIncome + result.directVipIncome + result.indirectPetrolIncome + result.indirectVipIncome
+            ) AS allCommissionIncome
+        FROM
+            (
+                SELECT
+                    sum(income.first_petrol_income) AS directPetrolIncome,
+                    sum(income.first_vip_income) AS directVipIncome,
+                    sum(
+                        income.second_petrol_income
+                    ) AS indirectPetrolIncome,
+                    sum(income.second_vip_income) AS indirectVipIncome
+                FROM
+                    czb_partner_vip_income income
+            ) AS result
+    </select>
+
+    <select id="getUsers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.ManagerStaticsDTO">
+     select count(*) userCount,
+        COUNT(IF(partner = 0,1,NULL)) ordinaryUser,
+        COUNT(IF(partner = 1,1,NULL)) ordinaryPartner,
+        COUNT(IF(partner = 2,1,NULL)) businessPartner,
+          COUNT(IF(is_vip = 1,1,NULL)) vipUser,
+          count(
+                IF (
+                    is_vip = 1
+                    AND (
+                        second_level_partner = ''
+                        OR second_level_partner IS NULL
+                    ),
+                    1,
+                    NULL
+                )
+            ) AS directVipCount,
+            count(
+                IF (
+                    is_vip = 1
+                    AND (
+                        second_level_partner != ''
+                        AND second_level_partner IS NOT NULL
+                    ),
+                    1,
+                    NULL
+                )
+            ) AS indirectVipCount
+    from czb_user left join czb_user_income_info on czb_user.user_id = czb_user_income_info.user_id
+    </select>
+
+    <select id="getAllVipDirectIncome" resultType="java.lang.Double">
+        SELECT
+            sum(
+                IF (
+                    result.partnerLevel = 0
+                    AND result.is_settlement = 0
+                    AND result.remark = '充值vip返佣',
+                    result.amount,
+                    0
+                )
+            ) directVip
+        FROM
+            (
+                SELECT
+                    log.amount amount,
+                    log.partner_commission_level partnerLevel,
+                    log.is_settlement,
+                    log.remark
+                FROM
+                    (
+                        SELECT
+                            info_id infoId
+                        FROM
+                            czb_user_income_info info
+                    ) AS infoIdResult
+                LEFT JOIN czb_income_log log ON log.info_id = infoIdResult.infoId
+                WHERE
+                    amount != 0
+            ) AS result
+    </select>
+
+    <select id="getNumberOfDevelopment" parameterType="com.cqut.czb.bn.entity.entity.partnerAndOperateCenter.StatisticsDevelopmentNumbers" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.ManagerStaticsDTO">
+       select
+		sum(case
+		when create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 0 ${type}),#{format}),'%')
+		then 1 else 0
+		end) as firstNumber,
+		sum(
+		case when create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 1 ${type}),#{format}),'%') then 1
+		else 0 end) as secondNumber,
+		sum(
+		case when create_at like concat(DATE_FORMAT(date_sub(curdate(),interval 2 ${type}),#{format}),'%') then 1
+		else 0 end) as thirdNumber
+      from
+		czb_user
+    </select>
+
+    <select id="getDirectAndIndirectIncome" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.DirectAndIndirectDTO">
+        SELECT
+            COALESCE(sum(
+                IF (
+                    result.partnerLevel = 1
+                    AND result.is_settlement = 1,
+                    result.amount,
+                    0
+                )
+            ), 0)
+             direct,
+             COALESCE(sum(
+                IF (
+                    result.partnerLevel = 2
+                    AND result.is_settlement = 1,
+                    result.amount,
+                    0
+                )
+            ),0)
+             indirect,
+             COALESCE(sum(
+                IF (
+                    result.partnerLevel = 0
+                    AND result.is_settlement = 0
+                    AND result.remark = '充值vip返佣',
+                    result.amount,
+                    0
+                )
+            ), 0)
+             directVip
+        FROM
+            (
+                SELECT
+                    log.amount amount,
+                    log.partner_commission_level partnerLevel,
+                    log.is_settlement,
+                    log.remark
+                FROM
+                    (
+                        SELECT
+                            info_id infoId
+                        FROM
+                            czb_user_income_info info
+
+                    ) AS infoIdResult
+                LEFT JOIN czb_income_log log ON log.info_id = infoIdResult.infoId
+                WHERE
+                    log.create_at BETWEEN #{startTime}
+                AND #{endTime}
+                AND amount != 0
+            ) AS result
+  </select>
+
+</mapper>
