@@ -9,7 +9,6 @@
     </resultMap>
 
     <select id="getAllUser" parameterType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.GeneralPartnerUserPageDTO" resultMap="user">
-        #地区主表
         select
         c.user_id,
         c.user_account userAccount,

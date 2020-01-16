@@ -49,7 +49,7 @@ public class OrdinaryManagementImpl implements OrdinaryManagement {
         }
 
         pageDTO.setAccount(account);
-        pageDTO.setAccount(superiorUserAccount);
+        pageDTO.setSuperiorUserAccount(superiorUserAccount);
         pageDTO.setCreateAt(createAt);
 
 
