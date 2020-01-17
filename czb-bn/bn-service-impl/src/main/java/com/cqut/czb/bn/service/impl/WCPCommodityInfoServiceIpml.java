@@ -82,6 +82,17 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
         }
         wcpCommodityOutputDTO.setPage((wcpCommodityOutputDTO.getPage() - 1) * wcpCommodityOutputDTO.getPageSize());
         List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectClassification(wcpCommodityOutputDTO);
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getDistance().compareTo("1000") >= 0){
+                double result = Integer.parseInt(list.get(i).getDistance()) / 1000.0;
+                BigDecimal   b   =   new   BigDecimal(result);
+                double   f1   =   b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+                list.get(i).setDistance(f1 + "km");
+            }
+            else {
+                list.get(i).setDistance(list.get(i).getDistance() + "m");
+            }
+        }
         return list;
     }
 
