@@ -29,8 +29,8 @@ public class WCPCommodityInfoController {
         return new JSONResult(wcpCommodityInfoService.getCommodity(wcpCommodityInputDTO));
     }
     @GetMapping("/getCommodityTitleList")
-    public JSONResult getCommodityTitleList(){
-        return wcpCommodityInfoService.getCommodityTitle();
+    public JSONResult getCommodityTitleList(WCPCommodityOutputDTO wcpCommodityOutputDTO){
+        return wcpCommodityInfoService.getCommodityTitle(wcpCommodityOutputDTO);
     }
 
     @GetMapping("/getOneCommodity")

@@ -555,22 +555,19 @@
         ORDER BY
           show_order
     </select>
-    <select id="selectAllCommodityTitleByArea"  resultMap="WCPCommodityInfoType">
-        SELECT
+    <select id="selectAllCommodityTitleByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO"  resultMap="WCPCommodityInfoType">
+       	SELECT
         czb_wechat_commodity.commodity_id commodityId,
         commodity_title commodityTitle,
-        commodity_info commodityInfo,
-        commodity_img_id commodityImgId,
-        czb_shop.shop_name shopName,
-        czb_shop.shop_content shopContent,
-        czb_shop.shop_address shopAddress,
-        czb_shop.shop_phone shopPhone
+        commodity_info commodityInfo
         FROM
         czb_wechat_commodity czb_wechat_commodity
-        LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
-        LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
-        WHERE
-        czb_wechat_commodity.is_sale = 1
+        <where>
+            czb_wechat_commodity.is_sale = 1
+            <if test="commodityTitle != null and commodityTitle != ''" >
+               and  commodity_title like concat('%', #{commodityTitle},'%')
+            </if>
+        </where>
         GROUP BY
         commodityId
         ORDER BY

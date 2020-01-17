@@ -86,8 +86,8 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
     }
 
     @Override
-    public JSONResult getCommodityTitle() {
-        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityTitleByArea();
+    public JSONResult getCommodityTitle(WCPCommodityOutputDTO wcpCommodityOutputDTO) {
+        List<WCPCommodityOutputDTO> list = weChatCommodityMapperExtra.selectAllCommodityTitleByArea(wcpCommodityOutputDTO);
         return new JSONResult("商品查询成功", 200, list);
     }
 
