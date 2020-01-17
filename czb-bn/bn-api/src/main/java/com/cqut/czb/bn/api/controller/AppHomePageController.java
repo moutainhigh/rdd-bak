@@ -159,8 +159,9 @@ public class AppHomePageController {
 
     @GetMapping("/isBuyPetrol")
     public JSONResult isBuyPetrol(Principal principal){
-        User user = (User) redisUtils.get(principal.getName());
-        return new JSONResult(appHomePageService.isBuyPetrol(user));
+        return new JSONResult(false);
+//        User user = (User) redisUtils.get(principal.getName());
+//        return new JSONResult(appHomePageService.isBuyPetrol(user));
     }
 
 }
