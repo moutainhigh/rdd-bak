@@ -5,6 +5,7 @@
         SELECT
         DISTINCT cu.user_id userId,
         cu.user_account userAccount,
+        cu.is_vip isVip,
         ca.receiver userName,
         oop.user_account spreadAccount,
         cas.receiver spreadName,
@@ -29,6 +30,12 @@
         </if>
         <if test="area!= null and area!= ''">
             AND cvac.area like concat('%',#{area},'%')
+        </if>
+        <if test="spreadAccount != null and spreadAccount != ''">
+            AND oop.user_account  like concat('%',#{spreadAccount},'%')
+        </if>
+        <if test="isVip != null and isVip != -1">
+            AND cu.is_vip = #{isVip}
         </if>
         ORDER BY commonUser DESC
     </select>

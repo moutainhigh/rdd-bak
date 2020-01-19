@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface AgentCenterCommonPartnerService {
 
-    List<AgentCenterCommonPartnerDto> list(String mobile, Date createAt, String area, PageDTO pageDTO);
-
+    List<AgentCenterCommonPartnerDto> list(String mobile, Date createAt, String area, String spreadAccount, Integer isVip, PageDTO pageDTO);
 }

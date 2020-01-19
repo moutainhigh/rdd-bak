@@ -32,12 +32,12 @@ public class AgentCenterCommonPartnerController {
     @Autowired
     private AgentCenterCommonPartnerService agentCenterCommonPartnerService;
     @RequestMapping("/list")
-    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area, PageDTO pageDTO){
+    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area,String spreadAccount, Integer isVip, PageDTO pageDTO){
         User user = (User) redisUtils.get(principal.getName());
         if(user.getUserId() == null){
             return new JSONResult("未登录",500);
         }
-        List<AgentCenterCommonPartnerDto> commonList = agentCenterCommonPartnerService.list(mobile,createAt,area,pageDTO);
+        List<AgentCenterCommonPartnerDto> commonList = agentCenterCommonPartnerService.list(mobile,createAt,area,spreadAccount,isVip,pageDTO);
         PageInfo<AgentCenterCommonPartnerDto> pageInfo = new PageInfo<>(commonList);
         return new JSONResult(pageInfo);
     }
