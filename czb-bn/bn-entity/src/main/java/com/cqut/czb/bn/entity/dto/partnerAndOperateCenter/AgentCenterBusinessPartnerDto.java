@@ -42,6 +42,16 @@ public class AgentCenterBusinessPartnerDto {
      */
     private Integer commonUser;
 
+    /**
+     * 是否Vip
+     */
+    private Integer isVip;
+
+    /**
+     * 推荐人账号
+     * @return
+     */
+    private String superiorUser;
 
     public String getUserId() {
         return userId;
@@ -97,5 +107,22 @@ public class AgentCenterBusinessPartnerDto {
 
     public void setCommonUser(Integer commonUser) {
         this.commonUser = commonUser;
+    }
+
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
+    public String getSuperiorUser() {
+        return superiorUser;
+    }
+
+    public void setSuperiorUser(String superiorUser) {
+        this.superiorUser = superiorUser;
     }
 }

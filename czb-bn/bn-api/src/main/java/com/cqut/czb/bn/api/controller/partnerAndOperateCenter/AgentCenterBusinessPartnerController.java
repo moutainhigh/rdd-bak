@@ -39,12 +39,12 @@ public class AgentCenterBusinessPartnerController {
      * @return
      */
     @RequestMapping("/list")
-    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area, PageDTO pageDTO){
+    public JSONResult list(Principal principal, String mobile, @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt, String area, PageDTO pageDTO,Integer isVip,String superiorMobile){
         User user = (User) redisUtils.get(principal.getName());
         if(user.getUserId() == null){
             return new JSONResult("未登录",500);
        }
-        List<AgentCenterBusinessPartnerDto> partnerList = agentCenterBusinessPartnerService.list(mobile,createAt,area,pageDTO);
+        List<AgentCenterBusinessPartnerDto> partnerList = agentCenterBusinessPartnerService.list(mobile,createAt,isVip,superiorMobile,area,pageDTO);
         PageInfo<AgentCenterBusinessPartnerDto> pageInfo = new PageInfo<>(partnerList);
         return new JSONResult(pageInfo);
     }

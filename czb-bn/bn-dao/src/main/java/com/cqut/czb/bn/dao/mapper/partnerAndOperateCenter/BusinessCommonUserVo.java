@@ -9,8 +9,25 @@ public class BusinessCommonUserVo {
     private String area;
     private String promotionMobile;
     private Integer isVip;
+    private String superiorMobile;
 
-    public BusinessCommonUserVo(String mobile,Date createAt,String area){
+    public String getSuperiorMobile() {
+        return superiorMobile;
+    }
+
+    public void setSuperiorMobile(String superiorMobile) {
+        this.superiorMobile = superiorMobile;
+    }
+
+    public BusinessCommonUserVo(String mobile, Date createAt, String area,Integer isVip,String superiorMobile){
+        this.mobile = mobile;
+        this.createAt = createAt;
+        this.area = area;
+        this.isVip = isVip;
+        this.superiorMobile = superiorMobile;
+    }
+
+    public BusinessCommonUserVo(String mobile, Date createAt, String area){
         this.mobile = mobile;
         this.createAt = createAt;
         this.area = area;

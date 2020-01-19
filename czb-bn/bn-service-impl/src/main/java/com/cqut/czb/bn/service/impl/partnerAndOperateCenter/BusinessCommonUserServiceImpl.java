@@ -40,7 +40,7 @@ public class BusinessCommonUserServiceImpl implements BusinessCommonUserService 
         for(BusinessCommonUserOutputDTO item : list){
             arrayList.add(item.getUserId());
         }
-        list = mapperExtra.listPetrol(arrayList);
+        //list = mapperExtra.listPetrol(arrayList);
 
         PageInfo<BusinessCommonUserOutputDTO> pageInfo = new PageInfo<>(list);
         return  pageInfo;
