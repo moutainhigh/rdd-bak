@@ -65,6 +65,36 @@ public class WxCommodityDTO {
 
     private String area;
 
+    private Integer salesVolume;
+
+    private String content;
+
+    private Double distance;
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getSalesVolume() {
+        return salesVolume;
+    }
+
+    public void setSalesVolume(Integer salesVolume) {
+        this.salesVolume = salesVolume;
+    }
+
     public String getArea() {
         return area;
     }
