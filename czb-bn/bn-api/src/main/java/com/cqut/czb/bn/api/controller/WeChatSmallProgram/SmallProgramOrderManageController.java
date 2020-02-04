@@ -89,7 +89,7 @@ public class SmallProgramOrderManageController {
      */
     @PermissionCheck(role = "管理员,微信商家")
     @PostMapping("/getOrderProcessInfo")
-    public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(@RequestBody String orderId) {
+    public JSONResult<WeChatCommodityOrderProcess> getOrderProcessInfo(String orderId) {
         return orderManageService.getOrderProcessInfo(orderId);
     }
 

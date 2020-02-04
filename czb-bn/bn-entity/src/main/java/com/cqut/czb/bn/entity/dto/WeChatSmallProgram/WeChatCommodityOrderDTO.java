@@ -29,6 +29,25 @@ public class WeChatCommodityOrderDTO {
     private Integer takeWay;
     private Integer deliveryState;
 
+    private String deliveryNum; // 快递单号
+    private String electronicCode; // 电子码
+
+    public String getDeliveryNum() {
+        return deliveryNum;
+    }
+
+    public void setDeliveryNum(String deliveryNum) {
+        this.deliveryNum = deliveryNum;
+    }
+
+    public String getElectronicCode() {
+        return electronicCode;
+    }
+
+    public void setElectronicCode(String electronicCode) {
+        this.electronicCode = electronicCode;
+    }
+
     public String getPhone() {
         return phone;
     }

@@ -116,6 +116,13 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         boolean result;
         if (input.getTakeWay() == 1) { // 寄送
             result = weChatCommodityOrderMapperExtra.dealOrderSend(input) > 0;
+            // 如果寄送状态为已收货，订单处理完成，修改订单状态
+            WeChatCommodityOrderProcess newOrderState = new WeChatCommodityOrderProcess();
+            newOrderState.setOrderId(input.getOrderId());
+            // 订单已完成
+            newOrderState.setOrderState(2);
+            newOrderState.setHandler(input.getHandler());
+            result = result && weChatCommodityOrderMapperExtra.dealOrderEl(newOrderState) > 0;
         } else if (input.getTakeWay() == 2) { // 核销
             result = weChatCommodityOrderMapperExtra.dealOrderEl(input) > 0;
         } else {

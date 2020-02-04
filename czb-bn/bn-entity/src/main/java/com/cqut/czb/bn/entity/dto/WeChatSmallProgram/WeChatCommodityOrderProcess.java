@@ -2,7 +2,6 @@ package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
 public class WeChatCommodityOrderProcess {
     private String orderId; // 平台订单号
-    private String qrcode; // 二维码
     private Integer orderState; // 订单状态
     private String electronicCode; // 电子码
     private String recordId; // 寄送记录id
@@ -21,14 +20,6 @@ public class WeChatCommodityOrderProcess {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public String getQrcode() {
-        return qrcode;
-    }
-
-    public void setQrcode(String qrcode) {
-        this.qrcode = qrcode;
     }
 
     public String getElectronicCode() {
