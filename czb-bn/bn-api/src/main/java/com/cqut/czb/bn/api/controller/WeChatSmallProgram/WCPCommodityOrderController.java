@@ -77,7 +77,7 @@ public class WCPCommodityOrderController {
      * @param orderId
      * @return
      */
-    @PostMapping("/comfirmDeliveryState")
+    @GetMapping("/comfirmDeliveryState")
     public JSONResult comfirmDeliveryState(Principal principal, String orderId){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
         return new JSONResult(wcpCommodityOrderService.comfirmDeliveryState(user.getUserId(), orderId));
