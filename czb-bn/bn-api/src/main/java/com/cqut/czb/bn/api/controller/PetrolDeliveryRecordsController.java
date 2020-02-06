@@ -146,7 +146,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/selectLogistics")
-    @PermissionCheck(role = "管理员")
+//    @PermissionCheck(role = "管理员")
     public JSONResult selectLogisticsOnPC(@RequestBody DeliveryInput deliveryInput){
         String logistics = petrolDeliveryRecordsService.selectLogistics(deliveryInput);
         if (logistics==null||logistics.equals("")){

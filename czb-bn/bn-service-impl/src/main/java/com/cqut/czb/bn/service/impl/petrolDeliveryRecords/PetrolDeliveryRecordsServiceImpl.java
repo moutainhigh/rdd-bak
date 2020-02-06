@@ -144,7 +144,11 @@ public class PetrolDeliveryRecordsServiceImpl implements PetrolDeliveryRecordsSe
                 return "EMS";
             }else if (deliveryCompany.equals("天天快递")){
                 return "HHTT";
-            } else {
+            } else if (deliveryCompany.equals("申通快递")){
+                return "STO";
+            }else if (deliveryCompany.equals("百世快递")){
+                return "HTKY";
+            }else {
                 return null;
             }
     }
