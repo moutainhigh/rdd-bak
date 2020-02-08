@@ -1,8 +1,6 @@
 package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
-import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
-import com.cqut.czb.bn.util.string.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -112,39 +110,28 @@ public class weChatOrderDelivery {
         weChatDeliveryDTO.setUserName(getStringValue(xssfRow.getCell(0)));
         weChatDeliveryDTO.setUserAccount(getStringValue(xssfRow.getCell(1)));
         weChatDeliveryDTO.setOrderId(getStringValue(xssfRow.getCell(2)));
-        if ("待支付".equals(getStringValue(xssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(0);
-        }else if ("支付完成待处理".equals(getStringValue(xssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(1);
-        }else if ("订单完成".equals(getStringValue(xssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(2);
-        }else if ("订单作废".equals(getStringValue(xssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(3);
-        }else {
-            weChatDeliveryDTO.setOrderState(-1);
-        }
-        weChatDeliveryDTO.setCommodityTitle(getStringValue(xssfRow.getCell(4)));
-        weChatDeliveryDTO.setCommodityNum(Integer.valueOf(getStringValue(xssfRow.getCell(5))));
-        weChatDeliveryDTO.setActualPrice(Double.valueOf(getStringValue(xssfRow.getCell(6))));
-        if ("未支付".equals(getStringValue(xssfRow.getCell(7)))) {
+        weChatDeliveryDTO.setCommodityTitle(getStringValue(xssfRow.getCell(3)));
+        weChatDeliveryDTO.setCommodityNum(Integer.parseInt(getStringValue(xssfRow.getCell(4))));
+        weChatDeliveryDTO.setActualPrice(Double.valueOf(getStringValue(xssfRow.getCell(5))));
+        if ("未支付".equals(getStringValue(xssfRow.getCell(6)))) {
             weChatDeliveryDTO.setPayStatus(0);
-        }else if ("已支付".equals(getStringValue(xssfRow.getCell(7)))) {
+        }else if ("已支付".equals(getStringValue(xssfRow.getCell(6)))) {
             weChatDeliveryDTO.setPayStatus(1);
         }else {
             weChatDeliveryDTO.setPayStatus(-1);
         }
         try {
-            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(8))));
+            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(7))));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        weChatDeliveryDTO.setDeliveryCompany(getStringValue(xssfRow.getCell(9)));
-        weChatDeliveryDTO.setDeliveryNum(getStringValue(xssfRow.getCell(10)));
-        if ("未邮寄".equals(getStringValue(xssfRow.getCell(11)))) {
+        weChatDeliveryDTO.setDeliveryCompany(getStringValue(xssfRow.getCell(8)));
+        weChatDeliveryDTO.setDeliveryNum(getStringValue(xssfRow.getCell(9)));
+        if ("未邮寄".equals(getStringValue(xssfRow.getCell(10)))) {
             weChatDeliveryDTO.setDeliveryState(0);
-        }else if ("寄送中".equals(getStringValue(xssfRow.getCell(11)))) {
+        }else if ("寄送中".equals(getStringValue(xssfRow.getCell(10)))) {
             weChatDeliveryDTO.setDeliveryState(1);
-        }else if ("已收货".equals(getStringValue(xssfRow.getCell(11)))) {
+        }else if ("已收货".equals(getStringValue(xssfRow.getCell(10)))) {
             weChatDeliveryDTO.setDeliveryState(2);
         }else {
             weChatDeliveryDTO.setDeliveryState(-1);
@@ -195,39 +182,28 @@ public class weChatOrderDelivery {
         weChatDeliveryDTO.setUserName(getStringValue(hssfRow.getCell(0)));
         weChatDeliveryDTO.setUserAccount(getStringValue(hssfRow.getCell(1)));
         weChatDeliveryDTO.setOrderId(getStringValue(hssfRow.getCell(2)));
-        if ("待支付".equals(getStringValue(hssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(0);
-        }else if ("支付完成待处理".equals(getStringValue(hssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(1);
-        }else if ("订单完成".equals(getStringValue(hssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(2);
-        }else if ("订单作废".equals(getStringValue(hssfRow.getCell(3)))) {
-            weChatDeliveryDTO.setOrderState(3);
-        }else {
-            weChatDeliveryDTO.setOrderState(-1);
-        }
-        weChatDeliveryDTO.setCommodityTitle(getStringValue(hssfRow.getCell(4)));
-        weChatDeliveryDTO.setCommodityNum(Integer.valueOf(getStringValue(hssfRow.getCell(5))));
-        weChatDeliveryDTO.setActualPrice(Double.valueOf(getStringValue(hssfRow.getCell(6))));
-        if ("未支付".equals(getStringValue(hssfRow.getCell(7)))) {
+        weChatDeliveryDTO.setCommodityTitle(getStringValue(hssfRow.getCell(3)));
+        weChatDeliveryDTO.setCommodityNum(Integer.valueOf(getStringValue(hssfRow.getCell(4))));
+        weChatDeliveryDTO.setActualPrice(Double.valueOf(getStringValue(hssfRow.getCell(5))));
+        if ("未支付".equals(getStringValue(hssfRow.getCell(6)))) {
             weChatDeliveryDTO.setPayStatus(0);
-        }else if ("已支付".equals(getStringValue(hssfRow.getCell(7)))) {
+        }else if ("已支付".equals(getStringValue(hssfRow.getCell(6)))) {
             weChatDeliveryDTO.setPayStatus(1);
         }else {
             weChatDeliveryDTO.setPayStatus(-1);
         }
         try {
-            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(hssfRow.getCell(8))));
+            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(hssfRow.getCell(7))));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        weChatDeliveryDTO.setDeliveryCompany(getStringValue(hssfRow.getCell(9)));
-        weChatDeliveryDTO.setDeliveryNum(getStringValue(hssfRow.getCell(10)));
-        if ("未邮寄".equals(getStringValue(hssfRow.getCell(11)))) {
+        weChatDeliveryDTO.setDeliveryCompany(getStringValue(hssfRow.getCell(8)));
+        weChatDeliveryDTO.setDeliveryNum(getStringValue(hssfRow.getCell(9)));
+        if ("未邮寄".equals(getStringValue(hssfRow.getCell(10)))) {
             weChatDeliveryDTO.setDeliveryState(0);
-        }else if ("寄送中".equals(getStringValue(hssfRow.getCell(11)))) {
+        }else if ("寄送中".equals(getStringValue(hssfRow.getCell(10)))) {
             weChatDeliveryDTO.setDeliveryState(1);
-        }else if ("已收货".equals(getStringValue(hssfRow.getCell(11)))) {
+        }else if ("已收货".equals(getStringValue(hssfRow.getCell(10)))) {
             weChatDeliveryDTO.setDeliveryState(2);
         }else {
             weChatDeliveryDTO.setDeliveryState(-1);

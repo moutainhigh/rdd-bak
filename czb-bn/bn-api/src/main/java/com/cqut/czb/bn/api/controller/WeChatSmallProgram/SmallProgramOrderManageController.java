@@ -141,8 +141,9 @@ public class SmallProgramOrderManageController {
             orderManageService.ImportDeliveryRecords(file);
         }catch (Exception e){
             e.printStackTrace();
+            return new JSONResult(500,"failed");
         }
-        return new JSONResult("success");
+        return new JSONResult(200,"success");
     }
 
 }
