@@ -101,37 +101,42 @@ public class weChatOrderDelivery {
      */
     private static WeChatCommodityOrderDTO resolveXlsx(XSSFRow xssfRow)  {
 
-        if (xssfRow.getCell(0) == null || xssfRow.getCell(0).toString() == "") {
+        if (xssfRow.getCell(3) == null || xssfRow.getCell(3).toString() == "") {
             return null;
         }
 
         WeChatCommodityOrderDTO weChatDeliveryDTO = new WeChatCommodityOrderDTO();
 
-        weChatDeliveryDTO.setUserName(getStringValue(xssfRow.getCell(0)));
-        weChatDeliveryDTO.setUserAccount(getStringValue(xssfRow.getCell(1)));
-        weChatDeliveryDTO.setOrderId(getStringValue(xssfRow.getCell(2)));
-        weChatDeliveryDTO.setCommodityTitle(getStringValue(xssfRow.getCell(3)));
-        weChatDeliveryDTO.setCommodityNum(Integer.parseInt(getStringValue(xssfRow.getCell(4))));
-        weChatDeliveryDTO.setActualPrice(Double.valueOf(getStringValue(xssfRow.getCell(5))));
-        if ("未支付".equals(getStringValue(xssfRow.getCell(6)))) {
+        weChatDeliveryDTO.setUserName(getStringValue(xssfRow.getCell(1)));
+        weChatDeliveryDTO.setUserAccount(getStringValue(xssfRow.getCell(2)));
+        weChatDeliveryDTO.setOrderId(getStringValue(xssfRow.getCell(3)));
+        weChatDeliveryDTO.setCommodityTitle(getStringValue(xssfRow.getCell(4)));
+        if (getValue(xssfRow.getCell(5)) != null || getValue(xssfRow.getCell(5)) != " "){
+            String[] str = getValue(xssfRow.getCell(5)).split("\\.");
+            weChatDeliveryDTO.setCommodityNum(Integer.parseInt(str[0]));
+        }
+        if (getValue(xssfRow.getCell(6)) != null || getValue(xssfRow.getCell(6)) != " "){
+            weChatDeliveryDTO.setActualPrice(Double.valueOf(getValue(xssfRow.getCell(6))));
+        }
+        if ("未支付".equals(getStringValue(xssfRow.getCell(7)))) {
             weChatDeliveryDTO.setPayStatus(0);
-        }else if ("已支付".equals(getStringValue(xssfRow.getCell(6)))) {
+        }else if ("已支付".equals(getStringValue(xssfRow.getCell(7)))) {
             weChatDeliveryDTO.setPayStatus(1);
         }else {
             weChatDeliveryDTO.setPayStatus(-1);
         }
-        try {
-            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(7))));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        weChatDeliveryDTO.setDeliveryCompany(getStringValue(xssfRow.getCell(8)));
-        weChatDeliveryDTO.setDeliveryNum(getStringValue(xssfRow.getCell(9)));
-        if ("未邮寄".equals(getStringValue(xssfRow.getCell(10)))) {
+//        try {
+//            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(xssfRow.getCell(8))));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        weChatDeliveryDTO.setDeliveryCompany(getStringValue(xssfRow.getCell(9)));
+        weChatDeliveryDTO.setDeliveryNum(getStringValue(xssfRow.getCell(10)));
+        if ("未邮寄".equals(getStringValue(xssfRow.getCell(11)))) {
             weChatDeliveryDTO.setDeliveryState(0);
-        }else if ("寄送中".equals(getStringValue(xssfRow.getCell(10)))) {
+        }else if ("寄送中".equals(getStringValue(xssfRow.getCell(11)))) {
             weChatDeliveryDTO.setDeliveryState(1);
-        }else if ("已收货".equals(getStringValue(xssfRow.getCell(10)))) {
+        }else if ("已收货".equals(getStringValue(xssfRow.getCell(11)))) {
             weChatDeliveryDTO.setDeliveryState(2);
         }else {
             weChatDeliveryDTO.setDeliveryState(-1);
@@ -176,34 +181,39 @@ public class weChatOrderDelivery {
 
     private static WeChatCommodityOrderDTO resolveXls(HSSFRow hssfRow) {
         WeChatCommodityOrderDTO weChatDeliveryDTO = new WeChatCommodityOrderDTO();
-        if (hssfRow.getCell(0) == null || hssfRow.getCell(0).toString() == "") {
+        if (hssfRow.getCell(3) == null || hssfRow.getCell(3).toString() == "") {
             return null;
         }
-        weChatDeliveryDTO.setUserName(getStringValue(hssfRow.getCell(0)));
-        weChatDeliveryDTO.setUserAccount(getStringValue(hssfRow.getCell(1)));
-        weChatDeliveryDTO.setOrderId(getStringValue(hssfRow.getCell(2)));
-        weChatDeliveryDTO.setCommodityTitle(getStringValue(hssfRow.getCell(3)));
-        weChatDeliveryDTO.setCommodityNum(Integer.valueOf(getStringValue(hssfRow.getCell(4))));
-        weChatDeliveryDTO.setActualPrice(Double.valueOf(getStringValue(hssfRow.getCell(5))));
-        if ("未支付".equals(getStringValue(hssfRow.getCell(6)))) {
+        weChatDeliveryDTO.setUserName(getStringValue(hssfRow.getCell(1)));
+        weChatDeliveryDTO.setUserAccount(getStringValue(hssfRow.getCell(2)));
+        weChatDeliveryDTO.setOrderId(getStringValue(hssfRow.getCell(3)));
+        weChatDeliveryDTO.setCommodityTitle(getStringValue(hssfRow.getCell(4)));
+        if (getValue(hssfRow.getCell(5)) != null || getValue(hssfRow.getCell(5)) != " "){
+            String[] str = getValue(hssfRow.getCell(5)).split(".");
+            weChatDeliveryDTO.setCommodityNum(Integer.parseInt(str[0]));
+        }
+        if (getValue(hssfRow.getCell(6)) != null || getValue(hssfRow.getCell(6)) != " "){
+            weChatDeliveryDTO.setActualPrice(Double.valueOf(getValue(hssfRow.getCell(6))));
+        }
+        if ("未支付".equals(getStringValue(hssfRow.getCell(7)))) {
             weChatDeliveryDTO.setPayStatus(0);
-        }else if ("已支付".equals(getStringValue(hssfRow.getCell(6)))) {
+        }else if ("已支付".equals(getStringValue(hssfRow.getCell(7)))) {
             weChatDeliveryDTO.setPayStatus(1);
         }else {
             weChatDeliveryDTO.setPayStatus(-1);
         }
         try {
-            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(hssfRow.getCell(7))));
+            weChatDeliveryDTO.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getStringValue(hssfRow.getCell(8))));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        weChatDeliveryDTO.setDeliveryCompany(getStringValue(hssfRow.getCell(8)));
-        weChatDeliveryDTO.setDeliveryNum(getStringValue(hssfRow.getCell(9)));
-        if ("未邮寄".equals(getStringValue(hssfRow.getCell(10)))) {
+        weChatDeliveryDTO.setDeliveryCompany(getStringValue(hssfRow.getCell(9)));
+        weChatDeliveryDTO.setDeliveryNum(getStringValue(hssfRow.getCell(10)));
+        if ("未邮寄".equals(getStringValue(hssfRow.getCell(11)))) {
             weChatDeliveryDTO.setDeliveryState(0);
-        }else if ("寄送中".equals(getStringValue(hssfRow.getCell(10)))) {
+        }else if ("寄送中".equals(getStringValue(hssfRow.getCell(11)))) {
             weChatDeliveryDTO.setDeliveryState(1);
-        }else if ("已收货".equals(getStringValue(hssfRow.getCell(10)))) {
+        }else if ("已收货".equals(getStringValue(hssfRow.getCell(11)))) {
             weChatDeliveryDTO.setDeliveryState(2);
         }else {
             weChatDeliveryDTO.setDeliveryState(-1);
@@ -212,21 +222,21 @@ public class weChatOrderDelivery {
     }
 
     // 表格数据转字符串
-    private static String getValue(XSSFCell xssfCell) {
-        if (xssfCell == null)
-            return null;
-
-        String data = xssfCell.toString();
-
-        try {
-            DecimalFormat df = new DecimalFormat("0");
-            data = Double.parseDouble(df.format(data)) + "";
-        } catch (Exception e) {
-            data = xssfCell.toString();
-        }
-
-        return data;
-    }
+//    private static String getValue(XSSFCell xssfCell) {
+//        if (xssfCell == null)
+//            return null;
+//
+//        String data = xssfCell.toString();
+//
+//        try {
+//            DecimalFormat df = new DecimalFormat("0");
+//            data = Double.parseDouble(df.format(data)) + "";
+//        } catch (Exception e) {
+//            data = xssfCell.toString();
+//        }
+//
+//        return data;
+//    }
 
     private static BigDecimal getBigDecimal(String str) {
         Double.parseDouble(str);
@@ -234,18 +244,18 @@ public class weChatOrderDelivery {
     }
 
     // 表格数据转字符串
-    private static String getValue(HSSFCell hssfCell) {
-        if (hssfCell == null)
-            return null;
-        String data = hssfCell.toString();
-        try {
-            DecimalFormat df = new DecimalFormat("0");
-            data = Double.parseDouble(df.format(data)) + "";
-        } catch (Exception e) {
-            data = hssfCell.toString();
-        }
-        return data;
-    }
+//    private static String getValue(HSSFCell hssfCell) {
+//        if (hssfCell == null)
+//            return null;
+//        String data = hssfCell.toString();
+//        try {
+//            DecimalFormat df = new DecimalFormat("0");
+//            data = Double.parseDouble(df.format(data)) + "";
+//        } catch (Exception e) {
+//            data = hssfCell.toString();
+//        }
+//        return data;
+//    }
 
     // 判断文档类型是xls还是xlsx
     public static String getPostfix(String filename) {
@@ -265,11 +275,28 @@ public class weChatOrderDelivery {
             return null;
 //        hssfCell.setCellStyle();
 //        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
-        hssfCell.setCellType(CellType.STRING);
+//        hssfCell.setCellType(CellType.STRING);
         return hssfCell.getStringCellValue();
     }
 
     private static String getStringValue(XSSFCell xssfCell) {
+        if (xssfCell == null)
+            return null;
+//        xssfCell.setCellStyle(XSSFCell.CELL_TYPE_STRING);
+//        xssfCell.setCellType(Cell.CELL_TYPE_STRING);
+//        xssfCell.setCellType(CellType.STRING);
+        return xssfCell.getStringCellValue();
+    }
+    private static String getValue(HSSFCell hssfCell) {
+        if (hssfCell == null)
+            return null;
+//        hssfCell.setCellStyle();
+//        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
+        hssfCell.setCellType(CellType.STRING);
+        return hssfCell.getStringCellValue();
+    }
+
+    private static String getValue(XSSFCell xssfCell) {
         if (xssfCell == null)
             return null;
 //        xssfCell.setCellStyle(XSSFCell.CELL_TYPE_STRING);
