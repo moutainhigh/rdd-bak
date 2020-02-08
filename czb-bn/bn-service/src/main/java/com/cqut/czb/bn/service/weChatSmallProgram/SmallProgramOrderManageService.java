@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import net.sf.json.JSON;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -63,4 +64,6 @@ public interface SmallProgramOrderManageService {
      * @return
      */
     JSONResult<Double> getTotalSale(WeChatCommodityOrderDTO input);
+
+    int ImportDeliveryRecords(MultipartFile file) throws Exception;
 }

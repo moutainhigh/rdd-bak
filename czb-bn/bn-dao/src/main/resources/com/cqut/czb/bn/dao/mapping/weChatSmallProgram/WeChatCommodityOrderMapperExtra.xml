@@ -266,7 +266,7 @@
       czb_wechat_commodity_order.create_at DESC
     </select>
 
-  <update id="updateCommodityDeliveryState">
+  <update id="updateCommodityDeliveryState" parameterType="java.lang.String" >
     UPDATE czb_wechat_goods_delivery_records,
       czb_wechat_commodity_order
     SET delivery_state = 2, czb_wechat_commodity_order.order_state = 2
@@ -536,5 +536,23 @@
         order_table.order_id = #{orderId,jdbcType=VARCHAR}
     AND
         delivery_table.order_id = order_table.order_id
+  </update>
+
+<!--  导入更新Excel-->
+  <update id="updateImportRecords" parameterType="com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO" >
+    UPDATE czb_wechat_commodity_order inner join czb_wechat_goods_delivery_records
+    on czb_wechat_commodity_order.order_id = czb_wechat_goods_delivery_records.order_id
+    <set>
+    czb_wechat_commodity_order.order_state = 2,czb_wechat_goods_delivery_records.delivery_state = 2
+    </set>
+    where
+    czb_wechat_commodity_order.order_id in
+    <foreach collection="list" item="item" index = "index" separator="," open="(" close=")">
+      #{item.orderId,jdbcType=VARCHAR}
+    </foreach> and
+    czb_wechat_goods_delivery_records.order_id in
+    <foreach collection="list" item="item" index = "index" separator="," open="(" close=")">
+      #{item.orderId,jdbcType=VARCHAR}
+    </foreach>
   </update>
 </mapper>

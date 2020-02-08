@@ -14,6 +14,7 @@ import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -128,4 +129,20 @@ public class SmallProgramOrderManageController {
         weChatCommodityOrderDTO.setManagerId(user.getUserId());
         return orderManageService.getTotalSale(weChatCommodityOrderDTO);
     }
+    /**
+     * 导入excel表（更新快递单号/公司 状态）
+     * @param file
+     * @return
+     */
+    @PostMapping("importDeliveryRecords")
+//    @PermissionCheck(role = "管理员")
+    public JSONResult importDeliveryRecords(MultipartFile file){
+        try {
+            orderManageService.ImportDeliveryRecords(file);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new JSONResult("success");
+    }
+
 }

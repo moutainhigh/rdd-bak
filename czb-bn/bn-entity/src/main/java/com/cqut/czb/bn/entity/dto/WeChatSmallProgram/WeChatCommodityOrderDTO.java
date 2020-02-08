@@ -31,6 +31,7 @@ public class WeChatCommodityOrderDTO {
 
     private String deliveryNum; // 快递单号
     private String electronicCode; // 电子码
+    private String deliveryCompany;
 
     public String getDeliveryNum() {
         return deliveryNum;
@@ -206,5 +207,13 @@ public class WeChatCommodityOrderDTO {
 
     public void setDeliveryState(Integer deliveryState) {
         this.deliveryState = deliveryState;
+    }
+
+    public String getDeliveryCompany() {
+        return deliveryCompany;
+    }
+
+    public void setDeliveryCompany(String deliveryCompany) {
+        this.deliveryCompany = deliveryCompany;
     }
 }

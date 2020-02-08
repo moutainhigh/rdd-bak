@@ -9,17 +9,21 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 import com.cqut.czb.bn.entity.entity.UserRole;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.impl.petrolDeliveryRecords.ImportPetrolDelivery;
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 
 @Service
 public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderManageService {
@@ -153,6 +157,34 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     }
 
     /**
+     * 导入excel
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int ImportDeliveryRecords(MultipartFile file) throws Exception {
+        InputStream inputStream = file.getInputStream();
+        List<WeChatCommodityOrderDTO> deliveryList = null;
+        Map<String,WeChatCommodityOrderDTO> deliveryMap = new HashMap<>();
+        deliveryList = weChatOrderDelivery.readExcel(file.getOriginalFilename(), inputStream);
+        /**
+         * 按照订单号区分重复
+         */
+        if(deliveryList != null){
+            for (WeChatCommodityOrderDTO p : deliveryList){
+                deliveryMap.put(p.getOrderId(),p);
+            }
+        }
+        List<WeChatCommodityOrderDTO> deliveryListNoRepeat = new ArrayList<>();
+        for (WeChatCommodityOrderDTO p : deliveryMap.values()){
+            deliveryListNoRepeat.add(p);
+        }
+        int countForInsert = weChatCommodityOrderMapperExtra.updateImportRecords(deliveryListNoRepeat);
+        return countForInsert;
+    }
+
+    /**
      * 处理用户权限问题
      * (微信小程序商家只能看到自己的订单，管理员可以看到所有订单)
      *
@@ -180,4 +212,6 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
             input.setManagerId(null);
         }
     }
+
+
 }

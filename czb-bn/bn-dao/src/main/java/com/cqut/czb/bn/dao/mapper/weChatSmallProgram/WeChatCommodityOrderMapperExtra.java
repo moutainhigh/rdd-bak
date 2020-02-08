@@ -5,6 +5,8 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityComdirmOrder
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -106,4 +108,6 @@ public interface WeChatCommodityOrderMapperExtra {
      * @return
      */
     Double selectTotalPrice(@Param("userId") String userId,@Param("orderState") Integer orderState);
+
+    int updateImportRecords(List<WeChatCommodityOrderDTO> list);
 }
