@@ -109,5 +109,14 @@ public interface WeChatCommodityOrderMapperExtra {
      */
     Double selectTotalPrice(@Param("userId") String userId,@Param("orderState") Integer orderState);
 
+    /**
+     * 导出订单
+     * @param pageDto
+     * @return
+     */
+    List<WeChatCommodityOrderDTO> selectOrder(WeChatCommodityOrderDTO pageDto);
+
+
+
     int updateImportRecords(List<WeChatCommodityOrderDTO> list);
 }
