@@ -94,9 +94,12 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         }
         // 如果为寄送(takeWay == 1)，获取addressInfo
         if (result.getTakeWay() == 1 && result.getAddressId() != null) {
+            // 获取地址
             Address address = addressMapper.selectByPrimaryKey(result.getAddressId());
+            // 设置地址与联系电话
             if (address != null) {
                 result.setAddressInfo(address.getProvince() + address.getCity() + address.getArea() + address.getDetail());
+                result.setContactNumber(address.getContactNumber());
             }
         }
 

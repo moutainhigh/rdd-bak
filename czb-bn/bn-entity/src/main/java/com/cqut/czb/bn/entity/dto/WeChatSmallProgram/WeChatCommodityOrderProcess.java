@@ -14,6 +14,16 @@ public class WeChatCommodityOrderProcess {
     private String handler; // 处理人
     private Integer takeWay; // 商品取件方式
 
+    private String contactNumber; // 客户电话(地址联系人电话)
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
     public String getOrderId() {
         return orderId;
     }
