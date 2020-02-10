@@ -28,9 +28,10 @@ public class WeChatCommodityOrderDTO {
     private Date endTime; // 结束时间(查询使用)
     private Integer takeWay;
     private Integer deliveryState;
-
+    private String deliveryCompany; //快递公司
     private String deliveryNum; // 快递单号
     private String electronicCode; // 电子码
+    private String shopName;//商家名
 
     public String getDeliveryNum() {
         return deliveryNum;
@@ -206,5 +207,21 @@ public class WeChatCommodityOrderDTO {
 
     public void setDeliveryState(Integer deliveryState) {
         this.deliveryState = deliveryState;
+    }
+
+    public String getDeliveryCompany() {
+        return deliveryCompany;
+    }
+
+    public void setDeliveryCompany(String deliveryCompany) {
+        this.deliveryCompany = deliveryCompany;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 }
