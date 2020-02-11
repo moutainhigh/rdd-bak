@@ -119,4 +119,11 @@ public interface WeChatCommodityOrderMapperExtra {
 
 
     int updateImportRecords(List<WeChatCommodityOrderDTO> list);
+
+    /**
+     * 订单地址
+     * @param addressId
+     * @return
+     */
+    WeChatCommodityOrderDTO getOrderAddress(@Param("addressId") String addressId);
 }

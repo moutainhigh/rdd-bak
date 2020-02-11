@@ -260,14 +260,18 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
             sheet.setColumnWidth(i, (short) 6000); // 设置列宽
         }
         sheet.setColumnWidth(1,(short)4000);
+        sheet.setColumnWidth(4,(short)8000);
+        sheet.setColumnWidth(5,(short)8000);
         sheet.setColumnWidth(6,(short)4000);
-        sheet.setColumnWidth(7,(short)8000);
+        sheet.setColumnWidth(7,(short)4000);
         int startRow=1;
         int startRow1=1;
         int addRow=0;
         int addRow1=0;
         String flag = "";
         String flagShop = "";
+        String subName = "";
+        String subShop = "";
         if (wxOrderWithdrawDTOS.get(0).getUserName() != null) {
             flag = wxOrderWithdrawDTOS.get(0).getUserName();
         } else {
@@ -310,9 +314,20 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
                 startRow=addRow+1;
                 addRow=addRow+1;
             }
-            if (i==wxOrderWithdrawDTOS.size()-1) {
+           if (i==wxOrderWithdrawDTOS.size()-1 && wxOrderWithdrawDTOS.size() > 1 && startRow != addRow) {
                 sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 0, (short) 0));
-            }
+               row.createCell(count).setCellType(CellType.STRING);
+               row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+
+            } else if (i==wxOrderWithdrawDTOS.size()-1 && startRow == addRow) {
+               row.createCell(count).setCellType(CellType.STRING);
+               row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+           }
+           else {
+               row.createCell(count).setCellType(CellType.STRING);
+               row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+           }
+
             row.createCell(count).setCellType(CellType.STRING);
             if (wxOrderWithdrawDTOS.get(i).getUserName() != null) {
                 row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
@@ -333,13 +348,30 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
                 flag=checkFlag;
                 sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
                 sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 2, (short) 2));
-//                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
                 startRow1=addRow1+1;
                 addRow1=addRow1+1;
             }
-            if (i==wxOrderWithdrawDTOS.size()-1) {
+
+            if (i < wxOrderWithdrawDTOS.size()-1) {
+                if (wxOrderWithdrawDTOS.get(i+1).getUserName() != null) {
+                    subName = wxOrderWithdrawDTOS.get(i+1).getUserName();
+                } else {
+                    subName = "";
+                }
+            }
+            if (i==wxOrderWithdrawDTOS.size()-1 && wxOrderWithdrawDTOS.size() > 1 && startRow != addRow) {
                 sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
                 sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 2, (short) 2));
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
+
+            } else if (i==wxOrderWithdrawDTOS.size()-1 && startRow == addRow) {
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
+            }
+            else {
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
             }
 
             row.createCell(count).setCellType(CellType.STRING);
@@ -350,12 +382,18 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
 
             }
 
-
             row.createCell(count).setCellType(CellType.STRING);
             if (wxOrderWithdrawDTOS.get(i).getOrderId() != null)
                 row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getOrderId());
             else
                 row.createCell(count++).setCellValue("");
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getAddressId() != null)
+                row.createCell(count++).setCellValue(getAddress(wxOrderWithdrawDTOS.get(i).getAddressId()));
+            else
+                row.createCell(count++).setCellValue("");
+
             row.createCell(count).setCellType(CellType.STRING);
             if (wxOrderWithdrawDTOS.get(i).getCommodityTitle() != null)
                 row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getCommodityTitle());
@@ -415,6 +453,16 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String theDate = sdf.format(date);
         return theDate;
+    }
+
+//    获取订单地址信息
+    public String getAddress(String addressId) {
+        WeChatCommodityOrderDTO address = weChatCommodityOrderMapperExtra.getOrderAddress(addressId);
+        if (address != null) {
+            return address.getProvince() + address.getCity() + address.getArea() + address.getDetail();
+        } else {
+            return "";
+        }
     }
 
 
