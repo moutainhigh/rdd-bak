@@ -12,6 +12,33 @@ public class PetrolRechargeInputDTO extends PageDTO {
     private double petrolDenomination;
     private String userAccount;
     private Integer bindingType; //1 公司匹配 2 线下匹配 3 绑定过的卡
+    private String startTime;
+    private String endTime;
+    private Integer rechargeState;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getRechargeState() {
+        return rechargeState;
+    }
+
+    public void setRechargeState(Integer rechargeState) {
+        this.rechargeState = rechargeState;
+    }
 
     public Integer getBindingType() {
         return bindingType;

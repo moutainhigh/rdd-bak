@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper;
 
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxOrderWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryInput;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.DeliveryMessageDTO;
 import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;

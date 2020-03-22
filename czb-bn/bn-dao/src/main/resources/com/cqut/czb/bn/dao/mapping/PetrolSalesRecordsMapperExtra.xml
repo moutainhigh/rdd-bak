@@ -279,8 +279,16 @@ INNER JOIN (
             <if test="bindingType != null and bindingType == 3">
                 AND (petrol_num like 'RDD%' OR petrol_num like 'S%')
             </if>
+            <if test="startTime != null">
+                AND create_at &gt;= #{startTime,jdbcType = TIMESTAMP}
+            </if>
+            <if test="endTime != null">
+                AND create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
+            </if>
+            <if test="rechargeState != null">
+                and  state = #{rechargeState,jdbcType = INTEGER}
+            </if>
             and is_recharged != -1
-            and state = 1
         </where>
         ) AS t_cpsr
         INNER JOIN (
@@ -572,4 +580,5 @@ INNER JOIN (
             where
             record_id =#{orderId}
     </update>
+
 </mapper>

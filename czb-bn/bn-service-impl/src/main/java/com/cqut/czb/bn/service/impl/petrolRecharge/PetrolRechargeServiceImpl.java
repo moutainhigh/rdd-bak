@@ -6,6 +6,8 @@ import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.User;
@@ -123,6 +125,11 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             }
             row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
             row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
+            if ("0".equals(list.get(i).getIsRecharged())){
+                row.createCell(count++).setCellValue("未充值");
+            }else if ("1".equals(list.get(i).getIsRecharged())){
+                row.createCell(count++).setCellValue("已充值");
+            }
             row.createCell(count++).setCellValue(list.get(i).getUserPhone());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getPurchaseTime()));
             if ("1".equals(list.get(i).getBuyWay())) {
@@ -130,6 +137,57 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             }else if ("2".equals(list.get(i).getBuyWay())){
                 row.createCell(count++).setCellValue("微信");
             }
+        }
+        return workbook;
+    }
+
+
+    @Override
+    public Workbook exportSaleRecords(GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
+        List<SaleInfoOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(inputDTO);
+        return getSaleWorkBook(list);
+    }
+
+    private Workbook getSaleWorkBook(List<SaleInfoOutputDTO> list) throws Exception {
+        String[] rechargeHead = SystemConstants.PETROL_SALE_EXCEL_HEAD;
+        Workbook workbook = null;
+        try{
+            workbook = new SXSSFWorkbook(list.size());
+        } catch (Exception e) {
+            throw new Exception("Excel数据量过大，请缩短时间间隔");
+        }
+        Sheet sheet = workbook.createSheet("导出充值记录");//创建工作表
+        Row row =sheet.createRow(0);//创建行从第0行开始
+        CellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        for (int i = 0; i < rechargeHead.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(rechargeHead[i]);
+            cell.setCellStyle(style);
+            sheet.setColumnWidth(i, (short) 5000); // 设置列宽
+        }
+        for (int i = 0 ; i<list.size(); i++){
+            int count = 0;
+            row = sheet.createRow(i+1);
+            row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
+            row.createCell(count++).setCellValue(list.get(i).getThirdOrderId());
+            if ("1".equals(list.get(i).getPetrolKind())){
+                row.createCell(count++).setCellValue("中石油");
+            }else if ("2".equals(list.get(i).getPetrolKind())){
+                row.createCell(count++).setCellValue("中石化");
+            }else{
+                row.createCell(count++).setCellValue("其他");
+            }
+            row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
+            row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
+            row.createCell(count++).setCellValue(list.get(i).getOwner());
+            if ("1".equals(list.get(i).getPaymentMethod())) {
+                row.createCell(count++).setCellValue("支付宝");
+            }else if ("2".equals(list.get(i).getPaymentMethod())){
+                row.createCell(count++).setCellValue("微信");
+            }
+            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getTransactionTime()));
+            row.createCell(count++).setCellValue(list.get(i).getArea());
         }
         return workbook;
     }
