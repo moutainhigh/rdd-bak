@@ -9,17 +9,29 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
+import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 import com.cqut.czb.bn.entity.entity.UserRole;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.impl.petrolDeliveryRecords.ImportPetrolDelivery;
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
+import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.io.InputStream;
+import java.util.*;
 
 @Service
 public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderManageService {
@@ -94,9 +106,12 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         }
         // 如果为寄送(takeWay == 1)，获取addressInfo
         if (result.getTakeWay() == 1 && result.getAddressId() != null) {
+            // 获取地址
             Address address = addressMapper.selectByPrimaryKey(result.getAddressId());
+            // 设置地址与联系电话
             if (address != null) {
                 result.setAddressInfo(address.getProvince() + address.getCity() + address.getArea() + address.getDetail());
+                result.setContactNumber(address.getContactNumber());
             }
         }
 
@@ -116,6 +131,13 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         boolean result;
         if (input.getTakeWay() == 1) { // 寄送
             result = weChatCommodityOrderMapperExtra.dealOrderSend(input) > 0;
+            // 如果寄送状态为已收货，订单处理完成，修改订单状态
+            WeChatCommodityOrderProcess newOrderState = new WeChatCommodityOrderProcess();
+            newOrderState.setOrderId(input.getOrderId());
+            // 订单已完成
+            newOrderState.setOrderState(2);
+            newOrderState.setHandler(input.getHandler());
+            result = result && weChatCommodityOrderMapperExtra.dealOrderEl(newOrderState) > 0;
         } else if (input.getTakeWay() == 2) { // 核销
             result = weChatCommodityOrderMapperExtra.dealOrderEl(input) > 0;
         } else {
@@ -146,6 +168,34 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     }
 
     /**
+     * 导入excel
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int ImportDeliveryRecords(MultipartFile file) throws Exception {
+        InputStream inputStream = file.getInputStream();
+        List<WeChatCommodityOrderDTO> deliveryList = null;
+        Map<String,WeChatCommodityOrderDTO> deliveryMap = new HashMap<>();
+        deliveryList = weChatOrderDelivery.readExcel(file.getOriginalFilename(), inputStream);
+        /**
+         * 按照订单号区分重复
+         */
+        if(deliveryList != null){
+            for (WeChatCommodityOrderDTO p : deliveryList){
+                deliveryMap.put(p.getOrderId(),p);
+            }
+        }
+        List<WeChatCommodityOrderDTO> deliveryListNoRepeat = new ArrayList<>();
+        for (WeChatCommodityOrderDTO p : deliveryMap.values()){
+            deliveryListNoRepeat.add(p);
+        }
+        int countForInsert = weChatCommodityOrderMapperExtra.updateImportRecords(deliveryListNoRepeat);
+        return countForInsert;
+    }
+
+    /**
      * 处理用户权限问题
      * (微信小程序商家只能看到自己的订单，管理员可以看到所有订单)
      *
@@ -173,4 +223,247 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
             input.setManagerId(null);
         }
     }
+
+    /**
+     * 导出excel
+     * @param pageDTO
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Workbook exportOrderRecords(WeChatCommodityOrderDTO pageDTO) throws Exception {
+        List<WeChatCommodityOrderDTO> wxOrderDTOList = weChatCommodityOrderMapperExtra.selectOrder(pageDTO);
+        if(wxOrderDTOList==null||wxOrderDTOList.size()==0){
+            return getWorkBook(null);
+        }
+        return getWorkBook(wxOrderDTOList);
+    }
+
+    public Workbook getWorkBook(List<WeChatCommodityOrderDTO> wxOrderWithdrawDTOS)throws Exception{
+        String[] petrolDeliveryRecordHeader = SystemConstants.OREDER_MANAGE_EXCEL_HEAD;
+        Workbook workbook = null;
+        try{
+            workbook = new SXSSFWorkbook(wxOrderWithdrawDTOS.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Excel数据量过大，请缩短时间间隔");
+        }
+        Sheet sheet = workbook.createSheet("导出订单记录");//创建工作表
+        Row row =sheet.createRow(0);//创建行从第0行开始
+        CellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        for (int i = 0; i < petrolDeliveryRecordHeader.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(petrolDeliveryRecordHeader[i]);
+            cell.setCellStyle(style);
+            sheet.setColumnWidth(i, (short) 6000); // 设置列宽
+        }
+        sheet.setColumnWidth(1,(short)4000);
+        sheet.setColumnWidth(4,(short)8000);
+        sheet.setColumnWidth(5,(short)8000);
+        sheet.setColumnWidth(6,(short)4000);
+        sheet.setColumnWidth(7,(short)4000);
+        int startRow=1;
+        int startRow1=1;
+        int addRow=0;
+        int addRow1=0;
+        String flag = "";
+        String flagShop = "";
+        String subName = "";
+        String subShop = "";
+        if (wxOrderWithdrawDTOS.get(0).getUserName() != null) {
+            flag = wxOrderWithdrawDTOS.get(0).getUserName();
+        } else {
+            flag = "";
+        }
+        if (wxOrderWithdrawDTOS.get(0).getShopName() != null) {
+            flagShop = wxOrderWithdrawDTOS.get(0).getShopName();
+        } else {
+            flagShop = "";
+        }
+
+        for (int i = 0 ; i<wxOrderWithdrawDTOS.size(); i++){
+            int count = 0;
+            String checkFlag = "";
+            String checkFlag2 = "";
+            row = sheet.createRow(i+1);
+            Cell cell = row.createCell(count);
+            cell.setCellStyle(style);
+            cell.setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getShopName() != null) {
+                cell.setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+                checkFlag2 = wxOrderWithdrawDTOS.get(i).getShopName();
+            } else {
+                cell.setCellValue("");
+                checkFlag2 = "";
+            }
+            count++;
+
+            if (checkFlag2.equals(flagShop)){
+                addRow++;
+            }
+            else if (addRow==startRow){
+                flagShop=checkFlag2;
+                startRow=startRow+1;
+                addRow=addRow+1;
+            }
+            else{
+                flagShop=checkFlag2;
+                sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 0, (short) 0));
+                startRow=addRow+1;
+                addRow=addRow+1;
+            }
+           if (i==wxOrderWithdrawDTOS.size()-1 && wxOrderWithdrawDTOS.size() > 1 && startRow != addRow) {
+                sheet.addMergedRegion(new CellRangeAddress(startRow, addRow, (short) 0, (short) 0));
+               row.createCell(count).setCellType(CellType.STRING);
+               row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+
+            } else if (i==wxOrderWithdrawDTOS.size()-1 && startRow == addRow) {
+               row.createCell(count).setCellType(CellType.STRING);
+               row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+           }
+           else {
+               row.createCell(count).setCellType(CellType.STRING);
+               row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getShopName());
+           }
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getUserName() != null) {
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
+                checkFlag = wxOrderWithdrawDTOS.get(i).getUserName();
+            } else {
+                row.createCell(count++).setCellValue("");
+                checkFlag = "";
+            }
+            if (checkFlag.equals(flag)){
+                addRow1++;
+            }
+            else if (addRow1==startRow1){
+                flag=checkFlag;
+                startRow1=startRow1+1;
+                addRow1=addRow1+1;
+            }
+            else{
+                flag=checkFlag;
+                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
+                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 2, (short) 2));
+                startRow1=addRow1+1;
+                addRow1=addRow1+1;
+            }
+
+            if (i < wxOrderWithdrawDTOS.size()-1) {
+                if (wxOrderWithdrawDTOS.get(i+1).getUserName() != null) {
+                    subName = wxOrderWithdrawDTOS.get(i+1).getUserName();
+                } else {
+                    subName = "";
+                }
+            }
+            if (i==wxOrderWithdrawDTOS.size()-1 && wxOrderWithdrawDTOS.size() > 1 && startRow != addRow) {
+                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
+                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 2, (short) 2));
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
+
+            } else if (i==wxOrderWithdrawDTOS.size()-1 && startRow == addRow) {
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
+            }
+            else {
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
+            }
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getPhone() != null) {
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getPhone());
+            } else {
+                row.createCell(count++).setCellValue("");
+
+            }
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getOrderId() != null)
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getOrderId());
+            else
+                row.createCell(count++).setCellValue("");
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getAddressId() != null)
+                row.createCell(count++).setCellValue(getAddress(wxOrderWithdrawDTOS.get(i).getAddressId()));
+            else
+                row.createCell(count++).setCellValue("");
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getCommodityTitle() != null)
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getCommodityTitle());
+            else
+                row.createCell(count++).setCellValue("");
+            if (wxOrderWithdrawDTOS.get(i).getCommodityNum() != null)
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getCommodityNum());
+            else
+                row.createCell(count++).setCellValue("");
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getActualPrice() != null)
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getActualPrice());
+            else
+                row.createCell(count++).setCellValue("");
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getPayStatus()==0)
+                row.createCell(count++).setCellValue("未支付");
+            else if(wxOrderWithdrawDTOS.get(i).getPayStatus()==1)
+                row.createCell(count++).setCellValue("已支付");
+            else
+                row.createCell(count++).setCellValue("");
+
+
+            row.createCell(count).setCellType(CellType.STRING);
+            row.createCell(count++).setCellValue(formateDate(wxOrderWithdrawDTOS.get(i).getCreateAt()));
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getDeliveryCompany() != null)
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getDeliveryCompany());
+            else
+                row.createCell(count++).setCellValue("暂无");
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getDeliveryNum() != null)
+                row.createCell(count++).setCellValue(wxOrderWithdrawDTOS.get(i).getDeliveryNum());
+            else
+                row.createCell(count++).setCellValue("暂无");
+
+            row.createCell(count).setCellType(CellType.STRING);
+            if (wxOrderWithdrawDTOS.get(i).getDeliveryState() != null) {
+                if (wxOrderWithdrawDTOS.get(i).getDeliveryState()==0)
+                    row.createCell(count++).setCellValue("未寄送");
+                else if(wxOrderWithdrawDTOS.get(i).getDeliveryState()==1)
+                    row.createCell(count++).setCellValue("寄送中");
+                else if(wxOrderWithdrawDTOS.get(i).getDeliveryState()==2)
+                    row.createCell(count++).setCellValue("已收货");
+            } else {
+                row.createCell(count++).setCellValue("暂无");
+            }
+
+
+        }
+        return workbook;
+    }
+
+    public String formateDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String theDate = sdf.format(date);
+        return theDate;
+    }
+
+//    获取订单地址信息
+    public String getAddress(String addressId) {
+        WeChatCommodityOrderDTO address = weChatCommodityOrderMapperExtra.getOrderAddress(addressId);
+        if (address != null) {
+            return address.getProvince() + address.getCity() + address.getArea() + address.getDetail();
+        } else {
+            return "";
+        }
+    }
+
+
 }

@@ -1,6 +1,5 @@
 package com.cqut.czb.bn.entity.dto.WeChatSmallProgram;
 
-import com.cqut.czb.bn.entity.entity.File;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

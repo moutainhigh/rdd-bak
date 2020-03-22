@@ -90,6 +90,8 @@ public class DictServiceImpl implements IDictService {
                 || "1.1.0".equals(version)
                 || "1.1.1".equals(version)
                 || "1.1.2".equals(version)
+                || "1.1.3".equals(version)
+                || "1.1.4".equals(version)
                 || "".equals(version)
                 || version == null) {
             appInfoDTO.setIsUpdate(true);
@@ -164,7 +166,7 @@ public class DictServiceImpl implements IDictService {
         }
         Random random = new Random();
         appInfoDTO.setUrl(url.get(random.nextInt(url.size())));
-        if("1.0.0".equals(version) || "1.0.1".equals(version) || "1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.2".equals(version) || "1.0.5".equals(version) || "1.0.6".equals(version) || "1.0.7".equals(version) || "1.0.8".equals(version) || "1.0.9".equals(version) || "1.0.10".equals(version) || "1.1.0".equals(version)){
+        if("1.0.0".equals(version) || "1.0.1".equals(version) || "1.0.3".equals(version) || "1.0.4".equals(version) || "1.0.2".equals(version) || "1.0.5".equals(version) || "1.0.6".equals(version) || "1.0.7".equals(version) || "1.0.8".equals(version) || "1.0.9".equals(version) || "1.0.10".equals(version) || "1.1.0".equals(version) || "1.1.1".equals(version)){
             appInfoDTO.setIsUpdate(true);
         }else {
             appInfoDTO.setIsUpdate(false);

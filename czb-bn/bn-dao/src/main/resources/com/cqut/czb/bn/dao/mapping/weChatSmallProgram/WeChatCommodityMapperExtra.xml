@@ -544,9 +544,6 @@
         LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
         WHERE
         czb_wechat_commodity.is_sale = 1
-        <if test = "area != null and area != '' and area != '重庆市'">
-            AND area = #{area, jdbcType = VARCHAR}
-        </if>
         <if test = "shopPlace != null and shopPlace != '' ">
             AND show_place = #{shopPlace, jdbcType = VARCHAR}
         </if>

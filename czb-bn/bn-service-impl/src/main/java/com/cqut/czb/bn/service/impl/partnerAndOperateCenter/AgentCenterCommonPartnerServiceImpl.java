@@ -20,8 +20,9 @@ public class AgentCenterCommonPartnerServiceImpl implements AgentCenterCommonPar
     @Autowired
     private AgentCenterCommonPartnerMapperExtra agentCenterCommonPartnerMapperExtra;
 
+
     @Override
-    public List<AgentCenterCommonPartnerDto> list(String mobile, Date createAt, String area, PageDTO pageDTO) {
+    public List<AgentCenterCommonPartnerDto> list(String mobile, Date createAt, String area, String spreadAccount, Integer isVip, PageDTO pageDTO) {
         if(mobile != null ){
             mobile = mobile.trim();
         }
@@ -29,7 +30,7 @@ public class AgentCenterCommonPartnerServiceImpl implements AgentCenterCommonPar
             area = area.trim();
         }
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize(),true);
-        BusinessCommonUserVo businessCommonUserVo = new BusinessCommonUserVo(mobile,createAt,area);
+        BusinessCommonUserVo businessCommonUserVo = new BusinessCommonUserVo(mobile,createAt,area,spreadAccount,isVip);
         List<AgentCenterCommonPartnerDto> list = agentCenterCommonPartnerMapperExtra.list(businessCommonUserVo);
         return list;
     }
