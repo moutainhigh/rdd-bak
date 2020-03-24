@@ -79,7 +79,7 @@ public class SystemConstants {
     /**
      * 导出充值记录excel的头部
      */
-    public static final String[] PETROL_SALE_EXCEL_HEAD={"油卡号码","支付订单号","油卡类型","油卡面额","油卡价格","购买者电话","支付方式","交易时间","地区"};
+    public static final String[] PETROL_SALE_EXCEL_HEAD={"油卡号码","支付订单号","油卡类型","油卡面额","油卡价格","购买者电话","支付方式","交易时间","地区","充值类别"};
 
     /**
      * 导出合伙人考核excel的头部

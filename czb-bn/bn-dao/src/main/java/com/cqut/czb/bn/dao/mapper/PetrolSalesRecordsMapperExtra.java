@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleTotal;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import org.apache.ibatis.annotations.Param;
@@ -16,6 +17,8 @@ import java.util.List;
 
 public interface PetrolSalesRecordsMapperExtra {
     List<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO);
+
+    SaleTotal getTotal(String userId);
 
     List<Petrol> getGTSoldPetrolForUser(String userId);
 

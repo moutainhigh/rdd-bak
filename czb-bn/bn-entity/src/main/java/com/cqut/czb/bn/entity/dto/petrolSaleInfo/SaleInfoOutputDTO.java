@@ -8,6 +8,7 @@ public class SaleInfoOutputDTO {
     private String petrolDenomination;//油卡面额
     private String petrolPrice;//油卡价格
     private String owner;//购买者
+    private String ownerId;//购买者
     private String paymentMethod;//支付方式
     private Date transactionTime;//交易时间
     private String area;//地区
@@ -16,6 +17,23 @@ public class SaleInfoOutputDTO {
     private String remark;
     private Integer recordType; // 是否第一次购买
     private String thirdOrderId;
+    private Double vipRecord;  // 会员费
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Double getVipRecord() {
+        return vipRecord;
+    }
+
+    public void setVipRecord(Double vipRecord) {
+        this.vipRecord = vipRecord;
+    }
 
     public String getThirdOrderId() {
         return thirdOrderId;

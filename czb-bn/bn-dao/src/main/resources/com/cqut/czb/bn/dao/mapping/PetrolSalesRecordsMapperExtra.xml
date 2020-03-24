@@ -25,6 +25,15 @@
     transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type,
     is_recharged, petrol_kind, denomination, current_price
   </sql>
+  <select id="getTotal" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleTotal">
+    SELECT
+	    sum( amount ) vipRecordTotal,
+	    ( SELECT is_vip FROM czb_user WHERE czb_user.user_id IN ( SELECT owner_id FROM czb_petrol WHERE petrol_num = #{userId, jdbcType=VARCHAR} ) ) isVip
+    FROM
+	    czb_vip_recharge_records
+    WHERE
+	    czb_vip_recharge_records.user_id IN ( SELECT czb_user.user_id FROM czb_user WHERE czb_user.user_id IN ( SELECT owner_id FROM czb_petrol WHERE petrol_num = #{userId, jdbcType=VARCHAR} ) AND is_vip = 1 )
+  </select>
   <select id="getPetrolSaleInfoList" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO">
     SELECT
 	t2.user_account 'owner',
@@ -39,7 +48,8 @@
     t1.create_at createAt,
     t1.record_type recordType,
     t3.remark remark,
-    t1.third_order_id thirdOrderId
+    t1.third_order_id thirdOrderId,
+    t3.owner_id ownerId
 FROM
 	(
 		SELECT

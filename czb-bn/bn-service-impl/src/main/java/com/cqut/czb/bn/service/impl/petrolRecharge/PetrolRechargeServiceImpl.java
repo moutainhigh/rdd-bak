@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
+import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleTotal;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.User;
@@ -25,6 +26,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +98,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
     private Workbook getWorkBook(List<PetrolRechargeOutputDTO> list)throws Exception{
         String[] rechargeHead = SystemConstants.PETROL_RECHARGE_EXCEL_HEAD;
+        SaleTotal saleTotal = new SaleTotal();
         Workbook workbook = null;
         try{
             workbook = new SXSSFWorkbook(list.size());
@@ -113,6 +116,18 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             sheet.setColumnWidth(i, (short) 5000); // 设置列宽
         }
         for (int i = 0 ; i<list.size(); i++){
+            if(list.get(i).getPetrolNum().length() > 15) {
+                saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
+                if(list.get(i).getIsRecharged().equals("0")){
+                    saleTotal.setNoFristTotalNumber(saleTotal.getNoFristTotalNumber()+1);
+                    saleTotal.setNoFristTotal(saleTotal.getNoFristTotal() + list.get(i).getPetrolDenomination());
+                }
+                else if(list.get(i).getIsRecharged().equals("1")){
+                    saleTotal.setyFristTotalNumber(saleTotal.getyFristTotalNumber()+1);
+                    saleTotal.setyFristTotal(saleTotal.getyFristTotal() + list.get(i).getPetrolDenomination());
+                }
+                saleTotal.setFristTotal(saleTotal.getNoFristTotal() + saleTotal.getyFristTotal());
+            }
             int count = 0;
             row = sheet.createRow(i+1);
             row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
@@ -138,6 +153,24 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                 row.createCell(count++).setCellValue("微信");
             }
         }
+        int index = 0;
+        row = sheet.createRow(list.size()+1);
+        row.createCell(index++).setCellValue("首充合计");
+        row.createCell(index++).setCellValue("首充人数");
+        row.createCell(index++).setCellValue("首充已充合计");
+        row.createCell(index++).setCellValue("首充已充人数");
+        row.createCell(index++).setCellValue("首充未充合计");
+        row.createCell(index++).setCellValue("首充未充人数");
+        row = sheet.createRow(list.size()+2);
+        index = 0;
+        row.createCell(index++).setCellValue(saleTotal.getFristTotal() + "元");
+        row.createCell(index++).setCellValue(saleTotal.getFristTotalNumber() + "人");
+        row.createCell(index++).setCellValue(saleTotal.getyFristTotal() + "元");
+        row.createCell(index++).setCellValue(saleTotal.getyFristTotalNumber() + "人");
+        row.createCell(index++).setCellValue(saleTotal.getNoFristTotal() + "元");
+        row.createCell(index++).setCellValue(saleTotal.getNoFristTotalNumber() + "人");
+
+
         return workbook;
     }
 
@@ -145,11 +178,13 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
     @Override
     public Workbook exportSaleRecords(GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
         List<SaleInfoOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(inputDTO);
-        return getSaleWorkBook(list);
+        return getSaleWorkBook(list, inputDTO);
     }
 
-    private Workbook getSaleWorkBook(List<SaleInfoOutputDTO> list) throws Exception {
+    private Workbook getSaleWorkBook(List<SaleInfoOutputDTO> list, GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
         String[] rechargeHead = SystemConstants.PETROL_SALE_EXCEL_HEAD;
+        SaleTotal saleTotal = new SaleTotal();
+        saleTotal.setTotal(saleTotal.getContinueTotal()+saleTotal.getFristTotal()+saleTotal.getVipRecordTotal());
         Workbook workbook = null;
         try{
             workbook = new SXSSFWorkbook(list.size());
@@ -188,7 +223,46 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             }
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getTransactionTime()));
             row.createCell(count++).setCellValue(list.get(i).getArea());
+
+            BigDecimal bg = new BigDecimal(Float.parseFloat(list.get(i).getPetrolDenomination()));
+            double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            if(list.get(i).getPetrolNum().length() > 15){
+                row.createCell(count++).setCellValue("首充");
+                saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
+                saleTotal.setFristTotal(saleTotal.getFristTotal() + f1);
+            }else {
+                row.createCell(count++).setCellValue("续充");
+                saleTotal.setContinueTotalNumber(saleTotal.getContinueTotalNumber()+1);
+                saleTotal.setContinueTotal(saleTotal.getContinueTotal() + f1);
+            }
+
+            SaleTotal saleTotally = petrolSalesRecordsMapperExtra.getTotal(list.get(i).getPetrolNum());
+            if(saleTotally.getIsVip() == 1){
+                saleTotal.setVipRecordTotalNumber(saleTotal.getVipRecordTotalNumber() + 1);
+                saleTotal.setVipRecordTotal(saleTotal.getVipRecordTotal() + saleTotally.getVipRecordTotal());
+            }
         }
+        saleTotal.setTotal(saleTotal.getFristTotal() + saleTotal.getContinueTotal() + saleTotal.getVipRecordTotal());
+        int index = 0;
+        row = sheet.createRow(list.size()+1);
+        row.createCell(index++).setCellValue("会员人数");
+        row.createCell(index++).setCellValue("会员费合计");
+        row.createCell(index++).setCellValue("首充人数");
+        row.createCell(index++).setCellValue("首充合计");
+        row.createCell(index++).setCellValue("续充人数");
+        row.createCell(index++).setCellValue("续充合计");
+        row.createCell(index++).setCellValue("总计");
+
+        index = 0;
+        row = sheet.createRow(list.size()+2);
+        row.createCell(index++).setCellValue(saleTotal.getVipRecordTotalNumber() + "人");
+        row.createCell(index++).setCellValue(saleTotal.getVipRecordTotal() + "元");
+        row.createCell(index++).setCellValue(saleTotal.getFristTotalNumber() + "人");
+        row.createCell(index++).setCellValue(saleTotal.getFristTotal() + "元");
+        row.createCell(index++).setCellValue(saleTotal.getContinueTotalNumber() + "人");
+        row.createCell(index++).setCellValue(saleTotal.getContinueTotal() + "元");
+        row.createCell(index++).setCellValue(saleTotal.getTotal() + "元");
+
         return workbook;
     }
 }
