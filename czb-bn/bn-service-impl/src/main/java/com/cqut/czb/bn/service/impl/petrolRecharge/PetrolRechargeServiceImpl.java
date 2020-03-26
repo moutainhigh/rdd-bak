@@ -226,7 +226,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
             BigDecimal bg = new BigDecimal(Float.parseFloat(list.get(i).getPetrolDenomination()));
             double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-            if(list.get(i).getPetrolNum().length() > 15){
+            if(list.get(i).getPetrolNum().length() < 15){
                 row.createCell(count++).setCellValue("首充");
                 saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
                 saleTotal.setFristTotal(saleTotal.getFristTotal() + f1);
