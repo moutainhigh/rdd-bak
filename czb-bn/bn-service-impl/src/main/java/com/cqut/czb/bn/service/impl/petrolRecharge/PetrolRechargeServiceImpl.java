@@ -115,44 +115,45 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             cell.setCellStyle(style);
             sheet.setColumnWidth(i, (short) 5000); // 设置列宽
         }
-        for (int i = 0 ; i<list.size(); i++){
-            if(list.get(i).getPetrolNum().length() > 15) {
-                saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
-                if(list.get(i).getIsRecharged().equals("0")){
-                    saleTotal.setNoFristTotalNumber(saleTotal.getNoFristTotalNumber()+1);
-                    saleTotal.setNoFristTotal(saleTotal.getNoFristTotal() + list.get(i).getPetrolDenomination());
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getPetrolNum().length() > 15) {
+                    saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber() + 1);
+                    if (list.get(i).getIsRecharged().equals("0")) {
+                        saleTotal.setNoFristTotalNumber(saleTotal.getNoFristTotalNumber() + 1);
+                        saleTotal.setNoFristTotal(saleTotal.getNoFristTotal() + list.get(i).getPetrolDenomination());
+                    } else if (list.get(i).getIsRecharged().equals("1")) {
+                        saleTotal.setyFristTotalNumber(saleTotal.getyFristTotalNumber() + 1);
+                        saleTotal.setyFristTotal(saleTotal.getyFristTotal() + list.get(i).getPetrolDenomination());
+                    }
+                    saleTotal.setFristTotal(saleTotal.getNoFristTotal() + saleTotal.getyFristTotal());
                 }
-                else if(list.get(i).getIsRecharged().equals("1")){
-                    saleTotal.setyFristTotalNumber(saleTotal.getyFristTotalNumber()+1);
-                    saleTotal.setyFristTotal(saleTotal.getyFristTotal() + list.get(i).getPetrolDenomination());
+                int count = 0;
+                row = sheet.createRow(i + 1);
+                row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
+                if ("1".equals(list.get(i).getPetrolKind())) {
+                    row.createCell(count++).setCellValue("中石油");
+                } else if ("2".equals(list.get(i).getPetrolKind())) {
+                    row.createCell(count++).setCellValue("中石化");
+                } else {
+                    row.createCell(count++).setCellValue("其他");
                 }
-                saleTotal.setFristTotal(saleTotal.getNoFristTotal() + saleTotal.getyFristTotal());
+                row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
+                row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
+                if ("0".equals(list.get(i).getIsRecharged())) {
+                    row.createCell(count++).setCellValue("未充值");
+                } else if ("1".equals(list.get(i).getIsRecharged())) {
+                    row.createCell(count++).setCellValue("已充值");
+                }else if ("-1".equals(list.get(i).getIsRecharged())) {
+                    row.createCell(count++).setCellValue("不需要充值");
+                }
+                row.createCell(count++).setCellValue(list.get(i).getUserPhone());
+                row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getPurchaseTime()));
+                if ("1".equals(list.get(i).getBuyWay())) {
+                    row.createCell(count++).setCellValue("支付宝");
+                } else if ("2".equals(list.get(i).getBuyWay())) {
+                    row.createCell(count++).setCellValue("微信");
+                }
             }
-            int count = 0;
-            row = sheet.createRow(i+1);
-            row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
-            if ("1".equals(list.get(i).getPetrolKind())){
-                row.createCell(count++).setCellValue("中石油");
-            }else if ("2".equals(list.get(i).getPetrolKind())){
-                row.createCell(count++).setCellValue("中石化");
-            }else{
-                row.createCell(count++).setCellValue("其他");
-            }
-            row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
-            row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
-            if ("0".equals(list.get(i).getIsRecharged())){
-                row.createCell(count++).setCellValue("未充值");
-            }else if ("1".equals(list.get(i).getIsRecharged())){
-                row.createCell(count++).setCellValue("已充值");
-            }
-            row.createCell(count++).setCellValue(list.get(i).getUserPhone());
-            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getPurchaseTime()));
-            if ("1".equals(list.get(i).getBuyWay())) {
-                row.createCell(count++).setCellValue("支付宝");
-            }else if ("2".equals(list.get(i).getBuyWay())){
-                row.createCell(count++).setCellValue("微信");
-            }
-        }
         int index = 0;
         row = sheet.createRow(list.size()+1);
         row.createCell(index++).setCellValue("首充合计");

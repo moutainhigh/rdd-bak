@@ -628,9 +628,10 @@ INNER JOIN (
                 AND create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
             </if>
             <if test="rechargeState != null">
-                and  state = #{rechargeState,jdbcType = INTEGER}
+                and  is_recharged = #{rechargeState,jdbcType = INTEGER}
             </if>
             and is_recharged != -1
+            and state = 1
         </where>
         ) AS t_cpsr
         INNER JOIN (
