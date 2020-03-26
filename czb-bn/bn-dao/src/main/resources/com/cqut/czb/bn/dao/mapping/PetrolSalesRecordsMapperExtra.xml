@@ -583,4 +583,76 @@ INNER JOIN (
             record_id =#{orderId}
     </update>
 
+    <select id="exportRechargeRecords" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultMap="getPetrolRechargeMap">
+        SELECT
+        <include refid="getPetrolRecharge"/>
+        FROM
+        (
+        SELECT
+        record_id,
+        petrol_num,
+        petrol_id,
+        buyer_id,
+        is_recharged,
+        create_at,
+        update_at,
+        payment_method,
+        petrol_kind,
+        denomination AS petrol_denomination,
+        current_price AS petrol_price
+        FROM
+        czb_petrol_sales_records
+        <where>
+            <if test="petrolNum != null and petrolNum != ''">
+                and petrol_num LIKE CONCAT(CONCAT('%',#{petrolNum,jdbcType = VARCHAR}),'%')
+            </if>
+            <if test="isRecharged != null and isRecharged != ''">
+                and is_recharged = #{isRecharged,jdbcType = INTEGER}
+            </if>
+            <if test="petrolKind != null and petrolKind != ''">
+                and petrol_kind = #{petrolKind,jdbcType = INTEGER}
+            </if>
+            <if test="bindingType != null and bindingType == 2">
+                AND petrol_num like 'RDD%'
+            </if>
+            <if test="bindingType != null and bindingType == 1">
+                AND petrol_num like 'S%'
+            </if>
+            <if test="bindingType != null and bindingType == 3">
+                AND (petrol_num like 'RDD%' OR petrol_num like 'S%')
+            </if>
+            <if test="startTime != null">
+                AND create_at &gt;= #{startTime,jdbcType = TIMESTAMP}
+            </if>
+            <if test="endTime != null">
+                AND create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
+            </if>
+            <if test="rechargeState != null">
+                and  state = #{rechargeState,jdbcType = INTEGER}
+            </if>
+            and is_recharged != -1
+        </where>
+        ) AS t_cpsr
+        INNER JOIN (
+        SELECT
+        cu.user_account,
+        cu.user_name,
+        cu.user_id
+        FROM
+        czb_user AS cu
+        WHERE
+        cu.user_id IN (
+        SELECT
+        buyer_id
+        FROM
+        czb_petrol_sales_records
+        )
+        ) AS t_user ON t_user.user_id = t_cpsr.buyer_id
+        INNER JOIN (
+        SELECT
+        petrol_id
+        FROM
+        czb_petrol
+        ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
+    </select>
 </mapper>

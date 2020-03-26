@@ -95,4 +95,6 @@ public interface PetrolSalesRecordsMapperExtra {
     int inputChargeOrders(@Param("list") List<GetChargeOrderInputDTO> list);
 
     int inputChargeOrder(GetChargeOrderInputDTO getChargeOrderInputDTO);
+
+    List<PetrolRechargeOutputDTO> exportRechargeRecords(PetrolRechargeInputDTO inputDTO);
 }
