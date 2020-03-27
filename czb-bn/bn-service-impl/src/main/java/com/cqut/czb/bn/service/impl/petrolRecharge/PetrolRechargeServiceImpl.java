@@ -92,7 +92,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
     @Override
     public Workbook exportRechargeRecords(PetrolRechargeInputDTO inputDTO) throws Exception {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize(),true);
-        List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeList(inputDTO);
+        List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.exportRechargeRecords(inputDTO);
         return getWorkBook(list);
     }
 
