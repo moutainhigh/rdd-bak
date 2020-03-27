@@ -116,7 +116,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             sheet.setColumnWidth(i, (short) 5000); // 设置列宽
         }
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getPetrolNum().length() > 15) {
+                if (list.get(i).getPetrolNum().length() < 15) {
                     saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber() + 1);
                     if (list.get(i).getIsRecharged().equals("0")) {
                         saleTotal.setNoFristTotalNumber(saleTotal.getNoFristTotalNumber() + 1);
