@@ -18,7 +18,7 @@ import java.util.List;
 public interface PetrolSalesRecordsMapperExtra {
     List<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO);
 
-    SaleTotal getTotal(String userId);
+    SaleTotal getTotal(GetPetrolSaleInfoInputDTO inputDTO);
 
     List<Petrol> getGTSoldPetrolForUser(String userId);
 

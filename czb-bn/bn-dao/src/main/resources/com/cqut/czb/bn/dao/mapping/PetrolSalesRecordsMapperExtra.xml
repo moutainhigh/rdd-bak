@@ -25,14 +25,48 @@
     transaction_time, petrol_id, state, contract_id, create_at, update_at, record_type,
     is_recharged, petrol_kind, denomination, current_price
   </sql>
-  <select id="getTotal" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleTotal">
-    SELECT
-	    sum( amount ) vipRecordTotal,
-	    ( SELECT is_vip FROM czb_user WHERE czb_user.user_id IN ( SELECT owner_id FROM czb_petrol WHERE petrol_num = #{userId, jdbcType=VARCHAR} ) ) isVip
+  <select id="getTotal" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleTotal">
+     SELECT
+        SUM( amount ) vipRecordTotal,
+        (
+        SELECT
+            COUNT( is_vip )
+        FROM
+            czb_user
+        WHERE
+            czb_user.user_id IN (
+            SELECT
+                owner_id
+            FROM
+                czb_petrol
+            WHERE
+                petrol_num IN (
+                SELECT petrol_num FROM czb_petrol_sales_records AS records WHERE records.create_at BETWEEN #{startTime,jdbcType=TIMESTAMP} AND #{endTime,jdbcType=TIMESTAMP}
+                AND state = 1 AND is_vip = 1
+                )
+            )
+        ) vipRecordTotalNumber
     FROM
-	    czb_vip_recharge_records
+        czb_vip_recharge_records
     WHERE
-	    czb_vip_recharge_records.user_id IN ( SELECT czb_user.user_id FROM czb_user WHERE czb_user.user_id IN ( SELECT owner_id FROM czb_petrol WHERE petrol_num = #{userId, jdbcType=VARCHAR} ) AND is_vip = 1 )
+        czb_vip_recharge_records.user_id IN (
+        SELECT
+            czb_user.user_id
+        FROM
+            czb_user
+        WHERE
+            czb_user.user_id IN (
+            SELECT
+                owner_id
+            FROM
+                czb_petrol
+            WHERE
+                petrol_num IN (
+                SELECT petrol_num FROM czb_petrol_sales_records AS records WHERE records.create_at BETWEEN #{startTime,jdbcType=TIMESTAMP} AND #{endTime,jdbcType=TIMESTAMP}
+                AND state = 1 )
+            )
+            AND is_vip = 1
+        )
   </select>
   <select id="getPetrolSaleInfoList" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO">
     SELECT

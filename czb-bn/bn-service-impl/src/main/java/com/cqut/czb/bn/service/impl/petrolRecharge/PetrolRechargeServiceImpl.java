@@ -113,18 +113,18 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             Cell cell = row.createCell(i);
             cell.setCellValue(rechargeHead[i]);
             cell.setCellStyle(style);
-            sheet.setColumnWidth(i, (short) 5000); // 设置列宽
+            sheet.setColumnWidth(i,  (short) 7500); // 设置列宽
         }
         for (int i = 0 ; i<list.size(); i++){
-            if(list.get(i).getPetrolNum().length() > 15) {
+            if(list.get(i).getPetrolNum().length() < 15) {
                 saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
                 if(list.get(i).getIsRecharged().equals("0")){
                     saleTotal.setNoFristTotalNumber(saleTotal.getNoFristTotalNumber()+1);
-                    saleTotal.setNoFristTotal(saleTotal.getNoFristTotal() + list.get(i).getPetrolDenomination());
+                    saleTotal.setNoFristTotal(saleTotal.getNoFristTotal() + list.get(i).getPetrolPrice());
                 }
                 else if(list.get(i).getIsRecharged().equals("1")){
                     saleTotal.setyFristTotalNumber(saleTotal.getyFristTotalNumber()+1);
-                    saleTotal.setyFristTotal(saleTotal.getyFristTotal() + list.get(i).getPetrolDenomination());
+                    saleTotal.setyFristTotal(saleTotal.getyFristTotal() + list.get(i).getPetrolPrice());
                 }
                 saleTotal.setFristTotal(saleTotal.getNoFristTotal() + saleTotal.getyFristTotal());
             }
@@ -183,8 +183,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
     private Workbook getSaleWorkBook(List<SaleInfoOutputDTO> list, GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
         String[] rechargeHead = SystemConstants.PETROL_SALE_EXCEL_HEAD;
-        SaleTotal saleTotal = new SaleTotal();
-        saleTotal.setTotal(saleTotal.getContinueTotal()+saleTotal.getFristTotal()+saleTotal.getVipRecordTotal());
+        SaleTotal saleTotal = petrolSalesRecordsMapperExtra.getTotal(inputDTO);
         Workbook workbook = null;
         try{
             workbook = new SXSSFWorkbook(list.size());
@@ -199,7 +198,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             Cell cell = row.createCell(i);
             cell.setCellValue(rechargeHead[i]);
             cell.setCellStyle(style);
-            sheet.setColumnWidth(i, (short) 5000); // 设置列宽
+            sheet.setColumnWidth(i, (short) 7500); // 设置列宽
         }
         for (int i = 0 ; i<list.size(); i++){
             int count = 0;
@@ -224,9 +223,9 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getTransactionTime()));
             row.createCell(count++).setCellValue(list.get(i).getArea());
 
-            BigDecimal bg = new BigDecimal(Float.parseFloat(list.get(i).getPetrolDenomination()));
+            BigDecimal bg = new BigDecimal(Float.parseFloat(list.get(i).getPetrolPrice()));
             double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-            if(list.get(i).getPetrolNum().length() > 15){
+            if(list.get(i).getPetrolNum().length() < 15){
                 row.createCell(count++).setCellValue("首充");
                 saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
                 saleTotal.setFristTotal(saleTotal.getFristTotal() + f1);
@@ -234,12 +233,6 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                 row.createCell(count++).setCellValue("续充");
                 saleTotal.setContinueTotalNumber(saleTotal.getContinueTotalNumber()+1);
                 saleTotal.setContinueTotal(saleTotal.getContinueTotal() + f1);
-            }
-
-            SaleTotal saleTotally = petrolSalesRecordsMapperExtra.getTotal(list.get(i).getPetrolNum());
-            if(saleTotally.getIsVip() == 1){
-                saleTotal.setVipRecordTotalNumber(saleTotal.getVipRecordTotalNumber() + 1);
-                saleTotal.setVipRecordTotal(saleTotal.getVipRecordTotal() + saleTotally.getVipRecordTotal());
             }
         }
         saleTotal.setTotal(saleTotal.getFristTotal() + saleTotal.getContinueTotal() + saleTotal.getVipRecordTotal());
