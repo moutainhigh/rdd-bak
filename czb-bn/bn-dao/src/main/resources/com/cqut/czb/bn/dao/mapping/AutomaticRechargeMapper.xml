@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.AutomaticRechargeMapperExtra" >
+    <select id="getAutoList" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
+        select auto_recharge_record_id id,
+             petrol_num petrolNum,
+             recharge_amount rechargeAmount,
+             price price,
+             status status,
+             message message,
+             recharge_time rechargeTime,
+             order_time orderTime,
+             create_at createAt,
+             update_at updateAt
+        from czb_auto_recharge_record
+        <where>
+            <if test="petrolNum!= null and petrolNum!= ''">
+                petrol_num = #{petrolNum}
+            </if>
+            <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
+                AND ( order_time BETWEEN #{startTime} AND #{endTime} )
+            </if>
+        </where>
+        ORDER BY
+            update_at DESC
+    </select>
+
+    <delete id="deleteRecorder">
+        delete from czb_auto_recharge_record
+        where auto_recharge_record_id = #{id}
+    </delete>
+</mapper>
