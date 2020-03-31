@@ -34,4 +34,19 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
         }
         return new JSONResult("删除失败", 400);
     }
+
+    @Override
+    public JSONResult showRecorder(String id) {
+        AutomaticRechargeDTO automaticRechargeDTO = automaticRechargeMapperExtra.showRecorder(id);
+        return new JSONResult("列表数据查询成功", 200, automaticRechargeDTO);
+    }
+
+    @Override
+    public JSONResult editRecorder(AutomaticRechargeDTO automaticRechargeDTO) {
+        int updata = automaticRechargeMapperExtra.editRecorder(automaticRechargeDTO);
+        if (updata != 0) {
+            return new JSONResult("修改成功", 200);
+        }
+        return new JSONResult("修改失败", 200);
+    }
 }

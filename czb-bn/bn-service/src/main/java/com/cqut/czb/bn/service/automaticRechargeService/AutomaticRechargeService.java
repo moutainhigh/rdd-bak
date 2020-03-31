@@ -9,4 +9,8 @@ public interface AutomaticRechargeService {
     public JSONResult getAutoList(AutomaticRechargeDTO automaticRecharge);
 
     public JSONResult deleteRecorder(String id);
+
+    public JSONResult editRecorder(AutomaticRechargeDTO automaticRechargeDTO);
+
+    public JSONResult showRecorder(String id);
 }

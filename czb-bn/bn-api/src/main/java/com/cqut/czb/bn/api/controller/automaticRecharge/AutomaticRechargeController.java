@@ -20,7 +20,7 @@ public class AutomaticRechargeController {
      * @return
      */
     @RequestMapping(value = "/getTableList",method = RequestMethod.POST)
-    public JSONResult getOneServiceInfo(AutomaticRechargeDTO automaticRechargeDTO){
+    public JSONResult getTableList(AutomaticRechargeDTO automaticRechargeDTO){
         return automaticRechargeService.getAutoList(automaticRechargeDTO);
     }
 
@@ -29,7 +29,25 @@ public class AutomaticRechargeController {
      * @return
      */
     @RequestMapping(value = "/deleteRecorder",method = RequestMethod.POST)
-    public JSONResult getOneServiceInfo(String id){
+    public JSONResult deleteRecorder(String id){
         return automaticRechargeService.deleteRecorder(id);
+    }
+
+    /**
+     * 修改信息
+     * @return
+     */
+    @RequestMapping(value = "/editRecorder",method = RequestMethod.POST)
+    public JSONResult editRecorder(AutomaticRechargeDTO automaticRechargeDTO){
+        return automaticRechargeService.editRecorder(automaticRechargeDTO);
+    }
+
+    /**
+     * 查看信息
+     * @return
+     */
+    @RequestMapping(value = "/showRecorder",method = RequestMethod.POST)
+    public JSONResult showRecorder(String id){
+        return automaticRechargeService.showRecorder(id);
     }
 }

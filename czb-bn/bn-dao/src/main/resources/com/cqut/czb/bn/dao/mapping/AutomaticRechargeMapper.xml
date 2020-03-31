@@ -29,4 +29,29 @@
         delete from czb_auto_recharge_record
         where auto_recharge_record_id = #{id}
     </delete>
+
+    <select id="showRecorder" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
+        select auto_recharge_record_id id,
+             petrol_num petrolNum,
+             recharge_amount rechargeAmount,
+             price price,
+             status status,
+             message message,
+             recharge_time rechargeTime,
+             order_time orderTime,
+             create_at createAt,
+             update_at updateAt
+        from czb_auto_recharge_record
+        where auto_recharge_record_id = #{id}
+    </select>
+
+    <update id="editRecorder" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
+        update czb_address
+        set petrol_num = #{petrolNum},
+        recharge_amount = #{rechargeAmount},
+        price = #{price},
+        status = #{status},
+        message = #{message},
+        where auto_recharge_record_id = #{id}
+    </update>
 </mapper>

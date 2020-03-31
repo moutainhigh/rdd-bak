@@ -9,4 +9,8 @@ public interface AutomaticRechargeMapperExtra {
     List<AutomaticRechargeDTO> getAutoList(AutomaticRechargeDTO automaticRecharge);
 
     int deleteRecorder(@Param("id")String id);
+
+    int editRecorder(AutomaticRechargeDTO automaticRechargeDTO);
+
+    AutomaticRechargeDTO showRecorder(@Param("id")String id);
 }
