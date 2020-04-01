@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.autoRecharge;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.*;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
@@ -21,6 +22,7 @@ public class AutoRechargeController {
      * 获取 中石油 登录 验证码
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
     public JSONResult getCode(){
         return new JSONResult(autoRechargeService.getCode());
@@ -30,6 +32,7 @@ public class AutoRechargeController {
      * 获取 中石油 登录
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public JSONResult login(LoginInput loginInput){
         return new JSONResult(autoRechargeService.login(loginInput));
@@ -39,6 +42,7 @@ public class AutoRechargeController {
      * 获取 主卡信息
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/readCard", method = RequestMethod.GET)
     public JSONResult getCode(ReadCardInput readCardInput){
         return new JSONResult(autoRechargeService.readCard(readCardInput));
@@ -48,6 +52,7 @@ public class AutoRechargeController {
      * 充值
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/recharge", method = RequestMethod.GET)
     public JSONResult recharge(RechargeInput rechargeInput){
         return new JSONResult(autoRechargeService.recharge(rechargeInput));
@@ -57,6 +62,7 @@ public class AutoRechargeController {
      * 获取单个油卡的ID
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/searchCardId", method = RequestMethod.GET)
     public JSONResult searchCardId(SearchCardInput searchCardInput){
         return new JSONResult(autoRechargeService.searchCardId(searchCardInput));
@@ -66,6 +72,7 @@ public class AutoRechargeController {
      * 获取多个油卡的ID
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/searchCardIds", method = RequestMethod.GET)
     public JSONResult searchCardIds(SearchCardInput searchCardInput){
         return new JSONResult(autoRechargeService.searchCardIds(searchCardInput));
@@ -75,6 +82,7 @@ public class AutoRechargeController {
      * 获取模板信息
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getTemplateData", method = RequestMethod.GET)
     public JSONResult getTemplateData(TemplateInput templateInput){
         return new JSONResult(autoRechargeService.getTemplateData(templateInput));
@@ -84,6 +92,7 @@ public class AutoRechargeController {
      * 保存模板
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/saveTemplate", method = RequestMethod.GET)
     public JSONResult saveTemplate(SaveTemplateInput saveTemplateInput){
         return new JSONResult(autoRechargeService.saveTemplate(saveTemplateInput));
@@ -93,6 +102,7 @@ public class AutoRechargeController {
      * 获取待充值记录
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeList", method = RequestMethod.GET)
     public JSONResult getRechargeList(PetrolRechargeInputDTO petrolRechargeInputDTO){
         return new JSONResult(autoRechargeService.getRechargeList(petrolRechargeInputDTO));
