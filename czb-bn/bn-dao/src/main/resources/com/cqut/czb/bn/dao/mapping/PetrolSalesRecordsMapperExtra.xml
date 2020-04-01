@@ -321,7 +321,7 @@ INNER JOIN (
                 AND petrol_num like 'S%' and CHAR_LENGTH(petrol_num) > 15
             </if>
             <if test="bindingType != null and bindingType == 3">
-                AND (petrol_num like 'RDD%' OR petrol_num like 'S%') and CHAR_LENGTH(petrol_num) > 15
+                AND (petrol_num like 'RDD%' OR petrol_num like 'S%' OR CHAR_LENGTH(petrol_num) > 15)
             </if>
             and is_recharged != -1
             and state = 1
