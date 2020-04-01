@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AutoRechargeimpl implements AutoRechargeService {
@@ -44,7 +45,9 @@ public class AutoRechargeimpl implements AutoRechargeService {
                     List<Cookie> cookies = cookieStore.get(httpUrl.host());
                     return cookies != null ? cookies : new ArrayList<Cookie>();
                 }
-            }).build();
+            }).connectTimeout(50000, TimeUnit.MILLISECONDS)
+            .readTimeout(50000, TimeUnit.MILLISECONDS)
+            .build();
 
     private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 

@@ -15,7 +15,7 @@ public class MasterCardAsn {
 
     private String idno;
 
-    private String balance;
+    private Double balance;
 
     public String getCompanyUniqueId() {
         return companyUniqueId;
@@ -73,11 +73,11 @@ public class MasterCardAsn {
         this.idno = idno;
     }
 
-    public String getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 }
