@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.petrolRecharge;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class PetrolRechargeOutputDTO {
@@ -7,6 +9,7 @@ public class PetrolRechargeOutputDTO {
     private String userName;
     private String userPhone;
     private String petrolNum;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date purchaseTime;
     private Date rechargeTime;
     private double petrolDenomination;

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.automaticRecharge;
 
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
+import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.automaticRechargeService.AutomaticRechargeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,15 @@ public class AutomaticRechargeController {
     @RequestMapping(value = "/showRecorder",method = RequestMethod.POST)
     public JSONResult showRecorder(String id){
         return automaticRechargeService.showRecorder(id);
+    }
+
+    /**
+     * 插入记录
+     * @param autoRechargeRecord
+     * @return
+     */
+    @RequestMapping(value = "/insertRecord",method = RequestMethod.POST)
+    public JSONResult insertRecord(AutoRechargeRecord autoRechargeRecord){
+        return new JSONResult(automaticRechargeService.insertRecord(autoRechargeRecord));
     }
 }
