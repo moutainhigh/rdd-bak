@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.automaticRechargeService;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface AutomaticRechargeService {
     Boolean insertRecord(AutoRechargeRecord autoRechargeRecord);
 
     JSONResult showRecorder(String id);
+
+    Workbook exportOrderRecords(AutomaticRechargeDTO pageDTO) throws Exception;
 }

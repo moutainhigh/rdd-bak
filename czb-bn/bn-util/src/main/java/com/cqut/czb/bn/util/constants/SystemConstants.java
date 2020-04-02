@@ -98,6 +98,14 @@ public class SystemConstants {
      * 导出小程序订单管理Excel的头部
      */
     public static final String[] OREDER_MANAGE_EXCEL_HEAD = {"商店名","客户名称","客户电话","平台订单号","地址信息","商品名","商品数量","支付价格","支付状态","下单时间","快递公司","快递单号","快递状态"};
+    /**
+     * 导出自动充值记录Excel的头部
+     */
+    public static final String[] AUTOMATIC_RECHARGR_EXCEL_HEAD ={"编号","充值卡号","金额","价格","订单时间","执行时间","执行状态","执行信息"};
+    /**
+     * 导出自动充值记录中合计Excel的头部
+     */
+    public static final String[] SUM_AUTO_RECHARGE_EXCEL_HEAD={"合计","充值成功人数","充值失败人数",  "总人数","总充值金额","总价格","导出时间段"};
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }

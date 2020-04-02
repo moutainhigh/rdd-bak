@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
+import com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface AutomaticRechargeMapperExtra {
     int editRecorder(AutomaticRechargeDTO automaticRechargeDTO);
 
     AutomaticRechargeDTO showRecorder(@Param("id")String id);
+
+    SumAutoRecharge getSumData(AutomaticRechargeDTO pageDTO);
+
+    SumAutoRecharge getSuccessPeople(AutomaticRechargeDTO pageDTO);
 }

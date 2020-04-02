@@ -57,4 +57,25 @@
         message = #{message}
         where auto_recharge_record_id = #{id}
     </update>
+
+    <select id="getSumData" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
+        select COUNT(petrol_num) as sumPeople,
+        SUM(recharge_amount) as sumRechargeAmount ,
+        SUM(price) as sumPrice
+        from czb_auto_recharge_record
+        <where>
+            <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
+                AND (order_time BETWEEN #{startTime} AND #{endTime} )
+            </if>
+        </where>
+    </select>
+    <select id="getSuccessPeople" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
+        select count(status) as successPeople from czb_auto_recharge_record
+        <where>
+            <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
+                AND (order_time BETWEEN #{startTime} AND #{endTime} )
+            </if>
+            and status = 1
+        </where>
+    </select>
 </mapper>
