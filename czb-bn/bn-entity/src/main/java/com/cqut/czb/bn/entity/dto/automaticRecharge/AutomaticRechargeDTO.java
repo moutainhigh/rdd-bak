@@ -9,7 +9,7 @@ public class AutomaticRechargeDTO extends PageDTO {
     private String petrolNum;
     private double rechargeAmount;
     private double price;
-    private int status;
+    private Integer status;
     private String message;
     private Date rechargeTime;
     private Date orderTime;
@@ -48,14 +48,6 @@ public class AutomaticRechargeDTO extends PageDTO {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getMessage() {
@@ -112,5 +104,13 @@ public class AutomaticRechargeDTO extends PageDTO {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

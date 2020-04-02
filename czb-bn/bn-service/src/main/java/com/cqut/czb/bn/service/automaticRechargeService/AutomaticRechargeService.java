@@ -7,13 +7,13 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import java.util.List;
 
 public interface AutomaticRechargeService {
-    public JSONResult getAutoList(AutomaticRechargeDTO automaticRecharge);
+    JSONResult getAutoList(AutomaticRechargeDTO automaticRecharge);
 
-    public JSONResult deleteRecorder(String id);
+    JSONResult deleteRecorder(String id);
 
-    public JSONResult editRecorder(AutomaticRechargeDTO automaticRechargeDTO);
-
-    public JSONResult showRecorder(String id);
+    JSONResult editRecorder(AutomaticRechargeDTO automaticRechargeDTO);
 
     Boolean insertRecord(AutoRechargeRecord autoRechargeRecord);
+
+    JSONResult showRecorder(String id);
 }

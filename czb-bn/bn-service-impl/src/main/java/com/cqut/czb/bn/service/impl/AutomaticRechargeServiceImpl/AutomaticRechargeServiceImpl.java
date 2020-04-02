@@ -27,7 +27,6 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
     @Override
     public JSONResult getAutoList(AutomaticRechargeDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
-        System.out.println(pageDTO.getStartTime());
         List<AutomaticRechargeDTO> withdrawList = automaticRechargeMapperExtra.getAutoList(pageDTO);
         PageInfo<AutomaticRechargeDTO> pageInfo = new PageInfo<>(withdrawList);
         return new JSONResult("列表数据查询成功", 200, pageInfo);

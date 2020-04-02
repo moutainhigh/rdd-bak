@@ -20,6 +20,9 @@
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
                 AND ( order_time BETWEEN #{startTime} AND #{endTime} )
             </if>
+            <if test="status != null">
+                AND status = #{status,jdbcType=INTEGER}
+            </if>
         </where>
         ORDER BY
             update_at DESC
@@ -46,12 +49,12 @@
     </select>
 
     <update id="editRecorder" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
-        update czb_address
+        update czb_auto_recharge_record
         set petrol_num = #{petrolNum},
         recharge_amount = #{rechargeAmount},
         price = #{price},
         status = #{status},
-        message = #{message},
+        message = #{message}
         where auto_recharge_record_id = #{id}
     </update>
 </mapper>
