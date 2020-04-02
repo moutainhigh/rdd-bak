@@ -350,6 +350,64 @@ INNER JOIN (
         ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
     </select>
 
+    <select id="getPetrolRechargeListByAutoRecharge" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultMap="getPetrolRechargeMap">
+        SELECT
+        <include refid="getPetrolRecharge"/>
+        FROM
+	    (
+            SELECT
+                record_id,
+                petrol_num,
+                petrol_id,
+                buyer_id,
+                is_recharged,
+                create_at,
+                update_at,
+                payment_method,
+                petrol_kind,
+                denomination AS petrol_denomination,
+                current_price AS petrol_price
+            FROM
+                czb_petrol_sales_records
+            WHERE
+                is_recharged = 0
+            AND petrol_kind = #{petrolKind,jdbcType = INTEGER}
+            AND (
+                petrol_num LIKE 'RDD%'
+                OR petrol_num LIKE 'S%'
+            )
+            AND CHAR_LENGTH(petrol_num) > 15
+            AND state = 1
+            ORDER BY
+                RAND()
+            LIMIT 5
+        ) AS t_cpsr
+        INNER JOIN (
+            SELECT
+                cu.user_account,
+                cu.user_name,
+                cu.user_id
+            FROM
+                czb_user AS cu
+            WHERE
+                cu.user_id IN (
+                    SELECT
+                        buyer_id
+                    FROM
+                        czb_petrol_sales_records
+                )
+        ) AS t_user ON t_user.user_id = t_cpsr.buyer_id
+        INNER JOIN (
+            SELECT
+                petrol_id
+            FROM
+                czb_petrol
+        ) AS cp ON cp.petrol_id = t_cpsr.petrol_id
+        ORDER BY
+	      create_at DESC
+    </select>
+
+
     <update id="recharge" parameterType="java.lang.String">
         update czb_petrol_sales_records
         set is_recharged = 1

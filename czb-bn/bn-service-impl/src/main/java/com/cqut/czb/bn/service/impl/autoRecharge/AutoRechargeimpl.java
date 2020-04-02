@@ -169,8 +169,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
     @Override
     public List<PetrolRechargeOutputDTO> getRechargeList(PetrolRechargeInputDTO petrolRechargeInputDTO) {
         List<PetrolRechargeOutputDTO> returnList = new ArrayList<>();
-        PageHelper.startPage(petrolRechargeInputDTO.getCurrentPage(), petrolRechargeInputDTO.getPageSize(),true);
-        List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeList(petrolRechargeInputDTO);
+        List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeListByAutoRecharge(petrolRechargeInputDTO);
         for (PetrolRechargeOutputDTO rechargeOutputDTO: list){
             String carsAsn = rechargeOutputDTO.getPetrolNum();
             boolean flag = true; //判重处理
