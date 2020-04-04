@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.api.controller.autoRecharge;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.*;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.rentCar.companyContractSigned.ContractIdInfo;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.AutoRechargeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/autoRecharge")
 public class AutoRechargeController {
 
     @Autowired
     AutoRechargeService autoRechargeService;
+
+    @Autowired
+    RedisUtils redisUtils;
     /**
      * 获取 中石油 登录 验证码
      * @return
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
-    public JSONResult getCode(){
-        return new JSONResult(autoRechargeService.getCode());
+    public JSONResult getCode(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.getCode(user.getUserId()));
     }
 
     /**
@@ -34,8 +42,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public JSONResult login(LoginInput loginInput){
-        return new JSONResult(autoRechargeService.login(loginInput));
+    public JSONResult login(Principal principal, LoginInput loginInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.login(loginInput, user.getUserId()));
     }
 
     /**
@@ -44,8 +53,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/readCard", method = RequestMethod.GET)
-    public JSONResult getCode(ReadCardInput readCardInput){
-        return new JSONResult(autoRechargeService.readCard(readCardInput));
+    public JSONResult getCode(Principal principal, ReadCardInput readCardInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.readCard(readCardInput, user.getUserId()));
     }
 
     /**
@@ -54,8 +64,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/recharge", method = RequestMethod.GET)
-    public JSONResult recharge(RechargeInput rechargeInput){
-        return new JSONResult(autoRechargeService.recharge(rechargeInput));
+    public JSONResult recharge(Principal principal, RechargeInput rechargeInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.recharge(rechargeInput, user.getUserId()));
     }
 
     /**
@@ -64,8 +75,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/searchCardId", method = RequestMethod.GET)
-    public JSONResult searchCardId(SearchCardInput searchCardInput){
-        return new JSONResult(autoRechargeService.searchCardId(searchCardInput));
+    public JSONResult searchCardId(Principal principal, SearchCardInput searchCardInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.searchCardId(searchCardInput, user.getUserId()));
     }
 
     /**
@@ -74,8 +86,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/searchCardIds", method = RequestMethod.GET)
-    public JSONResult searchCardIds(SearchCardInput searchCardInput){
-        return new JSONResult(autoRechargeService.searchCardIds(searchCardInput));
+    public JSONResult searchCardIds(Principal principal, SearchCardInput searchCardInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.searchCardIds(searchCardInput, user.getUserId()));
     }
 
     /**
@@ -84,8 +97,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getTemplateData", method = RequestMethod.GET)
-    public JSONResult getTemplateData(TemplateInput templateInput){
-        return new JSONResult(autoRechargeService.getTemplateData(templateInput));
+    public JSONResult getTemplateData(Principal principal, TemplateInput templateInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.getTemplateData(templateInput, user.getUserId()));
     }
 
     /**
@@ -94,8 +108,9 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/saveTemplate", method = RequestMethod.GET)
-    public JSONResult saveTemplate(SaveTemplateInput saveTemplateInput){
-        return new JSONResult(autoRechargeService.saveTemplate(saveTemplateInput));
+    public JSONResult saveTemplate(Principal principal, SaveTemplateInput saveTemplateInput){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.saveTemplate(saveTemplateInput, user.getUserId()));
     }
 
     /**
@@ -104,7 +119,8 @@ public class AutoRechargeController {
      */
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeList", method = RequestMethod.GET)
-    public JSONResult getRechargeList(PetrolRechargeInputDTO petrolRechargeInputDTO){
-        return new JSONResult(autoRechargeService.getRechargeList(petrolRechargeInputDTO));
+    public JSONResult getRechargeList(Principal principal, PetrolRechargeInputDTO petrolRechargeInputDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(autoRechargeService.getRechargeList(petrolRechargeInputDTO, user.getUserId()));
     }
 }

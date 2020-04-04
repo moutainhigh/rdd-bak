@@ -34,29 +34,33 @@ public class AutoRechargeimpl implements AutoRechargeService {
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
     //保存Cookie
-    private OkHttpClient client = new OkHttpClient.Builder()
-            .cookieJar(new CookieJar() {
-                @Override
-                public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) {
-                    cookieStore.put(httpUrl.host(), list);
-                }
-                @Override
-                public List<Cookie> loadForRequest(HttpUrl httpUrl) {
-                    List<Cookie> cookies = cookieStore.get(httpUrl.host());
-                    return cookies != null ? cookies : new ArrayList<Cookie>();
-                }
-            }).connectTimeout(50000, TimeUnit.MILLISECONDS)
-            .readTimeout(50000, TimeUnit.MILLISECONDS)
-            .build();
+    public OkHttpClient createClient(String userId) {
+        return new OkHttpClient.Builder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) {
+                        cookieStore.put(userId, list);
+                    }
+
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl httpUrl) {
+                        List<Cookie> cookies = cookieStore.get(userId);
+                        return cookies != null ? cookies : new ArrayList<>();
+                    }
+                }).connectTimeout(50000, TimeUnit.MILLISECONDS)
+                .readTimeout(50000, TimeUnit.MILLISECONDS)
+                .build();
+    }
 
     private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
-    public byte[] getCode() {
+    public byte[] getCode(String userId) {
+
         Request req = new Request.Builder()
                 .get()
                 .url(BaseUrl + "/UserControl/Image.aspx?code=newcode")
                 .build();
-        Call call = client.newCall(req);
+        Call call = createClient(userId).newCall(req);
         try {
             Response res = call.execute();
             return readInputStream(res.body().byteStream());
@@ -69,7 +73,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
 
 
     @Override
-    public LoginResult login(LoginInput loginInput) {
+    public LoginResult login(LoginInput loginInput, String userId) {
         MediaType type = MediaType.parse("application/x-www-form-urlencoded; charset=UTF-8");
         RequestBody body = RequestBody.create(type, JSONObject.fromObject(loginInput).toString());
         Gson gson = new Gson();
@@ -77,7 +81,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
                 .post(body)
                 .url("http://95504.net/LoginHandler.ashx?code=" + loginInput.getCode() + "&id=" + loginInput.getId() + "&pwd=" + loginInput.getPwd() + "&action=" + loginInput.getAction())
                 .build();
-        Call call = client.newCall(req);
+        Call call = createClient(userId).newCall(req);
         try {
             Response res = call.execute();
 //            System.out.println(JSONObject.fromObject(loginInput).toString());
@@ -96,10 +100,10 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     @Override
-    public ReadCardOutput readCard(ReadCardInput readCardInput) {
+    public ReadCardOutput readCard(ReadCardInput readCardInput, String userId) {
         try {
             Gson gson = new Gson();
-            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", readCardInput);
+            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", readCardInput, userId);
             ReadCardOutput output = gson.fromJson(res, new TypeToken<ReadCardOutput>(){}.getType());
             if (output.getResult().equals("1")){
                 output.setTemplateId(output.getData().get(0).getTemplate().split(",")[0]);
@@ -114,10 +118,10 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     @Override
-    public RechargeOutput recharge(RechargeInput rechargeInput) {
+    public RechargeOutput recharge(RechargeInput rechargeInput, String userId) {
         try {
             Gson gson = new Gson();
-            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput);
+            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
             RechargeOutput rechargeOutput = gson.fromJson(res, RechargeOutput.class);
             return rechargeOutput;
         } catch (Exception e) {
@@ -130,9 +134,9 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     @Override
-    public SearchCardOutput searchCardId(SearchCardInput searchCardInput) {
+    public SearchCardOutput searchCardId(SearchCardInput searchCardInput, String userId) {
         Gson gson = new Gson();
-        String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", searchCardInput);
+        String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", searchCardInput, userId);
         SearchCardOutput searchCardOutput = gson.fromJson(res, new TypeToken<SearchCardOutput>(){}.getType());
         return searchCardOutput;
     }
@@ -140,13 +144,13 @@ public class AutoRechargeimpl implements AutoRechargeService {
 
 
     @Override
-    public List<SearchCardUser> searchCardIds(SearchCardInput searchCardInput) {
+    public List<SearchCardUser> searchCardIds(SearchCardInput searchCardInput, String userId) {
         Gson gson = new Gson();
         List<SearchCardUser> returnList = new ArrayList<>();
         String[] ids = searchCardInput.getCardAsns().split(",");
         for(int i = 0; i < ids.length; i++){
             searchCardInput.setCardAsn(ids[i]);
-            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", searchCardInput);
+            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", searchCardInput, userId);
             SearchCardOutput searchCardOutput = gson.fromJson(res, new TypeToken<SearchCardOutput>(){}.getType());
             if (searchCardOutput.getData().size() > 0){
                 SearchCardUser temp = searchCardOutput.getData().get(0);
@@ -167,7 +171,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     @Override
-    public List<PetrolRechargeOutputDTO> getRechargeList(PetrolRechargeInputDTO petrolRechargeInputDTO) {
+    public List<PetrolRechargeOutputDTO> getRechargeList(PetrolRechargeInputDTO petrolRechargeInputDTO, String userId) {
         List<PetrolRechargeOutputDTO> returnList = new ArrayList<>();
         List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeListByAutoRecharge(petrolRechargeInputDTO);
         for (PetrolRechargeOutputDTO rechargeOutputDTO: list){
@@ -186,22 +190,22 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     @Override
-    public TemplateOutput getTemplateData(TemplateInput templateInput) {
+    public TemplateOutput getTemplateData(TemplateInput templateInput, String userId) {
         Gson gson = new Gson();
-        String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", templateInput);
+        String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", templateInput, userId);
         TemplateOutput templateOutput = gson.fromJson(res, new TypeToken<TemplateOutput>(){}.getType());
         return templateOutput;
     }
 
     @Override
-    public SaveTemplateOutput saveTemplate(SaveTemplateInput saveTemplateInput) {
+    public SaveTemplateOutput saveTemplate(SaveTemplateInput saveTemplateInput, String userId) {
         Gson gson = new Gson();
-        String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", saveTemplateInput);
+        String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", saveTemplateInput, userId);
         SaveTemplateOutput saveTemplateOutput = gson.fromJson(res, new TypeToken<SaveTemplateOutput>(){}.getType());
         return saveTemplateOutput;
     }
 
-    private String getWithParamters(String url, Object object) {
+    private String getWithParamters(String url, Object object, String userId) {
         Map<String, String> stringObjectMap = JSON.parseObject(JSON.toJSONString(object), new TypeReference<Map<String, String>>() {});
         //1 构造Request
         HttpUrl.Builder httpBuider = HttpUrl.parse(BaseUrl + url).newBuilder();
@@ -216,7 +220,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
 
         //2 将Request提交执行
         try{
-            Response response = client.newCall(request).execute();
+            Response response = createClient(userId).newCall(request).execute();
             String res = response.body().string();
             System.out.println(res);
             return res;
