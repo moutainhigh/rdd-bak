@@ -12,10 +12,12 @@
     <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     auto_recharge_record_id, petrol_num, recharge_amount, price, status, message, recharge_time, 
-    order_time, create_at, update_at
+    order_time, create_at, update_at, user_id, user_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -31,11 +33,13 @@
     insert into czb_auto_recharge_record (auto_recharge_record_id, petrol_num, 
       recharge_amount, price, status, 
       message, recharge_time, order_time, 
-      create_at, update_at)
+      create_at, update_at, user_id, 
+      user_name)
     values (#{autoRechargeRecordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, 
       #{rechargeAmount,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, 
       #{message,jdbcType=VARCHAR}, #{rechargeTime,jdbcType=TIMESTAMP}, #{orderTime,jdbcType=TIMESTAMP}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord" >
     insert into czb_auto_recharge_record
@@ -70,6 +74,12 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="autoRechargeRecordId != null" >
@@ -101,6 +111,12 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -134,6 +150,12 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
     </set>
     where auto_recharge_record_id = #{autoRechargeRecordId,jdbcType=VARCHAR}
   </update>
@@ -147,7 +169,9 @@
       recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
       order_time = #{orderTime,jdbcType=TIMESTAMP},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR}
     where auto_recharge_record_id = #{autoRechargeRecordId,jdbcType=VARCHAR}
   </update>
 </mapper>

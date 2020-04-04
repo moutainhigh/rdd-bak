@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.entity.autoRecharge;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 public class AutoRechargeRecord {
@@ -19,12 +17,15 @@ public class AutoRechargeRecord {
 
     private Date rechargeTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderTime;
 
     private Date createAt;
 
     private Date updateAt;
+
+    private String userId;
+
+    private String userName;
 
     public String getAutoRechargeRecordId() {
         return autoRechargeRecordId;
@@ -104,5 +105,21 @@ public class AutoRechargeRecord {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
 }
