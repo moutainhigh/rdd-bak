@@ -96,11 +96,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
             row.createCell(count++).setCellValue(list.get(i).getId());
             row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
             row.createCell(count++).setCellValue(list.get(i).getUserAccount());
-            if("平台用户".equals(list.get(i).getUserName())){
-                row.createCell(count++).setCellValue(list.get(i).getUserName());
-            }else {
-                row.createCell(count++).setCellValue("非平台用户");
-            }
+            row.createCell(count++).setCellValue(list.get(i).getUserName());
             row.createCell(count++).setCellValue(list.get(i).getRechargeAmount());
             row.createCell(count++).setCellValue(list.get(i).getPrice());
             if (list.get(i).getOrderTime() == null){
@@ -148,6 +144,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
 
         return workbook;
     }
+
 
     @Override
     public Boolean insertRecord(AutoRechargeRecordDTO autoRechargeRecord) {
