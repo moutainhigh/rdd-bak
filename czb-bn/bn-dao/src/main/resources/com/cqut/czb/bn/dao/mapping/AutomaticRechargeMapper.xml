@@ -78,4 +78,84 @@
             and status = 1
         </where>
     </select>
+
+    <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO" >
+        insert into czb_auto_recharge_record
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="autoRechargeRecordId != null" >
+                auto_recharge_record_id,
+            </if>
+            <if test="petrolNum != null" >
+                petrol_num,
+            </if>
+            <if test="rechargeAmount != null" >
+                recharge_amount,
+            </if>
+            <if test="price != null" >
+                price,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="message != null" >
+                message,
+            </if>
+            <if test="rechargeTime != null" >
+                recharge_time,
+            </if>
+            <if test="orderTime != null" >
+                order_time,
+            </if>
+            <if test="createAt != null" >
+                create_at,
+            </if>
+            <if test="updateAt != null" >
+                update_at,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="userName != null" >
+                user_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="autoRechargeRecordId != null" >
+                #{autoRechargeRecordId,jdbcType=VARCHAR},
+            </if>
+            <if test="petrolNum != null" >
+                #{petrolNum,jdbcType=VARCHAR},
+            </if>
+            <if test="rechargeAmount != null" >
+                #{rechargeAmount,jdbcType=DOUBLE},
+            </if>
+            <if test="price != null" >
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="message != null" >
+                #{message,jdbcType=VARCHAR},
+            </if>
+            <if test="rechargeTime != null" >
+                #{rechargeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderTime != null" >
+                #{orderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createAt != null" >
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null" >
+                #{userName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 </mapper>

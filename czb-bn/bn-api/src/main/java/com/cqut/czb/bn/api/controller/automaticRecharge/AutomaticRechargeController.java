@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.automaticRecharge;
 
+import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -68,7 +69,7 @@ public class AutomaticRechargeController {
      * @return
      */
     @RequestMapping(value = "/insertRecord",method = RequestMethod.POST)
-    public JSONResult insertRecord(AutoRechargeRecord autoRechargeRecord){
+    public JSONResult insertRecord(AutoRechargeRecordDTO autoRechargeRecord){
         return new JSONResult(automaticRechargeService.insertRecord(autoRechargeRecord));
     }
 

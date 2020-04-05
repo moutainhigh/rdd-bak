@@ -15,6 +15,16 @@ public class RechargeInput {
 
     private String date1;
 
+    private String recordIds;
+
+    public String getRecordIds() {
+        return recordIds;
+    }
+
+    public void setRecordIds(String recordIds) {
+        this.recordIds = recordIds;
+    }
+
     public String getId() {
         return id;
     }

@@ -9,6 +9,8 @@ public class LoginInput {
 
     private String code;
 
+    private String userId;
+
     public String getAction() {
         return action;
     }

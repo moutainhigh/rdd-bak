@@ -350,6 +350,15 @@ INNER JOIN (
         ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
     </select>
 
+    <select id="selectCountByWaitRecharge" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT COUNT(*) rechargeCount
+        FROM czb_petrol_sales_records
+      WHERE record_id in ( #{recordIds, jdbcType = VARCHAR} )
+      AND is_recharged = 0
+    </select>
+
+
+
     <select id="getPetrolRechargeListByAutoRecharge" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultMap="getPetrolRechargeMap">
         SELECT
         <include refid="getPetrolRecharge"/>
