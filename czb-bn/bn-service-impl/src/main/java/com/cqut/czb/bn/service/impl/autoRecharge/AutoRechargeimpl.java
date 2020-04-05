@@ -118,17 +118,29 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     @Override
-    public RechargeOutput recharge(RechargeInput rechargeInput, String userId) {
+    synchronized public RechargeOutput recharge(RechargeInput rechargeInput, String userId) {
         try {
             Gson gson = new Gson();
-            String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
-            RechargeOutput rechargeOutput = gson.fromJson(res, RechargeOutput.class);
-            return rechargeOutput;
+            if (rechargeInput.getRecordIds() != null && ! rechargeInput.getRecordIds().equals("")){
+                Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(rechargeInput.getRecordIds());
+                if (count.equals(rechargeInput.getRecordIds().split(",").length)){
+                    String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
+                    return gson.fromJson(res, RechargeOutput.class);
+                }else{
+                    RechargeOutput rechargeOutput = new RechargeOutput();
+                    rechargeOutput.setResult("0");
+                    rechargeOutput.setErrorMsg("充值失败，已有卡被充值");
+                    return rechargeOutput;
+                }
+            }else{
+                String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
+                return gson.fromJson(res, RechargeOutput.class);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             RechargeOutput rechargeOutput = new RechargeOutput();
             rechargeOutput.setResult("0");
-            rechargeOutput.setErrorMsg("充值失败，请联系管理员");
+            rechargeOutput.setErrorMsg("充值失败，通讯异常");
             return rechargeOutput;
         }
     }

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.automaticRechargeService;
 
+import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -14,7 +15,7 @@ public interface AutomaticRechargeService {
 
     JSONResult editRecorder(AutomaticRechargeDTO automaticRechargeDTO);
 
-    Boolean insertRecord(AutoRechargeRecord autoRechargeRecord);
+    Boolean insertRecord(AutoRechargeRecordDTO autoRechargeRecord);
 
     JSONResult showRecorder(String id);
 
