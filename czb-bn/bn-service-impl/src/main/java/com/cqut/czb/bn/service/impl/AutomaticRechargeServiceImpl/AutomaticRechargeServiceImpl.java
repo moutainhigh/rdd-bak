@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.AutomaticRechargeServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.AutomaticRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.autoRecharge.AutoRechargeRecordMapper;
+import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge;
 import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
@@ -149,7 +150,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
     }
 
     @Override
-    public Boolean insertRecord(AutoRechargeRecord autoRechargeRecord) {
+    public Boolean insertRecord(AutoRechargeRecordDTO autoRechargeRecord) {
         autoRechargeRecord.setAutoRechargeRecordId(StringUtil.createId());
         autoRechargeRecord.setRechargeTime(new Date());
         autoRechargeRecord.setCreateAt(new Date());
