@@ -17,6 +17,9 @@ public class AutomaticRechargeDTO extends PageDTO {
     private String startTime;
     private String endTime;
     private Date updateAt;
+    private String userId;
+    private String userName;
+    private String userAccount;
 
     public String getId() {
         return id;
@@ -112,5 +115,29 @@ public class AutomaticRechargeDTO extends PageDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 }

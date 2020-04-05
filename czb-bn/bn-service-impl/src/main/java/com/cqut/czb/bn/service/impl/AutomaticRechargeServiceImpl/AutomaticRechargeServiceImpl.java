@@ -11,8 +11,6 @@ import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -96,10 +94,24 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
             row = sheet.createRow(i+1);
             row.createCell(count++).setCellValue(list.get(i).getId());
             row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
+            row.createCell(count++).setCellValue(list.get(i).getUserAccount());
+            if("平台用户".equals(list.get(i).getUserName())){
+                row.createCell(count++).setCellValue(list.get(i).getUserName());
+            }else {
+                row.createCell(count++).setCellValue("非平台用户");
+            }
             row.createCell(count++).setCellValue(list.get(i).getRechargeAmount());
             row.createCell(count++).setCellValue(list.get(i).getPrice());
-            row.createCell(count++).setCellValue(formateDate(list.get(i).getOrderTime()));
-            row.createCell(count++).setCellValue(formateDate(list.get(i).getRechargeTime()));
+            if (list.get(i).getOrderTime() == null){
+                row.createCell(count++).setCellValue("");
+            }else {
+                row.createCell(count++).setCellValue(formateDate(list.get(i).getOrderTime()));
+            }
+            if (list.get(i).getRechargeTime() == null){
+                row.createCell(count++).setCellValue("");
+            }else {
+                row.createCell(count++).setCellValue(formateDate(list.get(i).getRechargeTime()));
+            }
             if (list.get(i).getStatus()==1){
                 row.createCell(count++).setCellValue("执行成功");
             }else if (list.get(i).getStatus()==0){
@@ -130,7 +142,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
         row3.createCell(2).setCellValue(sumAutoRecharge1.getSumPeople()-sumAutoRecharge2.getSuccessPeople());
         row3.createCell(3).setCellValue(sumAutoRecharge1.getSumPeople());
         row3.createCell(4).setCellValue(sumAutoRecharge1.getSumRechargeAmount());
-        row3.createCell(5).setCellValue(sumAutoRecharge1.getSumPeople());
+        row3.createCell(5).setCellValue(sumAutoRecharge1.getSumPrice());
         row3.createCell(6).setCellValue(pageDTO.getStartTime()+"——"+pageDTO.getEndTime());
 
         return workbook;
@@ -155,7 +167,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
     }
 
     public String formateDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String theDate = sdf.format(date);
         return theDate;
     }

@@ -1,14 +1,12 @@
 package com.cqut.czb.bn.entity.dto.automaticRecharge;
 
 
-import io.swagger.models.auth.In;
-
 public class SumAutoRecharge {
     private Integer successPeople;
     private Integer failedPeople;
     private Integer sumPeople;
     private double sumRechargeAmount;
-    private double sumPlace;
+    private double sumPrice;
     private String startTime;
     private String endTime;
 
@@ -44,12 +42,12 @@ public class SumAutoRecharge {
         this.sumRechargeAmount = sumRechargeAmount;
     }
 
-    public double getSumPlace() {
-        return sumPlace;
+    public double getSumPrice() {
+        return sumPrice;
     }
 
-    public void setSumPlace(double sumPlace) {
-        this.sumPlace = sumPlace;
+    public void setSumPrice(double sumPrice) {
+        this.sumPrice = sumPrice;
     }
 
     public String getStartTime() {

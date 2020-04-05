@@ -9,12 +9,11 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
-import com.cqut.czb.bn.entity.dto.petrolDeliveryRecords.PetrolDeliveryDTO;
+
 import com.cqut.czb.bn.entity.entity.Address;
-import com.cqut.czb.bn.entity.entity.UserRole;
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
+
 import com.cqut.czb.bn.entity.global.JSONResult;
-import com.cqut.czb.bn.service.impl.petrolDeliveryRecords.ImportPetrolDelivery;
+
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
@@ -450,7 +449,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     }
 
     public String formateDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String theDate = sdf.format(date);
         return theDate;
     }

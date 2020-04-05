@@ -2,30 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.AutomaticRechargeMapperExtra" >
     <select id="getAutoList" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
-        select auto_recharge_record_id id,
-             petrol_num petrolNum,
-             recharge_amount rechargeAmount,
-             price price,
-             status status,
-             message message,
-             recharge_time rechargeTime,
-             order_time orderTime,
-             create_at createAt,
-             update_at updateAt
-        from czb_auto_recharge_record
+        select a.auto_recharge_record_id id,
+            a.petrol_num petrolNum,
+            a.recharge_amount rechargeAmount,
+            a.price price,
+            a.status status,
+            a.message message,
+            a.recharge_time rechargeTime,
+            a.order_time orderTime,
+            a.create_at createAt,
+            a.update_at updateAt,
+            a.user_id userId,
+            a.user_name userName,
+            b.user_account userAccount
+        from czb_auto_recharge_record as a LEFT JOIN czb_user as b on b.user_id = a.user_id
         <where>
             <if test="petrolNum!= null and petrolNum!= ''">
-                petrol_num = #{petrolNum}
+                a.petrol_num = #{petrolNum}
+            </if>
+            <if test="userAccount!=null and userAccount != ''">
+                AND  b.user_account like concat('%', #{userAccount},'%')
+            </if>
+            <if test="userName != null and userName != '1' and userName != '' ">
+                AND  a.user_name = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="userName == '1' and userName != ''">
+                AND  a.user_name = ' '
             </if>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND ( order_time BETWEEN #{startTime} AND #{endTime} )
+                AND ( a.order_time BETWEEN #{startTime} AND #{endTime} or a.order_time IS  null)
             </if>
             <if test="status != null">
-                AND status = #{status,jdbcType=INTEGER}
+                AND a.status = #{status,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY
-            update_at DESC
+            a.update_at DESC
     </select>
 
     <delete id="deleteRecorder">
@@ -34,18 +46,21 @@
     </delete>
 
     <select id="showRecorder" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
-        select auto_recharge_record_id id,
-             petrol_num petrolNum,
-             recharge_amount rechargeAmount,
-             price price,
-             status status,
-             message message,
-             recharge_time rechargeTime,
-             order_time orderTime,
-             create_at createAt,
-             update_at updateAt
-        from czb_auto_recharge_record
-        where auto_recharge_record_id = #{id}
+       select a.auto_recharge_record_id id,
+            a.petrol_num petrolNum,
+            a.recharge_amount rechargeAmount,
+            a.price price,
+            a.status status,
+            a.message message,
+            a.recharge_time rechargeTime,
+            a.order_time orderTime,
+            a.create_at createAt,
+            a.update_at updateAt,
+            a.user_id userId,
+            a.user_name userName,
+            b.user_account userAccount
+        from czb_auto_recharge_record as a LEFT JOIN czb_user as b on b.user_id = a.user_id
+        where a.auto_recharge_record_id = #{id}
     </select>
 
     <update id="editRecorder" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO">
@@ -59,23 +74,24 @@
     </update>
 
     <select id="getSumData" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
-        select COUNT(petrol_num) as sumPeople,
+        select COUNT(auto_recharge_record_id) as sumPeople,
         SUM(recharge_amount) as sumRechargeAmount ,
         SUM(price) as sumPrice
         from czb_auto_recharge_record
         <where>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND (order_time BETWEEN #{startTime} AND #{endTime} )
+                 (order_time BETWEEN #{startTime} AND #{endTime} or order_time IS NULL  )
             </if>
         </where>
     </select>
     <select id="getSuccessPeople" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
         select count(status) as successPeople from czb_auto_recharge_record
         <where>
+             status = 1
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND (order_time BETWEEN #{startTime} AND #{endTime} )
+                AND (order_time BETWEEN #{startTime} AND #{endTime}  or order_time IS NULL )
             </if>
-            and status = 1
+
         </where>
     </select>
 </mapper>

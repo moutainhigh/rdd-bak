@@ -101,7 +101,7 @@ public class SystemConstants {
     /**
      * 导出自动充值记录Excel的头部
      */
-    public static final String[] AUTOMATIC_RECHARGR_EXCEL_HEAD ={"编号","充值卡号","金额","价格","订单时间","执行时间","执行状态","执行信息"};
+    public static final String[] AUTOMATIC_RECHARGR_EXCEL_HEAD ={"编号","充值卡号","电话","用户类型","金额","价格","订单时间","执行时间","执行状态","执行信息"};
     /**
      * 导出自动充值记录中合计Excel的头部
      */
