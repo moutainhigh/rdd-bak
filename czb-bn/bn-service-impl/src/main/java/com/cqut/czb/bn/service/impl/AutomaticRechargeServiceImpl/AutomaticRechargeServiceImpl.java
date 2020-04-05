@@ -167,6 +167,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
         return new JSONResult("修改失败", 200);
     }
 
+
     public String formateDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String theDate = sdf.format(date);
