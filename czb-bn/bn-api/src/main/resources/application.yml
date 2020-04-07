@@ -16,18 +16,21 @@ spring:
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:G@6tSRWx}
 
+
+
+
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   cache:
     type: redis
   redis:
-#    host: 172.16.43.86
+#    host: 121.41.9.13
 #    port: 5259
 #    password: r2Z0@WJM
 #    host: 39.98.250.45
 #    port: 6379
 #    password: TTfF9Pfj3lL2qBS8
-    host: localhost
+    host: 127.0.0.1
     port: 6379
     password: root
     jedis:
@@ -47,26 +50,26 @@ spring:
     async:
       request-timeout: 10000
 
-#server:
-#  port: 888
-#  http:
-#    port: 8090
-#  ssl:
-#    key-store: classpath:2233184__renduoduo2019.com.jks
-#    key-store-type: PKCS12
-#    key-store-password: 4wk1P81U
-#    key-alias: alias
+server:
+  port: 888
+  http:
+    port: 8090
+  ssl:
+    key-store: classpath:2233184__renduoduo2019.com.jks
+    key-store-type: PKCS12
+    key-store-password: 4wk1P81U
+    key-alias: alias
 
 
-#端口号
-server.port: 888
-server.http.port: 8899
-#你生成的证书名字
-server.ssl.key-store: classpath:tomcat.keystore
-#密钥库密码
-server.ssl.key-store-password: 123456
-server.ssl.keyStoreType: JKS
-server.ssl.keyAlias: tomcat
+##端口号
+#server.port: 888
+#server.http.port: 8899
+##你生成的证书名字
+#server.ssl.key-store: classpath:tomcat.keystore
+##密钥库密码
+#server.ssl.key-store-password: 123456
+#server.ssl.keyStoreType: JKS
+#server.ssl.keyAlias: tomcat
 
 flyway:
   baseline-on-migrate: true

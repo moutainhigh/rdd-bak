@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.AutomaticRechargeServiceImpl;
 
 import com.cqut.czb.bn.dao.mapper.AutomaticRechargeMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.autoRecharge.AutoRechargeRecordMapper;
 import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
@@ -30,6 +31,9 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
 
     @Autowired
     AutoRechargeRecordMapper autoRechargeRecordMapper;
+
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     @Override
     public JSONResult getAutoList(AutomaticRechargeDTO pageDTO) {
@@ -152,7 +156,10 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
         autoRechargeRecord.setRechargeTime(new Date());
         autoRechargeRecord.setCreateAt(new Date());
         autoRechargeRecord.setUpdateAt(new Date());
-        return autoRechargeRecordMapper.insertSelective(autoRechargeRecord) > 0;
+        if (autoRechargeRecord.getUserAccount() != null && !autoRechargeRecord.getUserAccount().equals("")) {
+            autoRechargeRecord.setUserId(userMapperExtra.findUserByAccount(autoRechargeRecord.getUserAccount()).getUserId());
+        }
+        return automaticRechargeMapperExtra.insertSelective(autoRechargeRecord) > 0;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.entity.autoRecharge;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class AutoRechargeRecord {
@@ -17,6 +19,7 @@ public class AutoRechargeRecord {
 
     private Date rechargeTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderTime;
 
     private Date createAt;
