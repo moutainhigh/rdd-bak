@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -122,8 +119,10 @@ public class AutoRechargeimpl implements AutoRechargeService {
         try {
             Gson gson = new Gson();
             if (rechargeInput.getRecordIds() != null && ! rechargeInput.getRecordIds().equals("")){
-                Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(rechargeInput.getRecordIds());
-                if (count.equals(rechargeInput.getRecordIds().split(",").length)){
+                String[] arr = rechargeInput.getRecordIds().split(",");
+                List<String> list = Arrays.asList(arr);
+                Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(list);
+                if (count.equals(arr.length)){
                     String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
                     return gson.fromJson(res, RechargeOutput.class);
                 }else{

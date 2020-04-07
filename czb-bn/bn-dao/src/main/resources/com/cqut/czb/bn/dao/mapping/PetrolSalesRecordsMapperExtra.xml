@@ -350,11 +350,16 @@ INNER JOIN (
         ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
     </select>
 
-    <select id="selectCountByWaitRecharge" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT COUNT(*) rechargeCount
-        FROM czb_petrol_sales_records
-      WHERE record_id in ( #{recordIds, jdbcType = VARCHAR} )
+    <select id="selectCountByWaitRecharge" resultType="java.lang.Integer" parameterType="java.util.List">
+      SELECT COUNT(*) rechargeCount
+      FROM czb_petrol_sales_records
+
+      WHERE record_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
       AND is_recharged = 0
+      AND state = 1
     </select>
 
 
