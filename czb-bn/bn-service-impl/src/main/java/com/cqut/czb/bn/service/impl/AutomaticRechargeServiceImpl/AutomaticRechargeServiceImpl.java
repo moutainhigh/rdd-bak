@@ -68,6 +68,7 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
     }
 
     private Workbook getWorkBook(List<AutomaticRechargeDTO> list,AutomaticRechargeDTO pageDTO) throws Exception {
+
         String[] automaticRechargeHeader = SystemConstants.AUTOMATIC_RECHARGR_EXCEL_HEAD;
         Workbook workbook = null;
         try{
@@ -131,7 +132,16 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
         cell2.setCellValue("今日明细");
         cell2.setCellStyle(style);
         Row row3 = sheet.createRow(list.size()+4);
-        String[] sumAutoRechargeHeader = SystemConstants.SUM_AUTO_RECHARGE_EXCEL_HEAD;
+        String[] sumAutoRechargeHeader = null;
+        try{
+            if (pageDTO.getStatus() == null || pageDTO.getStatus() == 1){
+                sumAutoRechargeHeader = SystemConstants.SUM_AUTO_RECHARGE_SUCCESS_EXCEL_HEAD;
+            }else {
+                sumAutoRechargeHeader = SystemConstants.SUM_AUTO_RECHARGE_FAILED_EXCEL_HEAD;
+            }
+        }catch (Exception e){
+            sumAutoRechargeHeader = SystemConstants.SUM_AUTO_RECHARGE_SUCCESS_EXCEL_HEAD;
+        }
         for (int i = 0; i < sumAutoRechargeHeader.length; i++) {
             Cell cell3 = row3.createCell(i);
             cell3.setCellValue(sumAutoRechargeHeader[i]);
@@ -142,8 +152,8 @@ public class AutomaticRechargeServiceImpl implements AutomaticRechargeService {
         row3.createCell(1).setCellValue(sumAutoRecharge2.getSuccessPeople());
         row3.createCell(2).setCellValue(sumAutoRecharge1.getSumPeople()-sumAutoRecharge2.getSuccessPeople());
         row3.createCell(3).setCellValue(sumAutoRecharge1.getSumPeople());
-        row3.createCell(4).setCellValue(sumAutoRecharge1.getSumRechargeAmount());
-        row3.createCell(5).setCellValue(sumAutoRecharge1.getSumPrice());
+        row3.createCell(4).setCellValue(sumAutoRecharge2.getSumRechargeAmount());
+        row3.createCell(5).setCellValue(sumAutoRecharge2.getSumPrice());
         row3.createCell(6).setCellValue(pageDTO.getStartTime()+"——"+pageDTO.getEndTime());
 
         return workbook;

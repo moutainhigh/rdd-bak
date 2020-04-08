@@ -71,22 +71,30 @@
     </update>
 
     <select id="getSumData" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
-        select COUNT(auto_recharge_record_id) as sumPeople,
-        SUM(recharge_amount) as sumRechargeAmount ,
-        SUM(price) as sumPrice
+        select COUNT(auto_recharge_record_id) as sumPeople
         from czb_auto_recharge_record
         <where>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
                  (order_time BETWEEN #{startTime} AND #{endTime} or order_time IS NULL  )
             </if>
+            <if test=" status != null">
+            and status = #{status,jdbcType=INTEGER}
+            </if>
         </where>
     </select>
     <select id="getSuccessPeople" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
-        select count(status) as successPeople from czb_auto_recharge_record
+        select count(status) as successPeople,
+        SUM(recharge_amount) as sumRechargeAmount ,
+        SUM(price) as sumPrice from czb_auto_recharge_record
         <where>
-             status = 1
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND (order_time BETWEEN #{startTime} AND #{endTime}  or order_time IS NULL )
+                 (order_time BETWEEN #{startTime} AND #{endTime}  or order_time IS NULL )
+            </if>
+            <if test="status ==  null or status ==  1">
+                AND status = 1
+            </if>
+            <if test="status == 0">
+                AND status = 0
             </if>
 
         </where>

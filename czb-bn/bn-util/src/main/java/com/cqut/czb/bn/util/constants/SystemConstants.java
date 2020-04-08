@@ -101,11 +101,15 @@ public class SystemConstants {
     /**
      * 导出自动充值记录Excel的头部
      */
-    public static final String[] AUTOMATIC_RECHARGR_EXCEL_HEAD ={"编号","充值卡号","电话","用户类型","金额","价格","订单时间","执行时间","执行状态","执行信息"};
+    public static final String[] AUTOMATIC_RECHARGR_EXCEL_HEAD ={"序号","充值卡号","电话","用户类型","金额","价格","订单时间","执行时间","执行状态","执行信息"};
     /**
      * 导出自动充值记录中合计Excel的头部
      */
-    public static final String[] SUM_AUTO_RECHARGE_EXCEL_HEAD={"合计","充值成功人数","充值失败人数",  "总人数","总充值金额","总价格","导出时间段"};
+    public static final String[] SUM_AUTO_RECHARGE_SUCCESS_EXCEL_HEAD={"合计","充值成功人数","充值失败人数",  "总人数","总充值金额(成功)","总支付金额(成功)","导出时间段"};
+    /**
+     * 导出自动充值记录中合计Excel的头部
+     */
+    public static final String[] SUM_AUTO_RECHARGE_FAILED_EXCEL_HEAD={"合计","充值失败人数","充值成功人数","总人数","总充值金额(失败)","总支付金额(失败)","导出时间段"};
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }
