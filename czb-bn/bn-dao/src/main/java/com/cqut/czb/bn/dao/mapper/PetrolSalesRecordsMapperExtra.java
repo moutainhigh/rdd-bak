@@ -32,6 +32,8 @@ public interface PetrolSalesRecordsMapperExtra {
 
     int selectCountByWaitRecharge(@Param("list") List recordIds);
 
+    int getPetrolRechargeListTotalMoney(PetrolRechargeInputDTO inputDTO);
+
     int recharge(@Param("recordId") String recordId);
 
     PetrolSalesRecords selectPetrolSalesRecords(PetrolInputDTO petrolInputDTO);

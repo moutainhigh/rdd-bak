@@ -17,6 +17,7 @@ public class PetrolRechargeOutputDTO {
     private String isRecharged;
     private String buyWay;
     private String petrolKind;
+    private Integer totalMoney;  //未/已充值总金额
 
     public String getPetrolKind() {
         return petrolKind;
@@ -105,5 +106,13 @@ public class PetrolRechargeOutputDTO {
 
     public void setBuyWay(String buyWay) {
         this.buyWay = buyWay;
+    }
+
+    public Integer getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(Integer totalMoney) {
+        this.totalMoney = totalMoney;
     }
 }

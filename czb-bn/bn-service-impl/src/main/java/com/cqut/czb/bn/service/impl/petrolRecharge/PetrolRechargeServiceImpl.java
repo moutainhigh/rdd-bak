@@ -50,9 +50,18 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
     @Override
     public PageInfo<PetrolRechargeOutputDTO> getPetrolRechargeList(PetrolRechargeInputDTO inputDTO) {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize(),true);
-      List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeList(inputDTO);
-       return new PageInfo<>(list);
+        List<PetrolRechargeOutputDTO> list = petrolSalesRecordsMapperExtra.getPetrolRechargeList(inputDTO);
+        if (list.size()>0){ //在第一项中加入总的金额统计
+            list.get(0).setTotalMoney(getPetrolRechargeListTotalMoney(inputDTO));
+        }
+        return new PageInfo<>(list);
     }
+
+    public Integer getPetrolRechargeListTotalMoney(PetrolRechargeInputDTO inputDTO){
+        Integer totalMoney = petrolSalesRecordsMapperExtra.getPetrolRechargeListTotalMoney(inputDTO);
+        return totalMoney;
+    }
+
 
     @Override
     public boolean recharge(PetrolRechargeInputDTO record) {
