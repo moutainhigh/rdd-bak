@@ -27,7 +27,7 @@
                 AND  a.user_name = #{userName,jdbcType=VARCHAR}
             </if>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND ( a.order_time BETWEEN #{startTime} AND #{endTime} or a.order_time IS  null)
+                AND ( a.recharge_time BETWEEN #{startTime} AND #{endTime} )
             </if>
             <if test="status != null">
                 AND a.status = #{status,jdbcType=INTEGER}
@@ -75,7 +75,7 @@
         from czb_auto_recharge_record
         <where>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                 (order_time BETWEEN #{startTime} AND #{endTime} or order_time IS NULL  )
+                 (recharge_time BETWEEN #{startTime} AND #{endTime} )
             </if>
             <if test=" status != null">
             and status = #{status,jdbcType=INTEGER}
@@ -88,7 +88,7 @@
         SUM(price) as sumPrice from czb_auto_recharge_record
         <where>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                 (order_time BETWEEN #{startTime} AND #{endTime}  or order_time IS NULL )
+                 (recharge_time BETWEEN #{startTime} AND #{endTime}  )
             </if>
             <if test="status ==  null or status ==  1">
                 AND status = 1
