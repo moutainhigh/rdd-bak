@@ -251,7 +251,7 @@ INNER JOIN (
         and
         cpsr.state=1
         ORDER BY
-        cpsr.update_at DESC
+        cpsr.create_at DESC
     </select>
 
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
