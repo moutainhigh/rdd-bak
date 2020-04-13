@@ -10,13 +10,18 @@ import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.VipRechargeRecords;
 import com.cqut.czb.bn.entity.global.DateDealWith;
 import com.cqut.czb.bn.service.VIPRechargeRecordService;
+import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -153,6 +158,92 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
         BigDecimal mul2 = new BigDecimal(Double.toString(num2));
         double mul = mul1.multiply(mul2).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
         return mul;
+    }
+
+    @Override
+    public Workbook exportOrderRecords(VipRechargeRecordListDTO pageDTO) throws Exception {
+        List<VipRechargeRecordListDTO> vipRechargeRecordList = vipRechargeRecordsMapperExtra.getVipRechargeRecord(pageDTO);
+        if (vipRechargeRecordList==null || vipRechargeRecordList.size()==0){
+            return getWorkBook(null,null);
+        }
+        return getWorkBook(vipRechargeRecordList,pageDTO);
+    }
+
+    private Workbook getWorkBook(List<VipRechargeRecordListDTO> list,VipRechargeRecordListDTO pageDTO) throws Exception {
+
+        String[] vipRechargeHeader = SystemConstants.VIP_RECHARGR_EXCEL_HEAD;
+        Workbook workbook = null;
+        try{
+            workbook = new SXSSFWorkbook(list.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Excel数据量过大，请调整时间间隔");
+        }
+        Sheet sheet = workbook.createSheet("导出VIP充值记录");//创建工作表
+        Row row =sheet.createRow(0);//创建行从第0行开始
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont() ;
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        style.setFont(font);
+        for (int i = 0; i < vipRechargeHeader.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(vipRechargeHeader[i]);
+            cell.setCellStyle(style);
+            if (i == vipRechargeHeader.length-1 || i == 6){// 设置列宽
+                int index = i;
+                sheet.setColumnWidth(index,(short)7500);
+            }else {
+                sheet.setColumnWidth(i,  (short)5000);
+            }
+        }
+//        "账号","充值金额","地区","支付方式","第三方订单号""消费时间"
+        for (int i = 0; i<list.size();i++){
+            int count = 0;
+            row = sheet.createRow(i+1);
+            row.createCell(count++).setCellValue(list.get(i).getUserAccount());
+            row.createCell(count++).setCellValue(list.get(i).getAmount());
+            row.createCell(count++).setCellValue(list.get(i).getArea());
+            if (list.get(i).getRechargeWay()==1){
+                row.createCell(count++).setCellValue("支付宝");
+            }else if (list.get(i).getRechargeWay()==2){
+                row.createCell(count++).setCellValue("微信");
+            }else{
+                row.createCell(count++).setCellValue(" ");
+            }
+            row.createCell(count++).setCellValue(list.get(i).getThirdTradeNum());
+            if (list.get(i).getRechargeTime() == null){
+                row.createCell(count++).setCellValue("");
+            }else {
+                row.createCell(count++).setCellValue(formateDate(list.get(i).getRechargeTime()));
+            }
+
+        }
+
+//        "合计","充值总额",
+        VipRechargeRecordListDTO sumRecharge = vipRechargeRecordsMapperExtra.getSumData(pageDTO);
+        Row row2 = sheet.createRow(list.size()+3);
+        Cell cell2 = row2.createCell(0);
+        cell2.setCellStyle(style);
+        Row row3 = sheet.createRow(list.size()+4);
+        String[] sumRechargeHeader = SystemConstants.SUM_VIP_FAILED_RECHARGE_EXCEL_HEAD;
+
+        for (int i = 0; i < sumRechargeHeader.length; i++) {
+            Cell cell3 = row3.createCell(i);
+            cell3.setCellValue(sumRechargeHeader[i]);
+            cell3.setCellStyle(style);
+        }
+        row3 = sheet.createRow(list.size()+5);
+        row3.createCell(0).setCellValue(sumRecharge.getTotalAmount());
+        row3.createCell(1).setCellValue(sumRecharge.getTotalOrder());
+
+        return workbook;
+    }
+
+    public String formateDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String theDate = sdf.format(date);
+        return theDate;
     }
 
 

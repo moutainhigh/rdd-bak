@@ -22,4 +22,6 @@ public interface VipRechargeRecordsMapperExtra {
 
     Double getVipRechargeTotalMoney(VipRechargeRecordListDTO vipRechargeRecordListDTO);
 
+    VipRechargeRecordListDTO getSumData(VipRechargeRecordListDTO vipRechargeRecordListDTO);
+
 }

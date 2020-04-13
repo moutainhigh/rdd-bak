@@ -177,5 +177,23 @@
     ORDER BY  czb_vip_recharge_records.create_at desc
   </select>
 
+  <select id="getSumData" parameterType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO" resultType="com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO">
+    select COUNT(user_id) as totalOrder,
+         SUM(amount) as totalAmount
+    from czb_vip_recharge_records
+    WHERE
+    is_received = 1
+    <if test="startTime != null">
+      AND recharge_time &gt;= #{startTime,jdbcType = TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+      AND recharge_time &lt;= #{endTime,jdbcType = TIMESTAMP}
+    </if>
+      <if test="rechargeWay != null and rechargeWay != ''">
+        and recharge_way = #{rechargeWay,jdbcType = INTEGER}
+      </if>
+
+  </select>
+
 
 </mapper>

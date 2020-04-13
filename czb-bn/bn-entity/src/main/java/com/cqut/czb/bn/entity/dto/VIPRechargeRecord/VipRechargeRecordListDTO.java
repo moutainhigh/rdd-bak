@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class VipRechargeRecordListDTO extends PageDTO {
@@ -22,6 +23,10 @@ public class VipRechargeRecordListDTO extends PageDTO {
     private String thirdTradeNum;
 
     private String area;
+
+    private Double totalAmount;
+
+    private Integer totalOrder;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -129,5 +134,21 @@ public class VipRechargeRecordListDTO extends PageDTO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getTotalOrder() {
+        return totalOrder;
+    }
+
+    public void setTotalOrder(Integer totalOrder) {
+        this.totalOrder = totalOrder;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }

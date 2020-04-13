@@ -110,6 +110,14 @@ public class SystemConstants {
      * 导出自动充值记录中合计Excel的头部
      */
     public static final String[] SUM_AUTO_RECHARGE_FAILED_EXCEL_HEAD={"合计","充值失败人数","充值成功人数","总人数","总充值金额(失败)","总支付金额(失败)","导出时间段"};
+    /**
+     * 导出VIP充值记录Excel的头部
+     */
+    public static final String[] VIP_RECHARGR_EXCEL_HEAD ={"账号","充值金额","地区","支付方式","第三方订单号","消费时间"};
+    /**
+     * 导出VIP充值记录中合计Excel的头部
+     */
+    public static final String[] SUM_VIP_FAILED_RECHARGE_EXCEL_HEAD={"充值总额","总单数"};
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }
