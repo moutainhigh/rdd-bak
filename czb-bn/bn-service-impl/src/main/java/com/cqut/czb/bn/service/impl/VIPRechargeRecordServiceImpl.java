@@ -173,6 +173,14 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
 
         String[] vipRechargeHeader = SystemConstants.VIP_RECHARGR_EXCEL_HEAD;
         Workbook workbook = null;
+        if(list == null) {
+            workbook = new SXSSFWorkbook(1);
+            Sheet sheet = workbook.createSheet("导出VIP充值记录");//创建工作表
+            Row row =sheet.createRow(0);//创建行从第0行开始
+            Cell cell = row.createCell(0);
+            cell.setCellValue("该时间段无充值记录");
+            return workbook;
+        }
         try{
             workbook = new SXSSFWorkbook(list.size());
         } catch (Exception e) {
