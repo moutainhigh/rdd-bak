@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: czb
+
+  #数据库配置
+  datasource:
+    #    链接测试服
+    url: jdbc:mysql://${MYSQL_URL:39.98.250.45:3306/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:G@6tSRWx}
+
+    #    陈德强的服务器
+#    url: jdbc:mysql://${MYSQL_URL:101.37.85.141:3306/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
+#    username: ${MYSQL_USER:root}
+#    password: ${MYSQL_PASS:123456}
+
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  cache:
+    type: redis
+  redis:
+#    测试服
+    host: 39.98.250.45
+    port: 6379
+    password: TTfF9Pfj3lL2qBS8
+#    陈德强的服务器
+#    host: 101.37.85.141
+#    port: 6379
+#    password: cdqroot
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: 2000
+        test-on-borrow: true
+        max-idle: 100
+
+  activiti:
+    check-process-definitions: false
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  mvc:
+    async:
+      request-timeout: 40000
+
+#端口号
+server.port: 888
+server.http.port: 8899
+#你生成的证书名字
+server.ssl.key-store: classpath:tomcat.keystore
+#密钥库密码
+server.ssl.key-store-password: 123456
+server.ssl.keyStoreType: JKS
+server.ssl.keyAlias: tomcat
+
+flyway:
+  baseline-on-migrate: true
+  validate-on-migrate: false
+
+logging:
+  level:
+    org:
+      springframework: WARN
+    com:
+      cqut:
+        czb:
+          bn:
+            dao: DEBUG
+
+jwt:
+  token_header: Authorization
+  token_prefix: Bearer
+  secret: cqut.czb
+  iss: echisan
+
+  expiration: 3600
+  expiration_prmember: 604800
