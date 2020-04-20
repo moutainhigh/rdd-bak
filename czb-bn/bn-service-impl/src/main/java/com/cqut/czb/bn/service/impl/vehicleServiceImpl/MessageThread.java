@@ -10,10 +10,7 @@ import com.cqut.czb.bn.entity.entity.AppRouter;
 import com.cqut.czb.bn.entity.entity.vehicleService.RemotePush;
 import javapns.devices.Device;
 import javapns.devices.implementations.basic.BasicDevice;
-import javapns.notification.AppleNotificationServerBasicImpl;
-import javapns.notification.PushNotificationManager;
-import javapns.notification.PushNotificationPayload;
-import javapns.notification.PushedNotification;
+import javapns.notification.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +27,13 @@ import java.util.Map;
 @Component
 @ComponentScan
 public class MessageThread implements Runnable {
-    static String noticeId;
+    String noticeId;
 
-    static String userId;
+    String userId;
     
-    static Map<String,String> content = new HashMap<>();
+    Map<String,String> content = new HashMap<>();
 
-    static Integer type=2;
+    Integer type = 2;
 
     @Autowired
     CleanRiderMapperExtra cleanRiderMapper;
@@ -46,38 +43,6 @@ public class MessageThread implements Runnable {
     RemotePushNoticeMapperExtra remotePushNoticeMapperExtra;
     @Autowired
     AppRouterMapper appRouterMapper;
-
-    public String getNoticeId() {
-        return noticeId;
-    }
-
-    public void setNoticeId(String noticeId) {
-        this.noticeId = noticeId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public static Integer getType() {
-        return type;
-    }
-
-    public static void setType(Integer type) {
-        MessageThread.type = type;
-    }
-
-    public static Map<String, String> getContent() {
-        return content;
-    }
-
-    public static void setContent(Map<String, String> content) {
-        MessageThread.content = content;
-    }
 
     public CleanRiderMapperExtra getCleanRiderMapper() {
         return cleanRiderMapper;
@@ -115,12 +80,12 @@ public class MessageThread implements Runnable {
     public void run() {
         String deviceToken = "";
         if (type==2) {
-            RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
-            if (remotePush.getDeviceType() != 2 && remotePush.getDeviceType() != 3) {
-                return;
-            }
-             deviceToken = remotePush.getDeviceToken();
-            }
+        RemotePush remotePush = remotePushMapperExtra.selectByUser(userId);
+        if (remotePush.getDeviceType() != 2 && remotePush.getDeviceType() != 3) {
+            return;
+        }
+         deviceToken = remotePush.getDeviceToken();
+        }
             RemotePushNoticesDTO remotePushNotice = remotePushNoticeMapperExtra.selectById(noticeId);
             if (!content.isEmpty()){
                 for (Map.Entry<String, String> exp:content.entrySet()) {
@@ -137,7 +102,7 @@ public class MessageThread implements Runnable {
             List<String> tokens = new ArrayList<String>();
             tokens.add(deviceToken);
             String certificatePath = "iosPush.p12";
-//            String certificatePath = "/Users/nihao/IdeaProjects/czb-server/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/certificate/iosPush.p12";
+//            String certificatePath = "D:\\DDM\\czb-server\\czb-bn\\bn-util\\src\\main\\java\\com\\cqut\\czb\\bn\\util\\certificate\\iosPush.p12";
             String certificatePassword = "renduoduo2019";//此处注意导出的证书密码不能为空因为空密码会报错
             boolean sendCount = true;
             if (type==3){
@@ -178,20 +143,33 @@ public class MessageThread implements Runnable {
                 }
                 else
                 {
-                    List<Device> device = new ArrayList<Device>();
+                    List<Device> device = new ArrayList<>();
                     RemotePush exp = new RemotePush();
                     exp.setDeviceType(2);
                     List<RemotePush> remotePushes = remotePushMapperExtra.selectByPlatform(exp);
-                    for (RemotePush expRemotePush : remotePushes){
-                        if (expRemotePush.getDeviceToken()!=null&&!"".equals(expRemotePush.getDeviceToken())){
-                            device.add(new BasicDevice(expRemotePush.getDeviceToken()));
+//                    int count = 0; // 每次发送 1000 条，count 记录下
+                    for (int i = 0; i < remotePushes.size(); i++ ){
+                        if (remotePushes.get(i).getDeviceToken() != null && !"".equals(remotePushes.get(i).getDeviceToken())){
+                            device.add(new BasicDevice(remotePushes.get(i).getDeviceToken()));
+                        }
+//                        count += 1;
+//                        if (count / 1000  == 1 || i == remotePushes.size() - 1){
+//                            count %= 1000;
+//
+//                            device.clear();
+//                        }
+                    }
+                    notifications = pushManager.sendNotifications(payLoad, device);
+                    int success = 0;
+                    int failed = 0;
+                    for (PushedNotification pushedNotification: notifications){
+                        if (pushedNotification.isSuccessful()) {
+                            success += 1;
+                        }else{
+                            failed += 1;
                         }
                     }
-//                    for (String token : tokens)
-//                    {
-//                        device.add(new BasicDevice(token));
-//                    }
-                    notifications = pushManager.sendNotifications(payLoad, device);
+                    System.out.println("iOS 推送，成功（条数）：" + success + "失败（条数）" + failed);
                 }
                 pushManager.stopConnection();
             }

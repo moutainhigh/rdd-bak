@@ -87,8 +87,8 @@ public class RemotePushNoticeServiceImpl implements RemotePushNoticeService {
             }
         }else if (pushDTO.getPathType()==2) {
             MessageThread messageThread = new MessageThread();
-            messageThread.setType(3);
-            messageThread.setNoticeId(pushDTO.getTitle());
+            messageThread.type = 3;
+            messageThread.noticeId = pushDTO.getTitle();
             messageThread.setAppRouterMapper(appRouterMapper);
             messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
             messageThread.setRemotePushNoticeMapperExtra(mapper);
@@ -106,8 +106,8 @@ public class RemotePushNoticeServiceImpl implements RemotePushNoticeService {
                 Thread thread = new Thread(jgPush);
                 thread.start();
                 MessageThread messageThread = new MessageThread();
-                messageThread.setType(3);
-                messageThread.setNoticeId(pushDTO.getTitle());
+                messageThread.type = 3;
+                messageThread.noticeId = pushDTO.getTitle();
                 messageThread.setAppRouterMapper(appRouterMapper);
                 messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
                 messageThread.setRemotePushNoticeMapperExtra(mapper);

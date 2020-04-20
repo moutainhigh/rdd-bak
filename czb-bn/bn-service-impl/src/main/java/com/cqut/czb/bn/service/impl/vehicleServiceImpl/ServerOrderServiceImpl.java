@@ -117,8 +117,8 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                                 User user = new User();
                                 user.setUserId(manageDTO.getUserId());
                                 MessageThread messageThread = new MessageThread();
-                                messageThread.setNoticeId("8708831135559901");
-                                messageThread.setUserId(user.getUserId());
+                                messageThread.noticeId = "8708831135559901";
+                                messageThread.userId = user.getUserId();
                                 messageThread.setCleanRiderMapper(cleanRiderMapper);
                                 messageThread.setAppRouterMapper(appRouterMapper);
                                 messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
@@ -181,10 +181,10 @@ public class ServerOrderServiceImpl implements ServerOrderService {
                 user.setUserId(userId);
                 MessageThread messageThread = new MessageThread();
                 if (insertContent!=null) {
-                   MessageThread.content = insertContent;
+                    messageThread.content = insertContent;
                 }
-                messageThread.setNoticeId(noticeId);
-                messageThread.setUserId(user.getUserId());
+                messageThread.noticeId = noticeId;
+                messageThread.userId = user.getUserId();
                 messageThread.setCleanRiderMapper(cleanRiderMapper);
                 messageThread.setAppRouterMapper(appRouterMapper);
                 messageThread.setRemotePushMapperExtra(remotePushMapperExtra);
