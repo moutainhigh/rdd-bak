@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -84,21 +85,17 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 //            System.out.println("充值油卡发送成功");
 //        }
         //发送APP内部消息 和 推送
-        try {
-            PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
-            Map<String,String> content = new HashMap<>();
-            content.put("petrolKind", record.getPetrolKind());
-            content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
-            serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
-            content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
-            content.put("receiverId", petrolSalesRecords.getBuyerId());
-            content.put("userAccount", record.getUserAccount());
-            content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
-            content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
-            messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
-        }catch (Exception e){
-            System.out.println("消息发送异常");
-        }
+        PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
+        Map<String,String> content = new HashMap<>();
+        content.put("petrolKind", record.getPetrolKind());
+        content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
+        serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
+        content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+        content.put("receiverId", petrolSalesRecords.getBuyerId());
+        content.put("userAccount", record.getUserAccount());
+        content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
+        content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
+        messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
         return isRecharge;
     }
 
@@ -230,6 +227,14 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         String[] rechargeHead = SystemConstants.PETROL_SALE_EXCEL_HEAD;
         SaleTotal saleTotal = petrolSalesRecordsMapperExtra.getTotal(inputDTO);
         Workbook workbook = null;
+        if(list == null) {
+            workbook = new SXSSFWorkbook(1);
+            Sheet sheet = workbook.createSheet("导出充值记录");//创建工作表
+            Row row =sheet.createRow(0);//创建行从第0行开始
+            Cell cell = row.createCell(0);
+            cell.setCellValue("该时间段无销售记录");
+            return workbook;
+        }
         try{
             workbook = new SXSSFWorkbook(list.size());
         } catch (Exception e) {
@@ -254,6 +259,8 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                 row.createCell(count++).setCellValue("中石油");
             }else if ("2".equals(list.get(i).getPetrolKind())){
                 row.createCell(count++).setCellValue("中石化");
+            }else if("0".equals(list.get(i).getPetrolKind())){
+                row.createCell(count++).setCellValue("国通");
             }else{
                 row.createCell(count++).setCellValue("其他");
             }
@@ -302,5 +309,10 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         row.createCell(index++).setCellValue(saleTotal.getTotal() + "元");
 
         return workbook;
+    }
+
+    public String formatNum(double num) {
+        String a = String.format("%.2f",num);
+        return a;
     }
 }
