@@ -14,13 +14,18 @@ public class SaleTotal {
     private double yFristTotal; // 首充已充值合计
     private int yFristTotalNumber;  // 首充人数
 
+    private double noContinueTotal; // 续充未充值合计
+    private int noContinueTotalNumber;  // 续充人数
+    private double yContinueTotal; // 续充已充值合计
+    private int yContinueTotalNumber;  // 续充人数
+
     private int isVip;
 
     public SaleTotal() {
-        this(0.0,0,0.0,0,0.0,0,0.0,0.0,0.0);
+        this(0.0,0,0.0,0,0.0,0,0.0,0,0.0,0,0.0,0.0,0.0);
     }
 
-    public SaleTotal(double fristTotal, int fristTotalNumber, double continueTotal, int continueTotalNumber, double vipRecordTotal, int vipRecordTotalNumber, double total, double noFristTotal, double yFristTotal) {
+    public SaleTotal(double noContinueTotal,int noContinueTotalNumber,double yContinueTotal,int yContinueTotalNumber,double fristTotal, int fristTotalNumber, double continueTotal, int continueTotalNumber, double vipRecordTotal, int vipRecordTotalNumber, double total, double noFristTotal, double yFristTotal) {
         this.fristTotal = fristTotal;
         this.fristTotalNumber = fristTotalNumber;
         this.continueTotal = continueTotal;
@@ -126,5 +131,37 @@ public class SaleTotal {
 
     public void setIsVip(int isVip) {
         this.isVip = isVip;
+    }
+
+    public double getNoContinueTotal() {
+        return noContinueTotal;
+    }
+
+    public void setNoContinueTotal(double noContinueTotal) {
+        this.noContinueTotal = noContinueTotal;
+    }
+
+    public int getNoContinueTotalNumber() {
+        return noContinueTotalNumber;
+    }
+
+    public void setNoContinueTotalNumber(int noContinueTotalNumber) {
+        this.noContinueTotalNumber = noContinueTotalNumber;
+    }
+
+    public double getyContinueTotal() {
+        return yContinueTotal;
+    }
+
+    public void setyContinueTotal(double yContinueTotal) {
+        this.yContinueTotal = yContinueTotal;
+    }
+
+    public int getyContinueTotalNumber() {
+        return yContinueTotalNumber;
+    }
+
+    public void setyContinueTotalNumber(int yContinueTotalNumber) {
+        this.yContinueTotalNumber = yContinueTotalNumber;
     }
 }

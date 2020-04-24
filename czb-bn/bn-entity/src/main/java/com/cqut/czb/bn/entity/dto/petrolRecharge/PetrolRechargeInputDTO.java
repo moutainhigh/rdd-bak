@@ -10,6 +10,7 @@ public class PetrolRechargeInputDTO extends PageDTO {
     private String recordId;
     private String updatePetrolNum;
     private double petrolDenomination;
+    private String recordType;
     private String userAccount;
     private Integer bindingType; //1 公司匹配 2 线下匹配 3 绑定过的卡
     private String startTime;
@@ -110,5 +111,13 @@ public class PetrolRechargeInputDTO extends PageDTO {
 
     public void setPetrolKind(String petrolKind) {
         this.petrolKind = petrolKind;
+    }
+
+    public String getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(String recordType) {
+        this.recordType = recordType;
     }
 }
