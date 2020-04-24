@@ -129,7 +129,8 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             sheet.setColumnWidth(i,  (short) 7500); // 设置列宽
         }
         for (int i = 0 ; i<list.size(); i++){
-            if(list.get(i).getPetrolNum().length() < 15) {
+            System.out.println(list.get(i).getPetrolNum());
+            if (list.get(i).getRecordType().equals("0")) {
                 saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
                 if(list.get(i).getIsRecharged().equals("0")){
                     saleTotal.setNoFristTotalNumber(saleTotal.getNoFristTotalNumber()+1);
@@ -140,6 +141,17 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                     saleTotal.setyFristTotal(saleTotal.getyFristTotal() + list.get(i).getPetrolPrice());
                 }
                 saleTotal.setFristTotal(saleTotal.getNoFristTotal() + saleTotal.getyFristTotal());
+            } else if (list.get(i).getRecordType().equals("1")) {
+                saleTotal.setContinueTotalNumber(saleTotal.getContinueTotalNumber()+1);
+                if(list.get(i).getIsRecharged().equals("0")){
+                    saleTotal.setNoContinueTotalNumber(saleTotal.getNoContinueTotalNumber()+1);
+                    saleTotal.setNoContinueTotal(saleTotal.getNoContinueTotal() + list.get(i).getPetrolPrice());
+                }
+                else if(list.get(i).getIsRecharged().equals("1")){
+                    saleTotal.setyContinueTotalNumber(saleTotal.getyContinueTotalNumber()+1);
+                    saleTotal.setyContinueTotal(saleTotal.getyContinueTotal() + list.get(i).getPetrolPrice());
+                }
+                saleTotal.setContinueTotal(saleTotal.getNoContinueTotal() + saleTotal.getyContinueTotal());
             }
             int count = 0;
             row = sheet.createRow(i+1);
@@ -148,6 +160,8 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                 row.createCell(count++).setCellValue("中石油");
             }else if ("2".equals(list.get(i).getPetrolKind())){
                 row.createCell(count++).setCellValue("中石化");
+            }else if("0".equals(list.get(i).getPetrolKind())){
+                row.createCell(count++).setCellValue("国通");
             }else{
                 row.createCell(count++).setCellValue("其他");
             }
@@ -158,6 +172,11 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             }else if ("1".equals(list.get(i).getIsRecharged())){
                 row.createCell(count++).setCellValue("已充值");
             }
+            if ("0".equals(list.get(i).getRecordType())){
+                row.createCell(count++).setCellValue("首充");
+            }else if ("1".equals(list.get(i).getRecordType())){
+                row.createCell(count++).setCellValue("续充");
+            }
             row.createCell(count++).setCellValue(list.get(i).getUserPhone());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getPurchaseTime()));
             if ("1".equals(list.get(i).getBuyWay())) {
@@ -167,21 +186,34 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             }
         }
         int index = 0;
+        System.out.println(saleTotal.getFristTotalNumber());
         row = sheet.createRow(list.size()+1);
         row.createCell(index++).setCellValue("首充合计");
         row.createCell(index++).setCellValue("首充人数");
+        row.createCell(index++).setCellValue("续充合计");
+        row.createCell(index++).setCellValue("续充人数");
         row.createCell(index++).setCellValue("首充已充合计");
         row.createCell(index++).setCellValue("首充已充人数");
+        row.createCell(index++).setCellValue("续充已充人数");
+        row.createCell(index++).setCellValue("续充已充人数");
         row.createCell(index++).setCellValue("首充未充合计");
         row.createCell(index++).setCellValue("首充未充人数");
+        row.createCell(index++).setCellValue("续充未充合计");
+        row.createCell(index++).setCellValue("续充未充人数");
         row = sheet.createRow(list.size()+2);
         index = 0;
-        row.createCell(index++).setCellValue(saleTotal.getFristTotal() + "元");
+        row.createCell(index++).setCellValue(formatNum(saleTotal.getFristTotal()) + "元");
         row.createCell(index++).setCellValue(saleTotal.getFristTotalNumber() + "人");
-        row.createCell(index++).setCellValue(saleTotal.getyFristTotal() + "元");
+        row.createCell(index++).setCellValue(formatNum(saleTotal.getContinueTotal()) + "元");
+        row.createCell(index++).setCellValue(saleTotal.getContinueTotalNumber() + "人");
+        row.createCell(index++).setCellValue(formatNum(saleTotal.getyFristTotal()) + "元");
         row.createCell(index++).setCellValue(saleTotal.getyFristTotalNumber() + "人");
-        row.createCell(index++).setCellValue(saleTotal.getNoFristTotal() + "元");
+        row.createCell(index++).setCellValue(formatNum(saleTotal.getyContinueTotal()) + "元");
+        row.createCell(index++).setCellValue(saleTotal.getyContinueTotalNumber() + "人");
+        row.createCell(index++).setCellValue(formatNum(saleTotal.getNoFristTotal()) + "元");
         row.createCell(index++).setCellValue(saleTotal.getNoFristTotalNumber() + "人");
+        row.createCell(index++).setCellValue(formatNum(saleTotal.getNoContinueTotal()) + "元");
+        row.createCell(index++).setCellValue(saleTotal.getNoContinueTotalNumber() + "人");
 
 
         return workbook;
