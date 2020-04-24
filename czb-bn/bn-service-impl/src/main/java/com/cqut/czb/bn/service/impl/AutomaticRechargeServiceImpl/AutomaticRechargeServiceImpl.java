@@ -6,7 +6,6 @@ import com.cqut.czb.bn.dao.mapper.autoRecharge.AutoRechargeRecordMapper;
 import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge;
-import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.automaticRechargeService.AutomaticRechargeService;
 import com.cqut.czb.bn.util.constants.SystemConstants;

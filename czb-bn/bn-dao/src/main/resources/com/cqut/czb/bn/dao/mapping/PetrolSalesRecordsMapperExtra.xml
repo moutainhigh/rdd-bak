@@ -350,6 +350,28 @@ INNER JOIN (
         ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
     </select>
 
+    <select id="getRechargeUserInfo" resultType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO">
+        SELECT
+            petrol_num petrolNum,
+            user_account userAccount,
+            record_id recordId,
+            denomination petrolDenomination,
+            CASE petrol_kind
+        WHEN 1 THEN
+            '中石油'
+        WHEN 2 THEN
+            '中石化'
+        ELSE
+            '无'
+        END petrolKind
+        FROM
+            czb_petrol_sales_records
+        LEFT JOIN czb_user ON czb_petrol_sales_records.buyer_id = czb_user.user_id
+        WHERE
+            record_id = #{recordId, jdbcType = VARCHAR}
+        AND state = 1
+    </select>
+
     <select id="selectCountByWaitRecharge" resultType="java.lang.Integer" parameterType="java.util.List">
       SELECT COUNT(*) rechargeCount
       FROM czb_petrol_sales_records

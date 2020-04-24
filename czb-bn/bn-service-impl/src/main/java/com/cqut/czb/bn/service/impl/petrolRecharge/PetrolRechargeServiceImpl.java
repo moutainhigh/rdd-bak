@@ -84,17 +84,21 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 //            System.out.println("充值油卡发送成功");
 //        }
         //发送APP内部消息 和 推送
-        PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
-        Map<String,String> content = new HashMap<>();
-        content.put("petrolKind", record.getPetrolKind());
-        content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
-        serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
-        content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
-        content.put("receiverId", petrolSalesRecords.getBuyerId());
-        content.put("userAccount", record.getUserAccount());
-        content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
-        content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
-        messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
+        try {
+            PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(record.getRecordId());
+            Map<String,String> content = new HashMap<>();
+            content.put("petrolKind", record.getPetrolKind());
+            content.put("petrolPrice", String.valueOf(record.getPetrolDenomination()));
+            serverOrderService.sendMessage(petrolSalesRecords.getBuyerId(), MesInfo.noticeId.RECHARGE_PETROL_USER.getNoticeId(),content);
+            content.put("msgModelId", MessageModelInfo.RECHARGE_SUCCESS_MESSAGE_USER.getMessageModelInfo());
+            content.put("receiverId", petrolSalesRecords.getBuyerId());
+            content.put("userAccount", record.getUserAccount());
+            content.put("petrolNum", (record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") ? record.getUpdatePetrolNum() : record.getPetrolNum());
+            content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
+            messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
+        }catch (Exception e){
+            System.out.println("消息发送异常");
+        }
         return isRecharge;
     }
 

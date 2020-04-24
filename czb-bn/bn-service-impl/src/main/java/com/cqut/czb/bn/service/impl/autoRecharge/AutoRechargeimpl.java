@@ -2,12 +2,15 @@ package com.cqut.czb.bn.service.impl.autoRecharge;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.*;
 import com.cqut.czb.bn.entity.dto.WCPLoginBack;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
+import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.service.autoRecharge.AutoRechargeService;
+import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
 import com.github.pagehelper.PageHelper;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -29,6 +32,9 @@ public class AutoRechargeimpl implements AutoRechargeService {
 
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+
+    @Autowired
+    IPetrolRechargeService petrolRechargeService;
 
     //保存Cookie
     public OkHttpClient createClient(String userId) {
@@ -124,7 +130,11 @@ public class AutoRechargeimpl implements AutoRechargeService {
                 Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(list);
                 if (count.equals(arr.length)){
                     String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
-                    return gson.fromJson(res, RechargeOutput.class);
+                    RechargeOutput rechargeOutput = gson.fromJson(res, RechargeOutput.class);
+                    if ("1".equals(rechargeOutput.getResult())){
+                        updateSalePetrolRecord(list);
+                    }
+                    return rechargeOutput;
                 }else{
                     RechargeOutput rechargeOutput = new RechargeOutput();
                     rechargeOutput.setResult("0");
@@ -141,6 +151,13 @@ public class AutoRechargeimpl implements AutoRechargeService {
             rechargeOutput.setResult("0");
             rechargeOutput.setErrorMsg("充值失败，通讯异常");
             return rechargeOutput;
+        }
+    }
+
+    private void updateSalePetrolRecord(List<String> list){
+        for (String recordId : list){
+            PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
+            petrolRechargeService.recharge(item);
         }
     }
 
