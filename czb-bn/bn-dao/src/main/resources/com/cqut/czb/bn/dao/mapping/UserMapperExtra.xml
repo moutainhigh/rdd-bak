@@ -24,15 +24,13 @@
     <result column="old_superior" jdbcType="VARCHAR" property="oldSuperior" />
     <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
-    <result column="bindingId" jdbcType="VARCHAR" property="bindingid" />
-    <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
   </resultMap>
 
   <sql id="Base_Column_List">
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingid,avatar_url
+    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
@@ -83,8 +81,6 @@
     <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
-    <result column="is_vip" jdbcType="VARCHAR" property="isVip" />
-    <result column="bindingid" jdbcType="VARCHAR" property="bindingid" />
     <collection property="roles" column="{userId = user_id}" javaType="list" select="selectRoleList"></collection>
   </resultMap>
   <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >
@@ -110,10 +106,10 @@
   </select>
 
   <select id="selectRoleList" resultType="java.lang.String">
-    SELECT czb_role.role_name
+    SELECT czb_user_role.role_id
     FROM czb_user
-    LEFT JOIN czb_user_role ON czb_user.user_id = czb_user_role.user_id
-    LEFT JOIN czb_role ON czb_user_role.role_id = czb_role.role_id
+    LEFT JOIN czb_user_role
+    ON czb_user.user_id = czb_user_role.user_id
     WHERE czb_user_role.user_id = #{userId, jdbcType=VARCHAR}
   </select>
 
@@ -200,32 +196,29 @@
     </where>
     ) as u
     left join czb_user cu on u.superior_user = cu.user_id
-      <where>
-        <if test="userAccount != null and userAccount != ''">
-            and (u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
-            or u.bindingid in ( select user_id from czb_user where user_account  like concat('%',#{userAccount},'%' )))
-        </if>
-        <if test="userName != null and userName != ''">
-            and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="startTime != null">
-            and u.create_at >= #{startTime,jdbcType=TIMESTAMP}
-        </if>
-        <if test="endTime != null">
-          and u.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
-        </if>
-        <if test="partner != null">
-            and u.partner = #{partner,jdbcType=INTEGER}
-        </if>
-        <if test="isVip != null">
-          and u.is_vip = #{isVip,jdbcType=INTEGER}
-        </if>
-        <if test="userType != null">
-          and u.user_type = #{userType,jdbcType=INTEGER}
-        </if>
-        <if test="superiorUser != null and superiorUser != ''">
-            and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
-        </if>
+    <where>
+      <if test="userAccount != null and userAccount != ''">
+        and (u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+        or u.bindingid in ( select user_id from czb_user where user_account  like concat('%',#{userAccount},'%' )))
+      </if>
+      <if test="userName != null and userName != ''">
+        and u.user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="startTime != null">
+        and u.create_at >= #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null">
+        and u.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="partner != null">
+        and u.partner = #{partner,jdbcType=INTEGER}
+      </if>
+      <if test="isVip != null">
+        and u.is_vip = #{isVip,jdbcType=INTEGER}
+      </if>
+      <if test="superiorUser != null and superiorUser != ''">
+        and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
+      </if>
     </where>
     order by u.create_at desc
   </select>
@@ -254,7 +247,7 @@
   <delete id="deleteUser" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     update czb_user
     <set >
-        is_deleted = 1
+      is_deleted = 1
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </delete>
@@ -318,13 +311,13 @@
   </update>
 
   <resultMap id="TeamResultMap" type="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO" >
-      <id column="user_id" property="userId" jdbcType="VARCHAR" />
-      <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
-      <result column="user_name" property="userName" jdbcType="VARCHAR" />
-      <result column="amount" property="amount" jdbcType="DOUBLE" />
-      <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-      <result column="is_vip" property="isVip" jdbcType="INTEGER" />
-      <result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR" />
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="is_vip" property="isVip" jdbcType="INTEGER" />
+    <result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR" />
     <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">
@@ -364,16 +357,16 @@
         amount DESC
   </select>
   <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
-    <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->
-    <!--from czb_user cu-->
-    <!--left join czb_user_income_info cuii on  cu.user_id = cuii.user_id-->
-    <!--left join czb_income_log cil on cuii.info_id = cil.info_id-->
-    <!--<where>-->
-      <!--cu.superior_user = #{userId, jdbcType=VARCHAR}-->
-      <!--and type = 0-->
-    <!--</where>-->
-    <!--group by cu.user_id-->
-    <!--order by amount desc-->
+  <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->
+  <!--from czb_user cu-->
+  <!--left join czb_user_income_info cuii on  cu.user_id = cuii.user_id-->
+  <!--left join czb_income_log cil on cuii.info_id = cil.info_id-->
+  <!--<where>-->
+  <!--cu.superior_user = #{userId, jdbcType=VARCHAR}-->
+  <!--and type = 0-->
+  <!--</where>-->
+  <!--group by cu.user_id-->
+  <!--order by amount desc-->
   <!--</select>-->
   <select id="selectRecommender" resultType="com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO">
     select user_id as 'userId', user_account as 'userAccount', user_name as 'userName', is_vip as 'isVip', avatar_url as 'avatarUrl'
@@ -418,8 +411,8 @@
   <update id="UpdateToVip" parameterType="java.lang.String">
     update czb_user
     <set >
-        is_vip= 1,
-        update_at = now()
+      is_vip= 1,
+      update_at = now()
     </set>
     where  user_id= #{userId,jdbcType=VARCHAR}
   </update>
@@ -457,7 +450,7 @@
   <update id="updateSuperUser">
     update czb_user
     set superior_user CASE  user_id <foreach collection="userList" item="item" index="index"
-                                                        separator="" open="" close="end">
+                                             separator="" open="" close="end">
     when   #{item.userId,jdbcType=VARCHAR} THEN  #{item.oldSuperior,jdbcType=VARCHAR}
   </foreach>
     <where>
@@ -491,18 +484,18 @@
   <update id="updateTest">
     update czb_user
     set old_superior = CASE  user_id <foreach collection="list" item="item" index="index"
-                                             separator="" open="" close="end,">
+                                              separator="" open="" close="end,">
     when   #{item.userId,jdbcType=VARCHAR} THEN  #{item.superiorUser,jdbcType=VARCHAR}
   </foreach>
     superior_user = CASE user_id <foreach collection="list" item="item" index="index"
-                                            separator="" open="" close="end">
+                                          separator="" open="" close="end">
     when   #{item.userId,jdbcType=VARCHAR} THEN  #{item.firstLevelPartner,jdbcType=VARCHAR}
   </foreach>
     where
-        user_id in
-        <foreach collection="list" index="index" item="item" separator="," open="(" close=")" >
-          #{item.userId, jdbcType=VARCHAR}
-        </foreach>
+    user_id in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")" >
+      #{item.userId, jdbcType=VARCHAR}
+    </foreach>
   </update>
   <select id="selectBindingAccount" parameterType="java.lang.String" resultType="java.lang.String">
     select user_account from czb_user where user_id = #{bindingid,jdbcType=VARCHAR};

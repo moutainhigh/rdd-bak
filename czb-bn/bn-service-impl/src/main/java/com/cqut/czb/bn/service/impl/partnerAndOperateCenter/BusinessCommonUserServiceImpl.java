@@ -36,6 +36,11 @@ public class BusinessCommonUserServiceImpl implements BusinessCommonUserService 
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize(),true);
         BusinessCommonUserVo vo = new BusinessCommonUserVo(userId,mobile,createAt,area,promotionMobile,isVip);
         List<BusinessCommonUserOutputDTO> list = mapperExtra.list(vo);
+        ArrayList<String> arrayList = new ArrayList<>();
+        for(BusinessCommonUserOutputDTO item : list){
+            arrayList.add(item.getUserId());
+        }
+        //list = mapperExtra.listPetrol(arrayList);
 
         PageInfo<BusinessCommonUserOutputDTO> pageInfo = new PageInfo<>(list);
         return  pageInfo;

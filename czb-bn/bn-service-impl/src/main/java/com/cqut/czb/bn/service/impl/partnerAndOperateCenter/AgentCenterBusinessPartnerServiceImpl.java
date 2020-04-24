@@ -23,7 +23,7 @@ public class AgentCenterBusinessPartnerServiceImpl implements AgentCenterBusines
 
 
     @Override
-    public List<AgentCenterBusinessPartnerDto> list(String mobile, Date createAt, String area, PageDTO pageDTO) {
+    public List<AgentCenterBusinessPartnerDto> list(String mobile, Date createAt,Integer isVip,String superiorMobile, String area, PageDTO pageDTO) {
         if(mobile != null ){
             mobile = mobile.trim();
         }
@@ -31,7 +31,7 @@ public class AgentCenterBusinessPartnerServiceImpl implements AgentCenterBusines
             area = area.trim();
         }
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize(),true);
-        BusinessCommonUserVo businessCommonUserVo = new BusinessCommonUserVo(mobile,createAt,area);
+        BusinessCommonUserVo businessCommonUserVo = new BusinessCommonUserVo(mobile,createAt,area,isVip,superiorMobile);
         List<AgentCenterBusinessPartnerDto> list = agentCenterBusinessPartnerMapperExtra.list(businessCommonUserVo);
         return list;
     }

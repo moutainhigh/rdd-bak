@@ -8,21 +8,29 @@ public class BusinessCommonUserVo {
     private  Date createAt;
     private String area;
     private String promotionMobile;
-    private String spreadAccount;
     private Integer isVip;
+    private String superiorMobile;
 
-    public BusinessCommonUserVo(String mobile, Date createAt, String area) {
-        this.mobile = mobile;
-        this.createAt = createAt;
-        this.area = area;
+    public String getSuperiorMobile() {
+        return superiorMobile;
     }
 
-    public BusinessCommonUserVo(String mobile, Date createAt, String area, String spreadAccount, Integer isVip){
+    public void setSuperiorMobile(String superiorMobile) {
+        this.superiorMobile = superiorMobile;
+    }
+
+    public BusinessCommonUserVo(String mobile, Date createAt, String area,Integer isVip,String superiorMobile){
         this.mobile = mobile;
         this.createAt = createAt;
         this.area = area;
-        this.spreadAccount = spreadAccount;
         this.isVip = isVip;
+        this.superiorMobile = superiorMobile;
+    }
+
+    public BusinessCommonUserVo(String mobile, Date createAt, String area){
+        this.mobile = mobile;
+        this.createAt = createAt;
+        this.area = area;
     }
 
 
@@ -81,17 +89,5 @@ public class BusinessCommonUserVo {
 
     public void setIsVip(Integer isVip) {
         this.isVip = isVip;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getSpreadAccount() {
-        return spreadAccount;
-    }
-
-    public void setSpreadAccount(String spreadAccount) {
-        this.spreadAccount = spreadAccount;
     }
 }

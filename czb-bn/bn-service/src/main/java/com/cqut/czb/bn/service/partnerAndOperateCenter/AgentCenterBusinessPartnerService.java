@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface AgentCenterBusinessPartnerService {
 
-    List<AgentCenterBusinessPartnerDto> list(String mobile, Date createAt, String area, PageDTO pageDTO);
+    List<AgentCenterBusinessPartnerDto> list(String mobile, Date createAt,Integer isVip,String superiorMobile, String area, PageDTO pageDTO);
 }

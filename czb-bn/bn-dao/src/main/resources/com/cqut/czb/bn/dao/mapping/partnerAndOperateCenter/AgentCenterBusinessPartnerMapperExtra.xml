@@ -5,7 +5,9 @@
     <select id="list" parameterType="com.cqut.czb.bn.dao.mapper.partnerAndOperateCenter.BusinessCommonUserVo" resultType="com.cqut.czb.bn.entity.dto.partnerAndOperateCenter.AgentCenterBusinessPartnerDto">
         select
             cu.user_id userId,
+            cu.is_vip isVip,
             cu.user_account userAccount,
+            cu.superior_user superiorUser,
             ca.receiver userName,
             cvac.area area,
             cu.create_at createAt,
@@ -28,5 +30,9 @@
         <if test="area!= null and area!= ''">
             AND cvac.area like concat('%',#{area},'%')
         </if>
+        <if test="isVip!= null">
+            AND cu.is_vip = #{isVip}
+        </if>
+        ORDER BY commonUser DESC
     </select>
 </mapper>
