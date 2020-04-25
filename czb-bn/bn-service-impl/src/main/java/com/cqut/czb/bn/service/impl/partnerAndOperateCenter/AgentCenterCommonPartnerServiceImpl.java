@@ -30,8 +30,8 @@ public class AgentCenterCommonPartnerServiceImpl implements AgentCenterCommonPar
             area = area.trim();
         }
         PageHelper.startPage(pageDTO.getCurrentPage(),pageDTO.getPageSize(),true);
-        BusinessCommonUserVo businessCommonUserVo = new BusinessCommonUserVo(mobile,createAt,area,spreadAccount,isVip);
+        BusinessCommonUserVo businessCommonUserVo = new BusinessCommonUserVo(mobile,createAt,area,isVip,spreadAccount);
         List<AgentCenterCommonPartnerDto> list = agentCenterCommonPartnerMapperExtra.list(businessCommonUserVo);
-        return list;
+        return null;
     }
 }
