@@ -295,6 +295,7 @@
         FROM
         (
         SELECT
+        record_type,
         record_id,
         petrol_num,
         petrol_id,

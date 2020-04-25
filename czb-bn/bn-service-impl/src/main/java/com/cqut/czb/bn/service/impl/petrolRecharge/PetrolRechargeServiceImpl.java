@@ -126,7 +126,6 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
             sheet.setColumnWidth(i,  (short) 7500); // 设置列宽
         }
         for (int i = 0 ; i<list.size(); i++){
-            System.out.println(list.get(i).getPetrolNum());
             if (list.get(i).getRecordType().equals("0")) {
                 saleTotal.setFristTotalNumber(saleTotal.getFristTotalNumber()+1);
                 if(list.get(i).getIsRecharged().equals("0")){
@@ -191,7 +190,7 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         row.createCell(index++).setCellValue("续充人数");
         row.createCell(index++).setCellValue("首充已充合计");
         row.createCell(index++).setCellValue("首充已充人数");
-        row.createCell(index++).setCellValue("续充已充人数");
+        row.createCell(index++).setCellValue("续充已充合计");
         row.createCell(index++).setCellValue("续充已充人数");
         row.createCell(index++).setCellValue("首充未充合计");
         row.createCell(index++).setCellValue("首充未充人数");
