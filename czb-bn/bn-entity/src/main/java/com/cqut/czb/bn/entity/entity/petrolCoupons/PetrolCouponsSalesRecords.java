@@ -1,88 +1,148 @@
 package com.cqut.czb.bn.entity.entity.petrolCoupons;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import java.util.Date;
 
-public class PetrolCouponsSalesRecords {
-    private String recordId;
-
-    private String petrolId;
-
-    private String buyerId;
-
-    private String userAccount;
-
-    private Integer paymentMethod;
-
-    private String toRddOutTradeNo;
-
-    private String toRddThirdOrderId;
-
-    private Double toRddTurnoverAmount;
-
-    private Date toRddTransactionTime;
-
-    private Integer toRddState;
-
-    private Double unitPrice;
-
-    private Date toLuPayStartTime;
-
-    private Date toLuPayEndTime;
-
-    private Integer toLuPayState;
-
-    private String toRddOutId;
-
-    private String returnOrderId;
-
-    private String tradingId;
-
-    private String orderId;
-
-    private String orderInfo;
-
+public class PetrolCouponsSalesRecords extends PageDTO {
+    private String petrolNum;//油卡号码
+    private String petrolKind;//油卡种类 0 国通，1 中石油，2 中石化
+    private String petrolDenomination;//油卡面额
+    private String petrolPrice;//油卡价格
+    private String owner;//购买者
+    private String ownerId;//购买者
+    private String paymentMethod;//支付方式
+    private Date transactionTime;//交易时间
+    private String area;//地区
+    private String turnoverAmount;
     private Date createAt;
+    private String remark;
+    private Integer recordType; // 是否第一次购买
+    private String thirdOrderId;
 
-    private Date updateAt;
-
-    public String getRecordId() {
-        return recordId;
+    private String toRddOutTradeNo; // （用户向人多多）商家订单号
+    private String toRddThirdOrderId; // （用户向人多多）第三方订单号
+    private Double toRddTurnoverAmount; // （用户向人多多）成交金额
+    private Date toRddTransactionTime; // （用户向人多多）交易时间
+    private Integer toRddState; // （用户向人多多）交易状态 0 没支付，1 支付成功
+    private Double unitPrice; // （人多多向璐付）成交金额
+    private Date toLuPayStartTime; // （人多多向璐付）交易开始时间
+    private Date toLuPayEndTime; // （人多多向璐付）交易结束时间
+    private Integer toLuPayState; // （人多多向璐付）交易状态
+    private String toRddOutId; // （人多多向璐付）合作方订单编号
+    private String returnOrderId; // 缴费订单编号
+    private String tradingId; // 缴费交易流水编号
+    private String orderId; // 璐付系统订单号
+    private String orderInfo; // 券短链接
+    public String getOwnerId() {
+        return ownerId;
+    }
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public void setRecordId(String recordId) {
-        this.recordId = recordId == null ? null : recordId.trim();
+
+    public Integer getRecordType() {
+        return recordType;
     }
 
-    public String getPetrolId() {
-        return petrolId;
+    public void setRecordType(Integer recordType) {
+        this.recordType = recordType;
     }
 
-    public void setPetrolId(String petrolId) {
-        this.petrolId = petrolId == null ? null : petrolId.trim();
+    public String getTurnoverAmount() {
+        return turnoverAmount;
     }
 
-    public String getBuyerId() {
-        return buyerId;
+    public void setTurnoverAmount(String turnoverAmount) {
+        this.turnoverAmount = turnoverAmount;
     }
 
-    public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId == null ? null : buyerId.trim();
+    public String getPetrolNum() {
+        return petrolNum;
     }
 
-    public String getUserAccount() {
-        return userAccount;
+    public void setPetrolNum(String petrolNum) {
+        this.petrolNum = petrolNum;
     }
 
-    public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount == null ? null : userAccount.trim();
+    public String getPetrolKind() {
+        return petrolKind;
     }
 
-    public Integer getPaymentMethod() {
+    public void setPetrolKind(String petrolKind) {
+        this.petrolKind = petrolKind;
+    }
+
+    public String getPetrolDenomination() {
+        return petrolDenomination;
+    }
+
+    public void setPetrolDenomination(String petrolDenomination) {
+        this.petrolDenomination = petrolDenomination;
+    }
+
+    public String getPetrolPrice() {
+        return petrolPrice;
+    }
+
+    public void setPetrolPrice(String petrolPrice) {
+        this.petrolPrice = petrolPrice;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(Integer paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public Date getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(Date transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
     }
 
     public String getToRddOutTradeNo() {
@@ -90,7 +150,7 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setToRddOutTradeNo(String toRddOutTradeNo) {
-        this.toRddOutTradeNo = toRddOutTradeNo == null ? null : toRddOutTradeNo.trim();
+        this.toRddOutTradeNo = toRddOutTradeNo;
     }
 
     public String getToRddThirdOrderId() {
@@ -98,7 +158,7 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setToRddThirdOrderId(String toRddThirdOrderId) {
-        this.toRddThirdOrderId = toRddThirdOrderId == null ? null : toRddThirdOrderId.trim();
+        this.toRddThirdOrderId = toRddThirdOrderId;
     }
 
     public Double getToRddTurnoverAmount() {
@@ -162,7 +222,7 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setToRddOutId(String toRddOutId) {
-        this.toRddOutId = toRddOutId == null ? null : toRddOutId.trim();
+        this.toRddOutId = toRddOutId;
     }
 
     public String getReturnOrderId() {
@@ -170,7 +230,7 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setReturnOrderId(String returnOrderId) {
-        this.returnOrderId = returnOrderId == null ? null : returnOrderId.trim();
+        this.returnOrderId = returnOrderId;
     }
 
     public String getTradingId() {
@@ -178,7 +238,7 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setTradingId(String tradingId) {
-        this.tradingId = tradingId == null ? null : tradingId.trim();
+        this.tradingId = tradingId;
     }
 
     public String getOrderId() {
@@ -186,7 +246,7 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+        this.orderId = orderId;
     }
 
     public String getOrderInfo() {
@@ -194,22 +254,6 @@ public class PetrolCouponsSalesRecords {
     }
 
     public void setOrderInfo(String orderInfo) {
-        this.orderInfo = orderInfo == null ? null : orderInfo.trim();
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
+        this.orderInfo = orderInfo;
     }
 }
