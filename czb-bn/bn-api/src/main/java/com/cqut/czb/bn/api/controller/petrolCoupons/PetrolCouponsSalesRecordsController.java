@@ -45,7 +45,7 @@ public class PetrolCouponsSalesRecordsController {
         inputDTO2.setEndTime(DateDealWith.backEndTime());
         dataWithCountOutputDTO.setTodayCount(petrolCouponsSalesRecordsService.getPetrolCouponsSaleMoneyCount(inputDTO2));
         dataWithCountOutputDTO.setTodayNum(petrolCouponsSalesRecordsService.selectPetrolCouponsSalesRecords(inputDTO2).getSize()+"");
-        return new JSONResult(petrolCouponsSalesRecordsService.selectPetrolCouponsSalesRecords(input));
+        return new JSONResult(dataWithCountOutputDTO);
     }
 
 
