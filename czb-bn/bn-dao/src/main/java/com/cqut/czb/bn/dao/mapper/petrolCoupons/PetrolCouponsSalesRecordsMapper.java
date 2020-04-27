@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PetrolCouponsSalesRecordsMapper {
     List<PetrolCouponsSalesRecords> selectPetrolCouponsSalesRecords(GetPetrolSaleInfoInputDTO inputDTO);
+
+    String getPetrolCouponsSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO);
 }
