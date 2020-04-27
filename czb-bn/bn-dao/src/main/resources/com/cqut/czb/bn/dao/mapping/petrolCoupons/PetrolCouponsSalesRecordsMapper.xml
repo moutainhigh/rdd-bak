@@ -1,36 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords" >
-    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
-    <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
-    <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
-    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
-    <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
-    <result column="to_rdd_out_trade_no" property="toRddOutTradeNo" jdbcType="VARCHAR" />
-    <result column="to_rdd_third_order_id" property="toRddThirdOrderId" jdbcType="VARCHAR" />
-    <result column="to_rdd_turnover_amount" property="toRddTurnoverAmount" jdbcType="DOUBLE" />
-    <result column="to_rdd_transaction_time" property="toRddTransactionTime" jdbcType="TIMESTAMP" />
-    <result column="to_rdd_state" property="toRddState" jdbcType="INTEGER" />
-    <result column="unit_price" property="unitPrice" jdbcType="DOUBLE" />
-    <result column="to_lu_pay_start_time" property="toLuPayStartTime" jdbcType="TIMESTAMP" />
-    <result column="to_lu_pay_end_time" property="toLuPayEndTime" jdbcType="TIMESTAMP" />
-    <result column="to_lu_pay_state" property="toLuPayState" jdbcType="INTEGER" />
-    <result column="to_rdd_out_id" property="toRddOutId" jdbcType="VARCHAR" />
-    <result column="return_order_id" property="returnOrderId" jdbcType="VARCHAR" />
-    <result column="trading_id" property="tradingId" jdbcType="VARCHAR" />
-    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="order_info" property="orderInfo" jdbcType="VARCHAR" />
-    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
-    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    record_id, petrol_id, buyer_id, user_account, payment_method, to_rdd_out_trade_no, 
-    to_rdd_third_order_id, to_rdd_turnover_amount, to_rdd_transaction_time, to_rdd_state, 
-    unit_price, to_lu_pay_start_time, to_lu_pay_end_time, to_lu_pay_state, to_rdd_out_id, 
-    return_order_id, trading_id, order_id, order_info, create_at, update_at
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" >
+  <select id="selectPetrolCouponsSalesRecords" resultType="com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" >
     SELECT
     t2.user_account 'owner',
     t1.transaction_time transactionTime,
@@ -59,7 +30,7 @@
     t4.return_order_id returnOrderId,
     t4.trading_id tradingId,
     t4.order_id orderId,
-    t4.order_info orderInfo,
+    t4.order_info orderInfo
     FROM
     (
     SELECT
@@ -123,6 +94,12 @@
     SELECT
     *
     FROM
+    czb_petrol_coupons_sales_records
+    ) AS t4 ON t4.buyer_id = t1.buyer_id
+    INNER JOIN (
+    SELECT
+    *
+    FROM
     czb_petrol AS petrol
     <where>
       <if test="area != null and area !=''">
@@ -130,11 +107,5 @@
       </if>
     </where>
     ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.create_at desc
-    INNER JOIN (
-    SELECT
-    *
-    FROM
-    czb_petrol_coupons_sales_records AS coupons
-    ) AS t4 ON t4.buyer_id = t1.buyer_id
   </select>
 </mapper>

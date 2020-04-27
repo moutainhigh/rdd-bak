@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 模块：中石化优惠券管理
  * 创建时间： 2020/4/26
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/api/PetrolCoupons")
 public class PetrolCouponsSalesRecordsController {
