@@ -94,7 +94,12 @@
     SELECT
     *
     FROM
-    czb_petrol_coupons_sales_records
+    czb_petrol_coupons_sales_records as coupons
+    <where>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType = VARCHAR},'%')
+      </if>
+    </where>
     ) AS t4 ON t4.buyer_id = t1.buyer_id
     INNER JOIN (
     SELECT
@@ -175,7 +180,12 @@
     SELECT
     *
     FROM
-    czb_petrol_coupons_sales_records
+    czb_petrol_coupons_sales_records as coupons
+    <where>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType = VARCHAR},'%')
+      </if>
+    </where>
     ) AS t4 ON t4.buyer_id = t1.buyer_id
     INNER JOIN (
     SELECT
