@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.petrolManagement;
 
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
@@ -21,7 +22,7 @@ public interface IPetrolManagementService {
     int salePetrol(String petrolIds);
 
     int saleSomePetrol(PetrolManagementInputDTO inputDTO);
-
+    JSONResult editPetrol(GetPetrolListInputDTO inputDTO);
     int notSalePetrol(String petrolIds);
 
     int notSaleSomePetrol(PetrolManagementInputDTO inputDTO);
@@ -41,4 +42,8 @@ public interface IPetrolManagementService {
     String getPetrolPrice();
 
     boolean updatePetrolPrices(String petrolPrices);
+
+    JSONResult addPetrol(PetrolInputDTO inputDTO);
+
+    JSONResult deletePetrol(PetrolInputDTO inputDTO);
 }

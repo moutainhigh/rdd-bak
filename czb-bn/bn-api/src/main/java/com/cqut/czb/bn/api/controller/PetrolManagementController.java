@@ -4,6 +4,7 @@ import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
@@ -50,7 +51,22 @@ public class PetrolManagementController {
     public JSONResult updatePetrolPrices(String petrolPrices){
         return new JSONResult(petrolManagementService.updatePetrolPrices(petrolPrices));
     }
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value="/editPetrol",method=RequestMethod.POST)
+    public JSONResult editPetrol(@RequestBody GetPetrolListInputDTO inputDTO){
+        return new JSONResult(petrolManagementService.editPetrol(inputDTO));
+    }
 
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value="/insertPetrol",method=RequestMethod.POST)
+    public JSONResult insertPetrol(@RequestBody PetrolInputDTO inputDTO){
+        return new JSONResult(petrolManagementService.addPetrol(inputDTO));
+    }
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value="/deletePetrol",method=RequestMethod.POST)
+    public JSONResult deletePetrol(@RequestBody PetrolInputDTO inputDTO){
+        return new JSONResult(petrolManagementService.deletePetrol(inputDTO));
+    }
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "salePetrol",method = RequestMethod.POST)
     public JSONResult salePetrol(@RequestBody PetrolManagementInputDTO inputDTO){

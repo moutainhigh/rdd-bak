@@ -100,6 +100,35 @@
 
   </insert>
 
+  <insert id="insertPetrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO" >
+    insert into czb_petrol (petrol_id, petrol_num, petrol_psw,
+    petrol_kind, petrol_denomination, petrol_price,
+    state, area,remark,
+    petrol_type, create_at,update_at) values
+      (
+      #{petrolId,jdbcType = VARCHAR},
+      #{petrolNum,jdbcType = VARCHAR},
+      #{petrolPsw,jdbcType = VARCHAR},
+      #{petrolKind,jdbcType = INTEGER},
+      #{petrolDenomination,jdbcType = DOUBLE},
+      #{petrolPrice,jdbcType = DOUBLE},
+      #{state,jdbcType = INTEGER},
+      #{area,jdbcType = VARCHAR},
+      #{remark,jdbcType = VARCHAR},
+      #{petrolType,jdbcType = INTEGER},
+      NOW(),
+      NOW()
+      )
+  </insert>
+
+  <delete id="deletePetrol" parameterType="java.lang.String">
+    delete from czb_petrol where petrol_id = #{petrolId,jdbcType = VARCHAR}
+  </delete>
+
+  <select id="isRepeat" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO" resultType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO">
+    select petrol_id,petrol_num,petrol_type,area from czb_petrol
+    where petrol_num = #{petrolNum,jdbcType = VARCHAR}
+  </select>
 
   <!--油卡专区级联查询-->
   <resultMap type="com.cqut.czb.bn.entity.dto.appHomePage.PetrolZoneDTO" id="petrolZoneResult">
@@ -173,6 +202,26 @@
       </if>
     </set>
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="editPetrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO" >
+    update czb_petrol
+    <set >
+      <if test="petrolDenomination != null" >
+        petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="petrolPrice != null" >
+        petrol_price = #{petrolPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+        update_at = now(),
+    </set>
+    where petrol_num= #{petrolNum,jdbcType=VARCHAR}
   </update>
 
   <select id="selectPetrolInfoDTO" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO" >

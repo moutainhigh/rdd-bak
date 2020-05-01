@@ -9,6 +9,7 @@ import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
@@ -19,6 +20,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -129,6 +131,20 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         appHomePageService.selectAllPetrol();
         return result;
     }
+
+    @Override
+    public JSONResult editPetrol(GetPetrolListInputDTO inputDTO) {
+        boolean isSuccess = false;
+        if(inputDTO.getState() == "2"){
+            return new JSONResult("修改失敗",500);
+        }
+        isSuccess = petrolMapperExtra.editPetrol(inputDTO) > 0;
+        if(isSuccess)
+            return new JSONResult("修改成功",200);
+        else
+            return new JSONResult("修改失敗",500);
+    }
+
 
     @Override
     public int notSalePetrol(String petrolIds) {
@@ -273,5 +289,33 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         dictInputDTO.setName(dict.getName());
         dictInputDTO.setContent(json.toJSONString());
         return dictMapperExtra.updateDict(dictInputDTO) > 0;
+    }
+
+    @Override
+    public JSONResult addPetrol(PetrolInputDTO inputDTO) {
+        inputDTO.setPetrolId(StringUtil.createId());
+        boolean isSuccess = false;
+        PetrolInputDTO petrolInputDTO = petrolMapperExtra.isRepeat(inputDTO);
+        if (petrolInputDTO != null){
+            return new JSONResult("油卡重复",400);
+        }else if(petrolInputDTO == null){
+            isSuccess = petrolMapperExtra.insertPetrol(inputDTO) > 0;
+            if (isSuccess)
+                return new JSONResult("增加成功", 200);
+            else
+                return new JSONResult("增加失败", 500);
+        }else {
+            return new JSONResult("增加失败", 500);
+        }
+    }
+
+    @Override
+    public JSONResult deletePetrol(PetrolInputDTO inputDTO) {
+        boolean isSuccess = false;
+        isSuccess = petrolMapperExtra.deletePetrol(inputDTO.getPetrolId()) > 0;
+        if (isSuccess)
+            return new JSONResult("删除成功", 200);
+        else
+            return new JSONResult("删除失败", 500);
     }
 }

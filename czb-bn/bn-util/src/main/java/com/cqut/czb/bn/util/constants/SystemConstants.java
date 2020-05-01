@@ -82,6 +82,11 @@ public class SystemConstants {
     public static final String[] PETROL_SALE_EXCEL_HEAD={"油卡号码","支付订单号","油卡类型","油卡面额","油卡价格","购买者电话","支付方式","交易时间","地区","充值类别"};
 
     /**
+     * 导出中石化优惠券销售记录
+     */
+    public static final String[] PETROL_COUPONS_SALE_EXCEL_HEAD = {"油卡号码","璐付订单号","支付订单号","油卡类型","油卡面额","油卡价格","购买者电话","支付方式","交易时间","地区","充值类别"};
+
+    /**
      * 导出合伙人考核excel的头部
      */
     public static final String[] PARTNER_ASSESSMENT_EXCEL_HEAD = {"手机号码","合伙人类型","月目标推荐人数","月推荐人数","月目标首次消费人数","月新用户首次消费人数","状态","任务开始时间","任务结束时间"};
