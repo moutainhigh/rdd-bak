@@ -94,7 +94,98 @@
     SELECT
     *
     FROM
-    czb_petrol_coupons_sales_records
+    czb_petrol_coupons_sales_records as coupons
+    <where>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType = VARCHAR},'%')
+      </if>
+    </where>
+    ) AS t4 ON t4.buyer_id = t1.buyer_id
+    INNER JOIN (
+    SELECT
+    *
+    FROM
+    czb_petrol AS petrol
+    <where>
+      <if test="area != null and area !=''">
+        AND petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.create_at desc
+  </select>
+
+  <select id="getPetrolCouponsSaleMoneyCount" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO" >
+    SELECT
+    sum(t1.turnover_amount)
+    FROM
+    (
+    SELECT
+    *
+    FROM
+    czb_petrol_sales_records AS records
+    <where>
+      <if test="paymentMethod != null and paymentMethod != ''">
+        and records.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
+      </if>
+      <if test="petrolKind != null and petrolKind != ''">
+        and records.petrol_kind = #{petrolKind,jdbcType = INTEGER}
+      </if>
+      <if test="startTime != null and endTime != null">
+        and records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="petrolNum != null and petrolNum != ''">
+        AND records.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="petrolPrice != null and petrolPrice != ''">
+        AND records.current_price =#{petrolPrice,jdbcType = DOUBLE}
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' ">
+        AND records.denomination = #{petrolDenomination,jdbcType = DOUBLE}
+      </if>
+      <if test="petrolKind != null and petrolKind != '' ">
+        and records.petrol_kind = #{petrolKind,jdbcType = VARCHAR}
+      </if>
+      <if test="recordType == 0 || recordType != null">
+        and records.record_type = #{recordType}
+      </if>
+      <if test="thirdOrderId != null and thirdOrderId != '' ">
+        and records.third_order_id like concat('%',#{thirdOrderId, jdbcType=VARCHAR},'%')
+      </if>
+      <if test="bindingType != null and bindingType == 2">
+        AND records.petrol_num like 'RDD%'
+      </if>
+      <if test="bindingType != null and bindingType == 1">
+        AND records.petrol_num like 'S%'
+      </if>
+      <if test="bindingType != null and bindingType == 3">
+        AND (records.petrol_num like 'RDD%' OR records.petrol_num like 'S%')
+      </if>
+      and state = 1
+    </where>
+    ) AS t1
+    INNER JOIN (
+    SELECT
+    _user.user_id,
+    _user.user_account
+    FROM
+    czb_user AS _user
+    <where>
+      <if test="owner != null and owner != ''">
+        and _user.user_account like concat('%',#{owner,jdbcType = VARCHAR},'%')
+      </if>
+    </where>
+    ) AS t2 ON t1.buyer_id = t2.user_id
+    INNER JOIN (
+    SELECT
+    *
+    FROM
+    czb_petrol_coupons_sales_records as coupons
+    <where>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType = VARCHAR},'%')
+      </if>
+    </where>
     ) AS t4 ON t4.buyer_id = t1.buyer_id
     INNER JOIN (
     SELECT

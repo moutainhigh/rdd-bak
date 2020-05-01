@@ -24,6 +24,7 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     private Date todayStartTime;
     private Date todayEndTime;
     private Integer bindingType; //1 公司匹配 2 线下匹配 3 绑定过的卡
+    private String orderId; // 璐付系统订单号
 
     public Integer getBindingType() {
         return bindingType;
@@ -142,5 +143,13 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

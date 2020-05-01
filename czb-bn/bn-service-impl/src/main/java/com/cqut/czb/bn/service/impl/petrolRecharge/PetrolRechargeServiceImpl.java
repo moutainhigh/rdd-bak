@@ -158,6 +158,8 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                 row.createCell(count++).setCellValue("中石化");
             }else if("0".equals(list.get(i).getPetrolKind())){
                 row.createCell(count++).setCellValue("国通");
+            }else if("3".equals(list.get(i).getPetrolKind())){
+                row.createCell(count++).setCellValue("中石化加油卡");
             }else{
                 row.createCell(count++).setCellValue("其他");
             }
@@ -260,7 +262,10 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
                 row.createCell(count++).setCellValue("中石化");
             }else if("0".equals(list.get(i).getPetrolKind())){
                 row.createCell(count++).setCellValue("国通");
-            }else{
+            }else if("3".equals(list.get(i).getPetrolKind())){
+                row.createCell(count++).setCellValue("中石化加油卡");
+            }
+            else{
                 row.createCell(count++).setCellValue("其他");
             }
             row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
