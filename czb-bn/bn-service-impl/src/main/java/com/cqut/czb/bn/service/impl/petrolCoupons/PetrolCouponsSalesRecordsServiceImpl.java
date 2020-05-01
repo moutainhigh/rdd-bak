@@ -72,7 +72,7 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
             row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
             row.createCell(count++).setCellValue(list.get(i).getOrderId());
             row.createCell(count++).setCellValue(list.get(i).getThirdOrderId());
-            row.createCell(count++).setCellValue("中石化加油卡");
+            row.createCell(count++).setCellValue("中石化码商");
             row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
             row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
             row.createCell(count++).setCellValue(list.get(i).getOwner());
