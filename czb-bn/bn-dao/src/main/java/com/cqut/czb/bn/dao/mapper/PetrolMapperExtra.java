@@ -76,4 +76,12 @@ public interface PetrolMapperExtra {
     List<PetrolStock> selectPetrolStock(String area);
 
     Petrol selectPetrolByDeliveryRecordId(@Param("recordId")String recordId);
+
+    int editPetrol(GetPetrolListInputDTO inputDTO);
+
+    int insertPetrol(com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO inputDTO);
+
+    com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO isRepeat(com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO inputDTO);
+
+    int deletePetrol(@Param("petrolId")String petrolId);
 }
