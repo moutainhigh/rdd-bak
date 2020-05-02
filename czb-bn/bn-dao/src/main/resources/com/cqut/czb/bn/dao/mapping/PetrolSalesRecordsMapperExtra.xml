@@ -278,7 +278,7 @@
         order_info as orderInfo,
         create_at as createAt,
         update_at as updateAt
-        FROM `petrol_coupons_sales_records`
+        FROM `czb_petrol_coupons_sales_records`
         WHERE
             buyer_id = #{userId,jdbcType=VARCHAR}
         and
