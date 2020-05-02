@@ -97,6 +97,9 @@ public class PetrolManagementController {
 //        return new JSONResult(petrolManagementService.getPayInstruction());
 //    }
 
-
+    @RequestMapping(value = "/getWarning",method = RequestMethod.GET)
+    public JSONResult getWarning(String name){
+        return new JSONResult(petrolManagementService.getWarning(name));
+    }
 
 }

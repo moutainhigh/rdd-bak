@@ -31,6 +31,8 @@ public interface IPetrolManagementService {
 
     boolean modifyPetrol(ModifyPetrolInputDTO inputDTO);
 
+    JSONResult getWarning(String name);
+
     String getPetrolMoneyCount(GetPetrolListInputDTO inputDTO);
 
     String getPetrolSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO);

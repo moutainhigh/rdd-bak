@@ -2,7 +2,6 @@ package com.cqut.czb.bn.service.impl.petrolManagement;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.cqut.czb.bn.dao.mapper.DictMapper;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
@@ -23,13 +22,10 @@ import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -317,5 +313,10 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             return new JSONResult("删除成功", 200);
         else
             return new JSONResult("删除失败", 500);
+    }
+
+    @Override
+    public JSONResult getWarning(String name){
+        return new JSONResult(petrolMapperExtra.getWarning(name));
     }
 }

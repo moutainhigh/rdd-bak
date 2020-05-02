@@ -84,4 +84,6 @@ public interface PetrolMapperExtra {
     com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO isRepeat(com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO inputDTO);
 
     int deletePetrol(@Param("petrolId")String petrolId);
+
+    String getWarning(String name);
 }

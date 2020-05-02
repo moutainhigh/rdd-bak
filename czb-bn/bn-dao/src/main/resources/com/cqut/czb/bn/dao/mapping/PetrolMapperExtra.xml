@@ -440,4 +440,13 @@
         czb_petrol_delivery_records.record_id = #{recordId, jdbcType = VARCHAR}
     limit 1
   </select>
+
+  <select id="getWarning" resultType="java.lang.String">
+    SELECT
+	    content
+    FROM
+	    `czb_dict`
+	where
+	    name = #{name,jdbcType = VARCHAR}
+  </select>
 </mapper>
