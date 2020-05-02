@@ -14,14 +14,17 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInfo;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
+import com.cqut.czb.bn.service.appPaymentService.PurchaseCouponService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PurchaseCouponServiceImpl {
+@Service
+public class PurchaseCouponServiceImpl  implements PurchaseCouponService {
 
     @Autowired
     PetrolMapperExtra petrolMapperExtra;
@@ -29,6 +32,7 @@ public class PurchaseCouponServiceImpl {
     @Autowired
     PetrolCouponsSalesRecordsMapperExtra petrolCouponsSalesRecordsMapperExtra;
 
+    @Override
     public Map<String,Object> PurchaseControl(PetrolInputDTO petrolInputDTO) {
         //查出对应的油卡优惠券
         Petrol petrol=petrolMapperExtra.selectPetrolCoupons(petrolInputDTO);
