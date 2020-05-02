@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.entity.dto.CouponsSaleRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.*;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -90,12 +90,12 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     }
 
     @Override
-    public List<CouponsSaleRecords> getCouponsSaleRecords(String userId) {
-        List<CouponsSaleRecords> list = petrolSalesRecordsMapperExtra.getCouponsSaleRecords(userId);
+    public List<CouponsSaleRecordsDTO> getCouponsSaleRecords(String userId) {
+        List<CouponsSaleRecordsDTO> list = petrolSalesRecordsMapperExtra.getCouponsSaleRecords(userId);
         //解决app油卡购买时间显示问题
-        for(CouponsSaleRecords couponsSaleRecords : list){
-            couponsSaleRecords.setUpdateAt(couponsSaleRecords.getCreateAt());
-            couponsSaleRecords.setTransactionTime(couponsSaleRecords.getCreateAt());
+        for(CouponsSaleRecordsDTO couponsSaleRecordsDTO : list){
+            couponsSaleRecordsDTO.setUpdateAt(couponsSaleRecordsDTO.getCreateAt());
+            couponsSaleRecordsDTO.setTransactionTime(couponsSaleRecordsDTO.getCreateAt());
         }
         return list;
     }

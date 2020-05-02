@@ -257,7 +257,7 @@
         cpsr.create_at DESC
     </select>
 
-    <select id="getCouponsSaleRecords" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.CouponsSaleRecords">
+    <select id="getCouponsSaleRecords" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.CouponsSaleRecordsDTO">
         SELECT
         record_id as recordId,
         petrol_id as petrolId,
