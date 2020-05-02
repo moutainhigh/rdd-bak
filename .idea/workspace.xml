@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0ae4d526-cb84-4ac6-b62b-74b6ac2e623f" name="Default Changelist" comment="实验">
+    <list default="true" id="4d6578eb-f5e8-4a29-955b-d34657eca309" name="Default Changelist" comment="中石化卡券查询璐付订单号">
+      <change afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/petrolCoupons/PetrolCouponsSales.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/partnerAndOperateCenter/BusinessCommonUserVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/partnerAndOperateCenter/BusinessCommonUserVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/petrolCoupons/PetrolCouponsSalesRecordsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/petrolCoupons/PetrolCouponsSalesRecordsMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/petrolCoupons/PetrolCouponsSalesRecordsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/petrolCoupons/PetrolCouponsSalesRecordsMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/petrolCoupons/PetrolCouponsSalesRecords.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/petrolCoupons/PetrolCouponsSalesRecords.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/petrolCoupons/PetrolCouponsSalesRecordsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/petrolCoupons/PetrolCouponsSalesRecordsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/petrolCoupons/PetrolCouponsSalesRecordsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/petrolCoupons/PetrolCouponsSalesRecordsService.java" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +34,14 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PUSH_TAGS">
@@ -74,6 +91,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.cqut.czb.bn.entity.dto.petrolCoupons" />
       <recent name="com.cqut.czb.bn.service.impl.AutomaticRechargeServiceImpl" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -83,6 +101,80 @@
       <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-dao\src\main\resources\com\cqut\czb\bn\dao\mapping" />
       <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-service-impl\src\main\java\com\cqut\czb\bn\service\impl\vehicleServiceImpl" />
     </key>
+  </component>
+  <component name="RestClientSettings">
+    <option name="REQUEST_HISTORY">
+      <list>
+        <RestClientRequest>
+          <option name="httpMethod" value="GET" />
+          <option name="urlBase" value="http://localhost:8899" />
+          <option name="urlPath" value="/api/PetrolCoupons/selectPetrolCouponsSalesRecords" />
+          <option name="headers">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="Accept" />
+                <option name="value" value="*/*" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="Cache-Control" />
+                <option name="value" value="no-cache" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="currentPage" />
+                <option name="value" value="1" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="pageSize" />
+                <option name="value" value="10" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+        <RestClientRequest>
+          <option name="httpMethod" value="GET" />
+          <option name="urlBase" value="http://localhost:8899" />
+          <option name="urlPath" value="/api/VipApply/selectVipApply" />
+          <option name="headers">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="Accept" />
+                <option name="value" value="*/*" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="Cache-Control" />
+                <option name="value" value="no-cache" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="currentPage" />
+                <option name="value" value="1" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="pageSize" />
+                <option name="value" value="10" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+      </list>
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="StackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -98,7 +190,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0ae4d526-cb84-4ac6-b62b-74b6ac2e623f" name="Default Changelist" comment="" />
+      <changelist id="4d6578eb-f5e8-4a29-955b-d34657eca309" name="Default Changelist" comment="" />
       <created>1586773213648</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -111,6 +203,10 @@
       <workItem from="1587554638078" duration="18000" />
       <workItem from="1587726871318" duration="4278000" />
       <workItem from="1587792590431" duration="12000" />
+      <workItem from="1587947589441" duration="17142000" />
+      <workItem from="1588043105520" duration="8049000" />
+      <workItem from="1588296033667" duration="2802000" />
+      <workItem from="1588380606007" duration="821000" />
     </task>
     <task id="LOCAL-00001" summary="全部项目">
       <created>1587728763733</created>
@@ -133,7 +229,70 @@
       <option name="project" value="LOCAL" />
       <updated>1587792423923</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="中石化卡券数据读取">
+      <created>1587947827936</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1587947827937</updated>
+    </task>
+    <task id="LOCAL-00005" summary="中石化卡券数据读取sql修改">
+      <created>1587955689505</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1587955689505</updated>
+    </task>
+    <task id="LOCAL-00006" summary="中石化卡券导出数据">
+      <created>1587984528457</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1587984528457</updated>
+    </task>
+    <task id="LOCAL-00007" summary="中石化卡券加载数据">
+      <created>1587999964232</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1587999964232</updated>
+    </task>
+    <task id="LOCAL-00008" summary="中石化卡券导出数据">
+      <created>1588044637519</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1588044637520</updated>
+    </task>
+    <task id="LOCAL-00009" summary="中石化卡券查询璐付订单号">
+      <created>1588133533114</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1588133533114</updated>
+    </task>
+    <task id="LOCAL-00010" summary="中石化卡券导出">
+      <created>1588152997035</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1588152997036</updated>
+    </task>
+    <task id="LOCAL-00011" summary="中石化卡券导出">
+      <created>1588169125702</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1588169125702</updated>
+    </task>
+    <task id="LOCAL-00012" summary="中石化卡券导出">
+      <created>1588340803986</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1588340803986</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,6 +301,31 @@
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -151,13 +335,24 @@
         </entry>
       </map>
     </option>
+    <option name="OPEN_TABS">
+      <set>
+        <option value="1" />
+      </set>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="全部项目" />
     <MESSAGE value="Merge branch 'master' of http://39.98.250.45:2050/chezubaoProject/czbserver&#10;&#10;# Conflicts:&#10;#&#9;README.md&#10;#&#9;gradle/wrapper/gradle-wrapper.jar&#10;#&#9;gradle/wrapper/gradle-wrapper.properties&#10;#&#9;gradlew&#10;#&#9;gradlew.bat" />
     <MESSAGE value="实验" />
-    <option name="LAST_COMMIT_MESSAGE" value="实验" />
+    <MESSAGE value="中石化卡券数据读取" />
+    <MESSAGE value="中石化卡券数据读取sql修改" />
+    <MESSAGE value="中石化卡券加载数据" />
+    <MESSAGE value="中石化卡券导出数据" />
+    <MESSAGE value="中石化卡券查询璐付订单号" />
+    <MESSAGE value="中石化卡券导出" />
+    <option name="LAST_COMMIT_MESSAGE" value="中石化卡券导出" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -249,5 +444,16 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="449" y="215" key="git4idea.merge.GitPullDialog/0.0.1536.824@0.0.1536.824" timestamp="1587730428181" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="SpringBootApplicationConfigurationType">
+        <watch expression="inputDTO.pageSize" />
+        <watch expression="list.get(0).currentPage" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/czb$StackApplication.ic" NAME="StackApplication Coverage Results" MODIFIED="1587912920611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

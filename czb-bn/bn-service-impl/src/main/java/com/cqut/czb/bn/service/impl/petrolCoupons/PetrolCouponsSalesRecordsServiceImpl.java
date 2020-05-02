@@ -2,7 +2,7 @@ package com.cqut.czb.bn.service.impl.petrolCoupons;
 
 import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapper;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
-import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
+import com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales;
 import com.cqut.czb.bn.service.petrolCoupons.PetrolCouponsSalesRecordsService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.github.pagehelper.PageHelper;
@@ -23,9 +23,9 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
     PetrolCouponsSalesRecordsMapper petrolCouponsSalesRecordsMapper;
 
     @Override
-    public PageInfo<PetrolCouponsSalesRecords> selectPetrolCouponsSalesRecords(GetPetrolSaleInfoInputDTO inputDTO) {
+    public PageInfo<PetrolCouponsSales> selectPetrolCouponsSalesRecords(GetPetrolSaleInfoInputDTO inputDTO) {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize());
-        List<PetrolCouponsSalesRecords> list = petrolCouponsSalesRecordsMapper.selectPetrolCouponsSalesRecords(inputDTO);
+        List<PetrolCouponsSales> list = petrolCouponsSalesRecordsMapper.selectPetrolCouponsSalesRecords(inputDTO);
         return new PageInfo<>(list);
     }
 
@@ -36,11 +36,11 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
 
     @Override
     public Workbook exportCouponsRecords(GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
-        List<PetrolCouponsSalesRecords> list = petrolCouponsSalesRecordsMapper.selectPetrolCouponsSalesRecords(inputDTO);
+        List<PetrolCouponsSales> list = petrolCouponsSalesRecordsMapper.selectPetrolCouponsSalesRecords(inputDTO);
         return getSaleWorkBook(list, inputDTO);
     }
 
-    private Workbook getSaleWorkBook(List<PetrolCouponsSalesRecords> list, GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
+    private Workbook getSaleWorkBook(List<PetrolCouponsSales> list, GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
         String[] rechargeHead = SystemConstants.PETROL_COUPONS_SALE_EXCEL_HEAD;
         Workbook workbook = null;
         if(list == null) {
