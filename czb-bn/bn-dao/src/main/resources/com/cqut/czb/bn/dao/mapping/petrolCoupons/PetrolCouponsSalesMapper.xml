@@ -33,7 +33,7 @@
     czb_petrol.area,
     czb_petrol.petrol_denomination,
     czb_petrol.petrol_price
-    from czb_petrol_coupons_sales_records AS coupons,
+    from petrol_coupons_sales_records AS coupons,
     czb_petrol
     <where>
       czb_petrol.petrol_id = coupons.petrol_id
@@ -68,7 +68,7 @@
   <select id="getPetrolCouponsSaleMoneyCount" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
     SELECT
     sum(coupons.unit_price)
-    from czb_petrol_coupons_sales_records AS coupons,
+    from petrol_coupons_sales_records AS coupons,
     czb_petrol
     <where>
       czb_petrol.petrol_id = coupons.petrol_id
