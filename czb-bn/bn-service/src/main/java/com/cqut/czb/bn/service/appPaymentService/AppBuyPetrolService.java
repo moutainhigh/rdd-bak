@@ -14,6 +14,11 @@ import java.util.Map;
 public interface AppBuyPetrolService {
 
     /**
+     * 油卡购买，油卡优惠卷购买，分流处理
+     */
+    Map<String, Object> ShuntProcessing(PetrolInputDTO petrolInputDTO);
+
+    /**
      * 用支付宝购买油卡
      * 生成起调参数串——返回给app（支付订单）
      */

@@ -440,4 +440,21 @@
         czb_petrol_delivery_records.record_id = #{recordId, jdbcType = VARCHAR}
     limit 1
   </select>
+
+  <select id="selectPetrolCoupons" parameterType="com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM czb_petrol
+    WHERE
+    czb_petrol.petrol_kind=3
+    and
+    czb_petrol.area=#{area,jdbcType=VARCHAR}
+    and
+    czb_petrol.petrol_price=#{petrolPrice,jdbcType=INTEGER}
+    and
+    czb_petrol.state=1
+    order by
+    create_at desc
+    limit 1
+  </select>
 </mapper>

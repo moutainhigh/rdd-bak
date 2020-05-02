@@ -3,7 +3,6 @@ package com.cqut.czb.bn.api.controller.appPayment;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.WeChatPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.global.PetrolCache;
@@ -28,13 +27,13 @@ import java.util.Map;
 public class AppBuyPetrolController {
 
     @Autowired
-    private  AppBuyPetrolService appBuyPetrolService;
+    private AppBuyPetrolService appBuyPetrolService;
 
     @Autowired
     RedisUtils redisUtils;
 
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
-    public synchronized JSONResult buyPetrol(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO){
+    public synchronized JSONResult buyPetrol(Principal principal, @RequestBody PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
         //防止数据为空
         if(petrolInputDTO==null||user==null){
@@ -50,13 +49,13 @@ public class AppBuyPetrolController {
         //检测是否有未完成的订单(若存在则将油卡放回，无则继续操作)
         PetrolCache.isContainsNotPay(user.getUserId());
         //处理购油或充值
-        Map<String,Object> BuyPetrol=appBuyPetrolService.PurchaseControl(petrolInputDTO);
+        Map<String,Object> BuyPetrol=appBuyPetrolService.ShuntProcessing(petrolInputDTO);
         if(BuyPetrol==null){
-            return new JSONResult("无法生成订单",ResponseCodeConstants.FAILURE);
+            return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
         }else {
            if(BuyPetrol.get("-1")!=null){
                System.out.println((String)BuyPetrol.get("-1"));
-               return  new JSONResult( (String)BuyPetrol.get("-1"),ResponseCodeConstants.FAILURE);
+               return  new JSONResult( (String)BuyPetrol.get("-1"), ResponseCodeConstants.FAILURE);
            }else if(BuyPetrol.get("0")!=null){
                System.out.println((AliPetrolBackInfoDTO)BuyPetrol.get("0"));
                return  new JSONResult("购买成功",200,BuyPetrol.get("0"));
@@ -65,7 +64,7 @@ public class AppBuyPetrolController {
                return  new JSONResult("充值成功",200,BuyPetrol.get("2"));
            }else {
                System.out.println((String)BuyPetrol.get("-1"));
-               return new JSONResult("无法生成订单",ResponseCodeConstants.FAILURE);
+               return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
            }
         }
     }
@@ -74,8 +73,8 @@ public class AppBuyPetrolController {
      * 微信支付接口
      */
     @RequestMapping(value = "/weChatToPayment", method = RequestMethod.POST)
-    public synchronized JSONResult weChatToPayment(Principal principal,@RequestBody PetrolInputDTO petrolInputDTO) {
-        return new JSONResult("暂不支持微信支付",ResponseCodeConstants.FAILURE,"1");
+    public synchronized JSONResult weChatToPayment(Principal principal, @RequestBody PetrolInputDTO petrolInputDTO) {
+        return new JSONResult("暂不支持微信支付", ResponseCodeConstants.FAILURE,"1");
 //        User user = (User)redisUtils.get(principal.getName());
 //        //防止数据为空
 //        if(petrolInputDTO==null||user==null){

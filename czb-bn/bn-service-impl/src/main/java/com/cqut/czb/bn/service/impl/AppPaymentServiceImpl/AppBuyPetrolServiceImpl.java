@@ -15,6 +15,7 @@ import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.AppHomePageService;
 import com.cqut.czb.bn.service.appPaymentService.AppBuyPetrolService;
+import com.cqut.czb.bn.service.impl.AppPaymentServiceImpl.luPay.PurchaseCouponServiceImpl;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,31 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Autowired
     DictMapperExtra dictMapperExtra;
+
+    @Override
+    public Map<String, Object> ShuntProcessing(PetrolInputDTO petrolInputDTO) {
+        //检验传输数据是否为空
+        if (petrolInputDTO == null) {
+            Map<String,Object> info=new HashMap<>();
+            info.put("-1","油卡申请失败，信息有误，无此法生成订单");
+            return info;
+        }
+
+        //3代表中石化优惠券；
+        if(petrolInputDTO.getPetrolKind()==3){
+           //判断是否为重庆市的
+            if("重庆市".equals(petrolInputDTO.getArea())==false){
+                Map<String,Object> info=new HashMap<>();
+                info.put("-1","油卡申请失败，信息有误，无此法生成订单");
+                return info;
+            }else {
+                return new PurchaseCouponServiceImpl().PurchaseControl(petrolInputDTO);
+            }
+        }else {
+        //购油充值
+            return PurchaseControl(petrolInputDTO);
+        }
+    }
 
     @Override
     public JSONObject WechatBuyPetrol(Petrol petrol, PetrolInputDTO petrolInputDTO) {
