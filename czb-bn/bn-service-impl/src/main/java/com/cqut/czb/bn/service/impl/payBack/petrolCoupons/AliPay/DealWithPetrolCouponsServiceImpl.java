@@ -4,13 +4,16 @@ import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapperE
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
+import com.cqut.czb.bn.service.PaymentProcess.DealWithPetrolCouponsService;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPay;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Map;
 
-public class DealWithPetrolCouponsServiceImpl {
+@Service
+public class DealWithPetrolCouponsServiceImpl implements DealWithPetrolCouponsService {
 
     @Autowired
     private PetrolCouponsSalesRecordsMapperExtra extra;
@@ -19,6 +22,7 @@ public class DealWithPetrolCouponsServiceImpl {
     private DataProcessService dataProcessService;
 
 
+    @Override
     public int getAddBuyPetrolCouponsAli(Map<String, String> params) {
         String[] resDate = params.get("passback_params").split("\\^");
         String[] temp;
