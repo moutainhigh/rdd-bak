@@ -85,5 +85,7 @@ public interface PetrolMapperExtra {
 
     int deletePetrol(@Param("petrolId")String petrolId);
 
+    Petrol selectPetrolCoupons(PetrolInputDTO petrolInputDTO);
+
     String getWarning(String name);
 }

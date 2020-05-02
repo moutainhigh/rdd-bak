@@ -29,6 +29,9 @@ public class AliPayConfig {
 	//点餐
 	public static String BuyDish_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyDishInfoAiHu";
 
+	//中石化优惠券
+	public static String Coupons_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/luPayVerifyAsyn/verifyPetrolCouponsInfoAiHu";
+
 	// 加密方式
 	public static String sign_type = "RSA2";
 	

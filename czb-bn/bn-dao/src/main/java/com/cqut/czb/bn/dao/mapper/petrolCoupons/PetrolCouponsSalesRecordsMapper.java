@@ -1,11 +1,17 @@
 package com.cqut.czb.bn.dao.mapper.petrolCoupons;
 
-import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
-import com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales;
-import java.util.List;
+import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
 
 public interface PetrolCouponsSalesRecordsMapper {
-    List<PetrolCouponsSales> selectPetrolCouponsSalesRecords(GetPetrolSaleInfoInputDTO inputDTO);
+    int deleteByPrimaryKey(String recordId);
 
-    String getPetrolCouponsSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO);
+    int insert(PetrolCouponsSalesRecords record);
+
+    int insertSelective(PetrolCouponsSalesRecords record);
+
+    PetrolCouponsSalesRecords selectByPrimaryKey(String recordId);
+
+    int updateByPrimaryKeySelective(PetrolCouponsSalesRecords record);
+
+    int updateByPrimaryKey(PetrolCouponsSalesRecords record);
 }

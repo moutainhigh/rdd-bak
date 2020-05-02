@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
+    <result column="to_rdd_third_order_id" property="toRddThirdOrderId" jdbcType="VARCHAR" />
+    <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+    <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
+    <result column="to_rdd_turnover_amount" property="toRddTurnoverAmount" jdbcType="DOUBLE" />
+    <result column="to_rdd_transaction_time" property="toRddTransactionTime" jdbcType="TIMESTAMP" />
+    <result column="unit_price" property="unitPrice" jdbcType="DOUBLE" />
+    <result column="return_order_id" property="returnOrderId" jdbcType="VARCHAR" />
+    <result column="trading_id" property="tradingId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectPetrolCouponsSalesRecords" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
+    SELECT
+    coupons.record_id,
+    coupons.petrol_id,
+    coupons.user_account,
+    coupons.payment_method,
+    coupons.to_rdd_third_order_id,
+    coupons.to_rdd_turnover_amount,
+    coupons.to_rdd_transaction_time,
+    coupons.unit_price,
+    coupons.return_order_id,
+    coupons.trading_id,
+    coupons.order_id,
+    czb_petrol.area,
+    czb_petrol.petrol_denomination,
+    czb_petrol.petrol_price
+    from petrol_coupons_sales_records AS coupons,
+    czb_petrol
+    <where>
+      czb_petrol.petrol_id = coupons.petrol_id
+      <if test="petrolId != null and petrolId != ''">
+        and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
+      </if>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' ">
+        AND czb_petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
+      </if>
+      <if test="area != null and area !=''">
+        AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userAccount != null and userAccount != ''">
+        and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
+      </if>
+      <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
+        and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
+      </if>
+      <if test="paymentMethod != null and paymentMethod != ''">
+        and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
+      </if>
+      <if test="startTime != null and endTime != null">
+        and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+
+  <select id="getPetrolCouponsSaleMoneyCount" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
+    SELECT
+    sum(coupons.unit_price)
+    from petrol_coupons_sales_records AS coupons,
+    czb_petrol
+    <where>
+      czb_petrol.petrol_id = coupons.petrol_id
+      <if test="petrolId != null and petrolId != ''">
+        and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
+      </if>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
+      </if>
+      <if test="petrolDenomination != null and petrolDenomination != '' ">
+        AND czb_petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
+      </if>
+      <if test="area != null and area !=''">
+        AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userAccount != null and userAccount != ''">
+        and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
+      </if>
+      <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
+        and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
+      </if>
+      <if test="paymentMethod != null and paymentMethod != ''">
+        and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
+      </if>
+      <if test="startTime != null and endTime != null">
+        and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+</mapper>

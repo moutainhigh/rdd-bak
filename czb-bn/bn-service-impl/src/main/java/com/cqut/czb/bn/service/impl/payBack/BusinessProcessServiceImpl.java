@@ -22,6 +22,7 @@ import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
+import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.AliPay.DealWithPetrolCouponsServiceImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
@@ -132,6 +133,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
         }else if(consumptionType.equals("Dish")) {//点餐
             if (getAddBuyDishOrderAli(params) == 1) {
+                result.put("success", AlipayConfig.response_success);
+                return result;
+            }
+        }else if(consumptionType.equals("PetrolCoupons")) {//油卡卡券销售
+            if ((new DealWithPetrolCouponsServiceImpl().getAddBuyPetrolCouponsAli(params)) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }

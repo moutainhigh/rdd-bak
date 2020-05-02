@@ -1,12 +1,45 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
+import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.util.string.StringUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AliParameterConfig {
+
+    /**
+     * 转换为支付宝支付实体（油卡相关参数配置）
+     * @return
+     */
+    public static AlipayTradeAppPayModel getBizModelPetrolCoupons(String orgId, PetrolInputDTO petrolInputDTO, Petrol petrol) {
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody("爱虎购油");
+        model.setSubject("爱虎购油");
+        model.setOutTradeNo(orgId);
+        model.setTimeoutExpress(AliPayConfig.timeout_express);
+        model.setTotalAmount(String.valueOf(petrol.getPetrolPrice()));
+        model.setProductCode(AliPayConfig.product_code);
+        model.setPassbackParams(getParamsPetrolCoupons(orgId,petrol,petrolInputDTO));
+        return model;
+    }
+
+    public static String getParamsPetrolCoupons(String orgId,Petrol petrol,PetrolInputDTO petrolInputDTO) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("payType", petrolInputDTO.getPayType());
+        pbp.put("money", petrolInputDTO.getPetrolPrice());
+        pbp.put("petrolKind", petrolInputDTO.getPetrolKind());
+        pbp.put("ownerId", petrolInputDTO.getOwnerId());
+        pbp.put("petrolId", petrol.getPetrolId());
+        pbp.put("area",petrolInputDTO.getArea());
+        pbp.put("userAccount",petrolInputDTO.getAddressId());
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+
     //支付宝支付——订单格外数据（油卡相关参数配置）
     public static String getPassBackParams(String area,String orgId, String payType,String contractId,
                                     Double money, Integer petrolKind ,String ownerId,

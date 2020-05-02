@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.service.impl.petrolCoupons;
 
-import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapper;
-import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
+import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesMapper;
 import com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales;
 import com.cqut.czb.bn.service.petrolCoupons.PetrolCouponsSalesRecordsService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -12,7 +11,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -20,27 +18,27 @@ import java.util.List;
 public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesRecordsService {
 
     @Autowired
-    PetrolCouponsSalesRecordsMapper petrolCouponsSalesRecordsMapper;
+    PetrolCouponsSalesMapper petrolCouponsSalesRecordsMapper;
 
     @Override
-    public PageInfo<PetrolCouponsSales> selectPetrolCouponsSalesRecords(GetPetrolSaleInfoInputDTO inputDTO) {
+    public PageInfo<PetrolCouponsSales> selectPetrolCouponsSalesRecords(PetrolCouponsSales inputDTO) {
         PageHelper.startPage(inputDTO.getCurrentPage(), inputDTO.getPageSize());
         List<PetrolCouponsSales> list = petrolCouponsSalesRecordsMapper.selectPetrolCouponsSalesRecords(inputDTO);
         return new PageInfo<>(list);
     }
 
     @Override
-    public String getPetrolCouponsSaleMoneyCount(GetPetrolSaleInfoInputDTO infoInputDTO) {
+    public String getPetrolCouponsSaleMoneyCount(PetrolCouponsSales infoInputDTO) {
         return petrolCouponsSalesRecordsMapper.getPetrolCouponsSaleMoneyCount(infoInputDTO);
     }
 
     @Override
-    public Workbook exportCouponsRecords(GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
+    public Workbook exportCouponsRecords(PetrolCouponsSales inputDTO) throws Exception {
         List<PetrolCouponsSales> list = petrolCouponsSalesRecordsMapper.selectPetrolCouponsSalesRecords(inputDTO);
         return getSaleWorkBook(list, inputDTO);
     }
 
-    private Workbook getSaleWorkBook(List<PetrolCouponsSales> list, GetPetrolSaleInfoInputDTO inputDTO) throws Exception {
+    private Workbook getSaleWorkBook(List<PetrolCouponsSales> list, PetrolCouponsSales inputDTO) throws Exception {
         String[] rechargeHead = SystemConstants.PETROL_COUPONS_SALE_EXCEL_HEAD;
         Workbook workbook = null;
         if(list == null) {
@@ -69,25 +67,22 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
         for (int i = 0 ; i<list.size(); i++){
             int count = 0;
             row = sheet.createRow(i+1);
-            row.createCell(count++).setCellValue(list.get(i).getPetrolNum());
+            row.createCell(count++).setCellValue(list.get(i).getPetrolId());
             row.createCell(count++).setCellValue(list.get(i).getOrderId());
-            row.createCell(count++).setCellValue(list.get(i).getThirdOrderId());
-            row.createCell(count++).setCellValue("中石化码商");
-            row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
-            row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
-            row.createCell(count++).setCellValue(list.get(i).getOwner());
+            row.createCell(count++).setCellValue(list.get(i).getToRddThirdOrderId());
+            row.createCell(count++).setCellValue(list.get(i).getUserAccount());
             if ("1".equals(list.get(i).getPaymentMethod())) {
                 row.createCell(count++).setCellValue("支付宝");
             }else if ("2".equals(list.get(i).getPaymentMethod())){
                 row.createCell(count++).setCellValue("微信");
             }
-            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getTransactionTime()));
+            row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
+            row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
+            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getToRddTransactionTime()));
+            row.createCell(count++).setCellValue(list.get(i).getUnitPrice());
+            row.createCell(count++).setCellValue(list.get(i).getReturnOrderId());
+            row.createCell(count++).setCellValue(list.get(i).getTradingId());
             row.createCell(count++).setCellValue(list.get(i).getArea());
-            if(list.get(i).getPetrolNum().length() < 15){
-                row.createCell(count++).setCellValue("首充");
-            }else {
-                row.createCell(count++).setCellValue("续充");
-            }
         }
         int index = 0;
         row = sheet.createRow(list.size());
