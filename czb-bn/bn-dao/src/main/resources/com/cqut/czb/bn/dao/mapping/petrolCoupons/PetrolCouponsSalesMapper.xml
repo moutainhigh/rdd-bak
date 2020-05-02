@@ -40,11 +40,17 @@
       <if test="petrolId != null and petrolId != ''">
         and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
       </if>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
+      </if>
       <if test="petrolDenomination != null and petrolDenomination != '' ">
         AND czb_petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
       </if>
       <if test="area != null and area !=''">
         AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userAccount != null and userAccount != ''">
+        and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
       </if>
       <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
         and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
@@ -69,11 +75,17 @@
       <if test="petrolId != null and petrolId != ''">
         and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
       </if>
+      <if test="orderId != null and orderId != ''">
+        and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
+      </if>
       <if test="petrolDenomination != null and petrolDenomination != '' ">
         AND czb_petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
       </if>
       <if test="area != null and area !=''">
         AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userAccount != null and userAccount != ''">
+        and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
       </if>
       <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
         and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
