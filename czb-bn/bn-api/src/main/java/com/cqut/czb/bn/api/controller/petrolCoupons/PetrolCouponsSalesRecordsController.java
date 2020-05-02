@@ -1,7 +1,7 @@
 package com.cqut.czb.bn.api.controller.petrolCoupons;
 
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
-import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
+import com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales;
 import com.cqut.czb.bn.entity.global.DateDealWith;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolCoupons.PetrolCouponsSalesRecordsService;
@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
@@ -35,12 +33,12 @@ public class PetrolCouponsSalesRecordsController {
      * @return
      */
     @GetMapping("/selectPetrolCouponsSalesRecords")
-    public JSONResult selectVipApply(GetPetrolSaleInfoInputDTO input) {
+    public JSONResult selectVipApply(PetrolCouponsSales input) {
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolCouponsSalesRecordsService.selectPetrolCouponsSalesRecords(input));
         dataWithCountOutputDTO.setCount(petrolCouponsSalesRecordsService.getPetrolCouponsSaleMoneyCount(input));
         //获取今日销售数据
-        GetPetrolSaleInfoInputDTO inputDTO2=new GetPetrolSaleInfoInputDTO();
+        PetrolCouponsSales inputDTO2=new PetrolCouponsSales();
         inputDTO2.setStartTime(DateDealWith.backStartTime());
         inputDTO2.setEndTime(DateDealWith.backEndTime());
         dataWithCountOutputDTO.setTodayCount(petrolCouponsSalesRecordsService.getPetrolCouponsSaleMoneyCount(inputDTO2));
@@ -50,7 +48,7 @@ public class PetrolCouponsSalesRecordsController {
 
 
     @PostMapping("/exportCouponsRecords")
-    public JSONResult exportCouponsRecords(HttpServletResponse response, GetPetrolSaleInfoInputDTO inputDTO) {
+    public JSONResult exportCouponsRecords(HttpServletResponse response, PetrolCouponsSales inputDTO) {
         String message = null;
         Workbook workbook = null;
         try{
