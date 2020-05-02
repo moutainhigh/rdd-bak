@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.petrolCoupons;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ public class PetrolCouponsSales extends PageDTO {
     private Double petrolDenomination;//油卡面额
     private Double petrolPrice;//油卡价格
     private Double toRddTurnoverAmount; // 实际支付金额金额
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date toRddTransactionTime; // 购买时间
     private Double unitPrice; // 充值金额
     private String returnOrderId; // 缴费订单编号
@@ -20,7 +22,9 @@ public class PetrolCouponsSales extends PageDTO {
     private String orderId; // 璐付系统订单号
     private String area;//地区
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date startTime; // 购买时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date endTime; // 购买时间
 
     public String getRecordId() {
