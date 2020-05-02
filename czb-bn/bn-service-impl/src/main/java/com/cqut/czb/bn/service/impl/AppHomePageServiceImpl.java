@@ -333,6 +333,15 @@ public class AppHomePageServiceImpl implements AppHomePageService {
                 if(petrolInfoDTO1!=null){
                     petrolZoneDTOList.get(i).setPetrolPriceInfo(petrolInfoDTO1);
                 }
+            }else if(petrolZoneDTOList.get(i).getPetrolKind()==3) {
+                if(json.get("2")!=null)
+                    petrolZoneDTOList.get(i).setPetrolRemark((String) json.get("3"));
+                petrolZoneDTOList.get(i).setPetrolName("中石化码商");
+                //插入每张油卡的折扣信息和返佣信息
+                List<petrolInfoDTO> petrolInfoDTO1= calculatePrice(petrolZoneDTOList.get(i).getPetrolPriceInfo(),FY1.getContent(),FY2.getContent());
+                if(petrolInfoDTO1!=null){
+                    petrolZoneDTOList.get(i).setPetrolPriceInfo(petrolInfoDTO1);
+                }
             }
             }
         return petrolZoneDTOList;
