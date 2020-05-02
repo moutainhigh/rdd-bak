@@ -103,7 +103,7 @@
   <insert id="insertPetrol" parameterType="com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO" >
     insert into czb_petrol (petrol_id, petrol_num, petrol_psw,
     petrol_kind, petrol_denomination, petrol_price,
-    state, area,remark,
+    state,discount, area,remark,
     petrol_type, create_at,update_at) values
       (
       #{petrolId,jdbcType = VARCHAR},
@@ -113,6 +113,7 @@
       #{petrolDenomination,jdbcType = DOUBLE},
       #{petrolPrice,jdbcType = DOUBLE},
       #{state,jdbcType = INTEGER},
+      #{discount,jdbcType = DOUBLE},
       #{area,jdbcType = VARCHAR},
       #{remark,jdbcType = VARCHAR},
       #{petrolType,jdbcType = INTEGER},

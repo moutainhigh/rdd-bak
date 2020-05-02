@@ -13,6 +13,7 @@ public class PetrolInputDTO {
     private String state;//油卡状态
     private String petrolDenomination;//油卡面额
     private String petrolPrice;//油卡售价
+    private String discount;
     private String area;//所属地区
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
@@ -114,5 +115,13 @@ public class PetrolInputDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
     }
 }
