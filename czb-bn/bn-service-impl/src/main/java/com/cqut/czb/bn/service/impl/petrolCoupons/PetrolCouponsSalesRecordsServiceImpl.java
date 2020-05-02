@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.service.impl.petrolCoupons;
 
-import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapper;
+import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesMapper;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales;
 import com.cqut.czb.bn.service.petrolCoupons.PetrolCouponsSalesRecordsService;
@@ -12,7 +12,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
 public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesRecordsService {
 
     @Autowired
-    PetrolCouponsSalesRecordsMapper petrolCouponsSalesRecordsMapper;
+    PetrolCouponsSalesMapper petrolCouponsSalesRecordsMapper;
 
     @Override
     public PageInfo<PetrolCouponsSales> selectPetrolCouponsSalesRecords(GetPetrolSaleInfoInputDTO inputDTO) {
