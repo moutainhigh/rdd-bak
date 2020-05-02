@@ -1,45 +1,45 @@
-package com.cqut.czb.bn.entity.entity;
+package com.cqut.czb.bn.entity.dto;
 
 import java.util.Date;
 
-public class CouponsSaleRecords {
-    private String recordId;
+public class CouponsSaleRecordsDTO {
+    private String recordId;//记录ID
 
-    private String petrolId;
+    private String petrolId;//卡卷ID
 
-    private String buyerId;
+    private String buyerId;//用户id
 
-    private String userAccount;
+    private String userAccount;//用户电话
 
-    private Integer paymentMethod;
+    private Integer paymentMethod;//用户支付方式,1 支付宝，2 微信
 
-    private String toRddOrderId;
+    private String toRddOrderId;//（用户向人多多）商家订单号
 
-    private String thirdOrderId;
+    private String thirdOrderId;//（用户向人多多）第三方订单号
 
-    private Double turnoverAmount;
+    private Double turnoverAmount;//（用户向人多多）成交金额
 
-    private Date transactionTime;
+    private Date transactionTime;//（用户向人多多）交易时间
 
-    private Double unitPrice;
+    private Double unitPrice;//（人多多向璐付）成交金额
 
-    private Date startTime;
+    private Date startTime;//（人多多向璐付）交易开始时间
 
-    private Date endTime;
+    private Date endTime;//（人多多向璐付）交易结束时间
 
-    private String toRddOutId;
+    private String toRddOutId;//（人多多向璐付）合作方订单编号
 
-    private String returnOrderId;
+    private String returnOrderId;//缴费订单编号
 
-    private String tradingId;
+    private String tradingId;//缴费交易流水编号
 
-    private String orderId;
+    private String orderId;//璐付系统订单号
 
-    private String orderInfo;
+    private String orderInfo;//券短链接
 
-    private Date createAt;
+    private Date createAt;//创建时间
 
-    private Date updateAt;
+    private Date updateAt;//修改时间
 
     public String getRecordId() {
         return recordId;

@@ -9,7 +9,7 @@ import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.SaleTotal;
-import com.cqut.czb.bn.entity.entity.CouponsSaleRecords;
+import com.cqut.czb.bn.entity.dto.CouponsSaleRecordsDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import org.apache.ibatis.annotations.Param;
@@ -25,7 +25,7 @@ public interface PetrolSalesRecordsMapperExtra {
 
     List<AppPetrolSaleInfoOutputDTO> getPhysicalCardsForUser(@Param("userId") String userId, @Param("petrolKind") String petrolKind);
 
-    List<CouponsSaleRecords> getCouponsSaleRecords(@Param("userId") String userId);
+    List<CouponsSaleRecordsDTO> getCouponsSaleRecords(String userId);
 
     int insert(PetrolSalesRecords record);
 
