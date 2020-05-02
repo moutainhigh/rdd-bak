@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.PersonalCenterUserDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
+import com.cqut.czb.bn.entity.entity.CouponsSaleRecords;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -36,6 +37,14 @@ public interface AppPersonalCenterService {
     List<Petrol> getGTSoldPetrolForUser(String userId);
 
     List<AppPetrolSaleInfoOutputDTO> getPhysicalCardRechargeRecords(String userId, String petrolKind);
+
+    /**
+     * 获取中石化加油卡购买记录
+     *
+     * @param userId
+     * @return
+     */
+    List<CouponsSaleRecords> getCouponsSaleRecords(String userId);
 
     /**
      * 修改油卡卡号

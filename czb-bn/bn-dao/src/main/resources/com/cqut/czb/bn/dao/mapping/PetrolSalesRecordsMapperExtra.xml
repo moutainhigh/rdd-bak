@@ -257,6 +257,38 @@
         cpsr.create_at DESC
     </select>
 
+    <select id="getCouponsSaleRecords" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.entity.CouponsSaleRecords">
+        SELECT
+        record_id as recordId,
+        petrol_id as petrolId,
+        buyer_id as buyerId,
+        user_account as userAccount,
+        payment_method as paymentMethod,
+        to_rdd_out_trade_no as toRddOrderId,
+        to_rdd_third_order_id as thirdOrderId,
+        to_rdd_turnover_amount as turnoverAmount,
+        to_rdd_transaction_time as transactionTime,
+        unit_price as unitPrice,
+        to_lu_pay_start_time as startTime,
+        to_lu_pay_end_time as endTime,
+        to_rdd_out_id as toRddOutId,
+        return_order_id as returnOrderId,
+        trading_id as tradingId,
+        order_id as orderId,
+        order_info as orderInfo,
+        create_at as createAt,
+        update_at as updateAt
+        FROM `petrol_coupons_sales_records`
+        WHERE
+            buyer_id = #{userId,jdbcType=VARCHAR}
+        and
+                to_rdd_state = 1
+        and
+                to_lu_pay_state = 1
+        ORDER BY
+            create_at DESC
+    </select>
+
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
     insert into czb_petrol_sales_records (record_id, petrol_num, buyer_id,
       payment_method, third_order_id, turnover_amount,

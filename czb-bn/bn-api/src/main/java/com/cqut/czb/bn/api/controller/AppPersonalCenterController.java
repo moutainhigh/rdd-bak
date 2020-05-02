@@ -64,7 +64,12 @@ public class AppPersonalCenterController {
     @RequestMapping(value = "/getMyPhysicalPetrolList", method = RequestMethod.GET)
     public JSONResult getMyPetrolList(Principal principal, String petrolKind) {
         User user = (User) redisUtils.get(principal.getName());
-        return new JSONResult(appPersonalCenterService.getPhysicalCardRechargeRecords(user.getUserId(), petrolKind));
+        if (petrolKind.equals("3")){
+            return new JSONResult(appPersonalCenterService.getCouponsSaleRecords(user.getUserId()));
+        }
+        else{
+            return new JSONResult(appPersonalCenterService.getPhysicalCardRechargeRecords(user.getUserId(), petrolKind));
+        }
     }
 
     /**
