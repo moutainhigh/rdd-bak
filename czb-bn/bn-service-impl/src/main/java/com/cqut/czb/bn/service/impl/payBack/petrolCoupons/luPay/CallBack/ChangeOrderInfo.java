@@ -22,8 +22,9 @@ public class ChangeOrderInfo implements ChangeOrderInfoService {
     public void updateOrderInfo(Map<String, String> params){
 
         PetrolCouponsSalesRecords records=new PetrolCouponsSalesRecords();
-        if(params.get("OrderId")!=null){
-            records.setOrderId(params.get("OrderId"));
+
+        if(params.get("OrderID")!=null){
+            records.setOrderId(params.get("OrderID"));
         }
         if(params.get("OutID")!=null){
             records.setToRddOutId(params.get("OutID"));
@@ -34,6 +35,7 @@ public class ChangeOrderInfo implements ChangeOrderInfoService {
         if(params.get("OrderInfo")!=null){
             records.setOrderInfo(params.get("OrderInfo"));
         }
+        records.setToLuPayEndTime(new Date());
         records.setToLuPayState(1);
         records.setToLuPayEndTime(new Date());
         records.setUpdateAt(new Date());

@@ -30,6 +30,7 @@ public class VerifyAsynLuPayInfoServiceImpl implements VerifyAsynLuPayInfoServic
         }else {
             if(checkSign(params)){
                 System.out.println("修改信息");
+                System.out.println(params);
                 changeOrderInfoService.updateOrderInfo(params);
                 System.out.println("changeOrderInfoService.updateOrderInfo(params)success");
                 return "success";

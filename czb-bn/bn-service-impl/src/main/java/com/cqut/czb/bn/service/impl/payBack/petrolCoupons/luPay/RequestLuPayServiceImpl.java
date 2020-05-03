@@ -31,7 +31,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
         Date CreateTime=new Date();
         //金额不能为浮点数
         Integer money= BigDecimal.valueOf(30).
-                multiply(BigDecimal.valueOf(100)).
+                multiply(BigDecimal.valueOf(1000)).
                 setScale(2,BigDecimal.ROUND_HALF_UP).intValue();
         String string="APIID="+ LuPayApiConfig.APIID+
                 "&Account="+ petrolCouponsDTO.getUserAccount()+
@@ -65,9 +65,10 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
 
         //开始请求
         String sr= HttpRequest.httpRequestGet(URL, params);
-
+        System.out.println(sr);
         JSONObject jsonObject=JSONObject.fromObject(sr);
-
+        System.out.println("起吊璐付接口打印");
+        System.out.println(sr);
         if(jsonObject!=null){
             if(jsonObject.get("Code").equals("10018")) {
                 if (jsonObject.get("OrderID") != null) {
@@ -96,12 +97,12 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
     }
 
     //xiu改订单
-    public  void updatePetrolSaleRecords(String TradingID, String ReturnOrderID,Double unitPrice,Date startTime,String outId,String recordId){
+    public  void updatePetrolSaleRecords(String TradingID, String ReturnOrderID,Double unitPrice,Date startTime,String OrderID,String orgId){
         PetrolCouponsSalesRecords records=new PetrolCouponsSalesRecords();
-        records.setRecordId(recordId);
+        records.setRecordId(orgId);
         records.setUnitPrice(unitPrice);
         records.setToLuPayStartTime(startTime);
-        records.setToRddOutId(outId);
+        records.setToRddOutId(OrderID);
         records.setReturnOrderId(ReturnOrderID);
         records.setTradingId(TradingID);
         records.setToLuPayState(0);

@@ -288,6 +288,7 @@
         to_lu_pay_state = #{toLuPayState,jdbcType=INTEGER},
         order_id = #{orderId,jdbcType=VARCHAR},
         order_info = #{orderInfo,jdbcType=VARCHAR},
+        to_lu_pay_end_time = #{toLuPayEndTime,jdbcType=TIMESTAMP},
         update_at = #{updateAt,jdbcType=TIMESTAMP}
     where to_rdd_out_id = #{toRddOutId,jdbcType=VARCHAR} and user_account = #{userAccount,jdbcType=VARCHAR}
   </update>
