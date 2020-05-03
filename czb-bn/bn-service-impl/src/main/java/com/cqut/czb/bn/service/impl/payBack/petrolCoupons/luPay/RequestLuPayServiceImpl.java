@@ -3,22 +3,25 @@ package com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay;
 import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
+import com.cqut.czb.bn.service.PaymentProcess.RequestLuPayService;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-public class RequestLuPay {
+@Service
+public class RequestLuPayServiceImpl implements RequestLuPayService {
 
     @Autowired
     PetrolCouponsSalesRecordsMapperExtra extra;
 
+    @Override
     public String httpRequestGETLuPay(AliPetrolCouponsDTO petrolCouponsDTO){
 
         String URL="http://jiayou.10010.wiki/Api/PayGame.aspx";
@@ -28,7 +31,7 @@ public class RequestLuPay {
         Date CreateTime=new Date();
         //金额不能为浮点数
         Integer money= BigDecimal.valueOf(petrolCouponsDTO.getPetrolPrice()).
-                multiply(BigDecimal.valueOf(100)).
+                multiply(BigDecimal.valueOf(petrolCouponsDTO.getPetrolPrice())).
                 setScale(2,BigDecimal.ROUND_HALF_UP).intValue();
         String string="APIID="+ LuPayApiConfig.APIID+
                 "&Account="+ petrolCouponsDTO.getUserAccount()+
@@ -64,8 +67,6 @@ public class RequestLuPay {
         String sr= HttpRequest.httpRequestGet(URL, params);
 
         JSONObject jsonObject=JSONObject.fromObject(sr);
-
-        System.out.println(jsonObject.get("ReturnOrderID"));
 
         if(jsonObject!=null){
             if(jsonObject.get("Code").equals("10018")) {

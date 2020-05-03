@@ -17,7 +17,7 @@ public class LuPayApiConfig {
     public final static Integer ClientIP=0;
 
     //商品id
-    public final static String GoodsID="23421598";
+    public final static String GoodsID="23427869";
 
 }
 

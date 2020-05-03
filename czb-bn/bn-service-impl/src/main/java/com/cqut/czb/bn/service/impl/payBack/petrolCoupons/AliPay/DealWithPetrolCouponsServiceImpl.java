@@ -5,7 +5,7 @@ import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.DealWithPetrolCouponsService;
-import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPay;
+import com.cqut.czb.bn.service.PaymentProcess.RequestLuPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,8 @@ public class DealWithPetrolCouponsServiceImpl implements DealWithPetrolCouponsSe
     @Autowired
     private DataProcessService dataProcessService;
 
+    @Autowired
+    RequestLuPayService requestLuPayService;
 
     @Override
     public int getAddBuyPetrolCouponsAli(Map<String, String> params) {
@@ -48,9 +50,9 @@ public class DealWithPetrolCouponsServiceImpl implements DealWithPetrolCouponsSe
             }else if ("ownerId".equals(temp[0])) {
                 petrolCouponsDTO.setUserId(temp[1]);
                 System.out.println("用户id:" + temp[1]);
-            }else  if ("payType".equals(temp[0])) {//充值还是购买
-                petrolCouponsDTO.setPayType(Integer.valueOf(temp[1]));
-                System.out.println("用户支付类型:" + temp[1]);
+            }else  if ("petrolNum".equals(temp[0])) {
+                petrolCouponsDTO.setPetrolNum(temp[1]);
+                System.out.println("中石化编码:" + temp[1]);
             }else  if ("userAccount".equals(temp[0])) {
                 petrolCouponsDTO.setUserAccount(temp[1]);
                 System.out.println("用户电话:" + temp[1]);
@@ -65,7 +67,7 @@ public class DealWithPetrolCouponsServiceImpl implements DealWithPetrolCouponsSe
         updatePetrolSaleRecords(petrolCouponsDTO);
 
         //申请璐付订单
-        new RequestLuPay().httpRequestGETLuPay(petrolCouponsDTO);
+        requestLuPayService.httpRequestGETLuPay(petrolCouponsDTO);
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(petrolCouponsDTO.getUserId());
         //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务,5为点餐,6为购买优惠券

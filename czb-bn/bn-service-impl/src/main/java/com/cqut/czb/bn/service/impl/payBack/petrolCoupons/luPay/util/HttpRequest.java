@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util;
 
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
-import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPay;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -134,7 +133,6 @@ public class HttpRequest {
         //发送 POST 请求
 //        String sr=HttpRequest.httpRequestPost("http://localhost:8899/luPayVerifyAsyn/verifyPetrolCouponsInfo", "key=123&v=456");
 //        System.out.println(MD5Util.MD5Encode("slkjdflksjdk45454","UTF-8").toUpperCase());
-        new RequestLuPay().httpRequestGETLuPay(getAliPetrolCouponsDTO());
     }
 
 //    创建对象请求对象

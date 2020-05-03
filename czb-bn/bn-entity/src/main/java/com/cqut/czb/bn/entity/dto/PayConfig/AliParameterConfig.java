@@ -29,11 +29,10 @@ public class AliParameterConfig {
     public static String getParamsPetrolCoupons(String orgId,Petrol petrol,PetrolInputDTO petrolInputDTO) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
-        pbp.put("payType", petrolInputDTO.getPayType());
         pbp.put("money", petrolInputDTO.getPetrolPrice());
         pbp.put("petrolKind", petrolInputDTO.getPetrolKind());
         pbp.put("ownerId", petrolInputDTO.getOwnerId());
-        pbp.put("petrolId", petrol.getPetrolId());
+        pbp.put("petrolNum", petrol.getPetrolNum());
         pbp.put("area",petrolInputDTO.getArea());
         pbp.put("userAccount",petrolInputDTO.getAddressId());
         return StringUtil.transMapToStringOther(pbp);
