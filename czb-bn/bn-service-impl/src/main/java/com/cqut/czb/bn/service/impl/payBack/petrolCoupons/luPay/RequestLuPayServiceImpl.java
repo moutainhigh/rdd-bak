@@ -30,8 +30,8 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
         //修改时间
         Date CreateTime=new Date();
         //金额不能为浮点数
-        Integer money= BigDecimal.valueOf(petrolCouponsDTO.getPetrolPrice()).
-                multiply(BigDecimal.valueOf(petrolCouponsDTO.getPetrolPrice())).
+        Integer money= BigDecimal.valueOf(30).
+                multiply(BigDecimal.valueOf(100)).
                 setScale(2,BigDecimal.ROUND_HALF_UP).intValue();
         String string="APIID="+ LuPayApiConfig.APIID+
                 "&Account="+ petrolCouponsDTO.getUserAccount()+
@@ -104,6 +104,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
         records.setToRddOutId(outId);
         records.setReturnOrderId(ReturnOrderID);
         records.setTradingId(TradingID);
+        records.setToLuPayState(0);
         int is= extra.updateByPrimaryKeySelective(records);
         System.out.println("插入璐付起吊信息"+(is>0));
     }
