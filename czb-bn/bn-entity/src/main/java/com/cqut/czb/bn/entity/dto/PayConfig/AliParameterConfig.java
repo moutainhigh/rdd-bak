@@ -34,7 +34,7 @@ public class AliParameterConfig {
         pbp.put("ownerId", petrolInputDTO.getOwnerId());
         pbp.put("petrolNum", petrol.getPetrolNum());
         pbp.put("area",petrolInputDTO.getArea());
-        pbp.put("userAccount",petrolInputDTO.getAddressId());
+        pbp.put("userAccount",petrolInputDTO.getUserAccount());
         return StringUtil.transMapToStringOther(pbp);
     }
 
