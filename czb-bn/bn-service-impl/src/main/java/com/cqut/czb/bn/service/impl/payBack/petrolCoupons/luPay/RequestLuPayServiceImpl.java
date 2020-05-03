@@ -105,7 +105,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
         records.setReturnOrderId(ReturnOrderID);
         records.setTradingId(TradingID);
         int is= extra.updateByPrimaryKeySelective(records);
-        System.out.println("插入支付宝起吊信息"+(is>0));
+        System.out.println("插入璐付起吊信息"+(is>0));
     }
 
     public static String testHttpRequestGETLuPay(){
