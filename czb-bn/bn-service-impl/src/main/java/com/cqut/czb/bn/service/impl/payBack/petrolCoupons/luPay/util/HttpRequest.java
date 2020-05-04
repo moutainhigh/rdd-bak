@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util;
 
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
-import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPay;
+import com.cqut.czb.bn.service.PaymentProcess.RequestLuPayService;
+import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPayServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpRequest {
+
     /**
      * 向指定URL发送GET方法的请求
      *
@@ -133,21 +136,21 @@ public class HttpRequest {
 
         //发送 POST 请求
 //        String sr=HttpRequest.httpRequestPost("http://localhost:8899/luPayVerifyAsyn/verifyPetrolCouponsInfo", "key=123&v=456");
-//        System.out.println(MD5Util.MD5Encode("slkjdflksjdk45454","UTF-8").toUpperCase());
-        new RequestLuPay().httpRequestGETLuPay(getAliPetrolCouponsDTO());
+//        RequestLuPayService service=new RequestLuPayServiceImpl();
+//        service.httpRequestGETLuPay(getAliPetrolCouponsDTO());
     }
 
 //    创建对象请求对象
     public static AliPetrolCouponsDTO getAliPetrolCouponsDTO(){
         AliPetrolCouponsDTO dto=new AliPetrolCouponsDTO();
-        dto.setThirdOrderId("djfsjfksdjkf");
+        dto.setThirdOrderId("2020050322001450011447637530");
         dto.setPetrolPrice(100.00);
         dto.setPayType(1);
         dto.setUserId("254810436006489204");
         dto.setArea("重庆市");
         dto.setPetrolId("2492657649770078");
         dto.setPetrolKind(3);
-        dto.setOrgId("5454545454");
+        dto.setOrgId("1588482536552829-4");
         dto.setUserAccount("15730353007");
         return dto;
     }

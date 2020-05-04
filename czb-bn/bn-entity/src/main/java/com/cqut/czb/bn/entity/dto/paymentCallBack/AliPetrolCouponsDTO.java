@@ -20,6 +20,16 @@ public class AliPetrolCouponsDTO {
 
         private String thirdOrderId;
 
+        private String petrolNum;
+
+        public String getPetrolNum() {
+                return petrolNum;
+        }
+
+        public void setPetrolNum(String petrolNum) {
+                this.petrolNum = petrolNum;
+        }
+
         public String getThirdOrderId() {
                 return thirdOrderId;
         }

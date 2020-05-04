@@ -3,22 +3,25 @@ package com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay;
 import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
+import com.cqut.czb.bn.service.PaymentProcess.RequestLuPayService;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-public class RequestLuPay {
+@Service
+public class RequestLuPayServiceImpl implements RequestLuPayService {
 
     @Autowired
     PetrolCouponsSalesRecordsMapperExtra extra;
 
+    @Override
     public String httpRequestGETLuPay(AliPetrolCouponsDTO petrolCouponsDTO){
 
         String URL="http://jiayou.10010.wiki/Api/PayGame.aspx";
@@ -27,8 +30,8 @@ public class RequestLuPay {
         //修改时间
         Date CreateTime=new Date();
         //金额不能为浮点数
-        Integer money= BigDecimal.valueOf(petrolCouponsDTO.getPetrolPrice()).
-                multiply(BigDecimal.valueOf(100)).
+        Integer money= BigDecimal.valueOf(30).
+                multiply(BigDecimal.valueOf(1000)).
                 setScale(2,BigDecimal.ROUND_HALF_UP).intValue();
         String string="APIID="+ LuPayApiConfig.APIID+
                 "&Account="+ petrolCouponsDTO.getUserAccount()+
@@ -62,11 +65,10 @@ public class RequestLuPay {
 
         //开始请求
         String sr= HttpRequest.httpRequestGet(URL, params);
-
+        System.out.println(sr);
         JSONObject jsonObject=JSONObject.fromObject(sr);
-
-        System.out.println(jsonObject.get("ReturnOrderID"));
-
+        System.out.println("起吊璐付接口打印");
+        System.out.println(sr);
         if(jsonObject!=null){
             if(jsonObject.get("Code").equals("10018")) {
                 if (jsonObject.get("OrderID") != null) {
@@ -95,16 +97,17 @@ public class RequestLuPay {
     }
 
     //xiu改订单
-    public  void updatePetrolSaleRecords(String TradingID, String ReturnOrderID,Double unitPrice,Date startTime,String outId,String recordId){
+    public  void updatePetrolSaleRecords(String TradingID, String ReturnOrderID,Double unitPrice,Date startTime,String OrderID,String orgId){
         PetrolCouponsSalesRecords records=new PetrolCouponsSalesRecords();
-        records.setRecordId(recordId);
+        records.setRecordId(orgId);
         records.setUnitPrice(unitPrice);
         records.setToLuPayStartTime(startTime);
-        records.setToRddOutId(outId);
+        records.setToRddOutId(OrderID);
         records.setReturnOrderId(ReturnOrderID);
         records.setTradingId(TradingID);
+        records.setToLuPayState(0);
         int is= extra.updateByPrimaryKeySelective(records);
-        System.out.println("插入支付宝起吊信息"+(is>0));
+        System.out.println("插入璐付起吊信息"+(is>0));
     }
 
     public static String testHttpRequestGETLuPay(){

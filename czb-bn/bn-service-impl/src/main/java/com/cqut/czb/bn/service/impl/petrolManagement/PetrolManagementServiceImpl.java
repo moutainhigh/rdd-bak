@@ -312,7 +312,19 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     @Override
     public JSONResult deletePetrol(PetrolInputDTO inputDTO) {
         boolean isSuccess = false;
-        isSuccess = petrolMapperExtra.deletePetrol(inputDTO.getPetrolId()) > 0;
+//        isSuccess = petrolMapperExtra.deletePetrol(inputDTO.getPetrolId()) > 0;
+//        if (isSuccess)
+//            return new JSONResult("删除成功", 200);
+//        else
+//            return new JSONResult("删除失败", 500);
+
+//        int result=0;
+        if (inputDTO.getPetrolId() == null || inputDTO.getPetrolId().length() == 0){
+            return new JSONResult("删除失败", 500);
+        }else {
+            String[] ids = inputDTO.getPetrolId().split(",");
+            isSuccess = petrolMapperExtra.changePetrolState(ids,"-1") > 0;
+        }
         if (isSuccess)
             return new JSONResult("删除成功", 200);
         else

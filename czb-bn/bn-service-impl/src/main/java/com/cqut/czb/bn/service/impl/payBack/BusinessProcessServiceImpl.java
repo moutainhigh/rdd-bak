@@ -19,14 +19,11 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
-import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
+import com.cqut.czb.bn.service.PaymentProcess.*;
 import com.cqut.czb.bn.service.InfoSpreadService;
-import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.AliPay.DealWithPetrolCouponsServiceImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
-import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
-import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -106,6 +103,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     ShopMapper shopMapper;
 
+    @Autowired
+    DealWithPetrolCouponsService dealWithPetrolCouponsService;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
@@ -137,7 +137,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 return result;
             }
         }else if(consumptionType.equals("PetrolCoupons")) {//油卡卡券销售
-            if ((new DealWithPetrolCouponsServiceImpl().getAddBuyPetrolCouponsAli(params)) == 1) {
+            if ((dealWithPetrolCouponsService.getAddBuyPetrolCouponsAli(params)) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }

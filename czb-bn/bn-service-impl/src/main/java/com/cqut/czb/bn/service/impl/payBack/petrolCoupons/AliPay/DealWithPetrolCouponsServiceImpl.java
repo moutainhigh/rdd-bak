@@ -4,21 +4,27 @@ import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapperE
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
-import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPay;
+import com.cqut.czb.bn.service.PaymentProcess.DealWithPetrolCouponsService;
+import com.cqut.czb.bn.service.PaymentProcess.RequestLuPayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Map;
 
-public class DealWithPetrolCouponsServiceImpl {
+@Service
+public class DealWithPetrolCouponsServiceImpl implements DealWithPetrolCouponsService {
 
     @Autowired
-    private PetrolCouponsSalesRecordsMapperExtra extra;
+    PetrolCouponsSalesRecordsMapperExtra extra;
 
     @Autowired
     private DataProcessService dataProcessService;
 
+    @Autowired
+    RequestLuPayService requestLuPayService;
 
+    @Override
     public int getAddBuyPetrolCouponsAli(Map<String, String> params) {
         String[] resDate = params.get("passback_params").split("\\^");
         String[] temp;
@@ -44,9 +50,9 @@ public class DealWithPetrolCouponsServiceImpl {
             }else if ("ownerId".equals(temp[0])) {
                 petrolCouponsDTO.setUserId(temp[1]);
                 System.out.println("用户id:" + temp[1]);
-            }else  if ("payType".equals(temp[0])) {//充值还是购买
-                petrolCouponsDTO.setPayType(Integer.valueOf(temp[1]));
-                System.out.println("用户支付类型:" + temp[1]);
+            }else  if ("petrolNum".equals(temp[0])) {
+                petrolCouponsDTO.setPetrolNum(temp[1]);
+                System.out.println("中石化编码:" + temp[1]);
             }else  if ("userAccount".equals(temp[0])) {
                 petrolCouponsDTO.setUserAccount(temp[1]);
                 System.out.println("用户电话:" + temp[1]);
@@ -61,13 +67,13 @@ public class DealWithPetrolCouponsServiceImpl {
         updatePetrolSaleRecords(petrolCouponsDTO);
 
         //申请璐付订单
-        new RequestLuPay().httpRequestGETLuPay(petrolCouponsDTO);
-        //查询是否为首次消费
-        dataProcessService.isHaveConsumption(petrolCouponsDTO.getUserId());
-        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务,5为点餐,6为购买优惠券
-        //插入消费记录
-        dataProcessService.insertConsumptionRecord(petrolCouponsDTO.getOrgId(),petrolCouponsDTO.getThirdOrderId(),
-                petrolCouponsDTO.getPetrolPrice(), petrolCouponsDTO.getUserId(), "5", 1);
+        requestLuPayService.httpRequestGETLuPay(petrolCouponsDTO);
+//        //查询是否为首次消费
+//        dataProcessService.isHaveConsumption(petrolCouponsDTO.getUserId());
+//        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务,5为点餐,6为购买优惠券
+//        //插入消费记录
+//        dataProcessService.insertConsumptionRecord(petrolCouponsDTO.getOrgId(),petrolCouponsDTO.getThirdOrderId(),
+//                petrolCouponsDTO.getPetrolPrice(), petrolCouponsDTO.getUserId(), "5", 1);
 
         return 1;
     }
@@ -79,6 +85,7 @@ public class DealWithPetrolCouponsServiceImpl {
         records.setBuyerId(dto.getUserId());
         records.setToRddOutTradeNo(dto.getOrgId());
         records.setToRddThirdOrderId(dto.getThirdOrderId());
+        records.setToRddTurnoverAmount(dto.getPetrolPrice());
         records.setToRddTransactionTime(new Date());
         records.setToRddState(1);
         records.setCreateAt(new Date());

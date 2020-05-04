@@ -50,6 +50,11 @@ public class AlipayClientConfig {
 					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.BuyDish_url);
+		}else if(operationType.equals("6")){//"6"代表中石化优惠券
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+			instance.setCallBackUrl(AliPayConfig.Coupons_url);
 		}
 		return instance;
 	}
