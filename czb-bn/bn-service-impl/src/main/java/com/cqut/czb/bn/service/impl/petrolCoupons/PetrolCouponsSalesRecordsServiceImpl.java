@@ -73,11 +73,9 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
             row.createCell(count++).setCellValue(list.get(i).getUserAccount());
             if ("1".equals(list.get(i).getPaymentMethod())) {
                 row.createCell(count++).setCellValue("支付宝");
-            }else if ("2".equals(list.get(i).getPaymentMethod())){
+            }else if ("2".equals(list.get(i).getPaymentMethod())) {
                 row.createCell(count++).setCellValue("微信");
             }
-            row.createCell(count++).setCellValue(list.get(i).getPetrolDenomination());
-            row.createCell(count++).setCellValue(list.get(i).getPetrolPrice());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getToRddTransactionTime()));
             row.createCell(count++).setCellValue(list.get(i).getUnitPrice());
             row.createCell(count++).setCellValue(list.get(i).getReturnOrderId());
