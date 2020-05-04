@@ -14,7 +14,7 @@ public class LuPayApiConfig {
     public final static Integer IsCallBack=1;
 
     //0发短信 1返回短链接
-    public final static Integer ClientIP=0;
+    public final static Integer ClientIP=1;
 
     //商品id
     public final static String GoodsID="23427869";

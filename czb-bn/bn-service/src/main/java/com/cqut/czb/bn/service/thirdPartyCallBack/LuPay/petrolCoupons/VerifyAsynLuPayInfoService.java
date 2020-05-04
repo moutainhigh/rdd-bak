@@ -4,6 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface VerifyAsynLuPayInfoService {
 
-    public String VerifyInfo(HttpServletRequest request);
+     String VerifyInfo(HttpServletRequest request);
 
 }

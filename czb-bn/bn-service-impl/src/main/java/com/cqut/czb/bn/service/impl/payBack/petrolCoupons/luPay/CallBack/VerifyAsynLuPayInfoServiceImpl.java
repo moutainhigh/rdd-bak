@@ -32,7 +32,7 @@ public class VerifyAsynLuPayInfoServiceImpl implements VerifyAsynLuPayInfoServic
                 System.out.println("修改信息");
                 System.out.println(params);
                 changeOrderInfoService.updateOrderInfo(params);
-                System.out.println("changeOrderInfoService.updateOrderInfo(params)success");
+                System.out.println("success");
                 return "success";
             }
         }
