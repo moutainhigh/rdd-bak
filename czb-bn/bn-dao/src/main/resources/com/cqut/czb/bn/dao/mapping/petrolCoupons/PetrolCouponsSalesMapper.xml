@@ -30,24 +30,21 @@
     coupons.return_order_id,
     coupons.trading_id,
     coupons.order_id,
-    czb_petrol.area,
-    czb_petrol.petrol_denomination,
-    czb_petrol.petrol_price
-    from czb_petrol_coupons_sales_records AS coupons,
-    czb_petrol
+    ( SELECT area FROM czb_petrol WHERE petrol_id = coupons.petrol_id ) AS area
+    FROM
+    czb_petrol_coupons_sales_records AS coupons
     <where>
-      czb_petrol.petrol_id = coupons.petrol_id
       <if test="petrolId != null and petrolId != ''">
         and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
       </if>
       <if test="orderId != null and orderId != ''">
         and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
       </if>
-      <if test="petrolDenomination != null and petrolDenomination != '' ">
-        AND czb_petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
+      <if test="unitPrice != null and unitPrice != '' ">
+        AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
       </if>
       <if test="area != null and area !=''">
-        AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+        AND area like concat('%',#{area,jdbcType=VARCHAR},'%')
       </if>
       <if test="userAccount != null and userAccount != ''">
         and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
@@ -63,39 +60,38 @@
         and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
       </if>
     </where>
+    order by coupons.to_rdd_transaction_time DESC
   </select>
 
   <select id="getPetrolCouponsSaleMoneyCount" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
     SELECT
     sum(coupons.unit_price)
-    from czb_petrol_coupons_sales_records AS coupons,
-    czb_petrol
+    from czb_petrol_coupons_sales_records AS coupons
     <where>
-      czb_petrol.petrol_id = coupons.petrol_id
       <if test="petrolId != null and petrolId != ''">
-        and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
+          and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
       </if>
       <if test="orderId != null and orderId != ''">
-        and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
+          and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
       </if>
-      <if test="petrolDenomination != null and petrolDenomination != '' ">
-        AND czb_petrol.petrol_denomination = #{petrolDenomination,jdbcType = DOUBLE}
+      <if test="unitPrice != null and unitPrice != '' ">
+          AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
       </if>
       <if test="area != null and area !=''">
-        AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+          AND area like concat('%',#{area,jdbcType=VARCHAR},'%')
       </if>
       <if test="userAccount != null and userAccount != ''">
-        and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
+          and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
       </if>
       <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
-        and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
+          and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
       </if>
       <if test="paymentMethod != null and paymentMethod != ''">
-        and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
+          and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
       </if>
       <if test="startTime != null and endTime != null">
-        and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
-        and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+          and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+          and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
       </if>
     </where>
   </select>
