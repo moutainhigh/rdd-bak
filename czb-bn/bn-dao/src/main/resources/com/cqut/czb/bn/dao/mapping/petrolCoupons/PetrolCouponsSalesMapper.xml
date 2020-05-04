@@ -60,6 +60,7 @@
         and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
       </if>
     </where>
+    order by coupons.to_rdd_transaction_time DESC
   </select>
 
   <select id="getPetrolCouponsSaleMoneyCount" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
