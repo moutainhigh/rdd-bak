@@ -23,12 +23,13 @@
     <result column="order_info" property="orderInfo" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="lu_pay_balance" property="luPayBalance" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     record_id, petrol_id, buyer_id, user_account, payment_method, to_rdd_out_trade_no, 
     to_rdd_third_order_id, to_rdd_turnover_amount, to_rdd_transaction_time, to_rdd_state, 
     unit_price, to_lu_pay_start_time, to_lu_pay_end_time, to_lu_pay_state, to_rdd_out_id, 
-    return_order_id, trading_id, order_id, order_info, create_at, update_at
+    return_order_id, trading_id, order_id, order_info, create_at, update_at, lu_pay_balance
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -48,7 +49,7 @@
       to_lu_pay_start_time, to_lu_pay_end_time, to_lu_pay_state, 
       to_rdd_out_id, return_order_id, trading_id, 
       order_id, order_info, create_at, 
-      update_at)
+      update_at, lu_pay_balance)
     values (#{recordId,jdbcType=VARCHAR}, #{petrolId,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
       #{userAccount,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=INTEGER}, #{toRddOutTradeNo,jdbcType=VARCHAR}, 
       #{toRddThirdOrderId,jdbcType=VARCHAR}, #{toRddTurnoverAmount,jdbcType=DOUBLE}, 
@@ -56,7 +57,7 @@
       #{toLuPayStartTime,jdbcType=TIMESTAMP}, #{toLuPayEndTime,jdbcType=TIMESTAMP}, #{toLuPayState,jdbcType=INTEGER}, 
       #{toRddOutId,jdbcType=VARCHAR}, #{returnOrderId,jdbcType=VARCHAR}, #{tradingId,jdbcType=VARCHAR}, 
       #{orderId,jdbcType=VARCHAR}, #{orderInfo,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+      #{updateAt,jdbcType=TIMESTAMP}, #{luPayBalance,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords" >
     insert into czb_petrol_coupons_sales_records
@@ -124,6 +125,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="luPayBalance != null" >
+        lu_pay_balance,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -188,6 +192,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="luPayBalance != null" >
+        #{luPayBalance,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -254,6 +261,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="luPayBalance != null" >
+        lu_pay_balance = #{luPayBalance,jdbcType=DOUBLE},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -278,7 +288,8 @@
       order_id = #{orderId,jdbcType=VARCHAR},
       order_info = #{orderInfo,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      lu_pay_balance = #{luPayBalance,jdbcType=DOUBLE}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 </mapper>

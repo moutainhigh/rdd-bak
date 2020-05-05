@@ -35,12 +35,7 @@ public class BalanceQueryServiceImpl implements BalanceQueryService {
             JSONObject jsonObject = JSONObject.fromObject(sr);
             return Double.valueOf(jsonObject.get("Money").toString());
         }
-
         return 0.0;
-    }
-
-    public static void main(String[] args) {
-        new BalanceQueryServiceImpl().BalanceQuery();
     }
 
 }

@@ -14,6 +14,7 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInfo;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
+import com.cqut.czb.bn.service.LuPay.BalanceQueryService;
 import com.cqut.czb.bn.service.appPaymentService.PurchaseCouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,21 @@ public class PurchaseCouponServiceImpl  implements PurchaseCouponService {
     @Autowired
     PetrolCouponsSalesRecordsMapperExtra petrolCouponsSalesRecordsMapperExtra;
 
+    @Autowired
+    BalanceQueryService balanceQueryService;
+
     @Override
     public Map<String,Object> PurchaseControl(PetrolInputDTO petrolInputDTO) {
+        //判断余额是否充足
+        if(balanceQueryService.BalanceQuery()<petrolInputDTO.getPetrolPrice()){
+            Map<String,Object> info=new HashMap<>();
+            info.put("-1","暂不支持购买，请稍后");
+            return info;
+        }
+
         //查出对应的油卡优惠券
         Petrol petrol=petrolMapperExtra.selectPetrolCoupons(petrolInputDTO);
-//        判断是否有油卡优惠券
+        //判断是否有油卡优惠券
         if(petrol==null){
             Map<String,Object> info=new HashMap<>();
             info.put("-1","油卡申请失败，信息有误，无此法生成订单");
