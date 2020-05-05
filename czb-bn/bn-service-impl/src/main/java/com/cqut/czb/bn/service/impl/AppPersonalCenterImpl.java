@@ -1,5 +1,8 @@
 package com.cqut.czb.bn.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.CouponsSaleRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.*;
@@ -8,6 +11,7 @@ import com.cqut.czb.bn.entity.dto.petrolSaleInfo.AppPetrolSaleInfoOutputDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.AppPersonalCenterService;
+import com.sun.xml.internal.stream.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -94,6 +98,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
         List<CouponsSaleRecordsDTO> list = petrolSalesRecordsMapperExtra.getCouponsSaleRecords(userId);
         //解决app油卡购买时间显示问题
         for(CouponsSaleRecordsDTO couponsSaleRecordsDTO : list){
+            JSONArray orderInfo = JSON.parseArray(couponsSaleRecordsDTO.getOrderInfo());
+            JSONObject object = (JSONObject)orderInfo.get(0);
+            couponsSaleRecordsDTO.setOrderInfo((String) object.get("CardPass"));
             couponsSaleRecordsDTO.setUpdateAt(couponsSaleRecordsDTO.getCreateAt());
             couponsSaleRecordsDTO.setTransactionTime(couponsSaleRecordsDTO.getCreateAt());
         }

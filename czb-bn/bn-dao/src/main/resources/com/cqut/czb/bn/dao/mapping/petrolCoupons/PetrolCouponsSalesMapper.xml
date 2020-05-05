@@ -5,7 +5,7 @@
     <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
     <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
-    <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
+    <result column="payment_method" property="paymentMethod" jdbcType="VARCHAR" />
     <result column="to_rdd_third_order_id" property="toRddThirdOrderId" jdbcType="VARCHAR" />
     <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
     <result column="petrol_price" property="petrolPrice" jdbcType="DOUBLE" />
@@ -19,80 +19,95 @@
   </resultMap>
   <select id="selectPetrolCouponsSalesRecords" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
     SELECT
-    coupons.record_id,
-    coupons.petrol_id,
-    coupons.user_account,
-    coupons.payment_method,
-    coupons.to_rdd_third_order_id,
-    coupons.to_rdd_turnover_amount,
-    coupons.to_rdd_transaction_time,
-    coupons.unit_price,
-    coupons.return_order_id,
-    coupons.trading_id,
-    coupons.order_id,
-    ( SELECT area FROM czb_petrol WHERE petrol_id = coupons.petrol_id ) AS area
+    t1.record_id,
+    t1.petrol_id,
+    t1.user_account,
+    t1.payment_method,
+    t1.to_rdd_third_order_id,
+    t1.to_rdd_turnover_amount,
+    t1.to_rdd_transaction_time,
+    t1.unit_price,
+    t1.return_order_id,
+    t1.trading_id,
+    t1.order_id,
+    t2.area
     FROM
-    czb_petrol_coupons_sales_records AS coupons
-    <where>
-      <if test="petrolId != null and petrolId != ''">
-        and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
-      </if>
-      <if test="orderId != null and orderId != ''">
-        and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
-      </if>
-      <if test="unitPrice != null and unitPrice != '' ">
-        AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
-      </if>
-      <if test="area != null and area !=''">
-        AND area like concat('%',#{area,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="userAccount != null and userAccount != ''">
-        and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
-      </if>
-      <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
-        and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
-      </if>
-      <if test="paymentMethod != null and paymentMethod != ''">
-        and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
-      </if>
-      <if test="startTime != null and endTime != null">
-        and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
-        and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
-      </if>
-    </where>
-    order by coupons.to_rdd_transaction_time DESC
+    (
+    SELECT * FROM czb_petrol_coupons_sales_records AS coupons
+      <where>
+        <if test="petrolId != null and petrolId != ''">
+          and coupons.petrol_id like concat('%',#{petrolId,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderId != null and orderId != ''">
+          and coupons.order_id = #{orderId,jdbcType=VARCHAR}
+        </if>
+        <if test="unitPrice != null and unitPrice != '' ">
+          AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
+        </if>
+        <if test="userAccount != null and userAccount != ''">
+          and coupons.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
+          and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="paymentMethod != null and paymentMethod != ''">
+          and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="startTime != null and endTime != null">
+          and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+          and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+      </where>
+      ) as t1
+      INNER JOIN(
+      SELECT czb_petrol.area, czb_petrol.petrol_id FROM czb_petrol
+      <where>
+        <if test="area != null and area !=''">
+          AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+        </if>
+      </where>
+      ) AS t2 on t2.petrol_id = t1.petrol_id
+    order by t1.to_rdd_transaction_time DESC
   </select>
 
   <select id="getPetrolCouponsSaleMoneyCount" resultType="java.lang.String" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
     SELECT
-    sum(coupons.unit_price)
-    from czb_petrol_coupons_sales_records AS coupons
-    <where>
-      <if test="petrolId != null and petrolId != ''">
-          and coupons.petrol_id like concat('%',#{petrolId,jdbcType=INTEGER},'%')
-      </if>
-      <if test="orderId != null and orderId != ''">
-          and coupons.order_id like concat('%',#{orderId,jdbcType=INTEGER},'%')
-      </if>
-      <if test="unitPrice != null and unitPrice != '' ">
+    sum(t1.unit_price)
+    FROM
+    (
+    SELECT * FROM czb_petrol_coupons_sales_records AS coupons
+      <where>
+        <if test="petrolId != null and petrolId != ''">
+          and coupons.petrol_id like concat('%',#{petrolId,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderId != null and orderId != ''">
+          and coupons.order_id = #{orderId,jdbcType=VARCHAR}
+        </if>
+        <if test="unitPrice != null and unitPrice != '' ">
           AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
-      </if>
-      <if test="area != null and area !=''">
-          AND area like concat('%',#{area,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="userAccount != null and userAccount != ''">
-          and coupons.user_account like concat('%',#{userAccount,jdbcType=INTEGER},'%')
-      </if>
-      <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
-          and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=INTEGER},'%')
-      </if>
-      <if test="paymentMethod != null and paymentMethod != ''">
-          and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=INTEGER},'%')
-      </if>
-      <if test="startTime != null and endTime != null">
+        </if>
+        <if test="userAccount != null and userAccount != ''">
+          and coupons.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="toRddThirdOrderId != null and toRddThirdOrderId != ''">
+          and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="paymentMethod != null and paymentMethod != ''">
+          and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="startTime != null and endTime != null">
           and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
           and coupons.to_rdd_transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
-      </if>
-    </where>
+        </if>
+      </where>
+      ) as t1
+      INNER JOIN(
+      SELECT czb_petrol.area, czb_petrol.petrol_id FROM czb_petrol
+      <where>
+        <if test="area != null and area !=''">
+          AND czb_petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+        </if>
+      </where>
+      ) AS t2 on t2.petrol_id = t1.petrol_id
   </select>
 </mapper>

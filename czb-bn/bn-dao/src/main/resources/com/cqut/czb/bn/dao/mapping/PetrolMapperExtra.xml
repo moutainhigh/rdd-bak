@@ -456,4 +456,13 @@
     create_at desc
     limit 1
   </select>
+
+  <select id="getWarning" resultType="java.lang.String">
+    SELECT
+	    content
+    FROM
+	    `czb_dict`
+	where
+	    name = #{name,jdbcType = VARCHAR}
+  </select>
 </mapper>
