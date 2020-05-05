@@ -37,6 +37,7 @@
     (
     SELECT * FROM czb_petrol_coupons_sales_records AS coupons
       <where>
+        coupons.to_rdd_state = 1
         <if test="petrolId != null and petrolId != ''">
           and coupons.petrol_id like concat('%',#{petrolId,jdbcType=VARCHAR},'%')
         </if>
@@ -79,6 +80,7 @@
     (
     SELECT * FROM czb_petrol_coupons_sales_records AS coupons
       <where>
+        coupons.to_rdd_state = 1
         <if test="petrolId != null and petrolId != ''">
           and coupons.petrol_id like concat('%',#{petrolId,jdbcType=VARCHAR},'%')
         </if>

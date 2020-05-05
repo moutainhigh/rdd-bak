@@ -88,12 +88,12 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
             row.createCell(count++).setCellValue(list.get(i).getArea());
         }
         int index = 0;
-        row = sheet.createRow(list.size());
+        row = sheet.createRow(list.size()+1);
         row.createCell(index++).setCellValue("销售总单数");
         row.createCell(index++).setCellValue("销售总金额");
         index = 0;
-        row = sheet.createRow(list.size()+1);
-        row.createCell(index++).setCellValue(list.size()-1);
+        row = sheet.createRow(list.size()+2);
+        row.createCell(index++).setCellValue(list.size());
         row.createCell(index++).setCellValue(petrolCouponsSalesRecordsMapper.getPetrolCouponsSaleMoneyCount(inputDTO) + "元");
         return workbook;
     }
