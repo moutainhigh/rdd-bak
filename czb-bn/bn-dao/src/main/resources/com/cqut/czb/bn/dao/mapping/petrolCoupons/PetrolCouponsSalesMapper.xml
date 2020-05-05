@@ -16,6 +16,7 @@
     <result column="trading_id" property="tradingId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="lu_pay_balance" property="luPayBalance" jdbcType="DOUBLE" />
   </resultMap>
   <select id="selectPetrolCouponsSalesRecords" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales" >
     SELECT
@@ -30,6 +31,7 @@
     t1.return_order_id,
     t1.trading_id,
     t1.order_id,
+    t1.lu_pay_balance,
     t2.area
     FROM
     (

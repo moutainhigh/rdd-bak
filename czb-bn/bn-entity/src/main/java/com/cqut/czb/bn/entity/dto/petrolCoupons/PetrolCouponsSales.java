@@ -27,6 +27,8 @@ public class PetrolCouponsSales extends PageDTO {
     @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date endTime; // 购买时间
 
+    private Double luPayBalance; // 余额
+
     public String getRecordId() {
         return recordId;
     }
@@ -153,5 +155,14 @@ public class PetrolCouponsSales extends PageDTO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+
+    public Double getLuPayBalance() {
+        return luPayBalance;
+    }
+
+    public void setLuPayBalance(Double luPayBalance) {
+        this.luPayBalance = luPayBalance;
     }
 }
