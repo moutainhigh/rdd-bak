@@ -41,6 +41,8 @@ public interface IPetrolManagementService {
 
     String getPetrolPrice();
 
+    JSONResult getWarning(String name);
+
     boolean updatePetrolPrices(String petrolPrices);
 
     JSONResult addPetrol(PetrolInputDTO inputDTO);

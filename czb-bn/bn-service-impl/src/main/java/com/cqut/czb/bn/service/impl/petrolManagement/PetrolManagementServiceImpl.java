@@ -330,4 +330,9 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         else
             return new JSONResult("删除失败", 500);
     }
+
+    @Override
+    public JSONResult getWarning(String name){
+        return new JSONResult(petrolMapperExtra.getWarning(name));
+    }
 }
