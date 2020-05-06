@@ -16,8 +16,8 @@ public class AliParameterConfig {
      */
     public static AlipayTradeAppPayModel getBizModelPetrolCoupons(String orgId, PetrolInputDTO petrolInputDTO, Petrol petrol) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-        model.setBody("爱虎购油");
-        model.setSubject("爱虎购油");
+        model.setBody("中石化码商");
+        model.setSubject("中石化码商");
         model.setOutTradeNo(orgId);
         model.setTimeoutExpress(AliPayConfig.timeout_express);
         model.setTotalAmount(String.valueOf(petrol.getPetrolPrice()));
