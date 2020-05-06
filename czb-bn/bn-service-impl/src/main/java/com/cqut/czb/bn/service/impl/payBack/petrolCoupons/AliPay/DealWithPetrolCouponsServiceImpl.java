@@ -68,12 +68,12 @@ public class DealWithPetrolCouponsServiceImpl implements DealWithPetrolCouponsSe
 
         //申请璐付订单
         requestLuPayService.httpRequestGETLuPay(petrolCouponsDTO);
-//        //查询是否为首次消费
-//        dataProcessService.isHaveConsumption(petrolCouponsDTO.getUserId());
-//        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务,5为点餐,6为购买优惠券
-//        //插入消费记录
-//        dataProcessService.insertConsumptionRecord(petrolCouponsDTO.getOrgId(),petrolCouponsDTO.getThirdOrderId(),
-//                petrolCouponsDTO.getPetrolPrice(), petrolCouponsDTO.getUserId(), "5", 1);
+        //查询是否为首次消费
+        dataProcessService.isHaveConsumption(petrolCouponsDTO.getUserId());
+        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务,5为点餐,6为购买优惠券
+        //插入消费记录
+        dataProcessService.insertConsumptionRecord(petrolCouponsDTO.getOrgId(),petrolCouponsDTO.getThirdOrderId(),
+                petrolCouponsDTO.getPetrolPrice(), petrolCouponsDTO.getUserId(), "6", 1);
 
         return 1;
     }

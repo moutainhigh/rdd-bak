@@ -30,7 +30,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
         //修改时间
         Date CreateTime=new Date();
         //金额不能为浮点数
-        Integer money= BigDecimal.valueOf(30).
+        Integer money= BigDecimal.valueOf(petrolCouponsDTO.getPetrolPrice()).
                 multiply(BigDecimal.valueOf(1000)).
                 setScale(2,BigDecimal.ROUND_HALF_UP).intValue();
         String string="APIID="+ LuPayApiConfig.APIID+
@@ -38,7 +38,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
                 "&BuyNum="+ LuPayApiConfig.BuyNum+
                 "&ClientIP="+ LuPayApiConfig.ClientIP+
                 "&CreateTime="+ getNowDate(CreateTime)+
-                "&GoodsID="+ LuPayApiConfig.GoodsID+
+                "&GoodsID="+ petrolCouponsDTO.getPetrolNum()+
                 "&isCallBack="+ LuPayApiConfig.IsCallBack+
                 "&OrderID="+OrderID+
                 "&TotalPrice="+ money+
@@ -55,7 +55,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
                 "&BuyNum=" + LuPayApiConfig.BuyNum +
                 "&ClientIP=" + LuPayApiConfig.ClientIP+
                 "&CreateTime=" + getNowDate(CreateTime)+
-                "&GoodsID=" + LuPayApiConfig.GoodsID +
+                "&GoodsID=" + petrolCouponsDTO.getPetrolNum() +
                 "&isCallBack=" + LuPayApiConfig.IsCallBack +
                 "&OrderID=" + OrderID+
                 "&TotalPrice=" + money+
