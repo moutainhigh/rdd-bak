@@ -254,8 +254,8 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null" >
-        lu_pay_balance=#{luPayBalance,jdbcType=DOUBLE},
+      <if test="luPayBalance != null" >
+        lu_pay_balance = #{luPayBalance,jdbcType=DOUBLE},
       </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
