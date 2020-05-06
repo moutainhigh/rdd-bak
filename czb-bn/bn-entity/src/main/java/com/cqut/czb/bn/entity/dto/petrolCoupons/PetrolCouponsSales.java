@@ -17,6 +17,7 @@ public class PetrolCouponsSales extends PageDTO {
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date toRddTransactionTime; // 购买时间
     private Double unitPrice; // 充值金额
+    private String toLuPayState; // 充值状态
     private String returnOrderId; // 缴费订单编号
     private String tradingId; // 缴费交易流水编号
     private String orderId; // 璐付系统订单号
@@ -107,6 +108,14 @@ public class PetrolCouponsSales extends PageDTO {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public String getToLuPayState() {
+        return toLuPayState;
+    }
+
+    public void setToLuPayState(String toLuPayState) {
+        this.toLuPayState = toLuPayState;
     }
 
     public String getReturnOrderId() {

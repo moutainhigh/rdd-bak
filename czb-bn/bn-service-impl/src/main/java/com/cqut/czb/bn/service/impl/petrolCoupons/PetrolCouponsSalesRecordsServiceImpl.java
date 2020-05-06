@@ -68,13 +68,18 @@ public class PetrolCouponsSalesRecordsServiceImpl implements PetrolCouponsSalesR
             int count = 0;
             row = sheet.createRow(i+1);
             row.createCell(count++).setCellValue(list.get(i).getPetrolId());
-            row.createCell(count++).setCellValue(list.get(i).getOrderId());
+            row.createCell(count++).setCellValue(list.get(i).getReturnOrderId());
             row.createCell(count++).setCellValue(list.get(i).getToRddThirdOrderId());
             row.createCell(count++).setCellValue(list.get(i).getUserAccount());
             if ("1".equals(list.get(i).getPaymentMethod())) {
                 row.createCell(count++).setCellValue("支付宝");
             }else if ("2".equals(list.get(i).getPaymentMethod())) {
                 row.createCell(count++).setCellValue("微信");
+            }
+            if ("1".equals(list.get(i).getToLuPayState())) {
+                row.createCell(count++).setCellValue("已充值");
+            }else if ("0".equals(list.get(i).getToLuPayState())) {
+                row.createCell(count++).setCellValue("未充值");
             }
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getToRddTransactionTime()));
             if(list.get(i).getUnitPrice() == null){

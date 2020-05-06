@@ -12,6 +12,7 @@
     <result column="to_rdd_turnover_amount" property="toRddTurnoverAmount" jdbcType="DOUBLE" />
     <result column="to_rdd_transaction_time" property="toRddTransactionTime" jdbcType="TIMESTAMP" />
     <result column="unit_price" property="unitPrice" jdbcType="DOUBLE" />
+    <result column="to_lu_pay_state" property="toLuPayState" jdbcType="VARCHAR" />
     <result column="return_order_id" property="returnOrderId" jdbcType="VARCHAR" />
     <result column="trading_id" property="tradingId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
@@ -28,6 +29,7 @@
     t1.to_rdd_turnover_amount,
     t1.to_rdd_transaction_time,
     t1.unit_price,
+    t1.to_lu_pay_state,
     t1.return_order_id,
     t1.trading_id,
     t1.order_id,
@@ -41,8 +43,8 @@
         <if test="petrolId != null and petrolId != ''">
           and coupons.petrol_id like concat('%',#{petrolId,jdbcType=VARCHAR},'%')
         </if>
-        <if test="orderId != null and orderId != ''">
-          and coupons.order_id = #{orderId,jdbcType=VARCHAR}
+        <if test="returnOrderId != null and returnOrderId != ''">
+          and coupons.return_order_id = #{returnOrderId,jdbcType=VARCHAR}
         </if>
         <if test="unitPrice != null and unitPrice != '' ">
           AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
@@ -54,7 +56,10 @@
           and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=VARCHAR},'%')
         </if>
         <if test="paymentMethod != null and paymentMethod != ''">
-          and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=VARCHAR},'%')
+          and coupons.payment_method = #{paymentMethod,jdbcType=VARCHAR}
+        </if>
+        <if test="toLuPayState != null and toLuPayState != ''">
+          and coupons.to_lu_pay_state = #{toLuPayState,jdbcType=VARCHAR}
         </if>
         <if test="startTime != null and endTime != null">
           and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -84,8 +89,8 @@
         <if test="petrolId != null and petrolId != ''">
           and coupons.petrol_id like concat('%',#{petrolId,jdbcType=VARCHAR},'%')
         </if>
-        <if test="orderId != null and orderId != ''">
-          and coupons.order_id = #{orderId,jdbcType=VARCHAR}
+        <if test="returnOrderId != null and returnOrderId != ''">
+          and coupons.return_order_id = #{returnOrderId,jdbcType=VARCHAR}
         </if>
         <if test="unitPrice != null and unitPrice != '' ">
           AND coupons.unit_price = #{unitPrice,jdbcType = DOUBLE}
@@ -97,7 +102,10 @@
           and coupons.to_rdd_third_order_id like concat('%',#{toRddThirdOrderId,jdbcType=VARCHAR},'%')
         </if>
         <if test="paymentMethod != null and paymentMethod != ''">
-          and coupons.payment_method like concat('%',#{paymentMethod,jdbcType=VARCHAR},'%')
+          and coupons.payment_method = #{paymentMethod,jdbcType=VARCHAR}
+        </if>
+        <if test="toLuPayState != null and toLuPayState != ''">
+          and coupons.to_lu_pay_state = #{toLuPayState,jdbcType=VARCHAR}
         </if>
         <if test="startTime != null and endTime != null">
           and coupons.to_rdd_transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
