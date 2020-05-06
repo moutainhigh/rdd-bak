@@ -254,6 +254,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="updateAt != null" >
+        lu_pay_balance=#{luPayBalance,jdbcType=DOUBLE},
+      </if>
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
@@ -289,8 +292,7 @@
         order_id = #{orderId,jdbcType=VARCHAR},
         order_info = #{orderInfo,jdbcType=VARCHAR},
         to_lu_pay_end_time = #{toLuPayEndTime,jdbcType=TIMESTAMP},
-        update_at = #{updateAt,jdbcType=TIMESTAMP},
-        lu_pay_balance=#{luPayBalance,jdbcType=DOUBLE}
+        update_at = #{updateAt,jdbcType=TIMESTAMP}
     where to_rdd_out_id = #{toRddOutId,jdbcType=VARCHAR} and user_account = #{userAccount,jdbcType=VARCHAR}
   </update>
 </mapper>

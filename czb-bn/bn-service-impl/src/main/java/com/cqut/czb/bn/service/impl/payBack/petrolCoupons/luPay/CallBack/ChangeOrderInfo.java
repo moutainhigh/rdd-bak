@@ -43,7 +43,7 @@ public class ChangeOrderInfo implements ChangeOrderInfoService {
         records.setToLuPayState(1);
         records.setToLuPayEndTime(new Date());
         records.setUpdateAt(new Date());
-        records.setLuPayBalance(balanceQueryService.BalanceQuery());
+//        records.setLuPayBalance(balanceQueryService.BalanceQuery());
         int is= extra.updateByLuPayInfo(records);
         System.out.println("插入璐付回调信息"+(is>0));
     }

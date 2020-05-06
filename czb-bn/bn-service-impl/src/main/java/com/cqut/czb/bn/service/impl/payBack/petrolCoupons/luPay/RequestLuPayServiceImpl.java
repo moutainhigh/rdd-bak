@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay;
 import com.cqut.czb.bn.dao.mapper.petrolCoupons.PetrolCouponsSalesRecordsMapperExtra;
 import com.cqut.czb.bn.entity.dto.paymentCallBack.AliPetrolCouponsDTO;
 import com.cqut.czb.bn.entity.entity.petrolCoupons.PetrolCouponsSalesRecords;
+import com.cqut.czb.bn.service.LuPay.BalanceQueryService;
 import com.cqut.czb.bn.service.PaymentProcess.RequestLuPayService;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
@@ -20,6 +21,9 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
 
     @Autowired
     PetrolCouponsSalesRecordsMapperExtra extra;
+
+    @Autowired
+    BalanceQueryService balanceQueryService;
 
     @Override
     public String httpRequestGETLuPay(AliPetrolCouponsDTO petrolCouponsDTO){
@@ -106,6 +110,7 @@ public class RequestLuPayServiceImpl implements RequestLuPayService {
         records.setReturnOrderId(ReturnOrderID);
         records.setTradingId(TradingID);
         records.setToLuPayState(0);
+        records.setLuPayBalance(balanceQueryService.BalanceQuery());
         int is= extra.updateByPrimaryKeySelective(records);
         System.out.println("插入璐付起吊信息"+(is>0));
     }
