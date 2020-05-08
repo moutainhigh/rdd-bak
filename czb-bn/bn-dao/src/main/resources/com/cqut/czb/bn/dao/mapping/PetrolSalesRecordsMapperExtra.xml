@@ -425,7 +425,17 @@
 
     <select id="getPetrolRechargeListByAutoRecharge" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultMap="getPetrolRechargeMap">
         SELECT
-        <include refid="getPetrolRecharge"/>
+            record_id,
+            petrol_num,
+            user_account,
+            user_name,
+            petrol_denomination,
+            petrol_price,
+            is_recharged,
+            create_at,
+            update_at,
+            payment_method,
+            petrol_kind
         FROM
         (
         SELECT
