@@ -23,11 +23,12 @@ public class VerifyAsynLuPayInfoServiceImpl implements VerifyAsynLuPayInfoServic
         Map requestParams = request.getParameterMap();
         params=parseOrder(params,requestParams);
         System.out.println(params);
-        //订单交易成功状态码为10027
-        if(!params.get("State").equals("10027")){
+        if (params.get("State") == null||!params.get("State").equals("10027")) {
             System.out.println("判断状态failure");
             return "failure";
-        }else {
+        }
+        //订单交易成功状态码为10027
+        else {
             if(checkSign(params)){
                 System.out.println("修改信息");
                 System.out.println(params);
