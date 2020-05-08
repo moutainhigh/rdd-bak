@@ -206,9 +206,10 @@ public class AppHomePageServiceImpl implements AppHomePageService {
 
     public List<PetrolZoneDTO> getPetrolZone(User user,String area){
         //判断用户买了哪些卡
-        List<PetrolPriceDTO> petrolPriceDTOs=petrolMapperExtra.selectUserPetrol(user.getUserId(),area);
+        List<PetrolPriceDTO> petrolPriceDTOs = petrolMapperExtra.selectUserPetrol(user.getUserId(),area);
         //获取字典信息
         Dict dict=dictMapperExtra.selectDictByName("petrolPrice");
+
         //解析价格
         JSONObject json = JSON.parseObject(dict.getContent());
 
@@ -282,6 +283,7 @@ public class AppHomePageServiceImpl implements AppHomePageService {
         Dict FY2=new Dict();//保存二级返佣比例
         //从字典中查出对应油卡的描述
         List<Dict> infos=dictMapperExtra.selectPetrolInfo();
+
 
         if(infos!=null){
             for (int i=0;i<infos.size();i++){
@@ -463,13 +465,23 @@ public class AppHomePageServiceImpl implements AppHomePageService {
             PetrolStockSwitch petrolStockSwitch= gson.fromJson(body,PetrolStockSwitch.class);
             if(petrolStockSwitch.getUseFakeData()){
                 for(PetrolStock petrolStock : petrolStocks){
-                    petrolStock.setShowMessage("今日库存剩余：" + petrolStockSwitch.getFakeTotal());
+                    if (petrolStock.getPetrolKind() == 3){
+                        petrolStock.setTotal(999);
+                        petrolStock.setShowMessage("今日库存剩余：999" );
+                    }else {
+                        petrolStock.setShowMessage("今日库存剩余：" + petrolStockSwitch.getFakeTotal());
+                    }
                 }
                 return petrolStocks;
             }
         }
         for(PetrolStock petrolStock : petrolStocks){
-            petrolStock.setShowMessage("今日库存剩余：" + petrolStock.getTotal());
+            if (petrolStock.getPetrolKind() == 3){
+                petrolStock.setTotal(999);
+                petrolStock.setShowMessage("今日库存剩余：999" );
+            }else {
+                petrolStock.setShowMessage("今日库存剩余：" + petrolStock.getTotal());
+            }
         }
         return petrolStocks;
     }
