@@ -47,15 +47,13 @@
         czb_user.user_id,
         czb_petrol_sales_records.buyer_id,
         czb_petrol_sales_records.create_at,
-        sum(czb_petrol_sales_records.current_price) as current_price,
+        czb_petrol_sales_records.current_price,
         case when czb_petrol_sales_records.create_at > '2020-03-31 23:46:54'
-        then sum(czb_petrol_sales_records.current_price * 0.0025)
-        else sum(czb_petrol_sales_records.current_price * 0.003)
+        then czb_petrol_sales_records.current_price * 0.0025
+        else czb_petrol_sales_records.current_price * 0.003
         end as my_income
         from czb_user join czb_petrol_sales_records
         on czb_user.user_id = czb_petrol_sales_records.buyer_id
-        group by
-        czb_petrol_sales_records.buyer_id,czb_petrol_sales_records.create_at,user_id
         ) as middle
         group by middle.buyer_id) as income
         on czb_user.user_id = income.buyer_id
