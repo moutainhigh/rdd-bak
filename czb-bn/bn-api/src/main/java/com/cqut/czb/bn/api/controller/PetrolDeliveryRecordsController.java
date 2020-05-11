@@ -58,7 +58,7 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @PostMapping("/receivePetrolDelivery")
-    @PermissionCheck(role = "管理员")
+//    @PermissionCheck(role = "管理员")
     public JSONResult receivePetrolDelivery(@RequestBody DeliveryInput deliveryInput){
         return new JSONResult(petrolDeliveryRecordsService.receivePetrolDelivery(deliveryInput.getIds()));
     }
