@@ -52,6 +52,49 @@
     </select>
 
     <select id="getOfflineClientList" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineClientDTO">
-
+        SELECT
+            b.user_account AS account,
+            c.other_income AS balance,
+            a.create_at AS registerTime,
+            totalConsumption,
+            totalRecharge
+        FROM
+            czb_user_role AS a
+            JOIN czb_user AS b ON a.user_id = b.user_id
+            JOIN czb_user_income_info AS c ON a.user_id = c.user_id
+            LEFT JOIN (
+        SELECT
+            buyer_id,
+            sum( turnover_amount ) totalConsumption
+        FROM
+            czb_petrol_sales_records
+        WHERE
+            buyer_id = ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id WHERE role_id = '12919772806795175' )
+            AND record_type = 3
+        GROUP BY
+            buyer_id
+            ) AS d ON a.user_id = d.buyer_id
+            LEFT JOIN (
+        SELECT
+            buyer_id,
+            sum( amount ) totalRecharge
+        FROM
+            czb_offline_distributor_records
+        WHERE
+            buyer_id = ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id WHERE role_id = '12919772806795175' )
+        GROUP BY
+            buyer_id
+            ) AS e ON a.user_id = e.buyer_id
+        <where>
+            a.role_id = '12919772806795175'
+            <if test="account != null and account != ''">
+                and b.user_account = #{account,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
+                AND ( a.create_at BETWEEN #{startTime} AND #{endTime} )
+            </if>
+        </where>
+        ORDER BY
+            a.create_at DESC
     </select>
 </mapper>
