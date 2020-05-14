@@ -10,7 +10,7 @@ public class OfflineConsumptionDTO extends PageDTO{
 
     private double amount;
 
-    private int state;
+    private String state;
 
     private String account;
 
@@ -47,11 +47,11 @@ public class OfflineConsumptionDTO extends PageDTO{
         this.amount = amount;
     }
 
-    public int getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(String state) {
         this.state = state;
     }
 

@@ -5,6 +5,7 @@ import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.AccountRechargeDTO;
 import com.cqut.czb.bn.entity.dto.OfflineClientDTO;
 import com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO;
+import com.cqut.czb.bn.entity.dto.RechargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.OfflineDistributorOfAdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,15 @@ public class OfflineDistributorOfAdministratorController {
     @RequestMapping(value = "/getAccountBalance",method = RequestMethod.POST)
     public JSONResult getAccountBalance(String account){
         return offlineDistributorOfAdministratorService.getAccountBalance(account);
+    }
+
+    /**
+     * 管理员充值
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/recharge",method = RequestMethod.POST)
+    public JSONResult recharge(RechargeDTO rechargeDTO){
+        return offlineDistributorOfAdministratorService.recharge(rechargeDTO);
     }
 }

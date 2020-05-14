@@ -118,8 +118,25 @@
         FROM
             `czb_user_income_info` AS a
             JOIN czb_user AS b ON a.user_id = b.user_id
+            JOIN czb_user_role AS c ON a.user_id = c.user_id
         <where>
-            b.user_account = #{account,jdbcType = VARCHAR}
+            c.role_id = '12919772806795175'
         </where>
     </select>
+
+    <select id="selectAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count( * )
+        FROM
+            `czb_user_role` AS a
+            JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            a.role_id = '12919772806795175'
+            AND b.user_account = #{account,jdbcType = VARCHAR}
+        </where>
+    </select>
+    
+    <insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+
+    </insert>
 </mapper>
