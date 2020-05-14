@@ -106,9 +106,6 @@
             JOIN czb_user AS b ON a.user_id = b.user_id
         <where>
             a.role_id = '12919772806795175'
-            <if test="account != null and account != ''">
-            and b.user_account like concat('%', #{account,jdbcType = VARCHAR},'%')
-            </if>
         </where>
     </select>
 
