@@ -1,0 +1,66 @@
+package com.cqut.czb.bn.entity.dto;
+
+import java.util.Date;
+
+public class AccountRechargeDTO {
+
+    private String account;
+
+    private double rechargeAmount;
+
+    private double balance;
+
+    private Date startTime;
+
+    private Date endTime;
+
+    private Date rechargeTime;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public double getRechargeAmount() {
+        return rechargeAmount;
+    }
+
+    public void setRechargeAmount(double rechargeAmount) {
+        this.rechargeAmount = rechargeAmount;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Date getRechargeTime() {
+        return rechargeTime;
+    }
+
+    public void setRechargeTime(Date rechargeTime) {
+        this.rechargeTime = rechargeTime;
+    }
+}
