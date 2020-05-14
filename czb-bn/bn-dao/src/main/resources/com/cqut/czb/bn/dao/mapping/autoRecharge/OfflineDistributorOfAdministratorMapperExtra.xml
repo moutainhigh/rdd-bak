@@ -97,4 +97,29 @@
         ORDER BY
             a.create_at DESC
     </select>
+
+    <select id="getRechargeAccountList" parameterType="java.lang.String">
+        SELECT
+            b.user_account
+        FROM
+            `czb_user_role` AS a
+            JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            a.role_id = '12919772806795175'
+            <if test="account != null and account != ''">
+            and b.user_account like concat('%', #{account,jdbcType = VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getAccountBalance" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT
+            a.other_income
+        FROM
+            `czb_user_income_info` AS a
+            JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            b.user_account = #{account,jdbcType = VARCHAR}
+        </where>
+    </select>
 </mapper>

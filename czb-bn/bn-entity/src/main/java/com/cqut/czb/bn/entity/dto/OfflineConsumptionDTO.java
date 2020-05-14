@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.entity.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class OfflineConsumptionDTO {
+public class OfflineConsumptionDTO extends PageDTO{
 
     private String petrolNum;
 
@@ -12,10 +14,13 @@ public class OfflineConsumptionDTO {
 
     private String account;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeTime;
 
     public String getPetrolNum() {

@@ -1,17 +1,22 @@
 package com.cqut.czb.bn.entity.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class OfflineClientDTO {
+public class OfflineClientDTO extends PageDTO{
 
     private String account;
 
     private double balance;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date registerTime;
 
     private double totalConsumption;

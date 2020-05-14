@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.entity.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class AccountRechargeDTO {
+public class AccountRechargeDTO extends PageDTO {
 
     private String account;
 
@@ -10,10 +12,13 @@ public class AccountRechargeDTO {
 
     private double balance;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeTime;
 
     public String getAccount() {

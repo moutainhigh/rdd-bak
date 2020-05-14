@@ -15,4 +15,8 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
     List<OfflineConsumptionDTO> getOfflineConsumptionList(OfflineConsumptionDTO offlineConsumptionDTO);
 
     List<OfflineClientDTO> getOfflineClientList(OfflineClientDTO offlineClientDTO);
+
+    List<String> getRechargeAccountList(String account);
+
+    double getAccountBalance(String account);
 }

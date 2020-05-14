@@ -48,4 +48,24 @@ public class OfflineDistributorOfAdministratorController {
     public JSONResult getOfflineClientList(OfflineClientDTO offlineClientDTO){
         return offlineDistributorOfAdministratorService.getOfflineClientList(offlineClientDTO);
     }
+
+    /**
+     * 账户联动
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/getRechargeAccountList",method = RequestMethod.POST)
+    public JSONResult getRechargeAccountList(String account){
+        return offlineDistributorOfAdministratorService.getRechargeAccountList(account);
+    }
+
+    /**
+     * 获取余额
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/getAccountBalance",method = RequestMethod.POST)
+    public JSONResult getAccountBalance(String account){
+        return offlineDistributorOfAdministratorService.getAccountBalance(account);
+    }
 }

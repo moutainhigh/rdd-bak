@@ -12,4 +12,8 @@ public interface OfflineDistributorOfAdministratorService {
     JSONResult getOfflineConsumptionList(OfflineConsumptionDTO offlineConsumptionDTO);
 
     JSONResult getOfflineClientList(OfflineClientDTO offlineClientDTO);
+
+    JSONResult getRechargeAccountList(String account);
+
+    JSONResult getAccountBalance(String account);
 }
