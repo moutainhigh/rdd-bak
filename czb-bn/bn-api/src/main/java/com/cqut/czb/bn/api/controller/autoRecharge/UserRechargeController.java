@@ -4,6 +4,7 @@ package com.cqut.czb.bn.api.controller.autoRecharge;
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
+import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,21 @@ public class UserRechargeController {
         }
         System.out.println(user.getUserId());
         return new JSONResult(userRechargeService.getBalance(user.getUserId()));
+    }
+
+    /**
+     * 获取详情
+     * @param principal
+     * @param pageDTO
+     * @return
+     */
+    @RequestMapping(value = "/getRechargeDetails", method = RequestMethod.POST)
+    public JSONResult getRechargeDetails(Principal principal, UserRechargeDTO pageDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user == null){
+            return null;
+        }
+        return new JSONResult(userRechargeService.getRechargeDetails(user.getUserId(),pageDTO));
+
     }
 }
