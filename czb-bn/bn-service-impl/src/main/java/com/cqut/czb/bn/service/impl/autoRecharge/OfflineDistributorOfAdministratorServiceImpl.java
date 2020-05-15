@@ -1,10 +1,7 @@
 package com.cqut.czb.bn.service.impl.autoRecharge;
 
 import com.cqut.czb.bn.dao.mapper.autoRecharge.OfflineDistributorOfAdministratorMapperExtra;
-import com.cqut.czb.bn.entity.dto.AccountRechargeDTO;
-import com.cqut.czb.bn.entity.dto.OfflineClientDTO;
-import com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO;
-import com.cqut.czb.bn.entity.dto.RechargeDTO;
+import com.cqut.czb.bn.entity.dto.*;
 import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -26,16 +23,18 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     @Override
     public JSONResult getRechargeTableList(AccountRechargeDTO accountRechargeDTO) {
         PageHelper.startPage(accountRechargeDTO.getCurrentPage(), accountRechargeDTO.getPageSize(),true);
-        VipRechargeRecordDTO rechargeRecordDTO = new VipRechargeRecordDTO();
-        rechargeRecordDTO.setVipRechargeRecordListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO)));
+        OfflineRecordsDTO rechargeRecordDTO = new OfflineRecordsDTO();
+        rechargeRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO)));
+        rechargeRecordDTO.setTotalRecharge(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge());
         return new JSONResult("列表数据查询成功", 200, rechargeRecordDTO);
     }
 
     @Override
     public JSONResult getOfflineConsumptionList(OfflineConsumptionDTO offlineConsumptionDTO) {
         PageHelper.startPage(offlineConsumptionDTO.getCurrentPage(), offlineConsumptionDTO.getPageSize(),true);
-        VipRechargeRecordDTO consumptionRecordDTO = new VipRechargeRecordDTO();
-        consumptionRecordDTO.setVipRechargeRecordListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getOfflineConsumptionList(offlineConsumptionDTO)));
+        OfflineRecordsDTO consumptionRecordDTO = new OfflineRecordsDTO();
+        consumptionRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getOfflineConsumptionList(offlineConsumptionDTO)));
+        consumptionRecordDTO.setTotalSale(offlineDistributorOfAdministratorMapperExtra.getTotalSale());
         return new JSONResult("列表数据查询成功", 200, consumptionRecordDTO);
     }
 
@@ -69,8 +68,15 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             return new JSONResult("该账户不是线下大客户，充值失败",200);
         }
         else if (rechargeDTO.getAccount()==null || rechargeDTO.getAccount() == ""){
+            RechargeDTO rechargeInfo = offlineDistributorOfAdministratorMapperExtra.getInfo(rechargeDTO);
+            rechargeDTO.setUserId(rechargeInfo.getUserId());
+            rechargeDTO.setInfoId(rechargeInfo.getInfoId());
             rechargeDTO.setRecordId(StringUtil.createId());
+            rechargeDTO.setBalance(rechargeInfo.getBalance());
             offlineDistributorOfAdministratorMapperExtra.insertIncomeInfo(rechargeDTO);
+            rechargeDTO.setRecordId(StringUtil.createId());
+            offlineDistributorOfAdministratorMapperExtra.insertOfflineRecords(rechargeDTO);
+            offlineDistributorOfAdministratorMapperExtra.updateBalance(rechargeDTO);
             return new JSONResult("充值成功",200);
         }
         return new JSONResult("充值失败",200);

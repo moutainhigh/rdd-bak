@@ -21,7 +21,17 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
 
     double getAccountBalance(String account);
 
+    double getTotalRecharge();
+
+    double getTotalSale();
+
+    RechargeDTO getInfo(RechargeDTO rechargeDTO);
+
     int insertIncomeInfo(RechargeDTO rechargeDTO);
 
+    int insertOfflineRecords(RechargeDTO rechargeDTO);
+
     int selectAccount(String account);
+
+    int updateBalance(RechargeDTO rechargeDTO);
 }

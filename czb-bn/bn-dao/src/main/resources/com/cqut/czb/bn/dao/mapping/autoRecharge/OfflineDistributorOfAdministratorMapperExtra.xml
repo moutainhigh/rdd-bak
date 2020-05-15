@@ -132,8 +132,55 @@
             AND b.user_account = #{account,jdbcType = VARCHAR}
         </where>
     </select>
+
+    <select id="getInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO" resultType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+        SELECT
+            a.user_id AS userId,
+            a.info_id AS infoId,
+            a.other_income AS balance
+        FROM
+            `czb_user_income_info` AS a
+            JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            b.user_account = #{account,jdbcType = VARCHAR}
+        </where>
+    </select>
     
     <insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
-
+        INSERT INTO `czb_income_log` ( record_id, amount, type,
+        info_id, before_change_income, remark, create_at, update_at )
+        VALUES (#{recordId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE},6,
+        #{infoId,jdbcType=VARCHAR},#{balance,jdbcType=DOUBLE},"线下大客户充值",now(), now())
     </insert>
+    
+    <insert id="insertOfflineRecords" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+        INSERT INTO `czb_offline_distributor_records` ( recharge_id,
+        buyer_id, amount, recharge_time, before_balance, create_at, update_at )
+        VALUES(#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+        #{rechargeAmount,jdbcType=DOUBLE},now(), #{balance,jdbcType=DOUBLE},,now(), now())
+    </insert>
+
+    <update id="updateBalance" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+        UPDATE `czb_user_income_info`
+        SET other_income = other_income + 0.01
+        <where>
+            user_id = #{userId,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <select id="getTotalRecharge" >
+        SELECT
+            IFNULL(sum(amount),0)
+        FROM
+            `czb_offline_distributor_records`
+    </select>
+
+    <select id="getTotalSale" >
+        SELECT
+            IFNULL( sum( turnover_amount ), 0 )
+        FROM
+            `czb_petrol_sales_records`
+        WHERE
+            record_type = 3
+    </select>
 </mapper>
