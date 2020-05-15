@@ -48,8 +48,8 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     }
 
     @Override
-    public JSONResult getRechargeAccountList(String account) {
-        List<String> list = offlineDistributorOfAdministratorMapperExtra.getRechargeAccountList(account);
+    public JSONResult getRechargeAccountList() {
+        List<String> list = offlineDistributorOfAdministratorMapperExtra.getRechargeAccountList();
         return new JSONResult("列表查询成功", 200, list);
     }
 

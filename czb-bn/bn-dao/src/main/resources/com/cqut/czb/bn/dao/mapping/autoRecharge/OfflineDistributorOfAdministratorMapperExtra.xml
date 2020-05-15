@@ -75,7 +75,7 @@
         buyer_id = ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records
         JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id
         JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-        WHERE czb_role.role_id = '线下大客户' )
+        WHERE czb_role.role_name = '线下大客户' )
         AND record_type = 3
         GROUP BY
         buyer_id
@@ -90,7 +90,7 @@
         buyer_id = ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
         JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
         JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-        WHERE czb_role.role_id = '线下大客户' )
+        WHERE czb_role.role_name = '线下大客户' )
         GROUP BY
         buyer_id
         ) AS e ON a.user_id = e.buyer_id
@@ -108,7 +108,7 @@
             a.create_at DESC
     </select>
 
-    <select id="getRechargeAccountList" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="getRechargeAccountList" resultType="java.lang.String">
         SELECT
             b.user_account
         FROM
@@ -116,7 +116,7 @@
             JOIN czb_user AS b ON a.user_id = b.user_id
             JOIN czb_role AS c on c.role_id = a.role_id
         <where>
-            a.role_id = '线下大客户'
+            c.role_name = '线下大客户'
         </where>
     </select>
 
@@ -129,7 +129,7 @@
             JOIN czb_user_role AS c ON a.user_id = c.user_id
             JOIN czb_role AS d on d.role_id = c.role_id
         <where>
-            c.role_id = '线下大客户'
+            d.role_name = '线下大客户'
         </where>
     </select>
 
@@ -141,7 +141,7 @@
             JOIN czb_user AS b ON a.user_id = b.user_id
             JOIN czb_role AS c on c.role_id = a.role_id
         <where>
-            a.role_id = '线下大客户'
+            c.role_name = '线下大客户'
             AND b.user_account = #{account,jdbcType = VARCHAR}
         </where>
     </select>
@@ -181,14 +181,14 @@
         </where>
     </update>
 
-    <select id="getTotalRecharge" >
+    <select id="getTotalRecharge" resultType="java.lang.Double">
         SELECT
             IFNULL(sum(amount),0)
         FROM
             `czb_offline_distributor_records`
     </select>
 
-    <select id="getTotalSale" >
+    <select id="getTotalSale" resultType="java.lang.Double">
         SELECT
             IFNULL( sum( turnover_amount ), 0 )
         FROM

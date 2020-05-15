@@ -56,8 +56,8 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeAccountList",method = RequestMethod.POST)
-    public JSONResult getRechargeAccountList(String account){
-        return offlineDistributorOfAdministratorService.getRechargeAccountList(account);
+    public JSONResult getRechargeAccountList(){
+        return offlineDistributorOfAdministratorService.getRechargeAccountList();
     }
 
     /**
