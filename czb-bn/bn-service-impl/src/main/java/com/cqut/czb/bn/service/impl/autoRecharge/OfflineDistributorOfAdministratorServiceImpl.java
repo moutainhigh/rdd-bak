@@ -67,7 +67,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         if (offlineDistributorOfAdministratorMapperExtra.selectAccount(rechargeDTO.getAccount())==0){
             return new JSONResult("该账户不是线下大客户，充值失败",200);
         }
-        else if (rechargeDTO.getAccount()==null || rechargeDTO.getAccount() == ""){
+        else if (rechargeDTO.getAccount()!=null && rechargeDTO.getAccount() != ""){
             RechargeDTO rechargeInfo = offlineDistributorOfAdministratorMapperExtra.getInfo(rechargeDTO);
             rechargeDTO.setUserId(rechargeInfo.getUserId());
             rechargeDTO.setInfoId(rechargeInfo.getInfoId());

@@ -170,12 +170,12 @@
         INSERT INTO `czb_offline_distributor_records` ( recharge_id,
         buyer_id, amount, recharge_time, before_balance, create_at, update_at )
         VALUES(#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
-        #{rechargeAmount,jdbcType=DOUBLE},now(), #{balance,jdbcType=DOUBLE},,now(), now())
+        #{rechargeAmount,jdbcType=DOUBLE},now(), #{balance,jdbcType=DOUBLE},now(), now())
     </insert>
 
     <update id="updateBalance" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
         UPDATE `czb_user_income_info`
-        SET other_income = other_income + 0.01
+        SET other_income = other_income + #{rechargeAmount}
         <where>
             user_id = #{userId,jdbcType=VARCHAR}
         </where>
