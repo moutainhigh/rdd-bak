@@ -25,7 +25,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         PageHelper.startPage(accountRechargeDTO.getCurrentPage(), accountRechargeDTO.getPageSize(),true);
         OfflineRecordsDTO rechargeRecordDTO = new OfflineRecordsDTO();
         rechargeRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO)));
-        rechargeRecordDTO.setTotalRecharge(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge());
+        rechargeRecordDTO.setTotalRecharge(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO));
         return new JSONResult("列表数据查询成功", 200, rechargeRecordDTO);
     }
 
@@ -34,7 +34,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         PageHelper.startPage(offlineConsumptionDTO.getCurrentPage(), offlineConsumptionDTO.getPageSize(),true);
         OfflineRecordsDTO consumptionRecordDTO = new OfflineRecordsDTO();
         consumptionRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getOfflineConsumptionList(offlineConsumptionDTO)));
-        consumptionRecordDTO.setTotalSale(offlineDistributorOfAdministratorMapperExtra.getTotalSale());
+        consumptionRecordDTO.setTotalSale(offlineDistributorOfAdministratorMapperExtra.getTotalSale(offlineConsumptionDTO));
         return new JSONResult("列表数据查询成功", 200, consumptionRecordDTO);
     }
 

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.autoRecharge.OfflineDistributorOfAdministratorMapperExtra">
-    <select id="getRechargeTableList" parameterType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO">
-        SELECT
-        b.user_account AS account,
-        a.amount AS rechargeAmount,
-        ( a.amount + a.before_balance ) AS balance,
-        a.recharge_time AS rechargeTime
-        FROM
-        `czb_offline_distributor_records` AS a
-        JOIN czb_user AS b ON a.buyer_id = b.user_id
-        <where>
+<select id="getRechargeTableList" parameterType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO">
+    SELECT
+    b.user_account AS account,
+    a.amount AS rechargeAmount,
+    ( a.amount + a.before_balance ) AS balance,
+    a.recharge_time AS rechargeTime
+    FROM
+    `czb_offline_distributor_records` AS a
+    JOIN czb_user AS b ON a.buyer_id = b.user_id
+    <where>
         <if test="account != null and account != ''">
             and b.user_account = #{account,jdbcType=VARCHAR}
         </if>
@@ -19,24 +19,195 @@
             and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
     </where>
-        ORDER BY
-        rechargeTime DESC
-    </select>
+    ORDER BY
+    rechargeTime DESC
+</select>
 
-    <select id="getOfflineConsumptionList" parameterType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO">
+<select id="getOfflineConsumptionList" parameterType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO">
+    SELECT
+    a.petrol_num AS petrolNum,
+    a.turnover_amount AS amount,
+    a.state AS state,
+    b.user_account AS account,
+    a.transaction_time AS rechargeTime
+    FROM
+    `czb_petrol_sales_records` AS a
+    JOIN czb_user AS b ON a.buyer_id = b.user_id
+    <where>
+        a.record_type = 3
+        <if test="petrolNum != null and petrolNum != ''">
+            and a.petrol_num =  #{petrolNum,jdbcType=VARCHAR}
+        </if>
+        <if test="state != null and state != ''">
+            and a.state =  #{state}
+        </if>
+        <if test="account != null and account != ''">
+            and b.user_account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!= null and endTime!= null">
+            and a.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+            and a.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+    </where>
+    ORDER BY
+    rechargeTime DESC
+</select>
+
+<select id="getOfflineClientList" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineClientDTO">
+    SELECT
+    b.user_account AS account,
+    c.other_income AS balance,
+    a.create_at AS registerTime,
+    IFNULL(totalConsumption,0),
+    IFNULL(totalRecharge,0)
+    FROM
+    czb_user_role AS a
+    JOIN czb_user AS b ON a.user_id = b.user_id
+    JOIN czb_user_income_info AS c ON a.user_id = c.user_id
+    JOIN czb_role as f on a.role_id = f.role_id
+    LEFT JOIN (
+    SELECT
+    buyer_id,
+    sum( turnover_amount ) totalConsumption
+    FROM
+    czb_petrol_sales_records
+    WHERE
+    buyer_id = ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records
+    JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id
+    JOIN czb_role on czb_role.role_id = czb_user_role.role_id
+    WHERE czb_role.role_name = '线下大客户' )
+    AND record_type = 3
+    GROUP BY
+    buyer_id
+    ) AS d ON a.user_id = d.buyer_id
+    LEFT JOIN (
+    SELECT
+    buyer_id,
+    sum( amount ) totalRecharge
+    FROM
+    czb_offline_distributor_records
+    WHERE
+    buyer_id = ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
+    JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
+    JOIN czb_role on czb_role.role_id = czb_user_role.role_id
+    WHERE czb_role.role_name = '线下大客户' )
+    GROUP BY
+    buyer_id
+    ) AS e ON a.user_id = e.buyer_id
+    <where>
+        f.role_name = '线下大客户'
+        <if test="account != null and account != ''">
+            and b.user_account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null and endTime != null">
+            and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+    </where>
+    ORDER BY
+    a.create_at DESC
+</select>
+
+<select id="getRechargeAccountList" resultType="java.lang.String">
+    SELECT
+    b.user_account
+    FROM
+    `czb_user_role` AS a
+    JOIN czb_user AS b ON a.user_id = b.user_id
+    JOIN czb_role AS c on c.role_id = a.role_id
+    <where>
+        c.role_name = '线下大客户'
+    </where>
+</select>
+
+<select id="getAccountBalance" parameterType="java.lang.String" resultType="java.lang.Double">
+    SELECT
+    a.other_income
+    FROM
+    `czb_user_income_info` AS a
+    JOIN czb_user AS b ON a.user_id = b.user_id
+    JOIN czb_user_role AS c ON a.user_id = c.user_id
+    JOIN czb_role AS d on d.role_id = c.role_id
+    <where>
+        d.role_name = '线下大客户'
+    </where>
+</select>
+
+<select id="selectAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    count( * )
+    FROM
+    `czb_user_role` AS a
+    JOIN czb_user AS b ON a.user_id = b.user_id
+    JOIN czb_role AS c on c.role_id = a.role_id
+    <where>
+        c.role_name = '线下大客户'
+        AND b.user_account = #{account,jdbcType = VARCHAR}
+    </where>
+</select>
+
+<select id="getInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO" resultType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+    SELECT
+    a.user_id AS userId,
+    a.info_id AS infoId,
+    a.other_income AS balance
+    FROM
+    `czb_user_income_info` AS a
+    JOIN czb_user AS b ON a.user_id = b.user_id
+    <where>
+        b.user_account = #{account,jdbcType = VARCHAR}
+    </where>
+</select>
+
+<insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+        INSERT INTO `czb_income_log` ( record_id, amount, type,
+        info_id, before_change_income, remark, create_at, update_at )
+        VALUES (#{recordId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE},6,
+        #{infoId,jdbcType=VARCHAR},#{balance,jdbcType=DOUBLE},"线下大客户充值",now(), now())
+    </insert>
+
+<insert id="insertOfflineRecords" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+        INSERT INTO `czb_offline_distributor_records` ( recharge_id,
+        buyer_id, amount, recharge_time, before_balance, create_at, update_at )
+        VALUES(#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+        #{rechargeAmount,jdbcType=DOUBLE},now(), #{balance,jdbcType=DOUBLE},now(), now())
+    </insert>
+
+<update id="updateBalance" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
+    UPDATE `czb_user_income_info`
+    SET other_income = other_income + #{rechargeAmount}
+    <where>
+        user_id = #{userId,jdbcType=VARCHAR}
+    </where>
+</update>
+
+<select id="getTotalRecharge" parameterType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO" resultType="java.lang.Double">
+    SELECT
+    IFNULL( sum( amount ), 0 )
+    FROM
+    `czb_offline_distributor_records` AS a
+    JOIN czb_user AS b ON a.user_id = b.user_id
+    <where>
+        <if test="account != null and account != ''">
+            and b.user_account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null and endTime != null">
+            and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+    </where>
+</select>
+
+<select id="getTotalSale" parameterType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO" resultType="java.lang.Double">
         SELECT
-            a.petrol_num AS petrolNum,
-            a.turnover_amount AS amount,
-            a.state AS state,
-            b.user_account AS account,
-            a.transaction_time AS rechargeTime
+            IFNULL( sum( turnover_amount ), 0 )
         FROM
-            `czb_petrol_sales_records` AS a
-            JOIN czb_user AS b ON a.buyer_id = b.user_id
+            `czb_petrol_sales_records` as a
+        JOIN czb_user AS b ON a.buyer_id = b.user_id
         <where>
             a.record_type = 3
             <if test="petrolNum != null and petrolNum != ''">
-              and a.petrol_num =  #{petrolNum,jdbcType=VARCHAR}
+                and a.petrol_num =  #{petrolNum,jdbcType=VARCHAR}
             </if>
             <if test="state != null and state != ''">
                 and a.state =  #{state}
@@ -49,151 +220,5 @@
                 and a.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
-        ORDER BY
-            rechargeTime DESC
-    </select>
-
-    <select id="getOfflineClientList" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineClientDTO">
-        SELECT
-        b.user_account AS account,
-        c.other_income AS balance,
-        a.create_at AS registerTime,
-        IFNULL(totalConsumption,0),
-        IFNULL(totalRecharge,0)
-        FROM
-        czb_user_role AS a
-        JOIN czb_user AS b ON a.user_id = b.user_id
-        JOIN czb_user_income_info AS c ON a.user_id = c.user_id
-        JOIN czb_role as f on a.role_id = f.role_id
-        LEFT JOIN (
-        SELECT
-        buyer_id,
-        sum( turnover_amount ) totalConsumption
-        FROM
-        czb_petrol_sales_records
-        WHERE
-        buyer_id = ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records
-        JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id
-        JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-        WHERE czb_role.role_name = '线下大客户' )
-        AND record_type = 3
-        GROUP BY
-        buyer_id
-        ) AS d ON a.user_id = d.buyer_id
-        LEFT JOIN (
-        SELECT
-        buyer_id,
-        sum( amount ) totalRecharge
-        FROM
-        czb_offline_distributor_records
-        WHERE
-        buyer_id = ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
-        JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
-        JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-        WHERE czb_role.role_name = '线下大客户' )
-        GROUP BY
-        buyer_id
-        ) AS e ON a.user_id = e.buyer_id
-        <where>
-            f.role_name = '线下大客户'
-            <if test="account != null and account != ''">
-                and b.user_account = #{account,jdbcType=VARCHAR}
-            </if>
-            <if test="startTime != null and endTime != null">
-                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
-                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
-            </if>
-        </where>
-        ORDER BY
-            a.create_at DESC
-    </select>
-
-    <select id="getRechargeAccountList" resultType="java.lang.String">
-        SELECT
-            b.user_account
-        FROM
-            `czb_user_role` AS a
-            JOIN czb_user AS b ON a.user_id = b.user_id
-            JOIN czb_role AS c on c.role_id = a.role_id
-        <where>
-            c.role_name = '线下大客户'
-        </where>
-    </select>
-
-    <select id="getAccountBalance" parameterType="java.lang.String" resultType="java.lang.Double">
-        SELECT
-            a.other_income
-        FROM
-            `czb_user_income_info` AS a
-            JOIN czb_user AS b ON a.user_id = b.user_id
-            JOIN czb_user_role AS c ON a.user_id = c.user_id
-            JOIN czb_role AS d on d.role_id = c.role_id
-        <where>
-            d.role_name = '线下大客户'
-        </where>
-    </select>
-
-    <select id="selectAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT
-            count( * )
-        FROM
-            `czb_user_role` AS a
-            JOIN czb_user AS b ON a.user_id = b.user_id
-            JOIN czb_role AS c on c.role_id = a.role_id
-        <where>
-            c.role_name = '线下大客户'
-            AND b.user_account = #{account,jdbcType = VARCHAR}
-        </where>
-    </select>
-
-    <select id="getInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO" resultType="com.cqut.czb.bn.entity.dto.RechargeDTO">
-        SELECT
-            a.user_id AS userId,
-            a.info_id AS infoId,
-            a.other_income AS balance
-        FROM
-            `czb_user_income_info` AS a
-            JOIN czb_user AS b ON a.user_id = b.user_id
-        <where>
-            b.user_account = #{account,jdbcType = VARCHAR}
-        </where>
-    </select>
-    
-    <insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
-        INSERT INTO `czb_income_log` ( record_id, amount, type,
-        info_id, before_change_income, remark, create_at, update_at )
-        VALUES (#{recordId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE},6,
-        #{infoId,jdbcType=VARCHAR},#{balance,jdbcType=DOUBLE},"线下大客户充值",now(), now())
-    </insert>
-    
-    <insert id="insertOfflineRecords" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
-        INSERT INTO `czb_offline_distributor_records` ( recharge_id,
-        buyer_id, amount, recharge_time, before_balance, create_at, update_at )
-        VALUES(#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
-        #{rechargeAmount,jdbcType=DOUBLE},now(), #{balance,jdbcType=DOUBLE},now(), now())
-    </insert>
-
-    <update id="updateBalance" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
-        UPDATE `czb_user_income_info`
-        SET other_income = other_income + #{rechargeAmount}
-        <where>
-            user_id = #{userId,jdbcType=VARCHAR}
-        </where>
-    </update>
-
-    <select id="getTotalRecharge" resultType="java.lang.Double">
-        SELECT
-            IFNULL(sum(amount),0)
-        FROM
-            `czb_offline_distributor_records`
-    </select>
-
-    <select id="getTotalSale" resultType="java.lang.Double">
-        SELECT
-            IFNULL( sum( turnover_amount ), 0 )
-        FROM
-            `czb_petrol_sales_records`
-        WHERE
-            record_type = 3
     </select>
 </mapper>
