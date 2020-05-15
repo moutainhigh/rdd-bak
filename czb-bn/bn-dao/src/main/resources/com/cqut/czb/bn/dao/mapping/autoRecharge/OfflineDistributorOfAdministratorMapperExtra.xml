@@ -58,8 +58,8 @@
     b.user_account AS account,
     c.other_income AS balance,
     a.create_at AS registerTime,
-    IFNULL(totalConsumption,0),
-    IFNULL(totalRecharge,0)
+    IFNULL(totalConsumption,0) as totalConsumption,
+    IFNULL(totalRecharge,0) as totalRecharge
     FROM
     czb_user_role AS a
     JOIN czb_user AS b ON a.user_id = b.user_id
