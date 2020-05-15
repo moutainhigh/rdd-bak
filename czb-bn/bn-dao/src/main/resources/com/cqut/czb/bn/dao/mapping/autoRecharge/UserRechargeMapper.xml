@@ -3,6 +3,7 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper" >
     <select id="getBalance" resultType="java.lang.Double" parameterType="java.lang.String" >
         select other_income from czb_user_income_info where user_id = #{userId,jdbcType=VARCHAR}
+        GROUP BY other_income
     </select>
 
     <insert id="insertRecharge" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge" >
@@ -19,6 +20,34 @@
           #{denomination,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE})
     </insert>
 
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge" >
+        insert into czb_user_income_info (
+        info_id,
+        user_id,
+        fanyong_income,
+        share_income,
+        pay_total_rent,
+        got_total_rent,
+        other_income,
+        create_at,
+        update_at,
+        withdrawed,
+        total_consumption)
+        values (
+                #{infoId,jdbcType=VARCHAR},
+                #{userId,jdbcType=VARCHAR},
+                '0.00',
+                '0.00',
+                '0.00',
+                '0.00',
+                #{otherIncome,jdbcType=DOUBLE},
+                CURRENT_TIMESTAMP ,
+                CURRENT_TIMESTAMP,
+                '0.00',
+                '0.00'
+        )
+    </insert>
+
     <update id="updateRecharge" >
         update czb_user_income_info
         <set >
@@ -27,15 +56,5 @@
             </if>
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
-    </update>
-
-    <update id="update" >
-        update czb_user_income_info
-        <set >
-            <if test="turnoverAmount != null and turnoverAmount != ''">
-                other_income = other_income + #{turnoverAmount,jdbcType=DOUBLE}
-            </if>
-        </set>
-        where user_id in ( SELECT owner_id FROM czb_petrol WHERE petrol_num =  #{petrolNum,jdbcType=VARCHAR})
     </update>
 </mapper>

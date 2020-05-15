@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl.autoRecharge;
 
 import com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper;
+import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +41,16 @@ public class UserRechargeServiceimpl implements UserRechargeService {
         petrol.setPetrolKind(1);
         petrol.setDenomination(userRecharge.getTurnoverAmount());
         petrol.setCurrentPrice(userRecharge.getTurnoverAmount());
-        if(userRechargeMapper.update(userRecharge)&&userRechargeMapper.updateRecharge(userId,userRecharge.getTurnoverAmount()))
-            return userRechargeMapper.insertRecharge(petrol);
+        boolean petr = userRechargeMapper.insertRecharge(petrol);
+        boolean isBalance = userRechargeMapper.updateRecharge(userId,userRecharge.getTurnoverAmount());
+
+        IncomeInfo incomeInfo = new IncomeInfo();
+        incomeInfo.setInfoId(StringUtil.createId());
+        incomeInfo.setUserId(userId);
+        incomeInfo.setOtherIncome(userRechargeMapper.getBalance(userId));
+        boolean info = userRechargeMapper.insert(incomeInfo);
+        if(petr && isBalance && info)
+            return 1;
         else
             return -1;
     }
