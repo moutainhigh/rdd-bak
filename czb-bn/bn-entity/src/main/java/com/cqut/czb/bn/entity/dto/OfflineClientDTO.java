@@ -10,10 +10,10 @@ public class OfflineClientDTO extends PageDTO{
 
     private double balance;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

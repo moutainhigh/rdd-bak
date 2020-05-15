@@ -14,8 +14,9 @@
         <if test="account != null and account != ''">
             and b.user_account = #{account,jdbcType=VARCHAR}
         </if>
-        <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-            AND ( a.create_at BETWEEN #{startTime} AND #{endTime} )
+        <if test="startTime != null and endTime != null">
+            and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
     </where>
         ORDER BY
@@ -34,17 +35,18 @@
             JOIN czb_user AS b ON a.buyer_id = b.user_id
         <where>
             a.record_type = 3
-            <if test="petrolNum != null and account != ''">
+            <if test="petrolNum != null and petrolNum != ''">
               and a.petrol_num =  #{petrolNum,jdbcType=VARCHAR}
             </if>
-            <if test="state != null and account != ''">
+            <if test="state != null and state != ''">
                 and a.state =  #{state}
             </if>
             <if test="account != null and account != ''">
                 and b.user_account = #{account,jdbcType=VARCHAR}
             </if>
-            <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND ( a.transaction_time BETWEEN #{startTime} AND #{endTime} )
+            <if test="startTime!= null and endTime!= null">
+                and a.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
         ORDER BY
@@ -97,15 +99,16 @@
             <if test="account != null and account != ''">
                 and b.user_account = #{account,jdbcType=VARCHAR}
             </if>
-            <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                AND ( a.create_at BETWEEN #{startTime} AND #{endTime} )
+            <if test="startTime != null and endTime != null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
         ORDER BY
             a.create_at DESC
     </select>
 
-    <select id="getRechargeAccountList" parameterType="java.lang.String">
+    <select id="getRechargeAccountList" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT
             b.user_account
         FROM
