@@ -32,7 +32,6 @@ public class UserRechargeServiceImpl implements UserRechargeService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public JSONResult insertRecharge(String userId, UserRecharge userRecharge) {
         if(userRecharge.getTurnoverAmount() < 0) {
             return new JSONResult("充值金额不能为负数，充值失败",200);

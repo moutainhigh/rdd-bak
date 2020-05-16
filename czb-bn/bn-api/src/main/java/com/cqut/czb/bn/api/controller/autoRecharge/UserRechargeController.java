@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,7 @@ public class UserRechargeController {
      * 插入线下充值记录
      * @return
      */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     @PermissionCheck(role = "线下大客户")
     @RequestMapping(value = "/insertRecharge", method = RequestMethod.GET)
     public JSONResult insertRecharge(Principal principal, UserRecharge userRecharge){
@@ -42,6 +44,7 @@ public class UserRechargeController {
      * 获取余额
      * @return
      */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     @PermissionCheck(role = "线下大客户")
     @RequestMapping(value = "/getBalance", method = RequestMethod.GET)
     public JSONResult getBalance(Principal principal){
@@ -59,6 +62,7 @@ public class UserRechargeController {
      * @param pageDTO
      * @return
      */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     @PermissionCheck(role = "线下大客户")
     @RequestMapping(value = "/getRechargeDetails", method = RequestMethod.POST)
     public JSONResult getRechargeDetails(Principal principal, UserRechargeDTO pageDTO){
