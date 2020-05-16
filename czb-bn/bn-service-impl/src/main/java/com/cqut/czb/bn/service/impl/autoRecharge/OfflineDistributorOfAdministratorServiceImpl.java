@@ -55,7 +55,10 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
 
     @Override
     public JSONResult getAccountBalance(String account) {
-        double balance = offlineDistributorOfAdministratorMapperExtra.getAccountBalance(account);
+        if (account == null || account == ""){
+            return new JSONResult("账户不能为空",200);
+        }
+        Double balance = offlineDistributorOfAdministratorMapperExtra.getAccountBalance(account);
         return new JSONResult("余额查询成功", 200, balance);
     }
 

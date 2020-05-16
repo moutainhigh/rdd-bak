@@ -5,11 +5,12 @@
     SELECT
     b.user_account AS account,
     a.amount AS rechargeAmount,
-    ( a.amount + a.before_balance ) AS balance,
+    (a.amount + a.before_balance) AS balance,
     a.recharge_time AS rechargeTime
     FROM
     `czb_offline_distributor_records` AS a
     JOIN czb_user AS b ON a.buyer_id = b.user_id
+    join czb_user_income_info as c on c.user_id = b.user_id
     <where>
         <if test="account != null and account != ''">
             and b.user_account = #{account,jdbcType=VARCHAR}
@@ -54,9 +55,9 @@
 </select>
 
 <select id="getOfflineClientList" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineClientDTO">
-    SELECT
+    SELECT DISTINCT
     b.user_account AS account,
-    c.other_income AS balance,
+    c.offline_recharge_balance AS balance,
     a.create_at AS registerTime,
     IFNULL(totalConsumption,0) as totalConsumption,
     IFNULL(totalRecharge,0) as totalRecharge
@@ -72,7 +73,7 @@
     FROM
     czb_petrol_sales_records
     WHERE
-    buyer_id = ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records
+    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records
     JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
     WHERE czb_role.role_name = '线下大客户' )
@@ -87,7 +88,7 @@
     FROM
     czb_offline_distributor_records
     WHERE
-    buyer_id = ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
+    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
     JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
     WHERE czb_role.role_name = '线下大客户' )
@@ -122,7 +123,7 @@
 
 <select id="getAccountBalance" parameterType="java.lang.String" resultType="java.lang.Double">
     SELECT
-    a.other_income
+    IFNULL( a.offline_recharge_balance, 0.00 )
     FROM
     `czb_user_income_info` AS a
     JOIN czb_user AS b ON a.user_id = b.user_id
@@ -130,6 +131,7 @@
     JOIN czb_role AS d on d.role_id = c.role_id
     <where>
         d.role_name = '线下大客户'
+        and b.user_account = #{account,jdbcType = VARCHAR}
     </where>
 </select>
 
@@ -150,7 +152,7 @@
     SELECT
     a.user_id AS userId,
     a.info_id AS infoId,
-    a.other_income AS balance
+    a.offline_recharge_balance AS balance
     FROM
     `czb_user_income_info` AS a
     JOIN czb_user AS b ON a.user_id = b.user_id
@@ -175,7 +177,7 @@
 
 <update id="updateBalance" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
     UPDATE `czb_user_income_info`
-    SET other_income = other_income + #{rechargeAmount}
+    SET offline_recharge_balance = offline_recharge_balance + #{rechargeAmount}
     <where>
         user_id = #{userId,jdbcType=VARCHAR}
     </where>
@@ -186,7 +188,7 @@
     IFNULL( sum( amount ), 0 )
     FROM
     `czb_offline_distributor_records` AS a
-    JOIN czb_user AS b ON a.user_id = b.user_id
+    JOIN czb_user AS b ON a.buyer_id = b.user_id
     <where>
         <if test="account != null and account != ''">
             and b.user_account = #{account,jdbcType=VARCHAR}

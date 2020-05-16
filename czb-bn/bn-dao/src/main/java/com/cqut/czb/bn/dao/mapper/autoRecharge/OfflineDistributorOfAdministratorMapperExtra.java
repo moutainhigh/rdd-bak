@@ -19,11 +19,11 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
 
     List<String> getRechargeAccountList();
 
-    double getAccountBalance(String account);
+    Double getAccountBalance(String account);
 
-    double getTotalRecharge(AccountRechargeDTO accountRechargeDTO);
+    Double getTotalRecharge(AccountRechargeDTO accountRechargeDTO);
 
-    double getTotalSale(OfflineConsumptionDTO offlineConsumptionDTO);
+    Double getTotalSale(OfflineConsumptionDTO offlineConsumptionDTO);
 
     RechargeDTO getInfo(RechargeDTO rechargeDTO);
 
