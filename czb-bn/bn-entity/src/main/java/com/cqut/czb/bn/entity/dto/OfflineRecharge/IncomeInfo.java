@@ -5,7 +5,7 @@ public class IncomeInfo {
 
     private String userId;
 
-    private double otherIncome;
+    private double offlineRechargeBalance;
 
     public String getInfoId() {
         return infoId;
@@ -23,11 +23,11 @@ public class IncomeInfo {
         this.userId = userId;
     }
 
-    public double getOtherIncome() {
-        return otherIncome;
+    public double getOfflineRechargeBalance() {
+        return offlineRechargeBalance;
     }
 
-    public void setOtherIncome(double otherIncome) {
-        this.otherIncome = otherIncome;
+    public void setOfflineRechargeBalance(double offlineRechargeBalance) {
+        this.offlineRechargeBalance = offlineRechargeBalance;
     }
 }

@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,7 +32,11 @@ public class UserRechargeServiceImpl implements UserRechargeService {
      * @return
      */
     @Override
-    public int insertRecharge(String userId, UserRecharge userRecharge) {
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public JSONResult insertRecharge(String userId, UserRecharge userRecharge) {
+        if(userRecharge.getTurnoverAmount() < 0) {
+            return new JSONResult("充值金额不能为负数，充值失败",200);
+        }
         UserRecharge petrol = new UserRecharge();
         //订单标识
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
@@ -54,12 +59,12 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         IncomeInfo incomeInfo = new IncomeInfo();
         incomeInfo.setInfoId(StringUtil.createId());
         incomeInfo.setUserId(userId);
-        incomeInfo.setOtherIncome(userRechargeMapper.getBalance(userId));
+        incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(userId));
         boolean info = userRechargeMapper.insert(incomeInfo);
         if(petr && isBalance && info)
-            return 1;
+            return new JSONResult("充值成功",500);
         else
-            return -1;
+            return new JSONResult("充值失败",200);
     }
 
     /**
@@ -69,7 +74,8 @@ public class UserRechargeServiceImpl implements UserRechargeService {
      */
     @Override
     public double getBalance(String userId) {
-        return userRechargeMapper.getBalance(userId);
+        double balance = userRechargeMapper.getBalance(userId);
+        return balance;
     }
 
     /**

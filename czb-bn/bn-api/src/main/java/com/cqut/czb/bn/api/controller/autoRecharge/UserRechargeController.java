@@ -27,17 +27,14 @@ public class UserRechargeController {
      * 插入线下充值记录
      * @return
      */
-//    @PermissionCheck(role = "线下大客户")
+    @PermissionCheck(role = "线下大客户")
     @RequestMapping(value = "/insertRecharge", method = RequestMethod.GET)
     public JSONResult insertRecharge(Principal principal, UserRecharge userRecharge){
         User user = (User)redisUtils.get(principal.getName());
         if (user == null) {
             return null;
         }
-        if(userRechargeService.insertRecharge(user.getUserId(),userRecharge) == -1)
-            return new JSONResult("充值失败",500);
-        else
-            return new JSONResult("充值成功",200);
+        return userRechargeService.insertRecharge(user.getUserId(),userRecharge);
     }
 
 
@@ -45,7 +42,7 @@ public class UserRechargeController {
      * 获取余额
      * @return
      */
-//    @PermissionCheck(role = "线下大客户")
+    @PermissionCheck(role = "线下大客户")
     @RequestMapping(value = "/getBalance", method = RequestMethod.GET)
     public JSONResult getBalance(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
@@ -53,7 +50,7 @@ public class UserRechargeController {
             return null;
         }
         System.out.println(user.getUserId());
-        return new JSONResult(userRechargeService.getBalance(user.getUserId()));
+        return new JSONResult("余额获取成功",200, userRechargeService.getBalance(user.getUserId()));
     }
 
     /**
@@ -62,6 +59,7 @@ public class UserRechargeController {
      * @param pageDTO
      * @return
      */
+    @PermissionCheck(role = "线下大客户")
     @RequestMapping(value = "/getRechargeDetails", method = RequestMethod.POST)
     public JSONResult getRechargeDetails(Principal principal, UserRechargeDTO pageDTO){
         User user = (User)redisUtils.get(principal.getName());

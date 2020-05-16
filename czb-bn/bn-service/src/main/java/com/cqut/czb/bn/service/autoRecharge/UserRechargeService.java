@@ -2,11 +2,10 @@ package com.cqut.czb.bn.service.autoRecharge;
 
 
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
-import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
-
+import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 public interface UserRechargeService {
-    int insertRecharge(String userId, UserRecharge userRecharge);
+    JSONResult insertRecharge(String userId, UserRecharge userRecharge);
 
     double getBalance(String userId);
 
