@@ -24,7 +24,7 @@ public class OfflineDistributorOfAdministratorController {
      * 获取账户充值记录
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeTableList",method = RequestMethod.POST)
     public JSONResult getRechargeTableList(AccountRechargeDTO accountRechargeDTO){
         return offlineDistributorOfAdministratorService.getRechargeTableList(accountRechargeDTO);
@@ -34,7 +34,7 @@ public class OfflineDistributorOfAdministratorController {
      * 获取所有线下消费记录
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getOfflineConsumptionList",method = RequestMethod.POST)
     public JSONResult getOfflineConsumptionList(OfflineConsumptionDTO offlineConsumptionDTO){
         return offlineDistributorOfAdministratorService.getOfflineConsumptionList(offlineConsumptionDTO);
@@ -44,7 +44,7 @@ public class OfflineDistributorOfAdministratorController {
      * 获取代理商信息
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getOfflineClientList",method = RequestMethod.POST)
     public JSONResult getOfflineClientList(OfflineClientDTO offlineClientDTO){
         return offlineDistributorOfAdministratorService.getOfflineClientList(offlineClientDTO);
@@ -54,7 +54,7 @@ public class OfflineDistributorOfAdministratorController {
      * 账户联动
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeAccountList",method = RequestMethod.POST)
     public JSONResult getRechargeAccountList(){
         return offlineDistributorOfAdministratorService.getRechargeAccountList();
@@ -64,7 +64,7 @@ public class OfflineDistributorOfAdministratorController {
      * 获取余额
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getAccountBalance",method = RequestMethod.POST)
     public JSONResult getAccountBalance(String account){
         return offlineDistributorOfAdministratorService.getAccountBalance(account);
@@ -74,7 +74,7 @@ public class OfflineDistributorOfAdministratorController {
      * 管理员充值
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/recharge",method = RequestMethod.POST)
     public JSONResult recharge(RechargeDTO rechargeDTO){
         return offlineDistributorOfAdministratorService.recharge(rechargeDTO);

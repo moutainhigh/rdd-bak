@@ -133,6 +133,7 @@
         d.role_name = '线下大客户'
         and b.user_account = #{account,jdbcType = VARCHAR}
     </where>
+    LIMIT 1
 </select>
 
 <select id="selectAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
