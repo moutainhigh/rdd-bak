@@ -9,13 +9,13 @@
     <select id="getTotalRechargeAmount" resultType="java.lang.Double" parameterType="java.lang.String" >
        SELECT sum(turnover_amount) as total
        FROM czb_petrol_sales_records
-       where buyer_id = #{userId,jdbcType=VARCHAR}
+       where buyer_id = #{userId,jdbcType=VARCHAR} and record_type = 3
     </select>
 
     <select id="getRechargeDetails" parameterType="com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge">
         SELECT
         petrol_id as petrolId,
-        petrol_num as petrol_num,
+        petrol_num as petrolNum,
         turnover_amount as turnoverAmount,
         state,
         transaction_time as transactionTime,
@@ -24,13 +24,15 @@
         FROM czb_petrol_sales_records
         <where>
             buyer_id = #{buyerId,jdbcType=VARCHAR}
-            <if test="petrolId != null and petrolId != ''">
-              and   petrol_id like concat('%', #{petrolId},'%')
+              and record_type = 3
+            <if test="petrolNum != null and petrolNum != ''">
+              and   petrol_num like concat('%', #{petrolNum},'%')
             </if>
             <if test="state != null and state != -1" >
                 and   state = #{state,jdbcType=INTEGER}
             </if>
         </where>
+        ORDER BY transaction_time DESC
 
     </select>
 
