@@ -455,10 +455,6 @@
         WHERE
         is_recharged = 0
         AND petrol_kind = #{petrolKind,jdbcType = INTEGER}
-        AND (
-        petrol_num LIKE 'RDD%'
-        OR petrol_num LIKE 'S%'
-        )
         AND CHAR_LENGTH(petrol_num) > 15
         AND state = 1
         ORDER BY
