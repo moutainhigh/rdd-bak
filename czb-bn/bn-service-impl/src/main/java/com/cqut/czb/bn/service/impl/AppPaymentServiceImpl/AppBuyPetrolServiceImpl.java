@@ -202,6 +202,13 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
     @Override
     public Map<String,Object> PurchaseControl(PetrolInputDTO petrolInputDTO) {
+       //判断是否为vip
+        User user=userMapper.selectByPrimaryKey(petrolInputDTO.getOwnerId());
+        if(user.getIsVip()==0){
+            Map<String,Object> info=new HashMap<>();
+            info.put("-1","不是vip");
+            return info;
+        }
         //判断今日是否购买过油卡is_continuous_buy
         Dict dict=dictMapperExtra.selectDictByName("is_continuous_buy");
         if(dict.getContent().equals("否")){

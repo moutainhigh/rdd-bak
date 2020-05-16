@@ -25,6 +25,8 @@ public class UserIncomeInfo {
 
     private Double totalConsumption;
 
+    private Double offlineRechargeBalance;
+
     public String getInfoId() {
         return infoId;
     }
@@ -111,5 +113,13 @@ public class UserIncomeInfo {
 
     public void setTotalConsumption(Double totalConsumption) {
         this.totalConsumption = totalConsumption;
+    }
+
+    public Double getOfflineRechargeBalance() {
+        return offlineRechargeBalance;
+    }
+
+    public void setOfflineRechargeBalance(Double offlineRechargeBalance) {
+        this.offlineRechargeBalance = offlineRechargeBalance;
     }
 }
