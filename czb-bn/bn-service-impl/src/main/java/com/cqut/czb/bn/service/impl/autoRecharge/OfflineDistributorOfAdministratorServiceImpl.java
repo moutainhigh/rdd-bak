@@ -64,11 +64,11 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
 
     @Override
     public JSONResult recharge(RechargeDTO rechargeDTO) {
-        if (rechargeDTO.getRechargeAmount()<0){
-            return new JSONResult("充值金额不能为负数，充值失败",200);
+        if (rechargeDTO.getRechargeAmount()<=0){
+            return new JSONResult("充值金额不能为负数，充值失败",200,false);
         }
         if (offlineDistributorOfAdministratorMapperExtra.selectAccount(rechargeDTO.getAccount())==0){
-            return new JSONResult("该账户不是线下大客户，充值失败",200);
+            return new JSONResult("该账户不是线下大客户，充值失败",200,false);
         }
         else if (rechargeDTO.getAccount()!=null && rechargeDTO.getAccount() != ""){
             RechargeDTO rechargeInfo = offlineDistributorOfAdministratorMapperExtra.getInfo(rechargeDTO);
@@ -80,8 +80,8 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             rechargeDTO.setRecordId(StringUtil.createId());
             offlineDistributorOfAdministratorMapperExtra.insertOfflineRecords(rechargeDTO);
             offlineDistributorOfAdministratorMapperExtra.updateBalance(rechargeDTO);
-            return new JSONResult("充值成功",200);
+            return new JSONResult("充值成功",200,true);
         }
-        return new JSONResult("充值失败",200);
+        return new JSONResult("充值失败",200,false);
     }
 }

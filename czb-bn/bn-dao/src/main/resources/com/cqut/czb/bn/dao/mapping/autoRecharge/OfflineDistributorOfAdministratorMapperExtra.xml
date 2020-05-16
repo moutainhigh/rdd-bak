@@ -10,10 +10,9 @@
     FROM
     `czb_offline_distributor_records` AS a
     JOIN czb_user AS b ON a.buyer_id = b.user_id
-    join czb_user_income_info as c on c.user_id = b.user_id
     <where>
         <if test="account != null and account != ''">
-            and b.user_account = #{account,jdbcType=VARCHAR}
+            and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
         <if test="startTime != null and endTime != null">
             and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -28,7 +27,7 @@
     SELECT
     a.petrol_num AS petrolNum,
     a.turnover_amount AS amount,
-    a.state AS state,
+    a.is_recharged AS state,
     b.user_account AS account,
     a.transaction_time AS rechargeTime
     FROM
@@ -37,13 +36,13 @@
     <where>
         a.record_type = 3
         <if test="petrolNum != null and petrolNum != ''">
-            and a.petrol_num =  #{petrolNum,jdbcType=VARCHAR}
+            and a.petrol_num LIKE concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
         </if>
         <if test="state != null and state != ''">
-            and a.state =  #{state}
+            and a.is_recharged =  #{state}
         </if>
         <if test="account != null and account != ''">
-            and b.user_account = #{account,jdbcType=VARCHAR}
+            and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
         <if test="startTime!= null and endTime!= null">
             and a.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -98,7 +97,7 @@
     <where>
         f.role_name = '线下大客户'
         <if test="account != null and account != ''">
-            and b.user_account = #{account,jdbcType=VARCHAR}
+            and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
         <if test="startTime != null and endTime != null">
             and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -160,6 +159,7 @@
     <where>
         b.user_account = #{account,jdbcType = VARCHAR}
     </where>
+    LIMIT 1
 </select>
 
 <insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
@@ -192,7 +192,7 @@
     JOIN czb_user AS b ON a.buyer_id = b.user_id
     <where>
         <if test="account != null and account != ''">
-            and b.user_account = #{account,jdbcType=VARCHAR}
+            and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
         <if test="startTime != null and endTime != null">
             and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -210,13 +210,13 @@
         <where>
             a.record_type = 3
             <if test="petrolNum != null and petrolNum != ''">
-                and a.petrol_num =  #{petrolNum,jdbcType=VARCHAR}
+                and a.petrol_num LIKE concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
             </if>
             <if test="state != null and state != ''">
-                and a.state =  #{state}
+                and a.is_recharged =  #{state}
             </if>
             <if test="account != null and account != ''">
-                and b.user_account = #{account,jdbcType=VARCHAR}
+                and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>
             <if test="startTime!= null and endTime!= null">
                 and a.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
