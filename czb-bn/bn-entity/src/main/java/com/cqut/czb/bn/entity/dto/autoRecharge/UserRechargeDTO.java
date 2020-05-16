@@ -35,7 +35,7 @@ public class UserRechargeDTO extends PageDTO {
 
     private int recordType;  // 交易状态
 
-    private int isRecharged;  // 交易状态
+    private Integer isRecharged;  // 交易状态
 
     private int petrolKind;  // 交易状态
 
@@ -155,11 +155,11 @@ public class UserRechargeDTO extends PageDTO {
         this.recordType = recordType;
     }
 
-    public int getIsRecharged() {
+    public Integer getIsRecharged() {
         return isRecharged;
     }
 
-    public void setIsRecharged(int isRecharged) {
+    public void setIsRecharged(Integer isRecharged) {
         this.isRecharged = isRecharged;
     }
 

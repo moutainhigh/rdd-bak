@@ -18,6 +18,7 @@
         petrol_num as petrolNum,
         turnover_amount as turnoverAmount,
         state,
+        is_recharged as isRecharged,
         transaction_time as transactionTime,
         create_at as createAt,
         update_at as updateAt
@@ -28,8 +29,8 @@
             <if test="petrolNum != null and petrolNum != ''">
               and   petrol_num like concat('%', #{petrolNum},'%')
             </if>
-            <if test="state != null and state != -1" >
-                and   state = #{state,jdbcType=INTEGER}
+            <if test="isRecharged != null and isRecharged != -1" >
+                and   is_recharged = #{isRecharged,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY transaction_time DESC
