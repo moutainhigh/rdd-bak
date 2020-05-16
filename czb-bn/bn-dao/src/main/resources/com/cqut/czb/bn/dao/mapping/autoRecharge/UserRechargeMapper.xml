@@ -2,8 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper" >
     <select id="getBalance" resultType="java.lang.Double" parameterType="java.lang.String" >
-        select other_income from czb_user_income_info where user_id = #{userId,jdbcType=VARCHAR}
-        GROUP BY other_income
+        select offline_recharge_balance from czb_user_income_info where user_id = #{userId,jdbcType=VARCHAR}
+        GROUP BY offline_recharge_balance
+    </select>
+
+    <select id="getRechargeDetails" parameterType="com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge">
+        SELECT
+        petrol_id as petrolId,
+        petrol_num as petrol_num,
+        turnover_amount as turnoverAmount,
+        state,
+        transaction_time as transactionTime,
+        create_at as createAt,
+        update_at as updateAt
+        FROM czb_petrol_sales_records
+        <where>
+            buyer_id = #{buyerId,jdbcType=VARCHAR}
+            <if test="petrolId != null and petrolId != ''">
+              and   petrol_id like concat('%', #{petrolId},'%')
+            </if>
+            <if test="state != null and state != -1" >
+                and   state = #{state,jdbcType=INTEGER}
+            </if>
+        </where>
+
     </select>
 
     <insert id="insertRecharge" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge" >
@@ -20,7 +42,7 @@
           #{denomination,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE})
     </insert>
 
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge" >
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo" >
         insert into czb_user_income_info (
         info_id,
         user_id,
@@ -32,7 +54,8 @@
         create_at,
         update_at,
         withdrawed,
-        total_consumption)
+        total_consumption,
+        offline_recharge_balance)
         values (
                 #{infoId,jdbcType=VARCHAR},
                 #{userId,jdbcType=VARCHAR},
@@ -40,11 +63,12 @@
                 '0.00',
                 '0.00',
                 '0.00',
-                #{otherIncome,jdbcType=DOUBLE},
+                '0.00',
                 CURRENT_TIMESTAMP ,
                 CURRENT_TIMESTAMP,
                 '0.00',
-                '0.00'
+                '0.00',
+                #{offlineRechargeBalance,jdbcType=DOUBLE}
         )
     </insert>
 
@@ -52,9 +76,20 @@
         update czb_user_income_info
         <set >
             <if test="turnoverAmount != null and turnoverAmount != ''">
-                other_income = other_income - #{turnoverAmount,jdbcType=DOUBLE}
+                offline_recharge_balance = offline_recharge_balance - #{turnoverAmount,jdbcType=DOUBLE}
             </if>
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
+
+    <update id="update" >
+        update czb_user_income_info
+        <set >
+            <if test="turnoverAmount != null and turnoverAmount != ''">
+                other_income = other_income + #{turnoverAmount,jdbcType=DOUBLE}
+            </if>
+        </set>
+        where user_id in ( SELECT owner_id FROM czb_petrol WHERE petrol_num =  #{petrolNum,jdbcType=VARCHAR})
+    </update>
+
 </mapper>

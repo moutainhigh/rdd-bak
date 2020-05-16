@@ -1,10 +1,11 @@
-package com.cqut.czb.bn.entity.dto.OfflineRecharge;
+package com.cqut.czb.bn.entity.dto.autoRecharge;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class UserRecharge {
+public class UserRechargeDTO extends PageDTO {
     private String recordId; // 记录id
 
     private String petrolNum; // 油卡号
