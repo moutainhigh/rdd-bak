@@ -37,6 +37,9 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         if(userRecharge.getTurnoverAmount() < 0) {
             return new JSONResult("充值金额不能为负数，充值失败",200);
         }
+        else if(userRecharge.getTurnoverAmount() > getBalance(userId)){
+            return new JSONResult("充值失败，余额不足",200);
+        }
         UserRecharge petrol = new UserRecharge();
         //订单标识
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
