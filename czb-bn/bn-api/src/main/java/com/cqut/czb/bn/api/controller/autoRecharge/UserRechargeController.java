@@ -73,4 +73,20 @@ public class UserRechargeController {
         return new JSONResult(userRechargeService.getRechargeDetails(user.getUserId(),pageDTO));
 
     }
+
+    /**
+     * 获取总充值金额
+     * @param principal
+     * @return
+     */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    @PermissionCheck(role = "线下大客户")
+    @RequestMapping(value = "/getTotalRechargeAmount",method = RequestMethod.GET)
+    public JSONResult getTotalRechargeAmount(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user == null) {
+            return null;
+        }
+        return new JSONResult(userRechargeService.getTotalRechargeAmount(user));
+    }
 }

@@ -6,6 +6,12 @@
         GROUP BY offline_recharge_balance
     </select>
 
+    <select id="getTotalRechargeAmount" resultType="java.lang.Double" parameterType="java.lang.String" >
+       SELECT sum(turnover_amount) as total
+       FROM czb_petrol_sales_records
+       where buyer_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
     <select id="getRechargeDetails" parameterType="com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge">
         SELECT
         petrol_id as petrolId,

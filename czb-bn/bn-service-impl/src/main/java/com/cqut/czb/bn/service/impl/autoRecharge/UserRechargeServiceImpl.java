@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -85,7 +86,6 @@ public class UserRechargeServiceImpl implements UserRechargeService {
      */
     @Override
     public JSONResult getRechargeDetails(String userId, UserRechargeDTO pageDTO) {
-//        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(),true);
         pageDTO.setBuyerId(userId);
         List<UserRecharge> userRechargeList = userRechargeMapper.getRechargeDetails(pageDTO);
         for (int i=0; i<userRechargeList.size();i++){
@@ -93,6 +93,18 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         }
         PageInfo<UserRecharge> pageInfo = new PageInfo<>(userRechargeList);
         return new JSONResult("列表数据查询成功", 200, pageInfo);
+    }
+
+    /**
+     * 获取总充值金额
+     * @param user
+     * @return
+     */
+    @Override
+    public JSONResult getTotalRechargeAmount(User user) {
+        double total = userRechargeMapper.getTotalRechargeAmount(user.getUserId());
+        return new JSONResult("总充值金额查询成功",200,total);
+
     }
 
     /**

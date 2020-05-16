@@ -45,4 +45,6 @@ public interface UserRechargeMapper {
      * @return
      */
     List<UserRecharge> getRechargeDetails(UserRechargeDTO pageDTO);
+
+    double getTotalRechargeAmount(String userId);
 }
