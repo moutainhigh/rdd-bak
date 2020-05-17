@@ -108,4 +108,20 @@ public class UserRechargeController {
     }
 
 
+
+    /**
+     * 获取账号
+     * @return
+     */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    @PermissionCheck(role = "线下大客户")
+    @RequestMapping(value = "/getAccount", method = RequestMethod.GET)
+    public JSONResult getAccount(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user == null) {
+            return null;
+        }
+        System.out.println(user.getUserId());
+        return new JSONResult("账号获取成功",200, user.getUserAccount());
+    }
 }
