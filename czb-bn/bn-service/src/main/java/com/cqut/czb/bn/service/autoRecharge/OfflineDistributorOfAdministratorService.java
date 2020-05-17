@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.OfflineClientDTO;
 import com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO;
 import com.cqut.czb.bn.entity.dto.RechargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public interface OfflineDistributorOfAdministratorService {
 
@@ -19,4 +20,9 @@ public interface OfflineDistributorOfAdministratorService {
     JSONResult getAccountBalance(String account);
 
     JSONResult recharge(RechargeDTO rechargeDTO);
+
+    Workbook exportRechargeRecords(AccountRechargeDTO accountRechargeDTO) throws Exception;
+
+    Workbook exportConsumptionRecords(OfflineConsumptionDTO offlineConsumptionDTO) throws Exception;
+
 }

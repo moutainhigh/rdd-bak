@@ -123,6 +123,14 @@ public class SystemConstants {
      * 导出VIP充值记录中合计Excel的头部
      */
     public static final String[] SUM_VIP_FAILED_RECHARGE_EXCEL_HEAD={"充值总额","总单数"};
+    /**
+     * 导出线下大客户充值记录Excel的头部
+     */
+    public static final String[] RECHARGE_RECORDS_HEAD={"手机号","充值金额(元)","余额(元)","充值时间"};
+    /**
+     * 导出线下大客户消费记录Excel的头部
+     */
+    public static final String[] CONSUMPTION_RECORDS_HEAD={"油卡号","消费金额(元)","充值状态","线下大客户电话","消费时间"};
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }
