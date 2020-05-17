@@ -13,4 +13,6 @@ public interface UserRechargeService {
     JSONResult getRechargeDetails(String userId, UserRechargeDTO pageDTO);
 
     JSONResult getTotalRechargeAmount(User user);
+
+    JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO);
 }

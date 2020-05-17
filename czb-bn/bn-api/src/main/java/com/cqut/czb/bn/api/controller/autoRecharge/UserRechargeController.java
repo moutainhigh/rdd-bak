@@ -89,4 +89,23 @@ public class UserRechargeController {
         }
         return new JSONResult(userRechargeService.getTotalRechargeAmount(user));
     }
+
+    /**
+     * 插入批量充值记录
+     * @param principal
+     * @param userRechargeDTO
+     * @return
+     */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    @PermissionCheck(role = "线下大客户")
+    @RequestMapping(value = "/insertBatchRecharge",method = RequestMethod.POST)
+    public JSONResult insertBatchRecharge(Principal principal,UserRechargeDTO userRechargeDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user == null) {
+            return null;
+        }
+        return new JSONResult(userRechargeService.insertBatchRecharge(user,userRechargeDTO));
+    }
+
+
 }

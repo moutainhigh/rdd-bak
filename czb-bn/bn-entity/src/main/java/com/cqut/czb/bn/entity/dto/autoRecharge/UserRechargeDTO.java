@@ -8,6 +8,8 @@ import java.util.Date;
 public class UserRechargeDTO extends PageDTO {
     private String recordId; // 记录id
 
+    private String petrolNums;
+
     private String petrolNum; // 油卡号
 
     private String buyerId; // 充值人id
@@ -49,6 +51,14 @@ public class UserRechargeDTO extends PageDTO {
 
     public void setRecordId(String recordId) {
         this.recordId = recordId;
+    }
+
+    public String getPetrolNums() {
+        return petrolNums;
+    }
+
+    public void setPetrolNums(String petrolNums) {
+        this.petrolNums = petrolNums;
     }
 
     public String getPetrolNum() {
