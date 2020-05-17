@@ -43,6 +43,8 @@ public class UserRecharge {
 
     private double currentPrice;  // 充值金额
 
+    private double sumRechargePrice;
+
     public String getRecordId() {
         return recordId;
     }
@@ -185,5 +187,13 @@ public class UserRecharge {
 
     public void setCurrentPrice(double currentPrice) {
         this.currentPrice = currentPrice;
+    }
+
+    public double getSumRechargePrice() {
+        return sumRechargePrice;
+    }
+
+    public void setSumRechargePrice(double sumRechargePrice) {
+        this.sumRechargePrice = sumRechargePrice;
     }
 }

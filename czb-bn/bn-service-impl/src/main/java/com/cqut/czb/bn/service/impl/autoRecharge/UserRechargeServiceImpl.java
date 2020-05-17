@@ -71,6 +71,63 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             return new JSONResult("充值失败",200);
     }
 
+//    /**
+//     * 插入批量充值记录
+//     * @param user
+//     * @param userRechargeDTO
+//     * @return
+//     */
+//    @Override
+//    public JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO) {
+//        String[] petrolNums;
+//        boolean petr = false;
+//        boolean isBalance =false;
+//        boolean info = false;
+//        if (userRechargeDTO.getPetrolNums() != null && userRechargeDTO.getPetrolNums() != " "){
+//            petrolNums = userRechargeDTO.getPetrolNums().split(",");
+//        }else {
+//            return new JSONResult("充值失败",500);
+//        }
+//
+//        if(userRechargeDTO.getTurnoverAmount() < 0) {
+//            return new JSONResult("充值金额不能为负数，充值失败",500);
+//        }
+//        else if(userRechargeDTO.getTurnoverAmount() * petrolNums.length > getBalance(user.getUserId())){
+//            return new JSONResult("充值失败，余额不足",500);
+//        }
+//        List<UserRecharge> petrol = new ArrayList<>();
+////        UserRecharge petrol = new UserRecharge();
+//        for (int i=0; i<petrolNums.length; i++){
+//            //订单标识
+//            String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+//            petrol.get(i).setRecordId(orgId);
+//            petrol.get(i).setPetrolNum(petrolNums[i]);
+//            petrol.get(i).setBuyerId(user.getUserId());
+//            petrol.get(i).setPaymentMethod(2);
+//            petrol.get(i).setThirdOrderId(getOrderIdByUUId(user.getUserId()));
+//            petrol.get(i).setTurnoverAmount(userRechargeDTO.getTurnoverAmount());
+//            petrol.get(i).setTransactionTime(userRechargeDTO.getTransactionTime());
+//            petrol.get(i).setState(1);
+//            petrol.get(i).setRecordType(3);
+//            petrol.get(i).setIsRecharged(0);
+//            petrol.get(i).setPetrolKind(1);
+//            petrol.get(i).setDenomination(userRechargeDTO.getTurnoverAmount());
+//            petrol.get(i).setCurrentPrice(userRechargeDTO.getTurnoverAmount());
+//            petr = userRechargeMapper.insertRecharge(petrol.get(i));
+//            isBalance = userRechargeMapper.updateRecharge(user.getUserId(),userRechargeDTO.getTurnoverAmount());
+//
+//            IncomeInfo incomeInfo = new IncomeInfo();
+//            incomeInfo.setInfoId(StringUtil.createId());
+//            incomeInfo.setUserId(user.getUserId());
+//            incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(user.getUserId()));
+//            info = userRechargeMapper.insert(incomeInfo);
+//        }
+//
+//        if(petr && isBalance && info)
+//            return new JSONResult("充值成功",500);
+//        else
+//            return new JSONResult("充值失败",200);
+//    }
     /**
      * 插入批量充值记录
      * @param user
@@ -83,11 +140,14 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         boolean petr = false;
         boolean isBalance =false;
         boolean info = false;
+
         if (userRechargeDTO.getPetrolNums() != null && userRechargeDTO.getPetrolNums() != " "){
             petrolNums = userRechargeDTO.getPetrolNums().split(",");
         }else {
             return new JSONResult("充值失败",500);
         }
+        //本次总充值金额
+        double total = userRechargeDTO.getTurnoverAmount() * petrolNums.length;
 
         if(userRechargeDTO.getTurnoverAmount() < 0) {
             return new JSONResult("充值金额不能为负数，充值失败",500);
@@ -95,34 +155,28 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         else if(userRechargeDTO.getTurnoverAmount() * petrolNums.length > getBalance(user.getUserId())){
             return new JSONResult("充值失败，余额不足",500);
         }
-        List<UserRecharge> petrol = new ArrayList<>();
-//        UserRecharge petrol = new UserRecharge();
-        for (int i=0; i<petrolNums.length; i++){
-            //订单标识
-            String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-            petrol.get(i).setRecordId(orgId);
-            petrol.get(i).setPetrolNum(petrolNums[i]);
-            petrol.get(i).setBuyerId(user.getUserId());
-            petrol.get(i).setPaymentMethod(2);
-            petrol.get(i).setThirdOrderId(getOrderIdByUUId(user.getUserId()));
-            petrol.get(i).setTurnoverAmount(userRechargeDTO.getTurnoverAmount());
-            petrol.get(i).setTransactionTime(userRechargeDTO.getTransactionTime());
-            petrol.get(i).setState(1);
-            petrol.get(i).setRecordType(3);
-            petrol.get(i).setIsRecharged(0);
-            petrol.get(i).setPetrolKind(1);
-            petrol.get(i).setDenomination(userRechargeDTO.getTurnoverAmount());
-            petrol.get(i).setCurrentPrice(userRechargeDTO.getTurnoverAmount());
-            petr = userRechargeMapper.insertRecharge(petrol.get(i));
-            isBalance = userRechargeMapper.updateRecharge(user.getUserId(),userRechargeDTO.getTurnoverAmount());
+        //订单标识
+        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+        userRechargeDTO.setRecordId(orgId);
+        userRechargeDTO.setBuyerId(user.getUserId());
+        userRechargeDTO.setPaymentMethod(2);
+        userRechargeDTO.setThirdOrderId(getOrderIdByUUId(user.getUserId()));
+        userRechargeDTO.setState(1);
+        userRechargeDTO.setRecordType(3);
+        userRechargeDTO.setIsRecharged(0);
+        userRechargeDTO.setPetrolKind(1);
+        userRechargeDTO.setDenomination(userRechargeDTO.getTurnoverAmount());
+        userRechargeDTO.setCurrentPrice(userRechargeDTO.getTurnoverAmount());
+        petr = userRechargeMapper.insertBatchRecharge(petrolNums,userRechargeDTO);
 
-            IncomeInfo incomeInfo = new IncomeInfo();
-            incomeInfo.setInfoId(StringUtil.createId());
-            incomeInfo.setUserId(user.getUserId());
-            incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(user.getUserId()));
-            info = userRechargeMapper.insert(incomeInfo);
-        }
+        //更新余额
+        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),total);
 
+        IncomeInfo incomeInfo = new IncomeInfo();
+        incomeInfo.setInfoId(StringUtil.createId());
+        incomeInfo.setUserId(user.getUserId());
+        incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(user.getUserId()));
+        info = userRechargeMapper.insert(incomeInfo);
         if(petr && isBalance && info)
             return new JSONResult("充值成功",500);
         else

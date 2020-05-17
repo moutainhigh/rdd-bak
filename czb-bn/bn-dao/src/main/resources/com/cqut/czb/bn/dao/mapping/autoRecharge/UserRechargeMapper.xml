@@ -50,6 +50,30 @@
           #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER},
           #{denomination,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE})
     </insert>
+    <insert id="insertBatchRecharge" parameterType="com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO" >
+        insert into czb_petrol_sales_records (record_id, petrol_num, buyer_id,
+          payment_method, third_order_id, turnover_amount,
+          transaction_time, petrol_id, state,
+          contract_id, create_at, update_at,
+          record_type, is_recharged, petrol_kind,denomination,current_price)
+        values
+        <foreach  collection="petrolNums" item="item" index="index" open="(" separator="," close=")">
+            (#{recordId,jdbcType=VARCHAR},
+            #{item,jdbcType=VARCHAR},
+            #{buyerId,jdbcType=VARCHAR},
+            #{paymentMethod,jdbcType=INTEGER},
+            #{thirdOrderId,jdbcType=VARCHAR},
+            #{turnoverAmount,jdbcType=DOUBLE},now(),
+            #{petrolId,jdbcType=VARCHAR},
+            #{state,jdbcType=INTEGER},
+            #{contractId,jdbcType=VARCHAR}, now(), now(),
+            #{recordType,jdbcType=INTEGER},
+            #{isRecharged,jdbcType=INTEGER},
+            #{petrolKind,jdbcType=INTEGER},
+            #{denomination,jdbcType=DOUBLE},
+            #{currentPrice,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
 
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo" >
         insert into czb_user_income_info (
