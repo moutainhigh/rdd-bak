@@ -124,9 +124,9 @@ public class UserRechargeServiceImpl implements UserRechargeService {
 //        }
 //
 //        if(petr && isBalance && info)
-//            return new JSONResult("充值成功",500);
+//            return new JSONResult("充值成功",200);
 //        else
-//            return new JSONResult("充值失败",200);
+//            return new JSONResult("充值失败",500);
 //    }
     /**
      * 插入批量充值记录
@@ -178,9 +178,9 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(user.getUserId()));
         info = userRechargeMapper.insert(incomeInfo);
         if(petr && isBalance && info)
-            return new JSONResult("充值成功",500);
+            return new JSONResult("充值成功",200);
         else
-            return new JSONResult("充值失败",200);
+            return new JSONResult("充值失败",500);
     }
     /**
      * 获取余额
