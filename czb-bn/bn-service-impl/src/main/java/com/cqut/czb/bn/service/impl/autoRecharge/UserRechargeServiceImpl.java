@@ -144,34 +144,35 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         if (userRechargeDTO.getPetrolNums() != null && userRechargeDTO.getPetrolNums() != " "){
             petrolNums = userRechargeDTO.getPetrolNums().split(",");
         }else {
-            return new JSONResult("充值失败",500);
+            return new JSONResult("充值失败",200);
         }
         //本次总充值金额
         double total = userRechargeDTO.getTurnoverAmount() * petrolNums.length;
 
         if(userRechargeDTO.getTurnoverAmount() < 0) {
-            return new JSONResult("充值金额不能为负数，充值失败",500);
+            return new JSONResult("充值金额不能为负数，充值失败",200);
         }
         else if(userRechargeDTO.getTurnoverAmount() * petrolNums.length > getBalance(user.getUserId())){
-            return new JSONResult("充值失败，余额不足",500);
+            return new JSONResult("充值失败，余额不足",200);
         }
 
+        UserRecharge[] userRecharges = new UserRecharge[petrolNums.length];
         List<UserRecharge> userRecharge = new ArrayList<>();
-
         for (int i=0; i<petrolNums.length; i++){
             //订单标识
             String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-            userRecharge.get(i).setRecordId(orgId);
-            userRecharge.get(i).setPetrolNum(petrolNums[i]);
-            userRecharge.get(i).setBuyerId(user.getUserId());
-            userRecharge.get(i).setPaymentMethod(2);
-            userRecharge.get(i).setThirdOrderId(getOrderIdByUUId(user.getUserId()));
-            userRecharge.get(i).setState(1);
-            userRecharge.get(i).setRecordType(3);
-            userRecharge.get(i).setIsRecharged(0);
-            userRecharge.get(i).setPetrolKind(1);
-            userRecharge.get(i).setDenomination(userRechargeDTO.getTurnoverAmount());
-            userRecharge.get(i).setCurrentPrice(userRechargeDTO.getTurnoverAmount());
+            userRecharges[i].setRecordId(orgId);
+            userRecharges[i].setPetrolNum(petrolNums[i]);
+            userRecharges[i].setBuyerId(user.getUserId());
+            userRecharges[i].setPaymentMethod(2);
+            userRecharges[i].setThirdOrderId(getOrderIdByUUId(user.getUserId()));
+            userRecharges[i].setState(1);
+            userRecharges[i].setRecordType(3);
+            userRecharges[i].setIsRecharged(0);
+            userRecharges[i].setPetrolKind(1);
+            userRecharges[i].setDenomination(userRechargeDTO.getTurnoverAmount());
+            userRecharges[i].setCurrentPrice(userRechargeDTO.getTurnoverAmount());
+            userRecharge.add(userRecharges[i]);
         }
         petr = userRechargeMapper.insertBatchRecharge(userRecharge);
 
@@ -184,9 +185,9 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(user.getUserId()));
         info = userRechargeMapper.insert(incomeInfo);
         if(petr && isBalance && info)
-            return new JSONResult("充值成功",200);
+            return new JSONResult("充值成功",500);
         else
-            return new JSONResult("充值失败",500);
+            return new JSONResult("充值失败",200);
     }
     /**
      * 获取余额
