@@ -48,5 +48,5 @@ public interface UserRechargeMapper {
 
     double getTotalRechargeAmount(String userId);
 
-    boolean insertBatchRecharge(@Param("petrolNums")String[] petrolNums, UserRechargeDTO userRechargeDTO);
+    boolean insertBatchRecharge(List<UserRecharge> userRecharge);
 }

@@ -155,19 +155,25 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         else if(userRechargeDTO.getTurnoverAmount() * petrolNums.length > getBalance(user.getUserId())){
             return new JSONResult("充值失败，余额不足",500);
         }
-        //订单标识
-        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-        userRechargeDTO.setRecordId(orgId);
-        userRechargeDTO.setBuyerId(user.getUserId());
-        userRechargeDTO.setPaymentMethod(2);
-        userRechargeDTO.setThirdOrderId(getOrderIdByUUId(user.getUserId()));
-        userRechargeDTO.setState(1);
-        userRechargeDTO.setRecordType(3);
-        userRechargeDTO.setIsRecharged(0);
-        userRechargeDTO.setPetrolKind(1);
-        userRechargeDTO.setDenomination(userRechargeDTO.getTurnoverAmount());
-        userRechargeDTO.setCurrentPrice(userRechargeDTO.getTurnoverAmount());
-        petr = userRechargeMapper.insertBatchRecharge(petrolNums,userRechargeDTO);
+
+        List<UserRecharge> userRecharge = new ArrayList<>();
+
+        for (int i=0; i<petrolNums.length; i++){
+            //订单标识
+            String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+            userRecharge.get(i).setRecordId(orgId);
+            userRecharge.get(i).setPetrolNum(petrolNums[i]);
+            userRecharge.get(i).setBuyerId(user.getUserId());
+            userRecharge.get(i).setPaymentMethod(2);
+            userRecharge.get(i).setThirdOrderId(getOrderIdByUUId(user.getUserId()));
+            userRecharge.get(i).setState(1);
+            userRecharge.get(i).setRecordType(3);
+            userRecharge.get(i).setIsRecharged(0);
+            userRecharge.get(i).setPetrolKind(1);
+            userRecharge.get(i).setDenomination(userRechargeDTO.getTurnoverAmount());
+            userRecharge.get(i).setCurrentPrice(userRechargeDTO.getTurnoverAmount());
+        }
+        petr = userRechargeMapper.insertBatchRecharge(userRecharge);
 
         //更新余额
         isBalance = userRechargeMapper.updateRecharge(user.getUserId(),total);
