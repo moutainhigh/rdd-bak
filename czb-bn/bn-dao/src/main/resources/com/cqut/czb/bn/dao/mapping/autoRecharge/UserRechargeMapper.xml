@@ -57,7 +57,7 @@
           contract_id, create_at, update_at,
           record_type, is_recharged, petrol_kind,denomination,current_price)
         values
-        <foreach  collection="petrolNums" item="item" index="index" open="(" separator="," close=")">
+        <foreach  collection="userRecharge" item="item" index="index" open="(" separator="," close=")">
             (#{item.recordId,jdbcType=VARCHAR},
             #{item.petrolNum,jdbcType=VARCHAR},
             #{item.buyerId,jdbcType=VARCHAR},

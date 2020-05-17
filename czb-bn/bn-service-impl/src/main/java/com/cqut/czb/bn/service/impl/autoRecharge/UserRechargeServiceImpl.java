@@ -155,25 +155,26 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         else if(userRechargeDTO.getTurnoverAmount() * petrolNums.length > getBalance(user.getUserId())){
             return new JSONResult("充值失败，余额不足",200);
         }
+        userRechargeDTO.setBuyerId(user.getUserId());
+        userRechargeDTO.setPaymentMethod(2);
+        userRechargeDTO.setThirdOrderId(getOrderIdByUUId(user.getUserId()));
+        userRechargeDTO.setTransactionTime(userRechargeDTO.getTransactionTime());
+        userRechargeDTO.setState(1);
+        userRechargeDTO.setRecordType(3);
+        userRechargeDTO.setIsRecharged(0);
+        userRechargeDTO.setPetrolKind(1);
+        userRechargeDTO.setDenomination(userRechargeDTO.getTurnoverAmount());
+        userRechargeDTO.setCurrentPrice(userRechargeDTO.getTurnoverAmount());
 
-        UserRecharge[] userRecharges = new UserRecharge[petrolNums.length];
-        List<UserRecharge> userRecharge = new ArrayList<>();
+        List<UserRechargeDTO> userRecharge = new ArrayList<>();
         for (int i=0; i<petrolNums.length; i++){
             //订单标识
             String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-            userRecharges[i].setRecordId(orgId);
-            userRecharges[i].setPetrolNum(petrolNums[i]);
-            userRecharges[i].setBuyerId(user.getUserId());
-            userRecharges[i].setPaymentMethod(2);
-            userRecharges[i].setThirdOrderId(getOrderIdByUUId(user.getUserId()));
-            userRecharges[i].setState(1);
-            userRecharges[i].setRecordType(3);
-            userRecharges[i].setIsRecharged(0);
-            userRecharges[i].setPetrolKind(1);
-            userRecharges[i].setDenomination(userRechargeDTO.getTurnoverAmount());
-            userRecharges[i].setCurrentPrice(userRechargeDTO.getTurnoverAmount());
-            userRecharge.add(userRecharges[i]);
+            userRechargeDTO.setRecordId(orgId);
+            userRechargeDTO.setPetrolNum(petrolNums[i]);
+            userRecharge.add(userRechargeDTO);
         }
+
         petr = userRechargeMapper.insertBatchRecharge(userRecharge);
 
         //更新余额
