@@ -476,12 +476,6 @@
         czb_petrol_sales_records
         )
         ) AS t_user ON t_user.user_id = t_cpsr.buyer_id
-        INNER JOIN (
-        SELECT
-        petrol_id
-        FROM
-        czb_petrol
-        ) AS cp ON cp.petrol_id = t_cpsr.petrol_id
         ORDER BY
         create_at DESC
     </select>
