@@ -2,10 +2,7 @@ package com.cqut.czb.bn.api.controller.autoRecharge;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 
-import com.cqut.czb.bn.entity.dto.AccountRechargeDTO;
-import com.cqut.czb.bn.entity.dto.OfflineClientDTO;
-import com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO;
-import com.cqut.czb.bn.entity.dto.RechargeDTO;
+import com.cqut.czb.bn.entity.dto.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.OfflineDistributorOfAdministratorService;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -184,5 +181,25 @@ public class OfflineDistributorOfAdministratorController {
             message = "导出Excel数据失败，请稍后再试";
         }
         return new JSONResult(message);
+    }
+
+    /**
+     * 验证财务密码
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/passwordVerification",method = RequestMethod.POST)
+    public JSONResult passwordVerification(String password){
+        return offlineDistributorOfAdministratorService.passwordVerification(password);
+    }
+
+    /**
+     * 修改密码
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/passwordModification",method = RequestMethod.POST)
+    public JSONResult passwordModification(NewOldPwdDTO newOldPwdDTO){
+        return offlineDistributorOfAdministratorService.passwordModification(newOldPwdDTO.getOldPWD(),newOldPwdDTO.getNewPWD());
     }
 }

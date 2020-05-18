@@ -126,7 +126,7 @@ public class SystemConstants {
     /**
      * 导出线下大客户充值记录Excel的头部
      */
-    public static final String[] RECHARGE_RECORDS_HEAD={"手机号","充值金额(元)","余额(元)","充值时间"};
+    public static final String[] RECHARGE_RECORDS_HEAD={"手机号","充值金额(元)","圈回金额(元)","余额(元)","充值时间"};
     /**
      * 导出线下大客户消费记录Excel的头部
      */

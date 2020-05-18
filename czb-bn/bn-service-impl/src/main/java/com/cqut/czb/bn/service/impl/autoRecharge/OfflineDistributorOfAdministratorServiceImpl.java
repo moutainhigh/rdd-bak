@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -19,8 +20,14 @@ import java.util.List;
 @Service
 public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDistributorOfAdministratorService {
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     OfflineDistributorOfAdministratorMapperExtra offlineDistributorOfAdministratorMapperExtra;
+
+    public OfflineDistributorOfAdministratorServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     public JSONResult getRechargeTableList(AccountRechargeDTO accountRechargeDTO) {
@@ -30,6 +37,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getRechargeAmount()<0){
                 list.get(i).setTurnMoeny(-list.get(i).getRechargeAmount());
+                list.get(i).setRechargeAmount(0);
                 list.get(i).setType(1);
             }
             else {
@@ -54,6 +62,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     public JSONResult getOfflineClientList(OfflineClientDTO offlineClientDTO) {
         PageHelper.startPage(offlineClientDTO.getCurrentPage(), offlineClientDTO.getPageSize(),true);
         List<OfflineClientDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineClientList(offlineClientDTO);
+        for (int i = 0; i < list.size(); i++){
+            list.get(i).setTotalTurn(-list.get(i).getTotalTurn());
+        }
         PageInfo<OfflineClientDTO> pageInfo = new PageInfo<>(list);
         JSONResult result = new JSONResult("列表数据查询成功", 200, pageInfo);
         return  result;
@@ -75,6 +86,36 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     }
 
     @Override
+    public JSONResult passwordVerification(String password) {
+        String OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
+        boolean isLike=bCryptPasswordEncoder.matches(password, OldPwd);
+        System.out.println(isLike);
+        if (!isLike){
+            return new JSONResult("密码错误！",200,false);
+        }else{
+            return new JSONResult("密码正确！",200,true);
+        }
+    }
+
+    @Override
+    public JSONResult passwordModification(String OldPWD, String NewPWD) {
+        String OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
+        boolean isLike=bCryptPasswordEncoder.matches(OldPWD, OldPwd);
+        if (!isLike){
+            if (OldPwd == null){
+                String newPWD = bCryptPasswordEncoder.encode(NewPWD);
+                offlineDistributorOfAdministratorMapperExtra.insertPassword(newPWD);
+                return new JSONResult("密码创建成功",200,true);
+            }
+            return new JSONResult("密码错误！",200,false);
+        }else{
+            String newPWD = bCryptPasswordEncoder.encode(NewPWD);
+            boolean result = offlineDistributorOfAdministratorMapperExtra.changePWD(newPWD) > 0;
+            return new JSONResult("密码正确",200,result);
+        }
+    }
+
+    @Override
     public JSONResult rechargeAndTurn(RechargeDTO rechargeDTO) {
         if (rechargeDTO.getRechargeAmount()<=0){
             return new JSONResult("充值金额不能为负数，充值失败",200,false);
@@ -88,14 +129,14 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             rechargeDTO.setInfoId(rechargeInfo.getInfoId());
             rechargeDTO.setRecordId(StringUtil.createId());
             rechargeDTO.setBalance(rechargeInfo.getBalance());
-            if (rechargeDTO.getType()=="1" && rechargeDTO.getRechargeAmount()<rechargeDTO.getBalance()){
+            if ("1".equals(rechargeDTO.getType()) && rechargeDTO.getRechargeAmount()<rechargeDTO.getBalance()){
                     rechargeDTO.setRechargeAmount(-rechargeDTO.getRechargeAmount());
             }
             offlineDistributorOfAdministratorMapperExtra.insertIncomeInfo(rechargeDTO);
             rechargeDTO.setRecordId(StringUtil.createId());
             offlineDistributorOfAdministratorMapperExtra.insertOfflineRecords(rechargeDTO);
             offlineDistributorOfAdministratorMapperExtra.updateBalance(rechargeDTO);
-            return new JSONResult("充值成功",200,true);
+            return new JSONResult("成功",200,true);
         }
         return new JSONResult("充值失败",200,false);
     }
@@ -139,7 +180,16 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             int count = 0;
             row = sheet.createRow(i+1);
             row.createCell(count++).setCellValue(list.get(i).getAccount());
-            row.createCell(count++).setCellValue(formatNum(list.get(i).getRechargeAmount()));
+            if (list.get(i).getRechargeAmount()<0){
+                row.createCell(count++).setCellValue(0.00);
+                row.createCell(count++).setCellValue(formatNum(-list.get(i).getRechargeAmount()));
+            }else if (list.get(i).getRechargeAmount()>0){
+                row.createCell(count++).setCellValue(formatNum(list.get(i).getRechargeAmount()));
+                row.createCell(count++).setCellValue(0.00);
+            }else {
+                row.createCell(count++).setCellValue(0.00);
+                row.createCell(count++).setCellValue(0.00);
+            }
             row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRechargeTime()));
     }
@@ -157,9 +207,11 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         List<OfflineClientDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineClientList(offlineClientDTO);
         return getClientWorkBook(list, offlineClientDTO);
     }
+
+
     private Workbook getClientWorkBook(List<OfflineClientDTO> list, OfflineClientDTO inputDTO) throws Exception {
         String[] ClientHead = SystemConstants.CLIENT_RECORDS_HEAD;
-        Double totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
+        double totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
         Workbook workbook = null;
         if(list == null) {
             workbook = new SXSSFWorkbook(1);
@@ -191,7 +243,11 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
             row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalConsumption()));
             row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalRecharge()));
-            row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalTurn()));
+            if (list.get(i).getTotalTurn()<0){
+                row.createCell(count++).setCellValue(formatNum(-list.get(i).getTotalTurn()));
+            }else{
+                row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalTurn()));
+            }
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRegisterTime()));
         }
         int index = 0;
@@ -206,6 +262,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         List<OfflineConsumptionDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineConsumptionList(offlineConsumptionDTO);
         return getConsumptionWorkBook(list, offlineConsumptionDTO);
     }
+
 
     private Workbook getConsumptionWorkBook(List<OfflineConsumptionDTO> list, OfflineConsumptionDTO inputDTO) throws Exception {
         String[] consumptionHead = SystemConstants.CONSUMPTION_RECORDS_HEAD;
