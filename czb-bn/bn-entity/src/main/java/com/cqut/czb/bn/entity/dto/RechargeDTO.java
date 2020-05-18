@@ -11,6 +11,8 @@ public class RechargeDTO {
 
     private String userId;
 
+    private int type;
+
     private String balance;
 
     private String account;
@@ -43,6 +45,14 @@ public class RechargeDTO {
 
     public void setBalance(String balance) {
         this.balance = balance;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public void setRecordId(String recordId) {

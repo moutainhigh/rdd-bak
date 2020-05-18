@@ -67,7 +67,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     }
 
     @Override
-    public JSONResult recharge(RechargeDTO rechargeDTO) {
+    public JSONResult rechargeAndTurn(RechargeDTO rechargeDTO) {
         if (rechargeDTO.getRechargeAmount()<=0){
             return new JSONResult("充值金额不能为负数，充值失败",200,false);
         }
@@ -140,6 +140,56 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         return workbook;
     }
 
+
+    @Override
+    public Workbook exportClientRecords(OfflineClientDTO offlineClientDTO) throws Exception {
+        List<OfflineClientDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineClientList(offlineClientDTO);
+        return getClientWorkBook(list, offlineClientDTO);
+    }
+    private Workbook getClientWorkBook(List<OfflineClientDTO> list, OfflineClientDTO inputDTO) throws Exception {
+        String[] ClientHead = SystemConstants.CLIENT_RECORDS_HEAD;
+        Double totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
+        Workbook workbook = null;
+        if(list == null) {
+            workbook = new SXSSFWorkbook(1);
+            Sheet sheet = workbook.createSheet("导出线下大客户余额记录");//创建工作表
+            Row row =sheet.createRow(0);//创建行从第0行开始
+            Cell cell = row.createCell(0);
+            cell.setCellValue("该时间段无记录");
+            return workbook;
+        }
+        try{
+            workbook = new SXSSFWorkbook(list.size());
+        } catch (Exception e) {
+            throw new Exception("Excel数据量过大，请缩短时间间隔");
+        }
+        Sheet sheet = workbook.createSheet("导出线下大客户余额记录");//创建工作表
+        Row row =sheet.createRow(0);//创建行从第0行开始
+        CellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        for (int i = 0; i < ClientHead.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(ClientHead[i]);
+            cell.setCellStyle(style);
+            sheet.setColumnWidth(i, (short) 7500); // 设置列宽
+        }
+        for (int i = 0; i < list.size(); i++) {
+            int count = 0;
+            row = sheet.createRow(i + 1);
+            row.createCell(count++).setCellValue(list.get(i).getAccount());
+            row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
+            row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalConsumption()));
+            row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalRecharge()));
+            row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalTurn()));
+            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRegisterTime()));
+        }
+        int index = 0;
+        row = sheet.createRow(list.size()+1);
+        row.createCell(index++).setCellValue("总余额：");
+        row.createCell(index++).setCellValue(formatNum(totalBalance));
+        return workbook;
+    }
+
     @Override
     public Workbook exportConsumptionRecords(OfflineConsumptionDTO offlineConsumptionDTO) throws Exception {
         List<OfflineConsumptionDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineConsumptionList(offlineConsumptionDTO);
@@ -190,7 +240,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         }
         int index = 0;
         row = sheet.createRow(list.size()+1);
-        row.createCell(index++).setCellValue("总充值金额：");
+        row.createCell(index++).setCellValue("总消费金额：");
         row.createCell(index++).setCellValue(totalConsumption);
         return workbook;
     }

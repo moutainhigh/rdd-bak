@@ -77,13 +77,13 @@ public class OfflineDistributorOfAdministratorController {
     }
 
     /**
-     * 管理员充值
+     * 管理员充值圈回
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
-    @RequestMapping(value = "/recharge",method = RequestMethod.POST)
-    public JSONResult recharge(RechargeDTO rechargeDTO){
-        return offlineDistributorOfAdministratorService.recharge(rechargeDTO);
+    @RequestMapping(value = "/rechargeAndTurn",method = RequestMethod.POST)
+    public JSONResult rechargeAndTurn(RechargeDTO rechargeDTO){
+        return offlineDistributorOfAdministratorService.rechargeAndTurn(rechargeDTO);
     }
 
     /**
@@ -150,7 +150,39 @@ public class OfflineDistributorOfAdministratorController {
         } catch (Exception e) {
             message = "导出Excel数据失败，请稍后再试";
         }
+        return new JSONResult(message);
+    }
 
+    /**
+     * 导出线下大客户余额
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/exportClientRecords",method = RequestMethod.POST)
+    public JSONResult exportClientRecords(HttpServletResponse response, OfflineClientDTO offlineClientDTO){
+        String message = null;
+        Workbook workbook = null;
+        try {
+            workbook = offlineDistributorOfAdministratorService.exportClientRecords(offlineClientDTO);
+            if(workbook == null) {
+                workbook = new SXSSFWorkbook();
+            }
+            //指定服务器返回给浏览器的编码格式
+            response.setCharacterEncoding("utf-8");
+            //点击下载之后出现下载对话框
+            response.setContentType("application/x-download");
+            String fileName = "线下大客户余额记录.xlsx";
+            //System.out.println(fileName);
+            //将中文转换为16进制
+            fileName = URLEncoder.encode(fileName,"utf-8");
+            //确保浏览器弹出对应文件的对话框
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            OutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        } catch (Exception e) {
+            message = "导出Excel数据失败，请稍后再试";
+        }
         return new JSONResult(message);
     }
 }

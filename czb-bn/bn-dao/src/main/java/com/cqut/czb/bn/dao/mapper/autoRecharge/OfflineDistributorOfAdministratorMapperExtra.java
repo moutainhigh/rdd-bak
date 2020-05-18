@@ -34,4 +34,6 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
     int selectAccount(String account);
 
     int updateBalance(RechargeDTO rechargeDTO);
+
+    Double getTotalBalance(OfflineClientDTO offlineClientDTO);
 }

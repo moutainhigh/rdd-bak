@@ -12,6 +12,10 @@ public class AccountRechargeDTO extends PageDTO {
 
     private double balance;
 
+    private double turnMoeny;
+
+    private int type;
+
     @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
@@ -20,6 +24,22 @@ public class AccountRechargeDTO extends PageDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeTime;
+
+    public double getTurnMoeny() {
+        return turnMoeny;
+    }
+
+    public void setTurnMoeny(double turnMoeny) {
+        this.turnMoeny = turnMoeny;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getAccount() {
         return account;

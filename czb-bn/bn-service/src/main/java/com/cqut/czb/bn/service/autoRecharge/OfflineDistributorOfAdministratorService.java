@@ -19,10 +19,11 @@ public interface OfflineDistributorOfAdministratorService {
 
     JSONResult getAccountBalance(String account);
 
-    JSONResult recharge(RechargeDTO rechargeDTO);
+    JSONResult rechargeAndTurn(RechargeDTO rechargeDTO);
 
     Workbook exportRechargeRecords(AccountRechargeDTO accountRechargeDTO) throws Exception;
 
     Workbook exportConsumptionRecords(OfflineConsumptionDTO offlineConsumptionDTO) throws Exception;
 
+    Workbook exportClientRecords(OfflineClientDTO offlineClientDTO) throws Exception;
 }
