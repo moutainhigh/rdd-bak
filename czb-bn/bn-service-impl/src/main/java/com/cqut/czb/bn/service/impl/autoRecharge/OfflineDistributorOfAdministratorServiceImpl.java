@@ -2,8 +2,6 @@ package com.cqut.czb.bn.service.impl.autoRecharge;
 
 import com.cqut.czb.bn.dao.mapper.autoRecharge.OfflineDistributorOfAdministratorMapperExtra;
 import com.cqut.czb.bn.entity.dto.*;
-import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordDTO;
-import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WxSettleRcordDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.OfflineDistributorOfAdministratorService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -28,7 +26,17 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     public JSONResult getRechargeTableList(AccountRechargeDTO accountRechargeDTO) {
         PageHelper.startPage(accountRechargeDTO.getCurrentPage(), accountRechargeDTO.getPageSize(),true);
         OfflineRecordsDTO rechargeRecordDTO = new OfflineRecordsDTO();
-        rechargeRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO)));
+        List<AccountRechargeDTO> list = offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getRechargeAmount()<0){
+                list.get(i).setTurnMoeny(-list.get(i).getRechargeAmount());
+                list.get(i).setType(1);
+            }
+            else {
+                list.get(i).setType(0);
+            }
+        }
+        rechargeRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(list));
         rechargeRecordDTO.setTotalRecharge(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO));
         return new JSONResult("列表数据查询成功", 200, rechargeRecordDTO);
     }
@@ -80,6 +88,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             rechargeDTO.setInfoId(rechargeInfo.getInfoId());
             rechargeDTO.setRecordId(StringUtil.createId());
             rechargeDTO.setBalance(rechargeInfo.getBalance());
+            if (rechargeDTO.getType()=="1" && rechargeDTO.getRechargeAmount()<rechargeDTO.getBalance()){
+                    rechargeDTO.setRechargeAmount(-rechargeDTO.getRechargeAmount());
+            }
             offlineDistributorOfAdministratorMapperExtra.insertIncomeInfo(rechargeDTO);
             rechargeDTO.setRecordId(StringUtil.createId());
             offlineDistributorOfAdministratorMapperExtra.insertOfflineRecords(rechargeDTO);
