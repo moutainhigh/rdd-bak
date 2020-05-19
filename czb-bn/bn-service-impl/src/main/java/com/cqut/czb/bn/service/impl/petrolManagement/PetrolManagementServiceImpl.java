@@ -239,6 +239,8 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         if(record.getUpdatePetrolNum() != null && record.getUpdatePetrolNum() != "") {
             if(!record.getUpdatePetrolNum().startsWith("S")){
                 record.setUpdatePetrolNum("S" + record.getUpdatePetrolNum());
+            } else if (record.getUpdatePetrolNum().startsWith("RDD")){
+                record.setUpdatePetrolNum("S" + record.getUpdatePetrolNum().replace("RDD", ""));
             }
             isSuccess = petrolSalesRecordsMapperExtra.updatePetrolNum(record) > 0;
         }
