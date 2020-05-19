@@ -23,6 +23,16 @@ public class OfflineClientDTO extends PageDTO{
 
     private double totalRecharge;
 
+    private double totalTurn;
+
+    public double getTotalTurn() {
+        return totalTurn;
+    }
+
+    public void setTotalTurn(double totalTurn) {
+        this.totalTurn = totalTurn;
+    }
+
     public String getAccount() {
         return account;
     }

@@ -11,7 +11,9 @@ public class RechargeDTO {
 
     private String userId;
 
-    private String balance;
+    private String type;
+
+    private double balance;
 
     private String account;
 
@@ -37,12 +39,20 @@ public class RechargeDTO {
         this.userId = userId;
     }
 
-    public String getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setRecordId(String recordId) {

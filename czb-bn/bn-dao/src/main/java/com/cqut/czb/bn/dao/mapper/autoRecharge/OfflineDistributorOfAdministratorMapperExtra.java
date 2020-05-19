@@ -25,6 +25,8 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
 
     Double getTotalSale(OfflineConsumptionDTO offlineConsumptionDTO);
 
+    Double getTotalTurn(AccountRechargeDTO accountRechargeDTO);
+
     RechargeDTO getInfo(RechargeDTO rechargeDTO);
 
     int insertIncomeInfo(RechargeDTO rechargeDTO);
@@ -34,4 +36,12 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
     int selectAccount(String account);
 
     int updateBalance(RechargeDTO rechargeDTO);
+
+    String getPassword();
+
+    int changePWD(String newPWD);
+
+    int insertPassword(String newPWD);
+
+    Double getTotalBalance(OfflineClientDTO offlineClientDTO);
 }
