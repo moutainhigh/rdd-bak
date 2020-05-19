@@ -59,7 +59,8 @@
     c.offline_recharge_balance AS balance,
     a.create_at AS registerTime,
     IFNULL(totalConsumption,0) as totalConsumption,
-    IFNULL(totalRecharge,0) as totalRecharge
+    IFNULL(totalRecharge,0) as totalRecharge,
+    IFNULL(totalTurn,0) as totalTurn
     FROM
     czb_user_role AS a
     JOIN czb_user AS b ON a.user_id = b.user_id
@@ -90,10 +91,26 @@
     buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
     JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-    WHERE czb_role.role_name = '线下大客户' )
+    WHERE czb_role.role_name = '线下大客户')
+    and czb_offline_distributor_records.amount&gt;0
     GROUP BY
     buyer_id
     ) AS e ON a.user_id = e.buyer_id
+    LEFT JOIN (
+    SELECT
+    buyer_id,
+    sum( amount ) totalTurn
+    FROM
+    czb_offline_distributor_records
+    WHERE
+    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
+    JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
+    JOIN czb_role on czb_role.role_id = czb_user_role.role_id
+    WHERE czb_role.role_name = '线下大客户')
+    and czb_offline_distributor_records.amount &lt;0
+    GROUP BY
+    buyer_id
+    ) AS g ON a.user_id = g.buyer_id
     <where>
         f.role_name = '线下大客户'
         <if test="account != null and account != ''">
@@ -191,6 +208,7 @@
     `czb_offline_distributor_records` AS a
     JOIN czb_user AS b ON a.buyer_id = b.user_id
     <where>
+    a.amount &gt;0
         <if test="account != null and account != ''">
             and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
@@ -200,6 +218,24 @@
         </if>
     </where>
 </select>
+
+    <select id="getTotalTurn" parameterType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO" resultType="java.lang.Double">
+        SELECT
+        IFNULL( sum( amount ), 0 )
+        FROM
+        `czb_offline_distributor_records` AS a
+        JOIN czb_user AS b ON a.buyer_id = b.user_id
+        <where>
+            a.amount &lt;0
+            <if test="account != null and account != ''">
+                and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime != null and endTime != null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
 
 <select id="getTotalSale" parameterType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO" resultType="java.lang.Double">
         SELECT
@@ -224,4 +260,53 @@
             </if>
         </where>
     </select>
+
+    <select id="getTotalBalance" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="java.lang.Double">
+        SELECT
+            sum( balance )
+        FROM
+            (
+        SELECT DISTINCT
+            b.user_account,
+            c.offline_recharge_balance AS balance
+        FROM
+            czb_user_role AS a
+            JOIN czb_user AS b ON a.user_id = b.user_id
+            JOIN czb_user_income_info AS c ON a.user_id = c.user_id
+            JOIN czb_role AS f ON a.role_id = f.role_id
+        <where>
+            f.role_name = '线下大客户'
+            <if test="account != null and account != ''">
+                and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+            ) AS totalBalance
+    </select>
+
+    <select id="getPassword" resultType="java.lang.String">
+        SELECT
+            content
+        FROM
+            `czb_dict`
+        <where>
+            NAME = 'finance_password'
+        </where>
+    </select>
+
+    <update id="changePWD" parameterType="java.lang.String">
+        UPDATE `czb_dict`
+        SET content =  #{newPWD,jdbcType=VARCHAR}
+        <where>
+            NAME = 'finance_password'
+        </where>
+    </update>
+
+    <insert id="insertPassword" parameterType="java.lang.String">
+        INSERT INTO `czb_dict` ( dict_id,name, content,create_at, update_at )
+        VALUES("24687922335559", "finance_password",#{newPWD,jdbcType=VARCHAR},now(), now())
+    </insert>
 </mapper>
