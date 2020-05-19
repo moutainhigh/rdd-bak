@@ -25,22 +25,6 @@ public class UserRechargeController {
     RedisUtils redisUtils;
 
     /**
-     * 插入线下充值记录
-     * @return
-     */
-    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-    @PermissionCheck(role = "线下大客户")
-    @RequestMapping(value = "/insertRecharge", method = RequestMethod.GET)
-    public JSONResult insertRecharge(Principal principal, UserRecharge userRecharge){
-        User user = (User)redisUtils.get(principal.getName());
-        if (user == null) {
-            return null;
-        }
-        return userRechargeService.insertRecharge(user.getUserId(),userRecharge);
-    }
-
-
-    /**
      * 获取余额
      * @return
      */
@@ -91,7 +75,7 @@ public class UserRechargeController {
     }
 
     /**
-     * 插入批量充值记录
+     * 插入充值记录
      * @param principal
      * @param userRechargeDTO
      * @return

@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.autoRecharge;
 
-import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo;
+import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeIog;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import org.apache.ibatis.annotations.Param;
@@ -10,19 +10,14 @@ import java.util.List;
 public interface UserRechargeMapper {
     double getBalance(String userId);
 
-    /**
-     * 插入油卡充值信息
-     * @param petrol
-     * @return
-     */
-    boolean insertRecharge(UserRecharge petrol);
+    String getInfoId(String userId);
 
     /**
      * 插入充值人收益信息
      * @param incomeInfo
      * @return
      */
-    boolean insert(IncomeInfo incomeInfo);
+    boolean insert(IncomeIog incomeInfo);
 
     /**
      * 充值人员余额变化
