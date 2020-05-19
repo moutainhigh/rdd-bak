@@ -25,6 +25,8 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
 
     Double getTotalSale(OfflineConsumptionDTO offlineConsumptionDTO);
 
+    Double getTotalTurn(AccountRechargeDTO accountRechargeDTO);
+
     RechargeDTO getInfo(RechargeDTO rechargeDTO);
 
     int insertIncomeInfo(RechargeDTO rechargeDTO);

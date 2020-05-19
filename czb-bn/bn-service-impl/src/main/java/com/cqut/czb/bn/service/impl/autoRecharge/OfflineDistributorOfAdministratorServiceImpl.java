@@ -212,6 +212,17 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     private Workbook getClientWorkBook(List<OfflineClientDTO> list, OfflineClientDTO inputDTO) throws Exception {
         String[] ClientHead = SystemConstants.CLIENT_RECORDS_HEAD;
         double totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
+        AccountRechargeDTO accountRechargeDTO = new AccountRechargeDTO();
+        accountRechargeDTO.setAccount(inputDTO.getAccount());
+        accountRechargeDTO.setStartTime(inputDTO.getStartTime());
+        accountRechargeDTO.setEndTime(inputDTO.getEndTime());
+        double totalRecharge = offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO);
+        OfflineConsumptionDTO offlineConsumptionDTO = new OfflineConsumptionDTO();
+        offlineConsumptionDTO.setAccount(inputDTO.getAccount());
+        offlineConsumptionDTO.setStartTime(inputDTO.getStartTime());
+        offlineConsumptionDTO.setEndTime(inputDTO.getEndTime());
+        double totalSale = offlineDistributorOfAdministratorMapperExtra.getTotalSale(offlineConsumptionDTO);
+        double totalTurn = offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO);
         Workbook workbook = null;
         if(list == null) {
             workbook = new SXSSFWorkbook(1);
@@ -252,8 +263,15 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         }
         int index = 0;
         row = sheet.createRow(list.size()+1);
+        row.createCell(index++).setCellValue("总充值金额：");
+        row.createCell(index++).setCellValue(formatNum(totalRecharge));
+        row.createCell(index++).setCellValue("总消费金额：");
+        row.createCell(index++).setCellValue(formatNum(totalSale));
+        row.createCell(index++).setCellValue("总圈回金额：");
+        row.createCell(index++).setCellValue(formatNum(-totalTurn));
         row.createCell(index++).setCellValue("总余额：");
         row.createCell(index++).setCellValue(formatNum(totalBalance));
+
         return workbook;
     }
 
