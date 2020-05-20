@@ -9,6 +9,8 @@ public class OfflineRecordsDTO {
 
     private Double totalRecharge;
 
+    private Double totalTurn;
+
     public PageInfo getOfflineRecordsListDTOList() {
         return OfflineRecordsListDTOList;
     }
@@ -31,6 +33,14 @@ public class OfflineRecordsDTO {
 
     public void setTotalRecharge(Double totalRecharge) {
         this.totalRecharge = totalRecharge;
+    }
+
+    public Double getTotalTurn() {
+        return totalTurn;
+    }
+
+    public void setTotalTurn(Double totalTurn) {
+        this.totalTurn = totalTurn;
     }
 }
 

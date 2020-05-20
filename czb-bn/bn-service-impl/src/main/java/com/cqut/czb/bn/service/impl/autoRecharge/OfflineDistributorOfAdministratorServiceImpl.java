@@ -46,6 +46,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         }
         rechargeRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(list));
         rechargeRecordDTO.setTotalRecharge(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO));
+        rechargeRecordDTO.setTotalTurn(-(offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO)));
         return new JSONResult("列表数据查询成功", 200, rechargeRecordDTO);
     }
 
