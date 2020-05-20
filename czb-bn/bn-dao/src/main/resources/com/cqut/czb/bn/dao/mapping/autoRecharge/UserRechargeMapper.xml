@@ -86,7 +86,7 @@
         update czb_user_income_info
         <set >
             <if test="turnoverAmount != null and turnoverAmount != ''">
-                other_income = other_income + #{turnoverAmount,jdbcType=DOUBLE}
+                other_income =  #{turnoverAmount}
             </if>
         </set>
         where user_id in ( SELECT owner_id FROM czb_petrol WHERE petrol_num =  #{petrolNum,jdbcType=VARCHAR})

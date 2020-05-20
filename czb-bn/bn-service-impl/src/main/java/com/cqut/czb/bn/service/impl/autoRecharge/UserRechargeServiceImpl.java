@@ -12,6 +12,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,8 +82,12 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(user.getUserId()));
         info = userRechargeMapper.insert(incomeInfo);
 
+        BigDecimal bignum1 = new BigDecimal(total);
+        BigDecimal bignum2 = new BigDecimal(incomeInfo.getBeforeChangeIncome());
+        BigDecimal bignum3 = null;
+        bignum3 = bignum1.subtract(bignum2);
         //更新余额
-        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),total);
+        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),bignum3);
         if(petr && isBalance && info)
             return new JSONResult("充值成功",500);
         else

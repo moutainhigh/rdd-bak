@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserRechargeMapper {
@@ -25,7 +26,7 @@ public interface UserRechargeMapper {
      * @param turnoverAmount
      * @return
      */
-    boolean updateRecharge(@Param("userId") String userId, @Param("turnoverAmount") double turnoverAmount);
+    boolean updateRecharge(@Param("userId") String userId, @Param("turnoverAmount") BigDecimal turnoverAmount);
 
     /**
      * 被充值人的余额更新
