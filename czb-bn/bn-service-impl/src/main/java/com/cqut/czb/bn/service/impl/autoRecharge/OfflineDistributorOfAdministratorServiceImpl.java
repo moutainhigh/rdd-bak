@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         OfflineRecordsDTO rechargeRecordDTO = new OfflineRecordsDTO();
         List<AccountRechargeDTO> list = offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO);
         for (int i = 0; i < list.size(); i++) {
+                BigDecimal a1 = new BigDecimal(String.valueOf(list.get(i).getRechargeAmount()));
+                BigDecimal b1 = new BigDecimal(String.valueOf(list.get(i).getBeforeBalance()));
+                list.get(i).setBalance(a1.add(b1).doubleValue());
             if (list.get(i).getRechargeAmount()<0){
                 list.get(i).setTurnMoeny(-list.get(i).getRechargeAmount());
                 list.get(i).setRechargeAmount(0);
@@ -135,6 +139,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             offlineDistributorOfAdministratorMapperExtra.insertIncomeInfo(rechargeDTO);
             rechargeDTO.setRecordId(StringUtil.createId());
             offlineDistributorOfAdministratorMapperExtra.insertOfflineRecords(rechargeDTO);
+            BigDecimal a1 = new BigDecimal(String.valueOf(rechargeDTO.getBalance()));
+            BigDecimal b1 = new BigDecimal(String.valueOf(rechargeDTO.getRechargeAmount()));
+            rechargeDTO.setRechargeAmount(a1.add(b1).doubleValue());
             offlineDistributorOfAdministratorMapperExtra.updateBalance(rechargeDTO);
             return new JSONResult("成功",200,true);
         }
@@ -144,6 +151,11 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     @Override
     public Workbook exportRechargeRecords(AccountRechargeDTO accountRechargeDTO) throws Exception {
         List<AccountRechargeDTO> list = offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO);
+        for (int i = 0; i < list.size(); i++){
+            BigDecimal a1 = new BigDecimal(String.valueOf(list.get(i).getRechargeAmount()));
+            BigDecimal b1 = new BigDecimal(String.valueOf(list.get(i).getBeforeBalance()));
+            list.get(i).setBalance(a1.add(b1).doubleValue());
+        }
         return getRechargeWorkBook(list, accountRechargeDTO);
     }
 

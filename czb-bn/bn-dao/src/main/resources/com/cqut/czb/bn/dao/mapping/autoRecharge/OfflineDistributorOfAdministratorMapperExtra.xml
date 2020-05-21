@@ -5,7 +5,7 @@
     SELECT
     b.user_account AS account,
     a.amount AS rechargeAmount,
-    (a.amount + a.before_balance) AS balance,
+    a.before_balance AS beforeBalance,
     a.recharge_time AS rechargeTime
     FROM
     `czb_offline_distributor_records` AS a
@@ -181,9 +181,9 @@
 
 <insert id="insertIncomeInfo" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
         INSERT INTO `czb_income_log` ( record_id, amount, type,
-        info_id, before_change_income, remark, create_at, update_at )
+        info_id, before_change_income, remark,souse_id, create_at, update_at )
         VALUES (#{recordId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE},6,
-        #{infoId,jdbcType=VARCHAR},#{balance,jdbcType=DOUBLE},"线下大客户充值",now(), now())
+        #{infoId,jdbcType=VARCHAR},#{balance,jdbcType=DOUBLE},"线下大客户充值",#{recordId,jdbcType=VARCHAR},now(), now())
     </insert>
 
 <insert id="insertOfflineRecords" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
@@ -195,7 +195,7 @@
 
 <update id="updateBalance" parameterType="com.cqut.czb.bn.entity.dto.RechargeDTO">
     UPDATE `czb_user_income_info`
-    SET offline_recharge_balance = offline_recharge_balance + #{rechargeAmount}
+    SET offline_recharge_balance =  #{rechargeAmount}
     <where>
         user_id = #{userId,jdbcType=VARCHAR}
     </where>

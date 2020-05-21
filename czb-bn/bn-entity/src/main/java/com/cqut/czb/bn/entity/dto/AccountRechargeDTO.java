@@ -12,6 +12,8 @@ public class AccountRechargeDTO extends PageDTO {
 
     private double balance;
 
+    private double beforeBalance;
+
     private double turnMoeny;
 
     private int type;
@@ -24,6 +26,14 @@ public class AccountRechargeDTO extends PageDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeTime;
+
+    public double getBeforeBalance() {
+        return beforeBalance;
+    }
+
+    public void setBeforeBalance(double beforeBalance) {
+        this.beforeBalance = beforeBalance;
+    }
 
     public double getTurnMoeny() {
         return turnMoeny;
