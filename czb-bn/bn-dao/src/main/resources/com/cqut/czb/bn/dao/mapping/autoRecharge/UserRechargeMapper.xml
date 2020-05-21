@@ -72,15 +72,13 @@
         #{infoId,jdbcType=VARCHAR},#{beforeChangeIncome,jdbcType=DOUBLE},"线下大客户消费",now(), now())
     </insert>
 
-    <update id="updateRecharge" >
+    <update id="updateRecharge">
         update czb_user_income_info
-        <set >
-            <if test="turnoverAmount != null and turnoverAmount != ''">
-                offline_recharge_balance = #{turnoverAmount}
-            </if>
+        <set>
+        <if test="turnoverAmount != null and turnoverAmount != ''">
+            offline_recharge_balance = #{turnoverAmount}
+        </if>
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
-
-
 </mapper>

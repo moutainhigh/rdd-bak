@@ -26,7 +26,7 @@ public interface UserRechargeMapper {
      * @param turnoverAmount
      * @return
      */
-    boolean updateRecharge(@Param("userId") String userId, @Param("turnoverAmount") BigDecimal turnoverAmount);
+    boolean updateRecharge(@Param("userId") String userId, @Param("turnoverAmount") double turnoverAmount);
 
 
     /**
