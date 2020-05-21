@@ -1,20 +1,18 @@
 package com.cqut.czb.bn.service.impl.autoRecharge;
 
 import com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper;
-import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo;
+import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeIog;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
-import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.util.string.StringUtil;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,50 +27,6 @@ public class UserRechargeServiceImpl implements UserRechargeService {
 
     /**
      * 插入充值记录
-     * @param userId
-     * @param userRecharge
-     * @return
-     */
-    @Override
-    public JSONResult insertRecharge(String userId, UserRecharge userRecharge) {
-        if(userRecharge.getTurnoverAmount() < 0) {
-            return new JSONResult("充值金额不能为负数，充值失败",200);
-        }
-        else if(userRecharge.getTurnoverAmount() > getBalance(userId)){
-            return new JSONResult("充值失败，余额不足",200);
-        }
-        UserRecharge petrol = new UserRecharge();
-        //订单标识
-        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
-        petrol.setRecordId(orgId);
-        petrol.setPetrolNum(userRecharge.getPetrolNum());
-        petrol.setBuyerId(userId);
-        petrol.setPaymentMethod(2);
-        petrol.setThirdOrderId(getOrderIdByUUId(userId));
-        petrol.setTurnoverAmount(userRecharge.getTurnoverAmount());
-        petrol.setTransactionTime(userRecharge.getTransactionTime());
-        petrol.setState(1);
-        petrol.setRecordType(3);
-        petrol.setIsRecharged(0);
-        petrol.setPetrolKind(1);
-        petrol.setDenomination(userRecharge.getTurnoverAmount());
-        petrol.setCurrentPrice(userRecharge.getTurnoverAmount());
-        boolean petr = userRechargeMapper.insertRecharge(petrol);
-        boolean isBalance = userRechargeMapper.updateRecharge(userId,userRecharge.getTurnoverAmount());
-
-        IncomeInfo incomeInfo = new IncomeInfo();
-        incomeInfo.setInfoId(StringUtil.createId());
-        incomeInfo.setUserId(userId);
-        incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(userId));
-        boolean info = userRechargeMapper.insert(incomeInfo);
-        if(petr && isBalance && info)
-            return new JSONResult("充值成功",500);
-        else
-            return new JSONResult("充值失败",200);
-    }
-
-    /**
-     * 插入批量充值记录
      * @param user
      * @param userRechargeDTO
      * @return
@@ -121,14 +75,19 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         }
         petr = userRechargeMapper.insertBatchRecharge(userRecharge);
 
-        //更新余额
-        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),total);
-
-        IncomeInfo incomeInfo = new IncomeInfo();
-        incomeInfo.setInfoId(StringUtil.createId());
-        incomeInfo.setUserId(user.getUserId());
-        incomeInfo.setOfflineRechargeBalance(userRechargeMapper.getBalance(user.getUserId()));
+        IncomeIog incomeInfo = new IncomeIog();
+        incomeInfo.setRecordId(StringUtil.createId());
+        incomeInfo.setAmount(userRechargeDTO.getTurnoverAmount() * petrolNums.length);
+        incomeInfo.setInfoId(userRechargeMapper.getInfoId(user.getUserId()));
+        incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(user.getUserId()));
         info = userRechargeMapper.insert(incomeInfo);
+
+        BigDecimal bignum1 = new BigDecimal(total);
+        BigDecimal bignum2 = new BigDecimal(incomeInfo.getBeforeChangeIncome());
+        BigDecimal bignum3 = null;
+        bignum3 = bignum1.subtract(bignum2);
+        //更新余额
+        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),bignum3);
         if(petr && isBalance && info)
             return new JSONResult("充值成功",500);
         else

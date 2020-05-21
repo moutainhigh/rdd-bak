@@ -267,6 +267,7 @@
         FROM
             (
         SELECT DISTINCT
+            b.user_account,
             c.offline_recharge_balance AS balance
         FROM
             czb_user_role AS a

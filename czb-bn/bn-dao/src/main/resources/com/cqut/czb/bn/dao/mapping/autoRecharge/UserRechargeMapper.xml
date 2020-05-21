@@ -3,7 +3,10 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper" >
     <select id="getBalance" resultType="java.lang.Double" parameterType="java.lang.String" >
         select offline_recharge_balance from czb_user_income_info where user_id = #{userId,jdbcType=VARCHAR}
-        GROUP BY offline_recharge_balance
+    </select>
+
+    <select id="getInfoId" resultType="java.lang.String" parameterType="java.lang.String" >
+        select info_id from czb_user_income_info where user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
     <select id="getTotalRechargeAmount" resultType="java.lang.Double" parameterType="java.lang.String" >
@@ -37,19 +40,6 @@
 
     </select>
 
-    <insert id="insertRecharge" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge" >
-        insert into czb_petrol_sales_records (record_id, petrol_num, buyer_id,
-          payment_method, third_order_id, turnover_amount,
-          transaction_time, petrol_id, state,
-          contract_id, create_at, update_at,
-          record_type, is_recharged, petrol_kind,denomination,current_price)
-        values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR},
-          #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR}, #{turnoverAmount,jdbcType=DOUBLE},
-          now(), #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
-          #{contractId,jdbcType=VARCHAR}, now(), now(),
-          #{recordType,jdbcType=INTEGER}, #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER},
-          #{denomination,jdbcType=DOUBLE}, #{currentPrice,jdbcType=DOUBLE})
-    </insert>
     <insert id="insertBatchRecharge" parameterType="java.util.List" >
         insert into czb_petrol_sales_records (record_id, petrol_num, buyer_id,
           payment_method, third_order_id, turnover_amount,
@@ -75,34 +65,11 @@
         </foreach>
     </insert>
 
-    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeInfo" >
-        insert into czb_user_income_info (
-        info_id,
-        user_id,
-        fanyong_income,
-        share_income,
-        pay_total_rent,
-        got_total_rent,
-        other_income,
-        create_at,
-        update_at,
-        withdrawed,
-        total_consumption,
-        offline_recharge_balance)
-        values (
-                #{infoId,jdbcType=VARCHAR},
-                #{userId,jdbcType=VARCHAR},
-                '0.00',
-                '0.00',
-                '0.00',
-                '0.00',
-                '0.00',
-                CURRENT_TIMESTAMP ,
-                CURRENT_TIMESTAMP,
-                '0.00',
-                '0.00',
-                #{offlineRechargeBalance,jdbcType=DOUBLE}
-        )
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeIog" >
+        INSERT INTO `czb_income_log` ( record_id, amount, type,
+        info_id, before_change_income, remark, create_at, update_at )
+        VALUES (#{recordId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE},7,
+        #{infoId,jdbcType=VARCHAR},#{beforeChangeIncome,jdbcType=DOUBLE},"线下大客户消费",now(), now())
     </insert>
 
     <update id="updateRecharge" >
@@ -119,7 +86,7 @@
         update czb_user_income_info
         <set >
             <if test="turnoverAmount != null and turnoverAmount != ''">
-                other_income = other_income + #{turnoverAmount,jdbcType=DOUBLE}
+                other_income =  #{turnoverAmount}
             </if>
         </set>
         where user_id in ( SELECT owner_id FROM czb_petrol WHERE petrol_num =  #{petrolNum,jdbcType=VARCHAR})

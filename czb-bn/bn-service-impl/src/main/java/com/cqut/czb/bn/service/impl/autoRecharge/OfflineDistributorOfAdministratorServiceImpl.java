@@ -50,6 +50,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         }
         rechargeRecordDTO.setOfflineRecordsListDTOList(new PageInfo<>(list));
         rechargeRecordDTO.setTotalRecharge(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO));
+        rechargeRecordDTO.setTotalTurn(-(offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO)));
         return new JSONResult("列表数据查询成功", 200, rechargeRecordDTO);
     }
 
@@ -164,6 +165,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     private Workbook getRechargeWorkBook(List<AccountRechargeDTO> list, AccountRechargeDTO inputDTO) throws Exception {
         String[] rechargeHead = SystemConstants.RECHARGE_RECORDS_HEAD;
         Double totalRecharge = offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(inputDTO);
+        double totalTurn = offlineDistributorOfAdministratorMapperExtra.getTotalTurn(inputDTO);
         Workbook workbook = null;
         if(list == null) {
             workbook = new SXSSFWorkbook(1);
@@ -209,7 +211,8 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         row = sheet.createRow(list.size()+1);
         row.createCell(index++).setCellValue("总充值金额：");
         row.createCell(index++).setCellValue(totalRecharge);
-
+        row.createCell(index++).setCellValue("总圈回金额：");
+        row.createCell(index++).setCellValue(formatNum(-totalTurn));
         return workbook;
     }
 
