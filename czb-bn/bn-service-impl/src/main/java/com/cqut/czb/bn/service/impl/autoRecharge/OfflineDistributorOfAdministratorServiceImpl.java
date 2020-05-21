@@ -136,6 +136,8 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             rechargeDTO.setBalance(rechargeInfo.getBalance());
             if ("1".equals(rechargeDTO.getType()) && rechargeDTO.getRechargeAmount()<rechargeDTO.getBalance()){
                     rechargeDTO.setRechargeAmount(-rechargeDTO.getRechargeAmount());
+            }else if("1".equals(rechargeDTO.getType()) && rechargeDTO.getRechargeAmount()>rechargeDTO.getBalance()){
+                return new JSONResult("圈回金额不能大于余额",200,false);
             }
             offlineDistributorOfAdministratorMapperExtra.insertIncomeInfo(rechargeDTO);
             rechargeDTO.setRecordId(StringUtil.createId());
