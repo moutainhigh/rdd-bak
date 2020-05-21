@@ -85,7 +85,7 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         BigDecimal bignum1 = new BigDecimal(total);
         BigDecimal bignum2 = new BigDecimal(incomeInfo.getBeforeChangeIncome());
         BigDecimal bignum3 = null;
-        bignum3 = bignum1.subtract(bignum2);
+        bignum3 = bignum2.subtract(bignum1);
         //更新余额
         isBalance = userRechargeMapper.updateRecharge(user.getUserId(),bignum3);
         if(petr && isBalance && info)

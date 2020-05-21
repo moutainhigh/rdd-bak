@@ -28,12 +28,6 @@ public interface UserRechargeMapper {
      */
     boolean updateRecharge(@Param("userId") String userId, @Param("turnoverAmount") BigDecimal turnoverAmount);
 
-    /**
-     * 被充值人的余额更新
-     * @param petrol
-     * @return
-     */
-    boolean update(UserRecharge petrol);
 
     /**
      * 查询充值记录
