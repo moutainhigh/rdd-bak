@@ -435,6 +435,7 @@
             create_at,
             update_at,
             payment_method,
+            record_type,
             petrol_kind
         FROM
         (
@@ -449,7 +450,8 @@
         payment_method,
         petrol_kind,
         denomination AS petrol_denomination,
-        current_price AS petrol_price
+        current_price AS petrol_price,
+        record_type
         FROM
         czb_petrol_sales_records
         WHERE
