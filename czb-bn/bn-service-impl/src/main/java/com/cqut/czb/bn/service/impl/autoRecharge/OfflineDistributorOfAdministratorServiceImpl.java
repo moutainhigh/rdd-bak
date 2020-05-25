@@ -269,14 +269,14 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             int count = 0;
             row = sheet.createRow(i + 1);
             row.createCell(count++).setCellValue(list.get(i).getAccount());
-            row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
-            row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalConsumption()));
             row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalRecharge()));
+            row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalConsumption()));
             if (list.get(i).getTotalTurn()<0){
                 row.createCell(count++).setCellValue(formatNum(-list.get(i).getTotalTurn()));
             }else{
                 row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalTurn()));
             }
+            row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRegisterTime()));
         }
         int index = 0;
