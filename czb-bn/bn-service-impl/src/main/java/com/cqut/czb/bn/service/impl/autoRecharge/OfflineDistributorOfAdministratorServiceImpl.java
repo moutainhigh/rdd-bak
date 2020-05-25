@@ -232,18 +232,25 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
 
     private Workbook getClientWorkBook(List<OfflineClientDTO> list, OfflineClientDTO inputDTO) throws Exception {
         String[] ClientHead = SystemConstants.CLIENT_RECORDS_HEAD;
-        double totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
+        double totalBalance;
+        if(offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO)==null){
+             totalBalance = 0;
+        }
+        else{
+             totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
+        }
+
         AccountRechargeDTO accountRechargeDTO = new AccountRechargeDTO();
         accountRechargeDTO.setAccount(inputDTO.getAccount());
         accountRechargeDTO.setStartTime(inputDTO.getStartTime());
         accountRechargeDTO.setEndTime(inputDTO.getEndTime());
-        double totalRecharge = offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO);
+        double totalRecharge = 0;
         OfflineConsumptionDTO offlineConsumptionDTO = new OfflineConsumptionDTO();
         offlineConsumptionDTO.setAccount(inputDTO.getAccount());
         offlineConsumptionDTO.setStartTime(inputDTO.getStartTime());
         offlineConsumptionDTO.setEndTime(inputDTO.getEndTime());
-        double totalSale = offlineDistributorOfAdministratorMapperExtra.getTotalSale(offlineConsumptionDTO);
-        double totalTurn = offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO);
+        double totalSale = 0;
+        double totalTurn = 0;
         Workbook workbook = null;
         if(list == null) {
             workbook = new SXSSFWorkbook(1);
@@ -281,6 +288,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             }
             row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRegisterTime()));
+            totalRecharge += list.get(i).getTotalRecharge();
+            totalSale += list.get(i).getTotalConsumption();
+            totalTurn += list.get(i).getTotalTurn();
         }
         int index = 0;
         row = sheet.createRow(list.size()+1);
