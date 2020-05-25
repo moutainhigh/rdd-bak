@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,14 +44,19 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         }else {
             return new JSONResult("充值失败",200);
         }
+        DecimalFormat dfDalance = new DecimalFormat("#.00");
         //本次总充值金额
         double total = userRechargeDTO.getTurnoverAmount() * petrolNums.length;
-
+        BigDecimal bignum1 = new BigDecimal(String.valueOf(total));
+        double formatBlance = bignum1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         if(userRechargeDTO.getTurnoverAmount() < 0) {
             return new JSONResult("充值金额不能为负数，充值失败",200);
         }
         else if(userRechargeDTO.getTurnoverAmount() * petrolNums.length > getBalance(user.getUserId())){
             return new JSONResult("充值失败，余额不足",200);
+        }
+        else if(formatBlance == 0.00){
+            return new JSONResult("充值失败，金额不能小于0.01",200);
         }
 
         List<UserRecharge> userRecharge = new ArrayList<>();
@@ -82,13 +88,13 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(user.getUserId()));
         info = userRechargeMapper.insert(incomeInfo);
 
-        BigDecimal bignum1 = new BigDecimal(String.valueOf(total));
-        BigDecimal bignum2 = new BigDecimal(String.valueOf(incomeInfo.getBeforeChangeIncome()));
-        BigDecimal bignum3 = null;
-        bignum3 = bignum2.subtract(bignum1);
-        System.out.println(bignum3.doubleValue());
+
+        BigDecimal beforeBalance = new BigDecimal(String.valueOf(incomeInfo.getBeforeChangeIncome()));
+        BigDecimal afterBalance = null;
+        afterBalance = beforeBalance.subtract(bignum1);
+        System.out.println(afterBalance.doubleValue());
         //更新余额
-        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),bignum3.doubleValue());
+        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),afterBalance.doubleValue());
         if(petr && isBalance && info)
             return new JSONResult("充值成功",500);
         else
