@@ -139,14 +139,19 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/exportConsumptionRecords",method = RequestMethod.POST)
-    public JSONResult exportConsumptionRecords(HttpServletResponse response, OfflineConsumptionDTO offlineConsumptionDTO){
+    public JSONResult exportConsumptionRecords(HttpServletResponse response,HttpServletRequest request, OfflineConsumptionDTO offlineConsumptionDTO){
+        Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
         try {
             workbook = offlineDistributorOfAdministratorService.exportConsumptionRecords(offlineConsumptionDTO);
             if(workbook == null) {
-                workbook = new SXSSFWorkbook();
+                message = "当前没有未导出的数据啦";
+                result.put("message", message);
+                return new JSONResult(result);
             }
+            //设置对客户端请求的编码格式
+            request.setCharacterEncoding("utf-8");
             //指定服务器返回给浏览器的编码格式
             response.setCharacterEncoding("utf-8");
             //点击下载之后出现下载对话框
@@ -160,26 +165,35 @@ public class OfflineDistributorOfAdministratorController {
             OutputStream out = response.getOutputStream();
             workbook.write(out);
             out.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             message = "导出Excel数据失败，请稍后再试";
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            message = "Excel数据量过大，请缩短导出文件的时间间隔";
         }
-        return new JSONResult(message);
+        result.put("message", message);
+        return new JSONResult(result);
     }
 
     /**
-     * 导出线下大客户余额
+     * 导出线下大客户详情
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/exportClientRecords",method = RequestMethod.POST)
-    public JSONResult exportClientRecords(HttpServletResponse response, OfflineClientDTO offlineClientDTO){
+    public JSONResult exportClientRecords(HttpServletResponse response,HttpServletRequest request,  OfflineClientDTO offlineClientDTO){
+        Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
         try {
             workbook = offlineDistributorOfAdministratorService.exportClientRecords(offlineClientDTO);
             if(workbook == null) {
-                workbook = new SXSSFWorkbook();
+                message = "当前没有未导出的数据啦";
+                result.put("message", message);
+                return new JSONResult(result);
             }
+            //设置对客户端请求的编码格式
+            request.setCharacterEncoding("utf-8");
             //指定服务器返回给浏览器的编码格式
             response.setCharacterEncoding("utf-8");
             //点击下载之后出现下载对话框
@@ -193,10 +207,14 @@ public class OfflineDistributorOfAdministratorController {
             OutputStream out = response.getOutputStream();
             workbook.write(out);
             out.close();
-        } catch (Exception e) {
+        }  catch (IOException e) {
             message = "导出Excel数据失败，请稍后再试";
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            message = "Excel数据量过大，请缩短导出文件的时间间隔";
         }
-        return new JSONResult(message);
+        result.put("message", message);
+        return new JSONResult(result);
     }
 
     /**

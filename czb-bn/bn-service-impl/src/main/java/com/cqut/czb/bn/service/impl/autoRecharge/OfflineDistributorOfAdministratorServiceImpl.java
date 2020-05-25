@@ -223,6 +223,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     @Override
     public Workbook exportClientRecords(OfflineClientDTO offlineClientDTO) throws Exception {
         List<OfflineClientDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineClientList(offlineClientDTO);
+        if(list==null||list.size()==0){
+            return getClientWorkBook(null,offlineClientDTO);
+        }
         return getClientWorkBook(list, offlineClientDTO);
     }
 
@@ -244,7 +247,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         Workbook workbook = null;
         if(list == null) {
             workbook = new SXSSFWorkbook(1);
-            Sheet sheet = workbook.createSheet("导出线下大客户余额记录");//创建工作表
+            Sheet sheet = workbook.createSheet("导出线下大客户详情记录");//创建工作表
             Row row =sheet.createRow(0);//创建行从第0行开始
             Cell cell = row.createCell(0);
             cell.setCellValue("该时间段无记录");
@@ -296,6 +299,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     @Override
     public Workbook exportConsumptionRecords(OfflineConsumptionDTO offlineConsumptionDTO) throws Exception {
         List<OfflineConsumptionDTO> list = offlineDistributorOfAdministratorMapperExtra.getOfflineConsumptionList(offlineConsumptionDTO);
+        if(list==null||list.size()==0){
+            return getConsumptionWorkBook(null,offlineConsumptionDTO);
+        }
         return getConsumptionWorkBook(list, offlineConsumptionDTO);
     }
 
