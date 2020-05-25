@@ -14,10 +14,10 @@ public class OfflineConsumptionDTO extends PageDTO{
 
     private String account;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
