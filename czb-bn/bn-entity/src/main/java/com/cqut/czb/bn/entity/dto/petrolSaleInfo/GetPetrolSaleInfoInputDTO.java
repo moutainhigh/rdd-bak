@@ -15,9 +15,9 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     private Date transactionTime;//交易时间
     private String paymentMethod; //0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
     private String petrolPrice;
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
     private Integer recordType;
     private String thirdOrderId;

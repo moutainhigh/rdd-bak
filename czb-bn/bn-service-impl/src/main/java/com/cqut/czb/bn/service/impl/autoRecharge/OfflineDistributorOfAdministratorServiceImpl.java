@@ -134,7 +134,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             rechargeDTO.setInfoId(rechargeInfo.getInfoId());
             rechargeDTO.setRecordId(StringUtil.createId());
             rechargeDTO.setBalance(rechargeInfo.getBalance());
-            if ("1".equals(rechargeDTO.getType()) && rechargeDTO.getRechargeAmount()<=rechargeDTO.getBalance()){
+            if ("1".equals(rechargeDTO.getType()) && rechargeDTO.getRechargeAmount()<= rechargeDTO.getBalance()){
                     rechargeDTO.setRechargeAmount(-rechargeDTO.getRechargeAmount());
             }else if("1".equals(rechargeDTO.getType()) && rechargeDTO.getRechargeAmount()>rechargeDTO.getBalance()){
                 return new JSONResult("圈回金额不能大于余额",200,false);
@@ -154,6 +154,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     @Override
     public Workbook exportRechargeRecords(AccountRechargeDTO accountRechargeDTO) throws Exception {
         List<AccountRechargeDTO> list = offlineDistributorOfAdministratorMapperExtra.getRechargeTableList(accountRechargeDTO);
+        if(list==null||list.size()==0){
+            return getRechargeWorkBook(null,accountRechargeDTO);
+        }
         for (int i = 0; i < list.size(); i++){
             BigDecimal a1 = new BigDecimal(String.valueOf(list.get(i).getRechargeAmount()));
             BigDecimal b1 = new BigDecimal(String.valueOf(list.get(i).getBeforeBalance()));
@@ -162,11 +165,9 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         return getRechargeWorkBook(list, accountRechargeDTO);
     }
 
-
-
     private Workbook getRechargeWorkBook(List<AccountRechargeDTO> list, AccountRechargeDTO inputDTO) throws Exception {
         String[] rechargeHead = SystemConstants.RECHARGE_RECORDS_HEAD;
-        Double totalRecharge = offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(inputDTO);
+        double totalRecharge = offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(inputDTO);
         double totalTurn = offlineDistributorOfAdministratorMapperExtra.getTotalTurn(inputDTO);
         Workbook workbook = null;
         if(list == null) {
