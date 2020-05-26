@@ -184,15 +184,16 @@ public class UserServiceImpl implements IUserService {
                                 user.setIsLoginPc(1);
                                 userMapperExtra.updateUser(user);
                             }
-                            UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
-                            if(redisUtil.hasKey(user.getUserAccount())) {
-                                redisUtil.remove(user.getUserAccount());
-                                redisUtil.put(user.getUserAccount(), user);
-                            }
                         }
                     }
                 }
                 isInsert = userRoleMapperExtra.insertUserRoles(insertList) > 0;
+                // 更新 reids 中 用户角色
+                UserDTO user = userMapperExtra.findUserDTOById(userInputDTO.getUserId());
+                if(redisUtil.hasKey(user.getUserAccount())) {
+                    redisUtil.remove(user.getUserAccount());
+                    redisUtil.put(user.getUserAccount(), user);
+                }
             }
         }
         return isInsert;
