@@ -182,7 +182,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
             autoRechargeRecordDTO.setPrice(item.getCurrentPrice());
             autoRechargeRecordDTO.setRechargeAmount(item.getPetrolDenomination());
             autoRechargeRecordDTO.setOrderTime(item.getCreateAt());
-            autoRechargeRecordDTO.setUserName(item.getRecordType().equals("3") ? "平台用户" : "大客户用户");
+            autoRechargeRecordDTO.setUserName(item.getRecordType().equals("3") ? "大客户用户" : "平台用户");
             autoRechargeRecordDTO.setStatus(isSuccess ? 1 : 0);
             autoRechargeRecordDTO.setMessage(message);
             automaticRechargeService.insertRecord(autoRechargeRecordDTO);
