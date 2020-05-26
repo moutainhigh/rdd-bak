@@ -1,0 +1,1 @@
+alter table czb_auto_recharge_record modify petrol_num varchar(50);
