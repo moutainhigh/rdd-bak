@@ -171,7 +171,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
             // 插入自动充值记录
             String message;
             if (isSuccess) {
-                message = "充值成功, 主卡余额为" + (balance - item.getPetrolDenomination());
+                message = "充值成功, 主卡余额为" + String .format("%.2f", balance - item.getPetrolDenomination());
                 balance -= item.getPetrolDenomination();
             }else {
                 message = "充值失败，" + errorMessage;
