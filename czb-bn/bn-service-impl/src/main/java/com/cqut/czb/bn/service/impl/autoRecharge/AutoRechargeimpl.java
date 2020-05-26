@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.service.autoRecharge.AutoRechargeService;
+import com.cqut.czb.bn.service.automaticRechargeService.AutomaticRechargeService;
 import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
 import com.github.pagehelper.PageHelper;
 import com.google.common.reflect.TypeToken;
@@ -35,6 +36,9 @@ public class AutoRechargeimpl implements AutoRechargeService {
 
     @Autowired
     IPetrolRechargeService petrolRechargeService;
+
+    @Autowired
+    AutomaticRechargeService automaticRechargeService;
 
     //保存Cookie
     public OkHttpClient createClient(String userId) {
@@ -124,26 +128,32 @@ public class AutoRechargeimpl implements AutoRechargeService {
     synchronized public RechargeOutput recharge(RechargeInput rechargeInput, String userId) {
         try {
             Gson gson = new Gson();
+            RechargeOutput rechargeOutput;
+            // 自动充值
             if (rechargeInput.getRecordIds() != null && ! rechargeInput.getRecordIds().equals("")){
-                String[] arr = rechargeInput.getRecordIds().split(",");
+                boolean isSuccess = false; // 是否成功
+                String[] arr = rechargeInput.getRecordIds().split(","); //订单数组
                 List<String> list = Arrays.asList(arr);
                 Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(list);
                 if (count.equals(arr.length)){
                     String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
-                    RechargeOutput rechargeOutput = gson.fromJson(res, RechargeOutput.class);
+                    rechargeOutput = gson.fromJson(res, RechargeOutput.class);
                     if ("1".equals(rechargeOutput.getResult())){
-                        updateSalePetrolRecord(list);
+                        isSuccess = true;
                     }
                     return rechargeOutput;
                 }else{
-                    RechargeOutput rechargeOutput = new RechargeOutput();
+                    rechargeOutput = new RechargeOutput();
                     rechargeOutput.setResult("0");
                     rechargeOutput.setErrorMsg("充值失败，已有卡被充值");
-                    return rechargeOutput;
                 }
-            }else{
-                String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
-                return gson.fromJson(res, RechargeOutput.class);
+                updateSalePetrolRecord(list, rechargeInput.getBalance(), isSuccess, rechargeOutput.getErrorMsg());
+                return rechargeOutput;
+            }else{ // 手动充值
+//                String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
+//                return gson.fromJson(res, RechargeOutput.class);
+                rechargeOutput = new RechargeOutput();
+                return rechargeOutput;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,10 +164,29 @@ public class AutoRechargeimpl implements AutoRechargeService {
         }
     }
 
-    private void updateSalePetrolRecord(List<String> list){
+    private void updateSalePetrolRecord(List<String> list, double balance, boolean isSuccess,String errorMessage){
         for (String recordId : list){
+            // 改变油卡销售记录 并 推送
             PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
             petrolRechargeService.recharge(item);
+            // 插入自动充值记录
+            String message;
+            if (isSuccess) {
+                message = "充值成功, 主卡余额为" + (balance - item.getPetrolDenomination());
+                balance -= item.getPetrolDenomination();
+            }else {
+                message = "充值失败，" + errorMessage;
+            }
+            AutoRechargeRecordDTO autoRechargeRecordDTO = new AutoRechargeRecordDTO();
+            autoRechargeRecordDTO.setUserAccount(item.getUserAccount());
+            autoRechargeRecordDTO.setPetrolNum(item.getPetrolNum());
+            autoRechargeRecordDTO.setPrice(item.getCurrentPrice());
+            autoRechargeRecordDTO.setRechargeAmount(item.getPetrolDenomination());
+            autoRechargeRecordDTO.setOrderTime(item.getCreateAt());
+            autoRechargeRecordDTO.setUserName(item.getRecordType().equals("3") ? "平台用户" : "平台大客户");
+            autoRechargeRecordDTO.setStatus(isSuccess ? 1 : 0);
+            autoRechargeRecordDTO.setMessage(message);
+            automaticRechargeService.insertRecord(autoRechargeRecordDTO);
         }
     }
 

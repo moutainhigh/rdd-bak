@@ -2,6 +2,8 @@ package com.cqut.czb.bn.entity.dto.petrolRecharge;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 
+import java.util.Date;
+
 public class PetrolRechargeInputDTO extends PageDTO {
     private String userId;
     private String petrolNum;
@@ -16,6 +18,24 @@ public class PetrolRechargeInputDTO extends PageDTO {
     private String startTime;
     private String endTime;
     private Integer rechargeState;
+    private Date createAt;
+    private Double currentPrice;
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
     public String getStartTime() {
         return startTime;
