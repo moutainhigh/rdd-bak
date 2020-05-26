@@ -141,7 +141,6 @@ public class AutoRechargeimpl implements AutoRechargeService {
                     if ("1".equals(rechargeOutput.getResult())){
                         isSuccess = true;
                     }
-                    return rechargeOutput;
                 }else{
                     rechargeOutput = new RechargeOutput();
                     rechargeOutput.setResult("0");
