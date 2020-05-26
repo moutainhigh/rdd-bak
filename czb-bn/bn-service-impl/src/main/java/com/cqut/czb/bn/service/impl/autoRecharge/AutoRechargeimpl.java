@@ -126,6 +126,8 @@ public class AutoRechargeimpl implements AutoRechargeService {
 
     @Override
     synchronized public RechargeOutput recharge(RechargeInput rechargeInput, String userId) {
+        double balance = rechargeInput.getBalance() == null ? 0 : rechargeInput.getBalance();
+        String message = "";
         try {
             Gson gson = new Gson();
             RechargeOutput rechargeOutput;
@@ -146,7 +148,8 @@ public class AutoRechargeimpl implements AutoRechargeService {
                     rechargeOutput.setResult("0");
                     rechargeOutput.setErrorMsg("充值失败，已有卡被充值");
                 }
-                updateSalePetrolRecord(list, rechargeInput.getBalance(), isSuccess, rechargeOutput.getErrorMsg());
+                message = rechargeOutput.getErrorMsg() == null ? "" : rechargeOutput.getErrorMsg();
+                updateSalePetrolRecord(list, rechargeInput.getBalance(), isSuccess, message);
                 return rechargeOutput;
             }else{ // 手动充值
 //                String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
@@ -168,7 +171,10 @@ public class AutoRechargeimpl implements AutoRechargeService {
             // 改变油卡销售记录 并 推送
             PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
             petrolRechargeService.recharge(item);
+        }
+        for (String recordId : list){
             // 插入自动充值记录
+            PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
             String message;
             if (isSuccess) {
                 message = "充值成功, 主卡余额为" + String .format("%.2f", balance - item.getPetrolDenomination());
