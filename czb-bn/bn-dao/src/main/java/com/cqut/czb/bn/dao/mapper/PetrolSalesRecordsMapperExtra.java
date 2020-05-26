@@ -41,6 +41,8 @@ public interface PetrolSalesRecordsMapperExtra {
 
     int recharge(@Param("recordId") String recordId);
 
+    int updateMatterCard(@Param("recordId") String recordId);
+
     PetrolSalesRecords selectPetrolSalesRecords(PetrolInputDTO petrolInputDTO);
 
     /**

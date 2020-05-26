@@ -128,6 +128,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
     synchronized public RechargeOutput recharge(RechargeInput rechargeInput, String userId) {
         double balance = rechargeInput.getBalance() == null ? 0 : rechargeInput.getBalance();
         String message = "";
+        List<String> list = new ArrayList<>();
         try {
             Gson gson = new Gson();
             RechargeOutput rechargeOutput;
@@ -135,13 +136,23 @@ public class AutoRechargeimpl implements AutoRechargeService {
             if (rechargeInput.getRecordIds() != null && ! rechargeInput.getRecordIds().equals("")){
                 boolean isSuccess = false; // 是否成功
                 String[] arr = rechargeInput.getRecordIds().split(","); //订单数组
-                List<String> list = Arrays.asList(arr);
+                list = Arrays.asList(arr);
                 Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(list);
                 if (count.equals(arr.length)){
                     String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
                     rechargeOutput = gson.fromJson(res, RechargeOutput.class);
                     if ("1".equals(rechargeOutput.getResult())){
                         isSuccess = true;
+                        for (String recordId : list){
+                            // 改变油卡销售记录 并 推送
+                            PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
+                            petrolRechargeService.recharge(item);
+                        }
+                    }else{
+                        for (String recordId : list){
+                            // 标记为问题卡号
+                            petrolSalesRecordsMapperExtra.updateMatterCard(recordId);
+                        }
                     }
                 }else{
                     rechargeOutput = new RechargeOutput();
@@ -158,7 +169,10 @@ public class AutoRechargeimpl implements AutoRechargeService {
                 return rechargeOutput;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            for (String recordId : list){
+                // 标记为问题卡号
+                petrolSalesRecordsMapperExtra.updateMatterCard(recordId);
+            }
             RechargeOutput rechargeOutput = new RechargeOutput();
             rechargeOutput.setResult("0");
             rechargeOutput.setErrorMsg("充值失败，通讯异常");
@@ -167,11 +181,6 @@ public class AutoRechargeimpl implements AutoRechargeService {
     }
 
     private void updateSalePetrolRecord(List<String> list, double balance, boolean isSuccess,String errorMessage){
-        for (String recordId : list){
-            // 改变油卡销售记录 并 推送
-            PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
-            petrolRechargeService.recharge(item);
-        }
         for (String recordId : list){
             // 插入自动充值记录
             PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
