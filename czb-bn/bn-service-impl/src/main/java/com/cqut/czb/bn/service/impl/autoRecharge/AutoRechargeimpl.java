@@ -225,7 +225,8 @@ public class AutoRechargeimpl implements AutoRechargeService {
             if (searchCardOutput.getData().size() > 0){
                 SearchCardUser temp = searchCardOutput.getData().get(0);
                 String cardAsn = temp.getAsn();
-                boolean flag = true; //判重处理
+                //判重处理
+                boolean flag = true;
                 for (SearchCardUser searchCardUser: returnList){
                     if (searchCardUser.getAsn().equals(cardAsn)){
                         flag = false;

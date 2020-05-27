@@ -352,7 +352,10 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
                 row.createCell(count++).setCellValue("充值成功");
             }else if ("0".equals(list.get(i).getState())){
                 row.createCell(count++).setCellValue("待充值");
-            }else {
+            }else if ("2".equals(list.get(i).getState())){
+                row.createCell(count++).setCellValue("问题卡号");
+            }
+            else {
                 row.createCell(count++).setCellValue(" ");
             }
             row.createCell(count++).setCellValue(list.get(i).getAccount());

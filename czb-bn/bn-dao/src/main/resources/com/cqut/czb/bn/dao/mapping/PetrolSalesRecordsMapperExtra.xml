@@ -552,7 +552,7 @@
     <update id="recharge" parameterType="java.lang.String">
         update czb_petrol_sales_records
         set is_recharged = 1
-        and record_id = #{recordId,jdbcType=VARCHAR}
+        where record_id = #{recordId,jdbcType=VARCHAR}
     </update>
 
     <update id="updateMatterCard" parameterType="java.lang.String">

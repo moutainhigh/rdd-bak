@@ -93,6 +93,10 @@
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
     WHERE czb_role.role_name = '线下大客户')
     and czb_offline_distributor_records.amount&gt;0
+    <if test="startTime != null and endTime != null">
+        and czb_offline_distributor_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and czb_offline_distributor_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
     GROUP BY
     buyer_id
     ) AS e ON a.user_id = e.buyer_id
@@ -115,10 +119,6 @@
         f.role_name = '线下大客户'
         <if test="account != null and account != ''">
             and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="startTime != null and endTime != null">
-            and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
-            and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
     </where>
     ORDER BY
