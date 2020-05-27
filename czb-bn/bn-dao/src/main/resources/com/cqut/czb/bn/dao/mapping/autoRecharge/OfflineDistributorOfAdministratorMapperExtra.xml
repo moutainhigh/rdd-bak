@@ -261,32 +261,6 @@
         </where>
     </select>
 
-    <select id="getTotalBalance" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="java.lang.Double">
-        SELECT
-            sum( balance )
-        FROM
-            (
-        SELECT DISTINCT
-            b.user_account,
-            c.offline_recharge_balance AS balance
-        FROM
-            czb_user_role AS a
-            JOIN czb_user AS b ON a.user_id = b.user_id
-            JOIN czb_user_income_info AS c ON a.user_id = c.user_id
-            JOIN czb_role AS f ON a.role_id = f.role_id
-        <where>
-            f.role_name = '线下大客户'
-            <if test="account != null and account != ''">
-                and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
-            </if>
-            <if test="startTime!= null and endTime!= null">
-                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
-                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
-            </if>
-        </where>
-            ) AS totalBalance
-    </select>
-
     <select id="getPassword" resultType="java.lang.String">
         SELECT
             content

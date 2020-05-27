@@ -232,14 +232,6 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
 
     private Workbook getClientWorkBook(List<OfflineClientDTO> list, OfflineClientDTO inputDTO) throws Exception {
         String[] ClientHead = SystemConstants.CLIENT_RECORDS_HEAD;
-        double totalBalance;
-        if(offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO)==null){
-             totalBalance = 0;
-        }
-        else{
-             totalBalance = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(inputDTO);
-        }
-
         AccountRechargeDTO accountRechargeDTO = new AccountRechargeDTO();
         accountRechargeDTO.setAccount(inputDTO.getAccount());
         accountRechargeDTO.setStartTime(inputDTO.getStartTime());
@@ -249,6 +241,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         offlineConsumptionDTO.setAccount(inputDTO.getAccount());
         offlineConsumptionDTO.setStartTime(inputDTO.getStartTime());
         offlineConsumptionDTO.setEndTime(inputDTO.getEndTime());
+        double totalBalance = 0;
         double totalSale = 0;
         double totalTurn = 0;
         Workbook workbook = null;
@@ -291,6 +284,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             totalRecharge += list.get(i).getTotalRecharge();
             totalSale += list.get(i).getTotalConsumption();
             totalTurn += list.get(i).getTotalTurn();
+            totalBalance += list.get(i).getBalance();
         }
         int index = 0;
         row = sheet.createRow(list.size()+1);

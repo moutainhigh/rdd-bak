@@ -42,6 +42,4 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
     int changePWD(String newPWD);
 
     int insertPassword(String newPWD);
-
-    Double getTotalBalance(OfflineClientDTO offlineClientDTO);
 }
