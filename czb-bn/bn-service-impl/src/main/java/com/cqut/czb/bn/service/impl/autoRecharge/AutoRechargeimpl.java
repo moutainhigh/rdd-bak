@@ -137,6 +137,10 @@ public class AutoRechargeimpl implements AutoRechargeService {
                 boolean isSuccess = false; // 是否成功
                 String[] arr = rechargeInput.getRecordIds().split(","); //订单数组
                 list = Arrays.asList(arr);
+                for (String recordId : list){
+                    // 标记为问题卡号
+                    petrolSalesRecordsMapperExtra.updateMatterCard(recordId);
+                }
                 Integer count = petrolSalesRecordsMapperExtra.selectCountByWaitRecharge(list);
                 if (count.equals(arr.length)){
                     String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
@@ -148,11 +152,6 @@ public class AutoRechargeimpl implements AutoRechargeService {
                             PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);
                             petrolRechargeService.recharge(item);
                         }
-                    }else{
-                        for (String recordId : list){
-                            // 标记为问题卡号
-                            petrolSalesRecordsMapperExtra.updateMatterCard(recordId);
-                        }
                     }
                 }else{
                     rechargeOutput = new RechargeOutput();
@@ -160,7 +159,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
                     rechargeOutput.setErrorMsg("充值失败，已有卡被充值");
                 }
                 message = rechargeOutput.getErrorMsg() == null ? "" : rechargeOutput.getErrorMsg();
-                updateSalePetrolRecord(list, rechargeInput.getBalance(), isSuccess, message);
+                insertAutoRechargeRecord(list, rechargeInput.getBalance(), isSuccess, message);
                 return rechargeOutput;
             }else{ // 手动充值
 //                String res = getWithParamters("/NewBigCustomerTerminal/NewDistributionRead.ashx", rechargeInput, userId);
@@ -180,7 +179,7 @@ public class AutoRechargeimpl implements AutoRechargeService {
         }
     }
 
-    private void updateSalePetrolRecord(List<String> list, double balance, boolean isSuccess,String errorMessage){
+    private void insertAutoRechargeRecord(List<String> list, double balance, boolean isSuccess,String errorMessage){
         for (String recordId : list){
             // 插入自动充值记录
             PetrolRechargeInputDTO item = petrolSalesRecordsMapperExtra.getRechargeUserInfo(recordId);

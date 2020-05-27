@@ -414,12 +414,11 @@
     <select id="selectCountByWaitRecharge" resultType="java.lang.Integer" parameterType="java.util.List">
         SELECT COUNT(*) rechargeCount
         FROM czb_petrol_sales_records
-
         WHERE record_id in
         <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
             #{item}
         </foreach>
-        AND is_recharged = 0
+        AND (is_recharged = 0 OR is_recharged = 2)
         AND state = 1
     </select>
 
@@ -553,7 +552,6 @@
     <update id="recharge" parameterType="java.lang.String">
         update czb_petrol_sales_records
         set is_recharged = 1
-        where is_recharged = 0
         and record_id = #{recordId,jdbcType=VARCHAR}
     </update>
 
