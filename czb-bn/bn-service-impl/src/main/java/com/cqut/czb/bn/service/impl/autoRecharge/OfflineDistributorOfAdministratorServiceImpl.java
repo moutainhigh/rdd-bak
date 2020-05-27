@@ -349,9 +349,6 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             }else if ("2".equals(list.get(i).getState())){
                 row.createCell(count++).setCellValue("问题卡号");
             }
-            else {
-                row.createCell(count++).setCellValue(" ");
-            }
             row.createCell(count++).setCellValue(list.get(i).getAccount());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRechargeTime()));
         }
