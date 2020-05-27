@@ -243,13 +243,13 @@ public class DataProcessServiceImpl implements DataProcessService {
             System.out.println("新增油卡邮寄记录" + isInsert);
         }
 
-        //发放补贴给购卡人
-        Double sendMoney =getSubsidies(orgId,money,ownerId,area);
-        System.out.println("发放补贴"+sendMoney);
-        double money1= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
-        System.out.println("实际支付"+money1);
+//        //发放补贴给购卡人
+//        Double sendMoney =getSubsidies(orgId,money,ownerId,area);
+//        System.out.println("发放补贴"+sendMoney);
+//        double money1= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(sendMoney)).doubleValue();
+//        System.out.println("实际支付"+money1);
 
-        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money1, money1, orgId);
+        boolean beginFanYong = fanYongService.beginFanYong(1,area,ownerId, money, money, orgId);
 
         if (beginFanYong == true)
             return true;
