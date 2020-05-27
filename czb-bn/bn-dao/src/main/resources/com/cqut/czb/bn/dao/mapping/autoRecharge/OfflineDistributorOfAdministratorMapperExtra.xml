@@ -29,12 +29,13 @@
     a.turnover_amount AS amount,
     a.is_recharged AS state,
     b.user_account AS account,
-    a.transaction_time AS rechargeTime
+    a.create_at AS rechargeTime
     FROM
     `czb_petrol_sales_records` AS a
     JOIN czb_user AS b ON a.buyer_id = b.user_id
     <where>
         a.record_type = 3
+        and a.state = 1
         <if test="petrolNum != null and petrolNum != ''">
             and a.petrol_num LIKE concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
         </if>
@@ -45,8 +46,8 @@
             and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
         <if test="startTime!= null and endTime!= null">
-            and a.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
-            and a.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+            and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
     </where>
     ORDER BY
@@ -78,6 +79,7 @@
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
     WHERE czb_role.role_name = '线下大客户' )
     AND record_type = 3
+    and state = 1
     <if test="startTime != null and endTime != null">
         and czb_petrol_sales_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
         and czb_petrol_sales_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
@@ -253,6 +255,7 @@
         JOIN czb_user AS b ON a.buyer_id = b.user_id
         <where>
             a.record_type = 3
+            and a.state = 1
             <if test="petrolNum != null and petrolNum != ''">
                 and a.petrol_num LIKE concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
             </if>
@@ -263,8 +266,8 @@
                 and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>
             <if test="startTime!= null and endTime!= null">
-                and a.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
-                and a.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
