@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.petrolRecharge;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.entity.dto.TroubleshootingDTO;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
@@ -58,6 +59,8 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         return new PageInfo<>(list);
     }
 
+
+
     public Integer getPetrolRechargeListTotalMoney(PetrolRechargeInputDTO inputDTO){
         Integer totalMoney = petrolSalesRecordsMapperExtra.getPetrolRechargeListTotalMoney(inputDTO);
         return totalMoney;
@@ -97,6 +100,12 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
         content.put("petrolDenomination", String.valueOf(record.getPetrolDenomination()));
         messageManagementService.sendMessageToOne(content, petrolSalesRecords.getBuyerId());
         return isRecharge;
+    }
+
+    @Override
+    public boolean troubleshooting(TroubleshootingDTO record){
+        boolean result = petrolSalesRecordsMapperExtra.troubleshooting(record) > 0;
+        return result;
     }
 
     @Override

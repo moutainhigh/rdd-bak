@@ -900,4 +900,13 @@
         czb_petrol
         ) AS cp ON cp.petrol_id = t_cpsr.petrol_id order by create_at desc
     </select>
+    <update id="troubleshooting" parameterType="com.cqut.czb.bn.entity.dto.TroubleshootingDTO">
+        update czb_petrol_sales_records
+        set is_recharged = #{isRecharged}
+        <where>
+            record_id = #{recordId,jdbcType=VARCHAR}
+            and is_recharged = 2
+        </where>
+    </update>
+
 </mapper>

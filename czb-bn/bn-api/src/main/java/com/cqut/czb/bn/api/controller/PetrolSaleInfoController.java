@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
+import com.cqut.czb.bn.entity.dto.TroubleshootingDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
 import com.cqut.czb.bn.entity.global.DateDealWith;
@@ -55,6 +56,12 @@ public class PetrolSaleInfoController {
     @RequestMapping(value ="/recharge",method = RequestMethod.POST)
     public JSONResult recharge(@RequestBody PetrolRechargeInputDTO inputDTO ){
         return new JSONResult(petrolRechargeService.recharge(inputDTO));
+    }
+
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value ="/troubleshooting",method = RequestMethod.POST)
+    public JSONResult troubleshooting(@RequestBody TroubleshootingDTO inputDTO ){
+        return new JSONResult(petrolRechargeService.troubleshooting(inputDTO));
     }
 
     @PostMapping("/exportRecords")

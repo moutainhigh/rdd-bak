@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetChargeOrderInputDTO;
 import com.cqut.czb.bn.entity.dto.ThirdBusiness.GetUnChargeOrderDTO;
+import com.cqut.czb.bn.entity.dto.TroubleshootingDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeOutputDTO;
@@ -40,6 +41,9 @@ public interface PetrolSalesRecordsMapperExtra {
     int getPetrolRechargeListTotalMoney(PetrolRechargeInputDTO inputDTO);
 
     int recharge(@Param("recordId") String recordId);
+
+
+    int troubleshooting(TroubleshootingDTO record);
 
     int updateMatterCard(@Param("recordId") String recordId);
 
