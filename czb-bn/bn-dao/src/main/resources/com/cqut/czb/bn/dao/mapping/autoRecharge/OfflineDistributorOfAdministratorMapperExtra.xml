@@ -78,6 +78,10 @@
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
     WHERE czb_role.role_name = '线下大客户' )
     AND record_type = 3
+    <if test="startTime != null and endTime != null">
+        and czb_petrol_sales_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and czb_petrol_sales_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
     GROUP BY
     buyer_id
     ) AS d ON a.user_id = d.buyer_id
@@ -112,6 +116,10 @@
     JOIN czb_role on czb_role.role_id = czb_user_role.role_id
     WHERE czb_role.role_name = '线下大客户')
     and czb_offline_distributor_records.amount &lt;0
+    <if test="startTime != null and endTime != null">
+        and czb_offline_distributor_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and czb_offline_distributor_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
     GROUP BY
     buyer_id
     ) AS g ON a.user_id = g.buyer_id
