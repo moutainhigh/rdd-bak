@@ -24,13 +24,14 @@
     <result column="old_superior" jdbcType="VARCHAR" property="oldSuperior" />
     <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
+    <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
   </resultMap>
 
   <sql id="Base_Column_List">
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner, is_vip,bindingid
+    partner, old_superior, first_level_partner, second_level_partner,avatar_url, is_vip,bindingid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
