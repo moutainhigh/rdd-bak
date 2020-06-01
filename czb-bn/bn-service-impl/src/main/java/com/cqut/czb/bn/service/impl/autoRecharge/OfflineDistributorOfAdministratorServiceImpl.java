@@ -9,6 +9,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -236,14 +238,10 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         accountRechargeDTO.setAccount(inputDTO.getAccount());
         accountRechargeDTO.setStartTime(inputDTO.getStartTime());
         accountRechargeDTO.setEndTime(inputDTO.getEndTime());
-        double totalRecharge = 0;
         OfflineConsumptionDTO offlineConsumptionDTO = new OfflineConsumptionDTO();
         offlineConsumptionDTO.setAccount(inputDTO.getAccount());
         offlineConsumptionDTO.setStartTime(inputDTO.getStartTime());
         offlineConsumptionDTO.setEndTime(inputDTO.getEndTime());
-        double totalBalance = 0;
-        double totalSale = 0;
-        double totalTurn = 0;
         Workbook workbook = null;
         if(list == null) {
             workbook = new SXSSFWorkbook(1);
@@ -262,6 +260,14 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         Row row =sheet.createRow(0);//创建行从第0行开始
         CellStyle style = workbook.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));//起始行号，终止行号， 起始列号，终止列号
+        Cell cell1 = row.createCell(0);
+        cell1.setCellStyle(style);
+        BigDecimal totalBalance = new BigDecimal(String.valueOf(0.00));
+        BigDecimal todayBalance = new BigDecimal(String.valueOf(0.00));
+        SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd");
+        cell1.setCellValue(sdf1.format(inputDTO.getStartTime())+"至"+sdf1.format(inputDTO.getEndTime())+"线下大客户余额记录");
+        row = sheet.createRow( 1);
         for (int i = 0; i < ClientHead.length; i++) {
             Cell cell = row.createCell(i);
             cell.setCellValue(ClientHead[i]);
@@ -270,7 +276,7 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         }
         for (int i = 0; i < list.size(); i++) {
             int count = 0;
-            row = sheet.createRow(i + 1);
+            row = sheet.createRow(i + 2);
             row.createCell(count++).setCellValue(list.get(i).getAccount());
             row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalRecharge()));
             row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalConsumption()));
@@ -279,24 +285,74 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             }else{
                 row.createCell(count++).setCellValue(formatNum(list.get(i).getTotalTurn()));
             }
-            row.createCell(count++).setCellValue(formatNum(list.get(i).getBalance()));
+            OfflineConsumptionDTO offlineConsumptionDTO1 = new OfflineConsumptionDTO();
+            offlineConsumptionDTO1.setAccount(list.get(i).getAccount());
+            offlineConsumptionDTO1.setStartTime(list.get(i).getStartTime());
+            offlineConsumptionDTO1.setEndTime(list.get(i).getEndTime());
+            BeforeBalanceDTO beforeBalanceDTO = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(offlineConsumptionDTO1);
+            BigDecimal balance;
+            BigDecimal a1 = new BigDecimal(String.valueOf(beforeBalanceDTO.getAmount()));
+            BigDecimal b1 = new BigDecimal(String.valueOf(beforeBalanceDTO.getBeforeBalance()));
+            if (beforeBalanceDTO.getType()== 6){
+                balance = a1.add(b1);
+            }else{
+
+                 balance = b1.subtract(a1);
+            }
+            row.createCell(count++).setCellValue(formatNum(balance.doubleValue()));
+            totalBalance = totalBalance.add(balance);
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRegisterTime()));
-            totalRecharge += list.get(i).getTotalRecharge();
-            totalSale += list.get(i).getTotalConsumption();
-            totalTurn += list.get(i).getTotalTurn();
-            totalBalance += list.get(i).getBalance();
+            todayBalance = todayBalance.add(new BigDecimal(String.valueOf(list.get(i).getBalance())));
+
         }
         int index = 0;
-        row = sheet.createRow(list.size()+1);
+        row = sheet.createRow(list.size()+2);
+        row.createCell(index++).setCellValue("累计：");
+        row = sheet.createRow(list.size()+3);
         row.createCell(index++).setCellValue("总充值金额：");
+        AccountRechargeDTO accountRechargeDTO1 = new AccountRechargeDTO();
+        accountRechargeDTO1.setStartTime(inputDTO.getStartTime());
+        accountRechargeDTO1.setEndTime(inputDTO.getEndTime());
+        row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO1)));
+        row.createCell(index++).setCellValue("总消费金额：");
+        OfflineConsumptionDTO offlineConsumptionDTO1 = new OfflineConsumptionDTO();
+        offlineConsumptionDTO1.setStartTime(inputDTO.getStartTime());
+        offlineConsumptionDTO1.setEndTime(inputDTO.getEndTime());
+        row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalSale(offlineConsumptionDTO1)));
+        row.createCell(index++).setCellValue("总圈回金额：");
+        if (offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1) == 0){
+            row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1)));
+        }else{
+            row.createCell(index++).setCellValue(formatNum(-offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1)));
+        }
+
+        row.createCell(index++).setCellValue("总余额：");
+        row.createCell(index++).setCellValue(formatNum(totalBalance.doubleValue()));
+        index=0;
+        row = sheet.createRow(list.size()+4);
+        row.createCell(index++).setCellValue("今日：");
+        row = sheet.createRow(list.size()+5);
+        row.createCell(index++).setCellValue("总充值金额：");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String time = formatter.format(new Date());
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = ft.parse(time);
+        accountRechargeDTO1.setStartTime(date);
+        accountRechargeDTO1.setEndTime(null);
+        double totalRecharge = offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO1);
         row.createCell(index++).setCellValue(formatNum(totalRecharge));
         row.createCell(index++).setCellValue("总消费金额：");
-        row.createCell(index++).setCellValue(formatNum(totalSale));
+        offlineConsumptionDTO1.setStartTime(date);
+        offlineConsumptionDTO1.setEndTime(null);
+        row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalSale(offlineConsumptionDTO1)));
         row.createCell(index++).setCellValue("总圈回金额：");
-        row.createCell(index++).setCellValue(formatNum(-totalTurn));
+        if (offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1) == 0){
+            row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1)));
+        }else{
+            row.createCell(index++).setCellValue(formatNum(-offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1)));
+        }
         row.createCell(index++).setCellValue("总余额：");
-        row.createCell(index++).setCellValue(formatNum(totalBalance));
-
+        row.createCell(index++).setCellValue(formatNum(todayBalance.doubleValue()));
         return workbook;
     }
 

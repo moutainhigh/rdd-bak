@@ -1,9 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.autoRecharge;
 
-import com.cqut.czb.bn.entity.dto.AccountRechargeDTO;
-import com.cqut.czb.bn.entity.dto.OfflineClientDTO;
-import com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO;
-import com.cqut.czb.bn.entity.dto.RechargeDTO;
+import com.cqut.czb.bn.entity.dto.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +17,8 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
     List<String> getRechargeAccountList();
 
     Double getAccountBalance(String account);
+
+    BeforeBalanceDTO getTotalBalance(OfflineConsumptionDTO offlineConsumptionDTO);
 
     Double getTotalRecharge(AccountRechargeDTO accountRechargeDTO);
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.autoRecharge.OfflineDistributorOfAdministratorMapperExtra">
+
 <select id="getRechargeTableList" parameterType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO">
     SELECT
     b.user_account AS account,
@@ -222,8 +223,10 @@
         <if test="account != null and account != ''">
             and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
-        <if test="startTime != null and endTime != null">
+        <if test="startTime!= null">
             and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime!= null">
             and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
         </if>
     </where>
@@ -240,8 +243,10 @@
             <if test="account != null and account != ''">
                 and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>
-            <if test="startTime != null and endTime != null">
+            <if test="startTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime!= null">
                 and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
@@ -265,11 +270,41 @@
             <if test="account != null and account != ''">
                 and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>
-            <if test="startTime!= null and endTime!= null">
+            <if test="startTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime!= null">
                 and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
+    </select>
+
+    <select id="getTotalBalance" parameterType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO" resultType="com.cqut.czb.bn.entity.dto.BeforeBalanceDTO">
+        SELECT
+        amount AS amount,
+        before_change_income AS beforeBalance,
+        type AS type
+        FROM
+        `czb_income_log`as a
+        left join czb_user_income_info as b on a.info_id = b.info_id
+        left join czb_user AS c ON c.user_id = b.user_id
+        <where>
+            type = 6
+            OR
+            type = 7
+            <if test="account != null and account != ''">
+                and c.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime!= null">
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER BY
+        a.create_at DESC
+        LIMIT 1
     </select>
 
     <select id="getPassword" resultType="java.lang.String">
