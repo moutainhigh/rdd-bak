@@ -17,6 +17,7 @@
 
     <select id="getRechargeDetails" parameterType="com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge">
         SELECT
+        record_id as recordId,
         petrol_id as petrolId,
         petrol_num as petrolNum,
         turnover_amount as turnoverAmount,
