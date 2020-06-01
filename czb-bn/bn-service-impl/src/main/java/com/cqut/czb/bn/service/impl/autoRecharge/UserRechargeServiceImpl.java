@@ -100,6 +100,17 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         else
             return new JSONResult("充值失败",200);
     }
+
+    /**
+     * 修改卡号
+     * @param userRechargeDTO
+     * @return
+     */
+    @Override
+    public boolean updatePetrolNum(UserRechargeDTO userRechargeDTO) {
+        return userRechargeMapper.updatePetrolNum(userRechargeDTO) > 0;
+    }
+
     /**
      * 获取余额
      * @param userId

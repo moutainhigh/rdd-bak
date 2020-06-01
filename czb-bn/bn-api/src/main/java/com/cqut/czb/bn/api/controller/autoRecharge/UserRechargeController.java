@@ -108,4 +108,25 @@ public class UserRechargeController {
         System.out.println(user.getUserId());
         return new JSONResult("账号获取成功",200, user.getUserAccount());
     }
+
+    /**
+     * 修改卡号
+     * @return
+     */
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    @PermissionCheck(role = "线下大客户")
+    @RequestMapping(value = "/updatePetrolNum", method = RequestMethod.POST)
+    public JSONResult updatePetrolNum(Principal principal,UserRechargeDTO userRechargeDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user == null) {
+            return null;
+        }
+        System.out.println(user.getUserId());
+        if(userRechargeService.updatePetrolNum(userRechargeDTO)){
+            return new JSONResult("卡号修改成功",200, true);
+        }
+        else {
+            return new JSONResult("卡号修改失败",500, false);
+        }
+    }
 }

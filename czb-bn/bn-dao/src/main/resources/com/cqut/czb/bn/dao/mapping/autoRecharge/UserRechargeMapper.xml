@@ -82,4 +82,14 @@
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
+
+    <update id="updatePetrolNum" parameterType="com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO">
+        update czb_petrol_sales_records
+        <set>
+            <if test="petrolNum != null and petrolNum != ''">
+                petrol_num = #{petrolNum,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where record_id = #{recordId,jdbcType=VARCHAR} and is_recharged = 0
+    </update>
 </mapper>
