@@ -287,19 +287,24 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
             }
             OfflineConsumptionDTO offlineConsumptionDTO1 = new OfflineConsumptionDTO();
             offlineConsumptionDTO1.setAccount(list.get(i).getAccount());
-            offlineConsumptionDTO1.setStartTime(list.get(i).getStartTime());
-            offlineConsumptionDTO1.setEndTime(list.get(i).getEndTime());
+            offlineConsumptionDTO1.setStartTime(null);
+            offlineConsumptionDTO1.setEndTime(inputDTO.getEndTime());
             BeforeBalanceDTO beforeBalanceDTO = offlineDistributorOfAdministratorMapperExtra.getTotalBalance(offlineConsumptionDTO1);
-            BigDecimal balance;
-            BigDecimal a1 = new BigDecimal(String.valueOf(beforeBalanceDTO.getAmount()));
-            BigDecimal b1 = new BigDecimal(String.valueOf(beforeBalanceDTO.getBeforeBalance()));
-            if (beforeBalanceDTO.getType()== 6){
-                balance = a1.add(b1);
-            }else{
-
-                 balance = b1.subtract(a1);
+            BigDecimal balance = new BigDecimal(String.valueOf(0.00));
+            if (beforeBalanceDTO == null){
+                row.createCell(count++).setCellValue(formatNum(0.00));
             }
-            row.createCell(count++).setCellValue(formatNum(balance.doubleValue()));
+            else {
+                BigDecimal a1 = new BigDecimal(String.valueOf(beforeBalanceDTO.getAmount()));
+                BigDecimal b1 = new BigDecimal(String.valueOf(beforeBalanceDTO.getBeforeBalance()));
+                if (beforeBalanceDTO.getType() == 6) {
+                    balance = a1.add(b1);
+                } else {
+
+                    balance = b1.subtract(a1);
+                }
+                row.createCell(count++).setCellValue(formatNum(balance.doubleValue()));
+            }
             totalBalance = totalBalance.add(balance);
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getRegisterTime()));
             todayBalance = todayBalance.add(new BigDecimal(String.valueOf(list.get(i).getBalance())));

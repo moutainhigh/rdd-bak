@@ -289,9 +289,9 @@
         left join czb_user_income_info as b on a.info_id = b.info_id
         left join czb_user AS c ON c.user_id = b.user_id
         <where>
-            type = 6
+            (type = 6
             OR
-            type = 7
+            type = 7)
             <if test="account != null and account != ''">
                 and c.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>
