@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.weChatOilCodeSale.WXStockAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStockAttr" >
+    <id column="stock_attr_id" property="stockAttrId" jdbcType="VARCHAR" />
+    <result column="stock_id" property="stockId" jdbcType="VARCHAR" />
+    <result column="attr_id" property="attrId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    stock_attr_id, stock_id, attr_id, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_wechat_stock_attr
+    where stock_attr_id = #{stockAttrId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_wechat_stock_attr
+    where stock_attr_id = #{stockAttrId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStockAttr" >
+    insert into czb_wechat_stock_attr (stock_attr_id, stock_id, attr_id, 
+      create_at, update_at)
+    values (#{stockAttrId,jdbcType=VARCHAR}, #{stockId,jdbcType=VARCHAR}, #{attrId,jdbcType=VARCHAR}, 
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStockAttr" >
+    insert into czb_wechat_stock_attr
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stockAttrId != null" >
+        stock_attr_id,
+      </if>
+      <if test="stockId != null" >
+        stock_id,
+      </if>
+      <if test="attrId != null" >
+        attr_id,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stockAttrId != null" >
+        #{stockAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="stockId != null" >
+        #{stockId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null" >
+        #{attrId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStockAttr" >
+    update czb_wechat_stock_attr
+    <set >
+      <if test="stockId != null" >
+        stock_id = #{stockId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null" >
+        attr_id = #{attrId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where stock_attr_id = #{stockAttrId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStockAttr" >
+    update czb_wechat_stock_attr
+    set stock_id = #{stockId,jdbcType=VARCHAR},
+      attr_id = #{attrId,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where stock_attr_id = #{stockAttrId,jdbcType=VARCHAR}
+  </update>
+</mapper>
