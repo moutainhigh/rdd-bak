@@ -65,6 +65,8 @@ public class WeChatCommodity {
 
     private Integer salesVolume;
 
+    private Integer itemNo;
+
     private String commodityIntroduce;
 
     public String getCommodityId() {
@@ -313,6 +315,14 @@ public class WeChatCommodity {
 
     public void setSalesVolume(Integer salesVolume) {
         this.salesVolume = salesVolume;
+    }
+
+    public Integer getItemNo() {
+        return itemNo;
+    }
+
+    public void setItemNo(Integer itemNo) {
+        this.itemNo = itemNo;
     }
 
     public String getCommodityIntroduce() {
