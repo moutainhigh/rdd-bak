@@ -9,12 +9,13 @@
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    stock_id, commodity_id, stock_attr_id, content, state, create_at, update_at
+    stock_id, commodity_id, stock_attr_id, content, state, create_at, update_at, buyer_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_wechat_stock
     where stock_id = #{stockId,jdbcType=VARCHAR}
@@ -24,12 +25,12 @@
     where stock_id = #{stockId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStock" >
-    insert into czb_wechat_stock (stock_id, commodity_id, stock_attr_id, 
-      content, state, create_at, 
-      update_at)
-    values (#{stockId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, #{stockAttrId,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP})
+    insert into czb_wechat_stock (stock_id, commodity_id, stock_attr_id,
+      content, state, create_at,
+      update_at, buyer_id)
+    values (#{stockId,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, #{stockAttrId,jdbcType=VARCHAR},
+      #{content,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP},
+      #{updateAt,jdbcType=TIMESTAMP}, #{buyerId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatOilSale.WXStock" >
     insert into czb_wechat_stock
@@ -55,6 +56,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="buyerId != null" >
+        buyer_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="stockId != null" >
@@ -77,6 +81,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -101,6 +108,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="buyerId != null" >
+        buyer_id = #{buyerId,jdbcType=VARCHAR},
+      </if>
     </set>
     where stock_id = #{stockId,jdbcType=VARCHAR}
   </update>
@@ -111,7 +121,8 @@
       content = #{content,jdbcType=VARCHAR},
       state = #{state,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      buyer_id = #{buyerId,jdbcType=VARCHAR}
     where stock_id = #{stockId,jdbcType=VARCHAR}
   </update>
 </mapper>

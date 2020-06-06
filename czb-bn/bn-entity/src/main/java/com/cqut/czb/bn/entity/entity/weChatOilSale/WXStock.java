@@ -17,6 +17,8 @@ public class WXStock {
 
     private Date updateAt;
 
+    private String buyerId;
+
     public String getStockId() {
         return stockId;
     }
@@ -71,5 +73,13 @@ public class WXStock {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId == null ? null : buyerId.trim();
     }
 }
