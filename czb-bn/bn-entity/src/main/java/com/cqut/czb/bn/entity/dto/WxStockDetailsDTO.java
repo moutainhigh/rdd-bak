@@ -7,6 +7,8 @@ import java.util.Date;
 public class WxStockDetailsDTO extends PageDTO{
     private String stockID;
 
+    private String commodityID;
+
     private String name;
 
     private String attribute;
@@ -21,6 +23,14 @@ public class WxStockDetailsDTO extends PageDTO{
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    public String getCommodityID() {
+        return commodityID;
+    }
+
+    public void setCommodityID(String commodityID) {
+        this.commodityID = commodityID;
+    }
 
     public String getStockID() {
         return stockID;

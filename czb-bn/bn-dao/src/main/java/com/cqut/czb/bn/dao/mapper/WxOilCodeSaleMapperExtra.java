@@ -15,4 +15,10 @@ public interface WxOilCodeSaleMapperExtra {
     int editWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO);
 
     int check(WxStockDetailsDTO wxStockDetailsDTO);
+
+    int deleteWxStock(WxStockDetailsDTO wxStockDetailsDTO);
+
+    int deleteWxStockAttr(WxStockDetailsDTO wxStockDetailsDTO);
+
+    int updateWxCommodityNum(WxStockDetailsDTO wxStockDetailsDTO);
 }

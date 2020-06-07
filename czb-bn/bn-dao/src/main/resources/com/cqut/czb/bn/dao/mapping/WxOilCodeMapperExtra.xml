@@ -34,6 +34,7 @@
     SELECT DISTINCT
       a.stock_id as stockID,
       e.commodity_title AS name,
+      a.commodity_id as commodityID,
       d.content AS attribute,
       a.content AS content,
       a.create_at AS createTime
@@ -74,6 +75,24 @@
     SET content =  #{content,jdbcType=VARCHAR}
     <where>
       stock_id = #{stockID,jdbcType=VARCHAR}
+    </where>
+  </update>
+
+  <delete id="deleteWxStock" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
+    delete from czb_wechat_stock
+    where  stock_id = #{stockID,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteWxStockAttr" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
+    delete from czb_wechat_stock_attr
+    where  stock_id = #{stockID,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="updateWxCommodityNum" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
+    UPDATE `czb_wechat_commodity`
+    SET commodity_num =  commodity_num-1
+    <where>
+      commodity_id = #{commodityID,jdbcType=VARCHAR}
     </where>
   </update>
 </mapper>

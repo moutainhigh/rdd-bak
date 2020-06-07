@@ -42,8 +42,15 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             return new JSONResult("输入的电子码重复", 200, false);
         }else{
             boolean result = wxOilCodeSaleMapperExtra.editWxStockDetails(wxStockDetailsDTO)>0;
-            return new JSONResult("列表数据查询成功", 200, result);
+            return new JSONResult("修改", 200, result);
         }
+    }
 
+    @Override
+    public JSONResult deleteWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO) {
+        boolean result = wxOilCodeSaleMapperExtra.deleteWxStock(wxStockDetailsDTO)>0
+                && wxOilCodeSaleMapperExtra.deleteWxStockAttr(wxStockDetailsDTO)>0
+                && wxOilCodeSaleMapperExtra.updateWxCommodityNum(wxStockDetailsDTO)>0;
+        return new JSONResult("删除", 200, result);
     }
 }
