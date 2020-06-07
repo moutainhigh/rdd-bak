@@ -16,7 +16,7 @@
       e.take_way = 3
       and a.state = 0
       <if test="itemNo != null and itemNo != ''">
-        and e.item_no =  #{state}
+        and e.item_no =  #{itemNo}
       </if>
       <if test="name != null and name != ''">
         and e.commodity_title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
