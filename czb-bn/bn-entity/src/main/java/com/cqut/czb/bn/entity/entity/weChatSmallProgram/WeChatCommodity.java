@@ -67,6 +67,8 @@ public class WeChatCommodity {
 
     private Integer itemNo;
 
+    private Integer limitedNum;
+
     private String commodityIntroduce;
 
     public String getCommodityId() {
@@ -323,6 +325,14 @@ public class WeChatCommodity {
 
     public void setItemNo(Integer itemNo) {
         this.itemNo = itemNo;
+    }
+
+    public Integer getLimitedNum() {
+        return limitedNum;
+    }
+
+    public void setLimitedNum(Integer limitedNum) {
+        this.limitedNum = limitedNum;
     }
 
     public String getCommodityIntroduce() {
