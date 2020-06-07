@@ -33,7 +33,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="norms_id" property="normsId" jdbcType="VARCHAR" />
     <result column="sales_volume" property="salesVolume" jdbcType="INTEGER" />
-    <result column="item_no" property="itemNo" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
     <result column="limited_num" property="limitedNum" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" extends="BaseResultMap" >
@@ -84,7 +84,7 @@
       #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER},
       #{fyMoney,jdbcType=DOUBLE}, #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER},
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{normsId,jdbcType=VARCHAR},
-      #{salesVolume,jdbcType=INTEGER}, #{itemNo,jdbcType=INTEGER}, #{limitedNum,jdbcType=INTEGER},
+      #{salesVolume,jdbcType=INTEGER}, #{itemNo,jdbcType=VARCHAR}, #{limitedNum,jdbcType=INTEGER},
       #{commodityIntroduce,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
@@ -288,7 +288,7 @@
         #{salesVolume,jdbcType=INTEGER},
       </if>
       <if test="itemNo != null" >
-        #{itemNo,jdbcType=INTEGER},
+        #{itemNo,jdbcType=VARCHAR},
       </if>
       <if test="limitedNum != null" >
         #{limitedNum,jdbcType=INTEGER},
@@ -392,7 +392,7 @@
         sales_volume = #{salesVolume,jdbcType=INTEGER},
       </if>
       <if test="itemNo != null" >
-        item_no = #{itemNo,jdbcType=INTEGER},
+        item_no = #{itemNo,jdbcType=VARCHAR},
       </if>
       <if test="limitedNum != null" >
         limited_num = #{limitedNum,jdbcType=INTEGER},
@@ -435,7 +435,7 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP},
       norms_id = #{normsId,jdbcType=VARCHAR},
       sales_volume = #{salesVolume,jdbcType=INTEGER},
-      item_no = #{itemNo,jdbcType=INTEGER},
+      item_no = #{itemNo,jdbcType=VARCHAR},
       limited_num = #{limitedNum,jdbcType=INTEGER},
       commodity_introduce = #{commodityIntroduce,jdbcType=LONGVARCHAR}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
@@ -472,7 +472,7 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP},
       norms_id = #{normsId,jdbcType=VARCHAR},
       sales_volume = #{salesVolume,jdbcType=INTEGER},
-      item_no = #{itemNo,jdbcType=INTEGER},
+      item_no = #{itemNo,jdbcType=VARCHAR},
       limited_num = #{limitedNum,jdbcType=INTEGER}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
