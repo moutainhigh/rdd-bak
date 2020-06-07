@@ -516,6 +516,33 @@
         <collection property="attrs" column="commodityId" javaType="list" select="selectCommodityAttrs"></collection>
     </resultMap>
 
+    <resultMap id="WeChatCommodityInfo" type="com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatCommodityDTO" >
+        <id column="commodityId" property="commodityId" jdbcType="VARCHAR" />
+        <result column="commodityTitle" property="commodityTitle" jdbcType="VARCHAR" />
+        <result column="commodityInfo" property="commodityInfo" jdbcType="VARCHAR" />
+        <result column="originalPrice" property="originalPrice" jdbcType="VARCHAR" />
+        <result column="salePrice" property="salePrice" jdbcType="VARCHAR" />
+        <result column="takeWay" property="takeWay" jdbcType="VARCHAR" />
+        <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+        <result column="shopContent" property="shopContent" jdbcType="VARCHAR" />
+        <result column="commodityNum" property="commodityNum" jdbcType="VARCHAR" />
+        <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+        <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+        <result column="startingTimeBusiness" property="startingTimeBusiness" jdbcType="VARCHAR" />
+        <result column="endTimeBusiness" property="endTimeBusiness" jdbcType="VARCHAR" />
+        <result column="commodity_img_id" property="commodityImgId" jdbcType="VARCHAR" />
+        <result column="totalFyMoney" property="totalFyMoney" jdbcType="VARCHAR" />
+        <result column="isHaveShop" property="isHaveShop" jdbcType="INTEGER" />
+        <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
+        <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
+        <result column="salesVolume" property="salesVolume" jdbcType="INTEGER" />
+        <result column="limitedNum" property="limitedNum" jdbcType="INTEGER" />
+        <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
+        <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
+        <collection property="attrs" column="commodityId" javaType="list" select="selectCommodityAttrs"></collection>
+    </resultMap>
+
     <select id="selectAllCommodityByArea" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO" resultMap="WCPCommodityInfoType">
         SELECT
         czb_wechat_commodity.commodity_id commodityId,
@@ -737,6 +764,42 @@
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
         czb_wechat_commodity.sales_volume salesVolume
+        FROM
+        czb_wechat_commodity czb_wechat_commodity
+        LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+        LEFT JOIN czb_shop ON czb_shop.shop_id = czb_wechat_commodity.shop_id
+        WHERE
+        czb_wechat_commodity.is_sale = 1
+        AND czb_wechat_commodity.commodity_id = #{commodityId, jdbcType = VARCHAR}
+        GROUP BY
+        commodityId
+        ORDER BY
+        show_order
+    </select>
+
+    <select id="selectCommodityInfo" parameterType="java.lang.String" resultMap="WeChatCommodityInfo">
+        SELECT
+        czb_wechat_commodity.commodity_id commodityId,
+        commodity_title commodityTitle,
+        commodity_info commodityInfo,
+        original_price originalPrice,
+        sale_price salePrice,
+        take_way takeWay,
+        commodity_img_id commodityImgId,
+        czb_shop.shop_name shopName,
+        czb_shop.shop_content shopContent,
+        czb_shop.shop_address shopAddress,
+        czb_wechat_commodity.commodity_num commodityNum,
+        czb_shop.longitude,
+        czb_shop.latitude,
+        is_have_shop isHaveShop,
+        czb_shop.shop_phone shopPhone,
+        czb_wechat_commodity.fy_money totalFyMoney,
+        czb_wechat_commodity.starting_time_business startingTimeBusiness,
+        czb_wechat_commodity.end_time_business endTimeBusiness,
+        czb_wechat_commodity.commodity_introduce commodityIntroduce,
+        czb_wechat_commodity.sales_volume salesVolume,
+        czb_wechat_commodity.limited_num limitedNum
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
