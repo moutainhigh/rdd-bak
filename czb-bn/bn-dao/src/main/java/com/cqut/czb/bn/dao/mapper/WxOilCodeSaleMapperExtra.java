@@ -12,7 +12,7 @@ public interface WxOilCodeSaleMapperExtra {
 
     List<WxStockDetailsDTO> getWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO);
 
-    int editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO);
+    int editWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO);
 
     int check(WxStockDetailsDTO wxStockDetailsDTO);
 }

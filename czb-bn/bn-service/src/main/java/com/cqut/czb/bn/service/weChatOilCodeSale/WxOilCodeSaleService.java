@@ -9,5 +9,5 @@ public interface WxOilCodeSaleService {
 
     JSONResult getWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO);
 
-    JSONResult editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO);
+    JSONResult editWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO);
 }

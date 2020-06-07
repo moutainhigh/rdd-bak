@@ -41,8 +41,18 @@ public class WxOilCodeSaleController {
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
-    @RequestMapping(value = "/editWxStockDetailsList",method = RequestMethod.POST)
-    public JSONResult editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO){
-        return wxOilCodeSaleService.editWxStockDetailsList(wxStockDetailsDTO);
+    @RequestMapping(value = "/editWxStockDetails",method = RequestMethod.POST)
+    public JSONResult editWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO){
+        return wxOilCodeSaleService.editWxStockDetails(wxStockDetailsDTO);
     }
+
+    /**
+     * 删除
+     */
+//    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+//    @PermissionCheck(role = "管理员")
+//    @RequestMapping(value = "/editWxStockDetailsList",method = RequestMethod.POST)
+//    public JSONResult editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO){
+//        return wxOilCodeSaleService.editWxStockDetailsList(wxStockDetailsDTO);
+//    }
 }

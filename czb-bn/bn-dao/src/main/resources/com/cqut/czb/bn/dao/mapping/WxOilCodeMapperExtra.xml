@@ -69,7 +69,7 @@
   </where>
   </select>
 
-  <update id="editWxStockDetailsList" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
+  <update id="editWxStockDetails" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
     UPDATE `czb_wechat_stock`
     SET content =  #{content,jdbcType=VARCHAR}
     <where>

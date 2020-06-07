@@ -37,11 +37,11 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
     }
 
     @Override
-    public JSONResult editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO) {
+    public JSONResult editWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO) {
         if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0){
             return new JSONResult("输入的电子码重复", 200, false);
         }else{
-            boolean result = wxOilCodeSaleMapperExtra.editWxStockDetailsList(wxStockDetailsDTO)>0;
+            boolean result = wxOilCodeSaleMapperExtra.editWxStockDetails(wxStockDetailsDTO)>0;
             return new JSONResult("列表数据查询成功", 200, result);
         }
 
