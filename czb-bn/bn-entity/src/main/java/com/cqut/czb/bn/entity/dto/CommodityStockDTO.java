@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class CommodityStockDTO extends PageDTO{
-    private int itemNo;
+    private String itemNo;
 
     private String name;
 
@@ -22,11 +22,11 @@ public class CommodityStockDTO extends PageDTO{
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    public int getItemNo() {
+    public String getItemNo() {
         return itemNo;
     }
 
-    public void setItemNo(int itemNo) {
+    public void setItemNo(String itemNo) {
         this.itemNo = itemNo;
     }
 
