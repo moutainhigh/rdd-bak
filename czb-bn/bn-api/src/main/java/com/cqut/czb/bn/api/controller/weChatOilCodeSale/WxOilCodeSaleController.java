@@ -4,6 +4,7 @@ package com.cqut.czb.bn.api.controller.weChatOilCodeSale;
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.CommodityStockDTO;
 
+import com.cqut.czb.bn.entity.dto.WxStockDetailsDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatOilCodeSale.WxOilCodeSaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,21 @@ public class WxOilCodeSaleController {
         return wxOilCodeSaleService.getWxOilCodeSaleList(commodityStockDTO);
     }
     /**
-     * 导出
+     * 获取详情页面数据
      */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/getWxStockDetailsList",method = RequestMethod.POST)
+    public JSONResult getWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO){
+        return wxOilCodeSaleService.getWxStockDetailsList(wxStockDetailsDTO);
+    }
+    /**
+     * 修改
+     */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/editWxStockDetailsList",method = RequestMethod.POST)
+    public JSONResult editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO){
+        return wxOilCodeSaleService.editWxStockDetailsList(wxStockDetailsDTO);
+    }
 }

@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.WxOilCodeSale;
 
 import com.cqut.czb.bn.dao.mapper.WxOilCodeSaleMapperExtra;
 import com.cqut.czb.bn.entity.dto.CommodityStockDTO;
+import com.cqut.czb.bn.entity.dto.WxStockDetailsDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatOilCodeSale.WxOilCodeSaleService;
 import com.github.pagehelper.PageHelper;
@@ -24,5 +25,25 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         List<CommodityStockDTO> list = wxOilCodeSaleMapperExtra.getWxOilCodeSaleList(commodityStockDTO);
         pageInfo.setList(list);
         return new JSONResult("列表数据查询成功", 200, pageInfo);
+    }
+
+    @Override
+    public JSONResult getWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO) {
+        PageHelper.startPage(wxStockDetailsDTO.getCurrentPage(),wxStockDetailsDTO.getPageSize(),true);
+        PageInfo pageInfo = new PageInfo();
+        List<WxStockDetailsDTO> list = wxOilCodeSaleMapperExtra.getWxStockDetailsList(wxStockDetailsDTO);
+        pageInfo.setList(list);
+        return new JSONResult("列表数据查询成功", 200, pageInfo);
+    }
+
+    @Override
+    public JSONResult editWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO) {
+        if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0){
+            return new JSONResult("输入的电子码重复", 200, false);
+        }else{
+            boolean result = wxOilCodeSaleMapperExtra.editWxStockDetailsList(wxStockDetailsDTO)>0;
+            return new JSONResult("列表数据查询成功", 200, result);
+        }
+
     }
 }

@@ -7,8 +7,8 @@
     e.item_no as itemNo,
     e.commodity_id as commodityID,
     e.commodity_title as name,
-    e.commodity_num,
-    e.create_at
+    e.commodity_num as stockNum,
+    e.create_at as createTime
     FROM `czb_wechat_stock`as a
     LEFT JOIN czb_wechat_stock_attr as b on a.stock_id = b.stock_id
     LEFT JOIN czb_wechat_commodity as e on e.commodity_id = a.commodity_id
@@ -26,8 +26,54 @@
         and e.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
       </if>
     </where>
-
-
+    order by
+    e.create_at desc
   </select>
 
+  <select id="getWxStockDetailsList" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO" resultType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
+    SELECT DISTINCT
+      a.stock_id as stockID,
+      e.commodity_title AS name,
+      d.content AS attribute,
+      a.content AS content,
+      a.create_at AS createTime
+  FROM
+      `czb_wechat_stock` AS a
+      LEFT JOIN czb_wechat_stock_attr AS b ON a.stock_id = b.stock_id
+      LEFT JOIN czb_wechat_commodity_attr AS c ON b.attr_id = c.commodity_attr_id
+      LEFT JOIN czb_attribute AS d ON c.attribute_id = d.attribute_id
+      LEFT JOIN czb_wechat_commodity AS e ON e.commodity_id = a.commodity_id
+    <where>
+      e.take_way = 3
+      and a.state = 0
+      <if test="name != null and name != ''">
+        and e.commodity_title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="attribute != null and attribute != ''">
+        and d.content LIKE concat('%',#{attribute,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="startTime!= null and endTime!= null">
+        and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by
+    a.create_at desc
+  </select>
+
+  <select id="check" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO" resultType="java.lang.Integer">
+    SELECT count(*)
+  FROM `czb_wechat_stock`
+  <where>
+    content =  #{content,jdbcType=VARCHAR}
+  </where>
+  </select>
+
+  <update id="editWxStockDetailsList" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
+    UPDATE `czb_wechat_stock`
+    SET content =  #{content,jdbcType=VARCHAR}
+    <where>
+      stock_id = #{stockID,jdbcType=VARCHAR}
+    </where>
+  </update>
 </mapper>
