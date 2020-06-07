@@ -1,0 +1,1 @@
+alter table czb_wechat_stock add buyer_id varchar(20) character  set utf8 collate utf8_general_ci null default null COMMENT '用户id';
