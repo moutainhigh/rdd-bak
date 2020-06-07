@@ -65,7 +65,7 @@ public class WeChatCommodity {
 
     private Integer salesVolume;
 
-    private Integer itemNo;
+    private String itemNo;
 
     private Integer limitedNum;
 
@@ -319,12 +319,12 @@ public class WeChatCommodity {
         this.salesVolume = salesVolume;
     }
 
-    public Integer getItemNo() {
+    public String getItemNo() {
         return itemNo;
     }
 
-    public void setItemNo(Integer itemNo) {
-        this.itemNo = itemNo;
+    public void setItemNo(String itemNo) {
+        this.itemNo = itemNo == null ? null : itemNo.trim();
     }
 
     public Integer getLimitedNum() {
