@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
+import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatCommodityDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface WCPCommodityInfoService {
     List<String> getContent();
 
     JSONResult getCommodityTitle(WCPCommodityOutputDTO wcpCommodityOutputDTO);
+
+    WeChatCommodityDTO getOneCommodityInfo(WCPCommodityInputDTO wcpCommodityInputDTO);
 }
