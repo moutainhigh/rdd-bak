@@ -48,6 +48,9 @@ public class WeChatPayConfig {
 
 	public static final String applet_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AppletVerifyAsyn/verifyAppletWeChat";
 
+	//通知地址2(小程序库存支付地址)
+	public static final String applet_url2 = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AppletVerifyAsyn/verifyAppletPaymentWeChat";
+
 	//交易类型——app支付
 	public static final String trade_type = "APP";
 

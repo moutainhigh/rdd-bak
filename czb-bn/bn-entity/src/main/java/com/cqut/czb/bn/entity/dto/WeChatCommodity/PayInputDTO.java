@@ -21,6 +21,7 @@ public class PayInputDTO {
     //属性id
     private String commodityAttrIds;
 
+
     public String getCommodityAttrIds() {
         return commodityAttrIds;
     }
@@ -68,4 +69,5 @@ public class PayInputDTO {
     public void setCommodityNum(Integer commodityNum) {
         this.commodityNum = commodityNum;
     }
+
 }
