@@ -13,5 +13,7 @@ public interface WeChatCommodityMapper {
 
     int updateByPrimaryKeySelective(WeChatCommodity record);
 
+    int updateByPrimaryKeyWithBLOBs(WeChatCommodity record);
+
     int updateByPrimaryKey(WeChatCommodity record);
 }

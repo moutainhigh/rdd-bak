@@ -35,7 +35,7 @@ public class WCPCommodityInfoController {
 
     @GetMapping("/getOneCommodity")
     public JSONResult getOneCommodity(@Valid WCPCommodityInputDTO wcpCommodityInputDTO){
-        return new JSONResult(wcpCommodityInfoService.getOneCommodityById(wcpCommodityInputDTO));
+        return new JSONResult(wcpCommodityInfoService.getOneCommodityInfo(wcpCommodityInputDTO));
     }
 
     @GetMapping("/getAreas")

@@ -1,0 +1,1 @@
+ALTER TABLE czb_wechat_commodity MODIFY COLUMN item_no varchar(255);

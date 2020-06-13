@@ -2,6 +2,7 @@ package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
+import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatCommodityDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.github.pagehelper.PageInfo;
@@ -35,6 +36,13 @@ public interface WeChatCommodityMapperExtra {
      * @return
      */
     WCPCommodityOutputDTO selectCommodityById(String commodityId);
+
+    /**
+     * 通过商品ID获取信息
+     * @param commodityId
+     * @return
+     */
+    WeChatCommodityDTO selectCommodityInfo(String commodityId);
 
     Integer insertCommodity(WxCommodityDTO wxCommodityDTO);
 

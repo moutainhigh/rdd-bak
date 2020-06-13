@@ -1,0 +1,1 @@
+ALTER TABLE czb_wechat_commodity_order MODIFY COLUMN electronic_code varchar(255);
