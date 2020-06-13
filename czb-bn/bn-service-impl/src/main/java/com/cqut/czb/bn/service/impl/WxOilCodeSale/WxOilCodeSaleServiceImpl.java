@@ -180,11 +180,12 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         for (int i = 0; i < list.size(); i++) {
             int count = 0;
             row = sheet.createRow(i + 2);
+            row.setRowStyle(style);
             row.createCell(count++).setCellValue(list.get(i).getItemNo());
             row.createCell(count++).setCellValue(list.get(i).getName());
             row.createCell(count++).setCellValue(list.get(i).getAttribute());
             row.createCell(count++).setCellValue(list.get(i).getContent());
-            row.createCell(count++).setCellValue(list.get(i).getCreateTime());
+            row.createCell(count++).setCellValue(sdf1.format(list.get(i).getCreateTime()));
         }
         return workbook;
     }

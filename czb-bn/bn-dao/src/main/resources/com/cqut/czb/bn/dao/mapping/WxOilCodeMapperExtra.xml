@@ -34,6 +34,7 @@
     SELECT
       a.stock_id as stockID,
       e.commodity_title AS name,
+      e.item_no as itemNo,
       a.commodity_id as commodityID,
       d.content AS attribute,
       a.content AS content,
