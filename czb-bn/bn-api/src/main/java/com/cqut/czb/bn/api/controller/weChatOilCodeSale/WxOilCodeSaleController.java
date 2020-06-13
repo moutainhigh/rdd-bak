@@ -75,7 +75,7 @@ public class WxOilCodeSaleController {
     public JSONResult importDate(MultipartFile file){
         boolean result = false;
         try {
-             result = wxOilCodeSaleService.importDate(file)>0;
+             result = wxOilCodeSaleService.importDate(file);
         }catch (Exception e){
             e.printStackTrace();
         }
