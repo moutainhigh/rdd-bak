@@ -13,13 +13,13 @@ public class CommodityStockDTO extends PageDTO{
 
     private int stockNum;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     public String getItemNo() {
