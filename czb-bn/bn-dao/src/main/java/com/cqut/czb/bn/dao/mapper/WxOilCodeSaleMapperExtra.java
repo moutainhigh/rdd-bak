@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.CommodityStockDTO;
+import com.cqut.czb.bn.entity.dto.ImportWxStockDTO;
 import com.cqut.czb.bn.entity.dto.WxStockDetailsDTO;
+import com.cqut.czb.bn.entity.dto.WxStockNumDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +23,15 @@ public interface WxOilCodeSaleMapperExtra {
     int deleteWxStockAttr(WxStockDetailsDTO wxStockDetailsDTO);
 
     int updateWxCommodityNum(WxStockDetailsDTO wxStockDetailsDTO);
+
+    ImportWxStockDTO checkCommodityAtrr(ImportWxStockDTO importWxStockDTO);
+
+    int importWxStockAttr(List<ImportWxStockDTO> list);
+
+    int importWxStock(List<ImportWxStockDTO> list);
+
+    List<WxStockNumDTO> getCommdityTotal();
+
+    int updateWxCommodityTotalNum(List<WxStockNumDTO> list);
+
 }

@@ -135,6 +135,10 @@ public class SystemConstants {
      *导出线下大客户余额记录Excel的头部
      */
     public static final String[] CLIENT_RECORDS_HEAD={"手机号","充值总额(元)","消费支出(元)","圈回金额(元)","余额(元)","分配角色时间"};
+    /**
+     *导出微信商品库存Excel的头部
+     */
+    public static final String[] WXSTOCK_DETAILS_HEAD={"商品编号","商品名","属性","内容","导出时间"};
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }

@@ -31,7 +31,7 @@
   </select>
 
   <select id="getWxStockDetailsList" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO" resultType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
-    SELECT DISTINCT
+    SELECT
       a.stock_id as stockID,
       e.commodity_title AS name,
       a.commodity_id as commodityID,
@@ -47,6 +47,9 @@
     <where>
       e.take_way = 3
       and a.state = 0
+      <if test="itemNo != null and itemNo != ''">
+        and e.item_no =  #{itemNo,jdbcType=VARCHAR}
+      </if>
       <if test="name != null and name != ''">
         and e.commodity_title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
       </if>
@@ -94,5 +97,58 @@
     <where>
       commodity_id = #{commodityID,jdbcType=VARCHAR}
     </where>
+  </update>
+
+  <select id="checkCommodityAtrr" parameterType="com.cqut.czb.bn.entity.dto.ImportWxStockDTO" resultType="com.cqut.czb.bn.entity.dto.ImportWxStockDTO">
+    SELECT
+    a.commodity_attr_id as AtrrID,
+    b.commodity_id as commodityID
+    FROM
+    `czb_wechat_commodity_attr` AS a
+    LEFT JOIN czb_wechat_commodity AS b ON a.commodity_id = b.commodity_id
+    LEFT JOIN czb_attribute AS c ON a.attribute_id = c.attribute_id
+    <where>
+      b.item_no = #{commodityNo,jdbcType=VARCHAR}
+      and
+      c.content = #{attribute,jdbcType=VARCHAR}
+    </where>
+  </select>
+  
+  <insert id="importWxStockAttr" parameterType="com.cqut.czb.bn.entity.dto.ImportWxStockDTO">
+    insert into czb_wechat_stock_attr (stock_attr_id,stock_id,attr_id,create_at, update_at)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (null,#{item.StockAtrrID,jdbcType=VARCHAR},#{item.StockID,jdbcType=VARCHAR},#{item.AtrrID,jdbcType=VARCHAR},now(),now())
+    </foreach>
+  </insert>
+
+  <insert id="importWxStock" parameterType="com.cqut.czb.bn.entity.dto.ImportWxStockDTO">
+    insert into czb_wechat_stock (stock_id,commodity_id,stock_attr_id,content,state,create_at, update_at,buyer_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.StockID,jdbcType=VARCHAR,jdbcType=VARCHAR},#{item.commodityID,jdbcType=VARCHAR},
+      #{item.StockAtrrID,jdbcType=VARCHAR},#{item.content,jdbcType=VARCHAR},0,now(),now(),null)
+    </foreach>
+  </insert>
+
+  <select id="getCommdityTotal" resultType="com.cqut.czb.bn.entity.dto.WxStockNumDTO">
+      SELECT
+      commodity_id as commodityNo,
+      count(*) as commodityNum
+       FROM `czb_wechat_stock`
+      WHERE
+      state = 0
+      GROUP BY
+      commodity_id
+  </select>
+
+  <update id="updateWxCommodityTotalNum" parameterType="com.cqut.czb.bn.entity.dto.WxStockNumDTO">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update czb_wechat_commodity
+      <set>
+        commodity_num=${item.commodityNum,jdbcType=VARCHAR}
+      </set>
+      where commodity_id = ${item.commodityNo,jdbcType=VARCHAR}
+    </foreach>
   </update>
 </mapper>

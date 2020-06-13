@@ -9,6 +9,8 @@ public class WxStockDetailsDTO extends PageDTO{
 
     private String commodityID;
 
+    private String itemNo;
+
     private String name;
 
     private String attribute;
@@ -23,6 +25,14 @@ public class WxStockDetailsDTO extends PageDTO{
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    public String getItemNo() {
+        return itemNo;
+    }
+
+    public void setItemNo(String itemNo) {
+        this.itemNo = itemNo;
+    }
 
     public String getCommodityID() {
         return commodityID;
