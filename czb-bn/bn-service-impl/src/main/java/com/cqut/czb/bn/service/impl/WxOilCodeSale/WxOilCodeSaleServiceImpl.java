@@ -142,6 +142,14 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         if(list==null||list.size()==0){
             return getWxStockWorkBook(null,wxStockDetailsDTO);
         }
+        for (int i = 0; i<list.size();i++){
+            for (int j=i+1;j<list.size();j++){
+                if (list.get(i).getStockID().equals(list.get(j).getStockID())){
+                    list.get(i).setAttribute(list.get(i).getAttribute()+","+list.get(j).getAttribute());
+                    list.remove(j);
+                }
+            }
+        }
         return getWxStockWorkBook(list, wxStockDetailsDTO);
     }
 
