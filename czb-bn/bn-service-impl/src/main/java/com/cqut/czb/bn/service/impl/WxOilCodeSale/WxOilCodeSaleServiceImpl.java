@@ -113,13 +113,17 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             WxStockDetailsDTO wxStockDetailsDTO = new WxStockDetailsDTO();
             wxStockDetailsDTO.setContent(list.get(i).getContent());
             ImportWxStockDTO importWxStockDTO = wxOilCodeSaleMapperExtra.checkCommodityAtrr(list.get(i));
-            list.get(i).setAtrrID(importWxStockDTO.getAtrrID());
-            list.get(i).setCommodityID(importWxStockDTO.getCommodityID());
-            if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 && list.get(i).getAtrrID()==null){
+            System.out.print(importWxStockDTO);
+            System.out.print(importWxStockDTO==null);
+            if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 || importWxStockDTO==null){
                 list.remove(i);
                 i--;
+            } else {
+                list.get(i).setAtrrID(importWxStockDTO.getAtrrID());
+                list.get(i).setCommodityID(importWxStockDTO.getCommodityID());
+                list.get(i).setStockAtrrID(StringUtil.createId());
             }
-            list.get(i).setStockAtrrID(StringUtil.createId());
+
         }
         boolean result1 = wxOilCodeSaleMapperExtra.importWxStockAttr(list)>0;
         Map<String, ImportWxStockDTO> stockAtrrMap = new HashMap<>();
