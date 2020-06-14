@@ -57,7 +57,6 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		}
 	}
 
-
 	//测试支付宝
 	@Override
 	public String AliOrderPayNotify(HttpServletRequest request, String consumptionType) {
@@ -169,6 +168,7 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		return resXml;
 	}
 
+
 	//解析订单
 	@Override
 	public Map<String, String>  parseOrder(Map<String, String> params, Map requestParams){
@@ -187,12 +187,6 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		}
 		return params;
 	}
-
-
-
-
-
-
 
 
 

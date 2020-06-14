@@ -32,4 +32,20 @@ public class AppletVerifyAsynNoticeInfoController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 小程序库存商品支付
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/verifyAppletPaymentWeChat", method= RequestMethod.POST)
+    public synchronized void verifyAppletPaymentWeChat(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/xml");
+        try {
+            response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"AppletPayment"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

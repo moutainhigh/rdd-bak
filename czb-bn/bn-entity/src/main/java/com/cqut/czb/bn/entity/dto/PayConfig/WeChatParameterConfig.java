@@ -154,6 +154,23 @@ public class WeChatParameterConfig {
         parameters.put("sign", WeChatUtils.createRddSign("UTF-8", parameters));//编码格式
         return parameters;
     }
+    //微信小程序库存商品使用
+    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount,Double money,String nonceStrTemp, String orgId, String userId, WeChatCommodity weChatCommodity){
+       SortedMap<String,Object> parameters = new TreeMap<String, Object>();
+       parameters=getParametersApplet();
+       parameters.put("nonce_str",nonceStrTemp);
+       parameters.put("out_trade_no",orgId);
+       parameters.put("openid",userAccount);
+       BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+       parameters.put("total_fee",totalFee);
+       parameters.put("notify_url",WeChatPayConfig.applet_url2);
+       parameters.put("detail","微信小程序支付");
+       String attach = getAttachApplet(orgId,userId,money,weChatCommodity.getCommodityId());
+       parameters.put("attach",attach);
+       parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
+       return parameters;
+
+    }
 
     /**
      * 微信支付——订单格外数据(充值vip）

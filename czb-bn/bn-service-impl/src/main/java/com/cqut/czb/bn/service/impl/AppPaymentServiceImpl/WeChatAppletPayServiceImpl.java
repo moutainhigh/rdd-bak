@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
@@ -50,6 +51,8 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
 
     @Autowired
     AttributeMapper attributeMapper;
+
+
 
 
     @Override
@@ -157,8 +160,8 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
 
     public WeChatBackDTO getBackObject(JSONObject jsonObject){
         String string="appId="+jsonObject.get("appid")+"&nonceStr="+jsonObject.get("noncestr")+
-                "&package=prepay_id="+jsonObject.get("prepayid")+"&signType=MD5&timeStamp="+jsonObject.get("timestamp")+
-                "&key="+ WeChatPayConfig.skey;
+                "&package=prepay_id="+jsonObject.get("prepayid")+"&signType=MD5&timeStamp="+
+                jsonObject.get("timestamp")+ "&key="+ WeChatPayConfig.skey;
         String paySignStr= MD5Util.MD5Encode(string,"UTF-8");
         WeChatBackDTO weChatBackDTO=new WeChatBackDTO();
         weChatBackDTO.setJsonObject(jsonObject);
