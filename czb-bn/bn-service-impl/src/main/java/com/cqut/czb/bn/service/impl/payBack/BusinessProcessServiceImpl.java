@@ -366,6 +366,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 ownerId = temp[1];
             }
         }
+        System.out.println(ownerId);
         //更改库存状态
         int updateStock =  weChatStockMapperExtra.updateStockState(ownerId);
         System.out.println("更改库存状态："+(updateStock>0));

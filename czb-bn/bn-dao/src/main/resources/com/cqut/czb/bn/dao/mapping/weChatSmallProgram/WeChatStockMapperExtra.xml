@@ -38,9 +38,9 @@
         LIMIT #{commodityNum,jdbcType=INTEGER}
     </select>
     <select id="selectStockState" parameterType="java.util.List">
-        select stock_id,commodity_id,buyer_id,state,content from zcb__wechat_stock
+        select stock_id,commodity_id,buyer_id,state,content from czb_wechat_stock
         where state = 2 and stock_id in
-        <foreach collection="list" item="item" index="index" separator=",">
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
             #{item.stockId}
         </foreach>
     </select>
@@ -55,7 +55,7 @@
         </foreach>
     </update>
 
-    <update id="updateStockState" parameterType="java.lang.String">
+    <update id="updateStockState" >
         UPDATE czb_wechat_stock
         <set>
              state = 2

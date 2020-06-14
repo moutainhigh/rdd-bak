@@ -65,7 +65,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
 
         int chatStock = weChatStockMapperExtra.getStockNum(payInputDTO);
         //库存不够时
-        if (chatStock <= payInputDTO.getCommodityNum()){
+        if (chatStock < payInputDTO.getCommodityNum()){
             return null;
         }
         //从库存提出库存id

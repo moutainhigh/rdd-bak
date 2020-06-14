@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public interface WeChatStockMapperExtra {
      * @param ownerId
      * @return
      */
-    int updateStockState(String ownerId);
+    int updateStockState(@Param("ownerId")String ownerId);
 
     /**
      * 查询是否支付成功
