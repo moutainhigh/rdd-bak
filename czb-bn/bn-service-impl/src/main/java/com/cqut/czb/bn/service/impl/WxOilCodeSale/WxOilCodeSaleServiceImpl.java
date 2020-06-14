@@ -89,6 +89,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         for (ImportWxStockDTO p:stockMap.values()) {
             list.add(p);
         }
+        list = changeTo(list);
         /**
          * 分离属性
          */
@@ -113,13 +114,17 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             WxStockDetailsDTO wxStockDetailsDTO = new WxStockDetailsDTO();
             wxStockDetailsDTO.setContent(list.get(i).getContent());
             ImportWxStockDTO importWxStockDTO = wxOilCodeSaleMapperExtra.checkCommodityAtrr(list.get(i));
-            list.get(i).setAtrrID(importWxStockDTO.getAtrrID());
-            list.get(i).setCommodityID(importWxStockDTO.getCommodityID());
-            if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 && list.get(i).getAtrrID()==null){
+            System.out.print(importWxStockDTO);
+            System.out.print(importWxStockDTO==null);
+            if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 || importWxStockDTO==null){
                 list.remove(i);
                 i--;
+            } else {
+                list.get(i).setAtrrID(importWxStockDTO.getAtrrID());
+                list.get(i).setCommodityID(importWxStockDTO.getCommodityID());
+                list.get(i).setStockAtrrID(StringUtil.createId());
             }
-            list.get(i).setStockAtrrID(StringUtil.createId());
+
         }
         boolean result1 = wxOilCodeSaleMapperExtra.importWxStockAttr(list)>0;
         Map<String, ImportWxStockDTO> stockAtrrMap = new HashMap<>();
@@ -152,7 +157,39 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         }
         return getWxStockWorkBook(list, wxStockDetailsDTO);
     }
+    List<ImportWxStockDTO> changeTo(List<ImportWxStockDTO> list){
+        for (int i = 0;i<list.size();i++){
+            List<String> contentList = new ArrayList<>();
+            String str = null;
+            contentList.add(list.get(i).getContent());
+            for (int j = 0;j<contentList.size();j++){
+                if (contentList.get(j).indexOf(",")!=-1){
+                    String content1 = contentList.get(j).substring(0,contentList.get(j).indexOf(","));
+                    String content2 = contentList.get(j).substring(contentList.get(j).indexOf(",")+1,contentList.get(j).length());
+                    contentList.add(content1);
+                    contentList.add(content2);
+                    contentList.remove(j);
+                    j--;
+                }
+            }
+            if (contentList.size() == 1) {
+                str = "{\"" + contentList.get(0).substring(0, 3) + "\":\"" + contentList.get(0).substring(4) + "\"}";
+            } else {
+                for (int m = 0; m < contentList.size(); m++) {
 
+                    if (m == 0) {
+                        str = "{\"" + contentList.get(0).substring(0, 3) + "\":\"" + contentList.get(0).substring(4) + "\",";
+                    } else if (m == contentList.size() - 1) {
+                        str = str + "\"" + contentList.get(contentList.size()-1).substring(0, 3) + "\":\"" + contentList.get(contentList.size()-1).substring(4) + "\"}";
+                    } else {
+                        str = str + "\"" + contentList.get(m).substring(0, 3) + "\":\"" + contentList.get(m).substring(4) + "\",";
+                    }
+                }
+            }
+            list.get(i).setContent(str);
+        }
+        return list;
+    }
     private Workbook getWxStockWorkBook(List<WxStockDetailsDTO> list, WxStockDetailsDTO inputDTO) throws Exception {
         String[] WxStockHead = SystemConstants.WXSTOCK_DETAILS_HEAD;
         Workbook workbook = null;

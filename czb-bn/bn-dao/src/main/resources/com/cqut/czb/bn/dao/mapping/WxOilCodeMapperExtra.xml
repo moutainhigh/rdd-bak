@@ -102,7 +102,7 @@
 
   <select id="checkCommodityAtrr" parameterType="com.cqut.czb.bn.entity.dto.ImportWxStockDTO" resultType="com.cqut.czb.bn.entity.dto.ImportWxStockDTO">
     SELECT
-    a.commodity_attr_id as AtrrID,
+    IFNULL(a.commodity_attr_id,"00")  as AtrrID,
     b.commodity_id as commodityID
     FROM
     `czb_wechat_commodity_attr` AS a
@@ -119,7 +119,7 @@
     insert into czb_wechat_stock_attr (stock_attr_id,stock_id,attr_id,create_at, update_at)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (null,#{item.StockAtrrID,jdbcType=VARCHAR},#{item.StockID,jdbcType=VARCHAR},#{item.AtrrID,jdbcType=VARCHAR},now(),now())
+      (#{item.StockAtrrID,jdbcType=VARCHAR},#{item.StockID,jdbcType=VARCHAR},#{item.AtrrID,jdbcType=VARCHAR},now(),now())
     </foreach>
   </insert>
 
@@ -143,13 +143,13 @@
       commodity_id
   </select>
 
-  <update id="updateWxCommodityTotalNum" parameterType="com.cqut.czb.bn.entity.dto.WxStockNumDTO">
+  <update id="updateWxCommodityTotalNum" parameterType="java.util.List">
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
       update czb_wechat_commodity
       <set>
-        commodity_num=${item.commodityNum,jdbcType=VARCHAR}
+        commodity_num=#{item.commodityNum}
       </set>
-      where commodity_id = ${item.commodityNo,jdbcType=VARCHAR}
+      where commodity_id = #{item.commodityNo,jdbcType=VARCHAR}
     </foreach>
   </update>
 </mapper>
