@@ -906,6 +906,12 @@
             <if test="area != null" >
                 area,
             </if>
+            <if test="itemNo != null" >
+                item_no,
+            </if>
+            <if test="limitedNum != null" >
+                limited_num,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -997,6 +1003,12 @@
             </if>
             <if test="area != null" >
                 #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="itemNo != null" >
+                #{itemNo,jdbcType=VARCHAR},
+            </if>
+            <if test="limitedNum != null" >
+                #{limitedNum},
             </if>
         </trim>
     </insert>

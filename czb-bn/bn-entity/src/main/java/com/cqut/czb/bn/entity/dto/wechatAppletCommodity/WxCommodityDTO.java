@@ -59,6 +59,10 @@ public class WxCommodityDTO {
 
     private Integer showOrder;
 
+    private String itemNo;
+
+    private int limitedNum;
+
     private List<FileFunctionDTO> imgs;
 
     private List<FileFunctionDTO> posterImgs;
@@ -70,6 +74,22 @@ public class WxCommodityDTO {
     private String content;
 
     private Double distance;
+
+    public int getLimitedNum() {
+        return limitedNum;
+    }
+
+    public void setLimitedNum(int limitedNum) {
+        this.limitedNum = limitedNum;
+    }
+
+    public String getItemNo() {
+        return itemNo;
+    }
+
+    public void setItemNo(String itemNo) {
+        this.itemNo = itemNo;
+    }
 
     public Double getDistance() {
         return distance;
