@@ -16,6 +16,7 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.*;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPaymentService;
 import com.cqut.czb.bn.util.md5.MD5Util;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,7 +80,13 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             weChatStock1.setStockId(weChatStock.getStockId());
             ids.add(weChatStock1);
         }
-
+        //提取stockId
+        String [] stockId = new String[stackState.size()];
+        for (int i=0; i<stackState.size();i++){
+            stockId[i] =stackState.get(i).getStockAttrId();
+        }
+        String stockIds = StringUtils.join(stockId,",");
+        System.out.println(stockIds);
         //修改状态
         boolean updateStock = weChatStockMapperExtra.updateStock(ids) > 0;
 
@@ -114,7 +121,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         //插入订单
         inputOrder( orgId, weChatCommodity, user, payInputDTO,fyMoney,money);
 
-        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,user.getUserId(),weChatCommodity);
+        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
 
         return getBackObject(jsonObject);

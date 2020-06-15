@@ -55,17 +55,20 @@
         </foreach>
     </update>
 
-    <update id="updateStockState" >
+    <update id="updateStockState"  parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=",">
         UPDATE czb_wechat_stock
         <set>
              state = 2
         </set>
         <where>
             <if test="ownerId != null and ownerId != ''">
-                buyer_id = #{ownerId,jdbcType=VARCHAR}
+                buyer_id = #{item.buyerId,jdbcType=VARCHAR}
             </if>
+               and stock_id = #{item.stockId,jdbcType=VARCHAR}
             and state = 1
         </where>
+        </foreach>
     </update>
 
     <update id="update" parameterType="java.util.List">

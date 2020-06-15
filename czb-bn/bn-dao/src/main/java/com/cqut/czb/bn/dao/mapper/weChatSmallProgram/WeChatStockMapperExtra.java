@@ -37,10 +37,10 @@ public interface WeChatStockMapperExtra {
 
     /**
      * 支付成功修改状态
-     * @param ownerId
+     * @param ids
      * @return
      */
-    int updateStockState(@Param("ownerId")String ownerId);
+    int updateStockState(List<WeChatStock> ids);
 
     /**
      * 查询是否支付成功

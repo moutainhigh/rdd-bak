@@ -6,14 +6,12 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
 import com.cqut.czb.bn.util.string.StringUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class WeChatParameterConfig {
 
@@ -155,7 +153,7 @@ public class WeChatParameterConfig {
         return parameters;
     }
     //微信小程序库存商品使用
-    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount,Double money,String nonceStrTemp, String orgId, String userId, WeChatCommodity weChatCommodity){
+    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity){
        SortedMap<String,Object> parameters = new TreeMap<String, Object>();
        parameters=getParametersApplet();
        parameters.put("nonce_str",nonceStrTemp);
@@ -165,11 +163,30 @@ public class WeChatParameterConfig {
        parameters.put("total_fee",totalFee);
        parameters.put("notify_url",WeChatPayConfig.applet_url2);
        parameters.put("detail","微信小程序支付");
-       String attach = getAttachApplet(orgId,userId,money,weChatCommodity.getCommodityId());
+       String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId());
        parameters.put("attach",attach);
        parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
        return parameters;
 
+    }
+
+    /**
+     * 微信支付-库存商品数据
+     * @param orgId
+     * @param userId
+     * @param stockIds
+     * @param money
+     * @param commodityId
+     * @return
+     */
+    private static String getAttachAppletPayment(String orgId, String userId,String stockIds, Double money, String commodityId) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
+        pbp.put("commodityId",commodityId);
+        pbp.put("stockId",stockIds);
+        return StringUtil.transMapToStringOther(pbp);
     }
 
     /**
