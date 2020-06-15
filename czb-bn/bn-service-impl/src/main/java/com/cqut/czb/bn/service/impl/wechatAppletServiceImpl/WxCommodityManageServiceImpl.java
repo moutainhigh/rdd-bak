@@ -18,6 +18,7 @@ import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.annotations.Until;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -143,6 +144,7 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             fileFunction.setGroupCode("WCCommodity");
             fileFunctionMapper.insertSelective(fileFunction);
         }
+        wxCommodityDTO.setItemNo(StringUtil.createId());
         return weChatCommodityMapperExtra.insertCommodity(wxCommodityDTO) > 0;
     }
 
