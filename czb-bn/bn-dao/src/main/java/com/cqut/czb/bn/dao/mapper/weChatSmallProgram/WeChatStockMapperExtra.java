@@ -47,7 +47,7 @@ public interface WeChatStockMapperExtra {
      * @param ids
      * @return
      */
-    List<WeChatStock> selectStockState(List<WeChatStock> ids);
+    int selectStockState(List<WeChatStock> ids);
 
     /**
      * 修改成库存

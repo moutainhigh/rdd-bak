@@ -78,12 +78,13 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             WeChatStock weChatStock1 = new WeChatStock();
             weChatStock1.setBuyerId(user.getUserId());
             weChatStock1.setStockId(weChatStock.getStockId());
+            weChatStock1.setState("1");
             ids.add(weChatStock1);
         }
         //提取stockId
         String [] stockId = new String[stackState.size()];
         for (int i=0; i<stackState.size();i++){
-            stockId[i] =stackState.get(i).getStockAttrId();
+            stockId[i] =stackState.get(i).getStockId();
         }
         String stockIds = StringUtils.join(stockId,",");
         System.out.println(stockIds);
@@ -98,8 +99,8 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         timer.schedule(new TimerTask() {
             public void run() {
                 System.out.println("改变状态状态计时器");
-                List<WeChatStock> weChatStocks = weChatStockMapperExtra.selectStockState(ids);
-                if (weChatStocks != null && weChatStocks.size() == stackState.size()){
+                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+                if (weChatStocks != 0 && weChatStocks == payInputDTO.getCommodityNum()){
                     timer.cancel();
                 }else {
                     //修改回库存商品原来状态

@@ -37,8 +37,8 @@
      </where>
         LIMIT #{commodityNum,jdbcType=INTEGER}
     </select>
-    <select id="selectStockState" parameterType="java.util.List">
-        select stock_id,commodity_id,buyer_id,state,content from czb_wechat_stock
+    <select id="selectStockState" parameterType="java.util.List" resultType="java.lang.Integer">
+        select count(*) from czb_wechat_stock
         where state = 2 and stock_id in
         <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
             #{item.stockId}
@@ -46,41 +46,51 @@
     </select>
 
     <update id="updateStock" parameterType="java.util.List">
-       <foreach collection="list" item="item" index="index" separator=",">
         UPDATE czb_wechat_stock
-        <set>
-            buyer_id = #{item.buyerId,jdbcType=VARCHAR},state = 1
-        </set>
-        WHERE stock_id = #{item.stockId,jdbcType = VARCHAR }
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="buyer_id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when stock_id=#{item.stockId,jdbcType = VARCHAR} then #{item.buyerId,jdbcType = VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="state =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when stock_id=#{item.stockId,jdbcType = VARCHAR} then #{item.state,jdbcType = VARCHAR}
+                </foreach>
+            </trim>
+        </trim>
+        where stock_id in
+        <foreach collection="list" item="item" index="index"  open="(" close=")" separator=",">
+             #{item.stockId,jdbcType = VARCHAR }
         </foreach>
     </update>
 
     <update id="updateStockState"  parameterType="java.util.List">
-        <foreach collection="list" index="index" item="item" separator=",">
         UPDATE czb_wechat_stock
         <set>
              state = 2
         </set>
         <where>
-            <if test="ownerId != null and ownerId != ''">
-                buyer_id = #{item.buyerId,jdbcType=VARCHAR}
-            </if>
-               and stock_id = #{item.stockId,jdbcType=VARCHAR}
+            stock_id in
+            <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+               #{item.stockId,jdbcType=VARCHAR}
+            </foreach>
             and state = 1
         </where>
-        </foreach>
     </update>
 
     <update id="update" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" separator=",">
-            UPDATE czb_wechat_stock
-            <set>
-                state = 0,buyer_id is null
-            </set>
-            <where>
-               stock_id = #{item.stockId,jdbcType=VARCHAR}
-            </where>
-        </foreach>
+        UPDATE czb_wechat_stock
+        <set>
+            state = 0,buyer_id = null
+        </set>
+        <where>
+            stock_id in
+            <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+                 #{item.stockId,jdbcType=VARCHAR}
+            </foreach>
+            and state = 1
+        </where>
     </update>
 
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder" >
