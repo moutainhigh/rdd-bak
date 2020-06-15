@@ -185,7 +185,7 @@ public class WeChatParameterConfig {
         pbp.put("ownerId", userId);
         pbp.put("money",money);
         pbp.put("commodityId",commodityId);
-        pbp.put("stockId",stockIds);
+        pbp.put("stockIds",stockIds);
         return StringUtil.transMapToStringOther(pbp);
     }
 

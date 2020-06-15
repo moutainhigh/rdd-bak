@@ -68,14 +68,13 @@
     <update id="updateStockState"  parameterType="java.util.List">
         UPDATE czb_wechat_stock
         <set>
-             state = 2
+            state = 2
         </set>
-        <where>
-            stock_id in
+        <where> state = 1
+         and stock_id in
             <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
                #{item.stockId,jdbcType=VARCHAR}
             </foreach>
-            and state = 1
         </where>
     </update>
 
