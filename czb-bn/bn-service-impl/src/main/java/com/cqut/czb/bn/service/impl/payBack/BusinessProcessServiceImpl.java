@@ -18,6 +18,7 @@ import com.cqut.czb.bn.entity.entity.food.DishOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.*;
@@ -352,6 +353,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
         System.out.println("微信小程序支付:"+money);
         String ownerId = "";
+        String stockIds = "";
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {
@@ -365,9 +367,25 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if ("ownerId".equals(temp[0])) {
                 ownerId = temp[1];
             }
+
+            if("stockIds".equals(temp[0])){
+                stockIds = temp[1];
+            }
+        }
+        System.out.println(ownerId);
+        System.out.println(stockIds);
+        List<String> myList = new ArrayList<String>(Arrays.asList(stockIds.split(",")));
+
+        List<WeChatStock> ids = new ArrayList<>();
+
+        for (String weChatStock:myList){
+            WeChatStock weChatStock1 = new WeChatStock();
+            weChatStock1.setBuyerId(ownerId);
+            weChatStock1.setStockId(weChatStock);
+            ids.add(weChatStock1);
         }
         //更改库存状态
-        int updateStock =  weChatStockMapperExtra.updateStockState(ownerId);
+        int updateStock =  weChatStockMapperExtra.updateStockState(ids);
         System.out.println("更改库存状态："+(updateStock>0));
 
         //更改用户订单

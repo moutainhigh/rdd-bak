@@ -16,6 +16,7 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.*;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPaymentService;
 import com.cqut.czb.bn.util.md5.MD5Util;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +66,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
 
         int chatStock = weChatStockMapperExtra.getStockNum(payInputDTO);
         //库存不够时
-        if (chatStock <= payInputDTO.getCommodityNum()){
+        if (chatStock < payInputDTO.getCommodityNum()){
             return null;
         }
         //从库存提出库存id
@@ -77,9 +78,16 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             WeChatStock weChatStock1 = new WeChatStock();
             weChatStock1.setBuyerId(user.getUserId());
             weChatStock1.setStockId(weChatStock.getStockId());
+            weChatStock1.setState("1");
             ids.add(weChatStock1);
         }
-
+        //提取stockId
+        String [] stockId = new String[stackState.size()];
+        for (int i=0; i<stackState.size();i++){
+            stockId[i] =stackState.get(i).getStockId();
+        }
+        String stockIds = StringUtils.join(stockId,",");
+        System.out.println(stockIds);
         //修改状态
         boolean updateStock = weChatStockMapperExtra.updateStock(ids) > 0;
 
@@ -91,8 +99,8 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         timer.schedule(new TimerTask() {
             public void run() {
                 System.out.println("改变状态状态计时器");
-                List<WeChatStock> weChatStocks = weChatStockMapperExtra.selectStockState(ids);
-                if (weChatStocks != null && weChatStocks.size() == stackState.size()){
+                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+                if (weChatStocks != 0 && weChatStocks == payInputDTO.getCommodityNum()){
                     timer.cancel();
                 }else {
                     //修改回库存商品原来状态
@@ -114,7 +122,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         //插入订单
         inputOrder( orgId, weChatCommodity, user, payInputDTO,fyMoney,money);
 
-        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,user.getUserId(),weChatCommodity);
+        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
 
         return getBackObject(jsonObject);
