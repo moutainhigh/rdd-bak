@@ -39,8 +39,6 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
 
     @Override
     public JSONResult getWxStockDetailsList(WxStockDetailsDTO wxStockDetailsDTO) {
-        PageHelper.startPage(wxStockDetailsDTO.getCurrentPage(),wxStockDetailsDTO.getPageSize(),true);
-        PageInfo pageInfo = new PageInfo();
         List<WxStockDetailsDTO> list = wxOilCodeSaleMapperExtra.getWxStockDetailsList(wxStockDetailsDTO);
         for (int i = 0; i<list.size();i++){
             for (int j=i+1;j<list.size();j++){
@@ -51,8 +49,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
                 }
             }
         }
-        pageInfo.setList(list);
-        return new JSONResult("列表数据查询成功", 200, pageInfo);
+        return new JSONResult("列表数据查询成功", 200, list);
     }
 
     @Override
