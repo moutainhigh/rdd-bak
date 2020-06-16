@@ -69,6 +69,11 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         if (chatStock < payInputDTO.getCommodityNum()){
             return null;
         }
+        //限购
+        int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
+        if (weChatCommodity.getLimitedNum() <= limit){
+            return null;
+        }
         //从库存提出库存id
         List<WeChatStock> stackState = weChatStockMapperExtra.getStockId(payInputDTO);
 

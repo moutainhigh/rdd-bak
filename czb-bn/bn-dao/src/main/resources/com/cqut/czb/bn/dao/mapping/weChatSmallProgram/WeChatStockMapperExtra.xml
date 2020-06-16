@@ -45,6 +45,22 @@
         </foreach>
     </select>
 
+    <select id="getLimitNum" resultType="java.lang.Integer">
+        SELECT
+            sum( commodity_num )
+        FROM
+            `czb_wechat_commodity_order`
+        <where>
+            <if test="commodityId != null and commodityId != ''">
+                commodity_id = #{commodityId,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId,jdbcType=VARCHAR}
+            </if>
+            AND date( create_at ) = curdate( )
+        </where>
+    </select>
+
     <update id="updateStock" parameterType="java.util.List">
         UPDATE czb_wechat_stock
         <trim prefix="set" suffixOverrides=",">
