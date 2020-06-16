@@ -4,26 +4,23 @@
 
   <select id="getWxOilCodeSaleList" parameterType="com.cqut.czb.bn.entity.dto.CommodityStockDTO" resultType="com.cqut.czb.bn.entity.dto.CommodityStockDTO">
     SELECT DISTINCT
-    e.item_no as itemNo,
-    e.commodity_id as commodityID,
-    e.commodity_title as name,
-    e.commodity_num as stockNum,
-    e.create_at as createTime
-    FROM `czb_wechat_stock`as a
-    LEFT JOIN czb_wechat_stock_attr as b on a.stock_id = b.stock_id
-    LEFT JOIN czb_wechat_commodity as e on e.commodity_id = a.commodity_id
+    a.item_no as itemNo,
+    a.commodity_id as commodityID,
+    a.commodity_title as name,
+    a.commodity_num as stockNum,
+    a.create_at as createTime
+    FROM `czb_wechat_commodity`as a
     <where>
-      e.take_way = 3
-      and a.state = 0
+      a.take_way = 3
       <if test="itemNo != null and itemNo != ''">
-        and e.item_no =  #{itemNo,jdbcType=VARCHAR}
+        and a.item_no =  #{itemNo,jdbcType=VARCHAR}
       </if>
       <if test="name != null and name != ''">
-        and e.commodity_title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        and a.commodity_title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
       </if>
       <if test="startTime!= null and endTime!= null">
-        and e.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
-        and e.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+        and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+        and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
       </if>
     </where>
     order by

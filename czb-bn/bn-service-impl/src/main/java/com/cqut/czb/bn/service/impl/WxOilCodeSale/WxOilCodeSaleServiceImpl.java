@@ -114,8 +114,6 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             WxStockDetailsDTO wxStockDetailsDTO = new WxStockDetailsDTO();
             wxStockDetailsDTO.setContent(list.get(i).getContent());
             ImportWxStockDTO importWxStockDTO = wxOilCodeSaleMapperExtra.checkCommodityAtrr(list.get(i));
-            System.out.print(importWxStockDTO);
-            System.out.print(importWxStockDTO==null);
             if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 || importWxStockDTO==null){
                 list.remove(i);
                 i--;
@@ -157,6 +155,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         }
         return getWxStockWorkBook(list, wxStockDetailsDTO);
     }
+
     List<ImportWxStockDTO> changeTo(List<ImportWxStockDTO> list){
         for (int i = 0;i<list.size();i++){
             List<String> contentList = new ArrayList<>();
