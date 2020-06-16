@@ -113,7 +113,7 @@
         czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_shop.shop_name,
         czb_wechat_commodity.shop_phone, czb_wechat_commodity.shop_content, czb_wechat_commodity.shop_address, czb_wechat_commodity.longitude, czb_wechat_commodity.latitude, is_have_shop, show_place,
         show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney, czb_wechat_commodity.commodity_introduce commodityIntroduce, area,sales_volume salesVolume,
-        czb_wechat_commodity.limited_num fyMoney
+        czb_wechat_commodity.limited_num
         from czb_wechat_commodity
         LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
@@ -1180,7 +1180,7 @@
             <if test="salesVolume != null" >
                 sales_volume = #{salesVolume,jdbcType=INTEGER},
             </if>
-            <if test="limited_num != null" >
+            <if test="limitedNum != null" >
                 limited_num = #{limitedNum,jdbcType=INTEGER},
             </if>
         </set>
