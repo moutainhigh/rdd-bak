@@ -290,6 +290,6 @@
         select
         content
         from czb_wechat_stock
-        where stock_id = #{ids,jdbcType=VARCHAR} and state = 1
+        where state = 1 and stock_id in (#{ids,jdbcType=VARCHAR})
   </select>
 </mapper>
