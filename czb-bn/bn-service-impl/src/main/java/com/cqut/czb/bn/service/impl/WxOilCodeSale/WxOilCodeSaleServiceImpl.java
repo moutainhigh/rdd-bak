@@ -47,6 +47,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
                 if (list.get(i).getStockID().equals(list.get(j).getStockID())){
                     list.get(i).setAttribute(list.get(i).getAttribute()+","+list.get(j).getAttribute());
                     list.remove(j);
+                    j--;
                 }
             }
         }
