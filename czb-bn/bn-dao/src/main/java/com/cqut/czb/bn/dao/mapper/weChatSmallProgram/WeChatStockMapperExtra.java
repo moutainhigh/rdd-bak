@@ -4,32 +4,34 @@ import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WeChatStockMapperExtra {
 
     /**
      * 从库存提出库存id
-     * @param payInputDTO
+     * @param params
      * @return
      */
-    List<WeChatStock> getStockId(PayInputDTO payInputDTO);
+    List<WeChatStock> getStockId(Map<String, Object> params);
 
     /**
-     * 获取库存数量
-     * @param payInputDTO
+     * 获取库存数量4
+     * @param params
      * @return
      */
-    int getStockNum(PayInputDTO payInputDTO);
+    Integer getStockNum(Map<String, Object> params);
 
     /**
      * 支付起调修改状态
      * @param ids
      * @return
      */
-    int updateStock( List<WeChatStock> ids);
+    Integer updateStock( List<WeChatStock> ids);
 
     List<String> selectElectronicCode(String userId);
 
@@ -47,7 +49,7 @@ public interface WeChatStockMapperExtra {
      * @param ids
      * @return
      */
-    int selectStockState(List<WeChatStock> ids);
+    Integer selectStockState(List<WeChatStock> ids);
 
     /**
      * 修改成库存
@@ -56,5 +58,7 @@ public interface WeChatStockMapperExtra {
      */
     int update(List<WeChatStock> ids);
 
-    int getLimitNum(@Param("commodityId") String commodityId,@Param("userId") String userId);
+    Integer getLimitNum(@Param("commodityId") String commodityId,@Param("userId") String userId);
+
+
 }

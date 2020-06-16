@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatStockMapperExtra" >
-    <select id="getStockNum" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO" resultType="java.lang.Integer">
+    <select id="getStockNum"  resultType="java.lang.Integer" parameterType="java.util.Map">
         SELECT count( * ) FROM
-	   czb_wechat_stock AS a
-	   LEFT JOIN ( SELECT stock_id, GROUP_CONCAT( attr_id ) AS attr_ids FROM
-	   czb_wechat_stock_attr GROUP BY stock_id ) AS b ON b.stock_id = a.stock_id
-      <where>
-          state = 0
-          <if test="commodityId != null">
-              AND a.commodity_id = #{commodityId,jdbcType=VARCHAR}
-          </if>
-          <if test="commodityAttrIds != null">
-              AND b.attr_ids = #{commodityAttrIds,jdbcType=VARCHAR}
-          </if>
-      </where>
+        czb_wechat_stock AS a
+        LEFT JOIN ( SELECT stock_id, GROUP_CONCAT( attr_id ) AS attr_ids FROM
+        czb_wechat_stock_attr GROUP BY stock_id ) AS b ON b.stock_id = a.stock_id
+        <where>
+            state = 0
+            <if test="commodityId != null">
+                AND a.commodity_id = #{commodityId,jdbcType=VARCHAR}
+            </if>
+            <foreach collection="attrIds" item="item" index="index" >
+                AND b.attr_ids like concat('%',#{item,jdbcType=VARCHAR},'%')
+            </foreach>
+        </where>
     </select>
-    <select id="getStockId" parameterType="com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO" resultType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock">
+    <select id="getStockId" parameterType="java.util.Map" resultType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock">
      SELECT
       a.stock_id as stockId,
       a.buyer_id as buyerId,
@@ -31,9 +31,9 @@
          <if test="commodityId != null">
              AND a.commodity_id = #{commodityId,jdbcType=VARCHAR}
          </if>
-         <if test="commodityAttrIds != null">
-             AND b.attr_ids = #{commodityAttrIds,jdbcType=VARCHAR}
-         </if>
+         <foreach collection="attrIds" item="item" index="index" >
+             AND b.attr_ids like concat('%',#{item,jdbcType=VARCHAR},'%')
+         </foreach>
      </where>
         LIMIT #{commodityNum,jdbcType=INTEGER}
     </select>
@@ -47,7 +47,7 @@
 
     <select id="getLimitNum" resultType="java.lang.Integer">
         SELECT
-            sum( commodity_num )
+            ifnull(sum(commodity_num),0)
         FROM
             `czb_wechat_commodity_order`
         <where>

@@ -64,7 +64,14 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             return weChatAppletPayService.WeChatAppletBuyCommodity(user,payInputDTO);
         }
 
-        int chatStock = weChatStockMapperExtra.getStockNum(payInputDTO);
+
+        List<String> attrIds = new ArrayList<String>(Arrays.asList(payInputDTO.getCommodityAttrIds().split(",")));
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("commodityId",payInputDTO.getCommodityId());
+        params.put("commodityNum",payInputDTO.getCommodityNum());
+        params.put("attrIds",attrIds);
+        int chatStock = weChatStockMapperExtra.getStockNum(params);
+
         //库存不够时
         if (chatStock < payInputDTO.getCommodityNum()){
             return null;
@@ -75,7 +82,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             return null;
         }
         //从库存提出库存id
-        List<WeChatStock> stackState = weChatStockMapperExtra.getStockId(payInputDTO);
+        List<WeChatStock> stackState = weChatStockMapperExtra.getStockId(params);
 
         List<WeChatStock> ids = new ArrayList<>();
 
