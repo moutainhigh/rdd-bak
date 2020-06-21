@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.api.controller.vipApplication;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
+import com.cqut.czb.bn.entity.dto.WxVipMoenyDTO;
 import com.cqut.czb.bn.entity.entity.VIPApply;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -50,5 +52,23 @@ public class VipApplyController {
     @PostMapping("/applyWCPVip")
     public JSONResult applyWCPVip(Principal principal,@RequestBody @Valid WeChatVipApply weChatVipApply){
         return new JSONResult(vipApplyService.applyWCPVip(weChatVipApply, principal));
+    }
+
+    /**
+     * 获取会员价格
+     */
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/getWxVIP",method = RequestMethod.POST)
+    public JSONResult getWxVIP(){
+        return new JSONResult(vipApplyService.getWxVIP());
+    }
+
+    /**
+     * 更改会员价格
+     */
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/changeWxVIP",method = RequestMethod.POST)
+    public JSONResult changeWxVIP(WxVipMoenyDTO wxVipMoenyDTO){
+        return vipApplyService.changeWxVIP(wxVipMoenyDTO);
     }
 }

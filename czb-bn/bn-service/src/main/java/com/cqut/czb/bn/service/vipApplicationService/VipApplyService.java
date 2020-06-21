@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service.vipApplicationService;
 
 
+import com.cqut.czb.bn.entity.dto.WxVipMoenyDTO;
 import com.cqut.czb.bn.entity.entity.VIPApply;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 
@@ -19,4 +21,8 @@ public interface VipApplyService {
     boolean updateVipApply(VIPApply vipApply);
 
     Boolean applyWCPVip(WeChatVipApply weChatVipApply, Principal principal);
+
+    WxVipMoenyDTO getWxVIP();
+
+    JSONResult changeWxVIP(WxVipMoenyDTO wxVipMoenyDTO);
 }

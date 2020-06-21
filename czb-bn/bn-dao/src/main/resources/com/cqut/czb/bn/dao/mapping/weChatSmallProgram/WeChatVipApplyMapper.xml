@@ -125,4 +125,43 @@
       status = #{status,jdbcType=INTEGER}
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
+
+  <select id="getWxVIPMoeny" parameterType="com.cqut.czb.bn.entity.dto.WxVipMoenyDTO" >
+    SELECT
+    content
+    FROM `czb_dict`
+    where name = 'wx_vip_moeny'
+  </select>
+
+  <select id="getWxVIPFY1" parameterType="com.cqut.czb.bn.entity.dto.WxVipMoenyDTO" >
+    SELECT
+    content
+    FROM `czb_dict`
+    where name = 'wx_vip_FY1'
+  </select>
+
+  <select id="getWxVIPFY2" parameterType="com.cqut.czb.bn.entity.dto.WxVipMoenyDTO" >
+    SELECT
+    content
+    FROM `czb_dict`
+    where name = 'wx_vip_FY2'
+  </select>
+
+  <update id="changeWxVIPMoeny" parameterType="java.lang.Double">
+    UPDATE`czb_dict`
+    set content = #{WxVipMoeny}
+    where name ='wx_vip_moeny'
+  </update>
+
+  <update id="changeWxVIPFY1" parameterType="java.lang.Double">
+    UPDATE`czb_dict`
+    set content = #{WxVipFY1}
+    where name ='wx_vip_FY1'
+  </update>
+
+  <update id="changeWxVIPFY2" parameterType="java.lang.Double">
+    UPDATE`czb_dict`
+    set content = #{WxVipFY2}
+    where name ='wx_vip_FY2'
+  </update>
 </mapper>
