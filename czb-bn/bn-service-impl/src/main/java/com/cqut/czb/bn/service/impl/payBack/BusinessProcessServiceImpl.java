@@ -174,7 +174,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         }else if(consumptionType.equals("Applet")){
             result.put("success", addAppletOrderWeChat(restmap));
         }else if(consumptionType.equals("AppletPayment")){
-            result.put("success", addAppletPaymentOrderWeChat(restmap));
+            result.put("success", weChatPayBackService.addAppletPaymentOrderWeChat(restmap));
         }else if(consumptionType.equals("RechargeVip")){
             result.put("success", weChatPayBackService.addRechargeVipOrderWeChat(restmap));
         } else {
@@ -329,120 +329,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
 
        //查询是否为首次消费
-        dataProcessService.isHaveConsumption(ownerId);
-
-        Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());
-        System.out.println("返佣"+isSucceed);
-
-        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务，5为点餐,6小程序购物
-        //插入消费记录
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
-
-        return 1;
-    }
-
-    /**
-     * 小程序库存支付成功(微信)
-     * @param restmap
-     * @return
-     */
-    private int addAppletPaymentOrderWeChat(Map<String, Object> restmap) {
-        String[] resDate = restmap.get("attach").toString().split("\\^");
-        //商户订单号
-        String out_trade_no = restmap.get("out_trade_no").toString();
-        //微信交易订单号
-        String thirdOrderId = restmap.get("transaction_id").toString();
-        String[] temp;
-        String orgId = "";
-        double money = Double.valueOf(restmap.get("total_fee").toString());
-        money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
-        System.out.println("微信小程序支付:"+money);
-        String ownerId = "";
-        String stockIds = "";
-        for (String data : resDate) {
-            temp = data.split("\'");
-            if (temp.length < 2) {
-                continue;
-            }
-            //商家订单
-            if ("orgId".equals(temp[0])) {
-                orgId = temp[1];
-            }
-            //用户id
-            if ("ownerId".equals(temp[0])) {
-                ownerId = temp[1];
-            }
-
-            if("stockIds".equals(temp[0])){
-                stockIds = temp[1];
-            }
-        }
-        System.out.println(ownerId);
-        System.out.println(stockIds);
-        List<String> myList = new ArrayList<String>(Arrays.asList(stockIds.split(",")));
-
-        List<WeChatStock> ids = new ArrayList<>();
-
-        for (String weChatStock:myList){
-            WeChatStock weChatStock1 = new WeChatStock();
-            weChatStock1.setBuyerId(ownerId);
-            weChatStock1.setStockId(weChatStock);
-            ids.add(weChatStock1);
-        }
-        //更改库存状态
-        int updateStock =  weChatStockMapperExtra.updateStockState(ids);
-        System.out.println("更改库存状态："+(updateStock>0));
-
-        //更改用户订单
-        WeChatCommodityOrder order=new WeChatCommodityOrder();
-        order.setOrderId(orgId);
-        order.setThirdOrder(thirdOrderId);
-        order.setUpdateAt(new Date());
-        order.setPayStatus(1);
-        order.setOrderState(1);
-        int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
-        System.out.println("更改用户订单："+(update>0));
-
-        //判断是否邮寄
-        WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
-        WeChatCommodity weChatCommodity = weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
-        if(order1.getCommodityType()==1){
-            WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
-            records.setRecordId(StringUtil.createId());
-            records.setAddressId(order1.getAddressId());
-            records.setCreateAt(new Date());
-            records.setDeliveryState(0);
-            records.setOrderId(orgId);
-            weChatGoodsDeliveryRecordsMapper.insertSelective(records);
-        }else {
-            // 发送短信
-            //查出商家电话
-            Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
-            String title="";
-            if(weChatCommodity.getCommodityTitle().length()>20){
-                title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
-            }else {
-                title=weChatCommodity.getCommodityTitle();
-            }
-            PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode(),shop.getShopPhone());
-        }
-
-        //更改商品数量
-        WeChatCommodity commodity=new WeChatCommodity();
-        commodity.setCommodityId(order1.getCommodityId());
-        //计算商品的总库存量
-        int num=weChatCommodity.getCommodityNum()-order1.getCommodityNum();
-        if(num>=0){
-            commodity.setCommodityNum(num);
-        }else {
-            commodity.setCommodityNum(0);
-        }
-        //计算商品的总销售量
-        int saleNum=weChatCommodity.getSalesVolume()+order1.getCommodityNum();
-        commodity.setSalesVolume(saleNum);
-        weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
-
-        //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
         Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());

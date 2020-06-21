@@ -266,7 +266,7 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "2", 2);
 
         //进行返佣
-        Boolean beginFanYong= fanYongService.beginFanYong(2,area,ownerId,money,money,orgId);
+        Boolean beginFanYong= fanYongService.AppletVIPBeginFanYong(ownerId,money,orgId,money);
         System.out.println("返佣"+beginFanYong);
         //vip是1 油卡是2
         Boolean addVipIncome=partnerVipIncomeService.addVipIncome(ownerId,money,1);

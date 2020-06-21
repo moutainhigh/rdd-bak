@@ -360,6 +360,71 @@ public class FanYongServiceImpl implements FanYongService {
         }
     }
 
+    @Override
+    public boolean AppletVIPBeginFanYong(String userId, double money, String orgId, double fyMoney) {
+        int count=1;//标识第几级
+        //查出自己的信息
+        User userSelf = userMapper.selectByPrimaryKey(userId);
+
+        if(userSelf==null||userSelf.getSuperiorUser()==null){
+            System.out.println("上级为空");
+            return true;
+        }
+
+        //查出返佣比例
+        Dict rate1 = dictMapperExtra.selectDictByName("wx_vip_FY1");
+        Dict rate2 = dictMapperExtra.selectDictByName("wx_vip_FY2");
+        Double fyMoney1=Double.valueOf(rate1.getContent());
+        System.out.println("fyMoney1"+fyMoney1);
+        Double fyMoney2=Double.valueOf(rate2.getContent());
+        System.out.println("fyMoney2"+fyMoney2);
+
+        //更改usrid
+        userId=userSelf.getSuperiorUser();
+        String firstVipUserId="";
+        UserIncomeInfo oldUserIncomeInfoUp1=null;
+        while (true) {
+            User user = userMapper.selectByPrimaryKey(userId);
+            if (user != null) {
+                if (user.getIsVip() == 1) {
+                    //对上级用户的操作
+                    UserIncomeInfo oldUserIncomeInfoUp = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(user.getUserId());//查出原收益信息
+                    //对上级用户的(收益信息表，收益变更记录表)进行操作
+                    if(count==1){
+                        firstVipUserId=user.getUserId();
+                        oldUserIncomeInfoUp1=oldUserIncomeInfoUp;
+                        changeUserIncomeInfo("小程序VIP返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney1, orgId);
+                    }else if(count==2){
+                        changeUserIncomeInfo("小程序VIP返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney2, orgId);
+                    }
+                    userId=user.getSuperiorUser();
+                    count++;
+                    if(count>2){
+                        return true;
+                    }
+                } else {
+                    if (user.getSuperiorUser() != null && !user.getSuperiorUser().equals("")) {
+                        userId = user.getSuperiorUser();
+                        continue;
+                    }else if(user.getSuperiorUser()==null){
+                        if(count==2){
+                            changeUserIncomeInfo("小程序VIP返佣", userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
+                        }
+                        return true;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            } else {
+                if(count==2){
+                    changeUserIncomeInfo("小程序VIP返佣", userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
+                }
+                return true;
+            }
+        }
+    }
+
 
     /**
      * 新增返佣收益变更记录表
