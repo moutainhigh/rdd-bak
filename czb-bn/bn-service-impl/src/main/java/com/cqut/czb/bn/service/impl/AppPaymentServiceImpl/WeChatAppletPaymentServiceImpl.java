@@ -2,6 +2,9 @@ package com.cqut.czb.bn.service.impl.AppPaymentServiceImpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
+import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.AttributeMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
@@ -11,7 +14,11 @@ import com.cqut.czb.bn.entity.dto.PayConfig.WeChatParameterConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
+import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatRechargeVipDTO;
+import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.*;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPaymentService;
@@ -43,8 +50,23 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
     @Autowired
     WeChatCommodityAttrMapperExtra weChatCommodityAttrMapperExtra;
 
+    @Autowired
+    VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
+
     private ReentrantLock lock = new ReentrantLock();
 
+    /**
+     * 微信小程序库存商品支付
+     * @param user
+     * @param payInputDTO
+     * @return
+     */
     @Override
     @Transactional
     public synchronized WeChatBackDTO WeChatAppletPaymentBuyCommodity(User user, PayInputDTO payInputDTO) {
@@ -140,8 +162,46 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
 
         return getBackObject(jsonObject);
     }
-    
-    
+
+    @Override
+    public WeChatBackDTO WeChatRechargeVip(User user, WeChatRechargeVipDTO weChatRechargeVipDTO) {
+        if(weChatRechargeVipDTO.getArea()==null){
+            System.out.println("地区为空");
+            return null;
+        }
+        if(!user.getUserId().equals(weChatRechargeVipDTO.getUserId())){
+            System.out.println("用户不匹配");
+            return null;
+        }
+        //查出vip价格
+        Dict dict = dictMapperExtra.selectDictByName("wx_vip_moeny");
+        if (!dict.getContent().equals(String.valueOf(weChatRechargeVipDTO.getVipPrice()))){
+            return null;
+        }
+
+        User userInfo =  userMapper.selectByPrimaryKey(weChatRechargeVipDTO.getUserId());
+        if (userInfo.getIsVip() == 1){
+            System.out.println("用户已经是Vip");
+            return null;
+        }
+
+        //生成起调参数串
+        String orgId = String.valueOf(System.currentTimeMillis()+(int)(1+Math.random()*(10000-1+1)));
+        String nonceStrTemp = WeChatUtils.getRandomStr();
+
+//        double money= (double) map.get("money");
+//        double fyMoney= (double) map.get("fyMoney");
+
+//        //插入订单
+//        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,stockIds);
+
+        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersRechargeVip(user.getUserAccount(),dict,nonceStrTemp,orgId,weChatRechargeVipDTO);
+        JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
+
+        return getBackObject(jsonObject);
+    }
+
+
     /**
      * 计算价格
      * @param

@@ -2,7 +2,9 @@ package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.Commodity.CommodityDTO;
+import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatRechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
@@ -169,6 +171,23 @@ public class WeChatParameterConfig {
        return parameters;
 
     }
+    public static SortedMap<String, Object> getParametersRechargeVip(String userAccount, Dict dict, String nonceStrTemp, String orgId, WeChatRechargeVipDTO weChatRechargeVipDTO) {
+        SortedMap<String,Object> parameters = new TreeMap<String, Object>();
+        parameters = getParametersApplet();
+        parameters.put("nonce_str",nonceStrTemp);
+        parameters.put("out_trade_no",orgId);
+        parameters.put("openid",userAccount);
+        BigInteger totalFee = BigDecimal.valueOf(weChatRechargeVipDTO.getVipPrice()).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("total_fee",totalFee);
+        parameters.put("notify_url",WeChatPayConfig.applet_url3);
+        parameters.put("detail","微信小程序支付");
+        String attach = getAttachRechargeVip(orgId,weChatRechargeVipDTO.getVipPrice(),dict.getDictId(),weChatRechargeVipDTO);
+        parameters.put("attach",attach);
+        parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
+        return parameters;
+    }
+
+
 
     /**
      * 微信支付-库存商品数据
@@ -186,6 +205,18 @@ public class WeChatParameterConfig {
         pbp.put("money",money);
         pbp.put("commodityId",commodityId);
         pbp.put("stockIds",stockIds);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     * 微信支付充值vip
+     */
+    private static String getAttachRechargeVip(String orgId, Double vipPrice, String dictId, WeChatRechargeVipDTO weChatRechargeVipDTO) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", weChatRechargeVipDTO.getUserId());
+        pbp.put("money",vipPrice);
+        pbp.put("vipAreaConfigId",dictId);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -304,4 +335,6 @@ public class WeChatParameterConfig {
         parameters.put("trade_type", WeChatPayConfig.WeChat_applet_trade_type);
         return parameters;
     }
+
+
 }
