@@ -111,6 +111,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     WeChatStockMapperExtra weChatStockMapperExtra;
 
+    @Autowired
+    public WeChatPayBackService weChatPayBackService;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
@@ -172,7 +175,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             result.put("success", addAppletOrderWeChat(restmap));
         }else if(consumptionType.equals("AppletPayment")){
             result.put("success", addAppletPaymentOrderWeChat(restmap));
-        }else {
+        }else if(consumptionType.equals("RechargeVip")){
+            result.put("success", weChatPayBackService.addRechargeVipOrderWeChat(restmap));
+        } else {
             result.put("fail",0);
         }
         return result;

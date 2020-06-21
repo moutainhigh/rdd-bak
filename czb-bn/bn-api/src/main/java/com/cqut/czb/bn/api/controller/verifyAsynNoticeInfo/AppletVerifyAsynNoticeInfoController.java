@@ -48,4 +48,20 @@ public class AppletVerifyAsynNoticeInfoController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 小程序Vip支付
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/verifyAppletRechargeVip", method= RequestMethod.POST)
+    public synchronized void verifyAppletRechargeVip(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/xml");
+        try {
+            response.getWriter().write(paymentRecordService.WeChatOrderPayNotify(request,"RechargeVip"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
