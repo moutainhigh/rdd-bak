@@ -83,6 +83,12 @@ public class VipApplyServiceImpl implements VipApplyService {
     }
 
     @Override
+    public Double getVipMoney() {
+        Double money = Double.parseDouble(vipApplyMapper.getVipMoney());
+        return money;
+    }
+
+    @Override
     public WxVipMoenyDTO getWxVIP() {
         WxVipMoenyDTO wxVipMoenyDTO = new WxVipMoenyDTO();
         wxVipMoenyDTO.setVIPMoney(weChatVipApplyMapper.getWxVIPMoeny());

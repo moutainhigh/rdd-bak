@@ -22,6 +22,8 @@ public interface VipApplyService {
 
     Boolean applyWCPVip(WeChatVipApply weChatVipApply, Principal principal);
 
+    Double getVipMoney();
+
     WxVipMoenyDTO getWxVIP();
 
     JSONResult changeWxVIP(WxVipMoenyDTO wxVipMoenyDTO);

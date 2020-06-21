@@ -54,6 +54,11 @@ public class VipApplyController {
         return new JSONResult(vipApplyService.applyWCPVip(weChatVipApply, principal));
     }
 
+    @PostMapping("/getVipMoney")
+    public JSONResult getVipMoney(){
+        return new JSONResult(vipApplyService.getVipMoney());
+    }
+
     /**
      * 获取会员价格
      */

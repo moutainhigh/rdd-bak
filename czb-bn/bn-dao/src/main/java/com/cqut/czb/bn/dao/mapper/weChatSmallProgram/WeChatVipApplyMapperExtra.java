@@ -11,4 +11,6 @@ public interface WeChatVipApplyMapperExtra {
     boolean updateVipApply(VIPApply vipApply);
 
     Boolean updateUserVip(String userId);
+
+    String getVipMoney();
 }
