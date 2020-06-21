@@ -286,10 +286,13 @@
         </trim>
     </insert>
 
-    <select id="selectElectronicCode" resultType="java.lang.String">
+    <select id="selectElectronicCode" parameterType="java.util.List" resultType="java.lang.String">
         select
         content
         from czb_wechat_stock
-        where state = 1 and stock_id in (#{ids,jdbcType=VARCHAR})
+        where  stock_id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.stockId,jdbcType=VARCHAR}
+        </foreach>
   </select>
 </mapper>

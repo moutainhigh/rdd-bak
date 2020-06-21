@@ -155,7 +155,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         double fyMoney= (double) map.get("fyMoney");
 
         //插入订单
-        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,stockIds);
+        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,ids);
 
         SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
@@ -255,7 +255,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
      * @param ids
      * @return
      */
-    public boolean inputOrder(String orgId, WeChatCommodity weChatCommodity, User user, PayInputDTO payInputDTO, double fyMoney, double money, String ids){
+    public boolean inputOrder(String orgId, WeChatCommodity weChatCommodity, User user, PayInputDTO payInputDTO, double fyMoney, double money, List<WeChatStock> ids){
         //插入预支付订单
         WeChatCommodityOrder weChatCommodityOrder=new WeChatCommodityOrder();
         weChatCommodityOrder.setOrderId(orgId);
@@ -280,7 +280,9 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             String newCode = jsonObjCode.getString(i).substring(1, jsonObjCode.getString(i).length() - 1) + ",";
             jsonCode += newCode;
         }
-        jsonCode = jsonCode.substring(0, jsonCode.length() - 1);
+        if (jsonObjCode.size()!=0){
+            jsonCode = jsonCode.substring(0, jsonCode.length() - 1);
+        }
         jsonCode += "}";
         weChatCommodityOrder.setElectronicCode(jsonCode);
 
