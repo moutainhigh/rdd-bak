@@ -138,7 +138,7 @@ public class SystemConstants {
     /**
      *导出微信商品库存Excel的头部
      */
-    public static final String[] WXSTOCK_DETAILS_HEAD={"商品编号","商品名","属性","内容","导出时间"};
+    public static final String[] WXSTOCK_DETAILS_HEAD={"商品编号","商品名","属性","内容","价格(元)","状态","导出时间"};
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }

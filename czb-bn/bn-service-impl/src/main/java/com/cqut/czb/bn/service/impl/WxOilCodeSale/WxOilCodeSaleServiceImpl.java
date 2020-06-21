@@ -116,7 +116,6 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
                 for (int j = 0; j<list.size(); j++){
                     if (list.get(i).getStockID().equals(list.get(j).getStockID())){
                         list.remove(j);
-                        i--;
                         j--;
                     }
                 }
@@ -155,7 +154,9 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             for (int j=i+1;j<list.size();j++){
                 if (list.get(i).getStockID().equals(list.get(j).getStockID())){
                     list.get(i).setAttribute(list.get(i).getAttribute()+","+list.get(j).getAttribute());
+                    list.get(i).setSalePrice(list.get(i).getSalePrice()+list.get(j).getExtSalePrice());
                     list.remove(j);
+                    j--;
                 }
             }
         }
@@ -235,6 +236,14 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             row.createCell(count++).setCellValue(list.get(i).getName());
             row.createCell(count++).setCellValue(list.get(i).getAttribute());
             row.createCell(count++).setCellValue(list.get(i).getContent());
+            row.createCell(count++).setCellValue(list.get(i).getSalePrice());
+            if (list.get(i).getState().equals("0")){
+                row.createCell(count++).setCellValue("未购买");
+            }else if (list.get(i).getState().equals("1")){
+                row.createCell(count++).setCellValue("支付中");
+            }else if (list.get(i).getState().equals("2")){
+                row.createCell(count++).setCellValue("已购买");
+            }
             row.createCell(count++).setCellValue(sdf1.format(list.get(i).getCreateTime()));
         }
         return workbook;
