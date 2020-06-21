@@ -43,6 +43,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             for (int j=i+1;j<list.size();j++){
                 if (list.get(i).getStockID().equals(list.get(j).getStockID())){
                     list.get(i).setAttribute(list.get(i).getAttribute()+","+list.get(j).getAttribute());
+                    list.get(i).setSalePrice(list.get(i).getSalePrice()+list.get(j).getExtSalePrice());
                     list.remove(j);
                     j--;
                 }
@@ -112,6 +113,13 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             wxStockDetailsDTO.setContent(list.get(i).getContent());
             ImportWxStockDTO importWxStockDTO = wxOilCodeSaleMapperExtra.checkCommodityAtrr(list.get(i));
             if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 || importWxStockDTO==null){
+                for (int j = 0; j<list.size(); j++){
+                    if (list.get(i).getStockID().equals(list.get(j).getStockID())){
+                        list.remove(j);
+                        i--;
+                        j--;
+                    }
+                }
                 list.remove(i);
                 i--;
             } else {
