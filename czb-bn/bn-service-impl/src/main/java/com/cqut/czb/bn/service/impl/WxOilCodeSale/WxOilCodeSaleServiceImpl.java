@@ -116,6 +116,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
                 for (int j = 0; j<list.size(); j++){
                     if (list.get(i).getStockID().equals(list.get(j).getStockID())){
                         list.remove(j);
+                        i--;
                         j--;
                     }
                 }

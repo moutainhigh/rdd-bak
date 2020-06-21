@@ -126,21 +126,21 @@
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
 
-  <select id="getWxVIPMoeny" parameterType="com.cqut.czb.bn.entity.dto.WxVipMoenyDTO" >
+  <select id="getWxVIPMoeny" resultType="java.lang.Double">
     SELECT
     content
     FROM `czb_dict`
     where name = 'wx_vip_moeny'
   </select>
 
-  <select id="getWxVIPFY1" parameterType="com.cqut.czb.bn.entity.dto.WxVipMoenyDTO" >
+  <select id="getWxVIPFY1" resultType="java.lang.Double">
     SELECT
     content
     FROM `czb_dict`
     where name = 'wx_vip_FY1'
   </select>
 
-  <select id="getWxVIPFY2" parameterType="com.cqut.czb.bn.entity.dto.WxVipMoenyDTO" >
+  <select id="getWxVIPFY2" resultType="java.lang.Double">
     SELECT
     content
     FROM `czb_dict`

@@ -13,7 +13,7 @@ public class WxStockDetailsDTO extends PageDTO{
 
     private double extSalePrice;
 
-    private int state;
+    private String state;
 
     private String itemNo;
 
@@ -48,11 +48,11 @@ public class WxStockDetailsDTO extends PageDTO{
         this.extSalePrice = extSalePrice;
     }
 
-    public int getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(String state) {
         this.state = state;
     }
 
