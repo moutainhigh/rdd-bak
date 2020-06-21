@@ -113,6 +113,12 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
             wxStockDetailsDTO.setContent(list.get(i).getContent());
             ImportWxStockDTO importWxStockDTO = wxOilCodeSaleMapperExtra.checkCommodityAtrr(list.get(i));
             if (wxOilCodeSaleMapperExtra.check(wxStockDetailsDTO)!=0 || importWxStockDTO==null){
+                for (int j = 0; j<list.size(); j++){
+                    if (list.get(i).getStockID().equals(list.get(j).getStockID())){
+                        list.remove(j);
+                        j--;
+                    }
+                }
                 list.remove(i);
                 i--;
             } else {
