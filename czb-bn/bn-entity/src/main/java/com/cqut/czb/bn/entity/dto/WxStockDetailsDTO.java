@@ -9,6 +9,12 @@ public class WxStockDetailsDTO extends PageDTO{
 
     private String commodityID;
 
+    private double salePrice;
+
+    private double extSalePrice;
+
+    private int state;
+
     private String itemNo;
 
     private String name;
@@ -25,6 +31,30 @@ public class WxStockDetailsDTO extends PageDTO{
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
+
+    public double getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(double salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public double getExtSalePrice() {
+        return extSalePrice;
+    }
+
+    public void setExtSalePrice(double extSalePrice) {
+        this.extSalePrice = extSalePrice;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 
     public String getItemNo() {
         return itemNo;

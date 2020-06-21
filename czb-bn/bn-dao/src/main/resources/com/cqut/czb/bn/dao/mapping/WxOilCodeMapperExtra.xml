@@ -31,12 +31,15 @@
     SELECT
       a.stock_id as stockID,
       e.commodity_title AS name,
+      (e.sale_price+c.extra_sale_money) as salePrice,
+      c.extra_sale_money as extSalePrice,
+      a.state as state,
       e.item_no as itemNo,
       a.commodity_id as commodityID,
       d.content AS attribute,
       a.content AS content,
       a.create_at AS createTime
-  FROM
+    FROM
       `czb_wechat_stock` AS a
       LEFT JOIN czb_wechat_stock_attr AS b ON a.stock_id = b.stock_id
       LEFT JOIN czb_wechat_commodity_attr AS c ON b.attr_id = c.commodity_attr_id
@@ -44,7 +47,6 @@
       LEFT JOIN czb_wechat_commodity AS e ON e.commodity_id = a.commodity_id
     <where>
       e.take_way = 3
-      and a.state = 0
       <if test="itemNo != null and itemNo != ''">
         and e.item_no =  #{itemNo,jdbcType=VARCHAR}
       </if>

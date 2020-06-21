@@ -144,8 +144,19 @@ public class WxCommodityManageServiceImpl implements WxCommodityManageService {
             fileFunction.setGroupCode("WCCommodity");
             fileFunctionMapper.insertSelective(fileFunction);
         }
-        wxCommodityDTO.setItemNo(StringUtil.createId());
+        wxCommodityDTO.setItemNo(IDUtils());
         return weChatCommodityMapperExtra.insertCommodity(wxCommodityDTO) > 0;
+    }
+
+    public String IDUtils() {
+          byte[] lock = new byte[0];
+        // 位数，默认是5位
+         long w = 10000;
+            long r = 0;
+            synchronized (lock) {
+                r = (long) ((Math.random() + 1) * w);
+            }
+            return String.valueOf(r);
     }
 
     @Override
