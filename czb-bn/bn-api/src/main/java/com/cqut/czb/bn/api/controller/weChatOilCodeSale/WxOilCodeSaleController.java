@@ -73,13 +73,12 @@ public class WxOilCodeSaleController {
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/importDate",method = RequestMethod.POST)
     public JSONResult importDate(MultipartFile file){
-        boolean result = false;
         try {
-             result = wxOilCodeSaleService.importDate(file);
-        }catch (Exception e){
+            return wxOilCodeSaleService.importDate(file);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return new JSONResult("连通成功",200,result);
+        return new JSONResult("导入失败",200,false);
     }
     /**
      * 导出
