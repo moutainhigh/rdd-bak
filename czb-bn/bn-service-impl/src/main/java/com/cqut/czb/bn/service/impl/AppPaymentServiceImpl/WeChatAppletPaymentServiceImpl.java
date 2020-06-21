@@ -100,6 +100,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         }
         String stockIds = StringUtils.join(stockId,",");
         System.out.println(stockIds);
+
         //修改状态
         boolean updateStock = weChatStockMapperExtra.updateStock(ids) > 0;
 
@@ -132,7 +133,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         double fyMoney= (double) map.get("fyMoney");
 
         //插入订单
-        inputOrder( orgId, weChatCommodity, user, payInputDTO,fyMoney,money);
+        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,stockIds);
 
         SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
@@ -191,9 +192,10 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
      * @param payInputDTO
      * @param fyMoney
      * @param money
+     * @param ids
      * @return
      */
-    public boolean inputOrder(String orgId, WeChatCommodity weChatCommodity, User user, PayInputDTO payInputDTO, double fyMoney, double money){
+    public boolean inputOrder(String orgId, WeChatCommodity weChatCommodity, User user, PayInputDTO payInputDTO, double fyMoney, double money, String ids){
         //插入预支付订单
         WeChatCommodityOrder weChatCommodityOrder=new WeChatCommodityOrder();
         weChatCommodityOrder.setOrderId(orgId);
@@ -211,7 +213,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         //插入电子码；
         Map mapCode=new HashMap();
         //获取电子码
-        List<String> listCode = weChatStockMapperExtra.selectElectronicCode(user.getUserId());
+        List<String> listCode = weChatStockMapperExtra.selectElectronicCode(ids);
         JSONArray jsonObjCode = (JSONArray) JSONArray.toJSON(listCode);// 数组转为JsonArray
         String jsonCode = "{";
         for (int i = 0; i < jsonObjCode.size(); i++){

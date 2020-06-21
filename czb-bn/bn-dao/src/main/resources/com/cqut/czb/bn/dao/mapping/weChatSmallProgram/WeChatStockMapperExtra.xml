@@ -287,9 +287,9 @@
     </insert>
 
     <select id="selectElectronicCode" resultType="java.lang.String">
-    select
-    content
-    from czb_wechat_stock
-    where buyer_id = #{userId,jdbcType=VARCHAR} and state = 1
+        select
+        content
+        from czb_wechat_stock
+        where state = 1 and stock_id in (#{ids,jdbcType=VARCHAR})
   </select>
 </mapper>

@@ -33,7 +33,7 @@ public interface WeChatStockMapperExtra {
      */
     Integer updateStock( List<WeChatStock> ids);
 
-    List<String> selectElectronicCode(String userId);
+    List<String> selectElectronicCode(@Param("ids") String ids);
 
     int insertSelective(WeChatCommodityOrder weChatCommodityOrder);
 
