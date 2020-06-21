@@ -15,7 +15,7 @@ public interface WxOilCodeSaleService {
 
     JSONResult deleteWxStockDetails(WxStockDetailsDTO wxStockDetailsDTO);
 
-    boolean importDate(MultipartFile file) throws Exception;
+    JSONResult importDate(MultipartFile file) throws Exception;
 
     Workbook exportDate(WxStockDetailsDTO wxStockDetailsDTO) throws Exception;
 }

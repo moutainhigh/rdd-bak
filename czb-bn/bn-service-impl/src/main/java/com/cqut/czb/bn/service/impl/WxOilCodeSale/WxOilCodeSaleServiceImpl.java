@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -71,10 +70,10 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
     }
 
     @Override
-    public boolean importDate(MultipartFile file) throws Exception {
+    public JSONResult importDate(MultipartFile file) throws Exception {
         List<ImportWxStockDTO> WxStockList = ImportWxStock.readExcel(file.getOriginalFilename(),file.getInputStream());
         if (WxStockList == null){
-            return false;
+            return new JSONResult("表格为空",200,false);
         }
         Map<String, ImportWxStockDTO> stockMap = new HashMap<>();
         /**
@@ -134,7 +133,8 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         boolean result2 = wxOilCodeSaleMapperExtra.importWxStock(list2)>0;
         List<WxStockNumDTO> wxStockNumDTOS = wxOilCodeSaleMapperExtra.getCommdityTotal();
         boolean result3 = wxOilCodeSaleMapperExtra.updateWxCommodityTotalNum(wxStockNumDTOS)>0;
-        return result1 && result2 && result3;
+        String result = "成功"+list2.size()+"条，失败"+(WxStockList.size()-list2.size())+"条";
+        return new JSONResult(result,200,result1&&result2&&result3);
     }
 
     @Override
