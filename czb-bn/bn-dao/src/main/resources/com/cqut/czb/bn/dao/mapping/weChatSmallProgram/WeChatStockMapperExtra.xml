@@ -44,6 +44,10 @@
             #{item.stockId}
         </foreach>
     </select>
+    <select id="selectStockStateNotPay" resultType="java.lang.Integer">
+        select ifnull(count(*),0) from czb_wechat_stock
+        where state = 1 and buyer_id =#{userId,jdbcType=VARCHAR}
+    </select>
 
     <select id="getLimitNum" resultType="java.lang.Integer">
         SELECT
@@ -94,7 +98,16 @@
             </foreach>
         </where>
     </update>
-
+    <update id="updateNotPay" >
+        UPDATE czb_wechat_stock
+        <set>
+            state = 0,buyer_id = null
+        </set>
+        <where>
+            buyer_id =#{userId,jdbcType=VARCHAR}
+            and state = 1
+        </where>
+    </update>
     <update id="update" parameterType="java.util.List">
         UPDATE czb_wechat_stock
         <set>
