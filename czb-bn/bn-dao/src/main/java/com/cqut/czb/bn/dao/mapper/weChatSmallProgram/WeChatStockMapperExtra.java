@@ -61,4 +61,7 @@ public interface WeChatStockMapperExtra {
     Integer getLimitNum(@Param("commodityId") String commodityId,@Param("userId") String userId);
 
 
+    int selectStockStateNotPay(@Param("userId") String userId);
+
+    Integer updateNotPay(@Param("userId")String userId);
 }
