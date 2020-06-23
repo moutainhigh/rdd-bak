@@ -210,6 +210,28 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         return getBackObject(jsonObject);
     }
 
+    @Override
+    public String getLimited(User user, PayInputDTO payInputDTO) {
+        //查出商品信息
+        WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(payInputDTO.getCommodityId());
+        if(weChatCommodity==null){
+            return null;
+        }
+
+        //限购
+        int limitDay = weChatStockMapperExtra.getLimitNumByDay(payInputDTO.getCommodityId(),user.getUserId());
+        int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
+        String message = "";
+        if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < limitDay){
+            message = "超出今日限购总量";
+        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < limit){
+            message = "超出商品限购总量";
+        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < limit || weChatCommodity.getLimitedNum() < limitDay)){
+            message = "超出今日限购跟商品限购总量";
+        }
+        return message;
+    }
+
 
     /**
      * 计算价格
