@@ -63,7 +63,7 @@ public class WxCommodityDTO {
 
     private int limitedNum;
 
-    private int IDlimitedNum;
+    private int idLimitedNum;
 
     private int limitedType;
 
@@ -87,12 +87,12 @@ public class WxCommodityDTO {
         this.limitedType = limitedType;
     }
 
-    public int getIDlimitedNum() {
-        return IDlimitedNum;
+    public int getIdLimitedNum() {
+        return idLimitedNum;
     }
 
-    public void setIDlimitedNum(int IDlimitedNum) {
-        this.IDlimitedNum = IDlimitedNum;
+    public void setIdLimitedNum(int idLimitedNum) {
+        this.idLimitedNum = idLimitedNum;
     }
 
     public int getLimitedNum() {
