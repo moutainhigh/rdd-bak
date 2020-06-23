@@ -104,15 +104,19 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             return null;
         }
         //限购
+        int limitDay = weChatStockMapperExtra.getLimitNumByDay(payInputDTO.getCommodityId(),user.getUserId());
         int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
-        if (weChatCommodity.getLimitedNum() <= limit || payInputDTO.getCommodityNum() > 2){
+        if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < limitDay){
+            return null;
+        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < limit){
+            return null;
+        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < limit || weChatCommodity.getLimitedNum() < limitDay)){
             return null;
         }
 
+        //提取库存
         List<WeChatStock> stackState = weChatStockMapperExtra.getStockId(params);
-
         List<WeChatStock> ids = new ArrayList<>();
-
         for (WeChatStock weChatStock:stackState){
             WeChatStock weChatStock1 = new WeChatStock();
             weChatStock1.setBuyerId(user.getUserId());

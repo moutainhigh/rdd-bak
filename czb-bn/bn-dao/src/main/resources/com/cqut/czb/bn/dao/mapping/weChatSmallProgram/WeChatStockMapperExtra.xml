@@ -49,7 +49,7 @@
         where state = 1 and buyer_id =#{userId,jdbcType=VARCHAR}
     </select>
 
-    <select id="getLimitNum" resultType="java.lang.Integer">
+    <select id="getLimitNumByDay" resultType="java.lang.Integer">
         SELECT
             ifnull(sum(commodity_num),0)
         FROM
@@ -63,6 +63,21 @@
             </if>
             AND pay_status = 1
             AND date( create_at ) = curdate( )
+        </where>
+    </select>
+    <select id="getLimitNum" resultType="java.lang.Integer">
+        SELECT
+        ifnull(sum(commodity_num),0)
+        FROM
+        `czb_wechat_commodity_order`
+        <where>
+            <if test="commodityId != null and commodityId != ''">
+                commodity_id = #{commodityId,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId,jdbcType=VARCHAR}
+            </if>
+            AND pay_status = 1
         </where>
     </select>
 

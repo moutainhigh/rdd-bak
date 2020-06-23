@@ -58,6 +58,8 @@ public interface WeChatStockMapperExtra {
      */
     int update(List<WeChatStock> ids);
 
+    Integer getLimitNumByDay(@Param("commodityId") String commodityId,@Param("userId") String userId);
+
     Integer getLimitNum(@Param("commodityId") String commodityId,@Param("userId") String userId);
 
 
