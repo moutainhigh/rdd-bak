@@ -1189,6 +1189,9 @@
             <if test="limitedNum != null" >
                 limited_num = #{limitedNum,jdbcType=INTEGER},
             </if>
+            <if test="IDlimitedNum != null" >
+                id_limited_num = #{limitedNum,jdbcType=INTEGER},
+            </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>
