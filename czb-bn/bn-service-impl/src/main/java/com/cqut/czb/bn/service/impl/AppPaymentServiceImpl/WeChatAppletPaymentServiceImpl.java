@@ -85,6 +85,10 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         if(weChatCommodity.getTakeWay() != 3){
             return weChatAppletPayService.WeChatAppletBuyCommodity(user,payInputDTO);
         }
+        //一次最多购买2条
+        if (payInputDTO.getCommodityNum() > 2){
+            return null;
+        }
 
         int noPay = weChatStockMapperExtra.selectStockStateNotPay(user.getUserId());
         if (noPay > 0){
@@ -106,11 +110,11 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         //限购
         int limitDay = weChatStockMapperExtra.getLimitNumByDay(payInputDTO.getCommodityId(),user.getUserId());
         int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
-        if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < limitDay){
+        if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum())){
             return null;
-        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < limit){
+        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum())){
             return null;
-        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < limit || weChatCommodity.getLimitedNum() < limitDay)){
+        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum()) || weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum()))){
             return null;
         }
 
@@ -188,7 +192,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             return null;
         }
 
-        User userInfo =  userMapper.selectByPrimaryKey(weChatRechargeVipDTO.getUserId());
+        User userInfo =  userMapper.selectByPrimaryKey(user.getUserId());
         if (userInfo.getIsVip() == 1){
             System.out.println("用户已经是Vip");
             return null;
@@ -197,13 +201,6 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         //生成起调参数串
         String orgId = String.valueOf(System.currentTimeMillis()+(int)(1+Math.random()*(10000-1+1)));
         String nonceStrTemp = WeChatUtils.getRandomStr();
-
-//        double money= (double) map.get("money");
-//        double fyMoney= (double) map.get("fyMoney");
-
-//        //插入订单
-//        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,stockIds);
-
         SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersRechargeVip(user.getUserAccount(),dict,nonceStrTemp,orgId,weChatRechargeVipDTO);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
 
