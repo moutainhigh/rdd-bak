@@ -20,13 +20,13 @@ spring:
     type: redis
   redis:
 #    测试服
-    host: 39.98.250.45
-    port: 6379
-    password: TTfF9Pfj3lL2qBS8
-#    陈德强的服务器
-#    host: 101.37.85.141
+#    host: 39.98.250.45
 #    port: 6379
-#    password: cdqroot
+#    password: TTfF9Pfj3lL2qBS8
+#    陈德强的服务器
+    host: 101.37.85.141
+    port: 6379
+    password: cdqroot
     jedis:
       pool:
         max-active: 200

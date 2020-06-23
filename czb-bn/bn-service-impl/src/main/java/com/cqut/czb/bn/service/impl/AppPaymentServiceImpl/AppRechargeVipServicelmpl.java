@@ -5,6 +5,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
@@ -23,10 +24,19 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
     @Autowired
     public VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
 
+    @Autowired
+    UserMapper userMapper;
+
     @Override
     public String AliRechargeVip(User user, RechargeVipDTO rechargeVipDTO) {
         if(rechargeVipDTO==null){
             System.out.println("地区为空");
+            return null;
+        }
+
+        User userInfo = userMapper.selectByPrimaryKey(user.getUserId());
+        if (userInfo.getIsVip() == 1){
+            System.out.println("已经为VIP");
             return null;
         }
 

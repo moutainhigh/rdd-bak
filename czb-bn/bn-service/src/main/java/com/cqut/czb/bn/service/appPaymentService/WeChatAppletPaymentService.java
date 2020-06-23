@@ -11,4 +11,6 @@ public interface WeChatAppletPaymentService {
     WeChatBackDTO WeChatAppletPaymentBuyCommodity(User user, PayInputDTO payInputDTO);
 
     WeChatBackDTO WeChatRechargeVip(User user, WeChatRechargeVipDTO rechargeVipDTO);
+
+    String getLimited(User user, PayInputDTO payInputDTO);
 }

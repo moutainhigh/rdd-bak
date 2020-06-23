@@ -31,7 +31,7 @@
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
         <result column="fyMoney" property="fyMoney" jdbcType="VARCHAR" />
         <result column="limited_num" property="limitedNum" jdbcType="INTEGER" />
-        <result column="id_limited_num" property="IDlimitedNum" jdbcType="INTEGER" />
+        <result column="id_limited_num" property="idLimitedNum" jdbcType="INTEGER" />
         <result column="limited_type" property="limitedType" jdbcType="INTEGER" />
         <collection property="imgs" select="selectImgs" column="commodity_img_id"></collection>
         <collection property="posterImg" select="selectPosterImg" column="commodity_img_id"></collection>
@@ -804,7 +804,8 @@
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
         czb_wechat_commodity.sales_volume salesVolume,
         czb_wechat_commodity.limited_num limitedNum,
-        czb_wechat_commodity.id_limited_num idLimitedNum
+        czb_wechat_commodity.id_limited_num idLimitedNum,
+        czb_wechat_commodity.limited_type limitedType
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id

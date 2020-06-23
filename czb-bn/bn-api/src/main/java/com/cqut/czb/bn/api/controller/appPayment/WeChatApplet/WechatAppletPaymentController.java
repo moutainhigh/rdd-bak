@@ -54,4 +54,20 @@ public class WechatAppletPaymentController {
         }
         return new JSONResult(weChatAppletPaymentService.WeChatRechargeVip(user,rechargeVipDTO));
     }
+
+
+    @RequestMapping(value = "/getLimited", method = RequestMethod.POST)
+    public JSONResult getLimited(Principal principal, @RequestBody PayInputDTO payInputDTO){
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null){
+            return new JSONResult("未登录",405,null);
+        }
+        String message = weChatAppletPaymentService.getLimited(user,payInputDTO);
+        if(message == ""){
+            return new JSONResult("",400);
+        }
+        else {
+            return new JSONResult(message,200);
+        }
+    }
 }
