@@ -36,6 +36,7 @@
     <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
     <result column="limited_num" property="limitedNum" jdbcType="INTEGER" />
     <result column="id_limited_num" property="idLimitedNum" jdbcType="INTEGER" />
+    <result column="limited_type" property="limitedType" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" extends="BaseResultMap" >
     <result column="commodity_introduce" property="commodityIntroduce" jdbcType="LONGVARCHAR" />
@@ -46,7 +47,7 @@
     end_time_business, commodity_source, commodity_num, is_sale, take_way, shop_name,
     shop_phone, shop_content, shop_address, longitude, latitude, is_have_shop, fy_money,
     show_place, show_order, create_at, update_at, norms_id, sales_volume, item_no, limited_num,
-    id_limited_num
+    id_limited_num, limited_type
   </sql>
   <sql id="Blob_Column_List" >
     commodity_introduce
@@ -75,7 +76,8 @@
       fy_money, show_place, show_order,
       create_at, update_at, norms_id,
       sales_volume, item_no, limited_num,
-      id_limited_num, commodity_introduce)
+      id_limited_num, limited_type, commodity_introduce
+      )
     values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
       #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE},
       #{commodityImgId,jdbcType=VARCHAR}, #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE},
@@ -87,7 +89,8 @@
       #{fyMoney,jdbcType=DOUBLE}, #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER},
       #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{normsId,jdbcType=VARCHAR},
       #{salesVolume,jdbcType=INTEGER}, #{itemNo,jdbcType=VARCHAR}, #{limitedNum,jdbcType=INTEGER},
-      #{idLimitedNum,jdbcType=INTEGER}, #{commodityIntroduce,jdbcType=LONGVARCHAR})
+      #{idLimitedNum,jdbcType=INTEGER}, #{limitedType,jdbcType=INTEGER}, #{commodityIntroduce,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
     insert into czb_wechat_commodity
@@ -193,6 +196,9 @@
       </if>
       <if test="idLimitedNum != null" >
         id_limited_num,
+      </if>
+      <if test="limitedType != null" >
+        limited_type,
       </if>
       <if test="commodityIntroduce != null" >
         commodity_introduce,
@@ -301,6 +307,9 @@
       <if test="idLimitedNum != null" >
         #{idLimitedNum,jdbcType=INTEGER},
       </if>
+      <if test="limitedType != null" >
+        #{limitedType,jdbcType=INTEGER},
+      </if>
       <if test="commodityIntroduce != null" >
         #{commodityIntroduce,jdbcType=LONGVARCHAR},
       </if>
@@ -408,6 +417,9 @@
       <if test="idLimitedNum != null" >
         id_limited_num = #{idLimitedNum,jdbcType=INTEGER},
       </if>
+      <if test="limitedType != null" >
+        limited_type = #{limitedType,jdbcType=INTEGER},
+      </if>
       <if test="commodityIntroduce != null" >
         commodity_introduce = #{commodityIntroduce,jdbcType=LONGVARCHAR},
       </if>
@@ -449,6 +461,7 @@
       item_no = #{itemNo,jdbcType=VARCHAR},
       limited_num = #{limitedNum,jdbcType=INTEGER},
       id_limited_num = #{idLimitedNum,jdbcType=INTEGER},
+      limited_type = #{limitedType,jdbcType=INTEGER},
       commodity_introduce = #{commodityIntroduce,jdbcType=LONGVARCHAR}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
@@ -486,7 +499,8 @@
       sales_volume = #{salesVolume,jdbcType=INTEGER},
       item_no = #{itemNo,jdbcType=VARCHAR},
       limited_num = #{limitedNum,jdbcType=INTEGER},
-      id_limited_num = #{idLimitedNum,jdbcType=INTEGER}
+      id_limited_num = #{idLimitedNum,jdbcType=INTEGER},
+      limited_type = #{limitedType,jdbcType=INTEGER}
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
 </mapper>
