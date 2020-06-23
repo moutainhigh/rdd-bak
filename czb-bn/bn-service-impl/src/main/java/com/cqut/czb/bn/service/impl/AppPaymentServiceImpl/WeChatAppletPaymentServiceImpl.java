@@ -224,9 +224,9 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         String message = "";
         if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum())){
             message = "超出今日限购总量";
-        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < (limit +  + payInputDTO.getCommodityNum())){
+        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum())){
             message = "超出商品限购总量";
-        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < (limit +  + payInputDTO.getCommodityNum()) || weChatCommodity.getLimitedNum() < (limitDay +  + payInputDTO.getCommodityNum()))){
+        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum()) || weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum()))){
             message = "超出今日限购跟商品限购总量";
         }
         return message;
