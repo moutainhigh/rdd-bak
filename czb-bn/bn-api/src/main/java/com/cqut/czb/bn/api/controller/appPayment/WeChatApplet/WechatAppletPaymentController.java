@@ -63,6 +63,11 @@ public class WechatAppletPaymentController {
             return new JSONResult("未登录",405,null);
         }
         String message = weChatAppletPaymentService.getLimited(user,payInputDTO);
-        return new JSONResult(message);
+        if(message == ""){
+            return new JSONResult("",400);
+        }
+        else {
+            return new JSONResult(message,200);
+        }
     }
 }

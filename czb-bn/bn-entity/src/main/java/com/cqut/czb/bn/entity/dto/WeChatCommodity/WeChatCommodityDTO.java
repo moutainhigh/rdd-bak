@@ -57,6 +57,8 @@ public class WeChatCommodityDTO {
 
     private int idLimitedNum;
 
+    private int limitedType;
+
     private int page;
 
     private int pageSize;
@@ -313,5 +315,13 @@ public class WeChatCommodityDTO {
 
     public void setIdLimitedNum(int idLimitedNum) {
         this.idLimitedNum = idLimitedNum;
+    }
+
+    public int getLimitedType() {
+        return limitedType;
+    }
+
+    public void setLimitedType(int limitedType) {
+        this.limitedType = limitedType;
     }
 }
