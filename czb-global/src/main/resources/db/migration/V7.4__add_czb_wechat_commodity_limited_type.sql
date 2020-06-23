@@ -1,0 +1,1 @@
+alter table czb_wechat_commodity add limited_type INT(5) default 0 COMMENT '限购量类型';
