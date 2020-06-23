@@ -801,7 +801,8 @@
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
         czb_wechat_commodity.sales_volume salesVolume,
-        czb_wechat_commodity.limited_num limitedNum
+        czb_wechat_commodity.limited_num limitedNum,
+        czb_wechat_commodity.id_limited_num idLimitedNum
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
