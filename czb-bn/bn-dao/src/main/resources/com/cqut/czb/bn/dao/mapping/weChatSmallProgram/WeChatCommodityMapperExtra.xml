@@ -914,6 +914,9 @@
             <if test="limitedNum != null" >
                 limited_num,
             </if>
+            <if test="IDlimitedNum != null" >
+                id_limited_num,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -1011,6 +1014,9 @@
             </if>
             <if test="limitedNum != null" >
                 #{limitedNum},
+            </if>
+            <if test="IDlimitedNum != null" >
+                #{IDlimitedNum},
             </if>
         </trim>
     </insert>

@@ -63,6 +63,8 @@ public class WxCommodityDTO {
 
     private int limitedNum;
 
+    private int IDlimitedNum;
+
     private List<FileFunctionDTO> imgs;
 
     private List<FileFunctionDTO> posterImgs;
@@ -74,6 +76,14 @@ public class WxCommodityDTO {
     private String content;
 
     private Double distance;
+
+    public int getIDlimitedNum() {
+        return IDlimitedNum;
+    }
+
+    public void setIDlimitedNum(int IDlimitedNum) {
+        this.IDlimitedNum = IDlimitedNum;
+    }
 
     public int getLimitedNum() {
         return limitedNum;
