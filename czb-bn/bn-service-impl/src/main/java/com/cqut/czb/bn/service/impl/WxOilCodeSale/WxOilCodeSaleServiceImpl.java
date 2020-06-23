@@ -179,16 +179,16 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
                 }
             }
             if (contentList.size() == 1) {
-                str = "{\"" + contentList.get(0).substring(0, 3) + "\":\"" + contentList.get(0).substring(4) + "\"}";
+                str = "{\"" + contentList.get(0).substring(0, contentList.get(0).indexOf(":")) + "\":\"" + contentList.get(0).substring(contentList.get(0).indexOf(":")+1) + "\"}";
             } else {
                 for (int m = 0; m < contentList.size(); m++) {
 
                     if (m == 0) {
-                        str = "{\"" + contentList.get(0).substring(0, 3) + "\":\"" + contentList.get(0).substring(4) + "\",";
+                        str = "{\"" + contentList.get(0).substring(0, contentList.get(0).indexOf(":")) + "\":\"" + contentList.get(0).substring(contentList.get(0).indexOf(":")+1) + "\",";
                     } else if (m == contentList.size() - 1) {
-                        str = str + "\"" + contentList.get(contentList.size()-1).substring(0, 3) + "\":\"" + contentList.get(contentList.size()-1).substring(4) + "\"}";
+                        str = str + "\"" + contentList.get(contentList.size()-1).substring(0, contentList.get(contentList.size()-1).indexOf(":")) + "\":\"" + contentList.get(contentList.size()-1).substring(contentList.get(contentList.size()-1).indexOf(":")+1) + "\"}";
                     } else {
-                        str = str + "\"" + contentList.get(m).substring(0, 3) + "\":\"" + contentList.get(m).substring(4) + "\",";
+                        str = str + "\"" + contentList.get(m).substring(0, contentList.get(m).indexOf(":")) + "\":\"" + contentList.get(m).substring(contentList.get(m).indexOf(":")+1) + "\",";
                     }
                 }
             }
