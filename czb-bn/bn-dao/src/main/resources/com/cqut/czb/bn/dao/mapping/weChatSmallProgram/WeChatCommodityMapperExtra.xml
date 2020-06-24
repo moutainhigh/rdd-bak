@@ -918,7 +918,7 @@
             <if test="limitedNum != null" >
                 limited_num,
             </if>
-            <if test="IDlimitedNum != null" >
+            <if test="idLimitedNum != null" >
                 id_limited_num,
             </if>
             <if test="limitedType != null" >
@@ -1022,8 +1022,8 @@
             <if test="limitedNum != null" >
                 #{limitedNum},
             </if>
-            <if test="IDlimitedNum != null" >
-                #{IDlimitedNum},
+            <if test="idLimitedNum != null" >
+                #{idLimitedNum},
             </if>
             <if test="limitedType != null" >
                 #{limitedType},
@@ -1199,7 +1199,7 @@
             <if test="limitedNum != null" >
                 limited_num = #{limitedNum,jdbcType=INTEGER},
             </if>
-            <if test="IDlimitedNum != null" >
+            <if test="idLimitedNum != null" >
                 id_limited_num = #{limitedNum,jdbcType=INTEGER},
             </if>
             <if test="limitedType != null" >
