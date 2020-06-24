@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.autoRecharge.OfflineDistributorOfAdministratorMapperExtra">
+<!--    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.OfflineClientDTO" >-->
+<!--        <id column="user_account" property="account" jdbcType="VARCHAR" />-->
+<!--        <result column="offline_recharge_balance" property="balance" jdbcType="Double" />-->
+<!--        <result column="total_consumption" property="totalConsumption" jdbcType="Double" />-->
+<!--        <result column="total_recharge" property="totalRecharge" jdbcType="Double" />-->
+<!--        <result column="total_turn" property="totalTurn" jdbcType="Double" />-->
+<!--        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />-->
+<!--    </resultMap>-->
 
 <select id="getRechargeTableList" parameterType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.AccountRechargeDTO">
     SELECT
@@ -56,84 +64,146 @@
 </select>
 
 <select id="getOfflineClientList" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineClientDTO">
-    SELECT DISTINCT
-    b.user_account AS account,
-    c.offline_recharge_balance AS balance,
-    a.create_at AS registerTime,
-    IFNULL(totalConsumption,0) as totalConsumption,
-    IFNULL(totalRecharge,0) as totalRecharge,
-    IFNULL(totalTurn,0) as totalTurn
-    FROM
-    czb_user_role AS a
-    JOIN czb_user AS b ON a.user_id = b.user_id
-    JOIN czb_user_income_info AS c ON a.user_id = c.user_id
-    JOIN czb_role as f on a.role_id = f.role_id
-    LEFT JOIN (
     SELECT
+    a.user_account,
+    d.offline_recharge_balance,
+    totalConsumption,
+    totalRecharge,
+    totalTurn,
+    b.create_at AS registerTime
+    FROM
+    czb_user AS a
+    LEFT JOIN czb_user_role AS b ON a.user_id = b.user_id
+    JOIN czb_role AS c ON c.role_id = b.role_id
+    AND c.role_name = '线下大客户'
+    LEFT JOIN czb_user_income_info AS d ON d.user_id = a.user_id
+    LEFT JOIN (
+    SELECT DISTINCT
     buyer_id,
     sum( turnover_amount ) totalConsumption
     FROM
     czb_petrol_sales_records
     WHERE
-    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records
-    JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id
-    JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-    WHERE czb_role.role_name = '线下大客户' )
-    AND record_type = 3
-    and state = 1
+    czb_petrol_sales_records.record_type = 3
+    AND czb_petrol_sales_records.state = 1
     <if test="startTime != null and endTime != null">
         and czb_petrol_sales_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
         and czb_petrol_sales_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
     GROUP BY
     buyer_id
-    ) AS d ON a.user_id = d.buyer_id
+    ) AS e ON e.buyer_id = a.user_id
     LEFT JOIN (
-    SELECT
+    SELECT DISTINCT
     buyer_id,
     sum( amount ) totalRecharge
     FROM
     czb_offline_distributor_records
     WHERE
-    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
-    JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
-    JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-    WHERE czb_role.role_name = '线下大客户')
-    and czb_offline_distributor_records.amount&gt;0
+    czb_offline_distributor_records.amount &gt;0
     <if test="startTime != null and endTime != null">
         and czb_offline_distributor_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
         and czb_offline_distributor_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
-    GROUP BY
-    buyer_id
-    ) AS e ON a.user_id = e.buyer_id
+    GROUP BY buyer_id ) AS f ON f.buyer_id = a.user_id
     LEFT JOIN (
-    SELECT
+    SELECT DISTINCT
     buyer_id,
     sum( amount ) totalTurn
     FROM
     czb_offline_distributor_records
     WHERE
-    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records
-    JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id
-    JOIN czb_role on czb_role.role_id = czb_user_role.role_id
-    WHERE czb_role.role_name = '线下大客户')
-    and czb_offline_distributor_records.amount &lt;0
+    czb_offline_distributor_records.amount &lt;0
     <if test="startTime != null and endTime != null">
         and czb_offline_distributor_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
         and czb_offline_distributor_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
-    GROUP BY
-    buyer_id
-    ) AS g ON a.user_id = g.buyer_id
+    GROUP BY buyer_id ) AS g ON g.buyer_id = a.user_id
     <where>
-        f.role_name = '线下大客户'
         <if test="account != null and account != ''">
-            and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
+            and a.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
     </where>
     ORDER BY
-    a.create_at DESC
+    b.create_at DESC
+<!--    SELECT DISTINCT-->
+<!--    b.user_account AS account,-->
+<!--    c.offline_recharge_balance AS balance,-->
+<!--    a.create_at AS registerTime,-->
+<!--    IFNULL(totalConsumption,0) as totalConsumption,-->
+<!--    IFNULL(totalRecharge,0) as totalRecharge,-->
+<!--    IFNULL(totalTurn,0) as totalTurn-->
+<!--    FROM-->
+<!--    czb_user_role AS a-->
+<!--    JOIN czb_user AS b ON a.user_id = b.user_id-->
+<!--    JOIN czb_user_income_info AS c ON a.user_id = c.user_id-->
+<!--    JOIN czb_role as f on a.role_id = f.role_id-->
+<!--    LEFT JOIN (-->
+<!--    SELECT-->
+<!--    buyer_id,-->
+<!--    sum( turnover_amount ) totalConsumption-->
+<!--    FROM-->
+<!--    czb_petrol_sales_records-->
+<!--    WHERE-->
+<!--    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_petrol_sales_records-->
+<!--    JOIN czb_user_role ON czb_petrol_sales_records.buyer_id = czb_user_role.user_id-->
+<!--    JOIN czb_role on czb_role.role_id = czb_user_role.role_id-->
+<!--    WHERE czb_role.role_name = '线下大客户' )-->
+<!--    AND record_type = 3-->
+<!--    and state = 1-->
+<!--    <if test="startTime != null and endTime != null">-->
+<!--        and czb_petrol_sales_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}-->
+<!--        and czb_petrol_sales_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}-->
+<!--    </if>-->
+<!--    GROUP BY-->
+<!--    buyer_id-->
+<!--    ) AS d ON a.user_id = d.buyer_id-->
+<!--    LEFT JOIN (-->
+<!--    SELECT-->
+<!--    buyer_id,-->
+<!--    sum( amount ) totalRecharge-->
+<!--    FROM-->
+<!--    czb_offline_distributor_records-->
+<!--    WHERE-->
+<!--    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records-->
+<!--    JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id-->
+<!--    JOIN czb_role on czb_role.role_id = czb_user_role.role_id-->
+<!--    WHERE czb_role.role_name = '线下大客户')-->
+<!--    and czb_offline_distributor_records.amount&gt;0-->
+<!--    <if test="startTime != null and endTime != null">-->
+<!--        and czb_offline_distributor_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}-->
+<!--        and czb_offline_distributor_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}-->
+<!--    </if>-->
+<!--    GROUP BY-->
+<!--    buyer_id-->
+<!--    ) AS e ON a.user_id = e.buyer_id-->
+<!--    LEFT JOIN (-->
+<!--    SELECT-->
+<!--    buyer_id,-->
+<!--    sum( amount ) totalTurn-->
+<!--    FROM-->
+<!--    czb_offline_distributor_records-->
+<!--    WHERE-->
+<!--    buyer_id in ( SELECT DISTINCT buyer_id FROM czb_offline_distributor_records-->
+<!--    JOIN czb_user_role ON czb_offline_distributor_records.buyer_id = czb_user_role.user_id-->
+<!--    JOIN czb_role on czb_role.role_id = czb_user_role.role_id-->
+<!--    WHERE czb_role.role_name = '线下大客户')-->
+<!--    and czb_offline_distributor_records.amount &lt;0-->
+<!--    <if test="startTime != null and endTime != null">-->
+<!--        and czb_offline_distributor_records.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}-->
+<!--        and czb_offline_distributor_records.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}-->
+<!--    </if>-->
+<!--    GROUP BY-->
+<!--    buyer_id-->
+<!--    ) AS g ON a.user_id = g.buyer_id-->
+<!--    <where>-->
+<!--        f.role_name = '线下大客户'-->
+<!--        <if test="account != null and account != ''">-->
+<!--            and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')-->
+<!--        </if>-->
+<!--    </where>-->
+<!--    ORDER BY-->
+<!--    a.create_at DESC-->
 </select>
 
 <select id="getRechargeAccountList" resultType="java.lang.String">
