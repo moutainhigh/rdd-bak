@@ -1200,7 +1200,7 @@
                 limited_num = #{limitedNum,jdbcType=INTEGER},
             </if>
             <if test="idLimitedNum != null" >
-                id_limited_num = #{limitedNum,jdbcType=INTEGER},
+                id_limited_num = #{idLimitedNum,jdbcType=INTEGER},
             </if>
             <if test="limitedType != null" >
                 limited_type = #{limitedType,jdbcType=INTEGER},
