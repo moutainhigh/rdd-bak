@@ -65,8 +65,8 @@
 
 <select id="getOfflineClientList" parameterType="com.cqut.czb.bn.entity.dto.OfflineClientDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineClientDTO">
     SELECT
-    a.user_account,
-    d.offline_recharge_balance,
+    a.user_account as account,
+    d.offline_recharge_balance as balance,
     totalConsumption,
     totalRecharge,
     totalTurn,
