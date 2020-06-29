@@ -44,7 +44,7 @@ server:
   http:
     port: 8090
   ssl:
-    key-store: classpath:3855919__renduoduo2019.com
+    key-store: classpath:3855919__renduoduo2019.com.jks
     key-store-type: PKCS12
     key-store-password: RRWStzb6
     key-alias: alias
