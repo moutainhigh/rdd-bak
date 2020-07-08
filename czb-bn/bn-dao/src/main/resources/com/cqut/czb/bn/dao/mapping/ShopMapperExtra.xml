@@ -280,7 +280,6 @@
         WHERE
         audit = 1
         AND shop_type = 3
-        AND czb_user.user_type = 2
     </select>
 
 </mapper>
