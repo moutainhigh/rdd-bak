@@ -11,6 +11,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -19,12 +20,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service("UserRechargeServiceImpl")
 public class UserRechargeServiceImpl implements UserRechargeService {
 
     @Autowired
     UserRechargeMapper userRechargeMapper;
+
+    private ReentrantLock lock = new ReentrantLock();
 
     /**
      * 插入充值记录
@@ -33,7 +37,8 @@ public class UserRechargeServiceImpl implements UserRechargeService {
      * @return
      */
     @Override
-    public JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO) {
+    @Transactional
+    public synchronized JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO) {
         String[] petrolNums;
         boolean petr = false;
         boolean isBalance =false;
@@ -79,26 +84,30 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             petrol.setCurrentPrice(userRechargeDTO.getTurnoverAmount());
             userRecharge.add(petrol);
         }
-        petr = userRechargeMapper.insertBatchRecharge(userRecharge);
+        petr = userRechargeMapper.insertBatchRecharge(userRecharge) > 0;
 
-        IncomeIog incomeInfo = new IncomeIog();
-        incomeInfo.setRecordId(StringUtil.createId());
-        incomeInfo.setAmount(userRechargeDTO.getTurnoverAmount() * petrolNums.length);
-        incomeInfo.setInfoId(userRechargeMapper.getInfoId(user.getUserId()));
-        incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(user.getUserId()));
-        info = userRechargeMapper.insert(incomeInfo);
+        if (petr){
+            IncomeIog incomeInfo = new IncomeIog();
+            incomeInfo.setRecordId(StringUtil.createId());
+            incomeInfo.setAmount(userRechargeDTO.getTurnoverAmount() * petrolNums.length);
+            incomeInfo.setInfoId(userRechargeMapper.getInfoId(user.getUserId()));
+            incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(user.getUserId()));
+            info = userRechargeMapper.insert(incomeInfo);
 
+            BigDecimal beforeBalance = new BigDecimal(String.valueOf(incomeInfo.getBeforeChangeIncome()));
+            BigDecimal afterBalance = null;
+            afterBalance = beforeBalance.subtract(bignum1);
+            System.out.println(afterBalance.doubleValue());
+            //更新余额
+            isBalance = userRechargeMapper.updateRecharge(user.getUserId(),afterBalance.doubleValue());
+            if(isBalance && info)
+                return new JSONResult("充值成功",500);
+            else
+                return new JSONResult("充值失败",200);
 
-        BigDecimal beforeBalance = new BigDecimal(String.valueOf(incomeInfo.getBeforeChangeIncome()));
-        BigDecimal afterBalance = null;
-        afterBalance = beforeBalance.subtract(bignum1);
-        System.out.println(afterBalance.doubleValue());
-        //更新余额
-        isBalance = userRechargeMapper.updateRecharge(user.getUserId(),afterBalance.doubleValue());
-        if(petr && isBalance && info)
-            return new JSONResult("充值成功",500);
-        else
+        }else {
             return new JSONResult("充值失败",200);
+        }
     }
 
     /**
