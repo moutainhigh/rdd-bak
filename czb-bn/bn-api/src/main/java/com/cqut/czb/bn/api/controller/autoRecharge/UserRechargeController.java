@@ -114,7 +114,7 @@ public class UserRechargeController {
      * @return
      */
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-    @PermissionCheck(role = "线下大客户")
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updatePetrolNum", method = RequestMethod.POST)
     public JSONResult updatePetrolNum(Principal principal,UserRechargeDTO userRechargeDTO){
         User user = (User)redisUtils.get(principal.getName());

@@ -34,6 +34,7 @@
 
 <select id="getOfflineConsumptionList" parameterType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO" resultType="com.cqut.czb.bn.entity.dto.OfflineConsumptionDTO">
     SELECT
+    a.record_id as recordId,
     a.petrol_num AS petrolNum,
     a.turnover_amount AS amount,
     a.is_recharged AS state,
