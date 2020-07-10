@@ -60,6 +60,6 @@
     </update>
 
     <select id="getVipMoney" resultType="java.lang.String">
-        select content from czb_dict where dict_id = '84395588977910040'
+        select content from czb_dict where name = 'wx_vip_moeny'
     </select>
 </mapper>
