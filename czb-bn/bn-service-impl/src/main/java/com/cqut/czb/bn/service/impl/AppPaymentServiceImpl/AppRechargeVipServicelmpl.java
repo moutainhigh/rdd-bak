@@ -25,7 +25,7 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
     public VipAreaConfigMapperExtra vipAreaConfigMapperExtra;
 
     @Autowired
-    UserMapper userMapper;
+    public UserMapper userMapper;
 
     @Override
     public String AliRechargeVip(User user, RechargeVipDTO rechargeVipDTO) {

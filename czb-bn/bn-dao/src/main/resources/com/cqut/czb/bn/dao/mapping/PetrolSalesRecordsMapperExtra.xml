@@ -481,7 +481,7 @@
 
     <select id="getPetrolRechargeListTotalMoney" parameterType="com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO" resultType="java.lang.Integer">
         SELECT
-        sum(petrol_denomination)
+        IFNULL(sum(petrol_denomination),0)
         FROM
         (
         SELECT
