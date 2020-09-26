@@ -262,4 +262,12 @@ public class User {
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
     }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
+    }
 }
