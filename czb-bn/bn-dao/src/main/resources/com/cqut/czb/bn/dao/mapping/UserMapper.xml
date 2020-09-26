@@ -145,6 +145,7 @@
       <if test="bindingid != null" >
         bindingid,
       </if>
+        is_special
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -222,6 +223,7 @@
       <if test="bindingid != null" >
         #{bindingid,jdbcType=VARCHAR},
       </if>
+        1
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
