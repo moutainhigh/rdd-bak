@@ -25,13 +25,16 @@
     <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
     <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+    <result column="bindingId" property="bindingid" jdbcType="VARCHAR" />
+    <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
   </resultMap>
 
   <sql id="Base_Column_List">
     user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
-    partner, old_superior, first_level_partner, second_level_partner,avatar_url, is_vip,bindingid
+    partner, old_superior, first_level_partner, second_level_partner,avatar_url, is_vip,
+    bindingid, is_special
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
@@ -82,6 +85,7 @@
     <result column="first_level_partner" jdbcType="VARCHAR" property="firstLevelPartner" />
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
     <collection property="roles" column="{userId = user_id}" javaType="list" select="selectRoleList"></collection>
   </resultMap>
   <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >
@@ -183,6 +187,7 @@
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
     <result column="partner" property="partner" jdbcType="INTEGER" />
     <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
+    <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <collection property="roleList" column="user_id" javaType="list" select="selectRole" />
   </resultMap>
@@ -324,6 +329,7 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
     <result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR" />
+    <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
     <!--<collection property="teamDTOList" column="user_id" javaType="list" select="selectSecondTeam" />-->
   </resultMap>
   <select id="selectTeam" resultMap="TeamResultMap">

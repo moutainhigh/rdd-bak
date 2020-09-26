@@ -1,25 +1,33 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.GetPetrolListInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.ModifyPetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolManagement.PetrolManagementInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/petrolManagement")
 public class PetrolManagementController {
     @Autowired
     IPetrolManagementService petrolManagementService;
+
+    @Autowired
+    private RedisUtils redisUtils;
     @RequestMapping(value = "/getPetrolList",method = RequestMethod.GET)
-    public JSONResult getPetrolList(GetPetrolListInputDTO inputDTO){
+    public JSONResult getPetrolList(GetPetrolListInputDTO inputDTO, Principal principal){
 //        return null;
+        User user = (User)redisUtils.get(principal.getName());
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolList(inputDTO));
         dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolMoneyCount(inputDTO));
