@@ -53,6 +53,8 @@ public class User {
 
     private String bindingid;
 
+    private Integer isSpecial;
+
     public String getUserId() {
         return userId;
     }
@@ -250,6 +252,14 @@ public class User {
     }
 
     public void setBindingid(String bindingid) {
-        this.bindingid = bindingid;
+        this.bindingid = bindingid == null ? null : bindingid.trim();
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }
