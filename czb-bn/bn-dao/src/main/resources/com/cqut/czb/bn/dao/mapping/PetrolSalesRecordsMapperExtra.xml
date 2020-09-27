@@ -55,6 +55,7 @@
         FROM
             czb_user
         WHERE
+            czb_user.is_special = #{isSpecial, jdbcType = INTEGER} and
             czb_user.user_id IN (
             SELECT
                 owner_id
@@ -533,6 +534,7 @@
         FROM
         czb_user AS cu
         WHERE
+        cu.is_special = #{isSpecial,jdbcType = INTEGER} and
         cu.user_id IN (
         SELECT
         buyer_id
@@ -888,6 +890,7 @@
         FROM
         czb_user AS cu
         WHERE
+        cu.is_special = #{isSpecial, jdbcType = INTEGER} and
         cu.user_id IN (
         SELECT
         buyer_id
