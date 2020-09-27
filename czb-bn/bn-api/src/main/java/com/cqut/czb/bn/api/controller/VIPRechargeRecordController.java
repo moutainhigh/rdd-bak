@@ -60,7 +60,9 @@ public class VIPRechargeRecordController {
      * @return
      */
     @PostMapping("/exportData")
-    public JSONResult ExportDate(HttpServletResponse response, HttpServletRequest request, VipRechargeRecordListDTO pageDTO){
+    public JSONResult ExportDate(HttpServletResponse response, HttpServletRequest request, VipRechargeRecordListDTO pageDTO, Principal principal){
+        User user = (User)redisUtil.get(principal.getName());
+        pageDTO.setIsSpecial(user.getIsSpecial());
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
