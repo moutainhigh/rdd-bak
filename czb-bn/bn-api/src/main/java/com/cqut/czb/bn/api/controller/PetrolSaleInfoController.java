@@ -77,7 +77,10 @@ public class PetrolSaleInfoController {
 
     @PostMapping("/exportRecords")
     public JSONResult exportRechargeRecord(HttpServletResponse response,
-                                           PetrolRechargeInputDTO inputDTO) {
+                                           PetrolRechargeInputDTO inputDTO, Principal principal) {
+
+        User user = (User) redisUtils.get(principal.getName());
+        inputDTO.setIsSpecial(user.getIsSpecial());
 
         String message = null;
         Workbook workbook = null;
@@ -108,8 +111,10 @@ public class PetrolSaleInfoController {
     }
 
     @PostMapping("/exportSaleRecords")
-    public JSONResult exportSaleRecords(HttpServletResponse response,
-                                        GetPetrolSaleInfoInputDTO inputDTO) {
+    public JSONResult exportSaleRecords(HttpServletResponse response, GetPetrolSaleInfoInputDTO inputDTO, Principal principal) {
+
+        User user = (User) redisUtils.get(principal.getName());
+        inputDTO.setIsSpecial(user.getIsSpecial());
 
         String message = null;
         Workbook workbook = null;
