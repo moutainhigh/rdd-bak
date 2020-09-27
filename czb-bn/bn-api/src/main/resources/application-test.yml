@@ -14,9 +14,12 @@ spring:
   cache:
     type: redis
   redis:
-    host: 39.98.250.45
+#    host: 39.98.250.45
+#    port: 6379
+#    password: TTfF9Pfj3lL2qBS8
+    host: 101.37.85.141
     port: 6379
-    password: TTfF9Pfj3lL2qBS8
+    password: cdqroot
     jedis:
       pool:
         max-active: 200

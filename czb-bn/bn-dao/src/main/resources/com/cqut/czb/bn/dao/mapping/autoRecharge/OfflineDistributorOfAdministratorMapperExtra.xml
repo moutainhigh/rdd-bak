@@ -20,6 +20,9 @@
     `czb_offline_distributor_records` AS a
     JOIN czb_user AS b ON a.buyer_id = b.user_id
     <where>
+        <if test="isSpecial != null">
+            and b.is_special = #{isSpecial, jdbcType = INTEGER}
+        </if>
         <if test="account != null and account != ''">
             and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
@@ -124,6 +127,9 @@
     </if>
     GROUP BY buyer_id ) AS g ON g.buyer_id = a.user_id
     <where>
+        <if test="isSpecial != null">
+            and a.is_special = #{isSpecial, jdbcType = INTEGER}
+        </if>
         <if test="account != null and account != ''">
             and a.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
@@ -294,6 +300,9 @@
     JOIN czb_user AS b ON a.buyer_id = b.user_id
     <where>
     a.amount &gt;0
+        <if test="isSpecial != null">
+            and b.is_special = #{isSpecial, jdbcType = INTEGER}
+        </if>
         <if test="account != null and account != ''">
             and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
         </if>
@@ -314,6 +323,9 @@
         JOIN czb_user AS b ON a.buyer_id = b.user_id
         <where>
             a.amount &lt;0
+            <if test="isSpecial != null">
+                and b.is_special = #{isSpecial, jdbcType = INTEGER}
+            </if>
             <if test="account != null and account != ''">
                 and b.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>
@@ -369,6 +381,9 @@
             (type = 6
             OR
             type = 7)
+            <if test="isSpecial != null">
+                and b.is_special = #{isSpecial, jdbcType = INTEGER}
+            </if>
             <if test="account != null and account != ''">
                 and c.user_account LIKE concat('%',#{account,jdbcType=VARCHAR},'%')
             </if>

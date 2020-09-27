@@ -25,6 +25,8 @@ public class OfflineClientDTO extends PageDTO{
 
     private double totalTurn;
 
+    private Integer isSpecial;
+
     public double getTotalTurn() {
         return totalTurn;
     }
@@ -87,5 +89,13 @@ public class OfflineClientDTO extends PageDTO{
 
     public void setTotalRecharge(double totalRecharge) {
         this.totalRecharge = totalRecharge;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

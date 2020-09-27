@@ -24,9 +24,12 @@ spring:
 #    port: 6379
 #    password: TTfF9Pfj3lL2qBS8
 #    陈德强的服务器
-    host: 101.37.85.141
+#    host: 101.37.85.141
+#    port: 6379
+#    password: cdqroot
+    host: localhost
     port: 6379
-    password: cdqroot
+    password:
     jedis:
       pool:
         max-active: 200

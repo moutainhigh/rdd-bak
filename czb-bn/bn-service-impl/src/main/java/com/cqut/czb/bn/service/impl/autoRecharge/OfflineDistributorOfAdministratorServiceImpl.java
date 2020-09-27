@@ -318,11 +318,13 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
         AccountRechargeDTO accountRechargeDTO1 = new AccountRechargeDTO();
         accountRechargeDTO1.setStartTime(inputDTO.getStartTime());
         accountRechargeDTO1.setEndTime(inputDTO.getEndTime());
+        accountRechargeDTO1.setIsSpecial(inputDTO.getIsSpecial());
         row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalRecharge(accountRechargeDTO1)));
         row.createCell(index++).setCellValue("总消费金额：");
         OfflineConsumptionDTO offlineConsumptionDTO1 = new OfflineConsumptionDTO();
         offlineConsumptionDTO1.setStartTime(inputDTO.getStartTime());
         offlineConsumptionDTO1.setEndTime(inputDTO.getEndTime());
+        offlineConsumptionDTO1.setIsSpecial(inputDTO.getIsSpecial());
         row.createCell(index++).setCellValue(formatNum(offlineDistributorOfAdministratorMapperExtra.getTotalSale(offlineConsumptionDTO1)));
         row.createCell(index++).setCellValue("总圈回金额：");
         if (offlineDistributorOfAdministratorMapperExtra.getTotalTurn(accountRechargeDTO1) == 0){

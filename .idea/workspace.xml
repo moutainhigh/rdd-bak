@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4d6578eb-f5e8-4a29-955b-d34657eca309" name="Default Changelist" comment="中石化卡券查询璐付订单号">
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/petrolCoupons/PetrolCouponsSales.java" afterDir="false" />
+    <list default="true" id="4d6578eb-f5e8-4a29-955b-d34657eca309" name="Default Changelist" comment="中石化卡券数据">
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/commons-compress-1.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/spring-core-5.0.5.RELEASE.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/autoRecharge/OfflineDistributorOfAdministratorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/autoRecharge/OfflineDistributorOfAdministratorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/partnerAndOperateCenter/BusinessCommonUserVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/partnerAndOperateCenter/BusinessCommonUserVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/petrolCoupons/PetrolCouponsSalesRecordsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/petrolCoupons/PetrolCouponsSalesRecordsMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/petrolCoupons/PetrolCouponsSalesRecordsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/petrolCoupons/PetrolCouponsSalesRecordsMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/petrolCoupons/PetrolCouponsSalesRecords.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/petrolCoupons/PetrolCouponsSalesRecords.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/petrolCoupons/PetrolCouponsSalesRecordsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/petrolCoupons/PetrolCouponsSalesRecordsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/petrolCoupons/PetrolCouponsSalesRecordsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/petrolCoupons/PetrolCouponsSalesRecordsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-test.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/autoRecharge/OfflineDistributorOfAdministratorMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/autoRecharge/OfflineDistributorOfAdministratorMapperExtra.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/OfflineClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/OfflineClientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/OfflineDistributorOfAdministratorServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/OfflineDistributorOfAdministratorServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,9 +28,23 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/czb-bn/bn-api">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/czb-bn">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="czb" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -80,26 +96,33 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../zhichen/titledeclare_server" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.cqut.czb.bn.entity.dto.petrolCoupons" />
-      <recent name="com.cqut.czb.bn.service.impl.AutomaticRechargeServiceImpl" />
+      <recent name="com.cqut.czb.bn.entity.dto.WeChatCommodity" />
+      <recent name="com.cqut.czb.bn.service.impl" />
+      <recent name="com.cqut.czb.bn.service" />
+      <recent name="com.cqut.czb.bn.api.controller.WeChatSmallProgram" />
+      <recent name="com.cqut.czb.bn.service.impl.weChatOilCodeSale" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-service-impl\src\main\java\com\cqut\czb\bn\service\impl\petrolRecharge" />
-      <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-service-impl\src\main\java\com\cqut\czb\bn\service\impl\autoRecharge" />
-      <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-dao\src\main\java\com\cqut\czb\bn\dao\mapper" />
-      <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-dao\src\main\resources\com\cqut\czb\bn\dao\mapping" />
-      <recent name="D:\RenDuoDuoTest\czb-server\czb-bn\bn-service-impl\src\main\java\com\cqut\czb\bn\service\impl\vehicleServiceImpl" />
+      <recent name="D:\JAVA305\B305\SimulationProject\TheOurProject\czbserver" />
+      <recent name="D:\JAVA内容\B305实验室\模拟项目\TheOurProject\czbserver\czb-global\src\main\resources\db\migration" />
+      <recent name="D:\JAVA内容\B305实验室\模拟项目\TheOurProject\czbserver\czb-bn\bn-dao\src\main\resources\com\cqut\czb\bn\dao\mapping\weChatOilCodeSale" />
+      <recent name="D:\JAVA内容\B305实验室\模拟项目\TheOurProject\czbserver\czb-bn\bn-dao\src\main\resources\com\cqut\czb\bn\dao\mapping\autoRecharge" />
+      <recent name="D:\JAVA内容\B305实验室\模拟项目\TheOurProject\czbserver\czb-bn\bn-dao\src\main\resources\com\cqut\czb\bn\dao\mapping\petrolCoupons" />
     </key>
   </component>
   <component name="RestClientSettings">
@@ -176,7 +199,26 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.StackApplication">
+    <configuration name="czbserver:czb-bn:bn-api [bootRepackage]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/czb-bn/bn-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootRepackage" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="StackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="czb.czb-bn.bn-api.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.cqut.czb.bn.api.StackApplication" />
@@ -184,6 +226,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Gradle.czbserver:czb-bn:bn-api [bootRepackage]" />
+      <item itemvalue="Spring Boot.StackApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.czbserver:czb-bn:bn-api [bootRepackage]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -206,49 +257,93 @@
       <workItem from="1587947589441" duration="17142000" />
       <workItem from="1588043105520" duration="8049000" />
       <workItem from="1588296033667" duration="2802000" />
-      <workItem from="1588380606007" duration="821000" />
-    </task>
-    <task id="LOCAL-00001" summary="全部项目">
-      <created>1587728763733</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1587728763733</updated>
-    </task>
-    <task id="LOCAL-00002" summary="全部项目">
-      <created>1587730645076</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1587730645076</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Merge branch 'master' of http://39.98.250.45:2050/chezubaoProject/czbserver&#10;&#10;# Conflicts:&#10;#&#9;README.md&#10;#&#9;gradle/wrapper/gradle-wrapper.jar&#10;#&#9;gradle/wrapper/gradle-wrapper.properties&#10;#&#9;gradlew&#10;#&#9;gradlew.bat">
-      <created>1587792423923</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1587792423923</updated>
-    </task>
-    <task id="LOCAL-00004" summary="中石化卡券数据读取">
-      <created>1587947827936</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1587947827937</updated>
-    </task>
-    <task id="LOCAL-00005" summary="中石化卡券数据读取sql修改">
-      <created>1587955689505</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1587955689505</updated>
-    </task>
-    <task id="LOCAL-00006" summary="中石化卡券导出数据">
-      <created>1587984528457</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1587984528457</updated>
+      <workItem from="1588380606007" duration="16728000" />
+      <workItem from="1588430746856" duration="186000" />
+      <workItem from="1588560318204" duration="17482000" />
+      <workItem from="1588585136179" duration="2713000" />
+      <workItem from="1588666431421" duration="3450000" />
+      <workItem from="1588727561314" duration="5687000" />
+      <workItem from="1588751155408" duration="1847000" />
+      <workItem from="1588989838491" duration="630000" />
+      <workItem from="1589202675673" duration="1418000" />
+      <workItem from="1589262396283" duration="5169000" />
+      <workItem from="1589330924474" duration="15158000" />
+      <workItem from="1589419512868" duration="8836000" />
+      <workItem from="1589431035784" duration="6074000" />
+      <workItem from="1589506274731" duration="16345000" />
+      <workItem from="1589588941528" duration="42554000" />
+      <workItem from="1589764506808" duration="5119000" />
+      <workItem from="1589870781496" duration="6159000" />
+      <workItem from="1589964470450" duration="5128000" />
+      <workItem from="1590065821786" duration="7255000" />
+      <workItem from="1590204813673" duration="671000" />
+      <workItem from="1590371056790" duration="8315000" />
+      <workItem from="1590460983523" duration="618000" />
+      <workItem from="1590494466696" duration="169000" />
+      <workItem from="1590541749958" duration="4549000" />
+      <workItem from="1590648427361" duration="2035000" />
+      <workItem from="1590925915266" duration="673000" />
+      <workItem from="1590992623784" duration="5388000" />
+      <workItem from="1591061007236" duration="5559000" />
+      <workItem from="1591181277932" duration="2566000" />
+      <workItem from="1591404191010" duration="18492000" />
+      <workItem from="1591490510545" duration="16513000" />
+      <workItem from="1591616205565" duration="20000" />
+      <workItem from="1591838505530" duration="1763000" />
+      <workItem from="1591857306573" duration="159000" />
+      <workItem from="1591864025475" duration="1475000" />
+      <workItem from="1591923270484" duration="21676000" />
+      <workItem from="1592029456817" duration="4282000" />
+      <workItem from="1592116452042" duration="3571000" />
+      <workItem from="1592206969727" duration="886000" />
+      <workItem from="1592225344750" duration="3025000" />
+      <workItem from="1592270338932" duration="2082000" />
+      <workItem from="1592320585685" duration="1613000" />
+      <workItem from="1592322668204" duration="999000" />
+      <workItem from="1592357006196" duration="14000" />
+      <workItem from="1592700587679" duration="4810000" />
+      <workItem from="1592729375670" duration="3867000" />
+      <workItem from="1592834790295" duration="7000" />
+      <workItem from="1592836324055" duration="786000" />
+      <workItem from="1592873324763" duration="18510000" />
+      <workItem from="1593257567233" duration="1220000" />
+      <workItem from="1593398982653" duration="787000" />
+      <workItem from="1593615474357" duration="1345000" />
+      <workItem from="1593848120053" duration="6303000" />
+      <workItem from="1593930256222" duration="9331000" />
+      <workItem from="1594123655553" duration="5102000" />
+      <workItem from="1594221164573" duration="578000" />
+      <workItem from="1594302929074" duration="1961000" />
+      <workItem from="1594349961838" duration="374000" />
+      <workItem from="1594377709049" duration="11148000" />
+      <workItem from="1594434967932" duration="1888000" />
+      <workItem from="1594455832250" duration="2867000" />
+      <workItem from="1594618891320" duration="4758000" />
+      <workItem from="1594628915250" duration="533000" />
+      <workItem from="1594630332053" duration="1210000" />
+      <workItem from="1594645308232" duration="2090000" />
+      <workItem from="1594655420268" duration="84000" />
+      <workItem from="1594695066855" duration="956000" />
+      <workItem from="1594799902955" duration="10067000" />
+      <workItem from="1594885493374" duration="1454000" />
+      <workItem from="1594900897887" duration="3925000" />
+      <workItem from="1595137832620" duration="479000" />
+      <workItem from="1595145883690" duration="5643000" />
+      <workItem from="1595298508919" duration="11064000" />
+      <workItem from="1595401260674" duration="38000" />
+      <workItem from="1595733778260" duration="1942000" />
+      <workItem from="1596104093916" duration="154000" />
+      <workItem from="1596448317555" duration="21000" />
+      <workItem from="1596455411308" duration="33000" />
+      <workItem from="1596458538734" duration="669000" />
+      <workItem from="1596629139383" duration="654000" />
+      <workItem from="1599099606354" duration="201000" />
+      <workItem from="1599099854650" duration="1091000" />
+      <workItem from="1599643146753" duration="1302000" />
+      <workItem from="1599906639550" duration="11000" />
+      <workItem from="1600241906253" duration="42000" />
+      <workItem from="1601024808534" duration="20637000" />
+      <workItem from="1601168061386" duration="5036000" />
     </task>
     <task id="LOCAL-00007" summary="中石化卡券加载数据">
       <created>1587999964232</created>
@@ -292,16 +387,627 @@
       <option name="project" value="LOCAL" />
       <updated>1588340803986</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="中石化码商实体修改">
+      <created>1588381548895</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1588381548895</updated>
+    </task>
+    <task id="LOCAL-00014" summary="中石化卡券">
+      <created>1588383334391</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1588383334391</updated>
+    </task>
+    <task id="LOCAL-00015" summary="中石化卡券">
+      <created>1588397955727</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1588397955727</updated>
+    </task>
+    <task id="LOCAL-00016" summary="中石化卡券">
+      <created>1588399943545</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1588399943545</updated>
+    </task>
+    <task id="LOCAL-00017" summary="中石化卡券">
+      <created>1588400669381</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1588400669381</updated>
+    </task>
+    <task id="LOCAL-00018" summary="中石化卡券">
+      <created>1588403627112</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1588403627112</updated>
+    </task>
+    <task id="LOCAL-00019" summary="中石化卡券">
+      <created>1588430918906</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1588430918906</updated>
+    </task>
+    <task id="LOCAL-00020" summary="中石化卡券">
+      <created>1588562128815</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1588562128815</updated>
+    </task>
+    <task id="LOCAL-00021" summary="中石化卡券排序">
+      <created>1588562696723</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1588562696723</updated>
+    </task>
+    <task id="LOCAL-00022" summary="中石化卡券数据">
+      <created>1588571506605</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1588571506605</updated>
+    </task>
+    <task id="LOCAL-00023" summary="中石化卡券数据">
+      <created>1588578785369</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1588578785369</updated>
+    </task>
+    <task id="LOCAL-00024" summary="中石化卡券数据">
+      <created>1588582997301</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1588582997301</updated>
+    </task>
+    <task id="LOCAL-00025" summary="中石化卡券导出">
+      <created>1588583909616</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1588583909616</updated>
+    </task>
+    <task id="LOCAL-00026" summary="中石化卡券增加余额">
+      <created>1588646699941</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1588646699941</updated>
+    </task>
+    <task id="LOCAL-00027" summary="中石化卡券导出">
+      <created>1588667925692</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1588667925692</updated>
+    </task>
+    <task id="LOCAL-00028" summary="中石化卡券增加充值状态">
+      <created>1588732803119</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1588732803119</updated>
+    </task>
+    <task id="LOCAL-00029" summary="线下用户充值文件创建">
+      <created>1589268585601</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1589268585601</updated>
+    </task>
+    <task id="LOCAL-00030" summary="线下大客户充值">
+      <created>1589447906204</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1589447906204</updated>
+    </task>
+    <task id="LOCAL-00031" summary="线下大客户充值">
+      <created>1589546766996</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1589546766996</updated>
+    </task>
+    <task id="LOCAL-00032" summary="线下大客户充值">
+      <created>1589592395019</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1589592395019</updated>
+    </task>
+    <task id="LOCAL-00033" summary="线下大客户充值">
+      <created>1589593409783</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1589593409783</updated>
+    </task>
+    <task id="LOCAL-00034" summary="线下大客户">
+      <created>1589636239494</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1589636239494</updated>
+    </task>
+    <task id="LOCAL-00035" summary="线下大客户">
+      <created>1589700468395</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1589700468395</updated>
+    </task>
+    <task id="LOCAL-00036" summary="线下大客户充值">
+      <created>1589875707767</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1589875707767</updated>
+    </task>
+    <task id="LOCAL-00037" summary="线下大客户充值浮点数处理">
+      <created>1589980161757</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1589980161757</updated>
+    </task>
+    <task id="LOCAL-00038" summary="线下大客户充值">
+      <created>1590079262283</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1590079262283</updated>
+    </task>
+    <task id="LOCAL-00039" summary="线下大客户充值">
+      <created>1590081878752</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1590081878752</updated>
+    </task>
+    <task id="LOCAL-00040" summary="线下大客户">
+      <created>1590083023232</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1590083023232</updated>
+    </task>
+    <task id="LOCAL-00041" summary="线下大客户充值">
+      <created>1590378321975</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1590378321976</updated>
+    </task>
+    <task id="LOCAL-00042" summary="线下大客户修改卡号">
+      <created>1590996081491</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1590996081491</updated>
+    </task>
+    <task id="LOCAL-00043" summary="小程序商品限购">
+      <created>1591497511083</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1591497511083</updated>
+    </task>
+    <task id="LOCAL-00044" summary="修改微信商品订单表电子码长度">
+      <created>1591955275226</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1591955275226</updated>
+    </task>
+    <task id="LOCAL-00045" summary="购买会员获取购买金额">
+      <created>1592710067754</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1592710067754</updated>
+    </task>
+    <task id="LOCAL-00046" summary="id限购量">
+      <created>1592873672739</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1592873672739</updated>
+    </task>
+    <task id="LOCAL-00047" summary="增加id限购">
+      <created>1592874836805</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1592874836805</updated>
+    </task>
+    <task id="LOCAL-00048" summary="限购">
+      <created>1592897673375</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1592897673375</updated>
+    </task>
+    <task id="LOCAL-00049" summary="商品限购">
+      <created>1592900915856</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1592900915856</updated>
+    </task>
+    <task id="LOCAL-00050" summary="限购">
+      <created>1592902478151</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1592902478154</updated>
+    </task>
+    <task id="LOCAL-00051" summary="店铺">
+      <created>1594221711306</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1594221711310</updated>
+    </task>
+    <task id="LOCAL-00052" summary="微信会员金额">
+      <created>1594379709040</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1594379709042</updated>
+    </task>
+    <task id="LOCAL-00053" summary="用户实体">
+      <created>1601123462176</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1601123462177</updated>
+    </task>
+    <task id="LOCAL-00054" summary="用户实体">
+      <created>1601123537265</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1601123537265</updated>
+    </task>
+    <task id="LOCAL-00055" summary="线下消费">
+      <created>1601170687106</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1601170687107</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="10">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="11">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="12">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="13">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="2">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="3">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="4">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="5">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="6">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="7">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="8">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="9">
           <value>
             <State>
               <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
@@ -343,113 +1049,101 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="全部项目" />
-    <MESSAGE value="Merge branch 'master' of http://39.98.250.45:2050/chezubaoProject/czbserver&#10;&#10;# Conflicts:&#10;#&#9;README.md&#10;#&#9;gradle/wrapper/gradle-wrapper.jar&#10;#&#9;gradle/wrapper/gradle-wrapper.properties&#10;#&#9;gradlew&#10;#&#9;gradlew.bat" />
-    <MESSAGE value="实验" />
-    <MESSAGE value="中石化卡券数据读取" />
-    <MESSAGE value="中石化卡券数据读取sql修改" />
-    <MESSAGE value="中石化卡券加载数据" />
     <MESSAGE value="中石化卡券导出数据" />
     <MESSAGE value="中石化卡券查询璐付订单号" />
+    <MESSAGE value="中石化码商实体修改" />
+    <MESSAGE value="中石化卡券" />
+    <MESSAGE value="中石化卡券排序" />
+    <MESSAGE value="中石化卡券数据" />
+    <MESSAGE value="中石化卡券增加余额" />
     <MESSAGE value="中石化卡券导出" />
-    <option name="LAST_COMMIT_MESSAGE" value="中石化卡券导出" />
+    <MESSAGE value="中石化卡券增加充值状态" />
+    <MESSAGE value="线下用户充值文件创建" />
+    <MESSAGE value="线下大客户充值浮点数处理" />
+    <MESSAGE value="线下大客户" />
+    <MESSAGE value="线下大客户充值" />
+    <MESSAGE value="线下大客户修改卡号" />
+    <MESSAGE value="小程序商品限购" />
+    <MESSAGE value="修改微信商品订单表电子码长度" />
+    <MESSAGE value="购买会员获取购买金额" />
+    <MESSAGE value="id限购量" />
+    <MESSAGE value="增加id限购" />
+    <MESSAGE value="商品限购" />
+    <MESSAGE value="限购" />
+    <MESSAGE value="店铺" />
+    <MESSAGE value="微信会员金额" />
+    <MESSAGE value="用户实体" />
+    <MESSAGE value="线下消费" />
+    <option name="LAST_COMMIT_MESSAGE" value="线下消费" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="407" y="52" key="#StackApplication" timestamp="1587732823626">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="407" y="52" key="#StackApplication/0.0.1536.824@0.0.1536.824" timestamp="1587732823626" />
-    <state x="488" y="279" width="559" height="271" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1587727949987">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="488" y="279" width="559" height="271" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1536.824@0.0.1536.824" timestamp="1587727949987" />
-    <state x="258" y="0" key="CommitChangelistDialog2" timestamp="1587795369425">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="258" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1587795369425" />
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" timestamp="1587795364178">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1587795364178" />
-    <state x="549" y="171" key="FileChooserDialogImpl" timestamp="1587792569662">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587792569662" />
-    <state width="1493" height="315" key="GridCell.Tab.0.bottom" timestamp="1587795340290">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587795340290" />
-    <state width="1493" height="315" key="GridCell.Tab.0.center" timestamp="1587795340289">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587795340289" />
-    <state width="1493" height="315" key="GridCell.Tab.0.left" timestamp="1587795340289">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587795340289" />
-    <state width="1493" height="315" key="GridCell.Tab.0.right" timestamp="1587795340290">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587795340290" />
-    <state width="1493" height="315" key="GridCell.Tab.1.bottom" timestamp="1587795340290">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587795340290" />
-    <state width="1493" height="315" key="GridCell.Tab.1.center" timestamp="1587795340290">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1587795340290" />
-    <state width="1493" height="315" key="GridCell.Tab.1.left" timestamp="1587795340290">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1587795340290" />
-    <state width="1493" height="315" key="GridCell.Tab.1.right" timestamp="1587795340290">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="315" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1587795340290" />
-    <state x="147" y="71" key="MergeDialog" timestamp="1587729713148">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="147" y="71" key="MergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1587729713148" />
-    <state x="477" y="129" key="MultipleFileMergeDialog" timestamp="1587792486701">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="477" y="129" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1587792486701" />
-    <state x="361" y="137" key="Vcs.Push.Dialog.v2" timestamp="1587792428427">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="361" y="137" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1587792428427" />
-    <state x="93" y="93" width="1350" height="638" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1587731155050">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="93" y="93" width="1350" height="638" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.0.1536.824@0.0.1536.824" timestamp="1587731155050" />
-    <state x="461" y="241" key="com.intellij.ide.util.TipDialog" timestamp="1587554645150">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="461" y="241" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1587554645150" />
-    <state x="564" y="331" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587792612131">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="564" y="331" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1587792612131" />
-    <state x="512" y="142" width="836" height="548" key="find.popup" timestamp="1587728320130">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="512" y="142" width="836" height="548" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1587728320130" />
-    <state x="530" y="128" key="git4idea.branch.GitSmartOperationDialog" timestamp="1587792468706">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="530" y="128" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.824@0.0.1536.824" timestamp="1587792468706" />
-    <state x="449" y="215" key="git4idea.merge.GitPullDialog" timestamp="1587730428181">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="449" y="215" key="git4idea.merge.GitPullDialog/0.0.1536.824@0.0.1536.824" timestamp="1587730428181" />
+    <state x="407" y="52" key="#StackApplication" />
+    <state x="407" y="52" key="#StackApplication/0.0.1536.824@0.0.1536.824" />
+    <state x="488" y="279" width="559" height="271" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" />
+    <state x="488" y="279" width="559" height="271" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1536.824@0.0.1536.824" />
+    <state x="258" y="0" key="CommitChangelistDialog2" />
+    <state x="258" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" />
+    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" />
+    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" />
+    <state x="549" y="171" key="FileChooserDialogImpl" />
+    <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.0.bottom" />
+    <state width="1493" height="315" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.0.center" />
+    <state width="1493" height="315" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.0.left" />
+    <state width="1493" height="315" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.0.right" />
+    <state width="1493" height="315" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.1.bottom" />
+    <state width="1493" height="315" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.1.center" />
+    <state width="1493" height="315" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.1.left" />
+    <state width="1493" height="315" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" />
+    <state width="1493" height="315" key="GridCell.Tab.1.right" />
+    <state width="1493" height="315" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" />
+    <state x="147" y="71" key="MergeDialog" />
+    <state x="147" y="71" key="MergeDialog/0.0.1536.824@0.0.1536.824" />
+    <state x="477" y="129" key="MultipleFileMergeDialog" />
+    <state x="477" y="129" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" />
+    <state x="361" y="137" key="Vcs.Push.Dialog.v2" />
+    <state x="361" y="137" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" />
+    <state x="93" y="93" width="1350" height="638" key="com.intellij.dvcs.ui.CompareBranchesDialog" />
+    <state x="93" y="93" width="1350" height="638" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.0.1536.824@0.0.1536.824" />
+    <state x="461" y="241" key="com.intellij.ide.util.TipDialog" />
+    <state x="461" y="241" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" />
+    <state x="564" y="331" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" />
+    <state x="564" y="331" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" />
+    <state x="512" y="142" width="836" height="548" key="find.popup" />
+    <state x="512" y="142" width="836" height="548" key="find.popup/0.0.1536.824@0.0.1536.824" />
+    <state x="530" y="128" key="git4idea.branch.GitSmartOperationDialog" />
+    <state x="530" y="128" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.824@0.0.1536.824" />
+    <state x="449" y="215" key="git4idea.merge.GitPullDialog" />
+    <state x="449" y="215" key="git4idea.merge.GitPullDialog/0.0.1536.824@0.0.1536.824" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPaymentServiceImpl.java</url>
+          <line>314</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="SpringBootApplicationConfigurationType">
         <watch expression="inputDTO.pageSize" />
         <watch expression="list.get(0).currentPage" />
+        <watch expression="inputDTO.endTime" />
+        <watch expression="inputDTO.endTime" />
+        <watch expression="wcpCommodityOrderService" language="JAVA" />
+        <watch expression="jsonObjectCode" />
+        <watch expression="m" />
+        <watch expression="file" />
+        <watch expression="inputStream" />
       </configuration>
     </watches-manager>
   </component>

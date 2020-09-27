@@ -39,7 +39,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeTableList",method = RequestMethod.POST)
-    public JSONResult getRechargeTableList(AccountRechargeDTO accountRechargeDTO){
+    public JSONResult getRechargeTableList(AccountRechargeDTO accountRechargeDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        accountRechargeDTO.setIsSpecial(user.getIsSpecial());
         return offlineDistributorOfAdministratorService.getRechargeTableList(accountRechargeDTO);
     }
 
@@ -61,7 +63,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getOfflineClientList",method = RequestMethod.POST)
-    public JSONResult getOfflineClientList(OfflineClientDTO offlineClientDTO){
+    public JSONResult getOfflineClientList(OfflineClientDTO offlineClientDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        offlineClientDTO.setIsSpecial(user.getIsSpecial());
         return offlineDistributorOfAdministratorService.getOfflineClientList(offlineClientDTO);
     }
 
@@ -193,7 +197,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/exportClientRecords",method = RequestMethod.POST)
-    public JSONResult exportClientRecords(HttpServletResponse response,HttpServletRequest request,  OfflineClientDTO offlineClientDTO){
+    public JSONResult exportClientRecords(HttpServletResponse response,HttpServletRequest request,  OfflineClientDTO offlineClientDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        offlineClientDTO.setIsSpecial(user.getIsSpecial());
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
