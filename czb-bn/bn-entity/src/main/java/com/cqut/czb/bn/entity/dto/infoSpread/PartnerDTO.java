@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.infoSpread;
 
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.util.Date;
 import java.util.List;
 
@@ -62,6 +64,8 @@ public class PartnerDTO {
     private Integer vipAddCount;  //每月Vip新增数量
 
     private Double vipMoney;  //每月通过Vip的获利金额
+
+    private Integer isSpecial;  //特殊用户
 
     public String getUserId() {
         return userId;
@@ -293,5 +297,13 @@ public class PartnerDTO {
 
     public void setVipMoney(Double vipMoney) {
         this.vipMoney = vipMoney;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

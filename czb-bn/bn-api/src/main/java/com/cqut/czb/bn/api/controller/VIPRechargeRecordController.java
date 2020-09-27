@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -35,6 +36,7 @@ public class VIPRechargeRecordController {
     @Autowired
     RedisUtil redisUtil;
 
+    @PermissionCheck(role = "管理员")
     @GetMapping("/getVIPRechargeRecordList")
     public JSONResult getVipRechargeRecordList(VipRechargeRecordListDTO vipRechargeRecordListDTO, Principal principal){
         User user = (User)redisUtil.get(principal.getName());
@@ -59,6 +61,7 @@ public class VIPRechargeRecordController {
      * @param pageDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @PostMapping("/exportData")
     public JSONResult ExportDate(HttpServletResponse response, HttpServletRequest request, VipRechargeRecordListDTO pageDTO, Principal principal){
         User user = (User)redisUtil.get(principal.getName());

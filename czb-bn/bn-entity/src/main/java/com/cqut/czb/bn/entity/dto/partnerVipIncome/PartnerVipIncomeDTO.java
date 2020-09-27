@@ -45,6 +45,8 @@ public class PartnerVipIncomeDTO {
 
     private Date updateAt;
 
+    private Integer isSpecial;
+
     public String getPartnerVipIncomeId() {
         return partnerVipIncomeId;
     }
@@ -195,5 +197,13 @@ public class PartnerVipIncomeDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.entity.dto.IndicatorRecord;
 
+import io.swagger.models.auth.In;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -22,6 +23,8 @@ public class IndicatorRecordDTO{
     private Integer actualNewConsumer;
 
     private Integer state;
+
+    private Integer isSpecial;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date indicatorBeginTime;
@@ -145,5 +148,13 @@ public class IndicatorRecordDTO{
 
     public void setRecordIds(String recordIds) {
         this.recordIds = recordIds;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

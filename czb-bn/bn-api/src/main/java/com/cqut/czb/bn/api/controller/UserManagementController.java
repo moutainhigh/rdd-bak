@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
@@ -51,6 +52,7 @@ public class UserManagementController {
         }
     }
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/selectUser",method = RequestMethod.GET)
     public JSONResult selectUser(@Validated UserInputDTO userInputDTO, PageDTO pageDTO, Principal principal){
         User user = (User) redisUtils.get(principal.getName());

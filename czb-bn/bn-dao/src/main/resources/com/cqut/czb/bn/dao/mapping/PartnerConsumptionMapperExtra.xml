@@ -21,6 +21,9 @@
        LEFT JOIN czb_user e ON a.superior_user = e.user_id
        WHERE
        b.money IS NOT NULL
+       <if test="isSpecial!=null">
+           AND a.is_special = #{isSpecial,jdbcType=INTEGER}
+       </if>
        <if test="userAccount!=null and userAccount!=''">
            AND a.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
        </if>
