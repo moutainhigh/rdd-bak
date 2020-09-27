@@ -46,6 +46,9 @@
     <where>
         a.record_type = 3
         and a.state = 1
+        <if test="isSpecial != null">
+            and b.is_special = #{isSpecial, jdbcType = INTEGER}
+        </if>
         <if test="petrolNum != null and petrolNum != ''">
             and a.petrol_num LIKE concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
         </if>
@@ -332,6 +335,9 @@
         <where>
             a.record_type = 3
             and a.state = 1
+            <if test="isSpecial != null">
+                and b.is_special = #{isSpecial, jdbcType = INTEGER}
+            </if>
             <if test="petrolNum != null and petrolNum != ''">
                 and a.petrol_num LIKE concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
             </if>

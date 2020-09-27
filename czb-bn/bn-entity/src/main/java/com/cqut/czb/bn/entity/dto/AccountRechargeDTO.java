@@ -27,6 +27,8 @@ public class AccountRechargeDTO extends PageDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeTime;
 
+    private Integer isSpecial;
+
     public double getBeforeBalance() {
         return beforeBalance;
     }
@@ -97,5 +99,13 @@ public class AccountRechargeDTO extends PageDTO {
 
     public void setRechargeTime(Date rechargeTime) {
         this.rechargeTime = rechargeTime;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

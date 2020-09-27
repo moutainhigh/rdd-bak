@@ -2,7 +2,9 @@ package com.cqut.czb.bn.api.controller.autoRecharge;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.*;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.OfflineDistributorOfAdministratorService;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +29,9 @@ import java.util.Map;
 public class OfflineDistributorOfAdministratorController {
     @Autowired
     OfflineDistributorOfAdministratorService offlineDistributorOfAdministratorService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * 获取账户充值记录
@@ -43,7 +49,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getOfflineConsumptionList",method = RequestMethod.POST)
-    public JSONResult getOfflineConsumptionList(OfflineConsumptionDTO offlineConsumptionDTO){
+    public JSONResult getOfflineConsumptionList(OfflineConsumptionDTO offlineConsumptionDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        offlineConsumptionDTO.setIsSpecial(user.getIsSpecial());
         return offlineDistributorOfAdministratorService.getOfflineConsumptionList(offlineConsumptionDTO);
     }
 
@@ -93,7 +101,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/exportRechargeRecords",method = RequestMethod.POST)
-    public JSONResult exportRechargeRecords(HttpServletResponse response, HttpServletRequest request, AccountRechargeDTO accountRechargeDTO){
+    public JSONResult exportRechargeRecords(HttpServletResponse response, HttpServletRequest request, AccountRechargeDTO accountRechargeDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        accountRechargeDTO.setIsSpecial(user.getIsSpecial());
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
@@ -139,7 +149,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/exportConsumptionRecords",method = RequestMethod.POST)
-    public JSONResult exportConsumptionRecords(HttpServletResponse response,HttpServletRequest request, OfflineConsumptionDTO offlineConsumptionDTO){
+    public JSONResult exportConsumptionRecords(HttpServletResponse response,HttpServletRequest request, OfflineConsumptionDTO offlineConsumptionDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        offlineConsumptionDTO.setIsSpecial(user.getIsSpecial());
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
