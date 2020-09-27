@@ -52,8 +52,9 @@ public class UserManagementController {
     }
 
     @RequestMapping(value = "/selectUser",method = RequestMethod.GET)
-    public JSONResult selectUser(@Validated UserInputDTO userInputDTO, PageDTO pageDTO){
-
+    public JSONResult selectUser(@Validated UserInputDTO userInputDTO, PageDTO pageDTO, Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        userInputDTO.setIsSpecial(user.getIsSpecial());
         return new JSONResult(userService.selectUser(userInputDTO, pageDTO));
     }
 

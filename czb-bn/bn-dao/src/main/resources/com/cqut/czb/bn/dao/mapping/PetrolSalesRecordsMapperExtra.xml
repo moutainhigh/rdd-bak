@@ -138,6 +138,9 @@
         FROM
         czb_user AS _user
         <where>
+            <if test="isSpecial != null">
+                and _user.is_special = #{isSpecial, jdbcType = INTEGER}
+            </if>
             <if test="owner != null and owner != ''">
                 and _user.user_account like concat('%',#{owner,jdbcType = VARCHAR},'%')
             </if>
@@ -372,6 +375,7 @@
         FROM
         czb_user AS cu
         WHERE
+        cu.is_special = #{isSpecial,jdbcType = INTEGER} and
         cu.user_id IN (
         SELECT
         buyer_id
@@ -761,6 +765,9 @@
         FROM
         czb_user AS _user
         <where>
+            <if test="isSpecial != null">
+                and _user.is_special = #{isSpecial, jdbcType = INTEGER}
+            </if>
             <if test="owner != null and owner != ''">
                 and _user.user_account like concat('%',#{owner,jdbcType = VARCHAR},'%')
             </if>

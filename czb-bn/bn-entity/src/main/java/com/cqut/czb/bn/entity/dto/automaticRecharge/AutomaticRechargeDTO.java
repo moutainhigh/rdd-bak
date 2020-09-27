@@ -20,6 +20,7 @@ public class AutomaticRechargeDTO extends PageDTO {
     private String userId;
     private String userName;
     private String userAccount;
+    private Integer isSpecial;
 
     public String getId() {
         return id;
@@ -139,5 +140,13 @@ public class AutomaticRechargeDTO extends PageDTO {
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public Integer getIsSepcial() {
+        return isSpecial;
+    }
+
+    public void setIsSepcial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.petrolRecharge;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import io.swagger.models.auth.In;
 
 import java.util.Date;
 
@@ -20,6 +21,7 @@ public class PetrolRechargeInputDTO extends PageDTO {
     private Integer rechargeState;
     private Date createAt;
     private Double currentPrice;
+    private Integer isSpecial;
 
     public Double getCurrentPrice() {
         return currentPrice;
@@ -139,5 +141,13 @@ public class PetrolRechargeInputDTO extends PageDTO {
 
     public void setRecordType(String recordType) {
         this.recordType = recordType;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

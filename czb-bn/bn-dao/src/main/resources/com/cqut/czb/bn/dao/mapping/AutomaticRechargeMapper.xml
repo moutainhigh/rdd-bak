@@ -17,6 +17,9 @@
             b.user_account userAccount
         from czb_auto_recharge_record as a LEFT JOIN czb_user as b on b.user_id = a.user_id
         <where>
+            <if test="isSpecial!= null">
+                b.is_special = #{isSpecial}
+            </if>
             <if test="petrolNum!= null and petrolNum!= ''">
                 a.petrol_num = #{petrolNum}
             </if>

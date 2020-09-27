@@ -12,7 +12,7 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, user_id, account, recharge_way, is_received, third_trade_num, create_at, 
+    record_id, user_id, account, recharge_way, is_received, third_trade_num, create_at,
     update_at
   </sql>
   <insert id="insertVipRechargeRecord" parameterType="com.cqut.czb.bn.entity.dto.appVIP.VipRechargeRecordDTO" >
@@ -90,6 +90,9 @@
     LEFT JOIN czb_vip_area_config ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
     WHERE
     is_received = 1
+    <if test="isSpecial != null">
+    and is_special = #{isSpecial,jdbcType = INTEGER}
+    </if>
     <if test="startTime != null">
     AND recharge_time &gt;= #{startTime,jdbcType = TIMESTAMP}
     </if>

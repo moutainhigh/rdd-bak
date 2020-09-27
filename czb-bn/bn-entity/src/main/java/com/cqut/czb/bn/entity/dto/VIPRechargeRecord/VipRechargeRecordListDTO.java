@@ -28,6 +28,8 @@ public class VipRechargeRecordListDTO extends PageDTO {
 
     private Integer totalOrder;
 
+    private Integer isSpecial;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date rechargeTime;
@@ -150,5 +152,13 @@ public class VipRechargeRecordListDTO extends PageDTO {
 
     public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

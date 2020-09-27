@@ -15,7 +15,7 @@ public class UserInputDTO {
 
     private String userId;
 
-
+    private Integer isSpecial;
 
     private String userAccount;
 
@@ -222,5 +222,13 @@ public class UserInputDTO {
 
     public void setBindingid(String bindingid) {
         this.bindingid = bindingid;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

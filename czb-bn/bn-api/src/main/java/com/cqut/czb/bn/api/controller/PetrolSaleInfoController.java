@@ -1,10 +1,12 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.TroubleshootingDTO;
 import com.cqut.czb.bn.entity.dto.petrolRecharge.PetrolRechargeInputDTO;
 import com.cqut.czb.bn.entity.dto.petrolSaleInfo.GetPetrolSaleInfoInputDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.DateDealWith;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/petrolSaleInfo")
@@ -28,8 +31,14 @@ public class PetrolSaleInfoController {
 
     @Autowired
     IPetrolRechargeService petrolRechargeService;
+
+    @Autowired
+    RedisUtils redisUtils;
+
     @RequestMapping(value = "/getSaleInfoList",method = RequestMethod.GET)
-    public JSONResult getSaleInfoList(GetPetrolSaleInfoInputDTO inputDTO){
+    public JSONResult getSaleInfoList(GetPetrolSaleInfoInputDTO inputDTO, Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        inputDTO.setIsSpecial(user.getIsSpecial());
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolSaleInfoList(inputDTO));
         dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO));
@@ -48,7 +57,9 @@ public class PetrolSaleInfoController {
     }
 
     @RequestMapping(value = "/getPetrolRechargeList",method = RequestMethod.GET)
-    public JSONResult getPetrolRechargeList(PetrolRechargeInputDTO inputDTO){
+    public JSONResult getPetrolRechargeList(PetrolRechargeInputDTO inputDTO, Principal principal){
+        User user = (User) redisUtils.get(principal.getName());
+        inputDTO.setIsSpecial(user.getIsSpecial());
         return new JSONResult(petrolRechargeService.getPetrolRechargeList(inputDTO));
     }
 

@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.bn.entity.dto.VIPRechargeRecord.VipRechargeRecordListDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.VIPRechargeRecordService;
+import com.cqut.czb.bn.util.RedisUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +32,13 @@ public class VIPRechargeRecordController {
     @Autowired
     VIPRechargeRecordService vipRechargeRecordService;
 
+    @Autowired
+    RedisUtil redisUtil;
+
     @GetMapping("/getVIPRechargeRecordList")
-    public JSONResult getVipRechargeRecordList(VipRechargeRecordListDTO vipRechargeRecordListDTO){
+    public JSONResult getVipRechargeRecordList(VipRechargeRecordListDTO vipRechargeRecordListDTO, Principal principal){
+        User user = (User)redisUtil.get(principal.getName());
+        vipRechargeRecordListDTO.setIsSpecial(user.getIsSpecial());
         return new JSONResult(vipRechargeRecordService.getVipRechargeRecordList(vipRechargeRecordListDTO));
     }
 

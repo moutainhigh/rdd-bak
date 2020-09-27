@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.api.controller.automaticRecharge;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.AutoRechargeLoginResult.AutoRechargeRecordDTO;
 import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.autoRecharge.AutoRechargeRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.automaticRechargeService.AutomaticRechargeService;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,12 +30,18 @@ public class AutomaticRechargeController {
     @Autowired
     AutomaticRechargeService automaticRechargeService;
 
+    @Autowired
+    RedisUtils redisUtils;
+
+
     /**
      * 获取信息
      * @return
      */
     @RequestMapping(value = "/getTableList",method = RequestMethod.POST)
-    public JSONResult getTableList(AutomaticRechargeDTO automaticRechargeDTO){
+    public JSONResult getTableList(AutomaticRechargeDTO automaticRechargeDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        automaticRechargeDTO.setIsSepcial(user.getIsSpecial());
         return automaticRechargeService.getAutoList(automaticRechargeDTO);
     }
 
@@ -81,7 +90,9 @@ public class AutomaticRechargeController {
      * @return
      */
     @PostMapping("/exportData")
-    public JSONResult ExportDate(HttpServletResponse response, HttpServletRequest request,AutomaticRechargeDTO pageDTO){
+    public JSONResult ExportDate(HttpServletResponse response, HttpServletRequest request,AutomaticRechargeDTO pageDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        pageDTO.setIsSepcial(user.getIsSpecial());
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
