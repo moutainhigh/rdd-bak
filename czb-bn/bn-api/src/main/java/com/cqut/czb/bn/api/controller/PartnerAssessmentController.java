@@ -48,7 +48,10 @@ public class PartnerAssessmentController {
 
     @PermissionCheck(role = "管理员")
     @PostMapping(value = "/exportExaminationRecords")
-    public JSONResult exportExaminationRecords(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input){
+    public JSONResult exportExaminationRecords(HttpServletResponse response, HttpServletRequest request,IndicatorRecordDTO input, Principal principal){
+        User user = (User)redisUtil.get(principal.getName());
+        input.setIsSpecial(user.getIsSpecial());
+
         return new JSONResult(indicatorRecordService.exportExaminationRecords(response,request,input));
     }
 
