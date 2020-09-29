@@ -52,7 +52,7 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
          * 生成起调参数串——返回给app（支付宝的支付订单）
          */
         String orderString = null;//用于保存起调参数,
-        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("3");//"3"为购买服务
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("3",user.getIsSpecial());//"3"为购买服务
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //订单标识
@@ -63,7 +63,7 @@ public class AppBuyServiceServiceImpl implements AppBuyServiceService {
         String commodityId=commodityDTO.getCommodityId();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelBuyService(thirdOrder, actualPrice,commodityId ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelBuyService(thirdOrder, actualPrice,commodityId ,ownerId,user.getIsSpecial()));//支付订单
         request.setNotifyUrl(AliPayConfig.BuyService_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute

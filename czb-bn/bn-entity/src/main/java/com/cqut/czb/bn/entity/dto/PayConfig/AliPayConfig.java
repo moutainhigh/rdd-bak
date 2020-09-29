@@ -11,11 +11,28 @@ public class AliPayConfig {
 	//支付宝公钥
 	public static final  String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlq4Z3VHsHvGDq9KnNVk8hIGt4575TXLYAsVEq0AdgMkQiQ8RONXX7FmZq/8PdVoyRczO/cMgQ4dllcvUh+ydnTSQgUe1/CsdjyIhLAvPd0R3YreXNJFEUoYeczW0/7M7lgUr5mXiCVOSPxag9qED/sbH/qNU29vGJuzchPyQiOg3TBamj0vRwwo3bOJdL/vaPMFFJ1q74g47qhJM24GD7jADkf10Kzc3M3GNJ7TFa/3IGqQzsfdQPGYErM6gYzSSQTu+SvQsYxZoX+dgsrO8ErI7J3M/Um9tRhFwFqT6XR+LzNlLON4YtOOhXcgp5N78e4lHWWSq5fsYzrCMpuWJkQIDAQAB";
 
+	//APPID-new
+	public static final  String app_id_new = "2021001197631321";
+
+	//私钥-new
+	public static final  String merchant_private_key_new = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCbKJfSEu67WA3fWXtHSKk6FGJQMZh27t7wlb/m4JkgtomPepwU21FxDiLLveOWfQIZ41R/GjFKCghxpXO7XhKS9W+O4ZSu+1QyWD5JO2WdJ61twoQWMdM9bE34rGQxaPbqOEDV9s3WAWoa7rcbbC9gFuFPNjvKsIfcyIQzNgAIOE56Hjhk3lX7FZ27cd2Ztlmnn6uAklAKVYASsNONfyEuMfD6Psq8vc0il2IJnX5R+gat0C4HWREcy4Zv+J7kmEGPtufqvm34a05wSRD6tLhtih+NAkUSxsS9AMnOwMF7A7SYTAOidC/9Nv/BgJcSFI8X7gDu6hYKqbnhLO0OLYZJAgMBAAECggEAMMLNE6QHirDdizef2oMnS61kSDeN5rKjNZCaQoCLHxC+omyx6IwUSCddIBKJF54pruEWiOs+WjpU9QI+IMArriub55dVFri9eSTqTjFwebcidcAPqrn13PPQfToQMsb98hXDqnpprbu8EMK8oM2bBeOq4y30FHrt96C8iyuJTwuCA52j8gwdD8tA113+viyBGsn1nv25RUA0aidS+rVsIlqkX/Re6pkt+lsT+0DLgmVN7sLTWQD8s0QJuWWxq82Kyu+fQ/jUhCJzRbCBwlUG+LJnzj7hlhTJgSRfrZUAQATM59Go8O7NisJaRj3pMs5tjfqTyHqEgeYa+Outd4EiQQKBgQD+EmJ5byLbTjVQjqdqehKMpYFESB3P10BO3UizujOXsZm4dSB3ig0YtN6olcCp+yiHjrzbzqFkMn+9dT6BnkUEsLE9vmRXJJuo37ib5sI2IP4jlKqZnU3Y7jggdeZAdPtT850pMUb9vVSAA7fehiV4Nn3xjWHTfy+/mdJhZMxttQKBgQCcVgm1t1XENb87GDjMXbKgOIW2gnG2mq11fgxt9Rk8hoD3502STa+nTwg+qz0/sPKa3Qo/CEmgobKwmXwtQ/LNMp5SkxGktjEaJxCJ7KKYZvrZm0k0LChupH/2iRJqFzjkJAeXVvpnLiL4jLWvieZvE3PqjSgK5580tb7MQYjyxQKBgGEZ96a/ccvtBPVHv/Yyt1onetL02OfxNTOu4LVHyaYFC2Hy6bil+0FhBuPZb+vHAINmawl63DWmEyn+YCg7q9cSDHszg7fGVvNgpXZ35+u2Ckrg656P/wuUZ8EILjqeOtun9H2kxqP9MwlF4oTaMgHSmamyxhuFtWL9z+jHFFYtAoGBAJEvuf6/T3BTtc+ss/rfPWdcdplDVVWPGm4V7HclexVhmF4hukGX0fwgAnko0E3ZB8VYaA6XpMD/yhIFyHPFObTlQHFRUb5U0Q8Hnm1ojKvaXzY952MDa10tegU70RUjkdsVttMOnKe8ChAnpQdrmswnFayLANf3uTvbWWEZr5Q9AoGAC9MA4DGSR7hvdVCjJJyZXrzHqF9pUDc3ySokPyUmmb44vE0UOtyKvvKrbT1bloOcs/PKMIMX3KtRULV0FMus04Yt2XeU//R7S24ZWDE1PxHLucVlTkVpgakfNxkhvaRRbXAbrdPDx6ry+HJqjqHSzTkuCMMy7hKXWvqGPh4uNjo=";
+
+	//支付宝公钥-new
+	public static final  String alipay_public_key_new = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmyiX0hLuu1gN31l7R0ipOhRiUDGYdu7e8JW/5uCZILaJj3qcFNtRcQ4iy73jln0CGeNUfxoxSgoIcaVzu14SkvVvjuGUrvtUMlg+STtlnSetbcKEFjHTPWxN+KxkMWj26jhA1fbN1gFqGu63G2wvYBbhTzY7yrCH3MiEMzYACDhOeh44ZN5V+xWdu3HdmbZZp5+rgJJQClWAErDTjX8hLjHw+j7KvL3NIpdiCZ1+UfoGrdAuB1kRHMuGb/ie5JhBj7bn6r5t+GtOcEkQ+rS4bYofjQJFEsbEvQDJzsDBewO0mEwDonQv/Tb/wYCXEhSPF+4A7uoWCqm54SztDi2GSQIDAQAB";
+
+
 	//网关地址——支付网关
 	public static final  String gatewayUrl = "https://openapi.alipay.com/gateway.do";
 
+//	//网关地址——支付网关-new
+//	public static final  String gatewayUrl_new = "https://openapi.alipay.com/gateway.do";
 	//购买油卡/充值（支付宝）
 	public static String PetrolRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyPetrolRechargeInfoAiHu";
+
+//	//购买油卡/充值（支付宝）-new
+//	public static String PetrolRecharge_url_new="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyPetrolRechargeInfoAiHu";
+
+
 
 	//购买服务
 	public static String BuyService_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyServiceInfoAiHu";

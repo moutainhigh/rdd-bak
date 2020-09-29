@@ -130,7 +130,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
          * 生成起调参数串——返回给app（支付宝的支付订单）
          */
         String orderString = null;//用于保存起调参数,
-        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance(petrolInputDTO.getPayType());//"0"代表的是购油
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance(petrolInputDTO.getPayType(),petrolInputDTO.getIsSpecial());//"0"代表的是购油
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //来源合同——合同id
@@ -153,7 +153,7 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
 
         request.setBizModel(AliParameterConfig.getBizModel(area,orgId, payType,contractId ,money,
                                                                              petrolKind, ownerId, petrolNum,
-                                                                            petrolInputDTO.getAddressId()));//支付订单
+                                                                            petrolInputDTO.getAddressId(),petrolInputDTO.getIsSpecial()));//支付订单
         request.setNotifyUrl(AliPayConfig.PetrolRecharge_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -162,7 +162,6 @@ public class AppBuyPetrolServiceImpl implements AppBuyPetrolService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-
         //插入购买信息
         boolean insertPetrolSalesRecords= insertPetrolSalesRecords(petrol,petrolInputDTO,orgId);
         System.out.println("新增油卡购买或充值记录完毕"+insertPetrolSalesRecords);

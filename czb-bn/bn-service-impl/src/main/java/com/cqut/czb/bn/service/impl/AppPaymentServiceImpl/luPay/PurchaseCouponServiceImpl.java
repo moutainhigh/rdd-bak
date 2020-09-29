@@ -76,7 +76,7 @@ public class PurchaseCouponServiceImpl  implements PurchaseCouponService {
         //生成起调参数串——返回给app（支付宝的支付订单）
         String orderString = null;//用于保存起调参数,
 
-        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("6");//“6”代表中石化优惠券
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("6",petrolInputDTO.getIsSpecial());//“6”代表中石化优惠券
 
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
 

@@ -52,7 +52,7 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
          * 生成起调参数串——返回给app（支付宝的支付订单）
          */
         String orderString = null;//用于保存起调参数,
-        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("1");//""1"代表的是充值vip
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("1",user.getIsSpecial());//""1"代表的是充值vip
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //订单标识
@@ -61,7 +61,7 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
         Double actualPrice=vipAreaConfig.getVipPrice();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelVIP(vipAreaConfig.getVipAreaConfigId(),thirdOrder, actualPrice ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelVIP(vipAreaConfig.getVipAreaConfigId(),thirdOrder, actualPrice ,ownerId,user.getIsSpecial()));//支付订单
         request.setNotifyUrl(AliPayConfig.RechargeVip_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute

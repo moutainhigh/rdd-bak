@@ -68,7 +68,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
 
      //生成起吊参数
         String orderString = null;//用于保存起调参数,
-        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("4");//"4"为购买洗车服务
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("4",user.getIsSpecial());//"4"为购买洗车服务
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //订单标识
@@ -81,7 +81,7 @@ public class AppBuyCarWashServiceImpl implements AppBuyCarWashService {
         String couponId=cleanServerVehicleDTO.getCouponId();
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(couponId,thirdOrder, actualPrice,serviceId ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelBuyCarWash(couponId,thirdOrder, actualPrice,serviceId ,ownerId,user.getIsSpecial()));//支付订单
         request.setNotifyUrl(AliPayConfig.BuyCarWash_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute

@@ -61,13 +61,13 @@ public class AppBuyDishServiceImpl implements AppBuyDishService {
         //生成起吊参数
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         String orderString = null;//用于保存起调参数,
-        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("5");//"5"为点餐
+        AlipayClientConfig alipayClientConfig = AlipayClientConfig.getInstance("5",user.getIsSpecial());//"5"为点餐
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 
         //购买者id
         String ownerId = user.getUserId();
-        request.setBizModel(AliParameterConfig.getBizModelBuyDish(thirdOrder, totalPrice ,ownerId));//支付订单
+        request.setBizModel(AliParameterConfig.getBizModelBuyDish(thirdOrder, totalPrice ,ownerId,user.getIsSpecial()));//支付订单
         request.setNotifyUrl(AliPayConfig.BuyDish_url);
         try {
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);

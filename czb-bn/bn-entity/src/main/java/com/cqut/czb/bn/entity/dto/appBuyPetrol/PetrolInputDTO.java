@@ -28,6 +28,8 @@ public class PetrolInputDTO {
 
     private Integer isHaveVip;
 
+    private Integer isSpecial;
+
     public String getRemark() {
         return remark;
     }
@@ -133,5 +135,13 @@ public class PetrolInputDTO {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }
