@@ -14,6 +14,7 @@ public class GetPetrolListInputDTO extends PageDTO {
     private String petrolPrice;//油卡售价
     private String area;//所属地区
     private Integer isSpecial;//特殊用户
+    private Integer isSpecialPetrol; // 普通特殊油卡类型
 
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
@@ -107,5 +108,13 @@ public class GetPetrolListInputDTO extends PageDTO {
 
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
+    }
+
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
     }
 }

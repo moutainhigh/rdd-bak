@@ -28,11 +28,20 @@ public class DeliveryInput {
 
     private String endTime;
 
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
+    }
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 //    private Date startTime;
 //
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 //    private Date endTime;
+
+    private Integer isSpecialPetrol; // 普通特殊油卡类型
 
     public String getContactNumber() {
         return contactNumber;

@@ -76,6 +76,9 @@
            <if test="endTime != null">
                AND a.create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
            </if>
+           <if test="isSpecialPetrol != null" >
+               AND b.is_special_petrol = #{isSpecialPetrol,jdbcType=INTEGER}
+           </if>
        </where>
         order by   a.create_at desc
     </select>

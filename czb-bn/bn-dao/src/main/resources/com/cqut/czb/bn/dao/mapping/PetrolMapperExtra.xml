@@ -56,6 +56,9 @@
       <if test="state != null and state != ''" >
         AND state = #{state,jdbcType=INTEGER}
       </if>
+      <if test="isSpecialPetrol != null" >
+        AND is_special_petrol = #{isSpecialPetrol,jdbcType=INTEGER}
+      </if>
       <if test="area != null and area != ''" >
         AND area like concat ('%',#{area,jdbcType=VARCHAR},'%')
       </if>
@@ -374,6 +377,9 @@
       </if>
       <if test="petrolKind != null and petrolKind !=''" >
         AND petrol_kind = #{petrolKind,jdbcType=INTEGER}
+      </if>
+      <if test="isSpecialPetrol != null" >
+        AND is_special_petrol = #{isSpecialPetrol,jdbcType=INTEGER}
       </if>
       <if test="petrolDenomination != null and petrolDenomination != '' " >
         AND petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE}

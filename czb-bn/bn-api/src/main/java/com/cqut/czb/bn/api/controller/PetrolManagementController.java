@@ -11,6 +11,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolManagement.IPetrolManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,10 +25,22 @@ public class PetrolManagementController {
 
     @Autowired
     private RedisUtils redisUtils;
+
+    @Value("${register.common.petrolType}")
+    private Integer commonPetrolType;
+
+    @Value("${register.special.petrolType}")
+    private Integer specialPetrolType;
+
     @RequestMapping(value = "/getPetrolList",method = RequestMethod.GET)
     public JSONResult getPetrolList(GetPetrolListInputDTO inputDTO, Principal principal){
-//        return null;
         User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolList(inputDTO));
         dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolMoneyCount(inputDTO));

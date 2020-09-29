@@ -11,6 +11,7 @@ import com.cqut.czb.bn.service.PetrolDeliveryRecordsService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +36,13 @@ public class PetrolDeliveryRecordsController {
     @Autowired
     RedisUtils redisUtils;
 
+    @Value("${register.common.petrolType}")
+    private Integer commonPetrolType;
+
+    @Value("${register.special.petrolType}")
+    private Integer specialPetrolType;
+
+
     /**
      * 获取寄送数据&查询
      * @param deliveryInput
@@ -42,7 +50,14 @@ public class PetrolDeliveryRecordsController {
      * @return
      */
     @GetMapping("/selectRecords")
-    public JSONResult selectRecords(DeliveryInput deliveryInput, PageDTO pageDTO){
+    public JSONResult selectRecords(DeliveryInput deliveryInput, PageDTO pageDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            deliveryInput.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            deliveryInput.setIsSpecialPetrol(specialPetrolType);
+        }
         return new JSONResult(petrolDeliveryRecordsService.selectPetrolDelivery(deliveryInput,pageDTO));
     }
 
