@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.infoSpreadController;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
@@ -139,8 +140,11 @@ public class infoSpreadController {
      * @param pageDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @GetMapping("/allPartnerManage")
-    public JSONResult allPartnerManage(PartnerDTO partnerDTO,PageDTO pageDTO) {
+    public JSONResult allPartnerManage(PartnerDTO partnerDTO,PageDTO pageDTO, Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        partnerDTO.setIsSpecial(user.getIsSpecial());
         return new JSONResult(infoSpreadService.allPartnerManage(partnerDTO,pageDTO));
     }
 }

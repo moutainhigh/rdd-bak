@@ -201,7 +201,6 @@
       <if test="rechargeWay != null and rechargeWay != ''">
         and recharge_way = #{rechargeWay,jdbcType = INTEGER}
       </if>
-
   </select>
 
 

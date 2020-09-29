@@ -15,12 +15,12 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, target_promotion_number, actual_promotion_number, target_new_consumer, 
-    actual_new_consumer, state, indicator_begin_time, indicator_end_time, user_id, create_at, 
+    record_id, target_promotion_number, actual_promotion_number, target_new_consumer,
+    actual_new_consumer, state, indicator_begin_time, indicator_end_time, user_id, create_at,
     update_at
   </sql>
   <select id="selectIndicatorRecordInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_indicator_record
     where user_id = #{userId,jdbcType=VARCHAR}
@@ -48,6 +48,9 @@
         czb_indicator_record.user_id IS NOT NULL
         <if test=" indicatorRecordDTO.userAccount != null and indicatorRecordDTO.userAccount != ''">
             AND user_account like concat('%',#{indicatorRecordDTO.userAccount,jdbcType = VARCHAR},'%')
+        </if>
+        <if test=" indicatorRecordDTO.isSpecial != null ">
+            AND is_special = #{indicatorRecordDTO.isSpecial,jdbcType=INTEGER}
         </if>
         <if test=" indicatorRecordDTO.state != null ">
             AND state = #{indicatorRecordDTO.state,jdbcType=INTEGER}

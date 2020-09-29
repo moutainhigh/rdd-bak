@@ -35,6 +35,7 @@ public class PetrolSaleInfoController {
     @Autowired
     RedisUtils redisUtils;
 
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getSaleInfoList",method = RequestMethod.GET)
     public JSONResult getSaleInfoList(GetPetrolSaleInfoInputDTO inputDTO, Principal principal){
         User user = (User) redisUtils.get(principal.getName());

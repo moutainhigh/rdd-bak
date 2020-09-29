@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipMoney;
@@ -22,8 +23,11 @@ public class PartnerVipIncomeController {
     @Autowired
     RedisUtil redisUtil;
 
+    @PermissionCheck(role = "管理员")
     @GetMapping("getVipIncomeList")
-    public JSONResult getVipIncomeList(PartnerVipIncomeDTO partnerVipIncomeDTO, PageDTO pageDTO){
+    public JSONResult getVipIncomeList(PartnerVipIncomeDTO partnerVipIncomeDTO, PageDTO pageDTO, Principal principal){
+        User user = (User)redisUtil.get(principal.getName());
+        partnerVipIncomeDTO.setIsSpecial(user.getIsSpecial());
         return new JSONResult(partnerVipIncomeService.getVipIncomeList(partnerVipIncomeDTO,pageDTO));
     }
 

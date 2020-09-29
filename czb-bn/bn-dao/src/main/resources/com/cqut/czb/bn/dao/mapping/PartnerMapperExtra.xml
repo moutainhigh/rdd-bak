@@ -508,6 +508,9 @@
         LEFT JOIN czb_user c ON (a.user_id = c.first_level_partner  OR a.user_id = c.second_level_partner )
         WHERE
         a.partner!=0
+        <if test="isSpecial != null">
+           and a.is_special = #{isSpecial,jdbcType=INTEGER}
+        </if>
         <if test="userAccount!=null and userAccount!=''">
             AND a.user_account LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
         </if>
