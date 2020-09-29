@@ -19,6 +19,7 @@ import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,9 @@ public class UserDetailServiceImpl implements UserDetailService {
     private final RedisUtils redisUtils;
 
     private final InfoSpreadService infoSpreadService;
+
+    @Value("${recharge.common.userType}")
+    private Integer commonType;
 
     @Autowired
     public UserDetailServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationCodeMapperExtra verificationCodeMapperExtra, EnterpriseInfoMapper enterpriseInfoMapper, UserIncomeInfoMapper userIncomeInfoMapper, RedisUtils redisUtils, InfoSpreadService infoSpreadService) {
@@ -80,6 +84,12 @@ public class UserDetailServiceImpl implements UserDetailService {
         } else {
             if(userMapperExtra.checkAccount(personalUserDTO.getSuperiorUser())) {
                 User superior = userMapperExtra.findUserByAccount(personalUserDTO.getSuperiorUser());
+                if(superior != null){
+                    user.setIsSpecial(superior.getIsSpecial());
+                }
+                else {
+                    user.setIsSpecial(commonType);
+                }
                 user.setSuperiorUser(superior.getUserId());
                 user.setFirstLevelPartner(superior.getFirstLevelPartner());
                 user.setSecondLevelPartner(superior.getSecondLevelPartner());
