@@ -35,6 +35,7 @@ public class AppBuyPetrolController {
     @RequestMapping(value = "/buyPetrol",method = RequestMethod.POST)
     public synchronized JSONResult buyPetrol(Principal principal, @RequestBody PetrolInputDTO petrolInputDTO){
         User user = (User)redisUtils.get(principal.getName());
+
         //防止数据为空
         if(petrolInputDTO==null||user==null){
             return new JSONResult("申请数据有误", ResponseCodeConstants.FAILURE);
@@ -46,6 +47,8 @@ public class AppBuyPetrolController {
         petrolInputDTO.setOwnerId(user.getUserId());
         petrolInputDTO.setPaymentMethod(1);//0 佣金购买，1 支付宝，2 微信，3 自己开发的方案，4 合同打款
         petrolInputDTO.setIsVip(user.getIsVip());
+        petrolInputDTO.setIsSpecial(user.getIsSpecial());
+
         //检测是否有未完成的订单(若存在则将油卡放回，无则继续操作)
         PetrolCache.isContainsNotPay(user.getUserId());
         //处理购油或充值

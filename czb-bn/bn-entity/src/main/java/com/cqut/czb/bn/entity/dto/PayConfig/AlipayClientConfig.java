@@ -58,6 +58,88 @@ public class AlipayClientConfig {
 		}
 		return instance;
 	}
+	public synchronized  static AlipayClientConfig getInstance(String operationType,Integer isSpecial) {
+		if (operationType.equals("0")) {//"0"为购油
+			if (isSpecial == 1){
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
+						AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+			}else {
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+						AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+			}
+			instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+		} else if(operationType.equals("1")){//"1"代表的是充值vip
+			if (isSpecial == 1){
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
+						AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}else {
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+						AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}
+			instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+		}else if(operationType.equals("2")){//"2"代表的是充值
+			if (isSpecial == 1){
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
+						AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+			}else {
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+						AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+			}
+			instance.setCallBackUrl(AliPayConfig.PetrolRecharge_url);
+		}else if(operationType.equals("4")){//"4"代表的是洗车服务
+			if (isSpecial == 1){
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
+						AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}else {
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+						AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}
+			instance.setCallBackUrl(AliPayConfig.BuyCarWash_url);
+		}else if(operationType.equals("5")){//"5"代表的是点餐
+			if (isSpecial == 1){
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
+						AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}else {
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+						AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}
+			instance.setCallBackUrl(AliPayConfig.BuyDish_url);
+		}else if(operationType.equals("6")){//"6"代表中石化优惠券
+			if (isSpecial == 1){
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
+						AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}else {
+				instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
+						AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
+						AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+//				instance.setCallBackUrl(AliPayConfig.RechargeVip_url);
+			}
+			instance.setCallBackUrl(AliPayConfig.Coupons_url);
+		}
+		return instance;
+	}
 
 	public String getCallBackUrl() {
 		return callBackUrl;

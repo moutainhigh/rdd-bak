@@ -31,14 +31,13 @@ public class VIPController {
     @RequestMapping(value = "/createVIPOrder",method = RequestMethod.POST)
     public JSONResult createVIPOrder(Principal principal){
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(vipService.createVIPOrder(user.getUserId()));
+        return new JSONResult(vipService.createVIPOrder(user));
     }
 
     @RequestMapping(value = "/purchaseVIP",method = RequestMethod.POST)
     public void purchaseVIP(HttpServletRequest request, HttpServletResponse response){
         response.setCharacterEncoding("utf-8");
         response.setHeader("content-type", "text/html;charset=utf-8");
-
         try {
                 response.getWriter().print(vipService.purchaseVIP(request));
         } catch (Exception e) {

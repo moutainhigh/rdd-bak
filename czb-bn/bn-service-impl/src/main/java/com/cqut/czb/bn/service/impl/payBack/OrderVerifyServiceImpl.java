@@ -68,8 +68,13 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		boolean signVerfied = false;
 		try {
 			//检测支付订单是否被篡改
-			signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key,
-					AliPayConfig.charset, AliPayConfig.sign_type);
+			if (params.get("isSpecial") == "1"){
+				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
+						AliPayConfig.charset, AliPayConfig.sign_type);
+			}else {
+				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
+						AliPayConfig.charset, AliPayConfig.sign_type);
+			}
 			System.out.println("408 " + signVerfied);
 		} catch (AlipayApiException e) {
 			e.printStackTrace();
