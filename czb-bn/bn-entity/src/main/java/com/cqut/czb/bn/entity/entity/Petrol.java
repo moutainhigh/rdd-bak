@@ -33,15 +33,9 @@ public class Petrol {
 
     private String remark;
 
+    private Integer isSpecialPetrol;
+
     private long endTime;
-
-    public long getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
 
     public String getPetrolId() {
         return petrolId;
@@ -161,5 +155,21 @@ public class Petrol {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 }

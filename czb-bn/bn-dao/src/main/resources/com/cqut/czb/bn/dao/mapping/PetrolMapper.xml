@@ -17,13 +17,15 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="commission" property="commission" jdbcType="DOUBLE" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_special_petrol" property="isSpecialPetrol" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price, 
-    state, discount, area, owner_id, petrol_type, create_at, update_at, commission, remark
+    petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission, remark,
+    is_special_petrol
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_petrol
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
@@ -33,18 +35,18 @@
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
-    insert into czb_petrol (petrol_id, petrol_num, petrol_psw, 
-      petrol_kind, petrol_denomination, petrol_price, 
-      state, discount, area, 
-      owner_id, petrol_type, create_at, 
-      update_at, commission, remark
-      )
-    values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR}, 
-      #{petrolKind,jdbcType=INTEGER}, #{petrolDenomination,jdbcType=DOUBLE}, #{petrolPrice,jdbcType=DOUBLE}, 
-      #{state,jdbcType=INTEGER}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=VARCHAR}, 
-      #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{commission,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}
-      )
+    insert into czb_petrol (petrol_id, petrol_num, petrol_psw,
+      petrol_kind, petrol_denomination, petrol_price,
+      state, discount, area,
+      owner_id, petrol_type, create_at,
+      update_at, commission, remark,
+      is_special_petrol)
+    values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR},
+      #{petrolKind,jdbcType=INTEGER}, #{petrolDenomination,jdbcType=DOUBLE}, #{petrolPrice,jdbcType=DOUBLE},
+      #{state,jdbcType=INTEGER}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=VARCHAR},
+      #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP},
+      #{updateAt,jdbcType=TIMESTAMP}, #{commission,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR},
+      #{isSpecialPetrol,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
     insert into czb_petrol
@@ -94,6 +96,9 @@
       <if test="remark != null" >
         remark,
       </if>
+      <if test="isSpecialPetrol != null" >
+        is_special_petrol,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="petrolId != null" >
@@ -140,6 +145,9 @@
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpecialPetrol != null" >
+        #{isSpecialPetrol,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="isSpecialPetrol != null" >
+        is_special_petrol = #{isSpecialPetrol,jdbcType=INTEGER},
+      </if>
     </set>
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>
@@ -206,7 +217,8 @@
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP},
       commission = #{commission,jdbcType=DOUBLE},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      is_special_petrol = #{isSpecialPetrol,jdbcType=INTEGER}
     where petrol_id = #{petrolId,jdbcType=VARCHAR}
   </update>
 </mapper>
