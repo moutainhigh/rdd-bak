@@ -68,7 +68,7 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		boolean signVerfied = false;
 		try {
 			//检测支付订单是否被篡改
-			if (params.get("isSpecial") == "1"){
+			if (params.get("isSpecial").equals("1")){
 				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
 						AliPayConfig.charset, AliPayConfig.sign_type);
 			}else {
@@ -130,11 +130,17 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 
 		System.out.println("675 " + params.get("app_id"));
 		// 验证app_id是否一致
-		if (!params.get("app_id").equals(AliPayConfig.app_id)) {
-			System.out.println("错误app_id:" + params.get("app_id"));
-			return false;
+		if(params.get("isSpecial").equals("1")){
+			if (!params.get("app_id").equals(AliPayConfig.app_id_new)) {
+				System.out.println("错误app_id_new:" + params.get("app_id"));
+				return false;
+			}
+		}else {
+			if (!params.get("app_id").equals(AliPayConfig.app_id)) {
+				System.out.println("错误app_id:" + params.get("app_id"));
+				return false;
+			}
 		}
-
 		// 判断交易状态是否为TRADE_SUCCESS
 		if (!params.get("trade_status").equals("TRADE_SUCCESS")) {
 			System.out.println("错误交易状态：" + params.get("trade_status"));

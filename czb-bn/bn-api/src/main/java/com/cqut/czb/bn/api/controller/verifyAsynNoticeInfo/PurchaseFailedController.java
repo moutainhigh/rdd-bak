@@ -33,6 +33,9 @@ public class PurchaseFailedController {
      */
     @RequestMapping(value = "/CancelPayPetrol",method = RequestMethod.POST)
     public JSONResult CancelPayPetrol(Principal principal){
+        if (principal==null){
+            return new JSONResult(ResponseCodeConstants.FAILURE, "用户信息有误");
+        }
         User user = (User)redisUtils.get(principal.getName());
         if (user==null&&user.getUserId()==null){
             return new JSONResult(ResponseCodeConstants.FAILURE, "用户信息有误");
