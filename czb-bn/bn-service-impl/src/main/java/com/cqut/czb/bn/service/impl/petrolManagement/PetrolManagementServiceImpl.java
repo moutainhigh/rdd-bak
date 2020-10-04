@@ -99,8 +99,14 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
 
     @Override
     public PageInfo<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO) {
-        PageHelper.startPage(infoInputDTO.getCurrentPage(), infoInputDTO.getPageSize(), true);
-        return new PageInfo<>(petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(infoInputDTO));
+        List<SaleInfoOutputDTO> list = new ArrayList<>();
+        try{
+            PageHelper.startPage(infoInputDTO.getCurrentPage(), infoInputDTO.getPageSize(), true);
+            list = petrolSalesRecordsMapperExtra.getPetrolSaleInfoList(infoInputDTO);
+        }catch (Exception e){
+            System.out.println("打印异常"+e);
+        }
+        return new PageInfo<>(list);
     }
 
     @Override

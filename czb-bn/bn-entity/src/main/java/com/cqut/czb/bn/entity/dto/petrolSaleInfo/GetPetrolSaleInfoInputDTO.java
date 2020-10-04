@@ -26,6 +26,7 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
     private Integer bindingType; //1 公司匹配 2 线下匹配 3 绑定过的卡
     private String orderId; // 璐付系统订单号
     private Integer isSpecial;
+    private Integer isSpecialPetrol;
 
     public Integer getBindingType() {
         return bindingType;
@@ -160,5 +161,13 @@ public class GetPetrolSaleInfoInputDTO extends PageDTO {
 
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
+    }
+
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
     }
 }

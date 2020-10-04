@@ -14,6 +14,7 @@ import com.cqut.czb.bn.service.petrolRecharge.IPetrolRechargeService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,10 +36,22 @@ public class PetrolSaleInfoController {
     @Autowired
     RedisUtils redisUtils;
 
+    @Value("${register.common.petrolType}")
+    private Integer commonPetrolType;
+
+    @Value("${register.special.petrolType}")
+    private Integer specialPetrolType;
+
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getSaleInfoList",method = RequestMethod.GET)
     public JSONResult getSaleInfoList(GetPetrolSaleInfoInputDTO inputDTO, Principal principal){
         User user = (User) redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
         inputDTO.setIsSpecial(user.getIsSpecial());
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolSaleInfoList(inputDTO));
