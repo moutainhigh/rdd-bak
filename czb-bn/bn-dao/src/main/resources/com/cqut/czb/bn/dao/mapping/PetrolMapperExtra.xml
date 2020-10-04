@@ -17,10 +17,12 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="commission" property="commission" jdbcType="DOUBLE" />
+    <result column="is_special_petrol" property="isSpecialPetrol" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, petrol_price,
-    state, discount, area, owner_id, petrol_type, create_at, update_at, commission,remark
+    state, discount, area, owner_id, petrol_type, create_at, update_at, commission,remark,
+    is_special_petrol
   </sql>
 
   <select id="selectUserPetrol" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.appHomePage.PetrolPriceDTO">

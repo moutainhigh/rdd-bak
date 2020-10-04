@@ -13,6 +13,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.service.appPaymentService.AppRechargeVipService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.SortedMap;
@@ -26,6 +27,9 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
 
     @Autowired
     public UserMapper userMapper;
+
+    @Value("${recharge.special.vipPrice}")
+    private Double vipPrice;
 
     @Override
     public String AliRechargeVip(User user, RechargeVipDTO rechargeVipDTO) {
@@ -42,6 +46,10 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
 
         //查出相应地区的vip价格
         VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea());
+
+        if (user.getIsSpecial() == 1){
+            vipAreaConfig.setVipPrice(vipPrice);
+        }
 
         if(vipAreaConfig==null){
             System.out.println("此地区没有VIP");
