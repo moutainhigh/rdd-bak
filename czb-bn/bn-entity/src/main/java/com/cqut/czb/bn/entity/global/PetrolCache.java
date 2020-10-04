@@ -174,6 +174,7 @@ public class PetrolCache {
 //                AllpetrolMap.remove(petrol.getPetrolNum());
                 it.remove();
                 System.out.println("randomPetrol" + AllpetrolMap.size() + ":" + currentPetrolMap.size());
+                System.out.println("petrol_num"+petrol.getPetrolNum());
                 return petrol;
             }
         }
