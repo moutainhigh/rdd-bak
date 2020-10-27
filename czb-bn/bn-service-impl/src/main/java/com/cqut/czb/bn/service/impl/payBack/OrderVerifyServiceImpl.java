@@ -74,7 +74,7 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
 						AliPayConfig.charset, AliPayConfig.sign_type);
 			}else {
-				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
+				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key,
 						AliPayConfig.charset, AliPayConfig.sign_type);
 			}
 			System.out.println("408 " + signVerfied);
