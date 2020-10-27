@@ -67,8 +67,10 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		//是否被篡改的标识
 		boolean signVerfied = false;
 		try {
+			String isSpecial = getIsSpecial(params);
+//			System.out.println("是否为特殊用户："+ isSpecial);
 			//检测支付订单是否被篡改
-			if (params.get("isSpecial").equals("1")){
+			if (isSpecial.equals("1")){
 				signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
 						AliPayConfig.charset, AliPayConfig.sign_type);
 			}else {
@@ -107,6 +109,25 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 		return AlipayConfig.response_fail;
 	}
 
+	private String getIsSpecial(Map<String, String> param) {
+		Object[] params = { param };
+		Map<String, String> petrol = (HashMap<String, String>) params[0];
+		String[] resDate = petrol.get("passback_params").split("\\^");
+		String[] temp;
+		String isSpecial = "";
+		for (String data : resDate) {
+			temp = data.split("\'");
+			if (temp.length < 2) {//判空
+				continue;
+			}
+			if ("isSpecial".equals(temp[0])) {
+				System.out.println(temp[0] + temp[1]);
+				isSpecial=temp[1];
+			}
+		}
+		return isSpecial;
+	}
+
 
 	/*
 	 * 验证数据是否正确（支付宝）
@@ -129,8 +150,10 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 	private boolean isCorrectDataAiHu(Map<String, String> params) {
 
 		System.out.println("675 " + params.get("app_id"));
+		String isSpecial = getIsSpecial(params);
+		System.out.println("是否为特殊用户："+ isSpecial);
 		// 验证app_id是否一致
-		if(params.get("isSpecial").equals("1")){
+		if(isSpecial.equals("1")){
 			if (!params.get("app_id").equals(AliPayConfig.app_id_new)) {
 				System.out.println("错误app_id_new:" + params.get("app_id"));
 				return false;
@@ -146,7 +169,6 @@ public class OrderVerifyServiceImpl implements OrderVerifyService {
 			System.out.println("错误交易状态：" + params.get("trade_status"));
 			return false;
 		}
-
 		return true;
 	}
 
