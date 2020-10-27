@@ -54,8 +54,8 @@ public class AutoRechargeimpl implements AutoRechargeService {
                         List<Cookie> cookies = cookieStore.get(userId);
                         return cookies != null ? cookies : new ArrayList<>();
                     }
-                }).connectTimeout(50000, TimeUnit.MILLISECONDS)
-                .readTimeout(50000, TimeUnit.MILLISECONDS)
+                }).connectTimeout(100000, TimeUnit.MILLISECONDS)
+                .readTimeout(100000, TimeUnit.MILLISECONDS)
                 .build();
     }
 
