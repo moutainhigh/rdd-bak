@@ -216,7 +216,7 @@
 <!--    a.create_at DESC-->
 </select>
 
-<select id="getRechargeAccountList" resultType="java.lang.String">
+<select id="getRechargeAccountList" parameterType="java.lang.Integer" resultType="java.lang.String">
     SELECT
     b.user_account
     FROM
@@ -225,6 +225,9 @@
     JOIN czb_role AS c on c.role_id = a.role_id
     <where>
         c.role_name = '线下大客户'
+        <if test="_parameter != null">
+            and b.is_special = #{_parameter, jdbcType = INTEGER}
+        </if>
     </where>
 </select>
 
@@ -409,6 +412,16 @@
         </where>
     </select>
 
+    <select id="getSpecialPassword" resultType="java.lang.String">
+        SELECT
+        content
+        FROM
+        `czb_dict`
+        <where>
+            NAME = 'special_finance_password'
+        </where>
+    </select>
+
     <update id="changePWD" parameterType="java.lang.String">
         UPDATE `czb_dict`
         SET content =  #{newPWD,jdbcType=VARCHAR}
@@ -417,8 +430,21 @@
         </where>
     </update>
 
+    <update id="changeSpecialPWD" parameterType="java.lang.String">
+        UPDATE `czb_dict`
+        SET content =  #{newPWD,jdbcType=VARCHAR}
+        <where>
+            NAME = 'special_finance_password'
+        </where>
+    </update>
+
     <insert id="insertPassword" parameterType="java.lang.String">
         INSERT INTO `czb_dict` ( dict_id,name, content,create_at, update_at )
         VALUES("24687922335559", "finance_password",#{newPWD,jdbcType=VARCHAR},now(), now())
+    </insert>
+
+    <insert id="insertSpecialPassword" parameterType="java.lang.String">
+        INSERT INTO `czb_dict` ( dict_id,name, content,create_at, update_at )
+        VALUES("4475471578790034", "special_finance_password",#{newPWD,jdbcType=VARCHAR},now(), now())
     </insert>
 </mapper>

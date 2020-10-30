@@ -78,8 +78,8 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     }
 
     @Override
-    public JSONResult getRechargeAccountList() {
-        List<String> list = offlineDistributorOfAdministratorMapperExtra.getRechargeAccountList();
+    public JSONResult getRechargeAccountList(Integer isSpecial) {
+        List<String> list = offlineDistributorOfAdministratorMapperExtra.getRechargeAccountList(isSpecial);
         return new JSONResult("列表查询成功", 200, list);
     }
 
@@ -93,10 +93,17 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     }
 
     @Override
-    public JSONResult passwordVerification(String password) {
-        String OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
-        boolean isLike=bCryptPasswordEncoder.matches(password, OldPwd);
-        System.out.println(isLike);
+    public JSONResult passwordVerification(String password,Integer isSpecial) {
+        boolean isLike = false;
+        if (isSpecial == 0){
+            String OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
+             isLike=bCryptPasswordEncoder.matches(password, OldPwd);
+        }else if (isSpecial == 1){
+            String OldPwd = offlineDistributorOfAdministratorMapperExtra.getSpecialPassword();
+             isLike=bCryptPasswordEncoder.matches(password, OldPwd);
+        }else{
+            return new JSONResult("该账户类型有误！",200,false);
+        }
         if (!isLike){
             return new JSONResult("密码错误！",200,false);
         }else{
@@ -105,19 +112,37 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     }
 
     @Override
-    public JSONResult passwordModification(String OldPWD, String NewPWD) {
-        String OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
-        boolean isLike=bCryptPasswordEncoder.matches(OldPWD, OldPwd);
+    public JSONResult passwordModification(NewOldPwdDTO newOldPwdDTO) {
+        boolean isLike = false;
+        String OldPwd =null;
+        if (newOldPwdDTO.getIsSpecial() == 0){
+             OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
+            isLike=bCryptPasswordEncoder.matches(newOldPwdDTO.getOldPWD(), OldPwd);
+        }else if (newOldPwdDTO.getIsSpecial() == 1){
+             OldPwd = offlineDistributorOfAdministratorMapperExtra.getSpecialPassword();
+            isLike=bCryptPasswordEncoder.matches(newOldPwdDTO.getOldPWD(), OldPwd);
+        }else{
+            return new JSONResult("该账户类型有误！",200,false);
+        }
         if (!isLike){
             if (OldPwd == null){
-                String newPWD = bCryptPasswordEncoder.encode(NewPWD);
-                offlineDistributorOfAdministratorMapperExtra.insertPassword(newPWD);
+                String newPWD = bCryptPasswordEncoder.encode(newOldPwdDTO.getNewPWD());
+                if (newOldPwdDTO.getIsSpecial() == 0){
+                    offlineDistributorOfAdministratorMapperExtra.insertPassword(newPWD);
+                }else{
+                    offlineDistributorOfAdministratorMapperExtra.insertSpecialPassword(newPWD);
+                }
                 return new JSONResult("密码创建成功",200,true);
             }
             return new JSONResult("密码错误！",200,false);
         }else{
-            String newPWD = bCryptPasswordEncoder.encode(NewPWD);
-            boolean result = offlineDistributorOfAdministratorMapperExtra.changePWD(newPWD) > 0;
+            String newPWD = bCryptPasswordEncoder.encode(newOldPwdDTO.getNewPWD());
+            boolean result = false;
+            if (newOldPwdDTO.getIsSpecial() == 0){
+                 result = offlineDistributorOfAdministratorMapperExtra.changePWD(newPWD) > 0;
+            }else{
+                 result = offlineDistributorOfAdministratorMapperExtra.changeSpecialPWD(newPWD) > 0;
+            }
             return new JSONResult("密码正确",200,result);
         }
     }

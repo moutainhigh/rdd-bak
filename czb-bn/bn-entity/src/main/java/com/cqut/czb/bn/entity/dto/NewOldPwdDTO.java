@@ -6,6 +6,16 @@ public class NewOldPwdDTO {
 
     private String NewPWD;
 
+    private Integer isSpecial;
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
+    }
+
     public String getOldPWD() {
         return OldPWD;
     }

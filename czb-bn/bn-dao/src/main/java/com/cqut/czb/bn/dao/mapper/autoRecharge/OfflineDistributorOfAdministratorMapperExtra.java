@@ -14,7 +14,7 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
 
     List<OfflineClientDTO> getOfflineClientList(OfflineClientDTO offlineClientDTO);
 
-    List<String> getRechargeAccountList();
+    List<String> getRechargeAccountList(Integer isSpecial);
 
     Double getAccountBalance(String account);
 
@@ -38,7 +38,14 @@ public interface OfflineDistributorOfAdministratorMapperExtra {
 
     String getPassword();
 
+    String getSpecialPassword();
+
     int changePWD(String newPWD);
 
+    int changeSpecialPWD(String newPWD);
+
     int insertPassword(String newPWD);
+
+    int insertSpecialPassword(String newPWD);
+
 }

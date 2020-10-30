@@ -75,8 +75,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/getRechargeAccountList",method = RequestMethod.POST)
-    public JSONResult getRechargeAccountList(){
-        return offlineDistributorOfAdministratorService.getRechargeAccountList();
+    public JSONResult getRechargeAccountList(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return offlineDistributorOfAdministratorService.getRechargeAccountList(user.getIsSpecial());
     }
 
     /**
@@ -241,8 +242,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/passwordVerification",method = RequestMethod.POST)
-    public JSONResult passwordVerification(String password){
-        return offlineDistributorOfAdministratorService.passwordVerification(password);
+    public JSONResult passwordVerification(String password,Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return offlineDistributorOfAdministratorService.passwordVerification(password,user.getIsSpecial());
     }
 
     /**
@@ -251,7 +253,9 @@ public class OfflineDistributorOfAdministratorController {
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/passwordModification",method = RequestMethod.POST)
-    public JSONResult passwordModification(NewOldPwdDTO newOldPwdDTO){
-        return offlineDistributorOfAdministratorService.passwordModification(newOldPwdDTO.getOldPWD(),newOldPwdDTO.getNewPWD());
+    public JSONResult passwordModification(NewOldPwdDTO newOldPwdDTO,Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        newOldPwdDTO.setIsSpecial(user.getIsSpecial());
+        return offlineDistributorOfAdministratorService.passwordModification(newOldPwdDTO);
     }
 }
