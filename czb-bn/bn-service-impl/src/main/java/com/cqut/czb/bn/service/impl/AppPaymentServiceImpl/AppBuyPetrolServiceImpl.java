@@ -19,6 +19,7 @@ import com.cqut.czb.bn.service.appPaymentService.PurchaseCouponService;
 import com.cqut.czb.bn.service.impl.AppPaymentServiceImpl.luPay.PurchaseCouponServiceImpl;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

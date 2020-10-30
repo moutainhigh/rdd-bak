@@ -141,8 +141,10 @@ public class PetrolCache {
         String area = petrolInputDTO.getArea();
 //        String area = "河北省";
         String ownerId = petrolInputDTO.getOwnerId();
+        Integer isSpecial = petrolInputDTO.getIsSpecial();
         String remark=petrolInputDTO.getRemark();
         Petrol petrol = new Petrol(); //当前遍历的油卡值
+        Map<String, Petrol> P = AllpetrolMap;
         Iterator<Map.Entry<String, Petrol>> it = AllpetrolMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Petrol> entry = it.next();
@@ -150,14 +152,17 @@ public class PetrolCache {
             boolean choice=false;
             if(remark==null||"".equals(remark)||"通用".equals(remark)){
                 choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
-                        petrol.getArea().equals(area) &&petrol.getRemark()==null;
+                        petrol.getArea().equals(area) && petrol.getIsSpecialPetrol().equals(isSpecial) &&
+                        petrol.getRemark()==null;
                 if(choice==false){
                     choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
-                            petrol.getArea().equals(area) &&petrol.getRemark().equals("通用");
+                            petrol.getArea().equals(area) && petrol.getIsSpecialPetrol().equals(isSpecial) &&
+                        petrol.getRemark().equals("通用");
                 }
             }else {
                 choice=petrol.getPetrolKind() == petrolKind && petrol.getPetrolPrice() == petrolPrice &&
-                        petrol.getArea().equals(area) &&remark.equals(petrol.getRemark());
+                        petrol.getArea().equals(area) && petrol.getIsSpecialPetrol().equals(isSpecial) &&
+                        remark.equals(petrol.getRemark());
             }
             if (choice) {
                 petrol.setOwnerId(ownerId);
@@ -169,6 +174,7 @@ public class PetrolCache {
 //                AllpetrolMap.remove(petrol.getPetrolNum());
                 it.remove();
                 System.out.println("randomPetrol" + AllpetrolMap.size() + ":" + currentPetrolMap.size());
+                System.out.println("petrol_num"+petrol.getPetrolNum());
                 return petrol;
             }
         }

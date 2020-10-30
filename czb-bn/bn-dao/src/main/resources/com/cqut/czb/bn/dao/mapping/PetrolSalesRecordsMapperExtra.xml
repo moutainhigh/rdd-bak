@@ -140,7 +140,7 @@
         czb_user AS _user
         <where>
             <if test="isSpecial != null">
-                and _user.is_special = #{isSpecial, jdbcType = INTEGER}
+                _user.is_special = #{isSpecial, jdbcType = INTEGER}
             </if>
             <if test="owner != null and owner != ''">
                 and _user.user_account like concat('%',#{owner,jdbcType = VARCHAR},'%')
@@ -155,6 +155,9 @@
         <where>
             <if test="area != null and area !=''">
                 AND petrol.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="isSpecialPetrol != null" >
+                AND petrol.is_special_petrol = #{isSpecialPetrol,jdbcType=INTEGER}
             </if>
         </where>
         ) AS t3 ON t3.petrol_id = t1.petrol_id order by t1.create_at desc

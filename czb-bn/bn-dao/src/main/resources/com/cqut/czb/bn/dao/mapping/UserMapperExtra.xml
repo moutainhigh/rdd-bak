@@ -201,13 +201,14 @@
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
       cu.is_deleted = 0
+      <if test="isSpecial != null">
+       and cu.is_special = #{isSpecial,jdbcType=INTEGER}
+      </if>
     </where>
     ) as u
     left join czb_user cu on u.superior_user = cu.user_id
     <where>
-    <if test="isSpecial != null">
-      cu.is_special = #{isSpecial,jdbcType=INTEGER}
-    </if>
+
       <if test="userAccount != null and userAccount != ''">
         and (u.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
         or u.bindingid in ( select user_id from czb_user where user_account  like concat('%',#{userAccount},'%' )))
