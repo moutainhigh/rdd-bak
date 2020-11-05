@@ -235,6 +235,7 @@
         update_at = now(),
     </set>
     where petrol_num= #{petrolNum,jdbcType=VARCHAR}
+    and is_special_petrol = #{isSpecialPetrol,jdbcType = INTEGER}
   </update>
 
   <select id="selectPetrolInfoDTO" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO" >

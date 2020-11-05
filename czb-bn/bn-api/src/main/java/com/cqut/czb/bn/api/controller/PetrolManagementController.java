@@ -80,13 +80,31 @@ public class PetrolManagementController {
     }
     @PermissionCheck(role = "管理员")
     @RequestMapping(value="/editPetrol",method=RequestMethod.POST)
-    public JSONResult editPetrol(@RequestBody GetPetrolListInputDTO inputDTO){
+    public JSONResult editPetrol(@RequestBody GetPetrolListInputDTO inputDTO, Principal principal){
+
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
+
         return new JSONResult(petrolManagementService.editPetrol(inputDTO));
     }
 
     @PermissionCheck(role = "管理员")
     @RequestMapping(value="/insertPetrol",method=RequestMethod.POST)
-    public JSONResult insertPetrol(@RequestBody PetrolInputDTO inputDTO){
+    public JSONResult insertPetrol(@RequestBody PetrolInputDTO inputDTO, Principal principal){
+
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
+
         return new JSONResult(petrolManagementService.addPetrol(inputDTO));
     }
     @PermissionCheck(role = "管理员")
