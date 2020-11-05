@@ -17,17 +17,17 @@ import java.util.List;
 
 public interface IPetrolManagementService {
     PageInfo<Petrol> getPetrolList(GetPetrolListInputDTO inputDTO);
-    int uploadPetrolExcel(InputStream inputStream,String originalFileName);
+    int uploadPetrolExcel(InputStream inputStream,String originalFileName,Integer type);
     PageInfo<SaleInfoOutputDTO> getPetrolSaleInfoList(GetPetrolSaleInfoInputDTO infoInputDTO);
-    int salePetrol(String petrolIds);
+//    int salePetrol(String petrolIds);
 
     int saleSomePetrol(PetrolManagementInputDTO inputDTO);
     JSONResult editPetrol(GetPetrolListInputDTO inputDTO);
-    int notSalePetrol(String petrolIds);
+//    int notSalePetrol(String petrolIds);
 
     int notSaleSomePetrol(PetrolManagementInputDTO inputDTO);
 
-    int BanPetrol(String petrolIds);
+    int BanPetrol(String petrolIds,Integer type);
 
     boolean modifyPetrol(ModifyPetrolInputDTO inputDTO);
 

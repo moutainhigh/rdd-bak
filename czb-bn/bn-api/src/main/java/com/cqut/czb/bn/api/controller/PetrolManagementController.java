@@ -49,11 +49,17 @@ public class PetrolManagementController {
 
     @PermissionCheck(role = "管理员")
     @RequestMapping(value="/uploadPetrol",method=RequestMethod.POST)
-    public JSONResult uploadPetrol(MultipartFile file){
+    public JSONResult uploadPetrol(MultipartFile file, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
         System.out.println(file.getOriginalFilename());
         int successResult = 0;
         try {
-            successResult = petrolManagementService.uploadPetrolExcel(file.getInputStream(),file.getOriginalFilename());
+            if (user.getIsSpecial() == 0){
+                successResult = petrolManagementService.uploadPetrolExcel(file.getInputStream(),file.getOriginalFilename(),commonPetrolType);
+            }
+            else if (user.getIsSpecial() == 1){
+                successResult = petrolManagementService.uploadPetrolExcel(file.getInputStream(),file.getOriginalFilename(),specialPetrolType);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -85,27 +91,55 @@ public class PetrolManagementController {
     }
     @PermissionCheck(role = "管理员")
     @RequestMapping(value="/deletePetrol",method=RequestMethod.POST)
-    public JSONResult deletePetrol(@RequestBody PetrolInputDTO inputDTO){
+    public JSONResult deletePetrol(@RequestBody PetrolInputDTO inputDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
         return new JSONResult(petrolManagementService.deletePetrol(inputDTO));
     }
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "salePetrol",method = RequestMethod.POST)
-    public JSONResult salePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
+    public JSONResult salePetrol(@RequestBody PetrolManagementInputDTO inputDTO, Principal principal){
+
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
 
         return new JSONResult(petrolManagementService.saleSomePetrol(inputDTO));
     }
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "notSalePetrol",method = RequestMethod.POST)
-    public JSONResult notSalePetrol(@RequestBody PetrolManagementInputDTO inputDTO){
+    public JSONResult notSalePetrol(@RequestBody PetrolManagementInputDTO inputDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
 
         return new JSONResult(petrolManagementService.notSaleSomePetrol(inputDTO));
     }
 
     @PermissionCheck(role = "管理员")
     @RequestMapping(value = "BanPetrol",method = RequestMethod.POST)
-    public JSONResult BanPetrol(@RequestBody PetrolManagementInputDTO inputDTO){
-
-        return new JSONResult(petrolManagementService.BanPetrol(inputDTO.getPetrolIds()));
+    public JSONResult BanPetrol(@RequestBody PetrolManagementInputDTO inputDTO, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            return new JSONResult(petrolManagementService.BanPetrol(inputDTO.getPetrolIds(),commonPetrolType));
+        }
+        else if (user.getIsSpecial() == 1){
+            return new JSONResult(petrolManagementService.BanPetrol(inputDTO.getPetrolIds(),specialPetrolType));
+        }
+        return new JSONResult("删除失败");
     }
 
     @RequestMapping(value = "/modifyPetrol",method = RequestMethod.POST)

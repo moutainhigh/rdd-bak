@@ -15,6 +15,8 @@ public class PetrolManagementInputDTO {
 
     private String area;
 
+    private Integer isSpecialPetrol;
+
     public Double getPetrolDenomination() {
         return petrolDenomination;
     }
@@ -61,5 +63,13 @@ public class PetrolManagementInputDTO {
 
     public void setPetrolIds(String petrolIds) {
         this.petrolIds = petrolIds;
+    }
+
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
     }
 }

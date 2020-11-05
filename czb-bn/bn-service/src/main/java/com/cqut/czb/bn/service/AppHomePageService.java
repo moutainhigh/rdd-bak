@@ -63,6 +63,12 @@ public interface AppHomePageService {
     boolean selectAllPetrol();
 
     /**
+     * 获取未售出的油卡
+     * @return
+     */
+    boolean selectPetrol(Integer isSpecialPetrol);
+
+    /**
      * 获取首页的所有路由
      * @param appRouterDTO
      * @return
