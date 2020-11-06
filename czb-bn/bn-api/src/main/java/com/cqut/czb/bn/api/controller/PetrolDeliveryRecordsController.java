@@ -85,7 +85,14 @@ public class PetrolDeliveryRecordsController {
      */
     @PostMapping("/updateRecords")
     @PermissionCheck(role = "管理员")
-    public JSONResult updateRecords(@RequestBody DeliveryInput deliveryInput){
+    public JSONResult updateRecords(@RequestBody DeliveryInput deliveryInput, Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            deliveryInput.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            deliveryInput.setIsSpecialPetrol(specialPetrolType);
+        }
         return new JSONResult(petrolDeliveryRecordsService.updatePetrolDelivery(deliveryInput));
     }
 
@@ -99,7 +106,15 @@ public class PetrolDeliveryRecordsController {
     @PostMapping("/exportRecords")
     @PermissionCheck(role = "管理员")
     public JSONResult exportPertrolRecord(HttpServletResponse response, HttpServletRequest request,
-                                                        DeliveryInput deliveryInput) {
+                                                        DeliveryInput deliveryInput, Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            deliveryInput.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            deliveryInput.setIsSpecialPetrol(specialPetrolType);
+        }
+
         Map<String, Object> result = new HashMap<>();
         String message = null;
         Workbook workbook = null;
