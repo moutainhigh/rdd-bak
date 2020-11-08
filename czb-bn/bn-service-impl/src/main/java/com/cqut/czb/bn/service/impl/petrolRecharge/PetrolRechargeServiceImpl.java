@@ -61,8 +61,8 @@ public class PetrolRechargeServiceImpl implements IPetrolRechargeService {
 
 
 
-    public Integer getPetrolRechargeListTotalMoney(PetrolRechargeInputDTO inputDTO){
-        Integer totalMoney = petrolSalesRecordsMapperExtra.getPetrolRechargeListTotalMoney(inputDTO);
+    public Double getPetrolRechargeListTotalMoney(PetrolRechargeInputDTO inputDTO){
+        Double totalMoney = petrolSalesRecordsMapperExtra.getPetrolRechargeListTotalMoney(inputDTO);
         return totalMoney;
     }
 
