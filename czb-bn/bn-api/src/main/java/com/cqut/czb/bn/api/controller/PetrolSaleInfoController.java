@@ -46,18 +46,21 @@ public class PetrolSaleInfoController {
     @RequestMapping(value = "/getSaleInfoList",method = RequestMethod.GET)
     public JSONResult getSaleInfoList(GetPetrolSaleInfoInputDTO inputDTO, Principal principal){
         User user = (User) redisUtils.get(principal.getName());
+        GetPetrolSaleInfoInputDTO inputDTO2=new GetPetrolSaleInfoInputDTO();
         if (user.getIsSpecial() == 0){
             inputDTO.setIsSpecialPetrol(commonPetrolType);
+            inputDTO2.setIsSpecialPetrol(commonPetrolType);
         }
         else if (user.getIsSpecial() == 1){
             inputDTO.setIsSpecialPetrol(specialPetrolType);
+            inputDTO2.setIsSpecialPetrol(specialPetrolType);
         }
         inputDTO.setIsSpecial(user.getIsSpecial());
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolManagementService.getPetrolSaleInfoList(inputDTO));
         dataWithCountOutputDTO.setCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO));
         //获取今日销售数据
-        GetPetrolSaleInfoInputDTO inputDTO2=new GetPetrolSaleInfoInputDTO();
+
         inputDTO2.setStartTime(DateDealWith.backStartTime());
         inputDTO2.setEndTime(DateDealWith.backEndTime());
         dataWithCountOutputDTO.setTodayCount(petrolManagementService.getPetrolSaleMoneyCount(inputDTO2));
