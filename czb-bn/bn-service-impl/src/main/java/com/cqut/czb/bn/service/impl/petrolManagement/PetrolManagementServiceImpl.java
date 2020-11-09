@@ -67,7 +67,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
      * @return
      */
     @Override
-    public int uploadPetrolExcel(InputStream inputStream, String originalFileName) {
+    public int uploadPetrolExcel(InputStream inputStream, String originalFileName,Integer type) {
         List<Petrol> petrols = null;
         Map<String, Petrol> petrolMap = new HashMap<>();
         try {
@@ -91,7 +91,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         }
 
         //油卡缓存里面没有重复
-       List<Petrol> petrolListNoRepeatForDB =  removeRepeatPetrolForDB(petrolListNoRepeatForExcel);
+       List<Petrol> petrolListNoRepeatForDB =  removeRepeatPetrolForDB(petrolListNoRepeatForExcel,type);
         int countForInsert = petrolMapperExtra.insertPetrolList(petrolListNoRepeatForDB);
         System.out.println("countForInsert " + countForInsert);
         return countForInsert;
@@ -109,19 +109,19 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
         return new PageInfo<>(list);
     }
 
-    @Override
-    public int salePetrol(String petrolIds) {
-        int result=0;
-        if (petrolIds==null || petrolIds.length() == 0){
-            result = petrolMapperExtra.saleAllPetrol();
-        }else {
-            String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"1");
-        }
-
-        appHomePageService.selectAllPetrol();
-        return result;
-    }
+//    @Override
+//    public int salePetrol(String petrolIds) {
+//        int result=0;
+//        if (petrolIds==null || petrolIds.length() == 0){
+//            result = petrolMapperExtra.saleAllPetrol();
+//        }else {
+//            String[] ids = petrolIds.split(",");
+//            result = petrolMapperExtra.changePetrolState(ids,"1");
+//        }
+//
+//        appHomePageService.selectAllPetrol();
+//        return result;
+//    }
 
     @Override
     public int saleSomePetrol(PetrolManagementInputDTO inputDTO) {
@@ -131,10 +131,10 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             result = petrolMapperExtra.saleSomePetrol(inputDTO);
         }else {
             String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"1");
+            result = petrolMapperExtra.changePetrolState(ids,"1",inputDTO.getIsSpecialPetrol());
         }
 
-        appHomePageService.selectAllPetrol();
+        appHomePageService.selectPetrol(inputDTO.getIsSpecialPetrol());
         return result;
     }
 
@@ -152,19 +152,19 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
     }
 
 
-    @Override
-    public int notSalePetrol(String petrolIds) {
-        int result=0;
-        if (petrolIds==null || petrolIds.length() == 0){
-            result = petrolMapperExtra.notSaleAllPetrol();
-        }else {
-            String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"3");
-        }
-
-        appHomePageService.selectAllPetrol();
-        return result;
-    }
+//    @Override
+//    public int notSalePetrol(String petrolIds) {
+//        int result=0;
+//        if (petrolIds==null || petrolIds.length() == 0){
+//            result = petrolMapperExtra.notSaleAllPetrol();
+//        }else {
+//            String[] ids = petrolIds.split(",");
+//            result = petrolMapperExtra.changePetrolState(ids,"3");
+//        }
+//
+//        appHomePageService.selectAllPetrol();
+//        return result;
+//    }
 
     @Override
     public int notSaleSomePetrol(PetrolManagementInputDTO inputDTO) {
@@ -176,23 +176,23 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             result = petrolMapperExtra.notSaleSomePetrols(inputDTO);
         }else {
             String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"3");
+            result = petrolMapperExtra.changePetrolState(ids,"3",inputDTO.getIsSpecialPetrol());
         }
 
-        appHomePageService.selectAllPetrol();
+        appHomePageService.selectPetrol(inputDTO.getIsSpecialPetrol());
         return result;
     }
 
     @Override
-    public int BanPetrol(String petrolIds) {
+    public int BanPetrol(String petrolIds,Integer type) {
         int result=0;
         if (petrolIds==null || petrolIds.length() == 0){
             return 0;
         }else {
             String[] ids = petrolIds.split(",");
-            result = petrolMapperExtra.changePetrolState(ids,"-1");
+            result = petrolMapperExtra.changePetrolState(ids,"-1",type);
         }
-        appHomePageService.selectAllPetrol();
+        appHomePageService.selectPetrol(type);
         return result;
     }
 
@@ -230,9 +230,10 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
      * @param list
      * @return
      */
-    private List<Petrol> removeRepeatPetrolForDB(List<Petrol> list){
+    private List<Petrol> removeRepeatPetrolForDB(List<Petrol> list,Integer type){
         List<Petrol> petrolListNoRepeatForDB = new ArrayList<>();
         for(Petrol p:list){
+            p.setIsSpecialPetrol(type);
             if(!PetrolCache.isContainPetorlMap(PetrolCache.AllpetrolMap,p.getPetrolNum())){
                 petrolListNoRepeatForDB.add(p);
             }
@@ -331,7 +332,7 @@ public class PetrolManagementServiceImpl implements IPetrolManagementService {
             return new JSONResult("删除失败", 500);
         }else {
             String[] ids = inputDTO.getPetrolId().split(",");
-            isSuccess = petrolMapperExtra.changePetrolState(ids,"-1") > 0;
+            isSuccess = petrolMapperExtra.changePetrolState(ids,"-1",inputDTO.getIsSpecialPetrol()) > 0;
         }
         if (isSuccess)
             return new JSONResult("删除成功", 200);

@@ -20,6 +20,7 @@ public class PetrolInputDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateAt;
     private String remark;
+    private Integer isSpecialPetrol;
 
     public String getPetrolId() {
         return petrolId;
@@ -123,5 +124,13 @@ public class PetrolInputDTO {
 
     public void setDiscount(String discount) {
         this.discount = discount;
+    }
+
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
     }
 }

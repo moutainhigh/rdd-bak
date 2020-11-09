@@ -36,6 +36,8 @@ public interface PetrolMapperExtra {
 
     List<Petrol> selectPetrol();
 
+    List<Petrol> selectAllPetrol(Integer isSpecialPetrol);
+
     List<PetrolInfoDTO> selectPetrolInfoDTO();
 
     /**
@@ -57,7 +59,7 @@ public interface PetrolMapperExtra {
      */
     Integer isBuyPetrol(@Param("userId") String userId);
 
-    int changePetrolState(@Param("ids")String[] id,@Param("state")String state);
+    int changePetrolState(@Param("ids")String[] id,@Param("state")String state,@Param("isSpecialPetrol")Integer isSpecialPetrol);
 
     int saleAllPetrol();
 

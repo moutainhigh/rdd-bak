@@ -77,13 +77,14 @@
         AND create_at &lt;= #{endTime,jdbcType = TIMESTAMP}
       </if>
     </where>
+    order by create_at DESC
   </select>
 
   <insert id="insertPetrolList" parameterType="java.util.List">
     insert into czb_petrol (petrol_id, petrol_num, petrol_psw,
     petrol_kind, petrol_denomination, petrol_price,
     state, discount, area,remark,
-    petrol_type, create_at) values
+    petrol_type, create_at,is_special_petrol) values
     <foreach collection="list" item="item" index="index" separator=",">
       (
       #{item.petrolId,jdbcType = VARCHAR},
@@ -97,7 +98,8 @@
       #{item.area,jdbcType = VARCHAR},
       #{item.remark,jdbcType = VARCHAR},
       #{item.petrolType,jdbcType = INTEGER},
-      NOW()
+      NOW(),
+      #{item.isSpecialPetrol,jdbcType = INTEGER}
       )
     </foreach>
 
@@ -164,6 +166,14 @@
     where state=1
   </select>
 
+  <select id="selectAllPetrol" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_petrol
+    where state=1
+    and is_special_petrol = #{isSpecialPetrol,jdbcType = INTEGER}
+  </select>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.Petrol" >
     update czb_petrol
     <set >
@@ -225,6 +235,7 @@
         update_at = now(),
     </set>
     where petrol_num= #{petrolNum,jdbcType=VARCHAR}
+    and is_special_petrol = #{isSpecialPetrol,jdbcType = INTEGER}
   </update>
 
   <select id="selectPetrolInfoDTO" resultType="com.cqut.czb.bn.entity.dto.appPersonalCenter.PetrolInfoDTO" >
@@ -289,6 +300,8 @@
     state = #{state,jdbcType = INTEGER}
   </set>
     <where>
+      is_special_petrol = #{isSpecialPetrol,jdbcType = INTEGER}
+      and
       petrol_id in
       <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
 
@@ -317,6 +330,7 @@
     </set>
     <where>
       state in (3,0)
+      and is_special_petrol = #{isSpecialPetrol,jdbcType = INTEGER}
       <if test="petrolNum != null and petrolNum !=''" >
         AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
       </if>
@@ -352,6 +366,7 @@
     </set>
     <where>
       state = 1
+      and is_special_petrol = #{isSpecialPetrol,jdbcType = INTEGER}
       <if test="petrolNum != null and petrolNum !=''" >
         AND petrol_num like CONCAT('%', #{petrolNum,jdbcType=VARCHAR},'%')
       </if>

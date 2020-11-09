@@ -404,6 +404,26 @@ public class AppHomePageServiceImpl implements AppHomePageService {
     }
 
     @Override
+    public boolean selectPetrol(Integer isSpecialPetrol) {
+        List<Petrol> petrols=petrolMapperExtra.selectAllPetrol(isSpecialPetrol);
+        Map<String,Petrol> petrolMap=new ConcurrentHashMap<String,Petrol>();
+        if (!CollectionUtils.isEmpty(petrols)){//判断所有的油卡是否为空
+            for( int i = 0 ; i < petrols.size() ; i++) {//内部不锁定，效率最高，但在多线程要考虑并发操作的问题。
+                if(PetrolCache.currentPetrolMap.containsKey(petrols.get(i).getPetrolNum())){
+//                    System.out.println("MAP2中包含卡号"+petrols.get(i).getPetrolNum());
+                    continue;
+                }
+//                System.out.println("MAP2中不包含卡号"+petrols.get(i).getPetrolNum());
+                petrolMap.put(petrols.get(i).getPetrolId(),petrols.get(i));
+            }
+        }else {
+            return false;
+        }
+        PetrolCache.AllpetrolMap=petrolMap;
+        return true;
+    }
+
+    @Override
     public List<AppRouterDTO> selectHomePageRouters(AppRouterDTO appRouterDTO) {
 
         List<AppRouterDTO> appRouter = appRouterMapperExtra.selectAppRouters(appRouterDTO);
