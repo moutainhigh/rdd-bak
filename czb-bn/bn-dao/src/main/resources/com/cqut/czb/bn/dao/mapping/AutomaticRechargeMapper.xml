@@ -75,31 +75,36 @@
 
     <select id="getSumData" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
         select COUNT(auto_recharge_record_id) as sumPeople
-        from czb_auto_recharge_record
+        from czb_auto_recharge_record as a LEFT JOIN czb_user as b on b.user_id = a.user_id
         <where>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                 (recharge_time BETWEEN #{startTime} AND #{endTime} )
+                 (a.recharge_time BETWEEN #{startTime} AND #{endTime} )
             </if>
             <if test=" status != null">
-            and status = #{status,jdbcType=INTEGER}
+            and a.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="isSpecial!= null">
+                and b.is_special = #{isSpecial}
             </if>
         </where>
     </select>
     <select id="getSuccessPeople" parameterType="com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO" resultType="com.cqut.czb.bn.entity.dto.automaticRecharge.SumAutoRecharge">
         select count(status) as successPeople,
         SUM(recharge_amount) as sumRechargeAmount ,
-        SUM(price) as sumPrice from czb_auto_recharge_record
+        SUM(price) as sumPrice from czb_auto_recharge_record as a LEFT JOIN czb_user as b on b.user_id = a.user_id
         <where>
             <if test="startTime!= null and startTime!= '' and endTime!= null and endTime!= ''">
-                 (recharge_time BETWEEN #{startTime} AND #{endTime}  )
+                 (a.recharge_time BETWEEN #{startTime} AND #{endTime}  )
             </if>
             <if test="status ==  null or status ==  1">
-                AND status = 1
+                AND a.status = 1
             </if>
             <if test="status == 0">
-                AND status = 0
+                AND a.status = 0
             </if>
-
+            <if test="isSpecial!= null">
+                and b.is_special = #{isSpecial}
+            </if>
         </where>
     </select>
 
