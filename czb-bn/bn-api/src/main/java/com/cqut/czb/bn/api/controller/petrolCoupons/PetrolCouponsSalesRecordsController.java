@@ -1,18 +1,22 @@
 package com.cqut.czb.bn.api.controller.petrolCoupons;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.petrolCoupons.PetrolCouponsSales;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.DateDealWith;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.petrolCoupons.PetrolCouponsSalesRecordsService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 
 /**
  * 作者： 陈爽
@@ -27,18 +31,37 @@ public class PetrolCouponsSalesRecordsController {
     @Autowired
     PetrolCouponsSalesRecordsService petrolCouponsSalesRecordsService;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
+    @Value("${register.common.petrolType}")
+    private Integer commonPetrolType;
+
+    @Value("${register.special.petrolType}")
+    private Integer specialPetrolType;
+
     /**
      * 初始化数据，查询
      * @param input
      * @return
      */
     @GetMapping("/selectPetrolCouponsSalesRecords")
-    public JSONResult selectVipApply(PetrolCouponsSales input) {
+    public JSONResult selectVipApply(PetrolCouponsSales input, Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        PetrolCouponsSales inputDTO2=new PetrolCouponsSales();
+
+        if (user.getIsSpecial() == 0){
+            input.setIsSpecialPetrol(commonPetrolType);
+            inputDTO2.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            input.setIsSpecialPetrol(specialPetrolType);
+            inputDTO2.setIsSpecialPetrol(specialPetrolType);
+        }
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(petrolCouponsSalesRecordsService.selectPetrolCouponsSalesRecords(input));
         dataWithCountOutputDTO.setCount(petrolCouponsSalesRecordsService.getPetrolCouponsSaleMoneyCount(input));
         //获取今日销售数据
-        PetrolCouponsSales inputDTO2=new PetrolCouponsSales();
         inputDTO2.setStartTime(DateDealWith.backStartTime());
         inputDTO2.setEndTime(DateDealWith.backEndTime());
         dataWithCountOutputDTO.setTodayCount(petrolCouponsSalesRecordsService.getPetrolCouponsSaleMoneyCount(inputDTO2));
@@ -48,7 +71,15 @@ public class PetrolCouponsSalesRecordsController {
 
 
     @PostMapping("/exportCouponsRecords")
-    public JSONResult exportCouponsRecords(HttpServletResponse response, PetrolCouponsSales inputDTO) {
+    public JSONResult exportCouponsRecords(HttpServletResponse response, PetrolCouponsSales inputDTO, Principal principal) {
+        User user = (User)redisUtils.get(principal.getName());
+        if (user.getIsSpecial() == 0){
+            inputDTO.setIsSpecialPetrol(commonPetrolType);
+        }
+        else if (user.getIsSpecial() == 1){
+            inputDTO.setIsSpecialPetrol(specialPetrolType);
+        }
+
         String message = null;
         Workbook workbook = null;
         try{

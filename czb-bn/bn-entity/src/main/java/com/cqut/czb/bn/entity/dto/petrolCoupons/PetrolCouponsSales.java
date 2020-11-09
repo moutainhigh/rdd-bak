@@ -30,6 +30,8 @@ public class PetrolCouponsSales extends PageDTO {
 
     private Double luPayBalance; // 余额
 
+    private Integer isSpecialPetrol; // 普通特殊油卡类型
+
     public String getRecordId() {
         return recordId;
     }
@@ -173,5 +175,13 @@ public class PetrolCouponsSales extends PageDTO {
 
     public void setLuPayBalance(Double luPayBalance) {
         this.luPayBalance = luPayBalance;
+    }
+
+    public Integer getIsSpecialPetrol() {
+        return isSpecialPetrol;
+    }
+
+    public void setIsSpecialPetrol(Integer isSpecialPetrol) {
+        this.isSpecialPetrol = isSpecialPetrol;
     }
 }
