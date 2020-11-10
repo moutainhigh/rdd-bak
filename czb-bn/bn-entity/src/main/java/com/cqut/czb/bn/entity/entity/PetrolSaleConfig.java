@@ -15,6 +15,8 @@ public class PetrolSaleConfig {
 
     private Date updateAt;
 
+    private Integer specialSaleState;
+
     public String getPetrolConfigId() {
         return petrolConfigId;
     }
@@ -61,5 +63,13 @@ public class PetrolSaleConfig {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getSpecialSaleState() {
+        return specialSaleState;
+    }
+
+    public void setSpecialSaleState(Integer specialSaleState) {
+        this.specialSaleState = specialSaleState;
     }
 }
