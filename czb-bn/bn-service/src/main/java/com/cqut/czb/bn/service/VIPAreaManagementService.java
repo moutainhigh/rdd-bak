@@ -17,12 +17,12 @@ public interface VIPAreaManagementService {
 
     Boolean addVipArea(VipAreaDTO vipAreaDTO);
 
-    JSONResult closeAll(VipChangeType type);
+    JSONResult closeAll(VipChangeType type,Integer isSpecial);
 
 
     Boolean editVipArea(VipAreaConfig vipAreaConfig);
 
     Boolean deleteVipArea(String vipAreaId);
 
-    VipPriceAndNote getVipPriceAndNote(String area);
+    VipPriceAndNote getVipPriceAndNote(String area,Integer isSpecial);
 }

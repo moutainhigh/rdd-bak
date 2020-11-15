@@ -18,7 +18,7 @@ public interface VipAreaConfigMapperExtra {
 
     int addVipArea(VipAreaDTO vipAreaDTO);
 
-    VipAreaConfig selectVipPrice(@Param("area") String area);
+    VipAreaConfig selectVipPrice(@Param("area") String area,@Param("isSpecial") Integer isSpecial);
 
     VipAreaConfig selectVipAreaConfigByArea(String area);
 

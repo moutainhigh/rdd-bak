@@ -52,8 +52,9 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
     }
 
     @Override
-    public JSONResult closeAll(VipChangeType type) {
+    public JSONResult closeAll(VipChangeType type,Integer isSpecial) {
         VipAreaDTO vipAreaDTO = new VipAreaDTO();
+        vipAreaDTO.setIsSpecial(isSpecial);
         List<VipAreaDTO> vipAreaDTOList =  vipAreaConfigMapperExtra.getVipAreaList(vipAreaDTO);
 
         boolean changeAll = false;
@@ -82,11 +83,11 @@ public class VIPAreaManagementServiceImpl implements VIPAreaManagementService {
     }
 
     @Override
-    public VipPriceAndNote getVipPriceAndNote(String area) {
+    public VipPriceAndNote getVipPriceAndNote(String area,Integer isSpecial) {
         if(area == null || area == "")
             return null;
         VipPriceAndNote vipPriceAndNote = new VipPriceAndNote();
-        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipPrice(area);
+        VipAreaConfig vipAreaConfig = vipAreaConfigMapperExtra.selectVipPrice(area,isSpecial);
         vipPriceAndNote.setArea(vipAreaConfig.getArea());
         vipPriceAndNote.setVipPrice(vipAreaConfig.getVipPrice());
         vipPriceAndNote.setNote(dictMapperExtra.selectDictByName("rechargeNote").getContent());
