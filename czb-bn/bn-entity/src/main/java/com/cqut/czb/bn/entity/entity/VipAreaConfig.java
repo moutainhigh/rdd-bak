@@ -21,6 +21,8 @@ public class VipAreaConfig {
 
     private Double fyTwo;
 
+    private Integer isSpecial;
+
     public String getVipAreaConfigId() {
         return vipAreaConfigId;
     }
@@ -91,5 +93,13 @@ public class VipAreaConfig {
 
     public void setFyTwo(Double fyTwo) {
         this.fyTwo = fyTwo;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
     }
 }

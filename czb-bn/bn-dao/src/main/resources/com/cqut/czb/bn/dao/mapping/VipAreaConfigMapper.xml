@@ -11,13 +11,14 @@
     <result column="fy_rate" property="fyRate" jdbcType="DOUBLE" />
     <result column="fy_one" property="fyOne" jdbcType="DOUBLE" />
     <result column="fy_two" property="fyTwo" jdbcType="DOUBLE" />
+    <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vip_area_config_id, area, vip_state, vip_price, create_at, update_at, fy_rate, fy_one, 
-    fy_two
+    vip_area_config_id, area, vip_state, vip_price, create_at, update_at, fy_rate, fy_one,
+    fy_two, is_special
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_vip_area_config
     where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
@@ -27,12 +28,14 @@
     where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
-    insert into czb_vip_area_config (vip_area_config_id, area, vip_state, 
-      vip_price, create_at, update_at, 
-      fy_rate, fy_one, fy_two)
-    values (#{vipAreaConfigId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{vipState,jdbcType=INTEGER}, 
-      #{vipPrice,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, 
-      #{fyRate,jdbcType=DOUBLE}, #{fyOne,jdbcType=DOUBLE}, #{fyTwo,jdbcType=DOUBLE})
+    insert into czb_vip_area_config (vip_area_config_id, area, vip_state,
+      vip_price, create_at, update_at,
+      fy_rate, fy_one, fy_two,
+      is_special)
+    values (#{vipAreaConfigId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{vipState,jdbcType=INTEGER},
+      #{vipPrice,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+      #{fyRate,jdbcType=DOUBLE}, #{fyOne,jdbcType=DOUBLE}, #{fyTwo,jdbcType=DOUBLE},
+      #{isSpecial,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.VipAreaConfig" >
     insert into czb_vip_area_config
@@ -64,6 +67,9 @@
       <if test="fyTwo != null" >
         fy_two,
       </if>
+      <if test="isSpecial != null" >
+        is_special,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="vipAreaConfigId != null" >
@@ -92,6 +98,9 @@
       </if>
       <if test="fyTwo != null" >
         #{fyTwo,jdbcType=DOUBLE},
+      </if>
+      <if test="isSpecial != null" >
+        #{isSpecial,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -122,6 +131,9 @@
       <if test="fyTwo != null" >
         fy_two = #{fyTwo,jdbcType=DOUBLE},
       </if>
+      <if test="isSpecial != null" >
+        is_special = #{isSpecial,jdbcType=INTEGER},
+      </if>
     </set>
     where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
   </update>
@@ -134,7 +146,8 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP},
       fy_rate = #{fyRate,jdbcType=DOUBLE},
       fy_one = #{fyOne,jdbcType=DOUBLE},
-      fy_two = #{fyTwo,jdbcType=DOUBLE}
+      fy_two = #{fyTwo,jdbcType=DOUBLE},
+      is_special = #{isSpecial,jdbcType=INTEGER}
     where vip_area_config_id = #{vipAreaConfigId,jdbcType=VARCHAR}
   </update>
 </mapper>
