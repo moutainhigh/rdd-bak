@@ -18,6 +18,8 @@ public class VipAreaDTO extends PageDTO {
 
     private Double vipPrice;
 
+    private Integer isSpecial;
+
     public String getVipAreaConfigId() {
         return vipAreaConfigId;
     }
@@ -58,5 +60,11 @@ public class VipAreaDTO extends PageDTO {
         this.vipPrice = vipPrice;
     }
 
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
 
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
+    }
 }

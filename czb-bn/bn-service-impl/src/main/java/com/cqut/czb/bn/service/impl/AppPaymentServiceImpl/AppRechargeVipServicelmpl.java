@@ -45,7 +45,7 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
         }
 
         //查出相应地区的vip价格
-        VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea());
+        VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea(),user.getIsSpecial());
 
         if (user.getIsSpecial() == 1){
             vipAreaConfig.setVipPrice(vipPrice);
@@ -89,7 +89,7 @@ public class AppRechargeVipServicelmpl implements AppRechargeVipService {
             return null;
         }
         //查出相应地区的vip价格
-        VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea());
+        VipAreaConfig vipAreaConfig=vipAreaConfigMapperExtra.selectVipPrice(rechargeVipDTO.getArea(),user.getIsSpecial());
 
         if(vipAreaConfig==null){
             System.out.println("此地区没有VIP");

@@ -26,20 +26,21 @@
     FROM
 	czb_vip_area_config
 	LEFT JOIN czb_vip_recharge_records ON czb_vip_recharge_records.vip_area_config_id = czb_vip_area_config.vip_area_config_id
-	<if test="area != null">
-        WHERE
-        czb_vip_area_config.area like concat('%',#{area,jdbcType = VARCHAR},'%')
-    </if>
+      WHERE
+      czb_vip_area_config.is_special = #{isSpecial,jdbcType=INTEGER}
+      <if test="area != null">
+        AND czb_vip_area_config.area like concat('%',#{area,jdbcType = VARCHAR},'%')
+      </if>
     GROUP BY
 	czb_vip_area_config.vip_area_config_id
   </select>
 
   <insert id="addVipArea" parameterType="com.cqut.czb.bn.entity.dto.VipArea.VipAreaDTO">
     insert into czb_vip_area_config (vip_area_config_id, area, vip_state,
-      vip_price, create_at, update_at
+      vip_price, create_at, update_at,is_special
       )
     values (#{vipAreaConfigId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{vipState,jdbcType=INTEGER},
-      #{vipPrice,jdbcType=DOUBLE}, now(), now()
+      #{vipPrice,jdbcType=DOUBLE}, now(), now(),#{isSpecial,jdbcType=INTEGER}
       )
   </insert>
 
@@ -57,6 +58,8 @@
         from czb_vip_area_config
         where area = #{area,jdbcType=VARCHAR}
         AND vip_state = 1
+        AND is_special = #{isSpecial,jdbcType=INTEGER}
+
     </select>
 
     <select id="selectVipPriceById" resultMap="BaseResultMap" parameterType="java.lang.String" >
