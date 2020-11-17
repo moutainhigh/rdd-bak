@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.CommodityWithoutCardMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.withoutCard.CommodityWithoutCard" >
+    <id column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+    <result column="commodity_title" property="commodityTitle" jdbcType="VARCHAR" />
+    <result column="commodity_info" property="commodityInfo" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="vip_discount" property="vipDiscount" jdbcType="DOUBLE" />
+    <result column="commodity_price" property="commodityPrice" jdbcType="DOUBLE" />
+    <result column="commodity_denomination" property="commodityDenomination" jdbcType="DOUBLE" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    commodity_id, commodity_title, commodity_info, discount, vip_discount, commodity_price, 
+    commodity_denomination, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_commodity_without_card
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_commodity_without_card
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+    insert into czb_commodity_without_card (commodity_id, commodity_title, commodity_info, 
+      discount, vip_discount, commodity_price, 
+      commodity_denomination, create_at, update_at
+      )
+    values (#{commodityId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, 
+      #{discount,jdbcType=DOUBLE}, #{vipDiscount,jdbcType=DOUBLE}, #{commodityPrice,jdbcType=DOUBLE}, 
+      #{commodityDenomination,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+    insert into czb_commodity_without_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commodityId != null" >
+        commodity_id,
+      </if>
+      <if test="commodityTitle != null" >
+        commodity_title,
+      </if>
+      <if test="commodityInfo != null" >
+        commodity_info,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="vipDiscount != null" >
+        vip_discount,
+      </if>
+      <if test="commodityPrice != null" >
+        commodity_price,
+      </if>
+      <if test="commodityDenomination != null" >
+        commodity_denomination,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commodityId != null" >
+        #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityTitle != null" >
+        #{commodityTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityInfo != null" >
+        #{commodityInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="vipDiscount != null" >
+        #{vipDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityPrice != null" >
+        #{commodityPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityDenomination != null" >
+        #{commodityDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+    update czb_commodity_without_card
+    <set >
+      <if test="commodityTitle != null" >
+        commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityInfo != null" >
+        commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="vipDiscount != null" >
+        vip_discount = #{vipDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityPrice != null" >
+        commodity_price = #{commodityPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityDenomination != null" >
+        commodity_denomination = #{commodityDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+    update czb_commodity_without_card
+    set commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+      commodity_info = #{commodityInfo,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DOUBLE},
+      vip_discount = #{vipDiscount,jdbcType=DOUBLE},
+      commodity_price = #{commodityPrice,jdbcType=DOUBLE},
+      commodity_denomination = #{commodityDenomination,jdbcType=DOUBLE},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+  </update>
+</mapper>

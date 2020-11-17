@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.PetrolWithoutCardMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.withoutCard.PetrolWithoutCard" >
+    <id column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+    <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+    <result column="petrol_psw" property="petrolPsw" jdbcType="VARCHAR" />
+    <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
+    <result column="petrol_denomination" property="petrolDenomination" jdbcType="DOUBLE" />
+    <result column="available_integral" property="availableIntegral" jdbcType="DOUBLE" />
+    <result column="points_to_be_loaded" property="pointsToBeLoaded" jdbcType="DOUBLE" />
+    <result column="petrol_balance" property="petrolBalance" jdbcType="DOUBLE" />
+    <result column="reserve_fund" property="reserveFund" jdbcType="DOUBLE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+    <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="commission" property="commission" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    petrol_id, petrol_num, petrol_psw, petrol_kind, petrol_denomination, available_integral, 
+    points_to_be_loaded, petrol_balance, reserve_fund, state, discount, area, owner_id, 
+    petrol_type, create_at, update_at, commission
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from czb_petrol_without_card
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_petrol_without_card
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolWithoutCard" >
+    insert into czb_petrol_without_card (petrol_id, petrol_num, petrol_psw, 
+      petrol_kind, petrol_denomination, available_integral, 
+      points_to_be_loaded, petrol_balance, reserve_fund, 
+      state, discount, area, 
+      owner_id, petrol_type, create_at, 
+      update_at, commission)
+    values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR}, 
+      #{petrolKind,jdbcType=INTEGER}, #{petrolDenomination,jdbcType=DOUBLE}, #{availableIntegral,jdbcType=DOUBLE}, 
+      #{pointsToBeLoaded,jdbcType=DOUBLE}, #{petrolBalance,jdbcType=DOUBLE}, #{reserveFund,jdbcType=DOUBLE}, 
+      #{state,jdbcType=INTEGER}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=VARCHAR}, 
+      #{ownerId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{updateAt,jdbcType=TIMESTAMP}, #{commission,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolWithoutCard" >
+    insert into czb_petrol_without_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="petrolId != null" >
+        petrol_id,
+      </if>
+      <if test="petrolNum != null" >
+        petrol_num,
+      </if>
+      <if test="petrolPsw != null" >
+        petrol_psw,
+      </if>
+      <if test="petrolKind != null" >
+        petrol_kind,
+      </if>
+      <if test="petrolDenomination != null" >
+        petrol_denomination,
+      </if>
+      <if test="availableIntegral != null" >
+        available_integral,
+      </if>
+      <if test="pointsToBeLoaded != null" >
+        points_to_be_loaded,
+      </if>
+      <if test="petrolBalance != null" >
+        petrol_balance,
+      </if>
+      <if test="reserveFund != null" >
+        reserve_fund,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="petrolType != null" >
+        petrol_type,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="commission != null" >
+        commission,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="petrolId != null" >
+        #{petrolId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolNum != null" >
+        #{petrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolPsw != null" >
+        #{petrolPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolKind != null" >
+        #{petrolKind,jdbcType=INTEGER},
+      </if>
+      <if test="petrolDenomination != null" >
+        #{petrolDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="availableIntegral != null" >
+        #{availableIntegral,jdbcType=DOUBLE},
+      </if>
+      <if test="pointsToBeLoaded != null" >
+        #{pointsToBeLoaded,jdbcType=DOUBLE},
+      </if>
+      <if test="petrolBalance != null" >
+        #{petrolBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="reserveFund != null" >
+        #{reserveFund,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commission != null" >
+        #{commission,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolWithoutCard" >
+    update czb_petrol_without_card
+    <set >
+      <if test="petrolNum != null" >
+        petrol_num = #{petrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolPsw != null" >
+        petrol_psw = #{petrolPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolKind != null" >
+        petrol_kind = #{petrolKind,jdbcType=INTEGER},
+      </if>
+      <if test="petrolDenomination != null" >
+        petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE},
+      </if>
+      <if test="availableIntegral != null" >
+        available_integral = #{availableIntegral,jdbcType=DOUBLE},
+      </if>
+      <if test="pointsToBeLoaded != null" >
+        points_to_be_loaded = #{pointsToBeLoaded,jdbcType=DOUBLE},
+      </if>
+      <if test="petrolBalance != null" >
+        petrol_balance = #{petrolBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="reserveFund != null" >
+        reserve_fund = #{reserveFund,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolType != null" >
+        petrol_type = #{petrolType,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commission != null" >
+        commission = #{commission,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.PetrolWithoutCard" >
+    update czb_petrol_without_card
+    set petrol_num = #{petrolNum,jdbcType=VARCHAR},
+      petrol_psw = #{petrolPsw,jdbcType=VARCHAR},
+      petrol_kind = #{petrolKind,jdbcType=INTEGER},
+      petrol_denomination = #{petrolDenomination,jdbcType=DOUBLE},
+      available_integral = #{availableIntegral,jdbcType=DOUBLE},
+      points_to_be_loaded = #{pointsToBeLoaded,jdbcType=DOUBLE},
+      petrol_balance = #{petrolBalance,jdbcType=DOUBLE},
+      reserve_fund = #{reserveFund,jdbcType=DOUBLE},
+      state = #{state,jdbcType=INTEGER},
+      discount = #{discount,jdbcType=DOUBLE},
+      area = #{area,jdbcType=VARCHAR},
+      owner_id = #{ownerId,jdbcType=VARCHAR},
+      petrol_type = #{petrolType,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      commission = #{commission,jdbcType=DOUBLE}
+    where petrol_id = #{petrolId,jdbcType=VARCHAR}
+  </update>
+</mapper>
