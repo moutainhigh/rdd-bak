@@ -77,6 +77,7 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
         VipRechargeRecordListDTO listDTO=new VipRechargeRecordListDTO();
         listDTO.setStartTime(DateDealWith.backStartTime());
         listDTO.setEndTime(DateDealWith.backEndTime());
+        listDTO.setIsSpecial(vipRechargeRecordListDTO.getIsSpecial());
 
         Double money=vipRechargeRecordsMapperExtra.getVipRechargeTotalMoney(listDTO);
         if(money!=null){
@@ -163,7 +164,7 @@ public class VIPRechargeRecordServiceImpl implements VIPRechargeRecordService {
     @Override
     public Workbook exportOrderRecords(VipRechargeRecordListDTO pageDTO) throws Exception {
         List<VipRechargeRecordListDTO> vipRechargeRecordList = vipRechargeRecordsMapperExtra.getVipRechargeRecord(pageDTO);
-        if (vipRechargeRecordList==null || vipRechargeRecordList.size()==0){
+        if (vipRechargeRecordList==null   || vipRechargeRecordList.size()==0){
             return getWorkBook(null,null);
         }
         return getWorkBook(vipRechargeRecordList,pageDTO);
