@@ -21,12 +21,12 @@
     <result column="petrol_kind" property="petrolKind" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, petrol_num, buyer_id, commodity_id, payment_method, third_order_id, turnover_amount, 
-    transaction_area, transaction_time, petrol_id, state, contract_id, create_at, update_at, 
+    record_id, petrol_num, buyer_id, commodity_id, payment_method, third_order_id, turnover_amount,
+    transaction_area, transaction_time, petrol_id, state, contract_id, create_at, update_at,
     record_type, is_recharged, petrol_kind
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_petrol_sales_records_without_card
     where record_id = #{recordId,jdbcType=VARCHAR}
@@ -35,21 +35,21 @@
     delete from czb_petrol_sales_records_without_card
     where record_id = #{recordId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecordsWithoutCard" >
-    insert into czb_petrol_sales_records_without_card (record_id, petrol_num, buyer_id, 
-      commodity_id, payment_method, third_order_id, 
-      turnover_amount, transaction_area, transaction_time, 
-      petrol_id, state, contract_id, 
-      create_at, update_at, record_type, 
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.PetrolSalesRecordsWithoutCard" >
+    insert into czb_petrol_sales_records_without_card (record_id, petrol_num, buyer_id,
+      commodity_id, payment_method, third_order_id,
+      turnover_amount, transaction_area, transaction_time,
+      petrol_id, state, contract_id,
+      create_at, update_at, record_type,
       is_recharged, petrol_kind)
-    values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
-      #{commodityId,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR}, 
-      #{turnoverAmount,jdbcType=DOUBLE}, #{transactionArea,jdbcType=VARCHAR}, #{transactionTime,jdbcType=TIMESTAMP}, 
-      #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{contractId,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{recordType,jdbcType=INTEGER}, 
+    values (#{recordId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR},
+      #{commodityId,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=INTEGER}, #{thirdOrderId,jdbcType=VARCHAR},
+      #{turnoverAmount,jdbcType=DOUBLE}, #{transactionArea,jdbcType=VARCHAR}, #{transactionTime,jdbcType=TIMESTAMP},
+      #{petrolId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{contractId,jdbcType=VARCHAR},
+      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{recordType,jdbcType=INTEGER},
       #{isRecharged,jdbcType=INTEGER}, #{petrolKind,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecordsWithoutCard" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.PetrolSalesRecordsWithoutCard" >
     insert into czb_petrol_sales_records_without_card
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="recordId != null" >
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecordsWithoutCard" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.PetrolSalesRecordsWithoutCard" >
     update czb_petrol_sales_records_without_card
     <set >
       <if test="petrolNum != null" >
@@ -212,7 +212,7 @@
     </set>
     where record_id = #{recordId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecordsWithoutCard" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.PetrolSalesRecordsWithoutCard" >
     update czb_petrol_sales_records_without_card
     set petrol_num = #{petrolNum,jdbcType=VARCHAR},
       buyer_id = #{buyerId,jdbcType=VARCHAR},

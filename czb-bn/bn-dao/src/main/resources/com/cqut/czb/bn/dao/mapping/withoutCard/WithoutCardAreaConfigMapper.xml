@@ -13,7 +13,7 @@
     petrol_config_id, petrol_type, area, sale_state, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_without_card_area_config
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
@@ -22,15 +22,15 @@
     delete from czb_without_card_area_config
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.WithoutCardAreaConfig" >
-    insert into czb_without_card_area_config (petrol_config_id, petrol_type, area, 
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.WithoutCardAreaConfig" >
+    insert into czb_without_card_area_config (petrol_config_id, petrol_type, area,
       sale_state, create_at, update_at
       )
-    values (#{petrolConfigId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR}, 
+    values (#{petrolConfigId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR},
       #{saleState,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.WithoutCardAreaConfig" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.WithoutCardAreaConfig" >
     insert into czb_without_card_area_config
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="petrolConfigId != null" >
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.WithoutCardAreaConfig" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.WithoutCardAreaConfig" >
     update czb_without_card_area_config
     <set >
       <if test="petrolType != null" >
@@ -94,7 +94,7 @@
     </set>
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.WithoutCardAreaConfig" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.WithoutCardAreaConfig" >
     update czb_without_card_area_config
     set petrol_type = #{petrolType,jdbcType=INTEGER},
       area = #{area,jdbcType=VARCHAR},

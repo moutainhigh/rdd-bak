@@ -13,11 +13,11 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    commodity_id, commodity_title, commodity_info, discount, vip_discount, commodity_price, 
+    commodity_id, commodity_title, commodity_info, discount, vip_discount, commodity_price,
     commodity_denomination, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_commodity_without_card
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
@@ -26,17 +26,17 @@
     delete from czb_commodity_without_card
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
-    insert into czb_commodity_without_card (commodity_id, commodity_title, commodity_info, 
-      discount, vip_discount, commodity_price, 
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.CommodityWithoutCard" >
+    insert into czb_commodity_without_card (commodity_id, commodity_title, commodity_info,
+      discount, vip_discount, commodity_price,
       commodity_denomination, create_at, update_at
       )
-    values (#{commodityId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR}, 
-      #{discount,jdbcType=DOUBLE}, #{vipDiscount,jdbcType=DOUBLE}, #{commodityPrice,jdbcType=DOUBLE}, 
+    values (#{commodityId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR},
+      #{discount,jdbcType=DOUBLE}, #{vipDiscount,jdbcType=DOUBLE}, #{commodityPrice,jdbcType=DOUBLE},
       #{commodityDenomination,jdbcType=DOUBLE}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.CommodityWithoutCard" >
     insert into czb_commodity_without_card
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="commodityId != null" >
@@ -97,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.CommodityWithoutCard" >
     update czb_commodity_without_card
     <set >
       <if test="commodityTitle != null" >
@@ -127,7 +127,7 @@
     </set>
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.CommodityWithoutCard" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.CommodityWithoutCard" >
     update czb_commodity_without_card
     set commodity_title = #{commodityTitle,jdbcType=VARCHAR},
       commodity_info = #{commodityInfo,jdbcType=VARCHAR},
