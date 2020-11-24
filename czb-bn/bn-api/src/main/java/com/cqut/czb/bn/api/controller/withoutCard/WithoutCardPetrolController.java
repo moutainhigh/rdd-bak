@@ -22,19 +22,35 @@ public class WithoutCardPetrolController {
     @Autowired
     WithoutCardPetrolService withoutCardPetrolService;
 
+    /**
+     * 获取列表数据
+     * @param petrolWithoutCardDto
+     * @return
+     */
     @PostMapping("/listByPagePetrol")
     public JSONResult listByPagePetrol(PetrolWithoutCardDto petrolWithoutCardDto) {
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(withoutCardPetrolService.listByPagePetrol(petrolWithoutCardDto));
+        // 总消费金额
         dataWithCountOutputDTO.setCount(withoutCardPetrolService.getPetrolTotal(petrolWithoutCardDto));
         return new JSONResult(dataWithCountOutputDTO);
     }
 
+    /**
+     * 新增油卡
+     * @param petrolWithoutCardDto
+     * @return
+     */
     @PostMapping("/insetPetrol")
     public JSONResult insetPetrol(PetrolWithoutCardDto petrolWithoutCardDto){
         return withoutCardPetrolService.insetPetrol(petrolWithoutCardDto);
     }
 
+    /**
+     * 删除油卡
+     * @param petrolIds
+     * @return
+     */
     @PostMapping("/removePetrol")
     public JSONResult removePetrol(String petrolIds){
         return withoutCardPetrolService.removePetrol(petrolIds);
