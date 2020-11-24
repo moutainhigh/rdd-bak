@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 import java.security.Principal;
 
 /**
- * 会员申请
+ * 作者： 陈爽
+ * 模块： 无卡加油商品管理
+ * 创建时间： 2020/11/17
  */
 @Component
 public interface WithoutCardCommodityService {

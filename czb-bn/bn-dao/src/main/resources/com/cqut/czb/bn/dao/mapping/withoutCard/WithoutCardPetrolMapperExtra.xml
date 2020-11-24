@@ -1,5 +1,103 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.withoutCard.WithoutCardPetrolMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto">
+        <id column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR" />
+        <result column="petrol_psw" property="petrolPsw" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="petrol_balance" property="petrolBalance" jdbcType="DOUBLE" />
+        <result column="reserve_fund" property="reserveFund" jdbcType="DOUBLE" />
+        <result column="available_integral" property="availableIntegral" jdbcType="DOUBLE" />
+        <result column="points_to_be_loaded" property="pointsToBeLoaded" jdbcType="DOUBLE" />
+        <result column="transaction_area" property="lastTransactionArea" jdbcType="VARCHAR" />
+        <result column="transaction_time" property="lastTransactionTime" jdbcType="TIMESTAMP" />
+        <result column="money" property="accumulativeTotal" jdbcType="DOUBLE" />
+    </resultMap>
 
+    <select id="listByPagePetrol" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto" resultMap="BaseResultMap">
+        SELECT
+            a.petrol_id,
+            a.petrol_num,
+            a.petrol_psw,
+            a.area,
+            a.petrol_balance,
+            a.reserve_fund,
+            a.available_integral,
+            a.points_to_be_loaded,
+            b.transaction_time,
+            b.money,
+            c.transaction_area
+        FROM
+            czb_petrol_without_card AS a
+            LEFT JOIN ( SELECT petrol_id, MAX( transaction_time ) AS transaction_time, SUM(turnover_amount) as money FROM czb_petrol_sales_records_without_card GROUP BY petrol_id ) AS b ON a.petrol_id = b.petrol_id
+            LEFT JOIN czb_petrol_sales_records_without_card AS c ON a.petrol_id = c.petrol_id
+            AND b.transaction_time = c.transaction_time
+        <where>
+            a.state = 1
+            <if test="petrolNum != null and petrolNum != ''">
+                and a.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="area != null and area != ''">
+                and a.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="lastTransactionArea != null and lastTransactionArea != ''">
+                and c.transaction_area like concat('%',#{lastTransactionArea,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime != null and endTime != null">
+                and b.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and b.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="getPetrolTotal" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto" resultType="java.lang.String">
+        SELECT
+        SUM(b.money)
+        FROM
+        czb_petrol_without_card AS a
+        LEFT JOIN ( SELECT petrol_id, MAX( transaction_time ) AS transaction_time, SUM(turnover_amount) as money FROM czb_petrol_sales_records_without_card GROUP BY petrol_id ) AS b ON a.petrol_id = b.petrol_id
+        LEFT JOIN czb_petrol_sales_records_without_card AS c ON a.petrol_id = c.petrol_id
+        AND b.transaction_time = c.transaction_time
+        <where>
+            a.state = 1
+            <if test="petrolNum != null and petrolNum != ''">
+                and a.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="area != null and area != ''">
+                and a.area like concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="lastTransactionArea != null and lastTransactionArea != ''">
+                and c.transaction_area like concat('%',#{lastTransactionArea,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime != null and endTime != null">
+                and b.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and b.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insetPetrol" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto">
+        insert into czb_petrol_without_card (petrol_id, petrol_num, petrol_psw,
+        available_integral, points_to_be_loaded, petrol_balance,
+        reserve_fund, state,area, create_at, update_at
+        )
+        values (#{petrolId,jdbcType=VARCHAR}, #{petrolNum,jdbcType=VARCHAR}, #{petrolPsw,jdbcType=VARCHAR},
+        #{availableIntegral,jdbcType=DOUBLE}, #{pointsToBeLoaded,jdbcType=DOUBLE}, #{petrolBalance,jdbcType=DOUBLE},
+        #{reserveFund,jdbcType=DOUBLE}, 1, #{area,jdbcType=VARCHAR}, now(), now()
+        )
+    </insert>
+
+    <update id="removePetrol" parameterType="java.lang.String">
+        update czb_petrol_without_card
+        <set>
+            state = 0
+        </set>
+        <where>
+            petrol_id in
+            <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+                #{item,jdbcType = VARCHAR }
+            </foreach>
+        </where>
+    </update>
 </mapper>

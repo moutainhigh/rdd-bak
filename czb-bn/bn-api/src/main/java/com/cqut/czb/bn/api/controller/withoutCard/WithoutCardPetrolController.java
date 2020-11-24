@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.api.controller.withoutCard;
 
+import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
+import com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.withoutCard.WithoutCardPetrolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +22,21 @@ public class WithoutCardPetrolController {
     @Autowired
     WithoutCardPetrolService withoutCardPetrolService;
 
+    @PostMapping("/listByPagePetrol")
+    public JSONResult listByPagePetrol(PetrolWithoutCardDto petrolWithoutCardDto) {
+        DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
+        dataWithCountOutputDTO.setData(withoutCardPetrolService.listByPagePetrol(petrolWithoutCardDto));
+        dataWithCountOutputDTO.setCount(withoutCardPetrolService.getPetrolTotal(petrolWithoutCardDto));
+        return new JSONResult(dataWithCountOutputDTO);
+    }
+
+    @PostMapping("/insetPetrol")
+    public JSONResult insetPetrol(PetrolWithoutCardDto petrolWithoutCardDto){
+        return withoutCardPetrolService.insetPetrol(petrolWithoutCardDto);
+    }
+
+    @PostMapping("/removePetrol")
+    public JSONResult removePetrol(String petrolIds){
+        return withoutCardPetrolService.removePetrol(petrolIds);
+    }
 }
