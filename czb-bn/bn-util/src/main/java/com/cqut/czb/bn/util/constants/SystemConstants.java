@@ -139,6 +139,12 @@ public class SystemConstants {
      *导出微信商品库存Excel的头部
      */
     public static final String[] WXSTOCK_DETAILS_HEAD={"商品编号","商品名","属性","内容","价格(元)","状态","导入时间"};
+
+    /**
+     * 导出充值记录excel的头部
+     */
+    public static final String[] WITHOUT_CARD_PETROL_SALE_EXCEL_HEAD={"所属油卡卡码","支付订单号","账号","消费时间","所购买商品","消费金额","消费地点"};
+
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }

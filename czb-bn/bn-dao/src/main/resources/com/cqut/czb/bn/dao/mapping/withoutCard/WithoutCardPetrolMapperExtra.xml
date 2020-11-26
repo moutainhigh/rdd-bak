@@ -49,6 +49,7 @@
                 and b.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
+        ORDER BY b.transaction_time DESC
     </select>
 
     <select id="getPetrolTotal" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto" resultType="java.lang.String">

@@ -2,6 +2,7 @@ package com.cqut.czb.bn.entity.dto.withoutCard;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -29,8 +30,10 @@ public class PetrolWithoutCardDto extends PageDTO {
 
     private Double accumulativeTotal;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
     public String getPetrolId() {

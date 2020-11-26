@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.withoutCard.WithoutCardSellManagementMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.withoutCard.PetrolSalesWithoutDto">
+        <id column="record_id" property="recordId" jdbcType="VARCHAR"/>
+        <result column="third_order_id" property="thirdOrderId" jdbcType="VARCHAR"/>
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
+        <result column="petrol_num" property="petrolNum" jdbcType="VARCHAR"/>
+        <result column="turnover_amount" property="turnoverAmount" jdbcType="VARCHAR"/>
+        <result column="transaction_area" property="transactionArea" jdbcType="VARCHAR"/>
+        <result column="transaction_time" property="transactionTime" jdbcType="VARCHAR"/>
+        <result column="commodity_title" property="commodityTitle" jdbcType="VARCHAR"/>
+    </resultMap>
 
+    <select id="listPetrolSellManagement" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolSalesWithoutDto">
+        SELECT
+        sell.record_id,
+        sell.third_order_id,
+        czb_user.user_account,
+        sell.petrol_num,
+        sell.turnover_amount,
+        sell.transaction_area,
+        sell.transaction_time,
+        cw.commodity_title
+        FROM
+        czb_petrol_sales_records_without_card AS sell
+        LEFT JOIN czb_user ON czb_user.user_id = sell.buyer_id
+        LEFT JOIN czb_commodity_without_card AS cw ON cw.commodity_id = sell.commodity_id
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and czb_user.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="petrolNum != null and petrolNum != ''">
+                and sell.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="transactionArea != null and transactionArea != ''">
+                and sell.transaction_area like concat('%',#{transactionArea,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="commodityTitle != null and commodityTitle != ''">
+                and cw.commodity_title like concat('%',#{commodityTitle,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime != null and endTime != null">
+                and sell.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and sell.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER BY sell.transaction_time DESC
+    </select>
+
+    <select id="getPetrolSellManagementTotal" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolSalesWithoutDto" resultType="java.lang.String">
+        SELECT
+        SUM(sell.turnover_amount)
+        FROM
+        czb_petrol_sales_records_without_card AS sell
+        LEFT JOIN czb_user ON czb_user.user_id = sell.buyer_id
+        LEFT JOIN czb_commodity_without_card AS cw ON cw.commodity_id = sell.commodity_id
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and czb_user.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="petrolNum != null and petrolNum != ''">
+                and sell.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="transactionArea != null and transactionArea != ''">
+                and sell.transaction_area like concat('%',#{transactionArea,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="commodityTitle != null and commodityTitle != ''">
+                and cw.commodity_title like concat('%',#{commodityTitle,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime != null and endTime != null">
+                and sell.transaction_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and sell.transaction_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
 </mapper>
