@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.withoutCard;
 
 
 import com.cqut.czb.bn.entity.dto.WxVipMoenyDTO;
+import com.cqut.czb.bn.entity.dto.withoutCard.CommodityWithoutCardDto;
 import com.cqut.czb.bn.entity.entity.VIPApply;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatVipApply;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -18,4 +19,13 @@ import java.security.Principal;
 @Component
 public interface WithoutCardCommodityService {
 
+    PageInfo<CommodityWithoutCardDto> listPetrolCommodity(CommodityWithoutCardDto commodityWithoutCardDto);
+
+    JSONResult insetCommodity(CommodityWithoutCardDto commodityWithoutCardDto);
+
+    JSONResult removeCommodity(String commodityId);
+
+    JSONResult updateCommodity(CommodityWithoutCardDto commodityWithoutCardDto);
+
+    CommodityWithoutCardDto getCommodityById(String commodityId);
 }
