@@ -8,9 +8,10 @@
     <result column="sale_state" property="saleState" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    petrol_config_id, petrol_type, area, sale_state, create_at, update_at
+    petrol_config_id, petrol_type, area, sale_state, create_at, update_at, discount
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -24,11 +25,11 @@
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.WithoutCardAreaConfig" >
     insert into czb_without_card_area_config (petrol_config_id, petrol_type, area,
-      sale_state, create_at, update_at
-      )
+      sale_state, create_at, update_at,
+      discount)
     values (#{petrolConfigId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR},
-      #{saleState,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-      )
+      #{saleState,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+      #{discount,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.withoutCard.WithoutCardAreaConfig" >
     insert into czb_without_card_area_config
@@ -51,6 +52,9 @@
       <if test="updateAt != null" >
         update_at,
       </if>
+      <if test="discount != null" >
+        discount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="petrolConfigId != null" >
@@ -70,6 +74,9 @@
       </if>
       <if test="updateAt != null" >
         #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -91,6 +98,9 @@
       <if test="updateAt != null" >
         update_at = #{updateAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
     </set>
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
   </update>
@@ -100,7 +110,8 @@
       area = #{area,jdbcType=VARCHAR},
       sale_state = #{saleState,jdbcType=INTEGER},
       create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      discount = #{discount,jdbcType=DOUBLE}
     where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
   </update>
 </mapper>

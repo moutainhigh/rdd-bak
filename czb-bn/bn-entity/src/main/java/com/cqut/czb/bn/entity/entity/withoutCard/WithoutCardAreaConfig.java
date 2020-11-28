@@ -15,6 +15,8 @@ public class WithoutCardAreaConfig {
 
     private Date updateAt;
 
+    private Double discount;
+
     public String getPetrolConfigId() {
         return petrolConfigId;
     }
@@ -61,5 +63,13 @@ public class WithoutCardAreaConfig {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 }
