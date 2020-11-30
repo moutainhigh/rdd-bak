@@ -1,5 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.withoutCard.WithoutCardAreaMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.withoutCard.WithoutCardAreaConfigDto" >
+        <id column="petrol_config_id" property="petrolConfigId" jdbcType="VARCHAR" />
+        <result column="petrol_type" property="petrolType" jdbcType="INTEGER" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="sale_state" property="saleState" jdbcType="INTEGER" />
+        <result column="discount" property="discount" jdbcType="DOUBLE" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
 
+    <select id="listWithoutCardArea" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.WithoutCardAreaConfigDto">
+    SELECT
+        petrol_config_id,
+        petrol_type,
+        area,
+        sale_state,
+        discount
+    FROM
+        czb_without_card_area_config
+    <where>
+        <if test="area != null and area != ''">
+            area like concat('%',#{area,jdbcType=VARCHAR},'%')
+        </if>
+    </where>
+    ORDER BY create_at DESC
+    </select>
+
+    <insert id="insertWithoutCardArea" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.WithoutCardAreaConfigDto" >
+    insert into czb_without_card_area_config (petrol_config_id, petrol_type, area,
+      sale_state, create_at, update_at,discount
+      )
+    values (#{petrolConfigId,jdbcType=VARCHAR}, #{petrolType,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR},
+      #{saleState,jdbcType=INTEGER}, now(), now(),#{discount,jdbcType=DOUBLE}
+      )
+    </insert>
+
+    <delete id="removetWithoutCardArea">
+        delete from czb_without_card_area_config
+        where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updatetWithoutCardArea" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.WithoutCardAreaConfigDto" >
+        update czb_without_card_area_config
+        <set >
+            <if test="petrolType != null" >
+                petrol_type = #{petrolType,jdbcType=INTEGER},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="saleState != null" >
+                sale_state = #{saleState,jdbcType=INTEGER},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="discount != null" >
+                discount = #{discount,jdbcType=DOUBLE}
+            </if>
+        </set>
+        where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="gettWithoutCardAreaById" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.WithoutCardAreaConfigDto">
+        SELECT
+        petrol_config_id,
+        petrol_type,
+        area,
+        sale_state,
+        discount
+        FROM
+        czb_without_card_area_config
+        where petrol_config_id = #{petrolConfigId,jdbcType=VARCHAR}
+    </select>
 </mapper>

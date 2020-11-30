@@ -29,6 +29,7 @@
                 commodity_price = #{commodityPrice,jdbcType=DOUBLE}
             </if>
         </where>
+        order by create_at DESC
     </select>
 
     <select id="getCommodityById" parameterType="java.lang.String" resultMap="BaseResultMap">
