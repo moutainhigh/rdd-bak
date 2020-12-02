@@ -34,7 +34,7 @@
             LEFT JOIN czb_petrol_sales_records_without_card AS c ON a.petrol_id = c.petrol_id
             AND b.transaction_time = c.transaction_time
         <where>
-            a.state = 1
+            a.state != -1
             <if test="petrolNum != null and petrolNum != ''">
                 and a.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
             </if>
@@ -52,16 +52,16 @@
         ORDER BY b.transaction_time DESC
     </select>
 
-    <select id="getPetrolTotal" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto" resultType="java.lang.String">
+    <select id="getPetrolTotal" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto" resultType="com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO">
         SELECT
-        SUM(b.money)
+        SUM(b.money) as count, SUM( a.petrol_balance ) as blance
         FROM
         czb_petrol_without_card AS a
         LEFT JOIN ( SELECT petrol_id, MAX( transaction_time ) AS transaction_time, SUM(turnover_amount) as money FROM czb_petrol_sales_records_without_card GROUP BY petrol_id ) AS b ON a.petrol_id = b.petrol_id
         LEFT JOIN czb_petrol_sales_records_without_card AS c ON a.petrol_id = c.petrol_id
         AND b.transaction_time = c.transaction_time
         <where>
-            a.state = 1
+            a.state != -1
             <if test="petrolNum != null and petrolNum != ''">
                 and a.petrol_num like concat('%',#{petrolNum,jdbcType=VARCHAR},'%')
             </if>
@@ -92,7 +92,7 @@
     <update id="removePetrol" parameterType="java.lang.String">
         update czb_petrol_without_card
         <set>
-            state = 0
+            state = -1
         </set>
         <where>
             petrol_id in

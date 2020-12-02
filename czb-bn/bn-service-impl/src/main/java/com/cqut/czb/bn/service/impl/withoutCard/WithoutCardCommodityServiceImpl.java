@@ -42,4 +42,10 @@ public class WithoutCardCommodityServiceImpl implements WithoutCardCommodityServ
     public CommodityWithoutCardDto getCommodityById(String commodityId) {
         return withoutCardCommodityMapperExtra.getCommodityById(commodityId);
     }
+
+    @Override
+    public JSONResult updateCommodityState(CommodityWithoutCardDto commodityWithoutCardDto) {
+        String[] ids = commodityWithoutCardDto.getCommodityId().split(",");
+        return withoutCardCommodityMapperExtra.updateCommodityState(ids,commodityWithoutCardDto.getState()) > 0 ? new JSONResult(200,"成功") : new JSONResult(500,"失败");
+    }
 }

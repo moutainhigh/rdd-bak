@@ -32,7 +32,10 @@ public class WithoutCardPetrolController {
         DataWithCountOutputDTO dataWithCountOutputDTO = new DataWithCountOutputDTO();
         dataWithCountOutputDTO.setData(withoutCardPetrolService.listByPagePetrol(petrolWithoutCardDto));
         // 总消费金额
-        dataWithCountOutputDTO.setCount(withoutCardPetrolService.getPetrolTotal(petrolWithoutCardDto));
+        DataWithCountOutputDTO output = withoutCardPetrolService.getPetrolTotal(petrolWithoutCardDto);
+        dataWithCountOutputDTO.setCount(output.getCount());
+        // 余额
+        dataWithCountOutputDTO.setBlance(output.getBlance());
         return new JSONResult(dataWithCountOutputDTO);
     }
 

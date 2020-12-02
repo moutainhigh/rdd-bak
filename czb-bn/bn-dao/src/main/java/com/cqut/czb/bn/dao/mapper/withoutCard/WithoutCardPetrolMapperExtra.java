@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.withoutCard;
 
+import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,7 +10,7 @@ public interface WithoutCardPetrolMapperExtra {
 
     List<PetrolWithoutCardDto> listByPagePetrol(PetrolWithoutCardDto petrolWithoutCardDto);
 
-    String getPetrolTotal(PetrolWithoutCardDto petrolWithoutCardDto);
+    DataWithCountOutputDTO getPetrolTotal(PetrolWithoutCardDto petrolWithoutCardDto);
 
     int insetPetrol(PetrolWithoutCardDto petrolWithoutCardDto);
 

@@ -28,4 +28,6 @@ public interface WithoutCardCommodityService {
     JSONResult updateCommodity(CommodityWithoutCardDto commodityWithoutCardDto);
 
     CommodityWithoutCardDto getCommodityById(String commodityId);
+
+    JSONResult updateCommodityState(CommodityWithoutCardDto commodityWithoutCardDto);
 }

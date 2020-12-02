@@ -18,7 +18,8 @@
             discount,
             vip_discount,
             commodity_price,
-            commodity_denomination
+            commodity_denomination,
+            state
         FROM
             czb_commodity_without_card
         <where>
@@ -40,7 +41,8 @@
         commodity_info,
         vip_discount,
         commodity_price,
-        commodity_denomination
+        commodity_denomination,
+        state
         FROM
         czb_commodity_without_card
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
@@ -49,11 +51,11 @@
     <insert id="insetCommodity" parameterType="com.cqut.czb.bn.entity.dto.withoutCard.CommodityWithoutCardDto" >
     insert into czb_commodity_without_card (commodity_id, commodity_title, commodity_info,
       discount, vip_discount, commodity_price,
-      commodity_denomination, create_at, update_at
+      commodity_denomination, create_at, update_at,state
       )
     values (#{commodityId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR}, #{commodityInfo,jdbcType=VARCHAR},
       #{discount,jdbcType=DOUBLE}, #{vipDiscount,jdbcType=DOUBLE}, #{commodityPrice,jdbcType=DOUBLE},
-      #{commodityDenomination,jdbcType=DOUBLE}, now(), now()
+      #{commodityDenomination,jdbcType=DOUBLE}, now(), now(), #{state,jdbcType=INTEGER}
       )
     </insert>
 
@@ -88,8 +90,25 @@
             <if test="commodityDenomination != null" >
                 commodity_denomination = #{commodityDenomination,jdbcType=DOUBLE},
             </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=INTEGER},
+            </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateCommodityState">
+        update czb_commodity_without_card
+        <set >
+            <if test="state != null" >
+                state = #{state,jdbcType=INTEGER},
+            </if>
+        </set>
+        <where>
+            commodity_id in
+            <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+                #{item,jdbcType = VARCHAR }
+            </foreach>
+        </where>
+    </update>
 </mapper>

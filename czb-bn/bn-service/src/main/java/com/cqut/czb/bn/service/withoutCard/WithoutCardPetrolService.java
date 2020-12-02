@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.withoutCard;
 
+import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
@@ -15,7 +16,7 @@ public interface WithoutCardPetrolService {
 
     PageInfo<PetrolWithoutCardDto> listByPagePetrol(PetrolWithoutCardDto petrolWithoutCardDto);
 
-    String getPetrolTotal(PetrolWithoutCardDto petrolWithoutCardDto);
+    DataWithCountOutputDTO getPetrolTotal(PetrolWithoutCardDto petrolWithoutCardDto);
 
     JSONResult insetPetrol(PetrolWithoutCardDto petrolWithoutCardDto);
 

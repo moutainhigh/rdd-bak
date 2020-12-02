@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.withoutCard;
 
 import com.cqut.czb.bn.dao.mapper.withoutCard.WithoutCardPetrolMapperExtra;
+import com.cqut.czb.bn.entity.dto.DataWithCountOutputDTO;
 import com.cqut.czb.bn.entity.dto.withoutCard.PetrolWithoutCardDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.withoutCard.WithoutCardPetrolService;
@@ -22,7 +23,7 @@ public class WithoutCardPetrolServiceImpl implements WithoutCardPetrolService {
     }
 
     @Override
-    public String getPetrolTotal(PetrolWithoutCardDto petrolWithoutCardDto) {
+    public DataWithCountOutputDTO getPetrolTotal(PetrolWithoutCardDto petrolWithoutCardDto) {
         return withoutCardPetrolMapperExtra.getPetrolTotal(petrolWithoutCardDto);
     }
 

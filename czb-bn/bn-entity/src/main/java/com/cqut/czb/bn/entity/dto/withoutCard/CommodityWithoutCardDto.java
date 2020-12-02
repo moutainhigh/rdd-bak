@@ -19,6 +19,8 @@ public class CommodityWithoutCardDto extends PageDTO {
 
     private Double commodityDenomination;
 
+    private Integer state;
+
 
     public String getCommodityId() {
         return commodityId;
@@ -74,5 +76,13 @@ public class CommodityWithoutCardDto extends PageDTO {
 
     public void setCommodityDenomination(Double commodityDenomination) {
         this.commodityDenomination = commodityDenomination;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

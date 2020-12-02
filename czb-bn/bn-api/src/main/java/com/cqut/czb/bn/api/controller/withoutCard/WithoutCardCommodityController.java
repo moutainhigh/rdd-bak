@@ -46,4 +46,9 @@ public class WithoutCardCommodityController {
     public JSONResult getCommodityById(String commodityId){
         return new JSONResult(withoutCardCommodityService.getCommodityById(commodityId));
     }
+
+    @PostMapping("updateCommodityState")
+    public JSONResult updateCommodityState(CommodityWithoutCardDto commodityWithoutCardDto){
+        return withoutCardCommodityService.updateCommodityState(commodityWithoutCardDto);
+    }
 }

@@ -10,6 +10,8 @@ public class DataWithCountOutputDTO<T> {
 
     private String todayNum;//今日总数量
 
+    private String blance; // 余额
+
     public String getTodayCount() {
         return todayCount;
     }
@@ -40,5 +42,13 @@ public class DataWithCountOutputDTO<T> {
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getBlance() {
+        return blance;
+    }
+
+    public void setBlance(String blance) {
+        this.blance = blance;
     }
 }
