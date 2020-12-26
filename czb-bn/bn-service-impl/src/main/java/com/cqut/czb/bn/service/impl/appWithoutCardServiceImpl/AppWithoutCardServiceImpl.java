@@ -48,8 +48,9 @@ public class AppWithoutCardServiceImpl implements AppWithoutCardService {
         return petrolZoneDTOList;
     }
 
-    public List<UserCommodityOrderDTO> getCommodityOrderList(String userId, Integer state) {
-        List<UserCommodityOrderDTO> a = appWithoutCardMapperExtra.getCommodityOrderList(userId,state);
+    @Override
+    public List<UserCommodityOrderDTO> getCommodityOrderList(String userId, Integer isRecharged) {
+        List<UserCommodityOrderDTO> a = appWithoutCardMapperExtra.getCommodityOrderList(userId,isRecharged);
         return a;
     }
 }

@@ -26,4 +26,23 @@
     FROM
       czb_commodity_without_card
   </select>
+
+
+  <select id="getCommodityOrderList" resultType="com.cqut.czb.bn.entity.dto.Commodity.UserCommodityOrderDTO">
+    SELECT
+	cp.record_id orderId,
+	cc.commodity_title commodityTitle,
+	cc.commodity_price commodityPrice,
+	cp.create_at createAt,
+	cc.commodity_info shopAddress
+  FROM
+	czb_petrol_sales_records_without_card as cp
+	LEFT JOIN czb_commodity_without_card as cc ON cp.commodity_id = cc.commodity_id
+    WHERE
+	cp.buyer_id = #{userId,jdbcType=VARCHAR}
+	AND
+	cp.is_recharged = #{isRecharged,jdbcType=INTEGER}
+    AND cp.state = 1
+	ORDER BY cp.create_at DESC
+  </select>
 </mapper>

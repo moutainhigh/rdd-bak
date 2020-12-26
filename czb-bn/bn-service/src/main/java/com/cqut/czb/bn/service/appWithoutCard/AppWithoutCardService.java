@@ -13,7 +13,7 @@ public interface AppWithoutCardService {
 
     List<PetrolZoneDTO> getGoods(User user, String area);
 
-    List<UserCommodityOrderDTO> getCommodityOrderList(String userId, Integer state);
+    List<UserCommodityOrderDTO> getCommodityOrderList(String userId, Integer isRecharged);
 
 
 }

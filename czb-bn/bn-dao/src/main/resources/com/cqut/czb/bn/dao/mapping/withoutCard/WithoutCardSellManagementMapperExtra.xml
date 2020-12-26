@@ -27,6 +27,7 @@
         LEFT JOIN czb_user ON czb_user.user_id = sell.buyer_id
         LEFT JOIN czb_commodity_without_card AS cw ON cw.commodity_id = sell.commodity_id
         <where>
+            sell.state = 1
             <if test="userAccount != null and userAccount != ''">
                 and czb_user.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
             </if>
@@ -55,6 +56,7 @@
         LEFT JOIN czb_user ON czb_user.user_id = sell.buyer_id
         LEFT JOIN czb_commodity_without_card AS cw ON cw.commodity_id = sell.commodity_id
         <where>
+            sell.state = 1
             <if test="userAccount != null and userAccount != ''">
                 and czb_user.user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
             </if>

@@ -31,8 +31,8 @@ public class AppWithoutCardController {
     }
 
     @GetMapping("/getCommodityOrder")
-    public JSONResult getCommodityOrder(@Param("state") Integer state, Principal principal){
+    public JSONResult getCommodityOrder(@Param("isRecharged") Integer isRecharged, Principal principal){
         User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(appWithoutCardService.getCommodityOrderList(user.getUserId(),state));
+        return new JSONResult(appWithoutCardService.getCommodityOrderList(user.getUserId(),isRecharged));
     }
 }

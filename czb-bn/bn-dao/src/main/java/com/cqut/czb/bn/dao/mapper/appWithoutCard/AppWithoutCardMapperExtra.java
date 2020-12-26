@@ -14,5 +14,5 @@ public interface AppWithoutCardMapperExtra {
 
     List<CommodityWithoutCard> getGoods();
 
-    List<UserCommodityOrderDTO> getCommodityOrderList(@Param("userId")String userId, @Param("state") Integer state);
+    List<UserCommodityOrderDTO> getCommodityOrderList(@Param("userId")String userId, @Param("isRecharged") Integer isRecharged);
 }
