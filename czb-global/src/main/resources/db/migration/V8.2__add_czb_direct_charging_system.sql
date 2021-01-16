@@ -50,10 +50,12 @@ CREATE TABLE `czb_direct_charging_commodity` (
 -- ----------------------------
 DROP TABLE IF EXISTS `czb_user_card_relation`;
 CREATE TABLE `czb_user_card_relation` (
-    `id` varchar(20) NOT NULL,
+    `record_id` varchar(20) NOT NULL,
     `user_id` varchar(20) DEFAULT NULL,
-   `petrol_id` varchar(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+   `petrol_id` varchar(20) DEFAULT NULL,
+   `create_at` timestamp NULL DEFAULT NULL,
+  `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`record_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 
