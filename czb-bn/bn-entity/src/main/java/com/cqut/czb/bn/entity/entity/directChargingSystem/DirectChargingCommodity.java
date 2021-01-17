@@ -5,7 +5,7 @@ import java.util.Date;
 public class DirectChargingCommodity {
     private String commodityId;
 
-    private Double amount;
+    private Double account;
 
     private Double discount;
 
@@ -25,12 +25,12 @@ public class DirectChargingCommodity {
         this.commodityId = commodityId == null ? null : commodityId.trim();
     }
 
-    public Double getAmount() {
-        return amount;
+    public Double getAccount() {
+        return account;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setAccount(Double account) {
+        this.account = account;
     }
 
     public Double getDiscount() {

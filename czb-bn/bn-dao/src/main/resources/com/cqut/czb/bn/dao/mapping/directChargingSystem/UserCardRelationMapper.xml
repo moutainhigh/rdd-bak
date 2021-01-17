@@ -4,15 +4,16 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation" >
     <id column="record_id" property="recordId" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="petrol_id" property="petrolId" jdbcType="VARCHAR" />
+    <result column="sinopec_petrol_num" property="sinopecPetrolNum" jdbcType="VARCHAR" />
+    <result column="petrolChina_petrol_num" property="petrolchinaPetrolNum" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    record_id, user_id, petrol_id, create_at, update_at
+    record_id, user_id, sinopec_petrol_num, petrolChina_petrol_num, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_user_card_relation
     where record_id = #{recordId,jdbcType=VARCHAR}
@@ -22,10 +23,12 @@
     where record_id = #{recordId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation" >
-    insert into czb_user_card_relation (record_id, user_id, petrol_id, 
-      create_at, update_at)
-    values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{petrolId,jdbcType=VARCHAR}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+    insert into czb_user_card_relation (record_id, user_id, sinopec_petrol_num,
+      petrolChina_petrol_num, create_at, update_at
+      )
+    values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{sinopecPetrolNum,jdbcType=VARCHAR},
+      #{petrolchinaPetrolNum,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation" >
     insert into czb_user_card_relation
@@ -36,8 +39,11 @@
       <if test="userId != null" >
         user_id,
       </if>
-      <if test="petrolId != null" >
-        petrol_id,
+      <if test="sinopecPetrolNum != null" >
+        sinopec_petrol_num,
+      </if>
+      <if test="petrolchinaPetrolNum != null" >
+        petrolChina_petrol_num,
       </if>
       <if test="createAt != null" >
         create_at,
@@ -53,8 +59,11 @@
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="petrolId != null" >
-        #{petrolId,jdbcType=VARCHAR},
+      <if test="sinopecPetrolNum != null" >
+        #{sinopecPetrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolchinaPetrolNum != null" >
+        #{petrolchinaPetrolNum,jdbcType=VARCHAR},
       </if>
       <if test="createAt != null" >
         #{createAt,jdbcType=TIMESTAMP},
@@ -70,8 +79,11 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="petrolId != null" >
-        petrol_id = #{petrolId,jdbcType=VARCHAR},
+      <if test="sinopecPetrolNum != null" >
+        sinopec_petrol_num = #{sinopecPetrolNum,jdbcType=VARCHAR},
+      </if>
+      <if test="petrolchinaPetrolNum != null" >
+        petrolChina_petrol_num = #{petrolchinaPetrolNum,jdbcType=VARCHAR},
       </if>
       <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
@@ -85,7 +97,8 @@
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation" >
     update czb_user_card_relation
     set user_id = #{userId,jdbcType=VARCHAR},
-      petrol_id = #{petrolId,jdbcType=VARCHAR},
+      sinopec_petrol_num = #{sinopecPetrolNum,jdbcType=VARCHAR},
+      petrolChina_petrol_num = #{petrolchinaPetrolNum,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=VARCHAR}

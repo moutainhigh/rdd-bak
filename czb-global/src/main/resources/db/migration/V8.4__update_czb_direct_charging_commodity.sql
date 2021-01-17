@@ -1,0 +1,1 @@
+ALTER TABLE czb_direct_charging_commodity CHANGE amount account double(10, 2) DEFAULT NULL;

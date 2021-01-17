@@ -3,7 +3,7 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.DirectChargingCommodityMapper" >
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" >
     <id column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
-    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="account" property="account" jdbcType="DOUBLE" />
     <result column="discount" property="discount" jdbcType="DOUBLE" />
     <result column="preferential_price" property="preferentialPrice" jdbcType="DOUBLE" />
     <result column="state" property="state" jdbcType="INTEGER" />
@@ -11,10 +11,10 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    commodity_id, amount, discount, preferential_price, state, create_at, update_at
+    commodity_id, account, discount, preferential_price, state, create_at, update_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_direct_charging_commodity
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
@@ -24,11 +24,11 @@
     where commodity_id = #{commodityId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" >
-    insert into czb_direct_charging_commodity (commodity_id, amount, discount, 
-      preferential_price, state, create_at, 
+    insert into czb_direct_charging_commodity (commodity_id, account, discount,
+      preferential_price, state, create_at,
       update_at)
-    values (#{commodityId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE}, 
-      #{preferentialPrice,jdbcType=DOUBLE}, #{state,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, 
+    values (#{commodityId,jdbcType=VARCHAR}, #{account,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE},
+      #{preferentialPrice,jdbcType=DOUBLE}, #{state,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP},
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" >
@@ -37,8 +37,8 @@
       <if test="commodityId != null" >
         commodity_id,
       </if>
-      <if test="amount != null" >
-        amount,
+      <if test="account != null" >
+        account,
       </if>
       <if test="discount != null" >
         discount,
@@ -60,8 +60,8 @@
       <if test="commodityId != null" >
         #{commodityId,jdbcType=VARCHAR},
       </if>
-      <if test="amount != null" >
-        #{amount,jdbcType=DOUBLE},
+      <if test="account != null" >
+        #{account,jdbcType=DOUBLE},
       </if>
       <if test="discount != null" >
         #{discount,jdbcType=DOUBLE},
@@ -83,8 +83,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" >
     update czb_direct_charging_commodity
     <set >
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DOUBLE},
+      <if test="account != null" >
+        account = #{account,jdbcType=DOUBLE},
       </if>
       <if test="discount != null" >
         discount = #{discount,jdbcType=DOUBLE},
@@ -106,7 +106,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" >
     update czb_direct_charging_commodity
-    set amount = #{amount,jdbcType=DOUBLE},
+    set account = #{account,jdbcType=DOUBLE},
       discount = #{discount,jdbcType=DOUBLE},
       preferential_price = #{preferentialPrice,jdbcType=DOUBLE},
       state = #{state,jdbcType=INTEGER},

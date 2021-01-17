@@ -7,7 +7,9 @@ public class UserCardRelation {
 
     private String userId;
 
-    private String petrolId;
+    private String sinopecPetrolNum;
+
+    private String petrolchinaPetrolNum;
 
     private Date createAt;
 
@@ -29,12 +31,20 @@ public class UserCardRelation {
         this.userId = userId == null ? null : userId.trim();
     }
 
-    public String getPetrolId() {
-        return petrolId;
+    public String getSinopecPetrolNum() {
+        return sinopecPetrolNum;
     }
 
-    public void setPetrolId(String petrolId) {
-        this.petrolId = petrolId == null ? null : petrolId.trim();
+    public void setSinopecPetrolNum(String sinopecPetrolNum) {
+        this.sinopecPetrolNum = sinopecPetrolNum == null ? null : sinopecPetrolNum.trim();
+    }
+
+    public String getPetrolchinaPetrolNum() {
+        return petrolchinaPetrolNum;
+    }
+
+    public void setPetrolchinaPetrolNum(String petrolchinaPetrolNum) {
+        this.petrolchinaPetrolNum = petrolchinaPetrolNum == null ? null : petrolchinaPetrolNum.trim();
     }
 
     public Date getCreateAt() {
