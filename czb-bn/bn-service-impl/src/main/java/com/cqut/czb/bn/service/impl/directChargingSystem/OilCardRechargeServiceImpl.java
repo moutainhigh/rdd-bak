@@ -1,4 +1,11 @@
 package com.cqut.czb.bn.service.impl.directChargingSystem;
 
-public class OilCardRechargeServiceImpl {
+
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
+import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class OilCardRechargeServiceImpl implements OilCardRechargeService {
+    @Autowired
+    OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
 }
