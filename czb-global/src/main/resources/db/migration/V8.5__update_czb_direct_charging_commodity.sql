@@ -1,0 +1,1 @@
+ALTER TABLE czb_direct_charging_commodity ADD COLUMN commodity_type int(1) DEFAULT NULL

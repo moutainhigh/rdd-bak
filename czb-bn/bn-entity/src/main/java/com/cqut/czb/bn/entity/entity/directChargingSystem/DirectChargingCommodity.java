@@ -17,6 +17,8 @@ public class DirectChargingCommodity {
 
     private Date updateAt;
 
+    private Integer commodityType;
+
     public String getCommodityId() {
         return commodityId;
     }
@@ -71,5 +73,13 @@ public class DirectChargingCommodity {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getCommodityType() {
+        return commodityType;
+    }
+
+    public void setCommodityType(Integer commodityType) {
+        this.commodityType = commodityType;
     }
 }
