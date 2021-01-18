@@ -14,8 +14,8 @@
         FROM
             czb_direct_charging_commodity
         <where>
-            <if test="type != 0">
-                commodity_type = #{type,jdbcType=INTEGER}
+            <if test="_parameter != 0">
+                commodity_type = #{_parameter,jdbcType=INTEGER}
             </if>
         </where>
     </select>
