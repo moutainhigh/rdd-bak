@@ -19,4 +19,16 @@
             </if>
         </where>
     </select>
+
+    <select id="getInfoNum" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.UserCardRelationDto">
+        SELECT
+            sinopec_petrol_num sinopecPetrolNum,
+            petrolChina_petrol_num petrolchinaPetrolNum,
+            user_account userAccount
+        FROM
+            czb_user_card_relation
+            LEFT JOIN czb_user ON czb_user_card_relation.user_id = czb_user.user_id
+        WHERE
+            czb_user_card_relation.user_id = #{userId,jdbcType=VARCHAR}
+    </select>
 </mapper>

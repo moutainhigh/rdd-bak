@@ -1,14 +1,12 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -18,8 +16,22 @@ public class PrepaidRefillController {
     @Autowired
     PrepaidRefillService prepaidRefillService;
 
+    @Autowired
+    RedisUtils redisUtils;
+
     @GetMapping("/getGoodsPrice")
     public JSONResult getGoodsPrice(Integer type) {
         return new JSONResult(prepaidRefillService.getGoodsPrice(type));
+    }
+
+    /**
+     * 获取当前账户号码和绑定的油卡
+     * @param principal
+     * @return
+     */
+    @PostMapping("/getInfoNum")
+    public JSONResult getInfoNum(Principal principal){
+        User user = (User)redisUtils.get(principal.getName());
+        return new JSONResult(prepaidRefillService.getInfoNum(user.getUserId()));
     }
 }
