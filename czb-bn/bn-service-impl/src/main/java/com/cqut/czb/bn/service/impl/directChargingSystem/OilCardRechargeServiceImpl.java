@@ -24,6 +24,11 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public List<DirectChargingOrderDto> getAllOrderInfoList(Integer type) {
+        return oilCardRechargeMapperExtra.getAllOrderInfoList(type);
+    }
+
+    @Override
     public JSONResult bindingOilCard(String userId, OilCardBinging oilCardBinging) {
         if(!oilCardBinging.getPertrolNum().equals(oilCardBinging.getIsPertrolNum()))
             return new JSONResult(500,"输入卡号不一致");
