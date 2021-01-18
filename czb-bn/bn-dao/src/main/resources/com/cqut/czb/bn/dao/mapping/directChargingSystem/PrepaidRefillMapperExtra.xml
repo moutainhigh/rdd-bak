@@ -26,8 +26,8 @@
             petrolChina_petrol_num petrolchinaPetrolNum,
             user_account userAccount
         FROM
-            czb_user_card_relation
-            LEFT JOIN czb_user ON czb_user_card_relation.user_id = czb_user.user_id
+            czb_user
+            LEFT JOIN czb_user_card_relation ON czb_user_card_relation.user_id = czb_user.user_id
         WHERE
             czb_user_card_relation.user_id = #{userId,jdbcType=VARCHAR}
     </select>

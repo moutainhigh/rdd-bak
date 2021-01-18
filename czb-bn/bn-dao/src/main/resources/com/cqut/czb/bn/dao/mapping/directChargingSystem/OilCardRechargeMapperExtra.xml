@@ -9,6 +9,45 @@
             state state,
             create_at createAt
         FROM czb_direct_charging_order
-        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = #{type,jdbcType=INTEGER}
+        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = #{type,jdbcType=INTEGER} and state != 0
     </select>
+
+    <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
+        SELECT COUNT(record_id)
+        FROM czb_user_card_relation
+        <where>
+            <if test="type != null and type = 0">
+                petrolChina_petrol_num = #{pertrolNum,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type = 1">
+                sinopec_petrol_num = #{pertrolNum,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="isExistOilCardUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(record_id)
+        FROM czb_user_card_relation
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="upDatePetrolNum">
+        UPDATE czb_user_card_relation
+        <if test="type != null and type = 0">
+            SET petrolChina_petrol_num = #{pertrolNum,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null and type = 1">
+            SET sinopec_petrol_num = #{pertrolNum,jdbcType=VARCHAR}
+        </if>
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertPetrolNum" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation">
+        insert into czb_user_card_relation (record_id, user_id, sinopec_petrol_num,
+          petrolChina_petrol_num, create_at, update_at
+          )
+        values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{sinopecPetrolNum,jdbcType=VARCHAR},
+          #{petrolchinaPetrolNum,jdbcType=VARCHAR}, now(), now()
+          )
+    </insert>
 </mapper>
