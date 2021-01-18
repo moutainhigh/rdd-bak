@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface PrepaidRefillMapperExtra {
-    List<DirectChargingCommodity> getGoodsPrice(@Param("type") Integer type);
+    List<DirectChargingCommodity> getGoodsPrice(Integer type);
 
-    UserCardRelationDto getInfoNum(@Param("userId")String userId);
+    UserCardRelationDto getInfoNum(String userId);
 }
