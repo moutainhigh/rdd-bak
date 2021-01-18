@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.directChargingSystem.PrepaidRefillMapperExtra" >
-    <select id="getGoodsPrice" resultType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity">
+    <select id="getGoodsPrice" parameterType="java.lang.Integer" resultType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity">
         SELECT
             commodity_id AS commodity_id,
             account AS account,
             discount AS discount,
             preferential_price AS preferentialPrice,
+            commodity_type as commodityType,
             state AS state,
             create_at AS createAt,
             update_at AS updateAt
@@ -14,7 +15,7 @@
             czb_direct_charging_commodity
         <where>
             <if test="type != 0">
-                state = #{type,jdbcType=INTEGER}
+                commodity_type = #{type,jdbcType=INTEGER}
             </if>
         </where>
     </select>
