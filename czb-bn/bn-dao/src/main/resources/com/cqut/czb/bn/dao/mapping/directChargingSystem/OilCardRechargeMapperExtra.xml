@@ -12,6 +12,17 @@
         WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = #{type,jdbcType=INTEGER} and state != 0
     </select>
 
+    <select id="getAllOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            order_id orderId,
+            third_order_id thirdOrderId,
+            recharge_amount rechargeAmount,
+            state state,
+            create_at createAt
+        FROM czb_direct_charging_order
+        WHERE record_type = #{type,jdbcType=INTEGER}
+    </select>
+
     <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
         SELECT COUNT(record_id)
         FROM czb_user_card_relation

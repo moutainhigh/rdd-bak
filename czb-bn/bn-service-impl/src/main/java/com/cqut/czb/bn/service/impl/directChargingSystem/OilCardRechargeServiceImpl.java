@@ -24,13 +24,18 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public List<DirectChargingOrderDto> getAllOrderInfoList(Integer type) {
+        return oilCardRechargeMapperExtra.getAllOrderInfoList(type);
+    }
+
+    @Override
     public JSONResult bindingOilCard(String userId, OilCardBinging oilCardBinging) {
-        if(oilCardBinging.getPertrolNum().equals(oilCardBinging.getIsPertrolNum()))
-            return new JSONResult("输入卡号不一致");
+        if(!oilCardBinging.getPertrolNum().equals(oilCardBinging.getIsPertrolNum()))
+            return new JSONResult(500,"输入卡号不一致");
 
         int oilCardNum = oilCardRechargeMapperExtra.isExistOilCard(oilCardBinging);
         if (oilCardNum > 0)
-            return new JSONResult("该卡号已被绑定过,请重新确认卡号");
+            return new JSONResult(500,"该卡号已被绑定过,请重新确认卡号");
 
         // 检查该用户有没有绑过卡号
         int isExist = oilCardRechargeMapperExtra.isExistOilCardUser(userId);
@@ -47,6 +52,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                 userCardRelation.setSinopecPetrolNum(oilCardBinging.getPertrolNum());
             isSuccess = oilCardRechargeMapperExtra.insertPetrolNum(userCardRelation) > 0;
         }
-        return isSuccess ? new JSONResult("绑定成功"):new JSONResult("绑定失败");
+        return isSuccess ? new JSONResult(200,"绑定成功"):new JSONResult(500,"绑定失败");
     }
 }

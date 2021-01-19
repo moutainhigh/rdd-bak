@@ -31,7 +31,7 @@
             czb_user
             LEFT JOIN czb_user_card_relation ON czb_user_card_relation.user_id = czb_user.user_id
         WHERE
-            czb_user_card_relation.user_id = #{userId,jdbcType=VARCHAR}
+            czb_user.user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectAllCommodity" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" resultType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity">

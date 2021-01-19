@@ -10,6 +10,8 @@ import java.util.List;
 public interface OilCardRechargeMapperExtra {
     List<DirectChargingOrderDto> getOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
 
+    List<DirectChargingOrderDto> getAllOrderInfoList(@Param("type")Integer type);
+
     int isExistOilCard(OilCardBinging oilCardBinging);
 
     int isExistOilCardUser(@Param("userId")String userId);
