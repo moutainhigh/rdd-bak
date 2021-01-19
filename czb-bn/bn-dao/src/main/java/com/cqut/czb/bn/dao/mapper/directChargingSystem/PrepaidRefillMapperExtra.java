@@ -17,4 +17,8 @@ public interface PrepaidRefillMapperExtra {
     Integer updateCommodity(DirectChargingCommodityDto directChargingCommodityDto);
 
     UserCardRelationDto getInfoNum(String userId);
+
+    int deletedCommodity(String commodityId);
+
+    int saleStatusCommodity(@Param("ids")String[] ids, @Param("state")Integer state);
 }

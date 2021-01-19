@@ -82,8 +82,28 @@
             preferential_price = #{preferentialPrice,jdbcType=DOUBLE},
             commodity_type = #{commodityType,jdbcType=INTEGER},
             state = #{state,jdbcType=INTEGER},
-            update_at = now();
+            update_at = now()
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deletedCommodity">
+        delete from czb_direct_charging_commodity
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="saleStatusCommodity">
+        update czb_direct_charging_commodity
+        <set >
+            <if test="state != null" >
+                state = #{state,jdbcType=INTEGER}
+            </if>
+        </set>
+        <where>
+            commodity_id in
+            <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+                #{item,jdbcType = VARCHAR }
+            </foreach>
+        </where>
     </update>
 </mapper>

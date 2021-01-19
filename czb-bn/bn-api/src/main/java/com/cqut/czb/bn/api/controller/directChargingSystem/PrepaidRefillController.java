@@ -43,6 +43,17 @@ public class PrepaidRefillController {
     public JSONResult updateCommodity(DirectChargingCommodityDto directChargingCommodityDto){
         return new JSONResult(prepaidRefillService.updateCommodity(directChargingCommodityDto));
     }
+
+    @GetMapping("/deletedCommodity")
+    public JSONResult deletedCommodity(String commodityId){
+        return prepaidRefillService.deletedCommodity(commodityId);
+    }
+
+    @GetMapping("/saleStatusCommodity")
+    public JSONResult saleStatusCommodity(String commodityIds, Integer state){
+        return prepaidRefillService.saleStatusCommodity(commodityIds,state);
+    }
+
     /**
      * 获取当前账户号码和绑定的油卡
      * @param principal

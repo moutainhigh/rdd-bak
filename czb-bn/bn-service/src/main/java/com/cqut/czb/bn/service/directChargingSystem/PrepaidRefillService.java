@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingCommodityDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.UserCardRelationDto;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +21,8 @@ public interface PrepaidRefillService {
     Boolean updateCommodity(DirectChargingCommodityDto directChargingCommodityDto);
 
     UserCardRelationDto getInfoNum(String userId);
+
+    JSONResult deletedCommodity(String commodityId);
+
+    JSONResult saleStatusCommodity(String commodityIds, Integer state);
 }
