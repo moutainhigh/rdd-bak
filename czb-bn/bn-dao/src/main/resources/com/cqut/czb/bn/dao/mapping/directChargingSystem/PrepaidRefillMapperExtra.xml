@@ -3,7 +3,7 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.directChargingSystem.PrepaidRefillMapperExtra" >
     <select id="getGoodsPrice" parameterType="java.lang.Integer" resultType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity">
         SELECT
-            commodity_id AS commodity_id,
+            commodity_id AS commodityId,
             account AS account,
             discount AS discount,
             preferential_price AS preferentialPrice,
@@ -17,6 +17,8 @@
             <if test="_parameter != 0">
                 commodity_type = #{_parameter,jdbcType=INTEGER}
             </if>
+        and
+            state = 1
         </where>
     </select>
 
@@ -31,4 +33,57 @@
         WHERE
             czb_user_card_relation.user_id = #{userId,jdbcType=VARCHAR}
     </select>
+
+    <select id="selectAllCommodity" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" resultType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity">
+        SELECT
+        commodity_id AS commodityId,
+        account AS account,
+        discount AS discount,
+        preferential_price AS preferentialPrice,
+        commodity_type as commodityType,
+        state AS state,
+        create_at AS createAt,
+        update_at AS updateAt
+        FROM
+        czb_direct_charging_commodity
+        <where>
+            <if test="commodityType != '' and commodityType != null ">
+                commodity_type = #{commodityType,jdbcType=INTEGER}
+            </if>
+            <if test="state != null and state != ''">
+                and
+                state =  #{state,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by update_at desc
+    </select>
+
+    <insert id="addCommodity" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity">
+        insert into czb_direct_charging_commodity
+            (commodity_id,account,discount,preferential_price,commodity_type,state,create_at,update_at)
+            values
+            (
+             #{commodityId,jdbcType=VARCHAR},
+             #{account,jdbcType=DOUBLE},
+             #{discount,jdbcType=DOUBLE},
+             #{preferentialPrice,jdbcType=DOUBLE},
+             #{commodityType,jdbcType=INTEGER},
+             #{state,jdbcType=INTEGER},
+             NOW(),
+             NOW()
+            )
+    </insert>
+
+    <update id="updateCommodity" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingCommodityDto">
+        update czb_direct_charging_commodity
+        <set >
+            account = #{account,jdbcType=DOUBLE},
+            discount = #{discount,jdbcType=DOUBLE},
+            preferential_price = #{preferentialPrice,jdbcType=DOUBLE},
+            commodity_type = #{commodityType,jdbcType=INTEGER},
+            state = #{state,jdbcType=INTEGER},
+            update_at = now();
+        </set>
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </update>
 </mapper>
