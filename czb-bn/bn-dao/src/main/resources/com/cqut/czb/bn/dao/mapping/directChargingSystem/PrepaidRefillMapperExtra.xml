@@ -47,10 +47,10 @@
         FROM
         czb_direct_charging_commodity
         <where>
-            <if test="commodityType != '' and commodityType != null ">
+            <if test="commodityType != null ">
                 commodity_type = #{commodityType,jdbcType=INTEGER}
             </if>
-            <if test="state != null and state != ''">
+            <if test="state != null">
                 and
                 state =  #{state,jdbcType=INTEGER}
             </if>
