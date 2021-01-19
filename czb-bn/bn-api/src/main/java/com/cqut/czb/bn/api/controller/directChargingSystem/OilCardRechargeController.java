@@ -42,6 +42,12 @@ public class OilCardRechargeController {
         return new JSONResult(oilCardRechargeService.getAllOrderInfoList(type));
     }
 
+    /**
+     * 绑定油卡
+     * @param principal
+     * @param oilCardBinging
+     * @return
+     */
     @PostMapping("/bindingOilCard")
     public JSONResult bindingOilCard(Principal principal, OilCardBinging oilCardBinging){
         User user = (User)redisUtils.get(principal.getName());
