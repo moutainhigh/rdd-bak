@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -37,9 +38,9 @@ public class OilCardRechargeController {
      * 获取所有订单
      * @return
      */
-    @GetMapping ("/getAllOrderInfoList")
-    public JSONResult getAllOrderInfoList(Integer type){
-        return new JSONResult(oilCardRechargeService.getAllOrderInfoList(type));
+    @PostMapping ("/getAllOrderInfoList")
+    public JSONResult getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto){
+        return new JSONResult(oilCardRechargeService.getAllOrderInfoList(directChargingOrderDto));
     }
 
     /**
@@ -52,5 +53,10 @@ public class OilCardRechargeController {
     public JSONResult bindingOilCard(Principal principal, OilCardBinging oilCardBinging){
         User user = (User)redisUtils.get(principal.getName());
         return oilCardRechargeService.bindingOilCard(user.getUserId(), oilCardBinging);
+    }
+
+    @PostMapping("/getAllUserCard")
+    public JSONResult getAllUserCard(DirectChargingOrderDto directChargingOrderDto){
+        return oilCardRechargeService.getAllUserCard(directChargingOrderDto);
     }
 }

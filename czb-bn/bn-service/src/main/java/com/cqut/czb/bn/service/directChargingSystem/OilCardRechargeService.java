@@ -11,7 +11,9 @@ import java.util.List;
 public interface OilCardRechargeService{
     List<DirectChargingOrderDto> getOrderInfoList(String userId, Integer type);
 
-    List<DirectChargingOrderDto> getAllOrderInfoList(Integer type);
+    JSONResult getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 
     JSONResult bindingOilCard(String userId, OilCardBinging oilCardBinging);
+
+    JSONResult getAllUserCard(DirectChargingOrderDto directChargingOrderDto);
 }

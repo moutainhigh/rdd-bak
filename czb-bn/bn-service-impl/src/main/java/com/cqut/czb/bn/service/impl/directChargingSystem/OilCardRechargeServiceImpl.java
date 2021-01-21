@@ -2,12 +2,15 @@ package com.cqut.czb.bn.service.impl.directChargingSystem;
 
 
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
+import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.util.string.StringUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +27,19 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
-    public List<DirectChargingOrderDto> getAllOrderInfoList(Integer type) {
-        return oilCardRechargeMapperExtra.getAllOrderInfoList(type);
+    public JSONResult getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto) {
+        PageHelper.startPage(directChargingOrderDto.getCurrentPage(), directChargingOrderDto.getPageSize(),true);
+        List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getAllOrderInfoList(directChargingOrderDto);
+        PageInfo<DirectChargingOrderDto> pageInfo = new PageInfo<>(withdrawList);
+        return new JSONResult("列表数据查询成功", 200, pageInfo);
+    }
+
+    @Override
+    public JSONResult getAllUserCard(DirectChargingOrderDto directChargingOrderDto) {
+        PageHelper.startPage(directChargingOrderDto.getCurrentPage(), directChargingOrderDto.getPageSize(),true);
+        List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getAllUserCard(directChargingOrderDto);
+        PageInfo<DirectChargingOrderDto> pageInfo = new PageInfo<>(withdrawList);
+        return new JSONResult("列表数据查询成功", 200, pageInfo);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.directChargingSystem;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -9,7 +10,13 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String thirdOrderId;
 
+    private String userAccount;
+
     private Double rechargeAmount;
+
+    private String sinopecPetrolNum;
+
+    private String petrolChinaPetrolNum;
 
     private String userId;
 
@@ -17,9 +24,17 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer state;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date updateAt;
+
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date startTime;
+
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date endTime;
 
     private Integer recordType;
 
@@ -93,5 +108,45 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setRecordType(Integer recordType) {
         this.recordType = recordType;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public String getSinopecPetrolNum() {
+        return sinopecPetrolNum;
+    }
+
+    public void setSinopecPetrolNum(String sinopecPetrolNum) {
+        this.sinopecPetrolNum = sinopecPetrolNum;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getPetrolChinaPetrolNum() {
+        return petrolChinaPetrolNum;
+    }
+
+    public void setPetrolChinaPetrolNum(String petrolChinaPetrolNum) {
+        this.petrolChinaPetrolNum = petrolChinaPetrolNum;
     }
 }

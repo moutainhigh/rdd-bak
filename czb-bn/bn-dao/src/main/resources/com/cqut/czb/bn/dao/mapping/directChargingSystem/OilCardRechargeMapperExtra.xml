@@ -12,15 +12,58 @@
         WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = #{type,jdbcType=INTEGER} and state != 0
     </select>
 
-    <select id="getAllOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <select id="getAllUserCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            user_account userAccount,
+            sinopec_petrol_num sinopecPetrolNum,
+            petrolChina_petrol_num petrolChinaPetrolNum,
+            a.create_at createAt
+        FROM czb_user_card_relation a left join czb_user b on a.user_id = b.user_id
+        <where>
+            <if test="userAccount!= null and userAccount!= ''">
+                b.user_account = #{userAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllOrderInfoList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
             order_id orderId,
             third_order_id thirdOrderId,
             recharge_amount rechargeAmount,
             state state,
-            create_at createAt
-        FROM czb_direct_charging_order
-        WHERE record_type = #{type,jdbcType=INTEGER}
+            a.create_at createAt,
+            user_account userAccount,
+            sinopec_petrol_num sinopecPetrolNum,
+            petrolChina_petrol_num petrolChinaPetrolNum
+        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
+        left join czb_user_card_relation d on a.user_id = d.user_id
+        <where>
+            record_type = #{recordType,jdbcType=INTEGER}
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="rechargeAmount!= null and rechargeAmount!= ''">
+                and a.recharge_amount = #{rechargeAmount,jdbcType=VARCHAR}
+            </if>
+            <if test="userAccount!= null and userAccount!= ''">
+                and b.user_account = #{userAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="userAccount!= null and userAccount!= ''">
+                and b.user_account = #{userAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="sinopecPetrolNum!= null and sinopecPetrolNum!= ''">
+                and b.sinopec_petrol_num = #{sinopecPetrolNum,jdbcType=VARCHAR}
+            </if>
+            <if test="petrolChinaPetrolNum!= null and petrolChinaPetrolNum!= ''">
+                and b.petrolChina_petrol_num = #{petrolChinaPetrolNum,jdbcType=VARCHAR}
+            </if>
+        </where>
     </select>
 
     <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
