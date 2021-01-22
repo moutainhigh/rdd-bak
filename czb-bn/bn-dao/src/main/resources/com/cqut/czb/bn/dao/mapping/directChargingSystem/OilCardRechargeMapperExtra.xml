@@ -104,4 +104,12 @@
           #{petrolchinaPetrolNum,jdbcType=VARCHAR}, now(), now()
           )
     </insert>
+    <insert id="insertOrder" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        insert into czb_direct_charging_order (order_id, recharge_amount, user_id,payment_method
+                                               state, create_at, update_at, record_type
+        )
+        values (#{orderId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE}, #{userId,jdbcType=VARCHAR},
+                #{paymentMethod}, #{state}, now(), now(), #{recordType}
+               )
+    </insert>
 </mapper>

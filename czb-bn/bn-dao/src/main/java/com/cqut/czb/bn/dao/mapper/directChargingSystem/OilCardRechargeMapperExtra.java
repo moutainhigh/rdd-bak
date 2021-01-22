@@ -21,4 +21,6 @@ public interface OilCardRechargeMapperExtra {
     int upDatePetrolNum(@Param("userId")String userId, @Param("oilCardBinging")OilCardBinging oilCardBinging);
 
     int insertPetrolNum(UserCardRelation userCardRelation);
+
+    int insertOrder(DirectChargingOrderDto directChargingOrderDto);
 }

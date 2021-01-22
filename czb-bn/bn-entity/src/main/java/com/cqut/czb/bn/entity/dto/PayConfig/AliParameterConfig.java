@@ -185,4 +185,31 @@ public class AliParameterConfig {
         pbp.put("isSpecial",String.valueOf(isSpecial));
         return StringUtil.transMapToStringOther(pbp);
     }
+
+    /**
+     * 转换为支付宝支付实体（直充相关参数配置）
+     * @return
+     */
+    public static AlipayTradeAppPayModel getPhonePill(String orderId,double rechargeAmount ,String userId,Integer recordType) {
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody("RDD话费直充");
+        model.setSubject("RDD话费直充");
+        model.setOutTradeNo(orderId);
+        model.setTimeoutExpress(AliPayConfig.timeout_express);
+        model.setTotalAmount(String.valueOf(rechargeAmount));
+//        model.setTotalAmount("0.01");
+        model.setProductCode(AliPayConfig.product_code);
+        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType));
+        return model;
+    }
+
+    //支付宝支付—— 直充值相关参数配置
+    public static String getPhonePillParams(String orderId,double rechargeAmount ,String userId,Integer recordType) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orderId", orderId);
+        pbp.put("rechargeAmount", rechargeAmount);
+        pbp.put("userId", userId);
+        pbp.put("recordType",String.valueOf(recordType));
+        return StringUtil.transMapToStringOther(pbp);
+    }
 }

@@ -47,9 +47,12 @@ public class AliPayConfig {
 	//中石化优惠券
 	public static String Coupons_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/luPayVerifyAsyn/verifyPetrolCouponsInfoAiHu";
 
+	//直充
+	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/luPayVerifyAsyn/verifyPetrolCouponsInfoAiHu";
+
 	// 加密方式
 	public static String sign_type = "RSA2";
-	
+
 	// 字符编码格式
 	public static String charset = "UTF-8";
 
@@ -58,16 +61,16 @@ public class AliPayConfig {
 
 	//参数返回格式
 	public static String format = "json";
-	
+
 	//订单允许的最晚付款时间30分钟
 	public static String timeout_express = "30m";
-	
+
 	//产品码
 	public static String product_code = "QUICK_MSECURITY_PAY";
-	
+
     //成功
 	public static String response_success = "success";
-	
+
 	//失败
 	public static String response_fail = "failure";
 }
