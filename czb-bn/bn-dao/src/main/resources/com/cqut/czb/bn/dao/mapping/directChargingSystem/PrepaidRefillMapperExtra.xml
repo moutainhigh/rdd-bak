@@ -20,6 +20,7 @@
         and
             state = 1
         </where>
+        order by account asc
     </select>
 
     <select id="getInfoNum" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.UserCardRelationDto">

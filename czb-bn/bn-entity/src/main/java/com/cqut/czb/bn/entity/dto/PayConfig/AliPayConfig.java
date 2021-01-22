@@ -48,7 +48,7 @@ public class AliPayConfig {
 	public static String Coupons_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/luPayVerifyAsyn/verifyPetrolCouponsInfoAiHu";
 
 	//直充
-	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/luPayVerifyAsyn/verifyPetrolCouponsInfoAiHu";
+	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/api/DirectChargingPay/aliPayReturn";
 
 	// 加密方式
 	public static String sign_type = "RSA2";
@@ -67,6 +67,9 @@ public class AliPayConfig {
 
 	//产品码
 	public static String product_code = "QUICK_MSECURITY_PAY";
+
+	//手机网页产品码
+	public static String product_wap_code = "QUICK_WAP_PAY";
 
     //成功
 	public static String response_success = "success";

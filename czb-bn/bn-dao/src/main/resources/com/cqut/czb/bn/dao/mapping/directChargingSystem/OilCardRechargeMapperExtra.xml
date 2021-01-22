@@ -112,4 +112,13 @@
                 #{paymentMethod}, #{state}, now(), now(), #{recordType}
                )
     </insert>
+
+    <update id="updateRechargeRecord" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        update czb_direct_charging_order
+            set third_order_id = {thirdOrderId,jdbcType=VARCHAR }
+            set update_at = {updateAt,jdbcType=TIME }
+            set state = {state ,jdbcType=INTEGER }
+        where
+            order_id = {orderId,jdbcType=VARCHAR}
+    </update>
 </mapper>

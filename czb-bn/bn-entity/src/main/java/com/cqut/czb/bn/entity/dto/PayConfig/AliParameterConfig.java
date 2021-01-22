@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -190,15 +191,16 @@ public class AliParameterConfig {
      * 转换为支付宝支付实体（直充相关参数配置）
      * @return
      */
-    public static AlipayTradeAppPayModel getPhonePill(String orderId,double rechargeAmount ,String userId,Integer recordType) {
-        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+    public static AlipayTradeWapPayModel getPhonePill(String orderId,double rechargeAmount ,String userId,Integer recordType) {
+        AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("RDD话费直充");
         model.setSubject("RDD话费直充");
         model.setOutTradeNo(orderId);
         model.setTimeoutExpress(AliPayConfig.timeout_express);
         model.setTotalAmount(String.valueOf(rechargeAmount));
-//        model.setTotalAmount("0.01");
-        model.setProductCode(AliPayConfig.product_code);
+        model.setProductCode(AliPayConfig.product_wap_code);
+        model.setQuitUrl("http://39.98.250.45:88/recharge");
+        model.setSellerId("2088731798282131");
         model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType));
         return model;
     }

@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,6 @@ public interface OilCardRechargeService{
      * 生成起调参数串——返回给app（支付订单）
      */
     String AlipayRechargeDirect(DirectChargingOrderDto directChargingOrderDto);
+
+    String aliPayReturn(HttpServletRequest request,String consumptionType);
 }

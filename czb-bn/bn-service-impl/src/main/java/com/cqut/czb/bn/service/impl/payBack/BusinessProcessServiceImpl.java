@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.food.DishOrderMapper;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
@@ -12,18 +13,17 @@ import com.cqut.czb.bn.entity.dto.appBuyCarWashService.AppVehicleCleanOrderDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
-import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
 import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.*;
 import com.cqut.czb.bn.service.InfoSpreadService;
-import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.AliPay.DealWithPetrolCouponsServiceImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
@@ -114,6 +114,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     public WeChatPayBackService weChatPayBackService;
 
+    @Autowired
+    OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
@@ -146,6 +149,11 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
         }else if(consumptionType.equals("PetrolCoupons")) {//油卡卡券销售
             if ((dealWithPetrolCouponsService.getAddBuyPetrolCouponsAli(params)) == 1) {
+                result.put("success", AlipayConfig.response_success);
+                return result;
+            }
+        }else if(consumptionType.equals("Direct")) {//直冲系统
+            if (getAddBuyDirectOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }
@@ -200,6 +208,43 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         System.out.println("购买失败删除后" + PetrolCache.AllpetrolMap + ":" + PetrolCache.currentPetrolMap);
     }
 
+
+    //直冲系统（支付宝）
+    public int getAddBuyDirectOrderAli(Map<String, String> params){
+        String[] resDate = params.get("passback-params").split("\\^");
+        String[] temp;
+        String thirdOrderId = params.get("trade_no");
+        String orgId = "";
+        double money = 0;
+        String ownerId = "";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orgId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println("商家订单orgId:" + orgId);
+            }
+            if ("money".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+                System.out.println("支付金额:money" + money);
+            }
+            if ("ownerId".equals(temp[0])) {
+                ownerId = temp[1];
+                System.out.println("用户id:" + ownerId);
+            }
+        }
+        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+        directChargingOrderDto.setOrderId(orgId);
+        directChargingOrderDto.setThirdOrderId(thirdOrderId);
+        directChargingOrderDto.setUpdateAt(new Date());
+        directChargingOrderDto.setState(1);
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        System.out.println("更改用户订单："+update);
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
+        return 1;
+    }
 
     //点餐(支付宝)
     public int getAddBuyDishOrderAli(Map<String, String> params) {

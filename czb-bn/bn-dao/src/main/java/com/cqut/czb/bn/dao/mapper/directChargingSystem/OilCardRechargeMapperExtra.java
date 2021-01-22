@@ -23,4 +23,6 @@ public interface OilCardRechargeMapperExtra {
     int insertPetrolNum(UserCardRelation userCardRelation);
 
     int insertOrder(DirectChargingOrderDto directChargingOrderDto);
+
+    int updateRechargeRecord(DirectChargingOrderDto directChargingOrderDto);
 }
