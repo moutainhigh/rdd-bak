@@ -222,15 +222,15 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if (temp.length < 2) {//判空
                 continue;
             }
-            if ("orgId".equals(temp[0])) {
+            if ("orderId".equals(temp[0])) {
                 orgId = temp[1];
                 System.out.println("商家订单orgId:" + orgId);
             }
-            if ("money".equals(temp[0])) {
+            if ("rechargeAmount".equals(temp[0])) {
                 money = Double.valueOf(temp[1]);
                 System.out.println("支付金额:money" + money);
             }
-            if ("ownerId".equals(temp[0])) {
+            if ("userId".equals(temp[0])) {
                 ownerId = temp[1];
                 System.out.println("用户id:" + ownerId);
             }
