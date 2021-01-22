@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
+import com.cqut.czb.bn.entity.dto.until.WXSign;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
@@ -10,9 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.cqut.czb.bn.entity.dto.weChatAppletPushNotification.sendNotification;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/oilCardRecharge")
@@ -59,4 +68,27 @@ public class OilCardRechargeController {
     public JSONResult getAllUserCard(DirectChargingOrderDto directChargingOrderDto){
         return oilCardRechargeService.getAllUserCard(directChargingOrderDto);
     }
+
+    /**
+     * 获取微信签名
+     * @return
+     */
+    @RequestMapping("/sign")
+    @ResponseBody
+    public Map<String, String> WapSignSignatureAction(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        HttpSession session = request.getSession();
+        String url = request.getParameter("url");
+        String accesstoken = (String) session.getAttribute(WeChatPayConfig.app_id + "accesstoken_session");
+        if (accesstoken == null || "".equals(accesstoken)) {
+            accesstoken = sendNotification.getAccessToken();
+            request.getSession().setAttribute("accesstoken_session",
+                    accesstoken);
+            request.getSession().setMaxInactiveInterval(7200);
+        }
+        Map<String, String> js_data = WXSign.getJSSignMapResult(WeChatPayConfig.app_id,accesstoken,url, request);
+        return js_data;
+    }
+
 }
