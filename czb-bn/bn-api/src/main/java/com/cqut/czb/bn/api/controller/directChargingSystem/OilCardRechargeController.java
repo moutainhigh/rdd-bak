@@ -78,13 +78,13 @@ public class OilCardRechargeController {
         response.setHeader("Access-Control-Allow-Origin", "*");
         HttpSession session = request.getSession();
         String url = request.getParameter("url");
-        String accesstoken = (String) session.getAttribute(WCProgramConfig.ren_duo_duo_app_id + "accesstoken_session");
+        String accesstoken = (String) session.getAttribute(WCProgramConfig.app_id + "accesstoken_session");
         if (accesstoken == null || "".equals(accesstoken)) {
             accesstoken = sendNotification.getWXAccessToken();
             request.getSession().setAttribute("accesstoken_session", accesstoken);
             request.getSession().setMaxInactiveInterval(7200);
         }
-        Map<String, String> js_data = WXSign.getJSSignMapResult(WCProgramConfig.ren_duo_duo_app_id,accesstoken,url, request);
+        Map<String, String> js_data = WXSign.getJSSignMapResult(WCProgramConfig.app_id,accesstoken,url, request);
         return js_data;
     }
 

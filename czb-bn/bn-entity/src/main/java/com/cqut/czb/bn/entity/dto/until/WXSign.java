@@ -69,7 +69,7 @@ public class WXSign {
         ret.put("noncestr", nonce_str);
         ret.put("timestamp", timestamp);
         ret.put("signature", signature);
-        ret.put("appid", WCProgramConfig.ren_duo_duo_app_id);
+        ret.put("appid", WCProgramConfig.app_id);
         return ret;
     }
 
