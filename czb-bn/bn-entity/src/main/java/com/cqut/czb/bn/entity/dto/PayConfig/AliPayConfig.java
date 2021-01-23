@@ -56,7 +56,7 @@ public class AliPayConfig {
 	public static String Coupons_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/luPayVerifyAsyn/verifyPetrolCouponsInfoAiHu";
 
 	//直充
-	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/api/DirectChargingPay/aliPayReturn";
+	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliPayReturn/aliPayReturn";
 
 	// 加密方式
 	public static String sign_type = "RSA2";

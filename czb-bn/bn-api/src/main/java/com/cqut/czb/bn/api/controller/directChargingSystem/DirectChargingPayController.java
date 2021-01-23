@@ -49,20 +49,5 @@ public class DirectChargingPayController {
         }
     }
 
-    /**
-     * 支付宝购买
-     * @param request
-     * @param response
-     */
-    @RequestMapping(value="/aliPayReturn", method= RequestMethod.POST)
-    public synchronized void aliPayReturn(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("支付宝回调——直冲");
-        response.setCharacterEncoding("utf-8");
-        response.setHeader("content-type", "text/html;charset=utf-8");
-        try {
-            response.getWriter().print(oilCardRechargeService.aliPayReturn(request,"direct"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 }
