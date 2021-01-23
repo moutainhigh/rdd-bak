@@ -16,6 +16,9 @@ public class WeChatPayConfig {
 	// 公众账号ID
 	public static final String app_id = "wxec50dac5d04a0c9f";
 
+	// 人多多公众账号ID
+	public static final String ren_duo_duo_app_id = "wx0a4273c49edc6e4a";
+
 	//人多多小程序
 	public static final String sapp_id = "wxd2d0171429ac208f";
 

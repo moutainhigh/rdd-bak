@@ -6,8 +6,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.servlet.http.HttpServletRequest;
 import com.alibaba.fastjson.JSONObject;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
+import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public class WXSign {
         ret.put("noncestr", nonce_str);
         ret.put("timestamp", timestamp);
         ret.put("signature", signature);
-        ret.put("appid", WeChatPayConfig.app_id);
+        ret.put("appid", WCProgramConfig.app_id);
         return ret;
     }
 
