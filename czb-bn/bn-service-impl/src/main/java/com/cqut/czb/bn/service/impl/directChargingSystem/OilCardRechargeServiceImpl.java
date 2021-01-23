@@ -148,13 +148,15 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     @Override
     public String aliPayReturn(HttpServletRequest request, String consumptionType) {
         // 获取支付宝POST过来反馈信息
+        System.out.println("1");
         Map<String, String> params = new HashMap<String, String>();
         Map requestParams = request.getParameterMap();
         params=parseOrder(params,requestParams);
         //是否被篡改的标识
         boolean signVerfied = false;
         try {
-                signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_wap_public_key,
+            System.out.println("2");
+            signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_wap_public_key,
                         AliPayConfig.charset, AliPayConfig.sign_type);
         } catch (AlipayApiException e) {
             e.printStackTrace();
@@ -164,6 +166,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 //				支付账单是否一致
                 if (isCorrectDataH5(params)) {//交易成功
                     Object[] param = { params };
+                    System.out.println("3");
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         return AlipayConfig.response_success;

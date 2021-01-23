@@ -29,7 +29,7 @@ public class AliPayReturnController {
         response.setCharacterEncoding("utf-8");
         response.setHeader("content-type", "text/html;charset=utf-8");
         try {
-            response.getWriter().print(oilCardRechargeService.aliPayReturn(request,"direct"));
+            response.getWriter().print(oilCardRechargeService.aliPayReturn(request,"Direct"));
         } catch (IOException e) {
             e.printStackTrace();
         }
