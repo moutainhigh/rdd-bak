@@ -73,7 +73,7 @@ public class OilCardRechargeController {
      * 获取微信签名
      * @return
      */
-    @RequestMapping("/sign")
+    @PostMapping("/sign")
     @ResponseBody
     public Map<String, String> WapSignSignatureAction(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -87,7 +87,7 @@ public class OilCardRechargeController {
                     accesstoken);
             request.getSession().setMaxInactiveInterval(7200);
         }
-        Map<String, String> js_data = WXSign.getJSSignMapResult(WeChatPayConfig.app_id,accesstoken,url, request);
+        Map<String, String> js_data = WXSign.getJSSignMapResult(WeChatPayConfig.ren_duo_duo_app_id,accesstoken,url, request);
         return js_data;
     }
 
