@@ -214,6 +214,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     //直冲系统（支付宝）
     public int getAddBuyDirectOrderAli(Map<String, String> params){
         System.out.println("6");
+        System.out.println(params.toString());
         String[] resDate = params.get("passback-params").split("\\^");
         String[] temp;
         String thirdOrderId = params.get("trade_no");
