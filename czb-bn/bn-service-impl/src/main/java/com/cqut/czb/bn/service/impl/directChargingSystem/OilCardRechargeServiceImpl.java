@@ -154,25 +154,17 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         //是否被篡改的标识
         boolean signVerfied = false;
         try {
-            String isSpecial = getIsSpecial(params);
-            //检测支付订单是否被篡改
-            if (isSpecial.equals("1")){
-                signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key_new,
+                signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_wap_public_key,
                         AliPayConfig.charset, AliPayConfig.sign_type);
-            }else {
-                signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key,
-                        AliPayConfig.charset, AliPayConfig.sign_type);
-            }
-            System.out.println("408 " + signVerfied);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
         try {
             if (signVerfied) {
 //				支付账单是否一致
-                if (isCorrectDataAiHu(params)) {//交易成功
+                if (isCorrectDataH5(params)) {//交易成功
                     Object[] param = { params };
-                    Map result = refuelingCard.AliPayback(param,consumptionType);//1为支付宝支付（用于拓展）
+                    Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         return AlipayConfig.response_success;
                     } else if (AlipayConfig.response_fail.equals(result.get("fail"))) {
@@ -181,78 +173,28 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                         return null;
                 } else {//交易失败
                     Object[] param = { params };
-                    refuelingCard.purchaseFailed(param);//油卡放回
                     return AlipayConfig.response_fail;
                 }
             } else {
-                System.out.println("被篡改"+AlipayConfig.response_fail);
                 return AlipayConfig.response_fail;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("被篡改外"+AlipayConfig.response_fail);
         return AlipayConfig.response_fail;
     }
 
-    private String getIsSpecial(Map<String, String> param) {
-        Object[] params = { param };
-        Map<String, String> petrol = (HashMap<String, String>) params[0];
-        String[] resDate = petrol.get("passback_params").split("\\^");
-        String[] temp;
-        String isSpecial = "";
-        for (String data : resDate) {
-            temp = data.split("\'");
-            if (temp.length < 2) {//判空
-                continue;
-            }
-            if ("isSpecial".equals(temp[0])) {
-                System.out.println(temp[0] + temp[1]);
-                isSpecial=temp[1];
-            }
-        }
-        return isSpecial;
-    }
 
 
-    /*
-     * 验证数据是否正确（支付宝）
-     */
-    private boolean isCorrectData(Map<String, String> params) {
+    private boolean isCorrectDataH5(Map<String, String> params) {
 
         // 验证app_id是否一致
-        if (!params.get("app_id").equals(AlipayConfig.app_id)) {
-            return false;
-        }
+            if (!params.get("app_id").equals(AliPayConfig.app_wap_id)) {
+                return false;
+            }
 
         // 判断交易状态是否为TRADE_SUCCESS
         if (!params.get("trade_status").equals("TRADE_SUCCESS")) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean isCorrectDataAiHu(Map<String, String> params) {
-
-        System.out.println("675 " + params.get("app_id"));
-        String isSpecial = getIsSpecial(params);
-        System.out.println("是否为特殊用户："+ isSpecial);
-        // 验证app_id是否一致
-        if(isSpecial.equals("1")){
-            if (!params.get("app_id").equals(AliPayConfig.app_id_new)) {
-                System.out.println("错误app_id_new:" + params.get("app_id"));
-                return false;
-            }
-        }else {
-            if (!params.get("app_id").equals(AliPayConfig.app_id)) {
-                System.out.println("错误app_id:" + params.get("app_id"));
-                return false;
-            }
-        }
-        // 判断交易状态是否为TRADE_SUCCESS
-        if (!params.get("trade_status").equals("TRADE_SUCCESS")) {
-            System.out.println("错误交易状态：" + params.get("trade_status"));
             return false;
         }
         return true;

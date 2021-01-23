@@ -224,15 +224,12 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
             if ("orderId".equals(temp[0])) {
                 orgId = temp[1];
-                System.out.println("商家订单orgId:" + orgId);
             }
             if ("rechargeAmount".equals(temp[0])) {
                 money = Double.valueOf(temp[1]);
-                System.out.println("支付金额:money" + money);
             }
             if ("userId".equals(temp[0])) {
                 ownerId = temp[1];
-                System.out.println("用户id:" + ownerId);
             }
         }
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
@@ -241,7 +238,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         directChargingOrderDto.setUpdateAt(new Date());
         directChargingOrderDto.setState(1);
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
-        System.out.println("更改用户订单："+update);
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
         return 1;
     }
