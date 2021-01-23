@@ -12,6 +12,12 @@ public class WCProgramConfig {
     //小程序 appSecret
     public static final String app_secret = "f3bf5f0e40c5a76eb9e84c9f683bcf1c";
 
+    //微信分享 appId
+    public static final String ren_duo_duo_app_id = "wx0a4273c49edc6e4a";
+
+    //微信分享 appSecret
+    public static final String ren_duo_duo_app_secret = "5ba2f570dc17eea98c226d600ffce055";
+
     //授权类型，此处只需填写 authorization_code
     public static final String grant_type = "authorization_code";
 

@@ -99,6 +99,28 @@ public class sendNotification {
         return accessToken.getAccess_token();
     }
 
+    /**
+     * 获取微信分享token
+     * @return
+     */
+    public static String  getWXAccessToken() {
+        AccessToken accessToken = null;
+        String requestUrl = ACCESS_TOKEN_URL.replace("APPID", WCProgramConfig.ren_duo_duo_app_id).replace("APPSECRET", WCProgramConfig.ren_duo_duo_app_secret);
+        net.sf.json.JSONObject jsonObject = HttpUtil.doGetstr(requestUrl);
+        if (null != jsonObject) {
+            try {
+                accessToken = new AccessToken();
+                accessToken.setAccess_token(jsonObject.getString("access_token"));
+                accessToken.setExpires_in(jsonObject.getInt("expires_in"));
+            } catch (JSONException e) {
+                accessToken = null;
+                // 获取token失败
+//                logger.error("获取token失败 errcode:{} errmsg:{}", jsonObject.getInt("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return accessToken.getAccess_token();
+    }
+
     public static void main(String[] args) throws Exception {
         System.out.println();
         sendMessage();
