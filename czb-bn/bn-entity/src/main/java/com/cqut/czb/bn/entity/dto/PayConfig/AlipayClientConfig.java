@@ -56,9 +56,9 @@ public class AlipayClientConfig {
 					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.Coupons_url);
 		}else if(operationType.equals("7")){//"7"代表直充
-			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id,
-					AliPayConfig.merchant_private_key, AliPayConfig.format, AliPayConfig.charset,
-					AliPayConfig.alipay_public_key, AliPayConfig.sign_type));
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_wap_id,
+					AliPayConfig.merchant_wap_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_wap_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.Direct_url);
 		}
 		return instance;
