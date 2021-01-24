@@ -81,7 +81,7 @@ public class sendNotification {
      * 获取token
      * @return
      */
-    public static String  getAccessToken() {
+    public static String getAccessToken() {
         AccessToken accessToken = null;
         String requestUrl = ACCESS_TOKEN_URL.replace("APPID", WCProgramConfig.app_id).replace("APPSECRET", WCProgramConfig.app_secret);
         net.sf.json.JSONObject jsonObject = HttpUtil.doGetstr(requestUrl);
@@ -105,10 +105,11 @@ public class sendNotification {
      */
     public static String  getWXAccessToken() {
         AccessToken accessToken = null;
-        String requestUrl = ACCESS_TOKEN_URL.replace("APPID", WCProgramConfig.app_id).replace("APPSECRET", WCProgramConfig.app_secret);
+        String requestUrl = ACCESS_TOKEN_URL.replace("APPID", WCProgramConfig.ren_duo_duo_app_id).replace("APPSECRET", WCProgramConfig.ren_duo_duo_app_secret);
         net.sf.json.JSONObject jsonObject = HttpUtil.doGetstr(requestUrl);
         if (null != jsonObject) {
             try {
+                System.out.println(jsonObject.getString("errmsg"));
                 accessToken = new AccessToken();
                 accessToken.setAccess_token(jsonObject.getString("access_token"));
                 accessToken.setExpires_in(jsonObject.getInt("expires_in"));
