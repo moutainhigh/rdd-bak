@@ -132,6 +132,6 @@
             set update_at = #{updateAt,jdbcType=TIMESTAMP }
             set state = #{state ,jdbcType=INTEGER }
         where
-            order_id = {orderId,jdbcType=VARCHAR}
+            order_id = #{orderId,jdbcType=VARCHAR}
     </update>
 </mapper>
