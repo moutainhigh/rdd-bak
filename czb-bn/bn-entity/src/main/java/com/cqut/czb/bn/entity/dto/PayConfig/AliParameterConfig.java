@@ -199,7 +199,7 @@ public class AliParameterConfig {
         model.setTimeoutExpress(AliPayConfig.timeout_express);
         model.setTotalAmount(String.valueOf(rechargeAmount));
         model.setProductCode(AliPayConfig.product_wap_code);
-        model.setQuitUrl("http://39.98.250.45:88/recharge");
+        model.setQuitUrl("http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/recharge");
         model.setSellerId("2088731798282131");
         model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType));
         return model;

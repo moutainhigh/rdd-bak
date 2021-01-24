@@ -120,6 +120,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
+        System.out.println("4");
         Map<String, String> result = new HashMap<>();
         Map<String, String> params = (HashMap<String, String>) param[0];
         if(consumptionType.equals("Petrol")){//购油
@@ -153,6 +154,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 return result;
             }
         }else if(consumptionType.equals("Direct")) {//直冲系统
+            System.out.println("5");
             if (getAddBuyDirectOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
@@ -211,7 +213,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     //直冲系统（支付宝）
     public int getAddBuyDirectOrderAli(Map<String, String> params){
-        String[] resDate = params.get("passback-params").split("\\^");
+        System.out.println("6");
+        System.out.println(params.toString());
+        String[] resDate = params.get("passback_params").split("\\^");
         String[] temp;
         String thirdOrderId = params.get("trade_no");
         String orgId = "";
@@ -224,15 +228,12 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
             if ("orderId".equals(temp[0])) {
                 orgId = temp[1];
-                System.out.println("商家订单orgId:" + orgId);
             }
             if ("rechargeAmount".equals(temp[0])) {
                 money = Double.valueOf(temp[1]);
-                System.out.println("支付金额:money" + money);
             }
             if ("userId".equals(temp[0])) {
                 ownerId = temp[1];
-                System.out.println("用户id:" + ownerId);
             }
         }
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
@@ -240,8 +241,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         directChargingOrderDto.setThirdOrderId(thirdOrderId);
         directChargingOrderDto.setUpdateAt(new Date());
         directChargingOrderDto.setState(1);
+        System.out.println("7");
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
-        System.out.println("更改用户订单："+update);
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
         return 1;
     }

@@ -13,6 +13,8 @@ public class UrlConfig {
 
     public static final String Port="8899";//端口号
 
+    public static final String Web_port="88";//前端端口号
+
     public static final String HTTPS="https";
 
     public static final String HTTP="http";
