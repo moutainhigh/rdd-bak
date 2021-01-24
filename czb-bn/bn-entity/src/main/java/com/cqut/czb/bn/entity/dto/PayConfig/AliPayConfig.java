@@ -58,6 +58,9 @@ public class AliPayConfig {
 	//直充
 	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliPayReturn/aliPayReturn";
 
+	//直冲返回页面
+	public static String Return_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/recharge";
+
 	// 加密方式
 	public static String sign_type = "RSA2";
 

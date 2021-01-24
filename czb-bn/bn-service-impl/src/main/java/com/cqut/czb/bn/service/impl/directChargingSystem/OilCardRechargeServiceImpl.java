@@ -116,7 +116,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String userId = directChargingOrderDto.getUserId();
         //直充类型
         Integer  recordType = directChargingOrderDto.getRecordType();
-
+        request.setReturnUrl(AliPayConfig.Return_url);
         request.setBizModel(AliParameterConfig.getPhonePill(orderId, rechargeAmount, userId, recordType));//支付订单
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
