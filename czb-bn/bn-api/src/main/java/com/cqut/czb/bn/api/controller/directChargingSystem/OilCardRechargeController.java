@@ -81,6 +81,7 @@ public class OilCardRechargeController {
         String accesstoken = (String) session.getAttribute(WCProgramConfig.ren_duo_duo_app_id + "accesstoken_session");
         if (accesstoken == null || "".equals(accesstoken)) {
         accesstoken = sendNotification.getWXAccessToken();
+            System.out.println(1+accesstoken);
         session.setAttribute(WCProgramConfig.ren_duo_duo_app_id + "accesstoken_session", accesstoken);
         session.setMaxInactiveInterval(7200);
         }

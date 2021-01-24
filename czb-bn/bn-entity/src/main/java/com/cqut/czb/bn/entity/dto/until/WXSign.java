@@ -25,13 +25,14 @@ public class WXSign {
 
     public static Map<String, String> getJSSignMapResult(String appid, String access_token, String url, HttpServletRequest request){
         Map<String, String> ret = new HashMap<String, String>();
-//        String jsapi_ticket=(String)request.getSession().getAttribute(appid+"jsapi_ticket_session");
-//        if(jsapi_ticket==null || "".equals(jsapi_ticket)){
+        String jsapi_ticket=(String)request.getSession().getAttribute(appid+"jsapi_ticket_session");
+        if(jsapi_ticket==null || "".equals(jsapi_ticket)){
         JSONObject json=httpRequest("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi", "GET", "");
-        String jsapi_ticket=(String)json.get("ticket");
-        request.getSession().setAttribute(appid+"jsapi_ticket_session", jsapi_ticket);
+        jsapi_ticket=(String)json.get("ticket");
+        System.out.println(2+jsapi_ticket);
+            request.getSession().setAttribute(appid+"jsapi_ticket_session", jsapi_ticket);
         request.getSession().setMaxInactiveInterval(7200);
-//        }
+        }
         ret = sign(jsapi_ticket, url);
         return ret;
     }

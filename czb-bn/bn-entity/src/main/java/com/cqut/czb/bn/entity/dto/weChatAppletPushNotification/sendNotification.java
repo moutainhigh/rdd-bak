@@ -109,7 +109,6 @@ public class sendNotification {
         net.sf.json.JSONObject jsonObject = HttpUtil.doGetstr(requestUrl);
         if (null != jsonObject) {
             try {
-                System.out.println(jsonObject.getString("errmsg"));
                 accessToken = new AccessToken();
                 accessToken.setAccess_token(jsonObject.getString("access_token"));
                 accessToken.setExpires_in(jsonObject.getInt("expires_in"));
