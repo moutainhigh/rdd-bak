@@ -86,6 +86,7 @@ public class OilCardRechargeController {
         session.setMaxInactiveInterval(7200);
         }
         Map<String, String> js_data = WXSign.getJSSignMapResult(WCProgramConfig.ren_duo_duo_app_id,accesstoken,url, request);
+        System.out.println(3+js_data.toString());
         return js_data;
     }
 
