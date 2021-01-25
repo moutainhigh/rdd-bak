@@ -52,7 +52,7 @@
         AND vip_state = 1
     </select>
     <!--selectVipPrice-->
-    <select id="selectVipPrice" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="selectVipPrice" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from czb_vip_area_config
