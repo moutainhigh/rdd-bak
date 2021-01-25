@@ -111,7 +111,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
 
         //订单标识
-        String orderId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+        String orderId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
 
         //支付的金额
 //        Double money=backMoney( petrol,petrolInputDTO);
