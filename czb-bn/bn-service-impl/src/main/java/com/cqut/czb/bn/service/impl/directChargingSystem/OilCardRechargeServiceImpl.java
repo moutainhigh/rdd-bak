@@ -45,7 +45,11 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Override
     public List<DirectChargingOrderDto> getOrderInfoList(String userId, Integer type) {
-        return oilCardRechargeMapperExtra.getOrderInfoList(userId, type);
+        if (type != 1) {
+            return oilCardRechargeMapperExtra.getOrderInfoList(userId, type);
+        } else {
+            return oilCardRechargeMapperExtra.getOilOrderInfoList(userId, type);
+        }
     }
 
     @Override

@@ -7,9 +7,30 @@
             third_order_id thirdOrderId,
             recharge_amount rechargeAmount,
             state state,
-            create_at createAt
-        FROM czb_direct_charging_order
-        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = #{type,jdbcType=INTEGER} and state != 0
+            b.user_account userAccount,
+            sinopec_petrol_num sinopecPetrolNum,
+            petrolChina_petrol_num petrolChinaPetrolNum,
+            record_type recordType,
+            a.create_at createAt
+        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
+            left join czb_user_card_relation c on a.user_id = c.user_id
+        WHERE a.user_id = #{userId,jdbcType=VARCHAR} and record_type = #{type,jdbcType=INTEGER} and state != 0
+    </select>
+
+    <select id="getOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            order_id orderId,
+            third_order_id thirdOrderId,
+            recharge_amount rechargeAmount,
+            state state,
+            b.user_account userAccount,
+            sinopec_petrol_num sinopecPetrolNum,
+            petrolChina_petrol_num petrolChinaPetrolNum,
+            record_type recordType,
+            a.create_at createAt
+        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
+                                         left join czb_user_card_relation c on a.user_id = c.user_id
+        WHERE a.user_id = #{userId,jdbcType=VARCHAR} and record_type != 0 and state != 0
     </select>
 
     <select id="getAllUserCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
