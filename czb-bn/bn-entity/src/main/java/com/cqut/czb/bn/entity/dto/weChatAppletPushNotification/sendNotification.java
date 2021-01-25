@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
+import com.cqut.czb.bn.entity.dto.until.WXSign;
 
 import java.io.IOException;
 
@@ -85,6 +86,8 @@ public class sendNotification {
         AccessToken accessToken = null;
         String requestUrl = ACCESS_TOKEN_URL.replace("APPID", WCProgramConfig.app_id).replace("APPSECRET", WCProgramConfig.app_secret);
         net.sf.json.JSONObject jsonObject = HttpUtil.doGetstr(requestUrl);
+        System.out.println("微信签名测试：");
+        System.out.println(jsonObject);
         if (null != jsonObject) {
             try {
                 accessToken = new AccessToken();
@@ -106,12 +109,14 @@ public class sendNotification {
     public static String  getWXAccessToken() {
         AccessToken accessToken = null;
         String requestUrl = ACCESS_TOKEN_URL.replace("APPID", WCProgramConfig.ren_duo_duo_app_id).replace("APPSECRET", WCProgramConfig.ren_duo_duo_app_secret);
-        net.sf.json.JSONObject jsonObject = HttpUtil.doGetstr(requestUrl);
+        JSONObject jsonObject = WXSign.httpRequest(requestUrl, "GET","");
+        System.out.println("accesstoken返回值：");
+        System.out.println(jsonObject);
         if (null != jsonObject) {
             try {
                 accessToken = new AccessToken();
                 accessToken.setAccess_token(jsonObject.getString("access_token"));
-                accessToken.setExpires_in(jsonObject.getInt("expires_in"));
+                accessToken.setExpires_in(jsonObject.getIntValue("expires_in"));
             } catch (JSONException e) {
                 accessToken = null;
                 // 获取token失败

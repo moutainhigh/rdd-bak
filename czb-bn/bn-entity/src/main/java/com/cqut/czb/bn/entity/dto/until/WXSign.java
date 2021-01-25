@@ -10,6 +10,9 @@ import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -20,22 +23,11 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class WXSign {
+
     private static Logger log = LoggerFactory.getLogger(WXSign.class);
 
-    public static Map<String, String> getJSSignMapResult(String appid, String access_token, String url, HttpServletRequest request){
-        Map<String, String> ret = new HashMap<String, String>();
-        String jsapi_ticket=(String)request.getSession().getAttribute(appid+"jsapi_ticket_session");
-        if(jsapi_ticket==null || "".equals(jsapi_ticket)){
-        JSONObject json=httpRequest("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi", "GET", "");
-        jsapi_ticket=(String)json.get("ticket");
-        System.out.println(2+jsapi_ticket);
-            request.getSession().setAttribute(appid+"jsapi_ticket_session", jsapi_ticket);
-        request.getSession().setMaxInactiveInterval(7200);
-        }
-        ret = sign(jsapi_ticket, url);
-        return ret;
-    }
 
     public static Map<String, String> sign(String jsapi_ticket, String url) {
         Map<String, String> ret = new HashMap<String, String>();
@@ -49,13 +41,16 @@ public class WXSign {
                 "&noncestr=" + nonce_str +
                 "&timestamp=" + timestamp +
                 "&url=" + url;
-        //  System.out.println(string1);
+        System.out.println("字符串");
+        System.out.println(string1);
         try
         {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
             crypt.update(string1.getBytes("UTF-8"));
             signature = byteToHex(crypt.digest());
+            System.out.println("签名");
+            System.out.println(signature);
         }
         catch (NoSuchAlgorithmException e)
         {

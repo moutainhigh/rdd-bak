@@ -30,6 +30,16 @@ public class RedisUtils {
     }
 
     /**
+     * 将用户信息存入redis
+     * */
+    public void putAccessToken(String key, Object object) {
+        ValueOperations<String, Object> operations=redisTemplate.opsForValue();
+        // 2小时失效
+        operations.set(key, object,7200, TimeUnit.SECONDS);
+    }
+
+
+    /**
      * 将信息从redis取出
      * */
     public Object get(String key) {
