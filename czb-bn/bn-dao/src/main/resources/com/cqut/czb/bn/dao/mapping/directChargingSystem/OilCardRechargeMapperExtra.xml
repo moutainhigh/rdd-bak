@@ -131,6 +131,12 @@
         WHERE user_id = #{userId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateOrderState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        UPDATE czb_direct_charging_order
+        set state = #{state,jdbcType=INTEGER}
+        WHERE order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
     <insert id="insertPetrolNum" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation">
         insert into czb_user_card_relation (record_id, user_id, sinopec_petrol_num,
           petrolChina_petrol_num, create_at, update_at

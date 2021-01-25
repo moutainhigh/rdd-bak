@@ -91,4 +91,13 @@ public class OilCardRechargeController {
     }
 
 
+    /**
+     *
+     * @return
+     */
+    @PostMapping("/updateOrderState")
+    @ResponseBody
+    public JSONResult updateOrderState(DirectChargingOrderDto directChargingOrderDto){
+        return new JSONResult(oilCardRechargeService.updateOrderState(directChargingOrderDto));
+    }
 }

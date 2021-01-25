@@ -69,6 +69,15 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public JSONResult updateOrderState(DirectChargingOrderDto directChargingOrderDto) {
+        int update = oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto);
+        if (update > 0) {
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
     public JSONResult bindingOilCard(String userId, OilCardBinging oilCardBinging) {
         if(!oilCardBinging.getPertrolNum().equals(oilCardBinging.getIsPertrolNum()))
             return new JSONResult(500,"输入卡号不一致");
