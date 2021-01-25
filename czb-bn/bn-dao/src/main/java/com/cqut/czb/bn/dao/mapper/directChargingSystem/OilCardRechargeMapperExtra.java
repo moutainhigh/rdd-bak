@@ -3,6 +3,7 @@ package com.cqut.czb.bn.dao.mapper.directChargingSystem;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -39,4 +40,6 @@ public interface OilCardRechargeMapperExtra {
     int insertOrder(DirectChargingOrderDto directChargingOrderDto);
 
     int updateRechargeRecord(DirectChargingOrderDto directChargingOrderDto);
+
+    int updateOrderState(DirectChargingOrderDto directChargingOrderDto);
 }
