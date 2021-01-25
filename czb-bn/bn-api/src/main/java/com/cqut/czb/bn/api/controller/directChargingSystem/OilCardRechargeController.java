@@ -90,13 +90,4 @@ public class OilCardRechargeController {
         return js_data;
     }
 
-
-    @PostMapping("/getRechageToken")
-    public JSONResult getRechageToken(){
-        String accesstoken = sendNotification.getAccessToken();
-        if (accesstoken.length() != 0)
-            return new JSONResult("登录信息获取成功",200,accesstoken);
-        return new JSONResult("登录信息获取失败",500,accesstoken);
-    }
-
 }
