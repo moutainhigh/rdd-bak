@@ -12,6 +12,7 @@ import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.AlipayClientConfig;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.OnlineorderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.TelorderDto;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -118,9 +119,16 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         // userId
         String userId = directChargingOrderDto.getUserId();
         //直充类型
-        Integer  recordType = directChargingOrderDto.getRecordType();
+        Integer recordType = directChargingOrderDto.getRecordType();
+        String userAccount = directChargingOrderDto.getUserAccount();
+        String cardNum;
+        if (recordType == 2){
+            cardNum = directChargingOrderDto.getPetrolChinaPetrolNum();
+        }else{
+            cardNum = directChargingOrderDto.getSinopecPetrolNum();
+        }
         request.setReturnUrl(AliPayConfig.Return_url);
-        request.setBizModel(AliParameterConfig.getPhonePill(orderId, rechargeAmount, userId, recordType));//支付订单
+        request.setBizModel(AliParameterConfig.getPhonePill(orderId, rechargeAmount, userId, recordType,userAccount,cardNum));//支付订单
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -152,14 +160,14 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     @Override
     public String aliPayReturn(HttpServletRequest request, String consumptionType) {
         // 获取支付宝POST过来反馈信息
-        System.out.println("1");
         Map<String, String> params = new HashMap<String, String>();
+        DirectChargingOrderDto directChargingOrderDto = getParams(params);
+        System.out.println(directChargingOrderDto.toString());
         Map requestParams = request.getParameterMap();
         params=parseOrder(params,requestParams);
         //是否被篡改的标识
         boolean signVerfied = false;
         try {
-            System.out.println("2");
             signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_wap_public_key,
                         AliPayConfig.charset, AliPayConfig.sign_type);
         } catch (AlipayApiException e) {
@@ -170,43 +178,113 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 //				支付账单是否一致
                 if (isCorrectDataH5(params)) {//交易成功
                     Object[] param = { params };
-                    System.out.println("3");
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
+                        if (directChargingOrderDto.getRecordType()==1){
+                            phoneRechargeSubmission(directChargingOrderDto);
+                        }else{
+                            onlineorderSubmission(directChargingOrderDto);
+                        }
                         return AlipayConfig.response_success;
                     } else if (AlipayConfig.response_fail.equals(result.get("fail"))) {
+                        directChargingOrderDto.setState(3);
+                        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
                         return AlipayConfig.response_fail;
                     } else
                         return null;
                 } else {//交易失败
                     Object[] param = { params };
+                    directChargingOrderDto.setState(3);
+                    boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
                     return AlipayConfig.response_fail;
                 }
             } else {
+                directChargingOrderDto.setState(3);
+                boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
                 return AlipayConfig.response_fail;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        directChargingOrderDto.setState(3);
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         return AlipayConfig.response_fail;
     }
 
-    @Override
-    public String phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
+    private DirectChargingOrderDto getParams(Map<String, String> param) {
+        String[] resDate = param.get("passback_params").split("\\^");
+        String[] temp;
+        String orgId = "";
+        String userAccount = "";
+        int recordType = 0;
+        String cardNum = "";
+        double rechargeAmount = 0;
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orderId".equals(temp[0])) {
+                orgId = temp[1];
+            }
+            if ("recordType".equals(temp[0])) {
+                recordType = Integer.valueOf(temp[1]);
+            }
+            if ("userAccount".equals(temp[0])) {
+                userAccount = temp[1];
+            }
+            if ("cardNum".equals(temp[0])) {
+                cardNum = temp[1];
+            }
+            if ("rechargeAmount".equals(temp[0])) {
+                rechargeAmount = Double.parseDouble(temp[1]);
+            }
+        }
+        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+        directChargingOrderDto.setOrderId(orgId);
+        directChargingOrderDto.setRecordType(recordType);
+        directChargingOrderDto.setUserAccount(userAccount);
+        directChargingOrderDto.setPetrolChinaPetrolNum(cardNum);
+        directChargingOrderDto.setRechargeAmount(rechargeAmount);
+        directChargingOrderDto.setUpdateAt(new Date());
+        return directChargingOrderDto;
+    }
+
+    public void phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
         String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
         TelorderDto telorderDto = new TelorderDto();
         telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
         telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
         telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
         telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
-        telorderDto.setSign(md5(telorderDto));
+        telorderDto.setSign(phonemd5(telorderDto));
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
         String body = responseEntity.getBody();
+        System.out.println("话费直冲");
         System.out.println(body);
-        return body;
     }
 
-    private String md5(TelorderDto telorderDto) {
+    public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
+        String url = "https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
+        OnlineorderDto onlineorderDto = new OnlineorderDto();
+        onlineorderDto.setGasUserid(directChargingOrderDto.getPetrolChinaPetrolNum());
+        onlineorderDto.setGasMobile(directChargingOrderDto.getUserAccount());
+        onlineorderDto.setOrdersn(directChargingOrderDto.getOrderId());
+        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
+        onlineorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
+        onlineorderDto.setSign(onlinemd5(onlineorderDto));
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, onlineorderDto, String.class);
+        String body = responseEntity.getBody();
+        System.out.println("油卡直冲");
+        System.out.println(body);
+    }
+
+    private String onlinemd5(OnlineorderDto onlineorderDto) {
+        String result = onlineorderDto.getAppId()+"667cadbb-c0c5-40a4-bd05-ad2855e75143"+onlineorderDto.getGasUserid()+onlineorderDto.getOrdersn()+onlineorderDto.getCardnum()+onlineorderDto.getGasMobile();
+        return MD5Util.getMD5Code(result);
+    }
+
+    private String phonemd5(TelorderDto telorderDto) {
         String result = telorderDto.getAppId()+"667cadbb-c0c5-40a4-bd05-ad2855e75143"+telorderDto.getPhoneno()+telorderDto.getCardnum()+telorderDto.getOrdersn();
         return MD5Util.getMD5Code(result);
     }

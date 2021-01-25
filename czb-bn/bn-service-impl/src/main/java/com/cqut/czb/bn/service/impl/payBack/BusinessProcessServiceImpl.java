@@ -154,7 +154,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 return result;
             }
         }else if(consumptionType.equals("Direct")) {//直冲系统
-            System.out.println("5");
             if (getAddBuyDirectOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
@@ -213,8 +212,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     //直冲系统（支付宝）
     public int getAddBuyDirectOrderAli(Map<String, String> params){
-        System.out.println("6");
-        System.out.println(params.toString());
         String[] resDate = params.get("passback_params").split("\\^");
         String[] temp;
         String thirdOrderId = params.get("trade_no");
@@ -241,7 +238,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         directChargingOrderDto.setThirdOrderId(thirdOrderId);
         directChargingOrderDto.setUpdateAt(new Date());
         directChargingOrderDto.setState(1);
-        System.out.println("7");
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
         return 1;

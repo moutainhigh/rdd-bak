@@ -90,14 +90,5 @@ public class OilCardRechargeController {
         return js_data;
     }
 
-    /**
-     *
-     * @return
-     */
-    @PostMapping("/phoneRechargeSubmission")
-    @ResponseBody
-    public JSONResult phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
-        return new JSONResult(oilCardRechargeService.phoneRechargeSubmission(directChargingOrderDto));
-    }
 
 }

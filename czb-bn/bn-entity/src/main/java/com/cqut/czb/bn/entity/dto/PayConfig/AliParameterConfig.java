@@ -191,7 +191,7 @@ public class AliParameterConfig {
      * 转换为支付宝支付实体（直充相关参数配置）
      * @return
      */
-    public static AlipayTradeWapPayModel getPhonePill(String orderId,double rechargeAmount ,String userId,Integer recordType) {
+    public static AlipayTradeWapPayModel getPhonePill(String orderId, double rechargeAmount, String userId, Integer recordType, String userAccount, String cardNum) {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("RDD话费直充");
         model.setSubject("RDD话费直充");
@@ -201,17 +201,19 @@ public class AliParameterConfig {
         model.setProductCode(AliPayConfig.product_wap_code);
         model.setQuitUrl("http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/recharge");
         model.setSellerId("2088731798282131");
-        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType));
+        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
         return model;
     }
 
     //支付宝支付—— 直充值相关参数配置
-    public static String getPhonePillParams(String orderId,double rechargeAmount ,String userId,Integer recordType) {
+    public static String getPhonePillParams(String orderId, double rechargeAmount, String userId, Integer recordType, String cardNum, String userAccount) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orderId", orderId);
         pbp.put("rechargeAmount", rechargeAmount);
         pbp.put("userId", userId);
         pbp.put("recordType",String.valueOf(recordType));
+        pbp.put("userAccount",userAccount);
+        pbp.put("cardNum",cardNum);
         return StringUtil.transMapToStringOther(pbp);
     }
 }
