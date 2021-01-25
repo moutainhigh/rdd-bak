@@ -76,6 +76,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             }
         }catch (Exception e){
             e.printStackTrace();
+            if (request.getRequestURI().startsWith("/api/prepaidRefill")
+                    || request.getRequestURI().startsWith("/api/oilCardRecharge"))
+                throw new SecurityException("身份验证过期 直充");
             throw new SecurityException("身份验证过期");
         }
     }
