@@ -14,6 +14,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Double rechargeAmount;
 
+    private Double realPrice;
+
     private String sinopecPetrolNum;
 
     private String petrolChinaPetrolNum;
@@ -38,10 +40,18 @@ public class DirectChargingOrderDto extends PageDTO {
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
-    private Integer recordType;
+    private Integer recordType; // 1 话费 2 中石油 3 中石化
 
     public String getOrderId() {
         return orderId;
+    }
+
+    public Double getRealPrice() {
+        return realPrice;
+    }
+
+    public void setRealPrice(Double realPrice) {
+        this.realPrice = realPrice;
     }
 
     public void setOrderId(String orderId) {

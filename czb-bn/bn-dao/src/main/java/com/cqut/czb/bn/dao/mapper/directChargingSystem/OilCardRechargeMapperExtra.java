@@ -8,8 +8,20 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface OilCardRechargeMapperExtra {
+    /**
+     * 话费订单
+     * @param userId
+     * @param type
+     * @return
+     */
     List<DirectChargingOrderDto> getOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
 
+    /**
+     * 油卡充值订单
+     * @param userId
+     * @param type
+     * @return
+     */
     List<DirectChargingOrderDto> getOilOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
 
     List<DirectChargingOrderDto> getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
