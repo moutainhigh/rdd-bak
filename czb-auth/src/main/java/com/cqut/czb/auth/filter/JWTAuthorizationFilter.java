@@ -54,7 +54,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         if(null == tokenHeader || "".equals(tokenHeader)) {
             if (request.getRequestURI().startsWith("/api/prepaidRefill")
-                    || request.getRequestURI().startsWith("/api/oilCardRecharge"))
+                    || request.getRequestURI().startsWith("/api/oilCardRecharge")
+                    || request.getRequestURI().startsWith("/api/DirectChargingPay")
+                    || request.getRequestURI().startsWith("/AliPayReturn"))
                 throw new SecurityException("登录信息不能为空 直充");
             throw new SecurityException("登录信息不能为空");
         }
@@ -69,7 +71,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 super.doFilterInternal(request, response, chain);
             } else {
                 if (request.getRequestURI().startsWith("/api/prepaidRefill")
-                        || request.getRequestURI().startsWith("/api/oilCardRecharge"))
+                        || request.getRequestURI().startsWith("/api/oilCardRecharge")
+                        || request.getRequestURI().startsWith("/api/DirectChargingPay")
+                        || request.getRequestURI().startsWith("/AliPayReturn"))
                     throw new SecurityException("身份验证过期 直充");
                 throw new SecurityException("身份验证过期");
 //                chain.doFilter(request, response);
@@ -77,7 +81,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }catch (Exception e){
             e.printStackTrace();
             if (request.getRequestURI().startsWith("/api/prepaidRefill")
-                    || request.getRequestURI().startsWith("/api/oilCardRecharge"))
+                    || request.getRequestURI().startsWith("/api/oilCardRecharge")
+                    || request.getRequestURI().startsWith("/api/DirectChargingPay")
+                    || request.getRequestURI().startsWith("/AliPayReturn"))
                 throw new SecurityException("身份验证过期 直充");
             throw new SecurityException("身份验证过期");
         }
