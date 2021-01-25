@@ -53,18 +53,21 @@
 
     <select id="getAllOrderInfoList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
-            order_id orderId,
-            third_order_id thirdOrderId,
-            recharge_amount rechargeAmount,
-            state state,
-            a.create_at createAt,
-            user_account userAccount,
-            sinopec_petrol_num sinopecPetrolNum,
-            petrolChina_petrol_num petrolChinaPetrolNum
-        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
+        a.order_id orderId,
+        a.third_order_id thirdOrderId,
+        a.recharge_amount rechargeAmount,
+        a.state state,
+        a.create_at createAt,
+        b.user_account userAccount,
+        cu.user_account superiorAccount,
+        d.sinopec_petrol_num sinopecPetrolNum,
+        d.petrolChina_petrol_num petrolChinaPetrolNum
+        FROM czb_direct_charging_order a
+        left join czb_user b on a.user_id = b.user_id
+        left join czb_user cu on cu.user_id = b.superior_user
         left join czb_user_card_relation d on a.user_id = d.user_id
         <where>
-            record_type = #{recordType,jdbcType=INTEGER}
+            a.record_type = #{recordType,jdbcType=INTEGER}
             <if test="startTime!= null and endTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
                 and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
@@ -75,14 +78,14 @@
             <if test="userAccount!= null and userAccount!= ''">
                 and b.user_account = #{userAccount,jdbcType=VARCHAR}
             </if>
-            <if test="userAccount!= null and userAccount!= ''">
-                and b.user_account = #{userAccount,jdbcType=VARCHAR}
-            </if>
             <if test="sinopecPetrolNum!= null and sinopecPetrolNum!= ''">
                 and b.sinopec_petrol_num = #{sinopecPetrolNum,jdbcType=VARCHAR}
             </if>
             <if test="petrolChinaPetrolNum!= null and petrolChinaPetrolNum!= ''">
                 and b.petrolChina_petrol_num = #{petrolChinaPetrolNum,jdbcType=VARCHAR}
+            </if>
+            <if test="superiorAccount!= null and superiorAccount!= ''">
+                and cu.user_account = #{superiorAccount,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

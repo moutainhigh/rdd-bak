@@ -24,6 +24,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer state;
 
+    private String superiorAccount; // 推荐人电话
+
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
 
@@ -148,5 +150,13 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setPetrolChinaPetrolNum(String petrolChinaPetrolNum) {
         this.petrolChinaPetrolNum = petrolChinaPetrolNum;
+    }
+
+    public String getSuperiorAccount() {
+        return superiorAccount;
+    }
+
+    public void setSuperiorAccount(String superiorAccount) {
+        this.superiorAccount = superiorAccount;
     }
 }
