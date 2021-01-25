@@ -25,11 +25,6 @@ public class PrepaidRefillController {
     @Autowired
     RedisUtils redisUtils;
 
-    @GetMapping("/getGoodsPrice")
-    public JSONResult getGoodsPrice(Integer type) {
-        return new JSONResult(prepaidRefillService.getGoodsPrice(type));
-    }
-
     @GetMapping("/getAllCommodity")
     public JSONResult getAllCommodity(DirectChargingCommodity directChargingCommodity, PageDTO pageDTO){
         return new JSONResult(prepaidRefillService.getAllCommodity(directChargingCommodity,pageDTO));

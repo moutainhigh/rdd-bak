@@ -1,8 +1,11 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
 
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
+import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +17,8 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/AliPayReturn")
 public class AliPayReturnController {
+    @Autowired
+    PrepaidRefillService prepaidRefillService;
 
     @Autowired
     OilCardRechargeService oilCardRechargeService;
@@ -33,5 +38,10 @@ public class AliPayReturnController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @GetMapping("/getGoodsPrice")
+    public JSONResult getGoodsPrice(Integer type) {
+        return new JSONResult(prepaidRefillService.getGoodsPrice(type));
     }
 }
