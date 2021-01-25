@@ -58,6 +58,7 @@
         a.order_id orderId,
         a.third_order_id thirdOrderId,
         a.recharge_amount rechargeAmount,
+        a.real_price realPrice,
         a.state state,
         a.create_at createAt,
         b.user_account userAccount,
@@ -69,7 +70,12 @@
         left join czb_user cu on cu.user_id = b.superior_user
         left join czb_user_card_relation d on a.user_id = d.user_id
         <where>
-            a.record_type = #{recordType,jdbcType=INTEGER}
+            <if test="recordType == 1">
+                a.record_type = 2 or a.record_type = 3
+            </if>
+            <if test="recordType == 0">
+                a.record_type = 1
+            </if>
             <if test="startTime!= null and endTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
                 and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
