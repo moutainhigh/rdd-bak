@@ -4,33 +4,28 @@ package com.cqut.czb.bn.service.impl.directChargingSystem;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.AliParameterConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.AlipayClientConfig;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
-import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
-import com.cqut.czb.bn.entity.dto.automaticRecharge.AutomaticRechargeDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
-import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.VipAreaConfig;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.TelorderDto;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
+import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -42,6 +37,10 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Autowired
     private BusinessProcessService refuelingCard;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
 
     @Override
     public List<DirectChargingOrderDto> getOrderInfoList(String userId, Integer type) {
@@ -192,7 +191,25 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         return AlipayConfig.response_fail;
     }
 
+    @Override
+    public String phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
+        String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
+        TelorderDto telorderDto = new TelorderDto();
+        telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
+        telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
+        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
+        telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
+        telorderDto.setSign(md5(telorderDto));
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
+        String body = responseEntity.getBody();
+        System.out.println(body);
+        return body;
+    }
 
+    private String md5(TelorderDto telorderDto) {
+        String result = telorderDto.getAppId()+"667cadbb-c0c5-40a4-bd05-ad2855e75143"+telorderDto.getPhoneno()+telorderDto.getCardnum()+telorderDto.getOrdersn();
+        return MD5Util.getMD5Code(result);
+    }
 
     private boolean isCorrectDataH5(Map<String, String> params) {
 
@@ -224,4 +241,5 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         }
         return params;
     }
+
 }

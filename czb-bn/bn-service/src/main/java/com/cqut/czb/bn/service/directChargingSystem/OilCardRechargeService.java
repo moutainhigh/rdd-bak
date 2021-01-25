@@ -30,4 +30,6 @@ public interface OilCardRechargeService{
     String AlipayRechargeDirect(DirectChargingOrderDto directChargingOrderDto);
 
     String aliPayReturn(HttpServletRequest request,String consumptionType);
+
+    String phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto);
 }
