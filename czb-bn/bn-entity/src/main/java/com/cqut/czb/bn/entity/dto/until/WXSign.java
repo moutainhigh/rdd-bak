@@ -27,10 +27,11 @@ public class WXSign {
         Map<String, String> ret = new HashMap<String, String>();
         String jsapi_ticket=(String)request.getSession().getAttribute(appid+"jsapi_ticket_session");
         if(jsapi_ticket==null || "".equals(jsapi_ticket)){
-            JSONObject json=httpRequest("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi", "GET", "");
-            jsapi_ticket=(String)json.get("ticket");
+        JSONObject json=httpRequest("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi", "GET", "");
+        jsapi_ticket=(String)json.get("ticket");
+        System.out.println(2+jsapi_ticket);
             request.getSession().setAttribute(appid+"jsapi_ticket_session", jsapi_ticket);
-            request.getSession().setMaxInactiveInterval(7200);
+        request.getSession().setMaxInactiveInterval(7200);
         }
         ret = sign(jsapi_ticket, url);
         return ret;
@@ -69,7 +70,7 @@ public class WXSign {
         ret.put("noncestr", nonce_str);
         ret.put("timestamp", timestamp);
         ret.put("signature", signature);
-        ret.put("appid", WCProgramConfig.app_id);
+        ret.put("appid", WCProgramConfig.ren_duo_duo_app_id);
         return ret;
     }
 
