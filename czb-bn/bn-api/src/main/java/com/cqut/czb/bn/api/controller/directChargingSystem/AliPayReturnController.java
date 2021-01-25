@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
 
+import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/AliPayReturn")
@@ -25,6 +28,9 @@ public class AliPayReturnController {
 
     @Autowired
     OilCardRechargeService oilCardRechargeService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * 支付宝购买
@@ -46,14 +52,5 @@ public class AliPayReturnController {
     @GetMapping("/getGoodsPrice")
     public JSONResult getGoodsPrice(Integer type) {
         return new JSONResult(prepaidRefillService.getGoodsPrice(type));
-    }
-
-    @PostMapping("/getRechageToken")
-    public JSONResult getRechageToken(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String accesstoken = (String) session.getAttribute(WCProgramConfig.app_id + "accesstoken_session");
-        if (accesstoken == null || "".equals(accesstoken))
-            return new JSONResult("登录信息获取失败",500,accesstoken);
-        return new JSONResult("登录信息获取成功",200,accesstoken);
     }
 }
