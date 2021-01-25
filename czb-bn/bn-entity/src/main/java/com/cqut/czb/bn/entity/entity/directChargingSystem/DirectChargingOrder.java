@@ -21,6 +21,8 @@ public class DirectChargingOrder {
 
     private Integer recordType;
 
+    private Double realPrice;
+
     public String getOrderId() {
         return orderId;
     }
@@ -91,5 +93,13 @@ public class DirectChargingOrder {
 
     public void setRecordType(Integer recordType) {
         this.recordType = recordType;
+    }
+
+    public Double getRealPrice() {
+        return realPrice;
+    }
+
+    public void setRealPrice(Double realPrice) {
+        this.realPrice = realPrice;
     }
 }

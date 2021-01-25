@@ -144,6 +144,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrder.setRechargeAmount(directChargingOrderDto.getRechargeAmount());
         directChargingOrder.setRecordType(directChargingOrderDto.getRecordType());
         directChargingOrder.setPaymentMethod(1);
+        directChargingOrder.setRealPrice(directChargingOrderDto.getRealPrice());
         directChargingOrder.setState(0);
         boolean insertRecords=oilCardRechargeMapperExtra.insertOrder(directChargingOrder)>0;
         return insertRecords;

@@ -11,13 +11,14 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="record_type" property="recordType" jdbcType="INTEGER" />
+    <result column="real_price" property="realPrice" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    order_id, third_order_id, recharge_amount, user_id, payment_method, state, create_at, 
-    update_at, record_type
+    order_id, third_order_id, recharge_amount, user_id, payment_method, state, create_at,
+    update_at, record_type, real_price
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_direct_charging_order
     where order_id = #{orderId,jdbcType=VARCHAR}
@@ -27,14 +28,14 @@
     where order_id = #{orderId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingOrder" >
-    insert into czb_direct_charging_order (order_id, third_order_id, recharge_amount, 
-      user_id, payment_method, state, 
-      create_at, update_at, record_type
-      )
-    values (#{orderId,jdbcType=VARCHAR}, #{thirdOrderId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE}, 
-      #{userId,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, 
-      #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{recordType,jdbcType=INTEGER}
-      )
+    insert into czb_direct_charging_order (order_id, third_order_id, recharge_amount,
+                                           user_id, payment_method, state,
+                                           create_at, update_at, record_type,
+                                           real_price)
+    values (#{orderId,jdbcType=VARCHAR}, #{thirdOrderId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE},
+            #{userId,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=INTEGER}, #{state,jdbcType=INTEGER},
+            #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{recordType,jdbcType=INTEGER},
+            #{realPrice,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingOrder" >
     insert into czb_direct_charging_order
@@ -66,6 +67,9 @@
       <if test="recordType != null" >
         record_type,
       </if>
+      <if test="realPrice != null" >
+        real_price,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -94,6 +98,9 @@
       </if>
       <if test="recordType != null" >
         #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="realPrice != null" >
+        #{realPrice,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -124,19 +131,23 @@
       <if test="recordType != null" >
         record_type = #{recordType,jdbcType=INTEGER},
       </if>
+      <if test="realPrice != null" >
+        real_price = #{realPrice,jdbcType=DOUBLE},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingOrder" >
     update czb_direct_charging_order
     set third_order_id = #{thirdOrderId,jdbcType=VARCHAR},
-      recharge_amount = #{rechargeAmount,jdbcType=DOUBLE},
-      user_id = #{userId,jdbcType=VARCHAR},
-      payment_method = #{paymentMethod,jdbcType=INTEGER},
-      state = #{state,jdbcType=INTEGER},
-      create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      record_type = #{recordType,jdbcType=INTEGER}
+        recharge_amount = #{rechargeAmount,jdbcType=DOUBLE},
+        user_id = #{userId,jdbcType=VARCHAR},
+        payment_method = #{paymentMethod,jdbcType=INTEGER},
+        state = #{state,jdbcType=INTEGER},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+        record_type = #{recordType,jdbcType=INTEGER},
+        real_price = #{realPrice,jdbcType=DOUBLE}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>

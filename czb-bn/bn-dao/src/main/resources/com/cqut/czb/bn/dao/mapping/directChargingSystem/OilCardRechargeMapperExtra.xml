@@ -16,6 +16,7 @@
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
             left join czb_user_card_relation c on a.user_id = c.user_id
         WHERE a.user_id = #{userId,jdbcType=VARCHAR} and record_type = 1 and state != 0
+        order by a.create_at DESC
     </select>
 
     <select id="getOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
@@ -33,6 +34,7 @@
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
                                          left join czb_user_card_relation c on a.user_id = c.user_id
         WHERE a.user_id = #{userId,jdbcType=VARCHAR} and record_type != 1 and state != 0
+        order by a.create_at DESC
     </select>
 
     <select id="getAllUserCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
@@ -96,6 +98,7 @@
                 and cu.user_account = #{superiorAccount,jdbcType=VARCHAR}
             </if>
         </where>
+        order by a.create_at DESC
     </select>
 
     <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
@@ -145,7 +148,8 @@
                                    state,
                                    create_at,
                                    update_at,
-                                   record_type
+                                   record_type,
+                                   real_price
         )
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
@@ -154,7 +158,8 @@
                 #{state,jdbcType=INTEGER },
                 now(),
                 now(),
-                #{recordType,jdbcType=INTEGER }
+                #{recordType,jdbcType=INTEGER },
+                #{realPrice,jdbcType=DOUBLE}
                )
     </insert>
 

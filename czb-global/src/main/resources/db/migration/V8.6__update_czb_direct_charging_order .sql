@@ -1,0 +1,1 @@
+ALTER TABLE czb_direct_charging_order ADD COLUMN  real_price double(10, 2) DEFAULT NULL
