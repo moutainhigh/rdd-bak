@@ -71,3 +71,25 @@ jwt:
 
   expiration: 3600
   expiration_prmember: 604800
+
+register:
+  common:
+    role: 管理员（普通）
+    userType: 普通用户
+    petrolType: 0
+  special:
+    role: 管理员（特殊）
+    userType: 特殊用户
+    petrolType: 1
+
+recharge:
+  common:
+    role: 普通
+    userType: 0
+    vipPrice: 69
+    aliAccount: 爱虎
+  special:
+    role: 特殊
+    userType: 1
+    vipPrice: 39
+    aliAccount: RDD
