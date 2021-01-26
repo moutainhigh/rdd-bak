@@ -91,7 +91,7 @@
     WHERE
     is_received = 1
     <if test="isSpecial != null">
-    and is_special = #{isSpecial,jdbcType = INTEGER}
+    and czb_user.is_special = #{isSpecial,jdbcType = INTEGER}
     </if>
     <if test="startTime != null">
     AND recharge_time &gt;= #{startTime,jdbcType = TIMESTAMP}

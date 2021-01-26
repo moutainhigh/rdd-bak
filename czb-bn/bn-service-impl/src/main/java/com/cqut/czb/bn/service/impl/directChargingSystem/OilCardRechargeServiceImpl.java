@@ -169,11 +169,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     @Override
     public String aliPayReturn(HttpServletRequest request, String consumptionType) {
         // 获取支付宝POST过来反馈信息
+        System.out.println(1);
         Map<String, String> params = new HashMap<String, String>();
-        DirectChargingOrderDto directChargingOrderDto = getParams(params);
-        System.out.println(directChargingOrderDto.toString());
         Map requestParams = request.getParameterMap();
         params=parseOrder(params,requestParams);
+        DirectChargingOrderDto directChargingOrderDto = getParams(params);
+        System.out.println(directChargingOrderDto.toString());
         //是否被篡改的标识
         boolean signVerfied = false;
         try {
@@ -190,6 +191,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         if (directChargingOrderDto.getRecordType()==1){
+                            System.out.println(2);
                             phoneRechargeSubmission(directChargingOrderDto);
                         }else{
                             onlineorderSubmission(directChargingOrderDto);
@@ -260,6 +262,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     public void phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
+        System.out.println(3);
         String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
         TelorderDto telorderDto = new TelorderDto();
         telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
