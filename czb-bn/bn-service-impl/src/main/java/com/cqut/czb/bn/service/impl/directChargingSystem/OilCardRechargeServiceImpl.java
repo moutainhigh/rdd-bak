@@ -304,14 +304,14 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String phoneno = directChargingOrderDto.getUserAccount();
 
         // 金额
-        String cardnum = String.valueOf(directChargingOrderDto.getRechargeAmount());
+        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
 
         // appId
         String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
 
         String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
 
-        String string = appId + appSecret + phoneno+cardnum+ordersn;
+        String string = appId + appSecret + phoneno + String.valueOf(cardnum) + ordersn;
         // sign
         String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
 
