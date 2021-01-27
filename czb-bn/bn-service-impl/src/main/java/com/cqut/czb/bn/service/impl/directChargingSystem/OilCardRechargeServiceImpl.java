@@ -127,7 +127,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         //支付的金额
 //        Double money=backMoney( petrol,petrolInputDTO);
-        Double rechargeAmount = directChargingOrderDto.getRechargeAmount();
+        Double rechargeAmount = directChargingOrderDto.getRealPrice();
+
+        Double amount = directChargingOrderDto.getRechargeAmount();
         // userId
         String userId = directChargingOrderDto.getUserId();
         //直充类型
@@ -140,8 +142,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             cardNum = directChargingOrderDto.getSinopecPetrolNum();
         }
         request.setReturnUrl(AliPayConfig.Return_url);
-        System.out.println(userAccount);
-        request.setBizModel(AliParameterConfig.getPhonePill(orderId, rechargeAmount, userId, recordType,userAccount,cardNum));//支付订单
+        System.out.println("起调传参"+directChargingOrderDto.toString());
+        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,userAccount,cardNum));//支付订单
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
