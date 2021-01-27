@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.service.impl.directChargingSystem;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -267,11 +269,22 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         TelorderDto telorderDto = new TelorderDto();
         telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
         telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
+        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRealPrice()));
         telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
         telorderDto.setSign(phonemd5(telorderDto));
+        System.out.println(telorderDto);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
         String body = responseEntity.getBody();
+        int begin = body.indexOf("code");
+        int end = body.indexOf("result");
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (body.substring(begin+6, end-2) == "0") {
+            directChargingOrderDto1.setState(2);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println("话费直冲");
         System.out.println(body);
     }
@@ -282,11 +295,22 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         onlineorderDto.setGasUserid(directChargingOrderDto.getPetrolChinaPetrolNum());
         onlineorderDto.setGasMobile(directChargingOrderDto.getUserAccount());
         onlineorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
+        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRealPrice()));
         onlineorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
         onlineorderDto.setSign(onlinemd5(onlineorderDto));
+        System.out.println(onlineorderDto);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, onlineorderDto, String.class);
         String body = responseEntity.getBody();
+        int begin = body.indexOf("code");
+        int end = body.indexOf("result");
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (body.substring(begin+6, end-2) == "0") {
+            directChargingOrderDto1.setState(2);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println("油卡直冲");
         System.out.println(body);
     }
