@@ -142,8 +142,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             cardNum = directChargingOrderDto.getSinopecPetrolNum();
         }
         request.setReturnUrl(AliPayConfig.Return_url);
-        System.out.println("起调传参"+directChargingOrderDto.toString());
-        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,userAccount,cardNum));//支付订单
+        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -176,10 +175,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     public String aliPayReturn(HttpServletRequest request, String consumptionType) {
         // 获取支付宝POST过来反馈信息
         System.out.println(1);
-        System.out.println("request"+request.toString());
         Map<String, String> params = new HashMap<String, String>();
         Map requestParams = request.getParameterMap();
-        System.out.println("requestParams"+requestParams.toString());
         params=parseOrder(params,requestParams);
         System.out.println("params"+params.toString());
         DirectChargingOrderDto directChargingOrderDto = getParams(params);
@@ -200,7 +197,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         if (directChargingOrderDto.getRecordType()==1){
-                            System.out.println(2);
                             phoneRechargeSubmission(directChargingOrderDto);
                         }else{
                             onlineorderSubmission(directChargingOrderDto);
@@ -233,7 +229,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     private DirectChargingOrderDto getParams(Map<String, String> param) {
         String[] resDate = param.get("passback_params").split("\\^");
-        System.out.println(resDate.toString());
         String[] temp;
         String orgId = "";
         String userAccount = "";
@@ -242,7 +237,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         double rechargeAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
-            System.out.println(temp.toString());
             if (temp.length < 2) {//判空
                 continue;
             }
@@ -283,7 +277,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRealPrice()));
         telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
         telorderDto.setSign(phonemd5(telorderDto));
-        System.out.println(telorderDto);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
         String body = responseEntity.getBody();
         int begin = body.indexOf("code");

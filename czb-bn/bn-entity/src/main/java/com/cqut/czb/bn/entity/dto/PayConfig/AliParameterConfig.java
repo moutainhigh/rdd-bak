@@ -201,12 +201,13 @@ public class AliParameterConfig {
         model.setProductCode(AliPayConfig.product_wap_code);
         model.setQuitUrl("http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/recharge");
         model.setSellerId("2088731798282131");
+        System.out.println(userAccount);
         model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
         return model;
     }
 
     //支付宝支付—— 直充值相关参数配置
-    public static String getPhonePillParams(String orderId, double rechargeAmount, String userId, Integer recordType, String cardNum, String userAccount) {
+    public static String getPhonePillParams(String orderId, double rechargeAmount, String userId, Integer recordType, String cardNum,String userAccount) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orderId", orderId);
         pbp.put("rechargeAmount", rechargeAmount);
@@ -216,7 +217,6 @@ public class AliParameterConfig {
         if (recordType != 1){
             pbp.put("cardNum",cardNum);
         }
-        System.out.println(pbp.toString());
         return StringUtil.transMapToStringOther(pbp);
     }
 }
