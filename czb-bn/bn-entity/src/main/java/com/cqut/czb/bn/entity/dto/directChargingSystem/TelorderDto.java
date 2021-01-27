@@ -51,4 +51,15 @@ public class TelorderDto {
 	public void setSign(String sign) {
 		this.sign = sign;
 	}
+
+	@Override
+	public String toString() {
+		return "TelorderDto{" +
+				"phoneno='" + phoneno + '\'' +
+				", cardnum='" + cardnum + '\'' +
+				", ordersn='" + ordersn + '\'' +
+				", appId='" + appId + '\'' +
+				", sign='" + sign + '\'' +
+				'}';
+	}
 }
