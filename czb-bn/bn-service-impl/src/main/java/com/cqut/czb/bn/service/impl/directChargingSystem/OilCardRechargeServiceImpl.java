@@ -2,7 +2,6 @@ package com.cqut.czb.bn.service.impl.directChargingSystem;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -20,11 +19,14 @@ import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
+import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
+import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -268,30 +271,66 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     public void phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
-        System.out.println(3);
-        System.out.println(directChargingOrderDto);
-        String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
-        TelorderDto telorderDto = new TelorderDto();
-        telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
-        telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
-        telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
-        telorderDto.setSign(phonemd5(telorderDto));
-        System.out.println("telorderDto"+telorderDto.toString());
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
-        String body = responseEntity.getBody();
-        int begin = body.indexOf("code");
-        int end = body.indexOf("result");
-        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
-        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if (body.substring(begin+6, end-2) == "0") {
-            directChargingOrderDto1.setState(2);
-        } else {
-            directChargingOrderDto1.setState(4);
-        }
-        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
-        System.out.println("话费直冲");
-        System.out.println(body);
+//        System.out.println(3);
+//        System.out.println(directChargingOrderDto);
+//        String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
+//        TelorderDto telorderDto = new TelorderDto();
+//        telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
+//        telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
+//        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
+//        telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
+//        telorderDto.setSign(phonemd5(telorderDto));
+//        System.out.println("telorderDto"+telorderDto.toString());
+//        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
+//        String body = responseEntity.getBody();
+//        int begin = body.indexOf("code");
+//        int end = body.indexOf("result");
+//        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+//        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+//        if (body.substring(begin+6, end-2) == "0") {
+//            directChargingOrderDto1.setState(2);
+//        } else {
+//            directChargingOrderDto1.setState(4);
+//        }
+//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+//        System.out.println("话费直冲");
+//        System.out.println(body);
+
+        String URL="https://huafei.renduoduo2019.com/api/mobile/telorder";
+        //人多多的订单号（由我方生成）
+        String ordersn = directChargingOrderDto.getOrderId();
+
+        // 电话号码
+        String phoneno = directChargingOrderDto.getUserAccount();
+
+        // 金额
+        String cardnum = String.valueOf(directChargingOrderDto.getRechargeAmount());
+
+        // appId
+        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+
+        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+
+        String string = appId + appSecret + phoneno+cardnum+ordersn;
+        // sign
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
+        //设置请求参数
+        String params = "appId=" + appId +
+                    "&phoneno=" + phoneno +
+                    "&cardnum=" + cardnum +
+                    "&ordersn=" + ordersn +
+                    "&sign=" + sign;
+
+        System.out.println(params);
+
+        //开始请求
+        String sr= HttpRequest.httpRequestPost(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println("话费充值");
+        System.out.println(sr);
+        System.out.println(jsonObject);
     }
 
     public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
