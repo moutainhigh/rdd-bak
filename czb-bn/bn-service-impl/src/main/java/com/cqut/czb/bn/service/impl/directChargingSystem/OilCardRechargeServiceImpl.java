@@ -334,29 +334,70 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
-        String url = "https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
-        OnlineorderDto onlineorderDto = new OnlineorderDto();
-        onlineorderDto.setGasUserid(directChargingOrderDto.getPetrolChinaPetrolNum());
-        onlineorderDto.setGasMobile(directChargingOrderDto.getUserAccount());
-        onlineorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
-        onlineorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
-        onlineorderDto.setSign(onlinemd5(onlineorderDto));
-        System.out.println(onlineorderDto);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, onlineorderDto, String.class);
-        String body = responseEntity.getBody();
-        int begin = body.indexOf("code");
-        int end = body.indexOf("result");
-        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
-        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if (body.substring(begin+6, end-2) == "0") {
-            directChargingOrderDto1.setState(2);
-        } else {
-            directChargingOrderDto1.setState(4);
-        }
-        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
-        System.out.println("油卡直冲");
-        System.out.println(body);
+//        String url = "https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
+//        OnlineorderDto onlineorderDto = new OnlineorderDto();
+//        onlineorderDto.setGasUserid(directChargingOrderDto.getPetrolChinaPetrolNum());
+//        onlineorderDto.setGasMobile(directChargingOrderDto.getUserAccount());
+//        onlineorderDto.setOrdersn(directChargingOrderDto.getOrderId());
+//        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
+//        onlineorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
+//        onlineorderDto.setSign(onlinemd5(onlineorderDto));
+//        System.out.println(onlineorderDto);
+//        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, onlineorderDto, String.class);
+//        String body = responseEntity.getBody();
+//        int begin = body.indexOf("code");
+//        int end = body.indexOf("result");
+//        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+//        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+//        if (body.substring(begin+6, end-2) == "0") {
+//            directChargingOrderDto1.setState(2);
+//        } else {
+//            directChargingOrderDto1.setState(4);
+//        }
+//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+//        System.out.println("油卡直冲");
+//        System.out.println(body);
+
+        String URL="https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
+        //人多多的订单号（由我方生成）
+        String ordersn = directChargingOrderDto.getOrderId();
+
+        // 油卡号
+        String gasUserid = directChargingOrderDto.getPetrolChinaPetrolNum();
+
+        // 持卡人手机号
+        String gasMobile = directChargingOrderDto.getUserAccount();
+
+        // 金额
+        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
+
+        // appId
+        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+
+        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+
+        String string = appId + appSecret + gasUserid + ordersn + String.valueOf(cardnum) + gasMobile;
+
+        // sign
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
+        //设置请求参数
+        String params = "gasUserid=" + gasUserid +
+                "&gasMobile=" + gasMobile +
+                "&ordersn=" + ordersn +
+                "&cardnum=" + cardnum +
+                "&appId=" + appId +
+                "&sign=" + sign;
+
+        System.out.println(params);
+
+        //开始请求
+        String sr= HttpRequest.httpRequestPost(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println("油卡充值");
+        System.out.println(sr);
+        System.out.println(jsonObject);
     }
 
     private String onlinemd5(OnlineorderDto onlineorderDto) {
