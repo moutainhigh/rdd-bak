@@ -300,7 +300,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         onlineorderDto.setGasUserid(directChargingOrderDto.getPetrolChinaPetrolNum());
         onlineorderDto.setGasMobile(directChargingOrderDto.getUserAccount());
         onlineorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRealPrice()));
+        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
         onlineorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
         onlineorderDto.setSign(onlinemd5(onlineorderDto));
         System.out.println(onlineorderDto);
