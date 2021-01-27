@@ -269,14 +269,15 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     public void phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
         System.out.println(3);
+        System.out.println(directChargingOrderDto);
         String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
         TelorderDto telorderDto = new TelorderDto();
-        System.out.println(telorderDto.toString());
         telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
         telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRealPrice()));
+        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
         telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
         telorderDto.setSign(phonemd5(telorderDto));
+        System.out.println("telorderDto"+telorderDto.toString());
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
         String body = responseEntity.getBody();
         int begin = body.indexOf("code");
