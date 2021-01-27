@@ -169,4 +169,26 @@ public class DirectChargingOrderDto extends PageDTO {
     public void setSuperiorAccount(String superiorAccount) {
         this.superiorAccount = superiorAccount;
     }
+
+    @Override
+    public String toString() {
+        return "4444444444"+"DirectChargingOrderDto{" +
+                "orderId='" + orderId + '\'' +
+                ", thirdOrderId='" + thirdOrderId + '\'' +
+                ", userAccount='" + userAccount + '\'' +
+                ", rechargeAmount=" + rechargeAmount +
+                ", realPrice=" + realPrice +
+                ", sinopecPetrolNum='" + sinopecPetrolNum + '\'' +
+                ", petrolChinaPetrolNum='" + petrolChinaPetrolNum + '\'' +
+                ", userId='" + userId + '\'' +
+                ", paymentMethod=" + paymentMethod +
+                ", state=" + state +
+                ", superiorAccount='" + superiorAccount + '\'' +
+                ", createAt=" + createAt +
+                ", updateAt=" + updateAt +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", recordType=" + recordType +
+                '}';
+    }
 }

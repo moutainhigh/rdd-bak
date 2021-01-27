@@ -30,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -175,7 +176,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println(1);
         Map<String, String> params = new HashMap<String, String>();
         Map requestParams = request.getParameterMap();
+        System.out.println(requestParams.toString());
         params=parseOrder(params,requestParams);
+        System.out.println(params.toString());
         DirectChargingOrderDto directChargingOrderDto = getParams(params);
         System.out.println(directChargingOrderDto.toString());
         //是否被篡改的标识
