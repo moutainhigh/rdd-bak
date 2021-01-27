@@ -233,6 +233,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     private DirectChargingOrderDto getParams(Map<String, String> param) {
         String[] resDate = param.get("passback_params").split("\\^");
+        System.out.println(resDate.toString());
         String[] temp;
         String orgId = "";
         String userAccount = "";
@@ -241,6 +242,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         double rechargeAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
+            System.out.println(temp.toString());
             if (temp.length < 2) {//判空
                 continue;
             }
