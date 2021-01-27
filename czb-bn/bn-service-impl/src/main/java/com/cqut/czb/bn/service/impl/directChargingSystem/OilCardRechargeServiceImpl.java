@@ -139,6 +139,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             cardNum = directChargingOrderDto.getSinopecPetrolNum();
         }
         request.setReturnUrl(AliPayConfig.Return_url);
+        System.out.println(userAccount);
         request.setBizModel(AliParameterConfig.getPhonePill(orderId, rechargeAmount, userId, recordType,userAccount,cardNum));//支付订单
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
@@ -253,6 +254,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                 rechargeAmount = Double.parseDouble(temp[1]);
             }
         }
+        System.out.println(userAccount);
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
         directChargingOrderDto.setOrderId(orgId);
         directChargingOrderDto.setRecordType(recordType);
@@ -267,6 +269,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println(3);
         String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
         TelorderDto telorderDto = new TelorderDto();
+        System.out.println(telorderDto.toString());
         telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
         telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
         telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRealPrice()));
