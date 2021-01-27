@@ -174,13 +174,14 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     public String aliPayReturn(HttpServletRequest request, String consumptionType) {
         // 获取支付宝POST过来反馈信息
         System.out.println(1);
+        System.out.println("request"+request.toString());
         Map<String, String> params = new HashMap<String, String>();
         Map requestParams = request.getParameterMap();
-        System.out.println(requestParams.toString());
+        System.out.println("requestParams"+requestParams.toString());
         params=parseOrder(params,requestParams);
-        System.out.println(params.toString());
+        System.out.println("params"+params.toString());
         DirectChargingOrderDto directChargingOrderDto = getParams(params);
-        System.out.println(directChargingOrderDto.toString());
+        System.out.println("directChargingOrderDto"+directChargingOrderDto.toString());
         //是否被篡改的标识
         boolean signVerfied = false;
         try {
