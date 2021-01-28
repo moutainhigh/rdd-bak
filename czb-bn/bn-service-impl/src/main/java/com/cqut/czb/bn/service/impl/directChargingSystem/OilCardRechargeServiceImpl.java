@@ -555,7 +555,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String phoneno = directChargingOrderDto.getUserAccount();
 
         // 金额
-        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
+        Integer cardnum = directChargingOrderDto.getRealPrice().intValue();
 
         // appId
         String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
