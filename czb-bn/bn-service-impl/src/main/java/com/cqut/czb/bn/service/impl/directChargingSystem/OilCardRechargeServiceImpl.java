@@ -547,4 +547,46 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         return new JSONResult("状态查询成功", 200);
     }
 
+    @Override
+    public JSONResult isPhoneRecharge(DirectChargingOrderDto directChargingOrderDto){
+        String URL="https://huafei.renduoduo2019.com/api/mobile/telcheck";
+
+        // 电话号码
+        String phoneno = directChargingOrderDto.getUserAccount();
+
+        // 金额
+        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
+
+        // appId
+        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+
+        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+
+        String string = appId + appSecret + phoneno + String.valueOf(cardnum);
+        // sign
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
+        //设置请求参数
+        String params = "cardnum=" + cardnum +
+                "&phoneno=" + phoneno +
+                "&appId=" + appId +
+                "&sign=" + sign;
+
+        System.out.println(params);
+
+        //开始请求
+        String sr= HttpRequest.httpRequestGet(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println("是否可以充值");
+        System.out.println(sr);
+        System.out.println(jsonObject);
+        int begin = sr.indexOf("code");
+        if (sr.substring(begin+6, begin+7) == "0") {
+            return new JSONResult("可以充值", 200);
+        } else {
+            return new JSONResult("无法充值", 500);
+        }
+    }
+
 }

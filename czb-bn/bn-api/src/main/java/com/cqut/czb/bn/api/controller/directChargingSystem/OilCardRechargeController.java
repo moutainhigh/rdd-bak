@@ -101,6 +101,16 @@ public class OilCardRechargeController {
     public JSONResult getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto){
         return new JSONResult(oilCardRechargeService.getPhoneOrderState(directChargingOrderDto));
     }
+
+    /**
+     * 是否可以充值
+     * @return
+     */
+    @PostMapping("/isPhoneRecharge")
+    @ResponseBody
+    public JSONResult isPhoneRecharge(DirectChargingOrderDto directChargingOrderDto){
+        return oilCardRechargeService.isPhoneRecharge(directChargingOrderDto);
+    }
 }
 
 

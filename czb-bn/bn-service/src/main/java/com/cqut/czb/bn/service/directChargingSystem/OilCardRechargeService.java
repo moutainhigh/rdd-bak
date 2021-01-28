@@ -29,6 +29,8 @@ public interface OilCardRechargeService{
 
     JSONResult getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto);
 
+    JSONResult isPhoneRecharge(DirectChargingOrderDto directChargingOrderDto);
+
     /**
      * 用支付宝充值油卡
      * 生成起调参数串——返回给app（支付订单）
