@@ -81,4 +81,26 @@ public class OilCardRechargeController {
     public JSONResult updateOrderState(DirectChargingOrderDto directChargingOrderDto){
         return new JSONResult(oilCardRechargeService.updateOrderState(directChargingOrderDto));
     }
+
+    /**
+     * 油卡充值状态
+     * @return
+     */
+    @PostMapping("/getOilOrderState")
+    @ResponseBody
+    public JSONResult getOilOrderState(DirectChargingOrderDto directChargingOrderDto){
+        return new JSONResult(oilCardRechargeService.getOilOrderState(directChargingOrderDto));
+    }
+
+    /**
+     * 话费充值状态
+     * @return
+     */
+    @PostMapping("/getPhoneOrderState")
+    @ResponseBody
+    public JSONResult getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto){
+        return new JSONResult(oilCardRechargeService.getPhoneOrderState(directChargingOrderDto));
+    }
 }
+
+

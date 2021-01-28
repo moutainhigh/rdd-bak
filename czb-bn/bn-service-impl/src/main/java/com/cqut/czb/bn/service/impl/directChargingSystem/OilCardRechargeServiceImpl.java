@@ -331,6 +331,18 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println("话费充值");
         System.out.println(sr);
         System.out.println(jsonObject);
+        int begin = sr.indexOf("code");
+        int end = sr.indexOf("result");
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (sr.substring(begin+6, end-2) == "0") {
+            directChargingOrderDto1.setState(2);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+        System.out.println("话费直冲");
+        System.out.println(sr);
     }
 
     public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
@@ -398,6 +410,18 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println("油卡充值");
         System.out.println(sr);
         System.out.println(jsonObject);
+        int begin = sr.indexOf("code");
+        int end = sr.indexOf("result");
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (sr.substring(begin+6, end-2) == "0") {
+            directChargingOrderDto1.setState(2);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+        System.out.println("油卡直冲");
+        System.out.println(sr);
     }
 
     private String onlinemd5(OnlineorderDto onlineorderDto) {
@@ -439,6 +463,88 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             params.put(name, valueStr);
         }
         return params;
+    }
+
+    @Override
+    public JSONResult  getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto){
+        String URL="https://huafei.renduoduo2019.com/api/mobile/ordersta";
+        //人多多的订单号（由我方生成）
+        String ordersn = directChargingOrderDto.getOrderId();
+
+        // appId
+        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+
+        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+
+        String string = appId + appSecret + ordersn;
+
+        // sign
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
+        //设置请求参数
+        String params = "ordersn=" + ordersn +
+                "&appId=" + appId +
+                "&sign=" + sign;
+
+        System.out.println(params);
+
+        //开始请求
+        String sr= HttpRequest.httpRequestGet(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println("油卡充值");
+        System.out.println(sr);
+        System.out.println(jsonObject);
+        int begin = sr.indexOf("orderStatus");
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        directChargingOrderDto1.setState(Integer.parseInt(sr.substring(begin+14, begin+15)));
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+        System.out.println(directChargingOrderDto1.toString());
+        System.out.println("油卡状态");
+        System.out.println(sr);
+        return new JSONResult("状态查询成功", 200);
+    }
+
+    @Override
+    public JSONResult  getOilOrderState(DirectChargingOrderDto directChargingOrderDto){
+        String URL="https://huafei.renduoduo2019.com/api/sinopec/ordersta";
+        //人多多的订单号（由我方生成）
+        String ordersn = directChargingOrderDto.getOrderId();
+
+        // appId
+        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+
+        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+
+        String string = appId + appSecret + ordersn;
+
+        // sign
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
+        //设置请求参数
+        String params = "ordersn=" + ordersn +
+                    "&appId=" + appId +
+                    "&sign=" + sign;
+
+        System.out.println(params);
+
+        //开始请求
+        String sr= HttpRequest.httpRequestGet(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println("油卡充值");
+        System.out.println(sr);
+        System.out.println(jsonObject);
+        int begin = sr.indexOf("orderStatus");
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        directChargingOrderDto1.setState(Integer.parseInt(sr.substring(begin+14, begin+15)));
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+        System.out.println(directChargingOrderDto1.toString());
+        System.out.println("油卡状态");
+        System.out.println(sr);
+        return new JSONResult("状态查询成功", 200);
     }
 
 }
