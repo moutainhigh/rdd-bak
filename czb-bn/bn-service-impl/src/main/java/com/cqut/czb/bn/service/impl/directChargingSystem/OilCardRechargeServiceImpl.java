@@ -335,7 +335,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         int end = sr.indexOf("result");
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if (sr.substring(begin+6, end-2) == "0") {
+        if (sr.substring(begin+6, end-2).equals("0")) {
             directChargingOrderDto1.setState(2);
         } else {
             directChargingOrderDto1.setState(4);
@@ -414,7 +414,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         int end = sr.indexOf("result");
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if (sr.substring(begin+6, end-2) == "0") {
+        if (sr.substring(begin+6, end-2).equals("0")) {
             directChargingOrderDto1.setState(2);
         } else {
             directChargingOrderDto1.setState(4);
@@ -492,7 +492,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String sr= HttpRequest.httpRequestGet(URL, params);
         System.out.println(sr);
         net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
-        System.out.println("油卡充值");
+        System.out.println("话费充值");
         System.out.println(sr);
         System.out.println(jsonObject);
         int begin = sr.indexOf("orderStatus");
@@ -501,7 +501,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrderDto1.setState(Integer.parseInt(sr.substring(begin+14, begin+15)));
         oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println(directChargingOrderDto1.toString());
-        System.out.println("油卡状态");
+        System.out.println("话费状态");
         System.out.println(sr);
         return new JSONResult("状态查询成功", 200);
     }
@@ -582,7 +582,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println(sr);
         System.out.println(jsonObject);
         int begin = sr.indexOf("code");
-        if (sr.substring(begin+6, begin+7) == "0") {
+        if (sr.substring(begin+6, begin+7).equals("0")) {
             return new JSONResult("可以充值", 200);
         } else {
             return new JSONResult("无法充值", 500);
