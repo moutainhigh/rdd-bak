@@ -218,6 +218,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String orgId = "";
         double money = 0;
         String ownerId = "";
+        String userAccount = "";
+        int recordType = 0;
+        String cardNum = "";
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -232,12 +235,26 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if ("userId".equals(temp[0])) {
                 ownerId = temp[1];
             }
+            if ("recordType".equals(temp[0])) {
+                recordType = Integer.valueOf(temp[1]);
+            }
+            if ("userAccount".equals(temp[0])) {
+                userAccount = temp[1];
+            }
+            if ("cardNum".equals(temp[0])) {
+                cardNum = temp[1];
+            }
         }
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
         directChargingOrderDto.setOrderId(orgId);
         directChargingOrderDto.setThirdOrderId(thirdOrderId);
         directChargingOrderDto.setUpdateAt(new Date());
         directChargingOrderDto.setState(1);
+        if (recordType == 1){
+            ownerId = userAccount;
+        }else{
+            ownerId = cardNum;
+        }
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
         return 1;

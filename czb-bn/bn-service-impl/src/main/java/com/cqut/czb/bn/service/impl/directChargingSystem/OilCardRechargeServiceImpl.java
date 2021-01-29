@@ -134,7 +134,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         Double amount = directChargingOrderDto.getRechargeAmount();
         // userId
-        String userId = directChargingOrderDto.getUserId();
+//        String userId = directChargingOrderDto.getUserId();
         //直充类型
         Integer recordType = directChargingOrderDto.getRecordType();
         String userAccount = directChargingOrderDto.getUserAccount();
@@ -145,7 +145,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             cardNum = directChargingOrderDto.getSinopecPetrolNum();
         }
         request.setReturnUrl(AliPayConfig.Return_url);
-        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
+//        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
+        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
@@ -154,16 +155,22 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        boolean insertSalesRecords = false;
         //插入购买信息
-        boolean insertPetrolSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
-        System.out.println("新增直充充值记录完毕"+insertPetrolSalesRecords);
+        if (recordType == 1){
+             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
+        }else{
+            directChargingOrderDto.setUserAccount(cardNum);
+             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
+        }
+        System.out.println("新增直充充值记录完毕"+insertSalesRecords);
         return orderString;
     }
 
     //    插入订单
     public boolean insertPhonePillRecords(DirectChargingOrderDto directChargingOrderDto, String orderId) {
         DirectChargingOrderDto directChargingOrder = new DirectChargingOrderDto();
-        directChargingOrder.setUserId(directChargingOrderDto.getUserId());
+//        directChargingOrder.setUserId(directChargingOrderDto.getUserId());
         directChargingOrder.setOrderId(orderId);
         directChargingOrder.setRechargeAmount(directChargingOrderDto.getRechargeAmount());
         directChargingOrder.setRecordType(directChargingOrderDto.getRecordType());
@@ -181,9 +188,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         Map<String, String> params = new HashMap<String, String>();
         Map requestParams = request.getParameterMap();
         params=parseOrder(params,requestParams);
-        System.out.println("params"+params.toString());
         DirectChargingOrderDto directChargingOrderDto = getParams(params);
-        System.out.println("directChargingOrderDto"+directChargingOrderDto.toString());
         //是否被篡改的标识
         boolean signVerfied = false;
         try {

@@ -37,9 +37,9 @@ public class DirectChargingPayController {
      * app buy service and input information(购买服务和录入信息)支付宝
      */
     @RequestMapping(value = "/AlipayRechargeDirect", method = RequestMethod.POST)
-    public JSONResult AlipayRechargeDirect(Principal principal,@RequestBody DirectChargingOrderDto directChargingOrderDto) {
-        User user = (User)redisUtils.get(principal.getName());
-        directChargingOrderDto.setUserId(user.getUserId());
+    public JSONResult AlipayRechargeDirect(@RequestBody DirectChargingOrderDto directChargingOrderDto) {
+//        User user = (User)redisUtils.get(principal.getName());
+//        directChargingOrderDto.setUserId(user.getUserId());
         String info =oilCardRechargeService.AlipayRechargeDirect(directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
