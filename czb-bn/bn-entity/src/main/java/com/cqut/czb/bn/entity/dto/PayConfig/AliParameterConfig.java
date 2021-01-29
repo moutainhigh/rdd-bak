@@ -221,6 +221,22 @@ public class AliParameterConfig {
         return model;
     }
 
+    public static AlipayTradeWapPayModel getPetrolPill(String orderId,double amount, double rechargeAmount, Integer recordType, String userAccount, String cardNum) {
+        AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
+        model.setBody("RDD油卡直充");
+        model.setSubject("RDD油卡直充");
+        model.setOutTradeNo(orderId);
+        model.setTimeoutExpress(AliPayConfig.timeout_express);
+        model.setTotalAmount(String.valueOf(amount));
+        model.setProductCode(AliPayConfig.product_wap_code);
+        model.setQuitUrl("http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/recharge");
+        model.setSellerId("2088731798282131");
+        System.out.println(userAccount);
+//        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
+        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount ,recordType,userAccount,cardNum));
+        return model;
+    }
+
 
     //支付宝支付—— 直充值相关参数配置
     public static String getPhonePillParams(String orderId, double rechargeAmount, Integer recordType, String cardNum,String userAccount) {

@@ -146,7 +146,11 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         }
         request.setReturnUrl(AliPayConfig.Return_url);
 //        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
-        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
+        if (recordType == 1){
+            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
+        }else{
+            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
+        }
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
             // 这里和普通的接口调用不同，使用的是sdkExecute
