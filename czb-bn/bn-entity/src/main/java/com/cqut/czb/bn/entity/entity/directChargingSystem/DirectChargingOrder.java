@@ -23,6 +23,8 @@ public class DirectChargingOrder {
 
     private Double realPrice;
 
+    private String rechargeAccount;
+
     public String getOrderId() {
         return orderId;
     }
@@ -101,5 +103,13 @@ public class DirectChargingOrder {
 
     public void setRealPrice(Double realPrice) {
         this.realPrice = realPrice;
+    }
+
+    public String getRechargeAccount() {
+        return rechargeAccount;
+    }
+
+    public void setRechargeAccount(String rechargeAccount) {
+        this.rechargeAccount = rechargeAccount == null ? null : rechargeAccount.trim();
     }
 }

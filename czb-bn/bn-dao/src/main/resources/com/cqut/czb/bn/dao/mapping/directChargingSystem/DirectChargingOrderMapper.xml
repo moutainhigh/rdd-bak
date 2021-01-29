@@ -12,10 +12,11 @@
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="record_type" property="recordType" jdbcType="INTEGER" />
     <result column="real_price" property="realPrice" jdbcType="DOUBLE" />
+    <result column="recharge_account" property="rechargeAccount" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     order_id, third_order_id, recharge_amount, user_id, payment_method, state, create_at,
-    update_at, record_type, real_price
+    update_at, record_type, real_price, recharge_account
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -31,11 +32,11 @@
     insert into czb_direct_charging_order (order_id, third_order_id, recharge_amount,
                                            user_id, payment_method, state,
                                            create_at, update_at, record_type,
-                                           real_price)
+                                           real_price, recharge_account)
     values (#{orderId,jdbcType=VARCHAR}, #{thirdOrderId,jdbcType=VARCHAR}, #{rechargeAmount,jdbcType=DOUBLE},
             #{userId,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=INTEGER}, #{state,jdbcType=INTEGER},
             #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}, #{recordType,jdbcType=INTEGER},
-            #{realPrice,jdbcType=DOUBLE})
+            #{realPrice,jdbcType=DOUBLE}, #{rechargeAccount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingOrder" >
     insert into czb_direct_charging_order
@@ -70,6 +71,9 @@
       <if test="realPrice != null" >
         real_price,
       </if>
+      <if test="rechargeAccount != null" >
+        recharge_account,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -101,6 +105,9 @@
       </if>
       <if test="realPrice != null" >
         #{realPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="rechargeAccount != null" >
+        #{rechargeAccount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -134,6 +141,9 @@
       <if test="realPrice != null" >
         real_price = #{realPrice,jdbcType=DOUBLE},
       </if>
+      <if test="rechargeAccount != null" >
+        recharge_account = #{rechargeAccount,jdbcType=VARCHAR},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
@@ -147,7 +157,8 @@
         create_at = #{createAt,jdbcType=TIMESTAMP},
         update_at = #{updateAt,jdbcType=TIMESTAMP},
         record_type = #{recordType,jdbcType=INTEGER},
-        real_price = #{realPrice,jdbcType=DOUBLE}
+        real_price = #{realPrice,jdbcType=DOUBLE},
+        recharge_account = #{rechargeAccount,jdbcType=VARCHAR},
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>

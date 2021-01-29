@@ -492,7 +492,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String sr= HttpRequest.httpRequestGet(URL, params);
         System.out.println(sr);
         net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
-        System.out.println("话费充值");
+        System.out.println("话费充值状态");
         System.out.println(sr);
         System.out.println(jsonObject);
         int begin = sr.indexOf("orderStatus");
@@ -533,7 +533,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String sr= HttpRequest.httpRequestGet(URL, params);
         System.out.println(sr);
         net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
-        System.out.println("油卡充值");
+        System.out.println("油卡充值状态");
         System.out.println(sr);
         System.out.println(jsonObject);
         int begin = sr.indexOf("orderStatus");
