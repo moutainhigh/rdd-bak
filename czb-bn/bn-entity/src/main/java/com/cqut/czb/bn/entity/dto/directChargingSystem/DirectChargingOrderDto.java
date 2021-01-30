@@ -28,6 +28,10 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String superiorAccount; // 推荐人电话
 
+    private Integer isNeedLogin; // 是否需要登录
+
+    private String rechargeAccount;
+
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
 
@@ -168,6 +172,22 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setSuperiorAccount(String superiorAccount) {
         this.superiorAccount = superiorAccount;
+    }
+
+    public Integer getIsNeedLogin() {
+        return isNeedLogin;
+    }
+
+    public void setIsNeedLogin(Integer isNeedLogin) {
+        this.isNeedLogin = isNeedLogin;
+    }
+
+    public String getRechargeAccount() {
+        return rechargeAccount;
+    }
+
+    public void setRechargeAccount(String rechargeAccount) {
+        this.rechargeAccount = rechargeAccount;
     }
 
     @Override

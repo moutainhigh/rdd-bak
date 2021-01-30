@@ -25,7 +25,28 @@ public interface OilCardRechargeMapperExtra {
      */
     List<DirectChargingOrderDto> getOilOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
 
+    /**
+     * 单次话费订单
+     * @param userId
+     * @param type
+     * @return
+     */
+    List<DirectChargingOrderDto> getOnceOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
+
+    /**
+     * 单次油卡充值订单
+     * @param userId
+     * @param type
+     * @return
+     */
+    List<DirectChargingOrderDto> getOnceSOilOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
+
+    List<DirectChargingOrderDto> getOnceCOilOrderInfoList(@Param("userId")String userId, @Param("type")Integer type);
+
+
     List<DirectChargingOrderDto> getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
+
+    List<DirectChargingOrderDto> getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 
     List<DirectChargingOrderDto> getAllUserCard(DirectChargingOrderDto directChargingOrderDto);
 

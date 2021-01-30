@@ -37,6 +37,51 @@
         order by a.create_at DESC
     </select>
 
+    <select id="getOnceOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            order_id orderId,
+            third_order_id thirdOrderId,
+            recharge_amount rechargeAmount,
+            real_price realPrice,
+            state state,
+            recharge_account userAccount,
+            record_type recordType,
+            create_at createAt
+        FROM czb_direct_charging_order
+        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = 1 and state != 0
+        order by create_at DESC
+    </select>
+
+    <select id="getOnceSOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            order_id orderId,
+            third_order_id thirdOrderId,
+            recharge_amount rechargeAmount,
+            real_price realPrice,
+            state state,
+            recharge_account sinopecPetrolNum,
+            record_type recordType,
+            create_at createAt
+        FROM czb_direct_charging_order
+        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type != 1 and state != 0
+        order by create_at DESC
+    </select>
+
+    <select id="getOnceCOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            order_id orderId,
+            third_order_id thirdOrderId,
+            recharge_amount rechargeAmount,
+            real_price realPrice,
+            state state,
+            recharge_account petrolChinaPetrolNum,
+            record_type recordType,
+            create_at createAt
+        FROM czb_direct_charging_order
+        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type != 1 and state != 0
+        order by create_at DESC
+    </select>
+
     <select id="getAllUserCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
             user_account userAccount,
@@ -96,6 +141,34 @@
             </if>
             <if test="superiorAccount!= null and superiorAccount!= ''">
                 and cu.user_account = #{superiorAccount,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by a.create_at DESC
+    </select>
+
+    <select id="getAllOnceOrderInfoList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+        order_id orderId,
+        third_order_id thirdOrderId,
+        recharge_amount rechargeAmount,
+        real_price realPrice,
+        state state,
+        create_at createAt,
+        recharge_account rechargeAccount
+        FROM czb_direct_charging_order
+        <where>
+            <if test="recordType = 1">
+                record_type = 1
+            </if>
+            <if test="recordType = 2">
+                record_type = 2 or record_type = 3
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="rechargeAccount!= null and rechargeAccount!= ''">
+                and recharge_account = #{rechargeAccount,jdbcType=VARCHAR}
             </if>
         </where>
         order by a.create_at DESC

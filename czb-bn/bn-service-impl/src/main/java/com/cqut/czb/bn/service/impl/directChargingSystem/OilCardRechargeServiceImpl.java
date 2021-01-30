@@ -59,9 +59,30 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public List<DirectChargingOrderDto> getOnceOrderInfoList(String userId, Integer type) {
+        if (type != 1) {
+            return oilCardRechargeMapperExtra.getOnceOrderInfoList(userId, type);
+        } else {
+            if (type == 2) {
+                return oilCardRechargeMapperExtra.getOnceCOilOrderInfoList(userId, type);
+            } else {
+                return oilCardRechargeMapperExtra.getOnceSOilOrderInfoList(userId, type);
+            }
+        }
+    }
+
+    @Override
     public JSONResult getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto) {
         PageHelper.startPage(directChargingOrderDto.getCurrentPage(), directChargingOrderDto.getPageSize(),true);
         List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getAllOrderInfoList(directChargingOrderDto);
+        PageInfo<DirectChargingOrderDto> pageInfo = new PageInfo<>(withdrawList);
+        return new JSONResult("列表数据查询成功", 200, pageInfo);
+    }
+
+    @Override
+    public JSONResult getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto) {
+        PageHelper.startPage(directChargingOrderDto.getCurrentPage(), directChargingOrderDto.getPageSize(),true);
+        List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getAllOnceOrderInfoList(directChargingOrderDto);
         PageInfo<DirectChargingOrderDto> pageInfo = new PageInfo<>(withdrawList);
         return new JSONResult("列表数据查询成功", 200, pageInfo);
     }

@@ -17,7 +17,11 @@ import java.util.Map;
 public interface OilCardRechargeService{
     List<DirectChargingOrderDto> getOrderInfoList(String userId, Integer type);
 
+    List<DirectChargingOrderDto> getOnceOrderInfoList(String userId, Integer type);
+
     JSONResult getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
+
+    JSONResult getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 
     JSONResult bindingOilCard(String userId, OilCardBinging oilCardBinging);
 

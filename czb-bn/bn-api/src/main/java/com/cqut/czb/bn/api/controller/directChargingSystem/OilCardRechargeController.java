@@ -37,9 +37,15 @@ public class OilCardRechargeController {
      * @return
      */
     @PostMapping("/getOrderInfoList")
-    public JSONResult getInfoNum(Principal principal, Integer type){
-        User user = (User)redisUtils.get(principal.getName());
-        return new JSONResult(oilCardRechargeService.getOrderInfoList(user.getUserId(), type));
+    public JSONResult getInfoNum(Principal principal, DirectChargingOrderDto directChargingOrderDto){
+        String userId = null;
+        if (directChargingOrderDto.getIsNeedLogin() == 1) {
+            userId = ((User)redisUtils.get(principal.getName())).getUserId();
+            return new JSONResult(oilCardRechargeService.getOrderInfoList(userId, directChargingOrderDto.getRecordType()));
+        } else {
+            userId = directChargingOrderDto.getUserId();
+            return new JSONResult(oilCardRechargeService.getOnceOrderInfoList(userId, directChargingOrderDto.getRecordType()));
+        }
     }
 
     /**
@@ -49,6 +55,15 @@ public class OilCardRechargeController {
     @PostMapping ("/getAllOrderInfoList")
     public JSONResult getAllOrderInfoList(DirectChargingOrderDto directChargingOrderDto){
         return new JSONResult(oilCardRechargeService.getAllOrderInfoList(directChargingOrderDto));
+    }
+
+    /**
+     * 获取所有订单
+     * @return
+     */
+    @PostMapping ("/getAllOnceOrderInfoList")
+    public JSONResult getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto){
+        return new JSONResult(oilCardRechargeService.getAllOnceOrderInfoList(directChargingOrderDto));
     }
 
     /**
