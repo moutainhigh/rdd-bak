@@ -29,6 +29,8 @@ public interface OilCardRechargeMapperExtra {
 
     List<DirectChargingOrderDto> getAllUserCard(DirectChargingOrderDto directChargingOrderDto);
 
+    String isNeedLogin();
+
     int isExistOilCard(OilCardBinging oilCardBinging);
 
     int isExistOilCardUser(@Param("userId")String userId);

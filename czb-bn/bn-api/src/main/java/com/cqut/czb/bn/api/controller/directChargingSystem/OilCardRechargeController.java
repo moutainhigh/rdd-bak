@@ -10,10 +10,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.cqut.czb.bn.entity.dto.weChatAppletPushNotification.sendNotification;
 
 import javax.servlet.http.HttpServletRequest;
@@ -110,6 +107,16 @@ public class OilCardRechargeController {
     @ResponseBody
     public JSONResult isPhoneRecharge(DirectChargingOrderDto directChargingOrderDto){
         return oilCardRechargeService.isPhoneRecharge(directChargingOrderDto);
+    }
+
+    /**
+     * 是否需要登录
+     * @return
+     */
+    @GetMapping("/isNeedLogin")
+    @ResponseBody
+    public JSONResult isNeedLogin(){
+        return oilCardRechargeService.isNeedLogin();
     }
 }
 

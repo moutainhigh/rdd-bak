@@ -67,6 +67,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public JSONResult isNeedLogin() {
+        String isNeedLogin = oilCardRechargeMapperExtra.isNeedLogin();
+        return new JSONResult("查询成功", 200, isNeedLogin);
+    }
+
+    @Override
     public JSONResult getAllUserCard(DirectChargingOrderDto directChargingOrderDto) {
         PageHelper.startPage(directChargingOrderDto.getCurrentPage(), directChargingOrderDto.getPageSize(),true);
         List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getAllUserCard(directChargingOrderDto);

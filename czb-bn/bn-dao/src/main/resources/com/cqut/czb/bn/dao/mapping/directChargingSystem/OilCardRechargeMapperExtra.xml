@@ -114,6 +114,12 @@
         </where>
     </select>
 
+    <select id="isNeedLogin" resultType="java.lang.String">
+        SELECT content isNeedLogin
+        FROM czb_dict
+        where name = 'is_need_login'
+    </select>
+
     <select id="isExistOilCardUser" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(record_id)
         FROM czb_user_card_relation
