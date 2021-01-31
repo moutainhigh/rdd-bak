@@ -17,7 +17,7 @@ import java.security.Principal;
 
 
 @RestController
-@RequestMapping("/api/prepaidRefill")
+@RequestMapping("/prepaidRefill")
 public class PrepaidRefillController {
     @Autowired
     PrepaidRefillService prepaidRefillService;

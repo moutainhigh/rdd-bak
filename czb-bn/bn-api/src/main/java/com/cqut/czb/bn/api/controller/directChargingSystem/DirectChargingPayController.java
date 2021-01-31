@@ -25,7 +25,7 @@ import java.security.Principal;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/DirectChargingPay")
+@RequestMapping("/DirectChargingPay")
 public class DirectChargingPayController {
     @Autowired
     OilCardRechargeService oilCardRechargeService;
