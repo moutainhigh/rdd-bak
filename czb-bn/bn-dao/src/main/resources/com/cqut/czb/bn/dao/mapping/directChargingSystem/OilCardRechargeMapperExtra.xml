@@ -118,10 +118,10 @@
         left join czb_user_card_relation d on a.user_id = d.user_id
         <where>
             <if test="recordType == 1">
-                a.record_type = 2 or a.record_type = 3
-            </if>
-            <if test="recordType == 0">
                 a.record_type = 1
+            </if>
+            <if test="recordType != 1">
+                a.record_type = 2 or a.record_type = 3
             </if>
             <if test="startTime!= null and endTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -154,13 +154,14 @@
         real_price realPrice,
         state state,
         create_at createAt,
-        recharge_account rechargeAccount
+        recharge_account rechargeAccount,
+        record_type recordType
         FROM czb_direct_charging_order
         <where>
-            <if test="recordType = 1">
+            <if test="recordType == 1">
                 record_type = 1
             </if>
-            <if test="recordType = 2">
+            <if test="recordType != 1">
                 record_type = 2 or record_type = 3
             </if>
             <if test="startTime!= null and endTime!= null">
@@ -171,7 +172,7 @@
                 and recharge_account = #{rechargeAccount,jdbcType=VARCHAR}
             </if>
         </where>
-        order by a.create_at DESC
+        order by create_at DESC
     </select>
 
     <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
