@@ -229,6 +229,7 @@
         insert into
         czb_direct_charging_order (order_id,
                                    recharge_amount,
+                                   user_id,
                                    payment_method,
                                    state,
                                    create_at,
@@ -239,13 +240,14 @@
         )
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
+                #{userId,jdbcType=VARCHAR},
                 #{paymentMethod,jdbcType=INTEGER },
                 #{state,jdbcType=INTEGER },
                 now(),
                 now(),
                 #{recordType,jdbcType=INTEGER },
                 #{realPrice,jdbcType=DOUBLE},
-                #{userAccount,jdbcType=VARCHAR}
+                #{rechargeAccount,jdbcType=VARCHAR}
                )
     </insert>
 

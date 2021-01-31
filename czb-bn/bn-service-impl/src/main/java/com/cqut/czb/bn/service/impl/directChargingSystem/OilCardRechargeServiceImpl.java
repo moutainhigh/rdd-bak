@@ -161,7 +161,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         Double amount = directChargingOrderDto.getRechargeAmount();
         // userId
-//        String userId = directChargingOrderDto.getUserId();
+        String userId = directChargingOrderDto.getUserId();
         //直充类型
         Integer recordType = directChargingOrderDto.getRecordType();
         String userAccount = directChargingOrderDto.getUserAccount();
@@ -201,13 +201,14 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     //    插入订单
     public boolean insertPhonePillRecords(DirectChargingOrderDto directChargingOrderDto, String orderId) {
         DirectChargingOrderDto directChargingOrder = new DirectChargingOrderDto();
-//        directChargingOrder.setUserId(directChargingOrderDto.getUserId());
+        directChargingOrder.setUserId(directChargingOrderDto.getUserId());
         directChargingOrder.setOrderId(orderId);
         directChargingOrder.setRechargeAmount(directChargingOrderDto.getRechargeAmount());
         directChargingOrder.setRecordType(directChargingOrderDto.getRecordType());
         directChargingOrder.setPaymentMethod(1);
         directChargingOrder.setRealPrice(directChargingOrderDto.getRealPrice());
         directChargingOrder.setState(0);
+        directChargingOrder.setRechargeAccount(directChargingOrderDto.getRechargeAccount());
         boolean insertRecords=oilCardRechargeMapperExtra.insertOrder(directChargingOrder)>0;
         return insertRecords;
     }
