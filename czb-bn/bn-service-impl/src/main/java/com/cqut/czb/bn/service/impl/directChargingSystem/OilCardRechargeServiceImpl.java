@@ -374,7 +374,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
         if (sr.substring(begin+6, end-2).equals("0")) {
-            directChargingOrderDto1.setState(2);
+            directChargingOrderDto1.setState(5);
         } else {
             directChargingOrderDto1.setState(4);
         }
@@ -454,7 +454,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
         if (sr.substring(begin+6, end-2).equals("0")) {
-            directChargingOrderDto1.setState(2);
+            directChargingOrderDto1.setState(5);
         } else {
             directChargingOrderDto1.setState(4);
         }
@@ -537,7 +537,15 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         int begin = sr.indexOf("orderStatus");
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        directChargingOrderDto1.setState(Integer.parseInt(sr.substring(begin+14, begin+15)));
+        if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 1) {
+            directChargingOrderDto1.setState(5);
+        } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 2) {
+            directChargingOrderDto1.setState(2);
+        } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 3) {
+            directChargingOrderDto1.setState(4);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
         oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println(directChargingOrderDto1.toString());
         System.out.println("话费状态");
@@ -578,7 +586,15 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         int begin = sr.indexOf("orderStatus");
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        directChargingOrderDto1.setState(Integer.parseInt(sr.substring(begin+14, begin+15)));
+        if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 1) {
+            directChargingOrderDto1.setState(5);
+        } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 2) {
+            directChargingOrderDto1.setState(2);
+        } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 3) {
+            directChargingOrderDto1.setState(4);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
         oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println(directChargingOrderDto1.toString());
         System.out.println("油卡状态");
