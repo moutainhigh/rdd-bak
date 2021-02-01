@@ -25,6 +25,8 @@ public class DirectChargingOrder {
 
     private String rechargeAccount;
 
+    private String cardholder;
+
     public String getOrderId() {
         return orderId;
     }
@@ -111,5 +113,13 @@ public class DirectChargingOrder {
 
     public void setRechargeAccount(String rechargeAccount) {
         this.rechargeAccount = rechargeAccount == null ? null : rechargeAccount.trim();
+    }
+
+    public String getCardholder() {
+        return cardholder;
+    }
+
+    public void setCardholder(String cardholder) {
+        this.cardholder = cardholder;
     }
 }
