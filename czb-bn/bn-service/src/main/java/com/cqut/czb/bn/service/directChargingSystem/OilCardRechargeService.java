@@ -35,6 +35,8 @@ public interface OilCardRechargeService{
 
     JSONResult isPhoneRecharge(DirectChargingOrderDto directChargingOrderDto);
 
+    void phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto);
+
     JSONResult isNeedLogin();
 
     /**

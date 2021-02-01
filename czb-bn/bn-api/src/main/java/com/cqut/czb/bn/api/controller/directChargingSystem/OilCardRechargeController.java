@@ -133,6 +133,17 @@ public class OilCardRechargeController {
     public JSONResult isNeedLogin(){
         return oilCardRechargeService.isNeedLogin();
     }
+
+    /**
+     * 重新提交
+     * @return
+     */
+    @PostMapping("/phoneRechargeSubmission")
+    @ResponseBody
+    public JSONResult phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
+        oilCardRechargeService.phoneRechargeSubmission(directChargingOrderDto);
+        return new JSONResult("重新提交成功", 200);
+    }
 }
 
 
