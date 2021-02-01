@@ -383,6 +383,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println(sr);
     }
 
+    @Override
     public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
 //        String url = "https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
 //        OnlineorderDto onlineorderDto = new OnlineorderDto();
