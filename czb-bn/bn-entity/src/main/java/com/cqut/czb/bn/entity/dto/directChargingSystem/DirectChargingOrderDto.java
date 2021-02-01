@@ -32,6 +32,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String rechargeAccount;
 
+    private String cardholder;
+
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
 
@@ -188,6 +190,14 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setRechargeAccount(String rechargeAccount) {
         this.rechargeAccount = rechargeAccount;
+    }
+
+    public String getCardholder() {
+        return cardholder;
+    }
+
+    public void setCardholder(String cardholder) {
+        this.cardholder = cardholder;
     }
 
     @Override

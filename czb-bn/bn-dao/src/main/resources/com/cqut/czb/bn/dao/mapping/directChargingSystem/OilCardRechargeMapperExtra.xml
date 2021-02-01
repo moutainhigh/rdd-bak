@@ -155,7 +155,8 @@
         state state,
         create_at createAt,
         recharge_account rechargeAccount,
-        record_type recordType
+        record_type recordType,
+        cardholder cardholder
         FROM czb_direct_charging_order
         <where>
             <if test="recordType == 1">
@@ -236,7 +237,8 @@
                                    update_at,
                                    record_type,
                                    real_price,
-                                   recharge_account
+                                   recharge_account,
+                                   cardholder
         )
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
@@ -248,6 +250,7 @@
                 #{recordType,jdbcType=INTEGER },
                 #{realPrice,jdbcType=DOUBLE},
                 #{rechargeAccount,jdbcType=VARCHAR}
+                #{cardholder,jdbcType=VARCHAR}
                )
     </insert>
 
