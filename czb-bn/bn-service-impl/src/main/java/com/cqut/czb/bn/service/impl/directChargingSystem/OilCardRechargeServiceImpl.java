@@ -165,16 +165,16 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         //直充类型
         Integer recordType = directChargingOrderDto.getRecordType();
         String userAccount = directChargingOrderDto.getUserAccount();
-        String cardNum;
+        String cardNum = "";
         if (recordType == 2){
             cardNum = directChargingOrderDto.getPetrolChinaPetrolNum();
-        }else{
+        }else if(recordType == 3){
             cardNum = directChargingOrderDto.getSinopecPetrolNum();
         }
         request.setReturnUrl(AliPayConfig.Return_url);
 //        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
         if (recordType == 1){
-            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
+            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum));
         }else{
             request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
         }
@@ -200,6 +200,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     //    插入订单
     public boolean insertPhonePillRecords(DirectChargingOrderDto directChargingOrderDto, String orderId) {
+        boolean insertRecords = false;
         DirectChargingOrderDto directChargingOrder = new DirectChargingOrderDto();
         directChargingOrder.setUserId(directChargingOrderDto.getUserId());
         directChargingOrder.setOrderId(orderId);
@@ -209,8 +210,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrder.setRealPrice(directChargingOrderDto.getRealPrice());
         directChargingOrder.setState(0);
         directChargingOrder.setRechargeAccount(directChargingOrderDto.getRechargeAccount());
-        directChargingOrder.setCardholder(directChargingOrderDto.getCardholder());
-        boolean insertRecords=oilCardRechargeMapperExtra.insertOrder(directChargingOrder)>0;
+        if (directChargingOrderDto.getRecordType() == 1) {
+            insertRecords=oilCardRechargeMapperExtra.insertOrder(directChargingOrder)>0;
+        } else {
+            directChargingOrder.setCardholder(directChargingOrderDto.getCardholder());
+            insertRecords=oilCardRechargeMapperExtra.insertOilOrder(directChargingOrder)>0;
+        }
         return insertRecords;
     }
 
@@ -239,6 +244,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         if (directChargingOrderDto.getRecordType()==1){
                             phoneRechargeSubmission(directChargingOrderDto);
+                            System.out.println("充值参数"+directChargingOrderDto.toString());
                         }else{
                             onlineorderSubmission(directChargingOrderDto);
                         }

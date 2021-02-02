@@ -237,8 +237,34 @@
                                    update_at,
                                    record_type,
                                    real_price,
-                                   recharge_account,
-                                   cardholder
+                                   recharge_account
+        )
+        values (#{orderId,jdbcType=VARCHAR},
+                #{rechargeAmount,jdbcType=DOUBLE},
+                #{userId,jdbcType=VARCHAR},
+                #{paymentMethod,jdbcType=INTEGER },
+                #{state,jdbcType=INTEGER },
+                now(),
+                now(),
+                #{recordType,jdbcType=INTEGER },
+                #{realPrice,jdbcType=DOUBLE},
+                #{rechargeAccount,jdbcType=VARCHAR}
+               )
+    </insert>
+
+    <insert id="insertOilOrder" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        insert into
+            czb_direct_charging_order (order_id,
+                                       recharge_amount,
+                                       user_id,
+                                       payment_method,
+                                       state,
+                                       create_at,
+                                       update_at,
+                                       record_type,
+                                       real_price,
+                                       recharge_account,
+                                       cardholder
         )
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},

@@ -62,6 +62,8 @@ public interface OilCardRechargeMapperExtra {
 
     int insertOrder(DirectChargingOrderDto directChargingOrderDto);
 
+    int insertOilOrder(DirectChargingOrderDto directChargingOrderDto);
+
     int updateRechargeRecord(DirectChargingOrderDto directChargingOrderDto);
 
     int updateOrderState(DirectChargingOrderDto directChargingOrderDto);

@@ -38,7 +38,7 @@ public class OilCardRechargeController {
      */
     @PostMapping("/getOrderInfoList")
     public JSONResult getInfoNum(Principal principal, DirectChargingOrderDto directChargingOrderDto){
-        String userId = null;
+        String userId = "";
         if (directChargingOrderDto.getIsNeedLogin() == 1) {
             userId = ((User)redisUtils.get(principal.getName())).getUserId();
             return new JSONResult(oilCardRechargeService.getOrderInfoList(userId, directChargingOrderDto.getRecordType()));

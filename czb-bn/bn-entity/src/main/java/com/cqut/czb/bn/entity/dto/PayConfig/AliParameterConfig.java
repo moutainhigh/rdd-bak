@@ -239,7 +239,7 @@ public class AliParameterConfig {
 
 
     //支付宝支付—— 直充值相关参数配置
-    public static String getPhonePillParams(String orderId, double rechargeAmount, Integer recordType, String cardNum,String userAccount) {
+    public static String getPhonePillParams(String orderId, double rechargeAmount, Integer recordType,String userAccount,String cardNum) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orderId", orderId);
         pbp.put("rechargeAmount", rechargeAmount);
