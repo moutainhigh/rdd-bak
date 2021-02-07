@@ -65,10 +65,10 @@ CREATE TABLE `czb_integral_exchange` (
 
 
 -- ----------------------------
--- Table structure for czb_integral_exchange
+-- Table structure for czb_integral_exchange_log_id
 -- ----------------------------
-DROP TABLE IF EXISTS `czb_integral_exchange`;
-CREATE TABLE `czb_integral_exchange` (
+DROP TABLE IF EXISTS `czb_integral_exchange_log_id`;
+CREATE TABLE `czb_integral_exchange_log_id` (
         `integral_exchange_log_id` varchar(20) NOT NULL,
         `integral_exchange_id` varchar(20) NOT NULL,
         `exchange_user_id` int(8) NOT NULL,
