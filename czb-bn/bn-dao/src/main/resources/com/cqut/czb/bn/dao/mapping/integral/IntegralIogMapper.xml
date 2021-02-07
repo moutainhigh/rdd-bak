@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralIogMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+    <id column="integral_log_id" property="integralLogId" jdbcType="VARCHAR" />
+    <result column="integral_info_id" property="integralInfoId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="integral_log_type" property="integralLogType" jdbcType="INTEGER" />
+    <result column="integral_amount" property="integralAmount" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="before_integral_amount" property="beforeIntegralAmount" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    integral_log_id, integral_info_id, user_id, integral_log_type, integral_amount, order_id,
+    before_integral_amount, remark, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_integral_log
+    where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_integral_log
+    where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+    insert into czb_integral_log (integral_log_id, integral_info_id, user_id,
+      integral_log_type, integral_amount, order_id,
+      before_integral_amount, remark, create_at,
+      update_at)
+    values (#{integralLogId,jdbcType=VARCHAR}, #{integralInfoId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+      #{integralLogType,jdbcType=INTEGER}, #{integralAmount,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR},
+      #{beforeIntegralAmount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+    insert into czb_integral_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="integralLogId != null" >
+        integral_log_id,
+      </if>
+      <if test="integralInfoId != null" >
+        integral_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="integralLogType != null" >
+        integral_log_type,
+      </if>
+      <if test="integralAmount != null" >
+        integral_amount,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="beforeIntegralAmount != null" >
+        before_integral_amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="integralLogId != null" >
+        #{integralLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="integralInfoId != null" >
+        #{integralInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="integralLogType != null" >
+        #{integralLogType,jdbcType=INTEGER},
+      </if>
+      <if test="integralAmount != null" >
+        #{integralAmount,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeIntegralAmount != null" >
+        #{beforeIntegralAmount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+    update czb_integral_log
+    <set >
+      <if test="integralInfoId != null" >
+        integral_info_id = #{integralInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="integralLogType != null" >
+        integral_log_type = #{integralLogType,jdbcType=INTEGER},
+      </if>
+      <if test="integralAmount != null" >
+        integral_amount = #{integralAmount,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeIntegralAmount != null" >
+        before_integral_amount = #{beforeIntegralAmount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+    update czb_integral_log
+    set integral_info_id = #{integralInfoId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      integral_log_type = #{integralLogType,jdbcType=INTEGER},
+      integral_amount = #{integralAmount,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      before_integral_amount = #{beforeIntegralAmount,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
+  </update>
+</mapper>

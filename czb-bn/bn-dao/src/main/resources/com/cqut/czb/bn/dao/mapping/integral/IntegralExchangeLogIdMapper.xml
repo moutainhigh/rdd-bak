@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralExchangeLogIdMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
+    <id column="integral_exchange_log_id" property="integralExchangeLogId" jdbcType="VARCHAR" />
+    <result column="integral_exchange_id" property="integralExchangeId" jdbcType="VARCHAR" />
+    <result column="exchange_user_id" property="exchangeUserId" jdbcType="INTEGER" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    integral_exchange_log_id, integral_exchange_id, exchange_user_id, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_integral_exchange_log_id
+    where integral_exchange_log_id = #{integralExchangeLogId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_integral_exchange_log_id
+    where integral_exchange_log_id = #{integralExchangeLogId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
+    insert into czb_integral_exchange_log_id (integral_exchange_log_id, integral_exchange_id,
+      exchange_user_id, create_at, update_at
+      )
+    values (#{integralExchangeLogId,jdbcType=VARCHAR}, #{integralExchangeId,jdbcType=VARCHAR},
+      #{exchangeUserId,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
+    insert into czb_integral_exchange_log_id
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="integralExchangeLogId != null" >
+        integral_exchange_log_id,
+      </if>
+      <if test="integralExchangeId != null" >
+        integral_exchange_id,
+      </if>
+      <if test="exchangeUserId != null" >
+        exchange_user_id,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="integralExchangeLogId != null" >
+        #{integralExchangeLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="integralExchangeId != null" >
+        #{integralExchangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeUserId != null" >
+        #{exchangeUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
+    update czb_integral_exchange_log_id
+    <set >
+      <if test="integralExchangeId != null" >
+        integral_exchange_id = #{integralExchangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeUserId != null" >
+        exchange_user_id = #{exchangeUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where integral_exchange_log_id = #{integralExchangeLogId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
+    update czb_integral_exchange_log_id
+    set integral_exchange_id = #{integralExchangeId,jdbcType=VARCHAR},
+      exchange_user_id = #{exchangeUserId,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where integral_exchange_log_id = #{integralExchangeLogId,jdbcType=VARCHAR}
+  </update>
+</mapper>

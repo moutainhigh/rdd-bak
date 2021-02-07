@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralExchangeMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+    <id column="integral_exchange" property="integralExchange" jdbcType="VARCHAR" />
+    <result column="exchange_code" property="exchangeCode" jdbcType="VARCHAR" />
+    <result column="exchange_amount" property="exchangeAmount" jdbcType="INTEGER" />
+    <result column="exchange_times_total" property="exchangeTimesTotal" jdbcType="INTEGER" />
+    <result column="exchange_times_current" property="exchangeTimesCurrent" jdbcType="INTEGER" />
+    <result column="exchange_type" property="exchangeType" jdbcType="INTEGER" />
+    <result column="exchange_source_id" property="exchangeSourceId" jdbcType="VARCHAR" />
+    <result column="is_complete" property="isComplete" jdbcType="INTEGER" />
+    <result column="failure_time" property="failureTime" jdbcType="TIMESTAMP" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    integral_exchange, exchange_code, exchange_amount, exchange_times_total, exchange_times_current,
+    exchange_type, exchange_source_id, is_complete, failure_time, create_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_integral_exchange
+    where integral_exchange = #{integralExchange,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_integral_exchange
+    where integral_exchange = #{integralExchange,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+    insert into czb_integral_exchange (integral_exchange, exchange_code, exchange_amount,
+      exchange_times_total, exchange_times_current,
+      exchange_type, exchange_source_id, is_complete,
+      failure_time, create_at, update_at
+      )
+    values (#{integralExchange,jdbcType=VARCHAR}, #{exchangeCode,jdbcType=VARCHAR}, #{exchangeAmount,jdbcType=INTEGER},
+      #{exchangeTimesTotal,jdbcType=INTEGER}, #{exchangeTimesCurrent,jdbcType=INTEGER},
+      #{exchangeType,jdbcType=INTEGER}, #{exchangeSourceId,jdbcType=VARCHAR}, #{isComplete,jdbcType=INTEGER},
+      #{failureTime,jdbcType=TIMESTAMP}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+    insert into czb_integral_exchange
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="integralExchange != null" >
+        integral_exchange,
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code,
+      </if>
+      <if test="exchangeAmount != null" >
+        exchange_amount,
+      </if>
+      <if test="exchangeTimesTotal != null" >
+        exchange_times_total,
+      </if>
+      <if test="exchangeTimesCurrent != null" >
+        exchange_times_current,
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type,
+      </if>
+      <if test="exchangeSourceId != null" >
+        exchange_source_id,
+      </if>
+      <if test="isComplete != null" >
+        is_complete,
+      </if>
+      <if test="failureTime != null" >
+        failure_time,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="integralExchange != null" >
+        #{integralExchange,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeCode != null" >
+        #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeAmount != null" >
+        #{exchangeAmount,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeTimesTotal != null" >
+        #{exchangeTimesTotal,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeTimesCurrent != null" >
+        #{exchangeTimesCurrent,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeType != null" >
+        #{exchangeType,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeSourceId != null" >
+        #{exchangeSourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="isComplete != null" >
+        #{isComplete,jdbcType=INTEGER},
+      </if>
+      <if test="failureTime != null" >
+        #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+    update czb_integral_exchange
+    <set >
+      <if test="exchangeCode != null" >
+        exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeAmount != null" >
+        exchange_amount = #{exchangeAmount,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeTimesTotal != null" >
+        exchange_times_total = #{exchangeTimesTotal,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeTimesCurrent != null" >
+        exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type = #{exchangeType,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeSourceId != null" >
+        exchange_source_id = #{exchangeSourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="isComplete != null" >
+        is_complete = #{isComplete,jdbcType=INTEGER},
+      </if>
+      <if test="failureTime != null" >
+        failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where integral_exchange = #{integralExchange,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+    update czb_integral_exchange
+    set exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      exchange_amount = #{exchangeAmount,jdbcType=INTEGER},
+      exchange_times_total = #{exchangeTimesTotal,jdbcType=INTEGER},
+      exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER},
+      exchange_type = #{exchangeType,jdbcType=INTEGER},
+      exchange_source_id = #{exchangeSourceId,jdbcType=VARCHAR},
+      is_complete = #{isComplete,jdbcType=INTEGER},
+      failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where integral_exchange = #{integralExchange,jdbcType=VARCHAR}
+  </update>
+</mapper>

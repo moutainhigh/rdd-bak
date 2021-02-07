@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" >
+    <id column="integral_deduction_info_id" property="integralDeductionInfoId" jdbcType="VARCHAR" />
+    <result column="deduction_type" property="deductionType" jdbcType="INTEGER" />
+    <result column="max_deduction_amount" property="maxDeductionAmount" jdbcType="DOUBLE" />
+    <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    integral_deduction_info_id, deduction_type, max_deduction_amount, commodity_id, create_at,
+    update_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from czb_integral_deduction_info
+    where integral_deduction_info_id = #{integralDeductionInfoId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from czb_integral_deduction_info
+    where integral_deduction_info_id = #{integralDeductionInfoId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" >
+    insert into czb_integral_deduction_info (integral_deduction_info_id, deduction_type,
+      max_deduction_amount, commodity_id, create_at,
+      update_at)
+    values (#{integralDeductionInfoId,jdbcType=VARCHAR}, #{deductionType,jdbcType=INTEGER},
+      #{maxDeductionAmount,jdbcType=DOUBLE}, #{commodityId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+      #{updateAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" >
+    insert into czb_integral_deduction_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="integralDeductionInfoId != null" >
+        integral_deduction_info_id,
+      </if>
+      <if test="deductionType != null" >
+        deduction_type,
+      </if>
+      <if test="maxDeductionAmount != null" >
+        max_deduction_amount,
+      </if>
+      <if test="commodityId != null" >
+        commodity_id,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="integralDeductionInfoId != null" >
+        #{integralDeductionInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="deductionType != null" >
+        #{deductionType,jdbcType=INTEGER},
+      </if>
+      <if test="maxDeductionAmount != null" >
+        #{maxDeductionAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityId != null" >
+        #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" >
+    update czb_integral_deduction_info
+    <set >
+      <if test="deductionType != null" >
+        deduction_type = #{deductionType,jdbcType=INTEGER},
+      </if>
+      <if test="maxDeductionAmount != null" >
+        max_deduction_amount = #{maxDeductionAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="commodityId != null" >
+        commodity_id = #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where integral_deduction_info_id = #{integralDeductionInfoId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" >
+    update czb_integral_deduction_info
+    set deduction_type = #{deductionType,jdbcType=INTEGER},
+      max_deduction_amount = #{maxDeductionAmount,jdbcType=DOUBLE},
+      commodity_id = #{commodityId,jdbcType=VARCHAR},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where integral_deduction_info_id = #{integralDeductionInfoId,jdbcType=VARCHAR}
+  </update>
+</mapper>
