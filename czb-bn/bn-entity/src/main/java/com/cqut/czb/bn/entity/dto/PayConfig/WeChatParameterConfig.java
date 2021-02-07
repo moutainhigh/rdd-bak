@@ -138,6 +138,35 @@ public class WeChatParameterConfig {
         return parameters;
     }
 
+    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount) {
+//        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters=getParameters();
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("out_trade_no", orgId);
+        Double totalFee = amount;
+        parameters.put("total_fee", totalFee);
+        parameters.put("notify_url", WeChatPayConfig.Direct_url);//通用一个接口（购买和充值）
+        parameters.put("detail","微信支付直充服务");//支付的类容备注
+        String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount);
+        parameters.put("attach",attach);
+        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
+        return parameters;
+    }
+
+    /**
+     * 微信支付——订单格外数据(直充）
+     */
+    public static String getAttachDirect(String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orderId", orgId);
+        pbp.put("rechargeAmount", rechargeAmount);
+//        pbp.put("userId", userId);
+        pbp.put("recordType",String.valueOf(recordType));
+        pbp.put("userAccount",userAccount);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
     //微信小程序用
     public static SortedMap<String, Object> getParametersApplet(String userAccount,Double money,String nonceStrTemp, String orgId, String userId, WeChatCommodity weChatCommodity) {
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
@@ -241,6 +270,18 @@ public class WeChatParameterConfig {
         pbp.put("ownerId", userId);
         pbp.put("money",money);
         pbp.put("commodityId",commodityId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     * 微信支付——订单格外数据(直充系统）
+     */
+    public static String getAttachDirect(String vipAreaConfigId ,String orgId,String userId,double money){
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
+        pbp.put("vipAreaConfigId",vipAreaConfigId);
         return StringUtil.transMapToStringOther(pbp);
     }
 

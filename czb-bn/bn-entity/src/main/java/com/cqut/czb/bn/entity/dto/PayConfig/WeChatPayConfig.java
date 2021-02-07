@@ -1,7 +1,7 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 /**
- * 
+ *
  * @author chendeqiang
  *
  */
@@ -33,7 +33,7 @@ public class WeChatPayConfig {
 
 	//终端ip
 	public static final String spbill_create_ip = UrlConfig.NOTIGY_URL;
-	
+
     //通知地址1(购买油卡的回调地址)
 	public static final String notify_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyPetrolInfoWeChat";
 
@@ -48,6 +48,9 @@ public class WeChatPayConfig {
 
 	//点餐
 	public static final String BuyDish_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyBuyDishInfoWeChat";
+
+	//直充系统
+	public static final String Direct_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/WechatPayReturn/wechatPayRetur";
 
 	public static final String applet_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AppletVerifyAsyn/verifyAppletWeChat";
 

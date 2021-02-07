@@ -186,6 +186,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             result.put("success", weChatPayBackService.addAppletPaymentOrderWeChat(restmap));
         }else if(consumptionType.equals("RechargeVip")){
             result.put("success", weChatPayBackService.addRechargeVipOrderWeChat(restmap));
+        }else if(consumptionType.equals("Direct")){
+            result.put("success", getAddBuyDirectOrderWechat(restmap));
         } else {
             result.put("fail",0);
         }
@@ -397,6 +399,81 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
 
+        return 1;
+    }
+
+    //直冲系统（微信）
+    public int getAddBuyDirectOrderWechat(Map<String, Object> restmap){
+//        String[] resDate = restmap.get("attach").toString().split("\\^");
+//        //商户订单号
+//        String out_trade_no = restmap.get("out_trade_no").toString();
+//        //微信交易订单号
+//        String thirdOrderId = restmap.get("transaction_id").toString();
+//        String[] temp;
+//        String orgId = "";
+//        double money = Double.valueOf(restmap.get("total_fee").toString());
+//        money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+//        System.out.println("微信小程序支付:"+money);
+//        String ownerId = "";
+//        for (String data : resDate) {
+//            temp = data.split("\'");
+//            if (temp.length < 2) {
+//                continue;
+//            }
+//            //商家订单
+//            if ("orgId".equals(temp[0])) {
+//                orgId = temp[1];
+//            }
+//            //用户id
+//            if ("ownerId".equals(temp[0])) {
+//                ownerId = temp[1];
+//            }
+//        }
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        String[] temp;
+        String thirdOrderId = restmap.get("transaction_id").toString();
+        String orgId = "";
+        double money = 0;
+        String ownerId = "";
+        String userAccount = "";
+        int recordType = 0;
+        String cardNum = "";
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orderId".equals(temp[0])) {
+                orgId = temp[1];
+            }
+            if ("rechargeAmount".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+            }
+            if ("userId".equals(temp[0])) {
+                ownerId = temp[1];
+            }
+            if ("recordType".equals(temp[0])) {
+                recordType = Integer.valueOf(temp[1]);
+            }
+            if ("userAccount".equals(temp[0])) {
+                userAccount = temp[1];
+            }
+            if ("cardNum".equals(temp[0])) {
+                cardNum = temp[1];
+            }
+        }
+        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+        directChargingOrderDto.setOrderId(orgId);
+        directChargingOrderDto.setThirdOrderId(thirdOrderId);
+        directChargingOrderDto.setUpdateAt(new Date());
+        directChargingOrderDto.setState(1);
+        if (recordType == 1){
+            ownerId = userAccount;
+        }else{
+            ownerId = cardNum;
+        }
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
         return 1;
     }
 

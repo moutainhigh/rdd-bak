@@ -8,13 +8,14 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
-import com.cqut.czb.bn.entity.dto.PayConfig.AliParameterConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.AlipayClientConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.*;
+import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.OnlineorderDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.TelorderDto;
+import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -32,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -39,6 +41,9 @@ import java.util.*;
 
 @Service
 public class OilCardRechargeServiceImpl implements OilCardRechargeService {
+
+    private String characterEncoding = "UTF-8";
+
     @Autowired
     OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
 
@@ -138,7 +143,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
 
-//    直充支付
+//    直充支付--支付宝
     @Override
     public String AlipayRechargeDirect(DirectChargingOrderDto directChargingOrderDto) {
         //检验是否都为空
@@ -648,6 +653,100 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             return new JSONResult("可以充值", 200);
         } else {
             return new JSONResult("无法充值", 500);
+        }
+    }
+
+    @Override
+    public com.alibaba.fastjson.JSONObject WeChatRechargeDirect(User user, DirectChargingOrderDto directChargingOrderDto) {
+
+        /**
+         * 生成起调参数串——返回给app（微信的支付订单）
+         */
+        //订单标识
+        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
+
+        String nonceStrTemp = WeChatUtils.getRandomStr();
+
+        //支付的金额
+//        Double money=backMoney( petrol,petrolInputDTO);
+        Double rechargeAmount = directChargingOrderDto.getRealPrice();
+
+        Double amount = directChargingOrderDto.getRechargeAmount();
+        // userId
+        String userId = directChargingOrderDto.getUserId();
+        //直充类型
+        Integer recordType = directChargingOrderDto.getRecordType();
+
+        String userAccount = directChargingOrderDto.getUserAccount();
+
+        String cardNum = "";
+        // 设置参数
+        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersDirect(nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount);
+        boolean insertSalesRecords = false;
+        if (recordType == 1){
+            insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);
+        }else{
+            directChargingOrderDto.setUserAccount(cardNum);
+            insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);
+        }
+        return WeChatParameterConfig.getSign( parameters, nonceStrTemp);
+    }
+
+    @Override
+    public String wechatPayReturn(HttpServletRequest request, String consumptionType) {
+        try {
+            ServletInputStream in = request.getInputStream();
+            String resxml = WeChatFileUtil.inputStream2String(in);
+            Map<String, Object> restmap = WeChatUtils.xml2Map(resxml);
+            if ("SUCCESS".equals(restmap.get("result_code"))) {
+                // 订单支付成功 业务处理
+                if (checkSign(restmap)) {
+                    // 进行业务处理
+                    Object[] param = { restmap };
+                    Map<String, Integer> result = refuelingCard.WeChatPayBack(param,consumptionType);
+                    if (result.get("success") == 1) {
+                        return getSuccess();
+                    } else {
+                        return AlipayConfig.response_fail;
+                    }
+                } else {
+                    return AlipayConfig.response_fail;
+                }
+            } else {
+                return AlipayConfig.response_fail;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getSuccess();
+        }
+    }
+
+    // 微信异步通知成功
+    public String getSuccess() {
+        SortedMap<String, Object> respMap = new TreeMap<>();
+        respMap = new TreeMap<String, Object>();
+        respMap.put("return_code", "SUCCESS"); // 响应给微信服务器
+        respMap.put("return_msg", "OK");
+        String resXml = WeChatUtils.map2xml(respMap);
+        return resXml;
+    }
+
+    // 验证签名（微信）
+    public boolean checkSign(Map<String, Object> restmap) {
+        String sign = (String) restmap.get("sign"); // 返回的签名
+        restmap.remove("sign");
+        SortedMap<String, Object> sortedMap = new TreeMap<String, Object>();
+        for (Map.Entry<String, Object> entry : restmap.entrySet()) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        //爱动key
+        String signNow = WeChatUtils.createSign(characterEncoding, sortedMap);
+        //人多多key
+        String signNowRdd = WeChatUtils.createRddSign(characterEncoding, sortedMap);
+        if (sign.equals(signNow)||sign.equals(signNowRdd)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

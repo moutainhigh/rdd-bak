@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.directChargingSystem;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
@@ -47,6 +48,14 @@ public interface OilCardRechargeService{
      */
     String AlipayRechargeDirect(DirectChargingOrderDto directChargingOrderDto);
 
+    /**
+     * 微信支付
+     * 充值
+     */
+    JSONObject WeChatRechargeDirect(User user, DirectChargingOrderDto directChargingOrderDto);
+
     String aliPayReturn(HttpServletRequest request,String consumptionType);
+
+    String wechatPayReturn(HttpServletRequest request,String consumptionType);
 
 }

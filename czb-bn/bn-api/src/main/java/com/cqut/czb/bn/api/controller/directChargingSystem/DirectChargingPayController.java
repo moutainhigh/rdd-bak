@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.AliPetrolBackInfoDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
@@ -45,6 +46,25 @@ public class DirectChargingPayController {
 //        User user = (User)redisUtils.get(principal.getName());
 //        directChargingOrderDto.setUserId(user.getUserId());
         String info =oilCardRechargeService.AlipayRechargeDirect(directChargingOrderDto);
+        if(info==null){
+            return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
+        }else {
+            return  new JSONResult("充值成功",200,info);
+        }
+    }
+
+    /**
+     * app buy service and input information(购买服务和录入信息)微信
+     */
+    @RequestMapping(value = "/WeChatRechargeDirect", method = RequestMethod.POST)
+    public JSONResult WeChatRechargeDirect(Principal principal,@RequestBody DirectChargingOrderDto directChargingOrderDto) {
+//        return new JSONResult("暂不支持微信支付",ResponseCodeConstants.FAILURE);
+        User user = (User)redisUtils.get(principal.getName());
+//        User user=new User();
+//        user.setUserId("155892403286206");
+//        rechargeVipDTO.setArea("重庆市");
+        directChargingOrderDto.setUserId(user.getUserId());
+        JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
         }else {
