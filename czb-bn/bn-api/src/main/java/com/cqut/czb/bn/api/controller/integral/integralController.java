@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.api.controller.integral;
 
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.integral.IntegralService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,8 @@ import java.security.Principal;
 @RequestMapping("/api/integral")
 public class integralController {
 
+    @Autowired
+    IntegralService integralService;
 
     /**
      * 获取个人积分明细
