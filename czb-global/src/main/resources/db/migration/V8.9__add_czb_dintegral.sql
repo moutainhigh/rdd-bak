@@ -76,3 +76,20 @@ CREATE TABLE `czb_integral_exchange_log_id` (
         `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`integral_exchange_log_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Table structure for czb_integral_purchase_record
+-- ----------------------------
+DROP TABLE IF EXISTS `czb_integral_purchase_record`;
+CREATE TABLE `czb_integral_purchase_record` (
+        `integral_purchase_record_id` varchar(20) NOT NULL,
+        `user_id` varchar(20) DEFAULT NULL,
+        `amount` double(10,2) DEFAULT NULL,
+        `recharge_way` int(8) NOT NULL,
+        `is_received` int(8) NOT NULL,
+        `integral_amount` int(8) NOT NULL,
+        `third_trade_num` varchar(50) NOT NULL,
+        `create_at` timestamp NULL DEFAULT NULL,
+        `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`integral_purchase_record_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
