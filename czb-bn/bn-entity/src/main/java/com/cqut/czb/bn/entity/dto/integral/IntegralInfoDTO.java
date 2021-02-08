@@ -7,6 +7,8 @@ public class IntegralInfoDTO {
 
     private String userId;
 
+    private String userAccount;
+
     private Integer gotTotal;
 
     private Integer currentTotal;
@@ -29,6 +31,14 @@ public class IntegralInfoDTO {
 
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 
     public Integer getGotTotal() {
