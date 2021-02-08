@@ -681,7 +681,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         String cardNum = "";
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatParameterConfig.getParametersDirect(nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount);
+        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersDirect(nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount);
         boolean insertSalesRecords = false;
         if (recordType == 1){
             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);
@@ -689,7 +689,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             directChargingOrderDto.setUserAccount(cardNum);
             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);
         }
-        return WeChatParameterConfig.getSign( parameters, nonceStrTemp);
+        return WeChatH5ParameterConfig.getSign(parameters, nonceStrTemp);
     }
 
     @Override

@@ -59,9 +59,9 @@ public class DirectChargingPayController {
     @RequestMapping(value = "/WeChatRechargeDirect", method = RequestMethod.POST)
     public JSONResult WeChatRechargeDirect(Principal principal,@RequestBody DirectChargingOrderDto directChargingOrderDto) {
 //        return new JSONResult("暂不支持微信支付",ResponseCodeConstants.FAILURE);
-        User user = (User)redisUtils.get(principal.getName());
+        User user = new User();
 //        User user=new User();
-//        user.setUserId("155892403286206");
+        user.setUserId("155892403286206");
 //        rechargeVipDTO.setArea("重庆市");
         directChargingOrderDto.setUserId(user.getUserId());
         JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
