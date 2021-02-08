@@ -1,5 +1,8 @@
 package com.cqut.czb.bn.api.controller.integral;
 
+import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ import java.security.Principal;
 public class integralController {
 
     @Autowired
+    RedisUtils redisUtils;
+
+    @Autowired
     IntegralService integralService;
 
     /**
@@ -30,7 +36,13 @@ public class integralController {
      */
     @RequestMapping(value = "/getIntegralDetail",method = RequestMethod.GET)
     public JSONResult getIntegralDetail(@RequestBody Principal principal) {
-        return null;
+        User user = (User) redisUtils.get(principal.getName());
+
+        if (user == null || user.getUserId() == null) {
+            return new JSONResult("未登录",500);
+        }
+
+        return new JSONResult(integralService.getIntegralDetail(user.getUserId()));
     }
 
     /**
@@ -66,11 +78,22 @@ public class integralController {
     }
 
     /**
-     * 积分折扣
+     * 商品最高抵扣金额
      * @param
      * @return
      */
-    public JSONResult deduction() {
+    @RequestMapping(value = "/getMaxDeductionAmount", method = RequestMethod.GET)
+    public JSONResult getMaxDeductionAmount(String commodityId) {
+        return integralService.getMaxDeductionAmount(commodityId);
+    }
+
+    /**
+     * 积分抵扣
+     * @param integralIogDTO
+     * @return
+     */
+    @RequestMapping(value = "/deduction", method = RequestMethod.POST)
+    public JSONResult deduction(IntegralIogDTO integralIogDTO) {
         return null;
     }
 }

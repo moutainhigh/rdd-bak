@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO" >
+        <id column="integral_log_id" property="integralLogId" jdbcType="VARCHAR" />
+        <result column="integral_info_id" property="integralInfoId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="integral_log_type" property="integralLogType" jdbcType="INTEGER" />
+        <result column="integral_amount" property="integralAmount" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="before_integral_amount" property="beforeIntegralAmount" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        integral_log_id, integral_info_id, user_id, integral_log_type, integral_amount, order_id,
+    before_integral_amount, remark, create_at, update_at
+    </sql>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_integral_log
+        where integral_log_id = #{userId,jdbcType=VARCHAR}
+        order by create_at
+    </select>
+</mapper>

@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.integral;
 
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface IntegralService {
     /**
      * 积分明细
      */
-    List<IntegralInfoDTO> getIntegralDetail(IntegralInfoDTO integralInfoDTO);
+    List<IntegralIogDTO> getIntegralDetail(String userId);
 
     /**
      * 购买积分
@@ -28,7 +29,7 @@ public interface IntegralService {
     JSONResult giveIntegral(IntegralExchangeDTO integralExchangeDTO);
 
     /**
-     * 积分折扣
+     * 商品抵扣最高额度
      */
-    JSONResult deduction();
+    JSONResult getMaxDeductionAmount(String commodityId);
 }
