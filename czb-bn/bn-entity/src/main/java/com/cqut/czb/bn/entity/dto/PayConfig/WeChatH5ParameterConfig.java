@@ -21,9 +21,11 @@ public class WeChatH5ParameterConfig {
         Map<String, Object> result = new TreeMap<String, Object>();
         result = WeChatUtils.xml2Map(orderList);
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(result);
+        System.out.println(jsonObject.getString("mweb_url"));
         // 生成调起支付sign
         SortedMap<String, Object> signParam = new TreeMap<String, Object>();
         signParam.put("appid", jsonObject.getString("appid"));
+        signParam.put("mweb_url", jsonObject.getString("mweb_url"));
         System.out.println(jsonObject.getString("appid"));
         signParam.put("partnerid", jsonObject.getString("mch_id"));
         signParam.put("prepayid", jsonObject.getString("prepay_id"));
