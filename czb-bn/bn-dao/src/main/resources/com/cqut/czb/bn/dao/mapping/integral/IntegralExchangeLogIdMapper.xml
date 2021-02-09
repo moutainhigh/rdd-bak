@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
     <id column="integral_exchange_log_id" property="integralExchangeLogId" jdbcType="VARCHAR" />
     <result column="integral_exchange_id" property="integralExchangeId" jdbcType="VARCHAR" />
-    <result column="exchange_user_id" property="exchangeUserId" jdbcType="INTEGER" />
+    <result column="exchange_user_id" property="exchangeUserId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -26,7 +26,7 @@
       exchange_user_id, create_at, update_at
       )
     values (#{integralExchangeLogId,jdbcType=VARCHAR}, #{integralExchangeId,jdbcType=VARCHAR},
-      #{exchangeUserId,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+      #{exchangeUserId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
@@ -56,7 +56,7 @@
         #{integralExchangeId,jdbcType=VARCHAR},
       </if>
       <if test="exchangeUserId != null" >
-        #{exchangeUserId,jdbcType=INTEGER},
+        #{exchangeUserId,jdbcType=VARCHAR},
       </if>
       <if test="createAt != null" >
         #{createAt,jdbcType=TIMESTAMP},
@@ -73,7 +73,7 @@
         integral_exchange_id = #{integralExchangeId,jdbcType=VARCHAR},
       </if>
       <if test="exchangeUserId != null" >
-        exchange_user_id = #{exchangeUserId,jdbcType=INTEGER},
+        exchange_user_id = #{exchangeUserId,jdbcType=VARCHAR},
       </if>
       <if test="createAt != null" >
         create_at = #{createAt,jdbcType=TIMESTAMP},
@@ -87,7 +87,7 @@
   <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
     update czb_integral_exchange_log_id
     set integral_exchange_id = #{integralExchangeId,jdbcType=VARCHAR},
-      exchange_user_id = #{exchangeUserId,jdbcType=INTEGER},
+      exchange_user_id = #{exchangeUserId,jdbcType=VARCHAR},
       create_at = #{createAt,jdbcType=TIMESTAMP},
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where integral_exchange_log_id = #{integralExchangeLogId,jdbcType=VARCHAR}

@@ -7,7 +7,7 @@ public class IntegralExchangeLogId {
 
     private String integralExchangeId;
 
-    private Integer exchangeUserId;
+    private String exchangeUserId;
 
     private Date createAt;
 
@@ -29,11 +29,11 @@ public class IntegralExchangeLogId {
         this.integralExchangeId = integralExchangeId == null ? null : integralExchangeId.trim();
     }
 
-    public Integer getExchangeUserId() {
+    public String getExchangeUserId() {
         return exchangeUserId;
     }
 
-    public void setExchangeUserId(Integer exchangeUserId) {
+    public void setExchangeUserId(String exchangeUserId) {
         this.exchangeUserId = exchangeUserId;
     }
 

@@ -71,7 +71,7 @@ DROP TABLE IF EXISTS `czb_integral_exchange_log_id`;
 CREATE TABLE `czb_integral_exchange_log_id` (
         `integral_exchange_log_id` varchar(20) NOT NULL,
         `integral_exchange_id` varchar(20) NOT NULL,
-        `exchange_user_id` int(8) NOT NULL,
+        `exchange_user_id` varchar(20) NOT NULL,
         `create_at` timestamp NULL DEFAULT NULL,
         `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`integral_exchange_log_id`) USING BTREE
