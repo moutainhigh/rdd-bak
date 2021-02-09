@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralExchangeLogIdMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId" >
+        <id column="integral_exchange_log_id" property="integralExchangeLogId" jdbcType="VARCHAR" />
+        <result column="integral_exchange_id" property="integralExchangeId" jdbcType="VARCHAR" />
+        <result column="exchange_user_id" property="exchangeUserId" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    integral_exchange_log_id, integral_exchange_id, exchange_user_id, create_at, update_at
+  </sql>
+    <select id="selectByIntegralExchange" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId">
+        select *
+        from
+        czb_integral_exchange_log_id
+        where 1 = 1
+        <if test="integralExchangeId!=null and integralExchangeId!=''">
+            AND  integral_exchange_id = #{integralExchangeId}
+        </if>
+        <if test="exchangeUserId!=null and exchangeUserId!=''">
+            AND  exchange_user_id = #{exchangeUserId}
+        </if>
+    </select>
+</mapper>

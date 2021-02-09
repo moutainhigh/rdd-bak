@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.integral;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -52,7 +53,7 @@ public class integralController {
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @RequestMapping(value = "/purchaseIntegral",method = RequestMethod.POST)
-    public JSONResult purchaseIntegral(@RequestBody Principal principal) {
+    public JSONResult purchaseIntegral(Principal principal) {
         return null;
     }
 
@@ -63,8 +64,9 @@ public class integralController {
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @RequestMapping(value = "/exchangeIntegral",method = RequestMethod.POST)
-    public JSONResult exchangeIntegral(@RequestBody Principal principal) {
-        return null;
+    public JSONResult exchangeIntegral(Principal principal,IntegralExchangeDTO integralExchangeDTO) {
+        User user = (User) redisUtils.get(principal.getName());
+        return integralService.exchangeIntegral(integralExchangeDTO, user.getUserId());
     }
 
     /**

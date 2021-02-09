@@ -21,7 +21,7 @@ public interface IntegralService {
     /**
      * 兑换积分
      */
-    JSONResult exchangeIntegral(IntegralExchangeDTO integralExchangeDTO);
+    JSONResult exchangeIntegral(IntegralExchangeDTO integralExchangeDTO, String userId);
 
     /**
      * 赠送积分

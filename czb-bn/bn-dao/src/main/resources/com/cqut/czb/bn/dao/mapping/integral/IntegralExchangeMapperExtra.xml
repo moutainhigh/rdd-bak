@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralExchangeMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+        <id column="integral_exchange" property="integralExchange" jdbcType="VARCHAR" />
+        <result column="exchange_code" property="exchangeCode" jdbcType="VARCHAR" />
+        <result column="exchange_amount" property="exchangeAmount" jdbcType="INTEGER" />
+        <result column="exchange_times_total" property="exchangeTimesTotal" jdbcType="INTEGER" />
+        <result column="exchange_times_current" property="exchangeTimesCurrent" jdbcType="INTEGER" />
+        <result column="exchange_type" property="exchangeType" jdbcType="INTEGER" />
+        <result column="exchange_source_id" property="exchangeSourceId" jdbcType="VARCHAR" />
+        <result column="is_complete" property="isComplete" jdbcType="INTEGER" />
+        <result column="failure_time" property="failureTime" jdbcType="TIMESTAMP" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    integral_exchange, exchange_code, exchange_amount, exchange_times_total, exchange_times_current,
+    exchange_type, exchange_source_id, is_complete, failure_time, create_at, update_at
+  </sql>
+    <select id="selectByExchangeCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from czb_integral_exchange
+        where exchange_code = #{exchangeCode,jdbcType=VARCHAR}
+    </select>
+    <update id="updateByPrimaryKeySync" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
+    update czb_integral_exchange
+    set exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      exchange_amount = #{exchangeAmount,jdbcType=INTEGER},
+      exchange_times_total = #{exchangeTimesTotal,jdbcType=INTEGER},
+      exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER} + 1,
+      exchange_type = #{exchangeType,jdbcType=INTEGER},
+      exchange_source_id = #{exchangeSourceId,jdbcType=VARCHAR},
+      is_complete = #{isComplete,jdbcType=INTEGER},
+      failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      create_at = #{createAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP}
+    where
+        integral_exchange = #{integralExchange,jdbcType=VARCHAR}
+    and
+        exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER}
+    and
+        update_at = #{oldUpdateAt,jdbcType=TIMESTAMP}
+  </update>
+</mapper>
