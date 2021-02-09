@@ -27,8 +27,8 @@ public class WCardAndPICCodeController {
      * @return
      */
     @GetMapping("/getCommodityOrder")
-    public JSONResult getCommodityOrder(Principal principal){
+    public JSONResult getCommodityOrder(Principal principal, int type){
         UserDTO user = (UserDTO) redisUtils.get(principal.getName());
-        return new JSONResult(wCardAndPICCodeService.getCommodityOrder(user.getUserId()));
+        return new JSONResult(wCardAndPICCodeService.getCommodityOrder(user.getUserId(), type));
     }
 }

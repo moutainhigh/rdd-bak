@@ -23,6 +23,12 @@
           LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
         WHERE
           czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
+          <if test="type == 1">
+              and czb_wechat_commodity_order.user_id = ''
+          </if>
+          <if test="type == 2">
+              and czb_wechat_commodity_order.user_id = ''
+          </if>
         ORDER BY
           czb_wechat_commodity_order.create_at DESC
   </select>
