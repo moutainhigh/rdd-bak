@@ -3,6 +3,8 @@ package com.cqut.czb.bn.entity.dto.PayConfig;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.bn.util.string.StringUtil;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 public class WeChatH5ParameterConfig {
@@ -37,21 +39,18 @@ public class WeChatH5ParameterConfig {
     public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
-        parameters.put("appid", WeChatH5PayConfig.app_id);
+        parameters = getParameters();
         String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount);
         parameters.put("attach",attach);
-        parameters.put("body", WeChatH5PayConfig.body);
         parameters.put("detail","微信支付直充服务");//支付的类容备注
-        parameters.put("mch_id", WeChatH5PayConfig.mch_id);
         parameters.put("nonce_str", nonceStrTemp);
         parameters.put("notify_url", WeChatH5PayConfig.Direct_url);//通用一个接口（购买和充值）
         parameters.put("out_trade_no", orgId);
-        parameters.put("sign", WeChatUtils.createSign("UTF-8", parameters));//编码格式
-        parameters.put("sign_type", WeChatH5PayConfig.sign_type);
-        parameters.put("spbill_create_ip", WeChatH5PayConfig.spbill_create_ip);
-        Double totalFee = amount;
+        BigInteger totalFee = (BigDecimal.valueOf(amount).multiply(new BigDecimal(100))).toBigInteger();
+        System.out.println(totalFee);
         parameters.put("total_fee", totalFee);
-        parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        parameters.put("sign", WeChatUtils.createH5Sign("UTF-8", parameters));//编码格式
+        System.out.println(WeChatUtils.createH5Sign("UTF-8", parameters));
         System.out.println(parameters);
 //        parameters.put("device_info", WeChatH5PayConfig.device_info);
         return parameters;
@@ -77,7 +76,7 @@ public class WeChatH5ParameterConfig {
         parameters.put("appid", WeChatH5PayConfig.app_id);
         parameters.put("body", WeChatH5PayConfig.body);
         parameters.put("mch_id", WeChatH5PayConfig.mch_id);
-        parameters.put("device_info", WeChatH5PayConfig.device_info);
+//        parameters.put("device_info", WeChatH5PayConfig.device_info);
         parameters.put("sign_type", WeChatH5PayConfig.sign_type);
         parameters.put("spbill_create_ip", WeChatH5PayConfig.spbill_create_ip);
         parameters.put("trade_type", WeChatH5PayConfig.trade_type);

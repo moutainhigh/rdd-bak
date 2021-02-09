@@ -27,23 +27,43 @@ public class WeChatUtils {
     }
 
     // 得到sign
-    @SuppressWarnings("unchecked")  
-    public static String createSign(String characterEncoding,SortedMap<String,Object> parameters){  
-        StringBuffer sb = new StringBuffer();  
-        Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）  
-        Iterator it = es.iterator();  
-        while(it.hasNext()) {  
-            Map.Entry entry = (Map.Entry)it.next();  
-            String k = (String)entry.getKey();  
-            Object v = entry.getValue();  
-            if(null != v && !"".equals(v)   
-                    && !"sign".equals(k) && !"key".equals(k)) {  
-                sb.append(k + "=" + v + "&");  
-            }  
-        }  
+    @SuppressWarnings("unchecked")
+    public static String createSign(String characterEncoding,SortedMap<String,Object> parameters){
+        StringBuffer sb = new StringBuffer();
+        Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）
+        Iterator it = es.iterator();
+        while(it.hasNext()) {
+            Map.Entry entry = (Map.Entry)it.next();
+            String k = (String)entry.getKey();
+            Object v = entry.getValue();
+            if(null != v && !"".equals(v)
+                    && !"sign".equals(k) && !"key".equals(k)) {
+                sb.append(k + "=" + v + "&");
+            }
+        }
         sb.append("key=" + WeChatPayConfig.key);
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
-        return sign;  
+        return sign;
+    }
+
+    // 得到h5sign
+    @SuppressWarnings("unchecked")
+    public static String createH5Sign(String characterEncoding,SortedMap<String,Object> parameters){
+        StringBuffer sb = new StringBuffer();
+        Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）
+        Iterator it = es.iterator();
+        while(it.hasNext()) {
+            Map.Entry entry = (Map.Entry)it.next();
+            String k = (String)entry.getKey();
+            Object v = entry.getValue();
+            if(null != v && !"".equals(v)
+                    && !"sign".equals(k) && !"key".equals(k)) {
+                sb.append(k + "=" + v + "&");
+            }
+        }
+        sb.append("key=" + WeChatH5PayConfig.key);
+        String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
+        return sign;
     }
 
     @SuppressWarnings("unchecked")
@@ -64,7 +84,7 @@ public class WeChatUtils {
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
         return sign;
     }
-    
+
     // 得到日期
     public static String getDataStr(String type) {
         Date date = new Date();
@@ -94,24 +114,24 @@ public class WeChatUtils {
             String FEATURE = null;
             FEATURE = "http://apache.org/xml/features/disallow-doctype-decl";
             factory.setFeature(FEATURE, true);
-        	
+
         	// If you can't completely disable DTDs, then at least do the following:
         	// Xerces 1 - http://xerces.apache.org/xerces-j/features.html#external-general-entities
         	// Xerces 2 - http://xerces.apache.org/xerces2-j/features.html#external-general-entities
-        	// JDK7+ - http://xml.org/sax/features/external-general-entities 
+        	// JDK7+ - http://xml.org/sax/features/external-general-entities
         	FEATURE = "http://xml.org/sax/features/external-general-entities";
         	factory.setFeature(FEATURE, false);
-        	
+
         	// Xerces 1 - http://xerces.apache.org/xerces-j/features.html#external-parameter-entities
         	// Xerces 2 - http://xerces.apache.org/xerces2-j/features.html#external-parameter-entities
-        	// JDK7+ - http://xml.org/sax/features/external-parameter-entities 
+        	// JDK7+ - http://xml.org/sax/features/external-parameter-entities
         	FEATURE = "http://xml.org/sax/features/external-parameter-entities";
         	factory.setFeature(FEATURE, false);
-        	
+
         	// Disable external DTDs as well
         	FEATURE = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
         	factory.setFeature(FEATURE, false);
-        	
+
         	// and these as well, per Timothy Morgan's 2014 paper: "XML Schema, DTD, and Entity Attacks"
         	factory.setXIncludeAware(false);
         	factory.setExpandEntityReferences(false);
@@ -135,11 +155,11 @@ public class WeChatUtils {
         }
         return map;
     }
-    
+
     //分转为元（单位转换）
     public static double centToYuan(double cent){
     	double yuan = 100.0;
     	return BigDecimal.valueOf(cent).divide(new BigDecimal(yuan)).doubleValue();
     }
-    
+
 }
