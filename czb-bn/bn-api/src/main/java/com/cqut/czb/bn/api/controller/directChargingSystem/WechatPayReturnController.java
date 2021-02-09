@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/WechatPayRetur")
+@RequestMapping("/WechatPayReturn")
 public class WechatPayReturnController {
     @Autowired
     PrepaidRefillService prepaidRefillService;
@@ -29,7 +29,7 @@ public class WechatPayReturnController {
      * @param request
      * @param response
      */
-    @RequestMapping(value="/wechatPayRetur", method= RequestMethod.POST)
+    @RequestMapping(value="/wechatPayReturn", method= RequestMethod.POST)
     public synchronized void aliPayReturn(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("微信回调——直冲");
         response.setCharacterEncoding("utf-8");
