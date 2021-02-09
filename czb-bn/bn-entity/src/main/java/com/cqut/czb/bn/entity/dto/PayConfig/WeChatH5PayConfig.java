@@ -5,10 +5,10 @@ public class WeChatH5PayConfig {
     //人多多
     public static final String key="jD1qNX96o5KSPomZ4xv8cdelsMhz9nnL";
 
-    // 公众账号ID
+    // 账号ID
     public static final String app_id = "ww537eb30a09eaa286";
 
-    // app商户号
+    // 商户号
     public static final String mch_id = "1566253131";
 
     // 签名类型
@@ -24,7 +24,7 @@ public class WeChatH5PayConfig {
     public static final String trade_type = "MWEB";
 
     // 设备号
-    public static final String device_info = "WEB";
+//    public static final String device_info = "WEB";
 
     // 商品描述
     public static final String body = "代充值服务";
