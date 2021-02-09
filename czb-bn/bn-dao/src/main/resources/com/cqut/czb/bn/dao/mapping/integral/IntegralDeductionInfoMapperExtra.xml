@@ -7,4 +7,8 @@
         from czb_integral_deduction_info
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </select>
+
+    <insert id="insertRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
+        insert into czb_integral_deduction_info
+    </insert>
 </mapper>

@@ -32,4 +32,20 @@ public interface IntegralService {
      * 商品抵扣最高额度
      */
     JSONResult getMaxDeductionAmount(String commodityId);
+
+    /**
+     * 积分抵扣
+     * @param integralInfoDTO
+     * @return
+     */
+    JSONResult deduction(IntegralInfoDTO integralInfoDTO);
+
+    /**
+     * 通过电话号码赠送
+     * @param providerId
+     * @param receiverPhone
+     * @param integralAmount
+     * @return
+     */
+    JSONResult offerIntegralByPhone(String providerId, String receiverPhone, Integer integralAmount);
 }

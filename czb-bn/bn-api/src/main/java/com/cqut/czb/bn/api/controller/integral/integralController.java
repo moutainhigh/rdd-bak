@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.integral;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -36,7 +37,7 @@ public class integralController {
      * @return
      */
     @RequestMapping(value = "/getIntegralDetail",method = RequestMethod.GET)
-    public JSONResult getIntegralDetail(@RequestBody Principal principal) {
+    public JSONResult getIntegralDetail(Principal principal) {
         User user = (User) redisUtils.get(principal.getName());
 
         if (user == null || user.getUserId() == null) {
@@ -90,12 +91,26 @@ public class integralController {
     }
 
     /**
-     * 积分抵扣
-     * @param integralIogDTO
+     * 积分抵扣记录
+     * @param integralInfoDTO
      * @return
      */
     @RequestMapping(value = "/deduction", method = RequestMethod.POST)
-    public JSONResult deduction(IntegralIogDTO integralIogDTO) {
+    public JSONResult deduction(IntegralInfoDTO integralInfoDTO) {
+        integralService.deduction(integralInfoDTO);
         return null;
+    }
+
+    /**
+     * 通过手机号赠送积分
+     * @param principal
+     * @param receiverPhone 被赠送人的电话
+     * @param integralAmount
+     * @return
+     */
+    @RequestMapping(value = "/offerIntegralByPhone", method = RequestMethod.POST)
+    public JSONResult offerIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
+        User user = (User)redisUtils.get(principal.getName());
+        return integralService.offerIntegralByPhone(user.getUserId(), receiverPhone, integralAmount);
     }
 }

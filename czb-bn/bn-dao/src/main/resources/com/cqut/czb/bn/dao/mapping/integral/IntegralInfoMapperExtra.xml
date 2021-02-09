@@ -10,8 +10,8 @@
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
     <sql id="Base_Column_List" >
-    integral_info_id, user_id, got_total, current_total, create_at, update_at
-  </sql>
+        integral_info_id, user_id, got_total, current_total, create_at, update_at
+    </sql>
     <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />

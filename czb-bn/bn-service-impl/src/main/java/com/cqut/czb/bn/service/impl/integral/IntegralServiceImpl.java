@@ -1,11 +1,19 @@
 package com.cqut.czb.bn.service.impl.integral;
 
 import com.cqut.czb.bn.dao.mapper.integral.*;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralIogMapper;
+import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
+import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
+import com.cqut.czb.bn.entity.entity.integral.IntegralIog;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
 import com.cqut.czb.bn.entity.entity.integral.IntegralIog;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -46,6 +54,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     IntegralExchangeLogIdMapperExtra integralExchangeLogIdMapperExtra;
+
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     @Override
     public List<IntegralIogDTO> getIntegralDetail(String userId) {
@@ -164,5 +175,52 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult getMaxDeductionAmount(String commodityId) {
         return new JSONResult(integralDeductionInfoMapperExtra.getMaxDeductionAmount(commodityId));
+    }
+
+    @Override
+    public JSONResult deduction(IntegralInfoDTO integralInfoDTO) {
+        return null;
+    }
+
+    @Override
+    public JSONResult offerIntegralByPhone(String providerId , String receiverPhone, Integer integralAmount) {
+        User receiver = userMapperExtra.findUserByAccount(receiverPhone);
+        IntegralInfo providerInfo = integralInfoMapperExtra.selectByUserId(providerId);
+        IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
+        // 赠送人的积分记录
+        IntegralIog integralIog = new IntegralIog();
+        integralIog.setIntegralLogId(StringUtil.createId());
+        integralIog.setIntegralInfoId(providerInfo.getIntegralInfoId());
+        integralIog.setUserId(providerInfo.getUserId());
+        integralIog.setIntegralLogType(1);
+        integralIog.setIntegralAmount(integralAmount);
+        integralIog.setBeforeIntegralAmount(providerInfo.getCurrentTotal());
+        integralIog.setRemark("赠予他人");
+        integralIog.setCreateAt(new Date());
+        integralIog.setUpdateAt(new Date());
+        integralIog.setOrderId(StringUtil.createId());
+        integralIogMapper.insert(integralIog);
+        providerInfo.setCurrentTotal(providerInfo.getCurrentTotal() - integralAmount);
+        providerInfo.setUpdateAt(new Date());
+        integralInfoMapper.updateByPrimaryKey(providerInfo);
+
+        // 新增兑换人积分记录
+        integralIog.setIntegralLogId(StringUtil.createId());
+        integralIog.setIntegralInfoId(receiverInfo.getIntegralInfoId());
+        integralIog.setUserId(receiver.getUserId());
+        integralIog.setIntegralLogType(2);
+        integralIog.setIntegralAmount(integralAmount);
+        integralIog.setBeforeIntegralAmount(receiverInfo.getCurrentTotal());
+        integralIog.setRemark("被赠予");
+        integralIog.setCreateAt(new Date());
+        integralIog.setUpdateAt(new Date());
+        integralIog.setOrderId(StringUtil.createId());
+        integralIogMapper.insert(integralIog);
+        receiverInfo.setCurrentTotal(receiverInfo.getCurrentTotal() + integralAmount);
+        receiverInfo.setGotTotal(receiverInfo.getGotTotal() + integralAmount);
+        receiverInfo.setUpdateAt(new Date());
+        integralInfoMapper.updateByPrimaryKey(receiverInfo);
+
+        return new JSONResult("恭喜你赠送积分成功!", 200);
     }
 }

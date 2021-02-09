@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.integral;
 
+import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
+
 public interface IntegralDeductionInfoMapperExtra {
 
     /**
@@ -8,4 +10,6 @@ public interface IntegralDeductionInfoMapperExtra {
      * @return
      */
     Double getMaxDeductionAmount(String commodityId);
+
+    int insertRecord(IntegralDeductionInfo record);
 }
