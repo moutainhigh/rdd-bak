@@ -10,5 +10,5 @@ public interface IntegrallogMapperExtra {
      * @param userId
      * @return
      */
-    List<IntegralLogDTO> list(String userId);
+    List<IntegralLogDTO> getIntegralDetailsList(String userId);
 }

@@ -19,11 +19,11 @@
     before_integral_amount, remark, create_at, update_at
     </sql>
 
-    <select id="list" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="getIntegralDetailsList" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO" >
         select
         <include refid="Base_Column_List" />
         from czb_integral_log
-        where integral_log_id = #{userId,jdbcType=VARCHAR}
+        where user_id = #{userId,jdbcType=VARCHAR}
         order by create_at
     </select>
 </mapper>
