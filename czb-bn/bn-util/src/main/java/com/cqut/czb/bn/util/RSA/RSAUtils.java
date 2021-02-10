@@ -176,6 +176,11 @@ public class RSAUtils {
         return new String(dectyptedText);
     }
 
+    /**
+     * 密文转换兑换码
+     * @param cipher
+     * @return
+     */
     // 1 -> / 2-> +
     public static String cipherToEXcode(String cipher) {
         StringBuffer cipherModel = new StringBuffer(cipher);
@@ -204,6 +209,11 @@ public class RSAUtils {
         return cipher;
     }
 
+    /**
+     * 兑换码转换密文
+     * @param cipher
+     * @return
+     */
     public static String eXcodeToCipher(String cipher) {
         StringBuffer stringBuffer = new StringBuffer(cipher);
         int index = cipher.indexOf("-");
