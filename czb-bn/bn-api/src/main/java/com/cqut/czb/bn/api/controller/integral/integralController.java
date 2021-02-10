@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,17 @@ public class integralController {
     IntegralService integralService;
 
     /**
+     * 获取个人当前总积分
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/getCurrentTotalIntegral", method = RequestMethod.GET)
+    public JSONResult getCurrentTotalIntegral(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        return integralService.getCurrentTotalIntegral(user.getUserId());
+    }
+
+    /**
      * 获取个人积分明细
      * @param
      * @return
@@ -45,6 +57,35 @@ public class integralController {
         }
 
         return new JSONResult(integralService.getIntegralDetail(user.getUserId()));
+    }
+
+    /**
+     * 获得赠送好友的明细
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/getOfferIntegralDetail",method = RequestMethod.GET)
+    public JSONResult getOfferIntegralDetail(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+
+        if (user == null || user.getUserId() == null) {
+            return new JSONResult("未登录",500);
+        }
+
+        return new JSONResult(integralService.getOfferIntegralDetail(user.getUserId()));
+    }
+
+    /**
+     * 获取兑换码详情
+     * @param principal
+     * @param integralExchangeId
+     * @return
+     */
+    @RequestMapping(value = "/getExchangeDetails", method = RequestMethod.GET)
+    public JSONResult getExchangeDetails(Principal principal, String integralExchangeId) {
+        User user = (User) redisUtils.get(principal.getName());
+
+        return integralService.getExchangeDetails(integralExchangeId);
     }
 
     /**
@@ -112,5 +153,18 @@ public class integralController {
     public JSONResult offerIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
         User user = (User)redisUtils.get(principal.getName());
         return integralService.offerIntegralByPhone(user.getUserId(), receiverPhone, integralAmount);
+    }
+
+    /**
+     * 创建兑换码
+     * @param principal
+     * @param integralExchange
+     * @return
+     */
+    @RequestMapping(value = "/createExchangeCode", method = RequestMethod.POST)
+    public JSONResult createExchangeCode(Principal principal, IntegralExchange integralExchange ) {
+        User user = (User) redisUtils.get(principal.getName());
+        integralExchange.setExchangeSourceId(user.getUserId());
+        return integralService.createExchangeCode(integralExchange);
     }
 }

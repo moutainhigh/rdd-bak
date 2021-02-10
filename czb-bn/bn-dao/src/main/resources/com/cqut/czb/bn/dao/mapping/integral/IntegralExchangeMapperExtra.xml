@@ -43,4 +43,11 @@
     and
         update_at = #{oldUpdateAt,jdbcType=TIMESTAMP}
   </update>
+
+    <select id="getExchangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from czb_integral_exchange
+        where exchange_source_id = #{exchangeSourceId, jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -6,6 +6,7 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
+import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
@@ -18,12 +19,14 @@ import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
 import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
+import com.cqut.czb.bn.util.RSA.RSAUtils;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.*;
 
 @Service
 public class IntegralServiceImpl implements IntegralService {
@@ -58,9 +61,111 @@ public class IntegralServiceImpl implements IntegralService {
     @Autowired
     UserMapperExtra userMapperExtra;
 
+    public JSONResult getCurrentTotalIntegral(String userId) {
+        return new JSONResult(integralInfoMapperExtra.selectByUserId(userId));
+    }
+
     @Override
-    public List<IntegralLogDTO> getIntegralDetail(String userId) {
-        return integrallogMapperExtra.list(userId);
+    public List<IntegralDetailsDTO> getIntegralDetail(String userId) {
+        List<IntegralLogDTO> integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
+        List<IntegralExchange> integralExchangeList = integralExchangeMapperExtra.getExchangeList(userId);
+        List<IntegralDetailsDTO> integralDetailsDTOS = new ArrayList<>();
+
+        for (int i = 0; i < integralLogDTOList.size(); i++) {
+            IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
+            IntegralLogDTO integralLogDTO = integralLogDTOList.get(i);
+            if (integralLogDTO.getIntegralLogType() != 1) {
+                integralDetailsDTO.setIntegralAmount(integralLogDTO.getIntegralAmount());
+                integralDetailsDTO.setIntegralLogType(integralLogDTO.getIntegralLogType());
+                integralDetailsDTO.setUserId(userId);
+                integralDetailsDTO.setRemark(integralLogDTO.getRemark());
+                integralDetailsDTO.setCreateAt(integralLogDTO.getCreateAt());
+                integralDetailsDTO.setUpdateAt(integralLogDTO.getUpdateAt());
+                integralDetailsDTOS.add(integralDetailsDTO);
+            }
+        }
+
+        for (int i = 0; i < integralExchangeList.size(); i++) {
+            IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
+            IntegralExchange integralExchange = integralExchangeList.get(i);
+            integralDetailsDTO.setIntegralAmount(integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesCurrent());
+            integralDetailsDTO.setIntegralLogType(1);
+            integralDetailsDTO.setUserId(userId);
+            integralDetailsDTO.setRemark("兑换码赠送");
+            integralDetailsDTO.setIntegralExchange(integralExchange.getIntegralExchange());
+            integralDetailsDTO.setExchangeType(integralExchange.getExchangeType());
+            integralDetailsDTO.setCreateAt(integralExchange.getCreateAt());
+            integralDetailsDTO.setUpdateAt(integralExchange.getUpdateAt());
+            integralDetailsDTOS.add(integralDetailsDTO);
+        }
+
+        integralDetailsDTOS.sort(new Comparator<IntegralDetailsDTO>() {
+            @Override
+            public int compare(IntegralDetailsDTO o1, IntegralDetailsDTO o2) {
+                return o2.getCreateAt().compareTo(o1.getCreateAt());
+            }
+        });
+
+        return integralDetailsDTOS;
+    }
+
+    @Override
+    public List<IntegralDetailsDTO> getOfferIntegralDetail(String userId) {
+        List<IntegralLogDTO> integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
+        List<IntegralExchange> integralExchangeList = integralExchangeMapperExtra.getExchangeList(userId);
+        List<IntegralDetailsDTO> integralDetailsDTOS = new ArrayList<>();
+
+        for (int i = 0; i < integralLogDTOList.size(); i++) {
+            IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
+            IntegralLogDTO integralLogDTO = integralLogDTOList.get(i);
+            if (integralLogDTO.getIntegralLogType() == 3) {
+                integralDetailsDTO.setIntegralAmount(integralLogDTO.getIntegralAmount());
+                integralDetailsDTO.setIntegralLogType(integralLogDTO.getIntegralLogType());
+                integralDetailsDTO.setUserId(userId);
+                integralDetailsDTO.setRemark(integralLogDTO.getRemark());
+                integralDetailsDTO.setCreateAt(integralLogDTO.getCreateAt());
+                integralDetailsDTO.setUpdateAt(integralLogDTO.getUpdateAt());
+                integralDetailsDTOS.add(integralDetailsDTO);
+            }
+        }
+
+        for (int i = 0; i < integralExchangeList.size(); i++) {
+            IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
+            IntegralExchange integralExchange = integralExchangeList.get(i);
+            integralDetailsDTO.setIntegralAmount(integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesCurrent());
+            integralDetailsDTO.setIntegralLogType(1);
+            integralDetailsDTO.setUserId(userId);
+            integralDetailsDTO.setRemark("兑换码赠送");
+            integralDetailsDTO.setIntegralExchange(integralExchange.getIntegralExchange());
+            integralDetailsDTO.setExchangeType(integralExchange.getExchangeType());
+            integralDetailsDTO.setCreateAt(integralExchange.getCreateAt());
+            integralDetailsDTO.setUpdateAt(integralExchange.getUpdateAt());
+            integralDetailsDTOS.add(integralDetailsDTO);
+        }
+
+        integralDetailsDTOS.sort(new Comparator<IntegralDetailsDTO>() {
+            @Override
+            public int compare(IntegralDetailsDTO o1, IntegralDetailsDTO o2) {
+                return o2.getCreateAt().compareTo(o1.getCreateAt());
+            }
+        });
+
+        return integralDetailsDTOS;
+    }
+
+    @Override
+    public JSONResult getExchangeDetails(String integralExchangeId) {
+        IntegralExchange exchangeDetails = integralExchangeMapper.selectByPrimaryKey(integralExchangeId);
+        try {
+            exchangeDetails.setExchangeCode(RSAUtils.cipherToEXcode(RSAUtils.publicEncrypt(exchangeDetails.getExchangeCode(), RSAUtils.getPublicKey(RSAUtils.publicKey))));
+        }
+        catch (NoSuchAlgorithmException e) {
+            return new JSONResult("服务器错误，请与管理人联络", 500);
+        } catch (InvalidKeySpecException e) {
+            return new JSONResult("密钥不合法", 500);
+        }
+
+        return new JSONResult(exchangeDetails);
     }
 
     @Override
@@ -151,7 +256,7 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setIntegralLogId(StringUtil.createId());
         integralLog.setIntegralInfoId(integralInfoGiven.getIntegralInfoId());
         integralLog.setUserId(userId);
-        integralLog.setIntegralLogType(2);
+        integralLog.setIntegralLogType(3);
         integralLog.setIntegralAmount(integralExchangeMng.getExchangeAmount());
         integralLog.setBeforeIntegralAmount(integralInfoGiven.getCurrentTotal());
         integralLog.setRemark("被赠予");
@@ -192,7 +297,7 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setIntegralLogId(StringUtil.createId());
         integralLog.setIntegralInfoId(providerInfo.getIntegralInfoId());
         integralLog.setUserId(providerInfo.getUserId());
-        integralLog.setIntegralLogType(1);
+        integralLog.setIntegralLogType(2);
         integralLog.setIntegralAmount(integralAmount);
         integralLog.setBeforeIntegralAmount(providerInfo.getCurrentTotal());
         integralLog.setRemark("赠予他人");
@@ -208,7 +313,7 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setIntegralLogId(StringUtil.createId());
         integralLog.setIntegralInfoId(receiverInfo.getIntegralInfoId());
         integralLog.setUserId(receiver.getUserId());
-        integralLog.setIntegralLogType(2);
+        integralLog.setIntegralLogType(3);
         integralLog.setIntegralAmount(integralAmount);
         integralLog.setBeforeIntegralAmount(receiverInfo.getCurrentTotal());
         integralLog.setRemark("被赠予");
@@ -224,4 +329,31 @@ public class IntegralServiceImpl implements IntegralService {
         return new JSONResult("恭喜你赠送积分成功!", 200);
     }
 
+    @Override
+    public JSONResult createExchangeCode(IntegralExchange integralExchange) {
+        IntegralInfo userIntegralInfo = integralInfoMapperExtra.selectByUserId(integralExchange.getExchangeSourceId());
+        if (userIntegralInfo.getCurrentTotal() < integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesTotal()) {
+            return new JSONResult("你的积分不足", 500);
+        }
+
+        if (integralExchange.getFailureTime().compareTo(new Date()) < 0) {
+            return new JSONResult("失效时间比当前时间早", 500);
+        }
+
+        integralExchange.setIntegralExchange(StringUtil.createId());
+        integralExchange.setExchangeType(2);
+        integralExchange.setExchangeTimesCurrent(0);
+        integralExchange.setIsComplete(0);
+        integralExchange.setCreateAt(new Date());
+        integralExchange.setUpdateAt(new Date());
+        integralExchange.setExchangeCode(integralExchange.getIntegralExchange());
+        integralExchangeMapper.insert(integralExchange);
+        try {
+            return new JSONResult(RSAUtils.cipherToEXcode(RSAUtils.publicEncrypt(integralExchange.getExchangeCode(),RSAUtils.getPublicKey(RSAUtils.publicKey))), 200);
+        } catch (NoSuchAlgorithmException e) {
+            return new JSONResult("服务器错误，请与管理人联络", 500);
+        } catch (InvalidKeySpecException e) {
+            return new JSONResult("密钥不合法", 500);
+        }
+    }
 }
