@@ -26,7 +26,8 @@ dependencies {
     compile group: 'org.jodd', name: 'jodd-http', version: '4.3.2'
 
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
-
+    // RSA BC加密组件依赖
+    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.65'
     // https://mvnrepository.com/artifact/org.jeecg/easypoi-base
     compile group: 'cn.afterturn', name: 'easypoi-base', version: '3.1.0'
 // https://mvnrepository.com/artifact/org.jeecg/easypoi-annotation

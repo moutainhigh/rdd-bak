@@ -1,10 +1,8 @@
 package com.cqut.czb.bn.util.RSA;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 
 import javax.crypto.Cipher;
-import java.io.ByteArrayOutputStream;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -20,10 +18,15 @@ import java.util.Map;
  */
 public class RSAUtils {
 
-    public static final String CHARSET = "UTF-8";
-    public static final String RSA_ALGORITHM = "RSA"; // RSA算法
-    public static final String PUBLIC_KEY = "MCwwDQYJKoZIhvcNAQEBBQADGwAwGAIRAM9DuGDt8mIXBOORmmYp5Q8CAwEAAQ==";
-    public static final String PRIVATE_KEY = "MHkCAQAwDQYJKoZIhvcNAQEBBQAEZTBjAgEAAhEAz0O4YO3yYhcE45GaZinlDwIDAQABAhAgYJDQkNB4op24PkKOOiFJAgkA+ZtMjGFbur0CCQDUksdl1+DBuwIJALC/VnIlUrYlAgg+RRkALnL6jQIJALwjyyyIxqLP";
+    public static final String ALGORITHM = "RSA";
+
+    public static final String PADDING = "RSA";
+
+    public static final String PROVIDER = "BC";
+
+    public static final String publicKey = "MDAwDQYJKoZIhvcNAQEBBQADHwAwHAIVALuhCQQxuB5gL79hRy8d9jIM7mbjAgMBAAE=";
+
+    public static final String privateKey = "MIGLAgEAMA0GCSqGSIb3DQEBAQUABHcwdQIBAAIVALuhCQQxuB5gL79hRy8d9jIM7mbjAgMBAAECFA0GB38wCEyrdoTewi8WPZZzCUZZAgsA5RXEzk+Q1sRP9QILANGsYyPi6zxezHcCCwCnndXyXqVLfzhBAgsApj/FrCK02n1gKQIKIL1ZtNoIzlC2nA==";
 
     public static Map<String, String> createKeys(int keySize) {
         // 修改加密组件
@@ -31,9 +34,9 @@ public class RSAUtils {
         // 为RSA算法创建一个KeyPairGenerator对象
         KeyPairGenerator kpg;
         try {
-            kpg = KeyPairGenerator.getInstance(RSA_ALGORITHM, "BC");
+            kpg = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
         } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException("No such algorithm-->[" + RSA_ALGORITHM + "]");
+            throw new IllegalArgumentException("No such algorithm-->[" + ALGORITHM + "]");
         }
 
         // 初始化KeyPairGenerator对象,密钥长度
@@ -62,7 +65,7 @@ public class RSAUtils {
     public static RSAPublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         // 通过X509编码的Key指令获得公钥对象
-        KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.decodeBase64(publicKey));
         RSAPublicKey key = (RSAPublicKey) keyFactory.generatePublic(x509KeySpec);
         return key;
@@ -76,7 +79,7 @@ public class RSAUtils {
     public static RSAPrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         // 通过PKCS#8编码的Key指令获得私钥对象
-        KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey));
         RSAPrivateKey key = (RSAPrivateKey) keyFactory.generatePrivate(pkcs8KeySpec);
         return key;
@@ -89,13 +92,18 @@ public class RSAUtils {
      * @return
      */
     public static String publicEncrypt(String data, RSAPublicKey publicKey) {
+        byte[] cipherText = null;
+        Base64 base64 = new Base64();
         try {
-            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            final Cipher cipher = Cipher.getInstance(PADDING);
+
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), publicKey.getModulus().bitLength()));
+            cipherText = cipher.doFinal(data.getBytes());
         } catch (Exception e) {
-            throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
+            e.printStackTrace();
         }
+        return base64.encodeToString(cipherText);
     }
 
     /**
@@ -106,13 +114,20 @@ public class RSAUtils {
      */
 
     public static String privateDecrypt(String data, RSAPrivateKey privateKey) {
+        Base64 base64 = new Base64();
+        byte[] dectyptedText = null;
         try {
-            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            final Cipher cipher = Cipher.getInstance(PADDING, PROVIDER);
+
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), privateKey.getModulus().bitLength()), CHARSET);
-        } catch (Exception e) {
-            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
+            dectyptedText = cipher.doFinal(base64.decode(data));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
+        return new String(dectyptedText);
     }
 
     /**
@@ -123,14 +138,18 @@ public class RSAUtils {
      */
 
     public static String privateEncrypt(String data, RSAPrivateKey privateKey) {
+        byte[] cipherText = null;
+        Base64 base64 = new Base64();
         try {
-            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
-            //每个Cipher初始化方法使用一个模式参数opmod，并用此模式初始化Cipher对象。此外还有其他参数，包括密钥key、包含密钥的证书certificate、算法参数params和随机源random。
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            final Cipher cipher = Cipher.getInstance(PADDING, PROVIDER);
+
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-            return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), privateKey.getModulus().bitLength()));
+            cipherText = cipher.doFinal(data.getBytes());
         } catch (Exception e) {
-            throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
+            e.printStackTrace();
         }
+        return base64.encodeToString(cipherText);
     }
 
     /**
@@ -141,58 +160,99 @@ public class RSAUtils {
      */
 
     public static String publicDecrypt(String data, RSAPublicKey publicKey) {
+        Base64 base64 = new Base64();
+        byte[] dectyptedText = null;
         try {
-            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            final Cipher cipher = Cipher.getInstance(PADDING, PROVIDER);
+
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
-            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), publicKey.getModulus().bitLength()), CHARSET);
-        } catch (Exception e) {
-            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
+            dectyptedText = cipher.doFinal(base64.decode(data));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
+        return new String(dectyptedText);
     }
 
-    //rsa切割解码  , ENCRYPT_MODE,加密数据   ,DECRYPT_MODE,解密数据
-    private static byte[] rsaSplitCodec(Cipher cipher, int opmode, byte[] datas, int keySize) {
-        int maxBlock = 0;  //最大块
-        if (opmode == Cipher.DECRYPT_MODE) {
-            maxBlock = keySize / 8;
-        } else {
-            maxBlock = keySize / 8 - 11;
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int offSet = 0;
-        byte[] buff;
-        int i = 0;
-        try {
-            while (datas.length > offSet) {
-                if (datas.length - offSet > maxBlock) {
-                    //可以调用以下的doFinal（）方法完成加密或解密数据：
-                    buff = cipher.doFinal(datas, offSet, maxBlock);
-                } else {
-                    buff = cipher.doFinal(datas, offSet, datas.length - offSet);
+    // 1 -> / 2-> +
+    public static String cipherToEXcode(String cipher) {
+        StringBuffer cipherModel = new StringBuffer(cipher);
+        for (int i = 0; i < cipher.length(); i++) {
+            if (cipher.charAt(i) == '/') {
+                if ((65 + i) > 90) {
+                    cipherModel.append((char)(65 + i + 6));
                 }
-                out.write(buff, 0, buff.length);
-                i++;
-                offSet = i * maxBlock;
+                else {
+                    cipherModel.append((char)(65 + i));
+                }
+                cipherModel.append(1);
             }
-        } catch (Exception e) {
-            throw new RuntimeException("加解密阀值为[" + maxBlock + "]的数据时发生异常", e);
+            if (cipher.charAt(i) == '+') {
+                if ((65 + i) > 90) {
+                    cipherModel.append((char)(65 + i + 6));
+                }
+                else {
+                    cipherModel.append((char)(65 + i));
+                }
+                cipherModel.append(2);
+            }
         }
-        byte[] resultDatas = out.toByteArray();
-        IOUtils.closeQuietly(out);
-        return resultDatas;
+        cipher = String.valueOf(cipherModel).replaceAll("[+, /]", "").replaceAll("=", "-");
+
+        return cipher;
+    }
+
+    public static String eXcodeToCipher(String cipher) {
+        StringBuffer stringBuffer = new StringBuffer(cipher);
+        int index = cipher.indexOf("-");
+        for (int n = index; n < cipher.length(); n += 2) {
+            if (cipher.charAt(n) == '2') {
+                if (cipher.charAt(n - 1) > 90) {
+                    stringBuffer.insert(cipher.charAt(n - 1) - 65 - 6,'+');
+                }
+                else {
+                    stringBuffer.insert(cipher.charAt(n - 1) - 65,'+');
+                }
+            }
+            if (cipher.charAt(n) == '1') {
+                if (cipher.charAt(n - 1) > 90) {
+                    stringBuffer.insert(cipher.charAt(n - 1) - 65 - 6,'/');
+                }
+                else {
+                    stringBuffer.insert(cipher.charAt(n - 1) - 65,'/');
+                }
+            }
+        }
+        cipher = String.valueOf(stringBuffer).replaceAll("-", "=").substring(0,28);
+        return cipher;
     }
 
     // 获取密钥后将密钥保存在21 22行key中
     public static void main(String[] args) {
         // 创建密钥对
-        Map<String, String> keys = RSAUtils.createKeys(128);
+        Map<String, String> keys = RSAUtils.createKeys(160);
         // 从Map中获取密钥对
         String publicKey = keys.get("publicKey");
         String privateKey = keys.get("privateKey");
         // 获取公钥
-        System.out.println("publicKey:"+publicKey);
+        System.out.println("publicKey:" + publicKey);
         // 获取私钥
-        System.out.println("privateKey:"+privateKey);
+        System.out.println("privateKey:" + privateKey);
+        // 验证
+//        System.out.println(RSAUtils.cipherToEXcode("CPv8/xpLgMdLyBT/HSRSikIEIzo="));
+//        System.out.println(RSAUtils.eXcodeToCipher("CPv8xpLgMdLyBTHSRSikIEIzo-E1P1").equals("CPv8/xpLgMdLyBT/HSRSikIEIzo="));
+        // 实例加密解密方案
+//        try {
+//            final String originalText = "25261754166600546112";
+//            String cipherText = RSAUtils.publicEncrypt(originalText, RSAUtils.getPublicKey(RSAUtils.publicKey));
+//            String plainText = RSAUtils.privateDecrypt(cipherText, RSAUtils.getPrivateKey(RSAUtils.privateKey));
+//            System.out.println(cipherText);
+//            // c42HvOUoKTcu2wXwR/pZXDibAd4=
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
