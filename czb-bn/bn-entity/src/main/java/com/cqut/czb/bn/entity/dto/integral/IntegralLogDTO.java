@@ -1,8 +1,8 @@
-package com.cqut.czb.bn.entity.entity.integral;
+package com.cqut.czb.bn.entity.dto.integral;
 
 import java.util.Date;
 
-public class IntegralIog {
+public class IntegralLogDTO {
     private String integralLogId;
 
     private String integralInfoId;

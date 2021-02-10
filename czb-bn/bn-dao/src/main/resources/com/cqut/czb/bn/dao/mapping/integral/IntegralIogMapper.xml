@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralIogMapper" >
-  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper" >
+  <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralLog" >
     <id column="integral_log_id" property="integralLogId" jdbcType="VARCHAR" />
     <result column="integral_info_id" property="integralInfoId" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -27,7 +27,7 @@
     delete from czb_integral_log
     where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+  <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralLog" >
     insert into czb_integral_log (integral_log_id, integral_info_id, user_id,
       integral_log_type, integral_amount, order_id,
       before_integral_amount, remark, create_at,
@@ -37,7 +37,7 @@
       #{beforeIntegralAmount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
       #{updateAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+  <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralLog" >
     insert into czb_integral_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="integralLogId != null" >
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralLog" >
     update czb_integral_log
     <set >
       <if test="integralInfoId != null" >
@@ -137,7 +137,7 @@
     </set>
     where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralIog" >
+  <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralLog" >
     update czb_integral_log
     set integral_info_id = #{integralInfoId,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=VARCHAR},

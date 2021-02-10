@@ -2,7 +2,7 @@ package com.cqut.czb.bn.service.integral;
 
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface IntegralService {
     /**
      * 积分明细
      */
-    List<IntegralIogDTO> getIntegralDetail(String userId);
+    List<IntegralLogDTO> getIntegralDetail(String userId);
 
     /**
      * 购买积分

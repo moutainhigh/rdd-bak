@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.integral;
 
-import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface IntegrallogMapperExtra {
      * @param userId
      * @return
      */
-    List<IntegralIogDTO> list(String userId);
+    List<IntegralLogDTO> list(String userId);
 }

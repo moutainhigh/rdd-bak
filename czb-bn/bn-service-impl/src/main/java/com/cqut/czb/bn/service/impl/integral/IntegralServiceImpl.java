@@ -4,18 +4,18 @@ import com.cqut.czb.bn.dao.mapper.integral.*;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
-import com.cqut.czb.bn.dao.mapper.integral.IntegralIogMapper;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralIogDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
-import com.cqut.czb.bn.entity.entity.integral.IntegralIog;
+import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
-import com.cqut.czb.bn.entity.entity.integral.IntegralIog;
+import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -41,7 +41,7 @@ public class IntegralServiceImpl implements IntegralService {
     IntegralInfoMapper integralInfoMapper;
 
     @Autowired
-    IntegralIogMapper integralIogMapper;
+    IntegralLogMapper integralLogMapper;
 
     @Autowired
     IntegralExchangeMapper integralExchangeMapper;
@@ -59,7 +59,7 @@ public class IntegralServiceImpl implements IntegralService {
     UserMapperExtra userMapperExtra;
 
     @Override
-    public List<IntegralIogDTO> getIntegralDetail(String userId) {
+    public List<IntegralLogDTO> getIntegralDetail(String userId) {
         return integrallogMapperExtra.list(userId);
     }
 
@@ -131,34 +131,34 @@ public class IntegralServiceImpl implements IntegralService {
         } while(affectRow == 0);
 
         // 新增兑换码主人积分记录
-        IntegralIog integralIog = new IntegralIog();
-        integralIog.setIntegralLogId(StringUtil.createId());
-        integralIog.setIntegralInfoId(integralInfoMng.getIntegralInfoId());
-        integralIog.setUserId(integralInfoMng.getUserId());
-        integralIog.setIntegralLogType(1);
-        integralIog.setIntegralAmount(integralExchangeMng.getExchangeAmount());
-        integralIog.setBeforeIntegralAmount(integralInfoMng.getCurrentTotal());
-        integralIog.setRemark("赠予他人");
-        integralIog.setCreateAt(new Date());
-        integralIog.setUpdateAt(new Date());
-        integralIog.setOrderId(StringUtil.createId());
-        integralIogMapper.insert(integralIog);
+        IntegralLog integralLog = new IntegralLog();
+        integralLog.setIntegralLogId(StringUtil.createId());
+        integralLog.setIntegralInfoId(integralInfoMng.getIntegralInfoId());
+        integralLog.setUserId(integralInfoMng.getUserId());
+        integralLog.setIntegralLogType(1);
+        integralLog.setIntegralAmount(integralExchangeMng.getExchangeAmount());
+        integralLog.setBeforeIntegralAmount(integralInfoMng.getCurrentTotal());
+        integralLog.setRemark("赠予他人");
+        integralLog.setCreateAt(new Date());
+        integralLog.setUpdateAt(new Date());
+        integralLog.setOrderId(StringUtil.createId());
+        integralLogMapper.insert(integralLog);
         integralInfoMng.setCurrentTotal(integralInfoMng.getCurrentTotal() - integralExchangeMng.getExchangeAmount());
         integralInfoMng.setUpdateAt(new Date());
         integralInfoMapper.updateByPrimaryKey(integralInfoMng);
 
         // 新增兑换人积分记录
-        integralIog.setIntegralLogId(StringUtil.createId());
-        integralIog.setIntegralInfoId(integralInfoGiven.getIntegralInfoId());
-        integralIog.setUserId(userId);
-        integralIog.setIntegralLogType(2);
-        integralIog.setIntegralAmount(integralExchangeMng.getExchangeAmount());
-        integralIog.setBeforeIntegralAmount(integralInfoGiven.getCurrentTotal());
-        integralIog.setRemark("被赠予");
-        integralIog.setCreateAt(new Date());
-        integralIog.setUpdateAt(new Date());
-        integralIog.setOrderId(StringUtil.createId());
-        integralIogMapper.insert(integralIog);
+        integralLog.setIntegralLogId(StringUtil.createId());
+        integralLog.setIntegralInfoId(integralInfoGiven.getIntegralInfoId());
+        integralLog.setUserId(userId);
+        integralLog.setIntegralLogType(2);
+        integralLog.setIntegralAmount(integralExchangeMng.getExchangeAmount());
+        integralLog.setBeforeIntegralAmount(integralInfoGiven.getCurrentTotal());
+        integralLog.setRemark("被赠予");
+        integralLog.setCreateAt(new Date());
+        integralLog.setUpdateAt(new Date());
+        integralLog.setOrderId(StringUtil.createId());
+        integralLogMapper.insert(integralLog);
         integralInfoGiven.setCurrentTotal(integralInfoGiven.getCurrentTotal() + integralExchangeMng.getExchangeAmount());
         integralInfoGiven.setGotTotal(integralInfoGiven.getGotTotal() + integralExchangeMng.getExchangeAmount());
         integralInfoGiven.setUpdateAt(new Date());
@@ -188,34 +188,34 @@ public class IntegralServiceImpl implements IntegralService {
         IntegralInfo providerInfo = integralInfoMapperExtra.selectByUserId(providerId);
         IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
         // 赠送人的积分记录
-        IntegralIog integralIog = new IntegralIog();
-        integralIog.setIntegralLogId(StringUtil.createId());
-        integralIog.setIntegralInfoId(providerInfo.getIntegralInfoId());
-        integralIog.setUserId(providerInfo.getUserId());
-        integralIog.setIntegralLogType(1);
-        integralIog.setIntegralAmount(integralAmount);
-        integralIog.setBeforeIntegralAmount(providerInfo.getCurrentTotal());
-        integralIog.setRemark("赠予他人");
-        integralIog.setCreateAt(new Date());
-        integralIog.setUpdateAt(new Date());
-        integralIog.setOrderId(StringUtil.createId());
-        integralIogMapper.insert(integralIog);
+        IntegralLog integralLog = new IntegralLog();
+        integralLog.setIntegralLogId(StringUtil.createId());
+        integralLog.setIntegralInfoId(providerInfo.getIntegralInfoId());
+        integralLog.setUserId(providerInfo.getUserId());
+        integralLog.setIntegralLogType(1);
+        integralLog.setIntegralAmount(integralAmount);
+        integralLog.setBeforeIntegralAmount(providerInfo.getCurrentTotal());
+        integralLog.setRemark("赠予他人");
+        integralLog.setCreateAt(new Date());
+        integralLog.setUpdateAt(new Date());
+        integralLog.setOrderId(StringUtil.createId());
+        integralLogMapper.insert(integralLog);
         providerInfo.setCurrentTotal(providerInfo.getCurrentTotal() - integralAmount);
         providerInfo.setUpdateAt(new Date());
         integralInfoMapper.updateByPrimaryKey(providerInfo);
 
         // 新增兑换人积分记录
-        integralIog.setIntegralLogId(StringUtil.createId());
-        integralIog.setIntegralInfoId(receiverInfo.getIntegralInfoId());
-        integralIog.setUserId(receiver.getUserId());
-        integralIog.setIntegralLogType(2);
-        integralIog.setIntegralAmount(integralAmount);
-        integralIog.setBeforeIntegralAmount(receiverInfo.getCurrentTotal());
-        integralIog.setRemark("被赠予");
-        integralIog.setCreateAt(new Date());
-        integralIog.setUpdateAt(new Date());
-        integralIog.setOrderId(StringUtil.createId());
-        integralIogMapper.insert(integralIog);
+        integralLog.setIntegralLogId(StringUtil.createId());
+        integralLog.setIntegralInfoId(receiverInfo.getIntegralInfoId());
+        integralLog.setUserId(receiver.getUserId());
+        integralLog.setIntegralLogType(2);
+        integralLog.setIntegralAmount(integralAmount);
+        integralLog.setBeforeIntegralAmount(receiverInfo.getCurrentTotal());
+        integralLog.setRemark("被赠予");
+        integralLog.setCreateAt(new Date());
+        integralLog.setUpdateAt(new Date());
+        integralLog.setOrderId(StringUtil.createId());
+        integralLogMapper.insert(integralLog);
         receiverInfo.setCurrentTotal(receiverInfo.getCurrentTotal() + integralAmount);
         receiverInfo.setGotTotal(receiverInfo.getGotTotal() + integralAmount);
         receiverInfo.setUpdateAt(new Date());
@@ -223,4 +223,5 @@ public class IntegralServiceImpl implements IntegralService {
 
         return new JSONResult("恭喜你赠送积分成功!", 200);
     }
+
 }
