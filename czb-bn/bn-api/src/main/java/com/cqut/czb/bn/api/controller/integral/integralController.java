@@ -8,6 +8,7 @@ import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
+import com.cqut.czb.bn.util.RSA.RSAUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * 作者： 袁菘壑 侯家领
@@ -108,6 +111,18 @@ public class integralController {
     @RequestMapping(value = "/exchangeIntegral",method = RequestMethod.POST)
     public JSONResult exchangeIntegral(Principal principal,IntegralExchangeDTO integralExchangeDTO) {
         User user = (User) redisUtils.get(principal.getName());
+        // 解密兑换码
+        try {
+            String integralExchangeId = RSAUtils.privateDecrypt(
+                    RSAUtils.eXcodeToCipher(integralExchangeDTO.getExchangeCode()),
+                    RSAUtils.getPrivateKey(RSAUtils.privateKey));
+            integralExchangeDTO.setIntegralExchange(integralExchangeId);
+        } catch (NoSuchAlgorithmException e) {
+            return new JSONResult("服务器错误,请与管理员联系", 500);
+        } catch (InvalidKeySpecException e) {
+            return new JSONResult("兑换码不存在!", 500);
+        }
+
         return integralService.exchangeIntegral(integralExchangeDTO, user.getUserId());
     }
 

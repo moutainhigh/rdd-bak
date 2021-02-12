@@ -18,11 +18,12 @@
     integral_exchange, exchange_code, exchange_amount, exchange_times_total, exchange_times_current,
     exchange_type, exchange_source_id, is_complete, failure_time, create_at, update_at
   </sql>
-    <select id="selectByExchangeCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="selectByIntegralExchange" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO" >
         select
         <include refid="Base_Column_List" />
         from czb_integral_exchange
         where exchange_code = #{exchangeCode,jdbcType=VARCHAR}
+        and integral_exchange = #{integralExchange,jdbcType=VARCHAR}
     </select>
     <update id="updateByPrimaryKeySync" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
     update czb_integral_exchange

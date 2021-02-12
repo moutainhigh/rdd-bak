@@ -26,7 +26,10 @@ import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class IntegralServiceImpl implements IntegralService {
@@ -189,8 +192,13 @@ public class IntegralServiceImpl implements IntegralService {
         int affectRow = 0;
         int whileTimes = 0;
         do {
-            integralExchangeMng = integralExchangeMapperExtra.selectByExchangeCode(integralExchangeDTO.getExchangeCode());
-
+            integralExchangeMng = integralExchangeMapperExtra.selectByIntegralExchange(integralExchangeDTO);
+            if (integralExchangeMng == null) {
+                return new JSONResult("兑换码不存在!", 500);
+            }
+            if (integralExchangeMng.getFailureTime().before(new Date())) {
+                return new JSONResult("兑换码已过期!", 500);
+            }
             // 积分兑换明细信息
             IntegralExchangeLogId integralExchangeLogId = new IntegralExchangeLogId();
             integralExchangeLogId.setIntegralExchangeId(integralExchangeMng.getIntegralExchange());
@@ -200,11 +208,7 @@ public class IntegralServiceImpl implements IntegralService {
             if (integralExchangeLogId != null) {
                 return new JSONResult("你已经兑换过该积分!", 500);
             }
-
             integralInfoMng = integralInfoMapperExtra.selectByUserId(integralExchangeMng.getExchangeSourceId());
-            if (integralInfoMng == null) {
-                return new JSONResult("没有该兑换码信息!", 500);
-            }
             if (integralExchangeMng.getExchangeAmount() > integralInfoMng.getCurrentTotal()) {
                 return new JSONResult("对方积分不足!", 500);
             }
