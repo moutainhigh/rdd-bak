@@ -292,6 +292,11 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult offerIntegralByPhone(String providerId , String receiverPhone, Integer integralAmount) {
         User receiver = userMapperExtra.findUserByAccount(receiverPhone);
+
+        if(receiver == null) {
+            return new JSONResult("此电话号码不存在", 500);
+        }
+
         IntegralInfo providerInfo = integralInfoMapperExtra.selectByUserId(providerId);
         IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
         // 赠送人的积分记录
