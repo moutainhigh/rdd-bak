@@ -298,6 +298,11 @@ public class IntegralServiceImpl implements IntegralService {
         }
 
         IntegralInfo providerInfo = integralInfoMapperExtra.selectByUserId(providerId);
+
+        if (providerInfo.getCurrentTotal() < integralAmount) {
+            return new JSONResult("用户您的账号的积分余额不足", 500);
+        }
+
         IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
         // 赠送人的积分记录
         IntegralLog integralLog = new IntegralLog();
