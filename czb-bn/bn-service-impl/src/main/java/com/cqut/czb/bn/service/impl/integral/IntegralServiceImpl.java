@@ -157,14 +157,6 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult getExchangeDetails(String integralExchangeId) {
         IntegralExchange exchangeDetails = integralExchangeMapper.selectByPrimaryKey(integralExchangeId);
-        try {
-            exchangeDetails.setExchangeCode(RSAUtils.cipherToEXcode(RSAUtils.publicEncrypt(exchangeDetails.getExchangeCode(), RSAUtils.getPublicKey(RSAUtils.publicKey))));
-        }
-        catch (NoSuchAlgorithmException e) {
-            return new JSONResult("服务器错误，请与管理人联络", 500);
-        } catch (InvalidKeySpecException e) {
-            return new JSONResult("密钥不合法", 500);
-        }
 
         return new JSONResult(exchangeDetails);
     }
