@@ -177,7 +177,7 @@ public class integralController {
      * @return
      */
     @RequestMapping(value = "/createExchangeCode", method = RequestMethod.POST)
-    public JSONResult createExchangeCode(Principal principal, IntegralExchange integralExchange ) {
+    public JSONResult createExchangeCode(Principal principal, IntegralExchangeDTO integralExchange ) {
         User user = (User) redisUtils.get(principal.getName());
         integralExchange.setExchangeSourceId(user.getUserId());
         return integralService.createExchangeCode(integralExchange);
