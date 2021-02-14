@@ -76,4 +76,11 @@ public interface IntegralService {
      * @return
      */
     JSONResult createExchangeCode(IntegralExchange integralExchange);
+
+    /**
+     * 获取所有用户积分信息
+     * @param userAccount
+     * @return
+     */
+    List<IntegralInfoDTO> selectIntegralInfoList(String userAccount);
 }

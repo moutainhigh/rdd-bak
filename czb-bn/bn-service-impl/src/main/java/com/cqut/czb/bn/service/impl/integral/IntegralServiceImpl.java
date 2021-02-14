@@ -15,8 +15,6 @@ import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
 import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
-import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
@@ -359,5 +357,11 @@ public class IntegralServiceImpl implements IntegralService {
         } catch (InvalidKeySpecException e) {
             return new JSONResult("密钥不合法", 500);
         }
+    }
+
+    @Override
+    public List<IntegralInfoDTO> selectIntegralInfoList(String userAccount) {
+
+        return integralInfoMapperExtra.selectIntegralInfoList(userAccount);
     }
 }
