@@ -7,28 +7,28 @@
         <result column="commodityId" property="commodityId" jdbcType="VARCHAR" />
         <result column="electronicCode" property="electronicCode" jdbcType="VARCHAR" />
         <result column="orderState" property="orderState" jdbcType="VARCHAR" />
-        <result column="originalPrice" property="originalPrice" jdbcType="DOUBLE" />
     </resultMap>
-    <select id="selectCommodityOrder" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectCommodityOrder" resultMap="BaseResultMap">
         SELECT
-          czb_wechat_commodity_order.order_id orderId,
-          czb_wechat_commodity_order.actual_price actualPrice,
+          order_id orderId,
+          actual_price actualPrice,
           czb_wechat_commodity_order.commodity_id commodityId,
-          czb_wechat_commodity_order.electronic_code electronicCode,
-          czb_wechat_commodity_order.order_state orderState,
-          czb_wechat_commodity.original_price originalPrice,
-          czb_wechat_commodity_order.create_at createAt,
+          electronic_code electronicCode,
+          order_state orderState,
+          original_price originalPrice,
+          czb_wechat_commodity_order.create_at createAt
         FROM
           czb_wechat_commodity_order
           LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
-        WHERE
+        <where>
           czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
           <if test="type == 1">
-              and czb_wechat_commodity_order.user_id = ''
+              and czb_wechat_commodity_order.commodity_id = '1593258997465'
           </if>
           <if test="type == 2">
-              and czb_wechat_commodity_order.user_id = ''
+              and czb_wechat_commodity_order.commodity_id = '1608017728685'
           </if>
+        </where>
         ORDER BY
           czb_wechat_commodity_order.create_at DESC
   </select>

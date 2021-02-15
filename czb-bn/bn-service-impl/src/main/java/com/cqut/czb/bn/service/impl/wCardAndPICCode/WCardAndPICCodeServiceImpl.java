@@ -13,7 +13,7 @@ public class WCardAndPICCodeServiceImpl implements WCardAndPICCodeService{
     WCardAndPICCodeMapper wCardAndPICCodeMapper;
 
     @Override
-    public List<WCardAndPICCodeDTO> getCommodityOrder(String userId, int type) {
+    public List<WCardAndPICCodeDTO> getCommodityOrder(String userId, Integer type) {
         return wCardAndPICCodeMapper.selectCommodityOrder(userId, type);
     }
 

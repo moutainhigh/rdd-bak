@@ -1,7 +1,7 @@
 package com.cqut.czb.bn.api.controller.wCardAndPICCode;
 
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.wCardAndPICCode.WCardAndPICCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ public class WCardAndPICCodeController {
      * @return
      */
     @GetMapping("/getCommodityOrder")
-    public JSONResult getCommodityOrder(Principal principal, int type){
-        UserDTO user = (UserDTO) redisUtils.get(principal.getName());
-        return new JSONResult(wCardAndPICCodeService.getCommodityOrder(user.getUserId(), type));
+    public JSONResult getCommodityOrder(Principal principal, Integer type){
+        String userId = ((User)redisUtils.get(principal.getName())).getUserId();
+        return new JSONResult(wCardAndPICCodeService.getCommodityOrder(userId, type));
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface WCardAndPICCodeService {
 
-    List<WCardAndPICCodeDTO> getCommodityOrder(String userId, int type);
+    List<WCardAndPICCodeDTO> getCommodityOrder(String userId, Integer type);
 }
