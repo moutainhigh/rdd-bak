@@ -75,7 +75,7 @@ public interface IntegralService {
      * @param integralExchange
      * @return
      */
-    JSONResult createExchangeCode(IntegralExchange integralExchange);
+    JSONResult createExchangeCode(IntegralExchangeDTO integralExchange);
 
     /**
      * 获取所有用户积分信息

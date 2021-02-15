@@ -119,7 +119,7 @@ public class IntegralServiceImpl implements IntegralService {
         for (int i = 0; i < integralLogDTOList.size(); i++) {
             IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
             IntegralLogDTO integralLogDTO = integralLogDTOList.get(i);
-            if (integralLogDTO.getIntegralLogType() == 3) {
+            if (integralLogDTO.getIntegralLogType() == 3 || integralLogDTO.getIntegralLogType() == 2) {
                 integralDetailsDTO.setIntegralAmount(integralLogDTO.getIntegralAmount());
                 integralDetailsDTO.setIntegralLogType(integralLogDTO.getIntegralLogType());
                 integralDetailsDTO.setUserId(userId);
@@ -157,14 +157,6 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult getExchangeDetails(String integralExchangeId) {
         IntegralExchange exchangeDetails = integralExchangeMapper.selectByPrimaryKey(integralExchangeId);
-        try {
-            exchangeDetails.setExchangeCode(RSAUtils.cipherToEXcode(RSAUtils.publicEncrypt(exchangeDetails.getExchangeCode(), RSAUtils.getPublicKey(RSAUtils.publicKey))));
-        }
-        catch (NoSuchAlgorithmException e) {
-            return new JSONResult("服务器错误，请与管理人联络", 500);
-        } catch (InvalidKeySpecException e) {
-            return new JSONResult("密钥不合法", 500);
-        }
 
         return new JSONResult(exchangeDetails);
     }
@@ -292,7 +284,17 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult offerIntegralByPhone(String providerId , String receiverPhone, Integer integralAmount) {
         User receiver = userMapperExtra.findUserByAccount(receiverPhone);
+
+        if(receiver == null) {
+            return new JSONResult("此电话号码不存在", 500);
+        }
+
         IntegralInfo providerInfo = integralInfoMapperExtra.selectByUserId(providerId);
+
+        if (providerInfo.getCurrentTotal() < integralAmount) {
+            return new JSONResult("用户您的账号的积分余额不足", 500);
+        }
+
         IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
         // 赠送人的积分记录
         IntegralLog integralLog = new IntegralLog();
@@ -302,7 +304,7 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setIntegralLogType(2);
         integralLog.setIntegralAmount(integralAmount);
         integralLog.setBeforeIntegralAmount(providerInfo.getCurrentTotal());
-        integralLog.setRemark("赠予他人");
+        integralLog.setRemark("手机号赠送");
         integralLog.setCreateAt(new Date());
         integralLog.setUpdateAt(new Date());
         integralLog.setOrderId(StringUtil.createId());
@@ -332,7 +334,7 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public JSONResult createExchangeCode(IntegralExchange integralExchange) {
+    public JSONResult createExchangeCode(IntegralExchangeDTO integralExchange) {
         IntegralInfo userIntegralInfo = integralInfoMapperExtra.selectByUserId(integralExchange.getExchangeSourceId());
         if (userIntegralInfo.getCurrentTotal() < integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesTotal()) {
             return new JSONResult("你的积分不足", 500);
@@ -348,15 +350,22 @@ public class IntegralServiceImpl implements IntegralService {
         integralExchange.setIsComplete(0);
         integralExchange.setCreateAt(new Date());
         integralExchange.setUpdateAt(new Date());
-        integralExchange.setExchangeCode(integralExchange.getIntegralExchange());
-        integralExchangeMapper.insert(integralExchange);
+
         try {
-            return new JSONResult(RSAUtils.cipherToEXcode(RSAUtils.publicEncrypt(integralExchange.getExchangeCode(),RSAUtils.getPublicKey(RSAUtils.publicKey))), 200);
+            integralExchange.setExchangeCode(RSAUtils.cipherToEXcode(RSAUtils.publicEncrypt(integralExchange.getIntegralExchange(),RSAUtils.getPublicKey(RSAUtils.publicKey))));
+            int n = integralExchangeMapperExtra.insert(integralExchange);
+            if (n != 0) {
+                return new JSONResult(integralExchange.getExchangeCode(), 200);
+            } else {
+                return new JSONResult("生成兑换码失败", 500);
+            }
+
         } catch (NoSuchAlgorithmException e) {
             return new JSONResult("服务器错误，请与管理人联络", 500);
         } catch (InvalidKeySpecException e) {
             return new JSONResult("密钥不合法", 500);
         }
+
     }
 
     @Override

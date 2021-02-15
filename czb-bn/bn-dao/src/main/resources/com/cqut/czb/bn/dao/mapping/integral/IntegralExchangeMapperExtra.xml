@@ -51,4 +51,17 @@
         from czb_integral_exchange
         where exchange_source_id = #{exchangeSourceId, jdbcType=VARCHAR}
     </select>
+
+    <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO" >
+        insert into czb_integral_exchange (integral_exchange, exchange_code, exchange_amount,
+                                           exchange_times_total, exchange_times_current,
+                                           exchange_type, exchange_source_id, is_complete,
+                                           failure_time, create_at, update_at
+        )
+        values (#{integralExchange,jdbcType=VARCHAR}, #{exchangeCode,jdbcType=VARCHAR}, #{exchangeAmount,jdbcType=INTEGER},
+                #{exchangeTimesTotal,jdbcType=INTEGER}, #{exchangeTimesCurrent,jdbcType=INTEGER},
+                #{exchangeType,jdbcType=INTEGER}, #{exchangeSourceId,jdbcType=VARCHAR}, #{isComplete,jdbcType=INTEGER},
+                #{failureTime,jdbcType=TIMESTAMP}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
+               )
+    </insert>
 </mapper>

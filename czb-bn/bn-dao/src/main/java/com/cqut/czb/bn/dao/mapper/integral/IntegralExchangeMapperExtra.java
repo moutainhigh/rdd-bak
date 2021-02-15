@@ -6,7 +6,7 @@ import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import java.util.List;
 
 /**
- * 袁菘壑
+ * 袁菘壑、侯家领
  */
 public interface IntegralExchangeMapperExtra {
     IntegralExchange selectByIntegralExchange(IntegralExchangeDTO integralExchange);
@@ -14,4 +14,6 @@ public interface IntegralExchangeMapperExtra {
     int updateByPrimaryKeySync(IntegralExchange record);
 
     List<IntegralExchange> getExchangeList(String exchangeSourceId);
+
+    int insert(IntegralExchangeDTO record);
 }
