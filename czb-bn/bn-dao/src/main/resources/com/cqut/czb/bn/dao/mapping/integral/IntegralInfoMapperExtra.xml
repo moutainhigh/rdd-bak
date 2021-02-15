@@ -20,14 +20,15 @@
     </select>
 
     <select id="selectIntegralInfoList" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO" parameterType="java.lang.String" >
-        select
+        SELECT
         b.user_account AS userAccount ,
         a.current_total AS currentTotal
-        from czb_integral_info a
-        LEFT JOIN czb_user b ON a.user_id = b.user_id
+        FROM czb_integral_info a
+        JOIN czb_user b ON a.user_id = b.user_id
         <if test="userAccount != '' and userAccount != null">
             where b.user_account = #{userAccount,jdbcType=VARCHAR}
         </if>
+        ORDER BY a.create_at DESC
     </select>
 
 </mapper>
