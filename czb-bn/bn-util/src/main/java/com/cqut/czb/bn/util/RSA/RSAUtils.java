@@ -204,7 +204,10 @@ public class RSAUtils {
                 cipherModel.append(2);
             }
         }
-        cipher = String.valueOf(cipherModel).replaceAll("[+, /]", "").replaceAll("=", "-");
+        cipher = String.valueOf(
+                cipherModel.append(cipherModel.length() - cipherModel.indexOf("=")))
+                .replaceAll("[+, /]", "")
+                .replaceAll("=", "");
 
         return cipher;
     }
@@ -215,8 +218,14 @@ public class RSAUtils {
      * @return
      */
     public static String eXcodeToCipher(String cipher) {
+
         StringBuffer stringBuffer = new StringBuffer(cipher);
-        int index = cipher.indexOf("-");
+        stringBuffer.insert(cipher.length() - cipher.charAt(cipher.length() - 1) + 48, "-");
+
+        cipher = String.valueOf(stringBuffer).substring(0, stringBuffer.length() - 1);
+        int index = stringBuffer.indexOf("-");
+        stringBuffer = new StringBuffer(cipher);
+
         for (int n = index; n < cipher.length(); n += 2) {
             if (cipher.charAt(n) == '2') {
                 if (cipher.charAt(n - 1) > 90) {
@@ -239,23 +248,23 @@ public class RSAUtils {
         return cipher;
     }
 
-    // 获取密钥后将密钥保存在21 22行key中
+    // 获取密钥后将密钥保存在27 29行key中
     public static void main(String[] args) {
         // 创建密钥对
-        Map<String, String> keys = RSAUtils.createKeys(160);
-        // 从Map中获取密钥对
-        String publicKey = keys.get("publicKey");
-        String privateKey = keys.get("privateKey");
-        // 获取公钥
-        System.out.println("publicKey:" + publicKey);
-        // 获取私钥
-        System.out.println("privateKey:" + privateKey);
+//        Map<String, String> keys = RSAUtils.createKeys(160);
+//        // 从Map中获取密钥对
+//        String publicKey = keys.get("publicKey");
+//        String privateKey = keys.get("privateKey");
+//        // 获取公钥
+//        System.out.println("publicKey:" + publicKey);
+//        // 获取私钥
+//        System.out.println("privateKey:" + privateKey);
         // 验证
-//        System.out.println(RSAUtils.cipherToEXcode("CPv8/xpLgMdLyBT/HSRSikIEIzo="));
-//        System.out.println(RSAUtils.eXcodeToCipher("CPv8xpLgMdLyBTHSRSikIEIzo-E1P1").equals("CPv8/xpLgMdLyBT/HSRSikIEIzo="));
+//        System.out.println(RSAUtils.cipherToEXcode("izzak68CmFf47gZcJU6qPs5N3wg="));
+//        System.out.println(RSAUtils.eXcodeToCipher("izzak68CmFf47gZcJU6qPs5N3wg1"));
         // 实例加密解密方案
 //        try {
-//            final String originalText = "25261754166600546112";
+//            final String originalText = "123456789";
 //            String cipherText = RSAUtils.publicEncrypt(originalText, RSAUtils.getPublicKey(RSAUtils.publicKey));
 //            String plainText = RSAUtils.privateDecrypt(cipherText, RSAUtils.getPrivateKey(RSAUtils.privateKey));
 //            System.out.println(cipherText);

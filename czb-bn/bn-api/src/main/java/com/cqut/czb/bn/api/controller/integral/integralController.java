@@ -182,4 +182,14 @@ public class integralController {
         integralExchange.setExchangeSourceId(user.getUserId());
         return integralService.createExchangeCode(integralExchange);
     }
+
+    /**
+     * 获取所有用户积分信息
+     * @param userAccount
+     * @return
+     */
+    @RequestMapping(value = "/createExchangeCode", method = RequestMethod.POST)
+    public JSONResult selectIntegralInfoList(String userAccount) {
+        return new JSONResult(integralService.selectIntegralInfoList(userAccount));
+    }
 }
