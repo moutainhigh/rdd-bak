@@ -188,7 +188,7 @@ public class integralController {
      * @param userAccount
      * @return
      */
-    @RequestMapping(value = "/createExchangeCode", method = RequestMethod.POST)
+    @RequestMapping(value = "/selectIntegralInfoList", method = RequestMethod.POST)
     public JSONResult selectIntegralInfoList(String userAccount) {
         return new JSONResult(integralService.selectIntegralInfoList(userAccount));
     }
