@@ -18,7 +18,7 @@ public class WeChatH5PayConfig {
     public static final String spbill_create_ip = UrlConfig.NOTIGY_URL;
 
     //直充系统
-    public static final String Direct_url = "http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/WechatPayReturn/wechatPayReturn";
+    public static final String Direct_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WechatPayReturn/wechatPayReturn";
 
     //交易类型——h5支付
     public static final String trade_type = "MWEB";
