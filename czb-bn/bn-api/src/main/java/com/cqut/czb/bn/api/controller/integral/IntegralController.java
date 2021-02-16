@@ -206,11 +206,23 @@ public class IntegralController {
         return integralService.subsidyIntegralByPhone(receiverPhone, integralAmount);
     }
 
+    /**
+     * 获取积分购买比率
+     * @param principal
+     * @return
+     */
     @RequestMapping(value = "/getIntegralRate", method = RequestMethod.GET)
     public JSONResult getIntegralRate(Principal principal) {
         return integralService.getIntegralRate();
     }
 
+    /**
+     * 更新积分购买比率
+     * @param principal
+     * @param rate
+     * @return
+     */
+    @RequestMapping(value = "/updateIntegralRate", method = RequestMethod.POST)
     public JSONResult updateIntegralRate(Principal principal, String rate) {
         return integralService.updateIntegralRate(rate);
     }
