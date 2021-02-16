@@ -9,6 +9,8 @@ public class WCardAndPICCode {
 
     private String commodityId;
 
+    private String commodityTitle;
+
     private Double originalPrice;
 
     private Double actualPrice;
@@ -34,6 +36,14 @@ public class WCardAndPICCode {
 
     public void setCommodityId(String commodityId) {
         this.commodityId = commodityId == null ? null : commodityId.trim();
+    }
+
+    public String getCommodityTitle() {
+        return commodityTitle;
+    }
+
+    public void setCommodityTitle(String commodityTitle) {
+        this.commodityTitle = commodityTitle;
     }
 
     public Double getActualPrice() {

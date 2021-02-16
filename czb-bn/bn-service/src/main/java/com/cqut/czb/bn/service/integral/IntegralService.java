@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.integral;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -78,5 +80,13 @@ public interface IntegralService {
      * @param userAccount
      * @return
      */
-    List<IntegralInfoDTO> selectIntegralInfoList(String userAccount);
+    PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO);
+
+    /**
+     * 手机号积分补贴
+     * @param receiverPhone
+     * @param integralAmount
+     * @return
+     */
+    JSONResult subsidyIntegralByPhone(String receiverPhone, Integer integralAmount);
 }

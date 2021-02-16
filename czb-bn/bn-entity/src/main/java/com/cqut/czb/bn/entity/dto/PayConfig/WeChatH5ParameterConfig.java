@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.util.string.StringUtil;
 
 import java.math.BigDecimal;
@@ -38,6 +39,9 @@ public class WeChatH5ParameterConfig {
         return orderString;
     }
 
+    /**
+     * 直充服务
+     */
     public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
@@ -68,6 +72,42 @@ public class WeChatH5ParameterConfig {
 //        pbp.put("userId", userId);
         pbp.put("recordType",String.valueOf(recordType));
         pbp.put("userAccount",userAccount);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    //中石化码商和无卡加油使用
+    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity){
+        SortedMap<String,Object> parameters = new TreeMap<String, Object>();
+        parameters=getParameters();
+        parameters.put("nonce_str",nonceStrTemp);
+        parameters.put("out_trade_no",orgId);
+        parameters.put("openid",userAccount);
+        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("total_fee",totalFee);
+        parameters.put("notify_url",WeChatH5PayConfig.Applet_url);
+        parameters.put("detail","微信小程序支付");
+        String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId());
+        parameters.put("attach",attach);
+        parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
+        return parameters;
+    }
+
+    /**
+     * 微信支付-中石化码商和无卡加油使用
+     * @param orgId
+     * @param userId
+     * @param stockIds
+     * @param money
+     * @param commodityId
+     * @return
+     */
+    private static String getAttachAppletPayment(String orgId, String userId,String stockIds, Double money, String commodityId) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orgId", orgId);
+        pbp.put("ownerId", userId);
+        pbp.put("money",money);
+        pbp.put("commodityId",commodityId);
+        pbp.put("stockIds",stockIds);
         return StringUtil.transMapToStringOther(pbp);
     }
 

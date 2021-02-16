@@ -25,9 +25,6 @@ public class IntegralExchange {
 
     private Date updateAt;
 
-    // CAS版本控制 ABA问题
-    private Date oldUpdateAt;
-
     public String getIntegralExchange() {
         return integralExchange;
     }
@@ -116,11 +113,4 @@ public class IntegralExchange {
         this.updateAt = updateAt;
     }
 
-    public Date getOldUpdateAt() {
-        return oldUpdateAt;
-    }
-
-    public void setOldUpdateAt(Date oldUpdateAt) {
-        this.oldUpdateAt = oldUpdateAt;
-    }
 }

@@ -9,6 +9,8 @@ public class WCardAndPICCodeDTO {
 
     private String commodityId;
 
+    private String commodityTitle;
+
     private Double originalPrice;
 
     private Double actualPrice;
@@ -19,6 +21,14 @@ public class WCardAndPICCodeDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
+
+    public String getCommodityTitle() {
+        return commodityTitle;
+    }
+
+    public void setCommodityTitle(String commodityTitle) {
+        this.commodityTitle = commodityTitle;
+    }
 
     public Double getOriginalPrice() {
         return originalPrice;

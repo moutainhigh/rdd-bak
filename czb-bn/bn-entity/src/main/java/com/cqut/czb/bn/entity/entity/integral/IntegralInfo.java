@@ -62,4 +62,5 @@ public class IntegralInfo {
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
     }
+
 }
