@@ -21,6 +21,7 @@ import com.cqut.czb.bn.util.RSA.RSAUtils;
 import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -277,6 +278,7 @@ public class IntegralServiceImpl implements IntegralService {
             affectRow = integralInfoMapperExtra.updateByPrimaryKeySync(integralInfoGiven);
             outDate = new Date();
             if (outDate.getTime() - preDate.getTime() > 3000) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return new JSONResult("响应超时请重试!", 500);
             }
         }
