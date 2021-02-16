@@ -13,6 +13,7 @@
           order_id orderId,
           actual_price actualPrice,
           czb_wechat_commodity_order.commodity_id commodityId,
+          czb_wechat_commodity.commodity_title commodityTitle,
           electronic_code electronicCode,
           order_state orderState,
           original_price originalPrice,
