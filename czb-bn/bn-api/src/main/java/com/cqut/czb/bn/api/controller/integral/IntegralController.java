@@ -1,11 +1,10 @@
 package com.cqut.czb.bn.api.controller.integral;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
@@ -190,8 +189,8 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/selectIntegralInfoList", method = RequestMethod.POST)
-    public JSONResult selectIntegralInfoList(String userAccount) {
-        return new JSONResult(integralService.selectIntegralInfoList(userAccount));
+    public JSONResult selectIntegralInfoList(String userAccount, PageDTO pageDTO) {
+        return new JSONResult(integralService.selectIntegralInfoList(userAccount, pageDTO));
     }
 
     /**

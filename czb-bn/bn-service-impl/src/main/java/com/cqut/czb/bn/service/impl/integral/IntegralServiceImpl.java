@@ -6,6 +6,7 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
+import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
@@ -19,6 +20,8 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
 import com.cqut.czb.bn.util.string.StringUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -401,9 +404,10 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public List<IntegralInfoDTO> selectIntegralInfoList(String userAccount) {
-
-        return integralInfoMapperExtra.selectIntegralInfoList(userAccount);
+    public PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<IntegralInfoDTO> integralInfoList = integralInfoMapperExtra.selectIntegralInfoList(userAccount);
+        return new PageInfo<>(integralInfoList);
     }
 
     @Override
