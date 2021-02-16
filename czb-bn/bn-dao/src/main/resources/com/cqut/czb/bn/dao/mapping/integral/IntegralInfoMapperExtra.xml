@@ -13,10 +13,10 @@
         integral_info_id, user_id, got_total, current_total, create_at, update_at
     </sql>
     <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
-        select
+        SELECT
         <include refid="Base_Column_List" />
-        from czb_integral_info
-        where user_id = #{userId,jdbcType=VARCHAR}
+        FROM czb_integral_info
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectIntegralInfoList" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO" parameterType="java.lang.String" >
@@ -26,7 +26,7 @@
         FROM czb_integral_info a
         JOIN czb_user b ON a.user_id = b.user_id
         <if test="userAccount != '' and userAccount != null">
-            where b.user_account = #{userAccount,jdbcType=VARCHAR}
+            WHERE b.user_account = #{userAccount,jdbcType=VARCHAR}
         </if>
         ORDER BY a.create_at DESC
     </select>

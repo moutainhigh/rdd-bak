@@ -26,23 +26,23 @@
         and integral_exchange = #{integralExchange,jdbcType=VARCHAR}
     </select>
     <update id="updateByPrimaryKeySync" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralExchange" >
-    update czb_integral_exchange
-    set exchange_code = #{exchangeCode,jdbcType=VARCHAR},
-      exchange_amount = #{exchangeAmount,jdbcType=INTEGER},
-      exchange_times_total = #{exchangeTimesTotal,jdbcType=INTEGER},
-      exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER} + 1,
-      exchange_type = #{exchangeType,jdbcType=INTEGER},
-      exchange_source_id = #{exchangeSourceId,jdbcType=VARCHAR},
-      is_complete = #{isComplete,jdbcType=INTEGER},
-      failure_time = #{failureTime,jdbcType=TIMESTAMP},
-      create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP}
-    where
-        integral_exchange = #{integralExchange,jdbcType=VARCHAR}
-    and
-        exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER}
-    and
-        update_at = #{oldUpdateAt,jdbcType=TIMESTAMP}
+        update czb_integral_exchange
+        set exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+            exchange_amount = #{exchangeAmount,jdbcType=INTEGER},
+            exchange_times_total = #{exchangeTimesTotal,jdbcType=INTEGER},
+            exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER} + 1,
+            exchange_type = #{exchangeType,jdbcType=INTEGER},
+            exchange_source_id = #{exchangeSourceId,jdbcType=VARCHAR},
+            is_complete = #{isComplete,jdbcType=INTEGER},
+            failure_time = #{failureTime,jdbcType=TIMESTAMP},
+            create_at = #{createAt,jdbcType=TIMESTAMP},
+            update_at = #{updateAt,jdbcType=TIMESTAMP}
+        where
+            integral_exchange = #{integralExchange,jdbcType=VARCHAR}
+        and
+            exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER}
+        and
+            update_at = #{oldUpdateAt,jdbcType=TIMESTAMP}
   </update>
 
     <select id="getExchangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -53,15 +53,31 @@
     </select>
 
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO" >
-        insert into czb_integral_exchange (integral_exchange, exchange_code, exchange_amount,
-                                           exchange_times_total, exchange_times_current,
-                                           exchange_type, exchange_source_id, is_complete,
-                                           failure_time, create_at, update_at
+        insert into czb_integral_exchange (
+        integral_exchange,
+        exchange_code,
+        exchange_amount,
+        exchange_times_total,
+        exchange_times_current,
+        exchange_type,
+        exchange_source_id,
+        is_complete,
+        failure_time,
+        create_at,
+        update_at
         )
-        values (#{integralExchange,jdbcType=VARCHAR}, #{exchangeCode,jdbcType=VARCHAR}, #{exchangeAmount,jdbcType=INTEGER},
-                #{exchangeTimesTotal,jdbcType=INTEGER}, #{exchangeTimesCurrent,jdbcType=INTEGER},
-                #{exchangeType,jdbcType=INTEGER}, #{exchangeSourceId,jdbcType=VARCHAR}, #{isComplete,jdbcType=INTEGER},
-                #{failureTime,jdbcType=TIMESTAMP}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP}
-               )
+        values (
+        #{integralExchange,jdbcType=VARCHAR},
+        #{exchangeCode,jdbcType=VARCHAR},
+        #{exchangeAmount,jdbcType=INTEGER},
+        #{exchangeTimesTotal,jdbcType=INTEGER},
+        #{exchangeTimesCurrent,jdbcType=INTEGER},
+        #{exchangeType,jdbcType=INTEGER},
+        #{exchangeSourceId,jdbcType=VARCHAR},
+        #{isComplete,jdbcType=INTEGER},
+        #{failureTime,jdbcType=TIMESTAMP},
+        #{createAt,jdbcType=TIMESTAMP},
+        #{updateAt,jdbcType=TIMESTAMP}
+        )
     </insert>
 </mapper>
