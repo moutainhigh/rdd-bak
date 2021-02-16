@@ -38,6 +38,8 @@ public class AliPayConfig {
 //	//购买油卡/充值（支付宝）-new
 //	public static String PetrolRecharge_url_new="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyPetrolRechargeInfoAiHu";
 
+	public static String IntegralRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/verifyAsyn/verifyPetrolRechargeInfoAiHu";
+
 
 
 	//购买服务
