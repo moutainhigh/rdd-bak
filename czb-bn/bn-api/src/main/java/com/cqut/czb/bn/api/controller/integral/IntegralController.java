@@ -27,7 +27,7 @@ import java.security.spec.InvalidKeySpecException;
  */
 @RestController
 @RequestMapping("/api/integral")
-public class integralController {
+public class IntegralController {
 
     @Autowired
     RedisUtils redisUtils;
