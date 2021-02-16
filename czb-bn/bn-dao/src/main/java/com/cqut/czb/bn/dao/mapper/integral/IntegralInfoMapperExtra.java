@@ -10,5 +10,5 @@ public interface IntegralInfoMapperExtra {
 
     List<IntegralInfoDTO> selectIntegralInfoList(String userAccount);
 
-    int updateByPrimaryKey(IntegralInfo record);
+    int updateByPrimaryKeySync(IntegralInfo record);
 }

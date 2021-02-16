@@ -201,6 +201,7 @@ public class IntegralController {
      * @param integralAmount
      * @return
      */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @RequestMapping(value = "/subsidyIntegralByPhone", method = RequestMethod.POST)
     public JSONResult subsidyIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
         return integralService.subsidyIntegralByPhone(receiverPhone, integralAmount);
