@@ -42,7 +42,7 @@
         and
             exchange_times_current = #{exchangeTimesCurrent,jdbcType=INTEGER}
         and
-            update_at = #{oldUpdateAt,jdbcType=TIMESTAMP}
+            update_at = #{updateAt,jdbcType=TIMESTAMP}
   </update>
 
     <select id="getExchangeList" parameterType="java.lang.String" resultMap="BaseResultMap">
