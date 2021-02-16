@@ -30,14 +30,15 @@
         </if>
         ORDER BY a.create_at DESC
     </select>
-    <update id="updateByPrimaryKeySync" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralInfo" >
+
+    <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralInfo" >
         UPDATE czb_integral_info
         SET user_id = #{userId,jdbcType=VARCHAR},
             got_total = #{gotTotal,jdbcType=INTEGER},
             current_total = #{currentTotal,jdbcType=INTEGER},
-            create_at = #{createAt,jdbcType=TIMESTAMP},
-            update_at = #{updateAt,jdbcType=TIMESTAMP}
-        WHERE integral_info_id = #{integralInfoId,jdbcType=VARCHAR}
-        AND update_at = #{oldUpdateAt,jdbcType=TIMESTAMP}
-  </update>
+            create_at = #{createAt,jdbcType=TIMESTAMP}
+        WHERE
+              integral_info_id = #{integralInfoId,jdbcType=VARCHAR} AND
+              update_at = #{updateAt,jdbcType=TIMESTAMP}
+    </update>
 </mapper>

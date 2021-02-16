@@ -79,4 +79,12 @@ public interface IntegralService {
      * @return
      */
     List<IntegralInfoDTO> selectIntegralInfoList(String userAccount);
+
+    /**
+     * 手机号积分补贴
+     * @param receiverPhone
+     * @param integralAmount
+     * @return
+     */
+    JSONResult subsidyIntegralByPhone(String receiverPhone, Integer integralAmount);
 }

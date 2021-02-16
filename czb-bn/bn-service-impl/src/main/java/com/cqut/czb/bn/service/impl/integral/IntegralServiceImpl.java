@@ -328,6 +328,25 @@ public class IntegralServiceImpl implements IntegralService {
         }
 
         IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
+
+
+        int affectRow = 0;
+        int whileTimes = 0;
+        do {
+            providerInfo.setCurrentTotal(providerInfo.getCurrentTotal() - integralAmount);
+            receiverInfo.setCurrentTotal(receiverInfo.getCurrentTotal() + integralAmount);
+            receiverInfo.setGotTotal(receiverInfo.getGotTotal() + integralAmount);
+            if (integralInfoMapperExtra.updateByPrimaryKey(providerInfo) == 1 && integralInfoMapperExtra.updateByPrimaryKey(receiverInfo) == 1) {
+                affectRow = 1;
+            } else {
+                affectRow = 0;
+            }
+            whileTimes++;
+            if (whileTimes == 10) {
+                return new JSONResult("网络超时请重试!", 500);
+            }
+        } while (affectRow == 0);
+
         // 赠送人的积分记录
         IntegralLog integralLog = new IntegralLog();
         integralLog.setIntegralLogId(StringUtil.createId());
@@ -341,11 +360,8 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setUpdateAt(new Date());
         integralLog.setOrderId(StringUtil.createId());
         integralLogMapper.insert(integralLog);
-        providerInfo.setCurrentTotal(providerInfo.getCurrentTotal() - integralAmount);
-        providerInfo.setUpdateAt(new Date());
-        integralInfoMapper.updateByPrimaryKey(providerInfo);
 
-        // 新增兑换人积分记录
+        // 新增被赠送人积分记录
         integralLog.setIntegralLogId(StringUtil.createId());
         integralLog.setIntegralInfoId(receiverInfo.getIntegralInfoId());
         integralLog.setUserId(receiver.getUserId());
@@ -357,10 +373,6 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setUpdateAt(new Date());
         integralLog.setOrderId(StringUtil.createId());
         integralLogMapper.insert(integralLog);
-        receiverInfo.setCurrentTotal(receiverInfo.getCurrentTotal() + integralAmount);
-        receiverInfo.setGotTotal(receiverInfo.getGotTotal() + integralAmount);
-        receiverInfo.setUpdateAt(new Date());
-        integralInfoMapper.updateByPrimaryKey(receiverInfo);
 
         return new JSONResult("恭喜你赠送积分成功!", 200);
     }
@@ -377,7 +389,6 @@ public class IntegralServiceImpl implements IntegralService {
         }
 
         integralExchange.setIntegralExchange(StringUtil.createId());
-        integralExchange.setExchangeType(2);
         integralExchange.setExchangeTimesCurrent(0);
         integralExchange.setIsComplete(0);
         integralExchange.setCreateAt(new Date());
@@ -404,5 +415,42 @@ public class IntegralServiceImpl implements IntegralService {
     public List<IntegralInfoDTO> selectIntegralInfoList(String userAccount) {
 
         return integralInfoMapperExtra.selectIntegralInfoList(userAccount);
+    }
+
+    @Override
+    public JSONResult subsidyIntegralByPhone(String receiverPhone, Integer integralAmount) {
+        User receiver = userMapperExtra.findUserByAccount(receiverPhone);
+
+        if(receiver == null) {
+            return new JSONResult("此电话号码不存在", 500);
+        }
+
+        IntegralInfo receiverInfo = integralInfoMapperExtra.selectByUserId(receiver.getUserId());
+
+        int affectRow = 0;
+        int whileTimes = 0;
+        do {
+            receiverInfo.setCurrentTotal(receiverInfo.getCurrentTotal() + integralAmount);
+            receiverInfo.setGotTotal(receiverInfo.getGotTotal() + integralAmount);
+            affectRow = integralInfoMapperExtra.updateByPrimaryKey(receiverInfo);
+            whileTimes++;
+            if (whileTimes == 10) {
+                return new JSONResult("网络超时请重试!", 500);
+            }
+        } while (affectRow == 0);
+
+        IntegralLog integralLog = new IntegralLog();
+        integralLog.setIntegralLogId(StringUtil.createId());
+        integralLog.setIntegralInfoId(receiverInfo.getIntegralInfoId());
+        integralLog.setUserId(receiver.getUserId());
+        integralLog.setIntegralLogType(7);
+        integralLog.setIntegralAmount(integralAmount);
+        integralLog.setBeforeIntegralAmount(receiverInfo.getCurrentTotal());
+        integralLog.setRemark("手机号补贴");
+        integralLog.setCreateAt(new Date());
+        integralLog.setUpdateAt(new Date());
+        integralLog.setOrderId(StringUtil.createId());
+        integralLogMapper.insert(integralLog);
+        return new JSONResult("补贴成功", 200);
     }
 }

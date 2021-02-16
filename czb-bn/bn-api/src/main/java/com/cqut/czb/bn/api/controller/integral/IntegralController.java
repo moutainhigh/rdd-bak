@@ -164,6 +164,7 @@ public class IntegralController {
      * @param integralAmount
      * @return
      */
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @RequestMapping(value = "/offerIntegralByPhone", method = RequestMethod.POST)
     public JSONResult offerIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
         User user = (User)redisUtils.get(principal.getName());
@@ -191,5 +192,17 @@ public class IntegralController {
     @RequestMapping(value = "/selectIntegralInfoList", method = RequestMethod.POST)
     public JSONResult selectIntegralInfoList(String userAccount) {
         return new JSONResult(integralService.selectIntegralInfoList(userAccount));
+    }
+
+    /**
+     * 手机号补贴积分
+     * @param principal
+     * @param receiverPhone
+     * @param integralAmount
+     * @return
+     */
+    @RequestMapping(value = "/subsidyIntegralByPhone", method = RequestMethod.POST)
+    public JSONResult subsidyIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
+        return integralService.subsidyIntegralByPhone(receiverPhone, integralAmount);
     }
 }
