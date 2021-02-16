@@ -89,4 +89,17 @@ public interface IntegralService {
      * @return
      */
     JSONResult subsidyIntegralByPhone(String receiverPhone, Integer integralAmount);
+
+    /**
+     * 获取积分购买比例
+     * @return
+     */
+    JSONResult getIntegralRate();
+
+    /**
+     * 更新积分购买比例
+     * @param rate
+     * @return
+     */
+    JSONResult updateIntegralRate(String rate);
 }

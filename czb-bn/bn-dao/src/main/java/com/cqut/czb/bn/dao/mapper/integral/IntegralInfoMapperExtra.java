@@ -11,4 +11,6 @@ public interface IntegralInfoMapperExtra {
     List<IntegralInfoDTO> selectIntegralInfoList(String userAccount);
 
     int updateByPrimaryKeySync(IntegralInfo record);
+
+    int getUserAmount();
 }

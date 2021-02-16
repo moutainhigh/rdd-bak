@@ -205,4 +205,13 @@ public class IntegralController {
     public JSONResult subsidyIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
         return integralService.subsidyIntegralByPhone(receiverPhone, integralAmount);
     }
+
+    @RequestMapping(value = "/getIntegralRate", method = RequestMethod.GET)
+    public JSONResult getIntegralRate(Principal principal) {
+        return integralService.getIntegralRate();
+    }
+
+    public JSONResult updateIntegralRate(Principal principal, String rate) {
+        return integralService.updateIntegralRate(rate);
+    }
 }

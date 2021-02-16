@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.service.impl.integral;
 
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.*;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
@@ -7,10 +8,12 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
@@ -65,6 +68,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     UserMapperExtra userMapperExtra;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     public JSONResult getCurrentTotalIntegral(String userId) {
         return new JSONResult(integralInfoMapperExtra.selectByUserId(userId));
@@ -372,12 +378,13 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult createExchangeCode(IntegralExchangeDTO integralExchange) {
         IntegralInfo userIntegralInfo = integralInfoMapperExtra.selectByUserId(integralExchange.getExchangeSourceId());
-        if (userIntegralInfo.getCurrentTotal() < integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesTotal()) {
-            return new JSONResult("你的积分不足", 500);
-        }
 
         if (integralExchange.getFailureTime().compareTo(new Date()) < 0) {
             return new JSONResult("失效时间比当前时间早", 500);
+        }
+
+        if (integralExchange.getExchangeType() == 1) {
+            integralExchange.setExchangeTimesTotal(integralInfoMapperExtra.getUserAmount());
         }
 
         integralExchange.setIntegralExchange(StringUtil.createId());
@@ -446,5 +453,18 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setOrderId(StringUtil.createId());
         integralLogMapper.insert(integralLog);
         return new JSONResult("补贴成功", 200);
+    }
+
+    public JSONResult getIntegralRate() {
+        return new JSONResult(dictMapperExtra.selectDictByName("integral_rate"));
+    }
+
+    public JSONResult updateIntegralRate(String rate) {
+        Dict dict = dictMapperExtra.selectDictByName("integral_rate");
+        DictInputDTO dictInputDTO = new DictInputDTO();
+        dictInputDTO.setDictId(dict.getDictId());
+        dictInputDTO.setName(dict.getName());
+        dictInputDTO.setContent(rate);
+        return new JSONResult(dictMapperExtra.updateDict(dictInputDTO));
     }
 }
