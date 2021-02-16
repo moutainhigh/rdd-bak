@@ -150,4 +150,9 @@
       update_at = #{updateAt,jdbcType=TIMESTAMP}
     where integral_log_id = #{integralLogId,jdbcType=VARCHAR}
   </update>
+  <select id="getIntegralRate" resultType="java.lang.Double">
+    select content
+    from czb_dict
+    where name = "integral_rate"
+  </select>
 </mapper>

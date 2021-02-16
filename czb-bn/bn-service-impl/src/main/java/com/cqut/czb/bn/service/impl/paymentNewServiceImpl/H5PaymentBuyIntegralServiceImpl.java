@@ -4,13 +4,23 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatH5ParameterConfig;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyIntegralService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.SortedMap;
 import java.util.UUID;
 
 /**
@@ -18,6 +28,9 @@ import java.util.UUID;
  */
 @Service("H5PaymentBuyIntegralService")
 public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralService {
+
+    @Autowired
+    IntegralPurchaseMapperExtra integralPurchaseMapperExtra;
 
     @Override
     public String AliBuyIntegral(User user, IntegralRechargeDTO integralRechargeDTO) {
@@ -62,5 +75,55 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
 
     private void InsertIntegralPurchaseRecord(String thirdOrder, double actualPrice, IntegralRechargeDTO integralRechargeDTO, int i) {
 
+    }
+
+    /**
+     * 微信
+     * @param user
+     * @param integralRechargeDTO
+     * @return
+     */
+    @Override
+    public com.alibaba.fastjson.JSONObject WeChatBuyIntegral(User user, IntegralRechargeDTO integralRechargeDTO) {
+
+        /**
+         * 生成起调参数串（微信的支付订单）
+         */
+        //订单标识
+        String orderId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
+
+        String nonceStrTemp = WeChatUtils.getRandomStr();
+
+        //支付的金额
+        Double amount = integralRechargeDTO.getAmount();
+
+        Integer integralAmount = integralRechargeDTO.getIntegralAmount();
+
+        // userId
+        String userId = user.getUserId();
+
+
+        // 设置参数
+        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersIntegral(nonceStrTemp, orderId, userId, amount, integralAmount);
+        Boolean insertOrder = insertBuyIntegral(orderId, userId, integralRechargeDTO);
+        return WeChatH5ParameterConfig.getSign(parameters, nonceStrTemp);
+    }
+
+    /**
+     * 插入购买记录
+     * @param integralRechargeDTO
+     * @param orderId
+     * @param userId
+     * @return
+     */
+    public Boolean insertBuyIntegral(String orderId, String userId, IntegralRechargeDTO integralRechargeDTO) {
+        IntegralRechargeDTO integralRechargeDTO1 = new IntegralRechargeDTO();
+        integralRechargeDTO1.setUserId(userId);
+        integralRechargeDTO1.setOrderId(orderId);
+        integralRechargeDTO1.setRechargeWay(1);
+        integralRechargeDTO1.setIsReceived(0);
+        integralRechargeDTO1.setIntegralAmount(integralRechargeDTO.getIntegralAmount());
+        Boolean insertRecords = integralPurchaseMapperExtra.insertIntegralPurchaseRecord(integralRechargeDTO1) > 0;
+        return insertRecords;
     }
 }

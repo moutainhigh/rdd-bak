@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPaymentService;
+import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyCommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class H5PaymentBuyCommodityController {
     @Autowired
     public RedisUtils redisUtils;
     @Autowired
-    WeChatAppletPaymentService weChatAppletPaymentService;
+    H5PaymentBuyCommodityService h5PaymentBuyCommodityService;
 
     /**
      * 微信商品支付
@@ -33,6 +34,6 @@ public class H5PaymentBuyCommodityController {
         if(user==null){
             return new JSONResult("未登录",405,null);
         }
-        return new JSONResult( weChatAppletPaymentService.WeChatAppletPaymentBuyCommodity(user,payInputDTO));
+        return new JSONResult( h5PaymentBuyCommodityService.WeChatAppletPaymentBuyCommodity(user,payInputDTO));
     }
 }

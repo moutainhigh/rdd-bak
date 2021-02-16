@@ -17,6 +17,8 @@ public class IntegralLogDTO {
 
     private Integer beforeIntegralAmount;
 
+    private Double amount;
+
     private String remark;
 
     private Date createAt;
@@ -101,5 +103,13 @@ public class IntegralLogDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 }

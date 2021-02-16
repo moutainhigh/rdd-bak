@@ -111,6 +111,40 @@ public class WeChatH5ParameterConfig {
         return StringUtil.transMapToStringOther(pbp);
     }
 
+    /**
+     * 购买积分服务
+     */
+    public static SortedMap<String, Object> getParametersIntegral(String nonceStrTemp, String orderId, String userId, Double amount, Integer integralAmount) {
+//        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters = getParameters();
+        String attach=getAttachIntegral(userId, orderId, amount, integralAmount);
+        parameters.put("attach",attach);
+        parameters.put("detail","微信支付直充服务");//支付的类容备注
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("notify_url", WeChatH5PayConfig.Integral_url);//通用一个接口（购买和充值）
+        parameters.put("out_trade_no", orderId);
+        BigInteger totalFee = (BigDecimal.valueOf(amount).multiply(new BigDecimal(100))).toBigInteger();
+        System.out.println(totalFee);
+        parameters.put("total_fee", totalFee);
+        parameters.put("sign", WeChatUtils.createH5Sign("UTF-8", parameters));//编码格式
+        System.out.println(WeChatUtils.createH5Sign("UTF-8", parameters));
+        System.out.println(parameters);
+//        parameters.put("device_info", WeChatH5PayConfig.device_info);
+        return parameters;
+    }
+
+    /**
+     * 微信支付——订单格外数据(购买积分）
+     */
+    public static String getAttachIntegral(String userId, String orderId, Double amount, Integer integralAmount) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("userId", userId);
+        pbp.put("orderId", orderId);
+        pbp.put("amount", amount);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
 
     //封装parameters
     public static SortedMap<String, Object> getParameters(){

@@ -14,11 +14,19 @@ public class IntegralRechargeDTO {
 
     private Integer integralAmount;
 
+    private Double amount;
+
     private String orderId;
 
     private Integer beforeIntegralAmount;
 
+    private Integer rechargeWay;
+
+    private String thirdOrderId;
+
     private String remark;
+
+    private Integer isReceived;
 
     private Date createAt;
 
@@ -102,5 +110,37 @@ public class IntegralRechargeDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Integer getIsReceived() {
+        return isReceived;
+    }
+
+    public void setIsReceived(Integer isReceived) {
+        this.isReceived = isReceived;
+    }
+
+    public Integer getRechargeWay() {
+        return rechargeWay;
+    }
+
+    public void setRechargeWay(Integer rechargeWay) {
+        this.rechargeWay = rechargeWay;
+    }
+
+    public String getThirdOrderId() {
+        return thirdOrderId;
+    }
+
+    public void setThirdOrderId(String thirdOrderId) {
+        this.thirdOrderId = thirdOrderId;
     }
 }

@@ -8,6 +8,8 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatFileUtil;
+import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
@@ -20,6 +22,8 @@ import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
 import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
+import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -29,12 +33,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class IntegralServiceImpl implements IntegralService {
@@ -68,6 +71,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     UserMapperExtra userMapperExtra;
+
+    @Autowired
+    private BusinessProcessService refuelingCard;
 
     @Autowired
     DictMapperExtra dictMapperExtra;
@@ -466,5 +472,75 @@ public class IntegralServiceImpl implements IntegralService {
         dictInputDTO.setName(dict.getName());
         dictInputDTO.setContent(rate);
         return new JSONResult(dictMapperExtra.updateDict(dictInputDTO));
+    }
+
+    /**
+     * 微信购买积分
+     * @param request
+     * @param consumptionType
+     * @return
+     */
+    @Override
+    public String wechatBuyIntegral(HttpServletRequest request, String consumptionType) {
+        try {
+            ServletInputStream in = request.getInputStream();
+            String resxml = WeChatFileUtil.inputStream2String(in);
+            Map<String, Object> restmap = WeChatUtils.xml2Map(resxml);
+            if ("SUCCESS".equals(restmap.get("result_code"))) {
+                // 订单支付成功 业务处理
+                if (checkSign(restmap)) {
+                    // 进行业务处理
+                    Object[] param = { restmap };
+                    Map<String, Integer> result = refuelingCard.WeChatPayBack(param,consumptionType);
+                    if (result.get("success") == 1) {
+                        return getSuccess();
+                    } else {
+                        return AlipayConfig.response_fail;
+                    }
+                } else {
+                    return AlipayConfig.response_fail;
+                }
+            } else {
+                return AlipayConfig.response_fail;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getSuccess();
+        }
+    }
+
+    // 微信异步通知成功
+    public String getSuccess() {
+        SortedMap<String, Object> respMap = new TreeMap<>();
+        respMap = new TreeMap<String, Object>();
+        respMap.put("return_code", "SUCCESS"); // 响应给微信服务器
+        respMap.put("return_msg", "OK");
+        String resXml = WeChatUtils.map2xml(respMap);
+        return resXml;
+    }
+
+    // 验证签名（微信）
+    public boolean checkSign(Map<String, Object> restmap) {
+        String sign = (String) restmap.get("sign"); // 返回的签名
+        restmap.remove("sign");
+        SortedMap<String, Object> sortedMap = new TreeMap<String, Object>();
+        for (Map.Entry<String, Object> entry : restmap.entrySet()) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        //爱动key
+        String signNow = WeChatUtils.createSign("UTF-8", sortedMap);
+        //人多多key
+        String signNowRdd = WeChatUtils.createRddSign("UTF-8", sortedMap);
+        if (sign.equals(signNow)||sign.equals(signNowRdd)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 查询log信息
+    @Override
+    public IntegralLogDTO getIntegralInfo(String userId) {
+        return integralInfoMapperExtra.getIntegralInfo(userId);
     }
 }

@@ -4,9 +4,11 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IntegralService {
@@ -102,4 +104,17 @@ public interface IntegralService {
      * @return
      */
     JSONResult updateIntegralRate(String rate);
+
+    /**
+     * 微信回调
+     * @param request
+     * @param consumptionType
+     * @return
+     */
+    String wechatBuyIntegral(HttpServletRequest request, String consumptionType);
+
+    /**
+     * 查询log信息
+     */
+    IntegralLogDTO getIntegralInfo(String userId);
 }

@@ -42,6 +42,13 @@
               update_at = #{updateAt,jdbcType=TIMESTAMP}
     </update>
 
+    <select id="getIntegralInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO">
+        select current_total beforeIntegralAmount,
+               integral_info_id integralInfoId
+        from czb_integral_info
+        where user_id = #{userId, jdbcType=VARCHAR}
+    </select>
+
     <select id="getUserAmount" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM czb_integral_info
     </select>

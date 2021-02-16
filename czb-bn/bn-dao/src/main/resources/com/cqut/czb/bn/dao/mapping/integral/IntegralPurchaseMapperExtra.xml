@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra">
+    <insert id="insertIntegralPurchaseRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO">
+        insert into czb_integral_purchase_record (integral_purchase_record_id,
+                                              user_id,
+                                              amount,
+                                              recharge_way,
+                                              is_received,
+                                              integral_amount,
+                                              create_at,
+                                              update_at)
+        values (#{orderId,jdbcType=VARCHAR},
+                #{userId,jdbcType=VARCHAR},
+                #{amount,jdbcType=DOUBLE},
+                #{rechargeWay,jdbcType=INTEGER},
+                #{isReceived,jdbcType=INTEGER},
+                #{integralAmount,jdbcType=INTEGER},
+                now(),
+                now(),
+               )
+    </insert>
+
+    <update id="updateIntegralPurchaseRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO">
+        update czb_integral_purchase_record
+        set third_order_id = #{thirdOrderId,jdbcType=VARCHAR}
+          ,update_at = #{updateAt,jdbcType=TIMESTAMP}
+          ,isReceived = #{isReceived ,jdbcType=INTEGER}
+        where
+            order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertIntegralLog" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO">
+        insert into czb_integral_log (integral_log_id,
+                                                  integral_info_id,
+                                                  user_id,
+                                                  integral_log_type,
+                                                  integral_amount,
+                                                  order_id,
+                                                  before_integral_amount,
+                                                  create_at,
+                                                  update_at)
+        values (#{integralLogId,jdbcType=VARCHAR},
+                #{integralInfoId,jdbcType=VARCHAR},
+                #{userId,jdbcType=VARCHAR},
+                #{integralLogType,jdbcType=INTEGER},
+                #{integralAmount,jdbcType=INTEGER},
+                #{orderId,jdbcType=VARCHAR},
+                #{beforeIntegralAmount,jdbcType=INTEGER},
+                now(),
+                now(),
+               )
+    </insert>
+
+    <update id="updateIntegralInfo">
+        update czb_integral_info
+        set current_total = #{currentTotal,jdbcType=INTEGER}
+        where
+            user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+</mapper>
