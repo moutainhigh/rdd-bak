@@ -15,6 +15,9 @@ public class IntegralInfo {
 
     private Date updateAt;
 
+    // CAS版本控制
+    private Date oldUpdateAt;
+
     public String getIntegralInfoId() {
         return integralInfoId;
     }
@@ -61,5 +64,13 @@ public class IntegralInfo {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Date getOldUpdateAt() {
+        return oldUpdateAt;
+    }
+
+    public void setOldUpdateAt(Date oldUpdateAt) {
+        this.oldUpdateAt = oldUpdateAt;
     }
 }
