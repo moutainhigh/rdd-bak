@@ -109,7 +109,7 @@ public class IntegralController {
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @RequestMapping(value = "/exchangeIntegral",method = RequestMethod.POST)
-    public JSONResult exchangeIntegral(Principal principal,IntegralExchangeDTO integralExchangeDTO) {
+    public JSONResult exchangeIntegral(Principal principal,@RequestBody IntegralExchangeDTO integralExchangeDTO) {
         User user = (User) redisUtils.get(principal.getName());
         // 解密兑换码
         try {
@@ -118,9 +118,9 @@ public class IntegralController {
                     RSAUtils.getPrivateKey(RSAUtils.privateKey));
             integralExchangeDTO.setIntegralExchange(integralExchangeId);
         } catch (NoSuchAlgorithmException e) {
-            return new JSONResult("服务器错误,请与管理员联系", 500);
+            return new JSONResult("服务器错误,请与管理员联系");
         } catch (InvalidKeySpecException e) {
-            return new JSONResult("兑换码不存在!", 500);
+            return new JSONResult("兑换码不存在!");
         }
 
         return integralService.exchangeIntegral(integralExchangeDTO, user.getUserId());
