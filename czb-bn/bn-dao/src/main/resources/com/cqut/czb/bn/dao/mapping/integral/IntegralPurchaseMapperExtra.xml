@@ -23,13 +23,13 @@
                )
     </insert>
 
-    <update id="updateIntegralPurchaseRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO">
+    <update id="updateIntegralPurchaseRecord" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord">
         update czb_integral_purchase_record
-        set third_order_id = #{thirdOrderId,jdbcType=VARCHAR}
+        set third_trade_num = #{thirdTradeNum,jdbcType=VARCHAR}
           ,update_at = #{updateAt,jdbcType=TIMESTAMP}
           ,isReceived = #{isReceived ,jdbcType=INTEGER}
         where
-            order_id = #{orderId,jdbcType=VARCHAR}
+            integral_purchase_record_id = #{integralPurchaseRecordId,jdbcType=VARCHAR}
     </update>
 
     <insert id="insertIntegralLog" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO">

@@ -92,7 +92,8 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
         Integer integralAmount = integralRechargeDTO.getIntegralAmount();
 
         // userId
-        String userId = user.getUserId();
+//        String userId = user.getUserId();
+        String userId = "703610893704287052";
 
 
         // 设置参数

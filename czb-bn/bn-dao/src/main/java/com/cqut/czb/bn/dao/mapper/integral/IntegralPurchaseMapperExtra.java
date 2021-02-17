@@ -11,7 +11,7 @@ public interface IntegralPurchaseMapperExtra {
 
     int insertIntegralLog(IntegralLogDTO integralLogDTO);
 
-    int updateIntegralPurchaseRecord(IntegralRechargeDTO integralRechargeDTO);
+    int updateIntegralPurchaseRecord(IntegralPurchaseRecord integralPurchaseRecord);
 
     int updateIntegralInfo(@Param("currentTotal")int currentTotal, @Param("userId")String userId);
 }

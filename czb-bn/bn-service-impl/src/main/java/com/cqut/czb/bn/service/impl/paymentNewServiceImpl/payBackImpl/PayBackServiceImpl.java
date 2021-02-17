@@ -98,12 +98,13 @@ public class PayBackServiceImpl implements PayBackService {
         }
 
         // 更新
-        IntegralRechargeDTO integralRechargeDTO = new IntegralRechargeDTO();
-        integralRechargeDTO.setThirdOrderId(thirdOrderId);
-        integralRechargeDTO.setUpdateAt(new Date());
-        integralRechargeDTO.setIsReceived(1);
+        IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
+        integralPurchaseRecord.setIntegralPurchaseRecordId(orgId);
+        integralPurchaseRecord.setThirdTradeNum(thirdOrderId);
+        integralPurchaseRecord.setUpdateAt(new Date());
+        integralPurchaseRecord.setIsReceived(1);
         System.out.println("更新成功");
-        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralRechargeDTO) > 0;
+        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralPurchaseRecord) > 0;
 
         //插入log记录
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
@@ -146,13 +147,13 @@ public class PayBackServiceImpl implements PayBackService {
             }
         }
         // 更新
-        IntegralRechargeDTO integralRechargeDTO = new IntegralRechargeDTO();
-        integralRechargeDTO.setOrderId(orderId);
-        integralRechargeDTO.setThirdOrderId(thirdOrderId);
-        integralRechargeDTO.setUpdateAt(new Date());
-        integralRechargeDTO.setIsReceived(1);
+        IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
+        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
+        integralPurchaseRecord.setThirdTradeNum(thirdOrderId);
+        integralPurchaseRecord.setUpdateAt(new Date());
+        integralPurchaseRecord.setIsReceived(1);
         System.out.println("更新成功");
-        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralRechargeDTO) > 0;
+        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralPurchaseRecord) > 0;
 
         //插入log记录
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
