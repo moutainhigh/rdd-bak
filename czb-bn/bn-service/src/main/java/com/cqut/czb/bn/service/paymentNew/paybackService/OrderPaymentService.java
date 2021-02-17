@@ -11,5 +11,6 @@ public interface OrderPaymentService {
     //解析订单
     Map<String, String> parseOrder(Map<String, String> params, Map requestParams);
 
+    //微信回调测试接口
     String WeChatOrderPaymentNotify(HttpServletRequest request, String consumptionType);
 }

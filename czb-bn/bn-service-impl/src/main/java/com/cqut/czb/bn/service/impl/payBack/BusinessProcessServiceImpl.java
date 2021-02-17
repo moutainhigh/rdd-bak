@@ -200,9 +200,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             result.put("success", weChatPayBackService.addRechargeVipOrderWeChat(restmap));
         }else if(consumptionType.equals("Direct")){
             result.put("success", getAddBuyDirectOrderWechat(restmap));
-        }else if(consumptionType.equals("Integral")){
-            result.put("success", getAddBuyIntegralOrderWechat(restmap));
-        } else {
+        }else {
             result.put("fail",0);
         }
         return result;
@@ -458,55 +456,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         System.out.println("更新成功");
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
-        return 1;
-    }
-
-    // 积分购买（微信）
-    public int getAddBuyIntegralOrderWechat(Map<String, Object> restmap){
-        String[] resDate = restmap.get("attach").toString().split("\\^");
-        String[] temp;
-        String thirdOrderId = restmap.get("transaction_id").toString();
-        String orderId = "";
-        String userId = "";
-        double amount = 0;
-        int integralAmount = 0;
-        for (String data : resDate) {
-            temp = data.split("\'");
-            if (temp.length < 2) {//判空
-                continue;
-            }
-            if ("orderId".equals(temp[0])) {
-                orderId = temp[1];
-            }
-            if ("userId".equals(temp[0])) {
-                userId = temp[1];
-            }
-            if ("integralAmount".equals(temp[0])) {
-                integralAmount = Integer.valueOf(temp[1]);
-            }
-            if ("amount".equals(temp[0])) {
-                amount = Double.valueOf(temp[1]);
-            }
-        }
-        // 更新
-        IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
-        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
-        integralPurchaseRecord.setThirdTradeNum(thirdOrderId);
-        integralPurchaseRecord.setUpdateAt(new Date());
-        integralPurchaseRecord.setIsReceived(1);
-        System.out.println("更新成功");
-        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralPurchaseRecord) > 0;
-
-        //插入log记录
-        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-        integralLogDTO.setOrderId(orderId);
-        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-        integralLogDTO.setUserId(userId);
-        integralLogDTO.setIntegralLogType(4);
-        integralLogDTO.setIntegralAmount(integralAmount);
-        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-
-        integralPurchaseMapperExtra.updateIntegralInfo(integralLogDTO.getBeforeIntegralAmount() + integralLogDTO.getBeforeIntegralAmount(), userId);
         return 1;
     }
 

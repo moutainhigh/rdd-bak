@@ -25,12 +25,18 @@ public class PayBackServiceImpl implements PayBackService {
     @Autowired
     public IntegralService integralService;
 
+    /**
+     *
+     * @Description： 支付宝回调
+     * @author： WangYa
+     * @Data： 2021/2/17 15:40
+     */
     @Override
     public Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
         Map<String, String> result = new HashMap<>();
         Map<String, String> params = (HashMap<String, String>) param[0];
-        if(consumptionType.equals("Integral")){//购油
+        if(consumptionType.equals("Integral")){//购买积分
             if (getIntegralOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
@@ -43,6 +49,13 @@ public class PayBackServiceImpl implements PayBackService {
         return result;
     }
 
+
+    /**
+     *
+     * @Description： 微信回调
+     * @author： WangYa
+     * @Data： 2021/2/17 15:41
+     */
     @Override
     public Map<String, Integer> WeChatPayBack(Object[] param, String consumptionType) {
         Map<String, Object> restmap = (HashMap<String, Object>) param[0];
