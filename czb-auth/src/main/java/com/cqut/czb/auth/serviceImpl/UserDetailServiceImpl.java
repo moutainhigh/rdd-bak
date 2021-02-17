@@ -4,6 +4,7 @@ import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
@@ -12,6 +13,7 @@ import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
+import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.mapper.BeanMapper;
@@ -46,6 +48,9 @@ public class UserDetailServiceImpl implements UserDetailService {
     private final RedisUtils redisUtils;
 
     private final InfoSpreadService infoSpreadService;
+
+    @Autowired
+    IntegralInfoMapper integralInfoMapper;
 
     @Value("${recharge.common.userType}")
     private Integer commonType;
@@ -126,6 +131,14 @@ public class UserDetailServiceImpl implements UserDetailService {
         } else {
             return String.valueOf("用户收益信息添加失败");
         }
+
+        // 开通积分
+        IntegralInfo integralInfo = new IntegralInfo();
+        integralInfo.setIntegralInfoId(StringUtil.createId());
+        integralInfo.setUserId(user.getUserId());
+        integralInfo.setGotTotal(0);
+        integralInfo.setCurrentTotal(0);
+        integralInfoMapper.insert(integralInfo);
 
         return String.valueOf(true);
     }
