@@ -20,11 +20,11 @@ public class AlipayNewClientConfig {
 	}
 
 	public synchronized  static AlipayNewClientConfig getInstance(String operationType) {
-		if (operationType.equals("0")) {//"0"为购油
-			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_id_new,
-					AliPayConfig.merchant_private_key_new, AliPayConfig.format, AliPayConfig.charset,
-					AliPayConfig.alipay_public_key_new, AliPayConfig.sign_type));
-			instance.setCallBackUrl(AliPayConfig.IntegralRecharge_url);
+		if (operationType.equals("0")) {//"0"为购买积分
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayH5Config.gatewayUrl, AliPayH5Config.app_id,
+					AliPayH5Config.merchant_private_key, AliPayH5Config.format, AliPayH5Config.charset,
+					AliPayH5Config.alipay_public_key, AliPayH5Config.sign_type));
+			instance.setCallBackUrl(AliPayH5Config.IntegralRecharge_url);
 		}
 		return instance;
 	}

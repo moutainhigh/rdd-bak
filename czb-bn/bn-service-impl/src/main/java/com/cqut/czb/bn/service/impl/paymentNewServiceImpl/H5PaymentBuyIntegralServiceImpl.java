@@ -8,12 +8,9 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatH5ParameterConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
-import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
-import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyIntegralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,12 +49,12 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
-        double actualPrice= BigDecimal.valueOf(integralRechargeDTO.getIntegralAmount()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
+        double actualPrice= BigDecimal.valueOf(integralRechargeDTO.getAmount()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
 
         //购买者id
         String ownerId = user.getUserId();
         //支付订单
-        request.setBizModel(AliParameterNewConfig.getBizModelIntegralCoupons(ownerId,integralRechargeDTO));
+        request.setBizModel(AliParameterNewConfig.getBizModelIntegralCoupons(thirdOrder,integralRechargeDTO));
         //支付回调接口
         request.setNotifyUrl(AliPayConfig.IntegralRecharge_url);
         try {
@@ -68,13 +65,8 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
             e.printStackTrace();
         }
         //payMethod 1为支付宝，2为微信
-        InsertIntegralPurchaseRecord(thirdOrder,actualPrice,integralRechargeDTO,1);
-
+        Boolean orderInsert = insertBuyIntegral(thirdOrder,ownerId,integralRechargeDTO,1);
         return orderString;
-    }
-
-    private void InsertIntegralPurchaseRecord(String thirdOrder, double actualPrice, IntegralRechargeDTO integralRechargeDTO, int i) {
-
     }
 
     /**
@@ -105,7 +97,7 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
 
         // 设置参数
         SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersIntegral(nonceStrTemp, orderId, userId, amount, integralAmount);
-        Boolean insertOrder = insertBuyIntegral(orderId, userId, integralRechargeDTO);
+        Boolean insertOrder = insertBuyIntegral(orderId, userId, integralRechargeDTO,2);
         return WeChatH5ParameterConfig.getSign(parameters, nonceStrTemp);
     }
 
@@ -116,14 +108,16 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
      * @param userId
      * @return
      */
-    public Boolean insertBuyIntegral(String orderId, String userId, IntegralRechargeDTO integralRechargeDTO) {
-        IntegralRechargeDTO integralRechargeDTO1 = new IntegralRechargeDTO();
-        integralRechargeDTO1.setUserId(userId);
-        integralRechargeDTO1.setOrderId(orderId);
-        integralRechargeDTO1.setRechargeWay(1);
-        integralRechargeDTO1.setIsReceived(0);
-        integralRechargeDTO1.setIntegralAmount(integralRechargeDTO.getIntegralAmount());
-        Boolean insertRecords = integralPurchaseMapperExtra.insertIntegralPurchaseRecord(integralRechargeDTO1) > 0;
+    public Boolean insertBuyIntegral(String orderId, String userId, IntegralRechargeDTO integralRechargeDTO,int rechargeWay) {
+        IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
+        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
+        integralPurchaseRecord.setUserId(userId);
+        integralPurchaseRecord.setAmount(integralRechargeDTO.getAmount());
+        integralPurchaseRecord.setIntegralAmount(integralRechargeDTO.getIntegralAmount());
+        integralPurchaseRecord.setIsReceived(0);
+        integralPurchaseRecord.setRechargeWay(rechargeWay);
+        integralPurchaseRecord.setThirdTradeNum(orderId);
+        Boolean insertRecords = integralPurchaseMapperExtra.insertIntegralPurchaseRecord(integralPurchaseRecord) > 0;
         return insertRecords;
     }
 }

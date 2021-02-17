@@ -105,13 +105,6 @@ public interface IntegralService {
      */
     JSONResult updateIntegralRate(String rate);
 
-    /**
-     * 微信回调
-     * @param request
-     * @param consumptionType
-     * @return
-     */
-    String wechatBuyIntegral(HttpServletRequest request, String consumptionType);
 
     /**
      * 查询log信息

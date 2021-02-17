@@ -21,7 +21,7 @@ public class WeChatH5PayConfig {
     public static final String Direct_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WechatPayReturn/wechatPayReturn";
 
     //购买积分
-    public static final String Integral_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WechatBuyIntegral/wechatBuyIntegral";
+    public static final String Integral_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WeChatPayment/weChatBuyIntegral";
 
     //中石化码商、无卡加油
     public static final String Applet_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/AppletVerifyAsyn/verifyAppletPaymentWeChat";

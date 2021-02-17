@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra">
-    <insert id="insertIntegralPurchaseRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO">
+    <insert id="insertIntegralPurchaseRecord" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord">
         insert into czb_integral_purchase_record (integral_purchase_record_id,
                                               user_id,
                                               amount,
                                               recharge_way,
                                               is_received,
                                               integral_amount,
+                                              third_trade_num,
                                               create_at,
                                               update_at)
-        values (#{orderId,jdbcType=VARCHAR},
+        values (#{integralPurchaseRecordId,jdbcType=VARCHAR},
                 #{userId,jdbcType=VARCHAR},
                 #{amount,jdbcType=DOUBLE},
                 #{rechargeWay,jdbcType=INTEGER},
                 #{isReceived,jdbcType=INTEGER},
                 #{integralAmount,jdbcType=INTEGER},
+                #{thirdTradeNum,jdbcType=VARCHAR}
                 now(),
                 now(),
                )

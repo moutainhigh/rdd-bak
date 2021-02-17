@@ -2,11 +2,12 @@ package com.cqut.czb.bn.dao.mapper.integral;
 
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
+import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import org.springframework.data.repository.query.Param;
 
 public interface IntegralPurchaseMapperExtra {
 
-    int insertIntegralPurchaseRecord(IntegralRechargeDTO integralRechargeDTO);
+    int insertIntegralPurchaseRecord(IntegralPurchaseRecord IntegralPurchaseRecord);
 
     int insertIntegralLog(IntegralLogDTO integralLogDTO);
 

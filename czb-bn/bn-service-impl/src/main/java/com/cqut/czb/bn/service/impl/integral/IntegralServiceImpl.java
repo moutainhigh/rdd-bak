@@ -474,69 +474,6 @@ public class IntegralServiceImpl implements IntegralService {
         return new JSONResult(dictMapperExtra.updateDict(dictInputDTO));
     }
 
-    /**
-     * 微信购买积分
-     * @param request
-     * @param consumptionType
-     * @return
-     */
-    @Override
-    public String wechatBuyIntegral(HttpServletRequest request, String consumptionType) {
-        try {
-            ServletInputStream in = request.getInputStream();
-            String resxml = WeChatFileUtil.inputStream2String(in);
-            Map<String, Object> restmap = WeChatUtils.xml2Map(resxml);
-            if ("SUCCESS".equals(restmap.get("result_code"))) {
-                // 订单支付成功 业务处理
-                if (checkSign(restmap)) {
-                    // 进行业务处理
-                    Object[] param = { restmap };
-                    Map<String, Integer> result = refuelingCard.WeChatPayBack(param,consumptionType);
-                    if (result.get("success") == 1) {
-                        return getSuccess();
-                    } else {
-                        return AlipayConfig.response_fail;
-                    }
-                } else {
-                    return AlipayConfig.response_fail;
-                }
-            } else {
-                return AlipayConfig.response_fail;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return getSuccess();
-        }
-    }
-
-    // 微信异步通知成功
-    public String getSuccess() {
-        SortedMap<String, Object> respMap = new TreeMap<>();
-        respMap = new TreeMap<String, Object>();
-        respMap.put("return_code", "SUCCESS"); // 响应给微信服务器
-        respMap.put("return_msg", "OK");
-        String resXml = WeChatUtils.map2xml(respMap);
-        return resXml;
-    }
-
-    // 验证签名（微信）
-    public boolean checkSign(Map<String, Object> restmap) {
-        String sign = (String) restmap.get("sign"); // 返回的签名
-        restmap.remove("sign");
-        SortedMap<String, Object> sortedMap = new TreeMap<String, Object>();
-        for (Map.Entry<String, Object> entry : restmap.entrySet()) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-        //爱动key
-        String signNow = WeChatUtils.createSign("UTF-8", sortedMap);
-        //人多多key
-        String signNowRdd = WeChatUtils.createRddSign("UTF-8", sortedMap);
-        if (sign.equals(signNow)||sign.equals(signNowRdd)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     // 查询log信息
     @Override
