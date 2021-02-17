@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/H5PaymentBuyIntegral")
+@RequestMapping("/H5PaymentBuyIntegral")
 public class H5PaymentBuyIntegralController {
 
     @Autowired
