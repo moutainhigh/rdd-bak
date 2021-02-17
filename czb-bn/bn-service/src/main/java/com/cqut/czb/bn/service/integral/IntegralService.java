@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.integral;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
@@ -100,10 +101,10 @@ public interface IntegralService {
 
     /**
      * 更新积分购买比例
-     * @param rate
+     * @param dictInputDTO
      * @return
      */
-    JSONResult updateIntegralRate(String rate);
+    JSONResult updateIntegralRate(DictInputDTO dictInputDTO);
 
     /**
      * 微信回调
