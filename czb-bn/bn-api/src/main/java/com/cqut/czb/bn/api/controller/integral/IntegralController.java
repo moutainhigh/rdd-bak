@@ -2,6 +2,7 @@ package com.cqut.czb.bn.api.controller.integral;
 
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.entity.User;
@@ -218,12 +219,12 @@ public class IntegralController {
 
     /**
      * 更新积分购买比率
-     * @param principal
-     * @param rate
+     * @param dictInputDTO
      * @return
      */
     @RequestMapping(value = "/updateIntegralRate", method = RequestMethod.POST)
-    public JSONResult updateIntegralRate(Principal principal, String rate) {
-        return integralService.updateIntegralRate(rate);
+    public JSONResult updateIntegralRate(DictInputDTO dictInputDTO) {
+        return integralService.updateIntegralRate(dictInputDTO);
     }
+
 }

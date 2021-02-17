@@ -15,7 +15,6 @@ import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
-import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
@@ -384,13 +383,12 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult createExchangeCode(IntegralExchangeDTO integralExchange) {
         IntegralInfo userIntegralInfo = integralInfoMapperExtra.selectByUserId(integralExchange.getExchangeSourceId());
+        if (userIntegralInfo.getCurrentTotal() < integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesTotal()) {
+            return new JSONResult("你的积分不足", 500);
+        }
 
         if (integralExchange.getFailureTime().compareTo(new Date()) < 0) {
             return new JSONResult("失效时间比当前时间早", 500);
-        }
-
-        if (integralExchange.getExchangeType() == 1) {
-            integralExchange.setExchangeTimesTotal(integralInfoMapperExtra.getUserAmount());
         }
 
         integralExchange.setIntegralExchange(StringUtil.createId());
@@ -465,13 +463,14 @@ public class IntegralServiceImpl implements IntegralService {
         return new JSONResult(dictMapperExtra.selectDictByName("integral_rate"));
     }
 
-    public JSONResult updateIntegralRate(String rate) {
-        Dict dict = dictMapperExtra.selectDictByName("integral_rate");
-        DictInputDTO dictInputDTO = new DictInputDTO();
-        dictInputDTO.setDictId(dict.getDictId());
-        dictInputDTO.setName(dict.getName());
-        dictInputDTO.setContent(rate);
-        return new JSONResult(dictMapperExtra.updateDict(dictInputDTO));
+    public JSONResult updateIntegralRate(DictInputDTO dictInputDTO) {
+        int n = dictMapperExtra.updateDict(dictInputDTO);
+        if (n == 1) {
+            return new JSONResult("修改积分比率成功!", 200);
+        }
+        else {
+            return new JSONResult("修改积分比率失败!", 200);
+        }
     }
 
 
