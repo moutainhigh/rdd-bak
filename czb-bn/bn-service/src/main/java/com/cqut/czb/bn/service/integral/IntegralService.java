@@ -2,14 +2,10 @@ package com.cqut.czb.bn.service.integral;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
+import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IntegralService {
@@ -106,9 +102,35 @@ public interface IntegralService {
      */
     JSONResult updateIntegralRate(DictInputDTO dictInputDTO);
 
-
     /**
      * 查询log信息
      */
     IntegralLogDTO getIntegralInfo(String userId);
+
+    /**
+     * 新增积分购买面额
+     * @param integralManageDTO
+     * @return
+     */
+    JSONResult insertIntegralValue(IntegralManageDTO integralManageDTO);
+
+    /**
+     * 修改积分购买面额
+     * @param integralManageDTO
+     * @return
+     */
+    JSONResult updateIntegralValue(IntegralManageDTO integralManageDTO);
+
+    /**
+     * 删除积分购买面额
+     * @param integralManageDTO
+     * @return
+     */
+    JSONResult deleteIntegralValue(IntegralManageDTO integralManageDTO);
+
+    /**
+     * 获取积分购买面额
+     * @return
+     */
+    PageInfo<IntegralManageDTO> getIntegralValueList(PageDTO pageDTO);
 }

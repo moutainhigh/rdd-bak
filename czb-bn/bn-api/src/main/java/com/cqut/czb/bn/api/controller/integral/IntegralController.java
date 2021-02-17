@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -227,4 +228,42 @@ public class IntegralController {
         return integralService.updateIntegralRate(dictInputDTO);
     }
 
+    /**
+     * 新增积分购买面额
+     * @param integralManageDTO
+     * @return
+     */
+    @RequestMapping(value = "/insertIntegralValue", method = RequestMethod.POST)
+    public JSONResult insertIntegralValue(IntegralManageDTO integralManageDTO) {
+        return integralService.insertIntegralValue(integralManageDTO);
+    }
+
+    /**
+     * 修改积分购买面额
+     * @param integralManageDTO
+     * @return
+     */
+    @RequestMapping(value = "/updateIntegralValue", method = RequestMethod.POST)
+    public JSONResult updateIntegralValue(IntegralManageDTO integralManageDTO) {
+        return integralService.updateIntegralValue(integralManageDTO);
+    }
+
+    /**
+     * 删除积分购买面额
+     * @param integralManageDTO
+     * @return
+     */
+    @RequestMapping(value = "/deleteIntegralValue", method = RequestMethod.POST)
+    public JSONResult deleteIntegralValue(IntegralManageDTO integralManageDTO) {
+        return integralService.deleteIntegralValue(integralManageDTO);
+    }
+
+    /**
+     * 获取积分购买面额
+     * @return
+     */
+    @RequestMapping(value = "/getIntegralValueList", method = RequestMethod.GET)
+    public JSONResult deleteIntegralValue(PageDTO pageDTO) {
+        return new JSONResult(integralService.getIntegralValueList(pageDTO));
+    }
 }

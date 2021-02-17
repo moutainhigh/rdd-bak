@@ -9,10 +9,7 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
+import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
 import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
@@ -71,6 +68,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     DictMapperExtra dictMapperExtra;
+
+    @Autowired
+    IntegralManageMapper integralManageMapper;
 
     public JSONResult getCurrentTotalIntegral(String userId) {
         return new JSONResult(integralInfoMapperExtra.selectByUserId(userId));
@@ -468,10 +468,47 @@ public class IntegralServiceImpl implements IntegralService {
         }
     }
 
-
     // 查询log信息
     @Override
     public IntegralLogDTO getIntegralInfo(String userId) {
         return integralInfoMapperExtra.getIntegralInfo(userId);
+    }
+
+    @Override
+    public JSONResult insertIntegralValue(IntegralManageDTO integralManageDTO) {
+        integralManageDTO.setId(StringUtil.createId());
+        if (integralManageMapper.insertSelective(integralManageDTO) == 1) {
+            return new JSONResult("新增成功!");
+        }
+        else {
+            return new JSONResult("新增失败!");
+        }
+    }
+
+    @Override
+    public JSONResult updateIntegralValue(IntegralManageDTO integralManageDTO) {
+        if (integralManageMapper.updateByPrimaryKeySelective(integralManageDTO) == 1) {
+            return new JSONResult("修改成功!");
+        }
+        else {
+            return new JSONResult("修改失败!");
+        }
+    }
+
+    @Override
+    public JSONResult deleteIntegralValue(IntegralManageDTO integralManageDTO) {
+        if (integralManageMapper.deleteByPrimaryKey(integralManageDTO.getId()) == 1) {
+            return new JSONResult("删除成功!");
+        }
+        else {
+            return new JSONResult("删除失败!");
+        }
+    }
+
+    @Override
+    public PageInfo<IntegralManageDTO> getIntegralValueList(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<IntegralManageDTO> integralInfoList = integralManageMapper.getIntegralValueList();
+        return new PageInfo<>(integralInfoList);
     }
 }
