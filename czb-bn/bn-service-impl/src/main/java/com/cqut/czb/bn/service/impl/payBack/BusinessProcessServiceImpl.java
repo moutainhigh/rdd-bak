@@ -21,6 +21,7 @@ import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.entity.entity.food.DishOrder;
+import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
@@ -488,13 +489,13 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
         }
         // 更新
-        IntegralRechargeDTO integralRechargeDTO = new IntegralRechargeDTO();
-        integralRechargeDTO.setOrderId(orderId);
-        integralRechargeDTO.setThirdOrderId(thirdOrderId);
-        integralRechargeDTO.setUpdateAt(new Date());
-        integralRechargeDTO.setIsReceived(1);
+        IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
+        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
+        integralPurchaseRecord.setThirdTradeNum(thirdOrderId);
+        integralPurchaseRecord.setUpdateAt(new Date());
+        integralPurchaseRecord.setIsReceived(1);
         System.out.println("更新成功");
-        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralRechargeDTO) > 0;
+        boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralPurchaseRecord) > 0;
 
         //插入log记录
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);

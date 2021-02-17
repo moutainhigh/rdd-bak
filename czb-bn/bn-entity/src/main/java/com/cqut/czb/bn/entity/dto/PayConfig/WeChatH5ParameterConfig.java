@@ -120,7 +120,7 @@ public class WeChatH5ParameterConfig {
         parameters = getParameters();
         String attach=getAttachIntegral(userId, orderId, amount, integralAmount);
         parameters.put("attach",attach);
-        parameters.put("detail","微信支付直充服务");//支付的类容备注
+        parameters.put("detail","微信支付积分购买服务");//支付的类容备注
         parameters.put("nonce_str", nonceStrTemp);
         parameters.put("notify_url", WeChatH5PayConfig.Integral_url);//通用一个接口（购买和充值）
         parameters.put("out_trade_no", orderId);
