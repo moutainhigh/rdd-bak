@@ -378,7 +378,7 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult createExchangeCode(IntegralExchangeDTO integralExchange) {
         IntegralInfo userIntegralInfo = integralInfoMapperExtra.selectByUserId(integralExchange.getExchangeSourceId());
-        if (userIntegralInfo.getCurrentTotal() < integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesTotal()) {
+        if (integralExchange.getExchangeType() == 2 && userIntegralInfo.getCurrentTotal() < integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesTotal()) {
             return new JSONResult("你的积分不足");
         }
 
