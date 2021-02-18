@@ -33,8 +33,6 @@ public class VideoCharge {
 
         Integer buyNum = videoChargeDTO.getBuyNum();
 
-        String createTime = videoChargeDTO.getCreateTime();
-
         Integer isCallBack = videoChargeDTO.getIsCallBack();
 
         // appId
