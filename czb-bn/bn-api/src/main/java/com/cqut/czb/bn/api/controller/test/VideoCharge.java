@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 import static com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPayServiceImpl.getNowDate;
@@ -76,8 +78,12 @@ public class VideoCharge {
         String createTime = getNowDate(new Date());
         Integer isCallBack = gameChargeDTO.getIsCallBack();
         String goodsId = gameChargeDTO.getGoodsId();
-//        String clientIP = gameChargeDTO.getClientIP();
-        String clientIP = "192.168.1.2";
+        String clientIP = "";
+        try {
+            clientIP = InetAddress.getLocalHost().getHostAddress();
+        }catch (Exception e){
+
+        }
 
         String params = "APIID=" + appId +
                 "&Account=" + account +
