@@ -3,6 +3,7 @@ package com.cqut.czb.bn.api.controller.integral;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralDistributionDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO;
@@ -12,14 +13,12 @@ import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 /**
  * 作者： 袁菘壑 侯家领
@@ -196,16 +195,27 @@ public class IntegralController {
     }
 
     /**
+     * 获取发放积分的全部信息
+     * @param userAccount
+     * @param integralDistributionDTO
+     * @return
+     */
+    @RequestMapping(value = "getIntegralDistributionDetails", method = RequestMethod.GET)
+    public JSONResult getIntegralDistributionDetails(String userAccount, IntegralDistributionDTO integralDistributionDTO) {
+        return new JSONResult(integralService.getIntegralDistributionDetails(userAccount, integralDistributionDTO));
+    }
+
+    /**
      * 手机号补贴积分
      * @param principal
-     * @param receiverPhone
+     * @param receiverPhones
      * @param integralAmount
      * @return
      */
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-    @RequestMapping(value = "/subsidyIntegralByPhone", method = RequestMethod.POST)
-    public JSONResult subsidyIntegralByPhone(Principal principal, String receiverPhone, Integer integralAmount) {
-        return integralService.subsidyIntegralByPhone(receiverPhone, integralAmount);
+    @RequestMapping(value = "/subsidyIntegralByPhone/{integralAmount}", method = RequestMethod.POST)
+    public JSONResult subsidyIntegralByPhone(Principal principal,@PathVariable("integralAmount") Integer integralAmount,@RequestBody List<String> receiverPhones) {
+        return integralService.subsidyIntegralByPhone(receiverPhones, integralAmount);
     }
 
     /**

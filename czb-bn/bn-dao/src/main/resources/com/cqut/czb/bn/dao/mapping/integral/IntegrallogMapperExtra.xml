@@ -24,6 +24,6 @@
         <include refid="Base_Column_List" />
         from czb_integral_log
         where user_id = #{userId,jdbcType=VARCHAR}
-        order by create_at
+        order by create_at desc
     </select>
 </mapper>
