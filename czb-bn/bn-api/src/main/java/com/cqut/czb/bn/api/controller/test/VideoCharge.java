@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.test;
 
+import com.cqut.czb.bn.api.controller.test.model.GameChargeDTO;
 import com.cqut.czb.bn.api.controller.test.model.VideoChargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
@@ -47,6 +48,50 @@ public class VideoCharge {
                 "&IsCallBack=" + isCallBack +
                 "&OrderID=" + orderId +
                 "&ProductCode=" + productCode;
+
+        // sign
+        String sign = MD5Util.MD5Encode(params + "&APIKEY=" + appKey,"UTF-8").toUpperCase();
+
+        //设置请求参数
+        params = params + "&Sign=" + sign;
+
+        System.out.println(params);
+
+        String sr= HttpRequest.httpRequestGet(URL, params);
+
+        return new JSONResult<String>(sr);
+    }
+
+    @GetMapping("/gameCharge")
+    public JSONResult<String> gameCharge(GameChargeDTO gameChargeDTO){
+        String URL="http://open.jiaofei100.com/Api/PayGame.aspx";
+
+        String appId = "20201605199061";
+        Integer tradeType = gameChargeDTO.getTradeType();
+        String account = gameChargeDTO.getAccount();
+        Integer unitPrice = gameChargeDTO.getUnitPrice();
+        Integer buyNum = gameChargeDTO.getBuyNum();
+        int totalPrice = unitPrice * buyNum;
+        String orderId = gameChargeDTO.getOrderId();
+        String createTime = getNowDate(new Date());
+        Integer isCallBack = gameChargeDTO.getIsCallBack();
+        String goodsId = gameChargeDTO.getGoodsId();
+//        String clientIP = gameChargeDTO.getClientIP();
+        String clientIP = "192.168.1.2";
+
+        String params = "APIID=" + appId +
+                "&Account=" + account +
+                "&BuyNum=" + buyNum +
+                "&ClientIP=" + clientIP +
+                "&CreateTime=" + createTime +
+                "&GoodsID=" + createTime +
+                "&isCallBack=" + isCallBack +
+                "&OrderID=" + orderId +
+                "&TotalPrice=" + totalPrice +
+                "&TradeType=" + tradeType +
+                "&UnitPrice=" + unitPrice;
+
+        String appKey = "124FEE100E3FAE06BBEF09A59C72E5CD";
 
         // sign
         String sign = MD5Util.MD5Encode(params + "&APIKEY=" + appKey,"UTF-8").toUpperCase();
