@@ -20,7 +20,7 @@ public interface IntegralService {
     /**
      * 积分明细
      */
-    List<IntegralDetailsDTO> getIntegralDetail(String userId);
+    List<IntegralLogDTO> getIntegralDetail(String userId);
 
     /**
      * 赠送积分明细
@@ -81,13 +81,15 @@ public interface IntegralService {
      */
     PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO);
 
+    PageInfo<IntegralDistributionDTO> getIntegralDistributionDetails(String userAccount, IntegralDistributionDTO integralDistributionDTO);
+
     /**
      * 手机号积分补贴
-     * @param receiverPhone
+     * @param receiverPhones
      * @param integralAmount
      * @return
      */
-    JSONResult subsidyIntegralByPhone(String receiverPhone, Integer integralAmount);
+    JSONResult subsidyIntegralByPhone(List<String> receiverPhones, Integer integralAmount);
 
     /**
      * 获取积分购买比例
