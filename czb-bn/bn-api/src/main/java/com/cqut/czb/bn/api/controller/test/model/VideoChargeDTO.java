@@ -10,7 +10,6 @@ public class VideoChargeDTO {
     private String account;
     private String productCode;
     private Integer buyNum;
-    private String createTime;
     private Integer IsCallBack;
 
     public String getOrderId() {
@@ -43,14 +42,6 @@ public class VideoChargeDTO {
 
     public void setBuyNum(Integer buyNum) {
         this.buyNum = buyNum;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
     }
 
     public Integer getIsCallBack() {

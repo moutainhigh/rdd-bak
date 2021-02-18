@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
+import static com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPayServiceImpl.getNowDate;
+
 /**
  * @author Liyan
  */
@@ -41,7 +45,7 @@ public class VideoCharge {
         String params = "APIID=" + appId +
                 "&Account=" + account +
                 "&BuyNum=" + buyNum +
-                "&CreateTime=" + createTime +
+                "&CreateTime=" + getNowDate(new Date()) +
                 "&IsCallBack=" + isCallBack +
                 "&OrderID=" + orderId +
                 "&ProductCode=" + productCode;
