@@ -98,7 +98,7 @@
                           exchange_code exchangeCode from `czb_integral_exchange`)) as fnd
         where 1 = 1
         <if test="userAccount != null and userAccount != ''">
-            and fnd.userAccount = #{userAccount}
+            and fnd.userAccount like concat('%', #{userAccount},'%')
         </if>
         <if test="type != null and type != ''">
             and fnd.type = #{type}

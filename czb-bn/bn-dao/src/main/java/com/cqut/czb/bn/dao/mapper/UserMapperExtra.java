@@ -99,4 +99,11 @@ public interface UserMapperExtra {
     User selectPassword(UserInputDTO userInputDTO);
 
     String selectBindingAccount(String bindingid);
+
+    /**
+     * 模糊查询所有电话
+     * @param account
+     * @return
+     */
+    List<User> selectUserByAccount(String account);
 }

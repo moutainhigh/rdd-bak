@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.integral;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
@@ -135,4 +136,6 @@ public interface IntegralService {
      * @return
      */
     PageInfo<IntegralManageDTO> getIntegralValueList(PageDTO pageDTO);
+
+    List<User> fuzzyQueryUserPhone(String phone);
 }

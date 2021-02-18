@@ -276,4 +276,12 @@ public class IntegralController {
     public JSONResult deleteIntegralValue(PageDTO pageDTO) {
         return new JSONResult(integralService.getIntegralValueList(pageDTO));
     }
+
+    /**
+     * 模糊查询电话号码
+     */
+    @RequestMapping(value = "/fuzzyQueryUserPhone", method = RequestMethod.GET)
+    public JSONResult fuzzyQueryUserPhone(Principal principal, String phone) {
+        return new JSONResult(integralService.fuzzyQueryUserPhone(phone));
+    }
 }

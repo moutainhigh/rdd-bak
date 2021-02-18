@@ -485,4 +485,9 @@ public class IntegralServiceImpl implements IntegralService {
         List<IntegralManageDTO> integralInfoList = integralManageMapper.getIntegralValueList();
         return new PageInfo<>(integralInfoList);
     }
+
+    @Override
+    public List<User> fuzzyQueryUserPhone(String phone) {
+        return userMapperExtra.selectUserByAccount(phone);
+    }
 }
