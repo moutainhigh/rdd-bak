@@ -1,0 +1,61 @@
+package com.cqut.czb.bn.api.controller.test;
+
+import com.cqut.czb.bn.api.controller.test.model.VideoChargeDTO;
+import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
+import com.cqut.czb.bn.util.md5.MD5Util;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author Liyan
+ */
+@RestController
+@RequestMapping("/videoCharge")
+public class VideoCharge {
+
+    @GetMapping("/charge")
+    public JSONResult<String> charge(VideoChargeDTO videoChargeDTO){
+        String URL="http://open.jiaofei100.com/Api/PayVideo.aspx";
+        //人多多的订单号（由我方生成）
+        String orderId = videoChargeDTO.getOrderId();
+
+        // 充值账号
+        String account = videoChargeDTO.getAccount();
+
+        // 商品编号
+        String productCode = videoChargeDTO.getProductCode();
+
+        Integer buyNum = videoChargeDTO.getBuyNum();
+
+        String createTime = videoChargeDTO.getCreateTime();
+
+        Integer isCallBack = videoChargeDTO.getIsCallBack();
+
+        // appId
+        String appId = "20201605199061";
+
+        String appKey = "124FEE100E3FAE06BBEF09A59C72E5CD";
+
+        String params = "APIID=" + appId +
+                "&Account=" + account +
+                "&BuyNum=" + buyNum +
+                "&CreateTime=" + createTime +
+                "&IsCallBack=" + isCallBack +
+                "&OrderID=" + orderId +
+                "&ProductCode=" + productCode;
+
+        // sign
+        String sign = MD5Util.MD5Encode(params + "&APIKEY=" + appKey,"UTF-8").toUpperCase();
+
+        //设置请求参数
+        params = params + "&Sign=" + sign;
+
+        System.out.println(params);
+
+        String sr= HttpRequest.httpRequestGet(URL, params);
+
+        return new JSONResult<String>(sr);
+    }
+}
