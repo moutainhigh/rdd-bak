@@ -412,7 +412,9 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
-        List<IntegralInfoDTO> integralInfoList = integralInfoMapperExtra.selectIntegralInfoList(userAccount);
+        IntegralInfoDTO integralInfoDTO = new IntegralInfoDTO();
+        integralInfoDTO.setUserAccount(userAccount);
+        List<IntegralInfoDTO> integralInfoList = integralInfoMapperExtra.selectIntegralInfoList(integralInfoDTO);
         return new PageInfo<>(integralInfoList);
     }
 
