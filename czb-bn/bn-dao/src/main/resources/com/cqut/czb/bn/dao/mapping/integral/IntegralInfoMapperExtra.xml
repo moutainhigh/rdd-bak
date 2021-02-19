@@ -21,8 +21,10 @@
 
     <select id="selectIntegralInfoList" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO" >
         SELECT
-        b.user_account AS userAccount ,
-        a.current_total AS currentTotal
+        b.user_account AS userAccount,
+        a.current_total AS currentTotal,
+        a.got_total AS gotTotal,
+        a.update_at AS updateAT
         FROM czb_integral_info a
         JOIN czb_user b ON a.user_id = b.user_id
         <if test="userAccount != '' and userAccount != null">
