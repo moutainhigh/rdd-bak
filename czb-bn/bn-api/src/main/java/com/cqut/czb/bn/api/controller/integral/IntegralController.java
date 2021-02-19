@@ -3,10 +3,7 @@ package com.cqut.czb.bn.api.controller.integral;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralDistributionDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO;
+import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -288,11 +285,11 @@ public class IntegralController {
     /**
      * 获取兑换码的兑换人的详情
      * @param principal
-     * @param userAccount
+     * @param integralExchangeLogIdDTO
      * @return
      */
     @RequestMapping(value = "/getExchangeLogDetails", method = RequestMethod.GET)
-    public JSONResult getExchangeLogDetails(Principal principal, String userAccount, PageDTO pageDTO) {
-        return new JSONResult(integralService.getExchangeLogDetails(userAccount, pageDTO));
+    public JSONResult getExchangeLogDetails(Principal principal, IntegralExchangeLogIdDTO integralExchangeLogIdDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.getExchangeLogDetails(pageDTO, integralExchangeLogIdDTO));
     }
 }

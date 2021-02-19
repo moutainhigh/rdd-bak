@@ -139,5 +139,5 @@ public interface IntegralService {
 
     List<User> fuzzyQueryUserPhone(String phone);
 
-    PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(String userAccount, PageDTO pageDTO);
+    PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(PageDTO pageDTO, IntegralExchangeLogIdDTO integralExchangeLogIdDTO);
 }

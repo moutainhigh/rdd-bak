@@ -16,5 +16,5 @@ public interface IntegralExchangeLogIdMapperExtra {
      */
     IntegralExchangeLogId selectByIntegralExchange(IntegralExchangeLogId integralExchangeLogId);
 
-    List<IntegralExchangeLogIdDTO> getExchangeLogDetails(String userAccount);
+    List<IntegralExchangeLogIdDTO> getExchangeLogDetails(IntegralExchangeLogIdDTO integralExchangeLogIdDTO);
 }

@@ -504,9 +504,9 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(String userAccount, PageDTO pageDTO) {
+    public PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(PageDTO pageDTO, IntegralExchangeLogIdDTO integralExchangeLogIdDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
-        List<IntegralExchangeLogIdDTO> integralExchangeLogIdDTOList =  integralExchangeLogIdMapperExtra.getExchangeLogDetails(userAccount);
+        List<IntegralExchangeLogIdDTO> integralExchangeLogIdDTOList =  integralExchangeLogIdMapperExtra.getExchangeLogDetails(integralExchangeLogIdDTO);
         return new PageInfo<IntegralExchangeLogIdDTO>(integralExchangeLogIdDTOList);
     }
 }
