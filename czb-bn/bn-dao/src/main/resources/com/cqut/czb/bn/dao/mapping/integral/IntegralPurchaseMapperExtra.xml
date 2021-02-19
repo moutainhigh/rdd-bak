@@ -17,9 +17,9 @@
                 #{rechargeWay,jdbcType=INTEGER},
                 #{isReceived,jdbcType=INTEGER},
                 #{integralAmount,jdbcType=INTEGER},
-                #{thirdTradeNum,jdbcType=VARCHAR}
+                #{thirdTradeNum,jdbcType=VARCHAR},
                 now(),
-                now(),
+                now()
                )
     </insert>
 

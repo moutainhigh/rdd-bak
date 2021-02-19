@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.integral;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
@@ -15,12 +16,12 @@ public interface IntegralService {
      * @param userId
      * @return
      */
-    JSONResult getCurrentTotalIntegral(String userId);
+    JSONResult getCurrentTotalIntegral(String userId, String userAccount);
 
     /**
      * 积分明细
      */
-    List<IntegralLogDTO> getIntegralDetail(String userId);
+    PageInfo<IntegralLogDTO> getIntegralDetail(String userId, String userAccount, PageDTO pageDTO);
 
     /**
      * 赠送积分明细
@@ -135,4 +136,8 @@ public interface IntegralService {
      * @return
      */
     PageInfo<IntegralManageDTO> getIntegralValueList(PageDTO pageDTO);
+
+    List<User> fuzzyQueryUserPhone(String phone);
+
+    PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(PageDTO pageDTO, IntegralExchangeLogIdDTO integralExchangeLogIdDTO);
 }

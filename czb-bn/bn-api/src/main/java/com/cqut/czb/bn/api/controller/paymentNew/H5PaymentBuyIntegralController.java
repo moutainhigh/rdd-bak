@@ -46,7 +46,8 @@ public class H5PaymentBuyIntegralController {
     }
     @RequestMapping(value = "AliBuyIntegral",method = RequestMethod.POST)
     public JSONResult AliBuyIntegral(Principal principal, @RequestBody IntegralRechargeDTO integralRechargeDTO){
-        User user = (User)redisUtils.get(principal.getName());
+//        User user = (User)redisUtils.get(principal.getName());
+        User user = new User();
         String info =h5PaymentBuyIntegralService.AliBuyIntegral(user,integralRechargeDTO);
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);

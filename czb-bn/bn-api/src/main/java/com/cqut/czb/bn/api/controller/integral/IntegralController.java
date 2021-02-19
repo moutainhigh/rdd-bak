@@ -3,10 +3,7 @@ package com.cqut.czb.bn.api.controller.integral;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralDistributionDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralExchangeDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
-import com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO;
+import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -41,9 +38,9 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/getCurrentTotalIntegral", method = RequestMethod.GET)
-    public JSONResult getCurrentTotalIntegral(Principal principal) {
+    public JSONResult getCurrentTotalIntegral(Principal principal, String userAccount) {
         User user = (User) redisUtils.get(principal.getName());
-        return integralService.getCurrentTotalIntegral(user.getUserId());
+        return integralService.getCurrentTotalIntegral(user.getUserId(), userAccount);
     }
 
     /**
@@ -52,14 +49,14 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/getIntegralDetail",method = RequestMethod.GET)
-    public JSONResult getIntegralDetail(Principal principal) {
+    public JSONResult getIntegralDetail(Principal principal, String userAccount, PageDTO pageDTO) {
         User user = (User) redisUtils.get(principal.getName());
 
         if (user == null || user.getUserId() == null) {
             return new JSONResult("未登录",500);
         }
 
-        return new JSONResult(integralService.getIntegralDetail(user.getUserId()));
+        return new JSONResult(integralService.getIntegralDetail(user.getUserId(), userAccount, pageDTO));
     }
 
     /**
@@ -275,5 +272,24 @@ public class IntegralController {
     @RequestMapping(value = "/getIntegralValueList", method = RequestMethod.GET)
     public JSONResult deleteIntegralValue(PageDTO pageDTO) {
         return new JSONResult(integralService.getIntegralValueList(pageDTO));
+    }
+
+    /**
+     * 模糊查询电话号码
+     */
+    @RequestMapping(value = "/fuzzyQueryUserPhone", method = RequestMethod.GET)
+    public JSONResult fuzzyQueryUserPhone(Principal principal, String phone) {
+        return new JSONResult(integralService.fuzzyQueryUserPhone(phone));
+    }
+
+    /**
+     * 获取兑换码的兑换人的详情
+     * @param principal
+     * @param integralExchangeLogIdDTO
+     * @return
+     */
+    @RequestMapping(value = "/getExchangeLogDetails", method = RequestMethod.GET)
+    public JSONResult getExchangeLogDetails(Principal principal, IntegralExchangeLogIdDTO integralExchangeLogIdDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.getExchangeLogDetails(pageDTO, integralExchangeLogIdDTO));
     }
 }

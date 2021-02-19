@@ -138,6 +138,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         integralInfo.setUserId(user.getUserId());
         integralInfo.setGotTotal(0);
         integralInfo.setCurrentTotal(0);
+        integralInfo.setUpdateAt(new Date());
         integralInfoMapper.insert(integralInfo);
 
         return String.valueOf(true);

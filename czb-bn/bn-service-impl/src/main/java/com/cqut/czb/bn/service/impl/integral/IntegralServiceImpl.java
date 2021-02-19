@@ -72,15 +72,27 @@ public class IntegralServiceImpl implements IntegralService {
     @Autowired
     IntegralManageMapper integralManageMapper;
 
-    public JSONResult getCurrentTotalIntegral(String userId) {
-        return new JSONResult(integralInfoMapperExtra.selectByUserId(userId));
+    public JSONResult getCurrentTotalIntegral(String userId, String userAccount) {
+        if (userAccount == null || userAccount.equals("")) {
+            return new JSONResult(integralInfoMapperExtra.selectGainAndLossIntegralByUserId(userId));
+        } else {
+            User user = userMapperExtra.findUserByAccount(userAccount);
+            return new JSONResult(integralInfoMapperExtra.selectGainAndLossIntegralByUserId(user.getUserId()));
+        }
     }
 
     @Override
-    public List<IntegralLogDTO> getIntegralDetail(String userId) {
-        List<IntegralLogDTO> integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
-
-        return integralLogDTOList;
+    public PageInfo<IntegralLogDTO> getIntegralDetail(String userId, String userAccount, PageDTO pageDTO) {
+        List<IntegralLogDTO> integralLogDTOList = null;
+        if (userAccount == null || userAccount.equals("")) {
+            PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+            integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
+        } else {
+            User user = userMapperExtra.findUserByAccount(userAccount);
+            PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+            integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(user.getUserId());
+        }
+        return new PageInfo<>(integralLogDTOList);
     }
 
     @Override
@@ -484,5 +496,17 @@ public class IntegralServiceImpl implements IntegralService {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
         List<IntegralManageDTO> integralInfoList = integralManageMapper.getIntegralValueList();
         return new PageInfo<>(integralInfoList);
+    }
+
+    @Override
+    public List<User> fuzzyQueryUserPhone(String phone) {
+        return userMapperExtra.selectUserByAccount(phone);
+    }
+
+    @Override
+    public PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(PageDTO pageDTO, IntegralExchangeLogIdDTO integralExchangeLogIdDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<IntegralExchangeLogIdDTO> integralExchangeLogIdDTOList =  integralExchangeLogIdMapperExtra.getExchangeLogDetails(integralExchangeLogIdDTO);
+        return new PageInfo<IntegralExchangeLogIdDTO>(integralExchangeLogIdDTOList);
     }
 }
