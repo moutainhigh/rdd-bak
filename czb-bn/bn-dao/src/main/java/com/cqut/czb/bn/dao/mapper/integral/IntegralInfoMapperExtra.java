@@ -11,6 +11,8 @@ import java.util.List;
 public interface IntegralInfoMapperExtra {
     IntegralInfo selectByUserId(String userId);
 
+    IntegralInfoDTO selectGainAndLossIntegralByUserId(String userId);
+
     List<IntegralInfoDTO> selectIntegralInfoList(IntegralInfoDTO integralInfoDTO);
 
     int updateByPrimaryKeySync(IntegralInfo record);

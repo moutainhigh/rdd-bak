@@ -7,7 +7,9 @@ public class IntegralExchangeLogIdDTO {
 
     private String integralExchangeId;
 
-    private Integer exchangeUserId;
+    private String exchangeUserId;
+
+    private String userAccount;
 
     private Date createAt;
 
@@ -29,12 +31,20 @@ public class IntegralExchangeLogIdDTO {
         this.integralExchangeId = integralExchangeId == null ? null : integralExchangeId.trim();
     }
 
-    public Integer getExchangeUserId() {
+    public String getExchangeUserId() {
         return exchangeUserId;
     }
 
-    public void setExchangeUserId(Integer exchangeUserId) {
+    public void setExchangeUserId(String exchangeUserId) {
         this.exchangeUserId = exchangeUserId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 
     public Date getCreateAt() {

@@ -138,4 +138,6 @@ public interface IntegralService {
     PageInfo<IntegralManageDTO> getIntegralValueList(PageDTO pageDTO);
 
     List<User> fuzzyQueryUserPhone(String phone);
+
+    PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(String userAccount, PageDTO pageDTO);
 }

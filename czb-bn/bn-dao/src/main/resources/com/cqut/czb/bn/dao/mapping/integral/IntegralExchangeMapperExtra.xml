@@ -85,13 +85,17 @@
         select * from
         ((select a.integral_amount integralAmount,
                  b.user_account userAccount,
+                 null as isComplete,
+                 null as failureTime,
                  a.create_at createAt,
                  2 as type, null as integralExchange,
                  null as exchangeCode
         from `czb_integral_log` a left join `czb_user` b on a.user_id = b.user_id
         where a.integral_log_type = 7 and a.remark = "手机号补贴")
-        union all (select null as integralAmount,
+        union all (select exchange_amount as integralAmount,
                           null as userAccount,
+                          is_complete isComplete,
+                          failure_time failureTime,
                           create_at createAt,
                           1 as `type`,
                           integral_exchange integralExchange,

@@ -284,4 +284,15 @@ public class IntegralController {
     public JSONResult fuzzyQueryUserPhone(Principal principal, String phone) {
         return new JSONResult(integralService.fuzzyQueryUserPhone(phone));
     }
+
+    /**
+     * 获取兑换码的兑换人的详情
+     * @param principal
+     * @param userAccount
+     * @return
+     */
+    @RequestMapping(value = "/getExchangeLogDetails", method = RequestMethod.GET)
+    public JSONResult getExchangeLogDetails(Principal principal, String userAccount, PageDTO pageDTO) {
+        return new JSONResult(integralService.getExchangeLogDetails(userAccount, pageDTO));
+    }
 }
