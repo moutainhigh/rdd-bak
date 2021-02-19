@@ -24,7 +24,7 @@
         b.user_account AS userAccount,
         a.current_total AS currentTotal,
         a.got_total AS gotTotal,
-        a.update_at AS updateAT
+        a.update_at AS updateAt
         FROM czb_integral_info a
         JOIN czb_user b ON a.user_id = b.user_id
         <if test="userAccount != '' and userAccount != null">
