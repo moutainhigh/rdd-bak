@@ -11,6 +11,10 @@ public class IntegralInfoDTO {
 
     private Integer gotTotal;
 
+    private Integer getConsumeTotal;
+
+    private Integer getOfferTotal;
+
     private Integer currentTotal;
 
     private Date createAt;
@@ -47,6 +51,22 @@ public class IntegralInfoDTO {
 
     public void setGotTotal(Integer gotTotal) {
         this.gotTotal = gotTotal;
+    }
+
+    public Integer getGetConsumeTotal() {
+        return getConsumeTotal;
+    }
+
+    public void setGetConsumeTotal(Integer getConsumeTotal) {
+        this.getConsumeTotal = getConsumeTotal;
+    }
+
+    public Integer getGetOfferTotal() {
+        return getOfferTotal;
+    }
+
+    public void setGetOfferTotal(Integer getOfferTotal) {
+        this.getOfferTotal = getOfferTotal;
     }
 
     public Integer getCurrentTotal() {

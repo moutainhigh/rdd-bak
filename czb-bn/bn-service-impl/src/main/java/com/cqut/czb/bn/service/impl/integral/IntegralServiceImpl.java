@@ -73,7 +73,7 @@ public class IntegralServiceImpl implements IntegralService {
     IntegralManageMapper integralManageMapper;
 
     public JSONResult getCurrentTotalIntegral(String userId) {
-        return new JSONResult(integralInfoMapperExtra.selectByUserId(userId));
+        return new JSONResult(integralInfoMapperExtra.selectGainAndLossIntegralByUserId(userId));
     }
 
     @Override
@@ -489,5 +489,12 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public List<User> fuzzyQueryUserPhone(String phone) {
         return userMapperExtra.selectUserByAccount(phone);
+    }
+
+    @Override
+    public PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(String userAccount, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<IntegralExchangeLogIdDTO> integralExchangeLogIdDTOList =  integralExchangeLogIdMapperExtra.getExchangeLogDetails(userAccount);
+        return new PageInfo<IntegralExchangeLogIdDTO>(integralExchangeLogIdDTOList);
     }
 }

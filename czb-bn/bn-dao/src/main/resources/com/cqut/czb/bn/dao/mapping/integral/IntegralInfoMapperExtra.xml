@@ -19,6 +19,37 @@
         WHERE user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
+    <select id="selectGainAndLossIntegralByUserId" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
+        SELECT
+            userId,
+            SUM(
+                    IF
+                        ( integralType = 1 OR integralType = 2, integralAmount, 0 )) getOfferTotal,
+            SUM(
+                    IF
+                        ( integralType = 1 OR integralType = 2 OR integralType = 5, integralAmount, 0 )) getConsumeTotal,
+            gotTotal,
+            currentTotal
+        FROM
+            (
+                SELECT
+                    a.integral_info_id integralInfoId,
+                    a.user_id userId,
+                    a.current_total currentTotal,
+                    a.got_total gotTotal,
+                    b.integral_log_type integralType,
+                    b.integral_amount integralAmount
+                FROM
+                    `czb_integral_info` a
+                        LEFT JOIN czb_integral_log b ON a.user_id = b.user_id
+            ) AS fnd
+        WHERE
+            fnd.userId = #{userId}
+        GROUP BY
+            fnd.gotTotal,
+            fnd.currentTotal
+    </select>
+
     <select id="selectIntegralInfoList" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO" >
         SELECT
         b.user_account AS userAccount,

@@ -23,4 +23,23 @@
             AND  exchange_user_id = #{exchangeUserId}
         </if>
     </select>
+
+    <select id="getExchangeLogDetails" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralExchangeLogIdDTO">
+        select
+            integral_exchange_log_id integralExchangeLogId,
+            integral_exchange_id integralExchangeId,
+            exchange_user_id exchangeUserId,
+            a.create_at createAt,
+            user_account userAccount
+        from
+            czb_integral_exchange_log_id a
+                left join czb_user b on exchange_user_id = user_id
+        <where>
+             <if test="_parameter!='' and _parameter!=null">
+                 user_account like concat('%', #{_parameter},'%')
+             </if>
+        </where>
+        order by
+            a.create_at desc
+    </select>
 </mapper>
