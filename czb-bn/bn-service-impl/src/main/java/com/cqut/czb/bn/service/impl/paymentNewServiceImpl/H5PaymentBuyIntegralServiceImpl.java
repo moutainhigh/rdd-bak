@@ -3,7 +3,9 @@ package com.cqut.czb.bn.service.impl.paymentNewServiceImpl;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
@@ -12,6 +14,7 @@ import com.cqut.czb.bn.entity.dto.PayConfig.WeChatH5ParameterConfig;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyIntegralService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +36,10 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
     public String AliBuyIntegral(User user, IntegralRechargeDTO integralRechargeDTO) {
 
         //判空
-        if(user==null && integralRechargeDTO==null){
-            System.out.println("用户信息不全");
-            return null;
-        }
+//        if(user==null && integralRechargeDTO==null){
+//            System.out.println("用户信息不全");
+//            return null;
+//        }
 
         Double couponMoney=0.0;
         //生成起吊参数
@@ -45,27 +48,31 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
         //"0"为购买积分
         AlipayNewClientConfig alipayClientConfig = AlipayNewClientConfig.getInstance("0");
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
-        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+        AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
         double actualPrice= BigDecimal.valueOf(integralRechargeDTO.getAmount()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
 
         //购买者id
-        String ownerId = user.getUserId();
+//        String ownerId = user.getUserId();
+        //        String userId = user.getUserId();
+        String ownerId = "703610893704287052";
+        integralRechargeDTO.setUserId(ownerId);
         //支付订单
         request.setBizModel(AliParameterNewConfig.getBizModelIntegralCoupons(thirdOrder,integralRechargeDTO));
+        request.setReturnUrl(AliPayH5Config.Return_url);
         //支付回调接口
-        request.setNotifyUrl(AliPayConfig.IntegralRecharge_url);
+        request.setNotifyUrl(AliPayH5Config.IntegralRecharge_url);
         try {
-            // 这里和普通的接口调用不同，使用的是sdkExecute
-            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+            AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);;
             orderString = response.getBody();
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
         //payMethod 1为支付宝，2为微信
         Boolean orderInsert = insertBuyIntegral(thirdOrder,ownerId,integralRechargeDTO,1);
+        System.out.println(orderString);
         return orderString;
     }
 
@@ -111,10 +118,11 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
      */
     public Boolean insertBuyIntegral(String orderId, String userId, IntegralRechargeDTO integralRechargeDTO,int rechargeWay) {
         IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
-        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
+        integralPurchaseRecord.setIntegralPurchaseRecordId(StringUtil.createId());
         integralPurchaseRecord.setUserId(userId);
         integralPurchaseRecord.setAmount(integralRechargeDTO.getAmount());
         integralPurchaseRecord.setIntegralAmount(integralRechargeDTO.getIntegralAmount());
+        //支付状态：0未支付，1已支付
         integralPurchaseRecord.setIsReceived(0);
         integralPurchaseRecord.setRechargeWay(rechargeWay);
         integralPurchaseRecord.setThirdTradeNum(orderId);
