@@ -41,9 +41,9 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/getCurrentTotalIntegral", method = RequestMethod.GET)
-    public JSONResult getCurrentTotalIntegral(Principal principal) {
+    public JSONResult getCurrentTotalIntegral(Principal principal, String userAccount) {
         User user = (User) redisUtils.get(principal.getName());
-        return integralService.getCurrentTotalIntegral(user.getUserId());
+        return integralService.getCurrentTotalIntegral(user.getUserId(), userAccount);
     }
 
     /**
@@ -52,14 +52,14 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/getIntegralDetail",method = RequestMethod.GET)
-    public JSONResult getIntegralDetail(Principal principal) {
+    public JSONResult getIntegralDetail(Principal principal, String userAccount, PageDTO pageDTO) {
         User user = (User) redisUtils.get(principal.getName());
 
         if (user == null || user.getUserId() == null) {
             return new JSONResult("未登录",500);
         }
 
-        return new JSONResult(integralService.getIntegralDetail(user.getUserId()));
+        return new JSONResult(integralService.getIntegralDetail(user.getUserId(), userAccount, pageDTO));
     }
 
     /**

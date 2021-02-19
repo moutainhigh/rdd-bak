@@ -72,15 +72,27 @@ public class IntegralServiceImpl implements IntegralService {
     @Autowired
     IntegralManageMapper integralManageMapper;
 
-    public JSONResult getCurrentTotalIntegral(String userId) {
-        return new JSONResult(integralInfoMapperExtra.selectGainAndLossIntegralByUserId(userId));
+    public JSONResult getCurrentTotalIntegral(String userId, String userAccount) {
+        if (userAccount == null || userAccount.equals("")) {
+            return new JSONResult(integralInfoMapperExtra.selectGainAndLossIntegralByUserId(userId));
+        } else {
+            User user = userMapperExtra.findUserByAccount(userAccount);
+            return new JSONResult(integralInfoMapperExtra.selectGainAndLossIntegralByUserId(user.getUserId()));
+        }
     }
 
     @Override
-    public List<IntegralLogDTO> getIntegralDetail(String userId) {
-        List<IntegralLogDTO> integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
-
-        return integralLogDTOList;
+    public PageInfo<IntegralLogDTO> getIntegralDetail(String userId, String userAccount, PageDTO pageDTO) {
+        List<IntegralLogDTO> integralLogDTOList = null;
+        if (userAccount == null || userAccount.equals("")) {
+            PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+            integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
+        } else {
+            User user = userMapperExtra.findUserByAccount(userAccount);
+            PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+            integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(user.getUserId());
+        }
+        return new PageInfo<>(integralLogDTOList);
     }
 
     @Override

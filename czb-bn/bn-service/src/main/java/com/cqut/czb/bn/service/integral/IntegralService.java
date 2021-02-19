@@ -16,12 +16,12 @@ public interface IntegralService {
      * @param userId
      * @return
      */
-    JSONResult getCurrentTotalIntegral(String userId);
+    JSONResult getCurrentTotalIntegral(String userId, String userAccount);
 
     /**
      * 积分明细
      */
-    List<IntegralLogDTO> getIntegralDetail(String userId);
+    PageInfo<IntegralLogDTO> getIntegralDetail(String userId, String userAccount, PageDTO pageDTO);
 
     /**
      * 赠送积分明细
