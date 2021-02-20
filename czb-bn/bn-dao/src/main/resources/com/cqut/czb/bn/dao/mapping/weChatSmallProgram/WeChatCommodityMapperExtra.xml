@@ -139,6 +139,11 @@
             </if>
         </where>
     </select>
+    <select id="selectAllCommodityTitle" resultMap="BaseResultMap">
+        select
+            commodity_id, commodity_title
+        from czb_wechat_commodity
+    </select>
     <!-- 查询商品属性信息-->
     <select id="selectAllWxAttribute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultMap="BaseAttributeMap">
             SELECT

@@ -1,12 +1,16 @@
 package com.cqut.czb.bn.service.impl.integral;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingCommodityMapperExtra;
+import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.*;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralInfoMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralLogMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
@@ -65,6 +69,18 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     private BusinessProcessService refuelingCard;
+
+    @Autowired
+    WeChatCommodityMapper weChatCommodityMapper;
+
+    @Autowired
+    WeChatCommodityMapperExtra weChatCommodityMapperExtra;
+
+    @Autowired
+    DirectChargingCommodityMapperExtra directChargingCommodityMapperExtra;
+
+    @Autowired
+    EquityPaymentCommodityMapperExtra equityPaymentCommodityMapperExtra;
 
     @Autowired
     DictMapperExtra dictMapperExtra;
@@ -550,5 +566,31 @@ public class IntegralServiceImpl implements IntegralService {
                 }
             }
         }
+    }
+
+    @Override
+    public JSONResult getCommodityByType(String type) {
+        if(type.equals("1")) {
+            return new JSONResult(weChatCommodityMapperExtra.selectAllCommodityTitle());
+        }
+        if(type.equals("2")) {
+            return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("1", null));
+        }
+        if(type.equals("3")) {
+            return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("2", "3"));
+        }
+        if(type.equals("4")) {
+            return new JSONResult(equityPaymentCommodityMapperExtra.selectAllCommodityTitle());
+        }
+        else {
+            return new JSONResult("请求无效", 500);
+        }
+    }
+
+    @Override
+    public PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<IntegralDeductionInfoDTO> integralExchangeLogIdDTOList =  integralDeductionInfoMapperExtra.selectByCommodityType(integralDeductionInfo);
+        return new PageInfo<>(integralExchangeLogIdDTOList);
     }
 }
