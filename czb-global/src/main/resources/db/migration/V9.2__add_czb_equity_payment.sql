@@ -69,6 +69,7 @@ CREATE TABLE `czb_equity_payment_order` (
     `purchase_price` double(10,2) NULL DEFAULT NULL COMMENT '进价',
     `selling_price` double (10,2) NULL DEFAULT NULL COMMENT '售价',
     `unit_price` double(10,2) NULL DEFAULT NULL COMMENT '商品面值',
+    `fy_mount` double(10,2) NULL DEFAULT NULL COMMENT '反佣金额',
     `create_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
     `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`order_id`) USING BTREE
