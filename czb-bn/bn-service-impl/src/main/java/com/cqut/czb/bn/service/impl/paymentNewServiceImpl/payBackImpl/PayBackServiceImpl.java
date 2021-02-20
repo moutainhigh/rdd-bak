@@ -123,6 +123,7 @@ public class PayBackServiceImpl implements PayBackService {
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(userId);
+        integralLogDTO.setOrderId(orgId);
         integralLogDTO.setIntegralLogType(4);
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
