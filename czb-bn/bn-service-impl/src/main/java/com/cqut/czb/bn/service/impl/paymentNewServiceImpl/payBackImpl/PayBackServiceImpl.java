@@ -86,7 +86,7 @@ public class PayBackServiceImpl implements PayBackService {
                 continue;
             }
             if ("trade_no".equals(temp[0])) {
-                System.out.println("该交易在支付宝系统中的交易流水号:" + temp[1]);
+                System.out.println("该交易在支付宝系统中的交易流水号:" + temp[1]+ "\n" + thirdOrderId);
             }
             if ("out_trade_no".equals(temp[0])) {
                 System.out.println("商户网站唯一订单号:" + temp[1]);
@@ -116,13 +116,14 @@ public class PayBackServiceImpl implements PayBackService {
         integralPurchaseRecord.setThirdTradeNum(thirdOrderId);
         integralPurchaseRecord.setUpdateAt(new Date());
         integralPurchaseRecord.setIsReceived(1);
-        System.out.println("更新成功");
         boolean update = integralPurchaseMapperExtra.updateIntegralPurchaseRecord(integralPurchaseRecord) > 0;
+        System.out.println("更新成功"+ update);
 
         //插入log记录
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(userId);
+        integralLogDTO.setOrderId(orgId);
         integralLogDTO.setIntegralLogType(4);
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);

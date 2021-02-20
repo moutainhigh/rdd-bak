@@ -33,7 +33,7 @@ public class AliParameterNewConfig {
         pbp.put("orgId", orgId);
         pbp.put("money", integralRechargeDTO.getAmount());
         pbp.put("integralAmount",integralRechargeDTO.getIntegralAmount());
-        pbp.put("ownerId", integralRechargeDTO.getUserId());
+        pbp.put("userId", integralRechargeDTO.getUserId());
         return StringUtil.transMapToStringOther(pbp);
     }
 }

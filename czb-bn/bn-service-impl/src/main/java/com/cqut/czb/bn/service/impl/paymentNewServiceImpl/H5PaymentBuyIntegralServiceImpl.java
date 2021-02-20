@@ -57,7 +57,7 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
         //购买者id
 //        String ownerId = user.getUserId();
         //        String userId = user.getUserId();
-        String ownerId = "703610893704287052";
+        String ownerId = "703614235874580972";
         integralRechargeDTO.setUserId(ownerId);
         //支付订单
         request.setBizModel(AliParameterNewConfig.getBizModelIntegralCoupons(thirdOrder,integralRechargeDTO));
@@ -118,7 +118,7 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
      */
     public Boolean insertBuyIntegral(String orderId, String userId, IntegralRechargeDTO integralRechargeDTO,int rechargeWay) {
         IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
-        integralPurchaseRecord.setIntegralPurchaseRecordId(StringUtil.createId());
+        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
         integralPurchaseRecord.setUserId(userId);
         integralPurchaseRecord.setAmount(integralRechargeDTO.getAmount());
         integralPurchaseRecord.setIntegralAmount(integralRechargeDTO.getIntegralAmount());
