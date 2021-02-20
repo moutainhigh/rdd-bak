@@ -118,7 +118,7 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
      */
     public Boolean insertBuyIntegral(String orderId, String userId, IntegralRechargeDTO integralRechargeDTO,int rechargeWay) {
         IntegralPurchaseRecord integralPurchaseRecord = new IntegralPurchaseRecord();
-        integralPurchaseRecord.setIntegralPurchaseRecordId(StringUtil.createId());
+        integralPurchaseRecord.setIntegralPurchaseRecordId(orderId);
         integralPurchaseRecord.setUserId(userId);
         integralPurchaseRecord.setAmount(integralRechargeDTO.getAmount());
         integralPurchaseRecord.setIntegralAmount(integralRechargeDTO.getIntegralAmount());
