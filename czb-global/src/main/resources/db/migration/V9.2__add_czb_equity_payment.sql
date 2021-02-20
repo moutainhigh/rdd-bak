@@ -9,7 +9,7 @@ CREATE TABLE `czb_equity_payment_commodity` (
     `purchase_price` double(10,2) NULL DEFAULT NULL COMMENT '进价',
     `selling_price` double (10,2) NULL DEFAULT NULL COMMENT '售价',
     `goods_pic` varchar(50) NULL DEFAULT NULL COMMENT '商品图片',
-    `unit_price` int(8) NULL DEFAULT NULL COMMENT '商品面值',
+    `unit_price` double(10,2) NULL DEFAULT NULL COMMENT '商品面值',
     `is_game` int(1) NULL DEFAULT NULL COMMENT '是否是游戏（为1时需要传入区服信息）',
     `desc` varchar(1000) NULL DEFAULT NULL COMMENT '描述信息',
     `on_sale` int(1) NULL DEFAULT NULL COMMENT '是否开售',
@@ -29,6 +29,7 @@ CREATE TABLE `czb_equity_payment_category` (
     `category_name` varchar(20) DEFAULT NULL COMMENT '类目名称',
     `order` varchar(20) NULL DEFAULT NULL COMMENT '类目显示排序字段',
     `is_hot` int(8) NULL DEFAULT NULL COMMENT '是否热门',
+    `is_delete` int(8) NULL DEFAULT NULL COMMENT '是否删除',
     `create_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
     `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`category_id`) USING BTREE
@@ -43,6 +44,7 @@ CREATE TABLE `czb_equity_payment_type` (
     `pic` varchar(50) NULL DEFAULT NULL COMMENT '商品类别图片',
     `order` int(8) NULL DEFAULT NULL COMMENT '类别显示排序字段',
     `is_hot` int(8) NULL DEFAULT NULL COMMENT '是否热门',
+    `is_delete` int(8) NULL DEFAULT NULL COMMENT '是否删除',
     `create_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
     `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`type_id`) USING BTREE
@@ -64,10 +66,9 @@ CREATE TABLE `czb_equity_payment_order` (
     `client_ip` varchar(20) NULL DEFAULT NULL COMMENT '客户端IP（区服信息）',
     `buy_num` int(8) NULL DEFAULT NULL COMMENT '购买数量',
     `code` varchar(100) NULL DEFAULT NULL COMMENT '卡密 / 链接',
-    `fy_mount` double(10,2) NULL DEFAULT NULL COMMENT '反佣金额',
     `purchase_price` double(10,2) NULL DEFAULT NULL COMMENT '进价',
     `selling_price` double (10,2) NULL DEFAULT NULL COMMENT '售价',
-    `unit_price` int(8) NULL DEFAULT NULL COMMENT '商品面值',
+    `unit_price` double(10,2) NULL DEFAULT NULL COMMENT '商品面值',
     `create_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
     `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`order_id`) USING BTREE
