@@ -57,7 +57,7 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
         //购买者id
 //        String ownerId = user.getUserId();
         //        String userId = user.getUserId();
-        String ownerId = "703610893704287052";
+        String ownerId = "703614235874580972";
         integralRechargeDTO.setUserId(ownerId);
         //支付订单
         request.setBizModel(AliParameterNewConfig.getBizModelIntegralCoupons(thirdOrder,integralRechargeDTO));
