@@ -12,4 +12,6 @@ public interface IntegralDeductionInfoMapperExtra {
     Double getMaxDeductionAmount(String commodityId);
 
     int insertRecord(IntegralDeductionInfo record);
+
+    IntegralDeductionInfo selectByCommodityId(IntegralDeductionInfo integralDeductionInfo);
 }

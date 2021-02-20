@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra">
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" >
+        <id column="integral_deduction_info_id" property="integralDeductionInfoId" jdbcType="VARCHAR" />
+        <result column="deduction_type" property="deductionType" jdbcType="INTEGER" />
+        <result column="max_deduction_amount" property="maxDeductionAmount" jdbcType="DOUBLE" />
+        <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        integral_deduction_info_id, deduction_type, max_deduction_amount, commodity_id, create_at,
+    update_at
+    </sql>
     <select id="getMaxDeductionAmount" resultType="java.lang.Double" parameterType="java.lang.String">
         select
             max_deduction_amount
@@ -11,4 +23,11 @@
     <insert id="insertRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
         insert into czb_integral_deduction_info
     </insert>
+
+    <select id="selectByCommodityId" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from czb_integral_deduction_info
+        where commodity_id = #{commodityId}
+    </select>
 </mapper>

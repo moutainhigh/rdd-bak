@@ -10,10 +10,7 @@ import com.cqut.czb.bn.dao.mapper.integral.IntegrallogMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
-import com.cqut.czb.bn.entity.entity.integral.IntegralExchange;
-import com.cqut.czb.bn.entity.entity.integral.IntegralExchangeLogId;
-import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
-import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
+import com.cqut.czb.bn.entity.entity.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -38,6 +35,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     IntegralDeductionInfoMapperExtra integralDeductionInfoMapperExtra;
+
+    @Autowired
+    IntegralDeductionInfoMapper integralDeductionInfoMapper;
 
     @Autowired
     IntegralInfoMapperExtra integralInfoMapperExtra;
@@ -508,5 +508,47 @@ public class IntegralServiceImpl implements IntegralService {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
         List<IntegralExchangeLogIdDTO> integralExchangeLogIdDTOList =  integralExchangeLogIdMapperExtra.getExchangeLogDetails(integralExchangeLogIdDTO);
         return new PageInfo<IntegralExchangeLogIdDTO>(integralExchangeLogIdDTOList);
+    }
+
+    @Override
+    public JSONResult insertMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo) {
+        if (integralDeductionInfoMapperExtra.selectByCommodityId(integralDeductionInfo) != null) {
+            return new JSONResult("新增失败，此商品的抵扣额度已存在");
+        }
+
+        integralDeductionInfo.setIntegralDeductionInfoId(StringUtil.createId());
+        integralDeductionInfo.setCreateAt(new Date());
+
+        if (integralDeductionInfoMapper.insert(integralDeductionInfo) == 1) {
+            return new JSONResult("新增成功");
+        } else {
+            return new JSONResult("新增失败");
+        }
+    }
+
+    @Override
+    public JSONResult updateMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo) {
+        IntegralDeductionInfo oldIntegralDeductionInfo = integralDeductionInfoMapper.selectByPrimaryKey(integralDeductionInfo.getIntegralDeductionInfoId());
+        if (oldIntegralDeductionInfo == null) {
+            return new JSONResult("更新失败，原商品已经不存在");
+        }
+
+        if (oldIntegralDeductionInfo.getCommodityId().equals(integralDeductionInfo.getCommodityId())) {
+            if (integralDeductionInfoMapper.updateByPrimaryKey(integralDeductionInfo) == 1) {
+                return new JSONResult("更新成功");
+            } else {
+                return new JSONResult("更新失败");
+            }
+        } else {
+            if (integralDeductionInfoMapperExtra.selectByCommodityId(integralDeductionInfo) != null) {
+                return new JSONResult("更新失败，此商品的抵扣额度已存在");
+            } else {
+                if (integralDeductionInfoMapper.updateByPrimaryKey(integralDeductionInfo) == 1) {
+                    return new JSONResult("更新成功");
+                } else {
+                    return new JSONResult("更新失败");
+                }
+            }
+        }
     }
 }

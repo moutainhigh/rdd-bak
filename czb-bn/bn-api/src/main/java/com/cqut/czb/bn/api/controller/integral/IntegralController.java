@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
@@ -291,5 +292,15 @@ public class IntegralController {
     @RequestMapping(value = "/getExchangeLogDetails", method = RequestMethod.GET)
     public JSONResult getExchangeLogDetails(Principal principal, IntegralExchangeLogIdDTO integralExchangeLogIdDTO, PageDTO pageDTO) {
         return new JSONResult(integralService.getExchangeLogDetails(pageDTO, integralExchangeLogIdDTO));
+    }
+
+    @RequestMapping(value = "/insertMaxDeductionAmount", method = RequestMethod.POST)
+    public JSONResult insertMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
+        return integralService.insertMaxDeductionAmount(integralDeductionInfo);
+    }
+
+    @RequestMapping(value = "/updateMaxDeductionAmount", method = RequestMethod.POST)
+    public JSONResult updateMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
+        return integralService.updateMaxDeductionAmount(integralDeductionInfo);
     }
 }

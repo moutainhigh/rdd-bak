@@ -4,6 +4,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
@@ -140,4 +141,8 @@ public interface IntegralService {
     List<User> fuzzyQueryUserPhone(String phone);
 
     PageInfo<IntegralExchangeLogIdDTO> getExchangeLogDetails(PageDTO pageDTO, IntegralExchangeLogIdDTO integralExchangeLogIdDTO);
+
+    JSONResult insertMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo);
+
+    JSONResult updateMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo);
 }
