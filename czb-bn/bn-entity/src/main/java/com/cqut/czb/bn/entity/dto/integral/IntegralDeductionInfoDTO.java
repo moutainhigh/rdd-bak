@@ -17,9 +17,9 @@ public class IntegralDeductionInfoDTO {
 
     private Date updateAt;
 
-    private Date beginDate;
+    private String beginDate;
 
-    private Date overDate;
+    private String overDate;
 
     public String getIntegralDeductionInfoId() {
         return integralDeductionInfoId;
@@ -77,19 +77,19 @@ public class IntegralDeductionInfoDTO {
         this.commodityTitle = commodityTitle;
     }
 
-    public Date getBeginDate() {
+    public String getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(String beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getOverDate() {
+    public String getOverDate() {
         return overDate;
     }
 
-    public void setOverDate(Date overDate) {
+    public void setOverDate(String overDate) {
         this.overDate = overDate;
     }
 }
