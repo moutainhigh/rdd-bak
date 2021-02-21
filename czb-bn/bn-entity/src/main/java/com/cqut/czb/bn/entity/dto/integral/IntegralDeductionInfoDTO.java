@@ -11,6 +11,8 @@ public class IntegralDeductionInfoDTO {
 
     private String commodityId;
 
+    private String commodityTitle;
+
     private Date createAt;
 
     private Date updateAt;
@@ -61,5 +63,13 @@ public class IntegralDeductionInfoDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getCommodityTitle() {
+        return commodityTitle;
+    }
+
+    public void setCommodityTitle(String commodityTitle) {
+        this.commodityTitle = commodityTitle;
     }
 }

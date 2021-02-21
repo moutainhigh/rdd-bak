@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
+import net.sf.json.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -302,5 +303,25 @@ public class IntegralController {
     @RequestMapping(value = "/updateMaxDeductionAmount", method = RequestMethod.POST)
     public JSONResult updateMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
         return integralService.updateMaxDeductionAmount(integralDeductionInfo);
+    }
+
+    /**
+     * 根据商品类型查询下属商品
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/getCommodityByType", method = RequestMethod.GET)
+    public JSONResult getCommodityByType(String type) {
+        return integralService.getCommodityByType(type);
+    }
+
+    /**
+     * 根据商品类型分页查询商品
+     * @param integralDeductionInfo
+     * @return
+     */
+    @RequestMapping(value = "/getCommodityByPage", method = RequestMethod.GET)
+    public JSONResult getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO) {
+        return new JSONResult(integralService.getCommodityByPage(integralDeductionInfo, pageDTO));
     }
 }

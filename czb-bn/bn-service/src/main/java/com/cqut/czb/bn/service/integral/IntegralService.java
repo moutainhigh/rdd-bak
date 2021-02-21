@@ -145,4 +145,18 @@ public interface IntegralService {
     JSONResult insertMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo);
 
     JSONResult updateMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo);
+
+    /**
+     * 根据商品类型查询下属商品
+     * @param type
+     * @return
+     */
+    JSONResult getCommodityByType(String type);
+
+    /**
+     * 根据商品类型分页查询商品
+     * @param integralDeductionInfo
+     * @return
+     */
+    PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO);
 }
