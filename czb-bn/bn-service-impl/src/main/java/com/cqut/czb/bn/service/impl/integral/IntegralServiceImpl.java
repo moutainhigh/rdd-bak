@@ -518,6 +518,7 @@ public class IntegralServiceImpl implements IntegralService {
 
         integralDeductionInfo.setIntegralDeductionInfoId(StringUtil.createId());
         integralDeductionInfo.setCreateAt(new Date());
+        integralDeductionInfo.setUpdateAt(new Date());
 
         if (integralDeductionInfoMapper.insert(integralDeductionInfo) == 1) {
             return new JSONResult("新增成功");
