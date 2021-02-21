@@ -24,7 +24,10 @@ public class WeChatH5PayConfig {
     public static final String Integral_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WeChatPayment/weChatBuyIntegral";
 
     //中石化码商、无卡加油
-    public static final String Applet_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/AppletVerifyAsyn/verifyAppletPaymentWeChat";
+    public static final String Applet_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WeChatPayment/verifyAppletPaymentWeChat";
+
+    //权益商品购买
+    public static final String EquityGoods_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WeChatPayment/weChatBuyEquityGoods";
 
     //交易类型——h5支付
     public static final String trade_type = "MWEB";

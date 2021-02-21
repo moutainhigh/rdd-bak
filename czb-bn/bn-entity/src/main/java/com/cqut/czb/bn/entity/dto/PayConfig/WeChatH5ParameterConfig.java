@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.util.string.StringUtil;
 
@@ -168,6 +169,61 @@ public class WeChatH5ParameterConfig {
 
     }
 
+    /**
+     * 购买权益商品
+     */
+    public static SortedMap<String, Object> getParametersEquityGoods(String nonceStrTemp, String orderId, String userId, EquityPaymentDTO equityPaymentDTO) {
+//        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters = getParameters();
+        String attach=getAttachEquityGoods(userId, orderId, equityPaymentDTO);
+        if (equityPaymentDTO.getIsBrowser() == 1) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", "JSAPI");
+        } else if (equityPaymentDTO.getIsBrowser() == 0) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        } else if (equityPaymentDTO.getIsBrowser() == 2) {
+            parameters.put("trade_type", "APP");
+            parameters.put("appid", "wxec50dac5d04a0c9f");
+        }
+        System.out.println("9999"+parameters);
+        parameters.put("attach",attach);
+        parameters.put("detail","微信支付权益商品");//支付的类容备注
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("notify_url", WeChatH5PayConfig.EquityGoods_url);//通用一个接口（购买和充值）
+        parameters.put("out_trade_no", orderId);
+        BigInteger totalFee = (BigDecimal.valueOf(equityPaymentDTO.getAmount()).multiply(new BigDecimal(100))).toBigInteger();
+        System.out.println(totalFee);
+        parameters.put("total_fee", totalFee);
+        parameters.put("sign", WeChatUtils.createH5Sign("UTF-8", parameters));//编码格式
+        System.out.println(WeChatUtils.createH5Sign("UTF-8", parameters));
+        System.out.println(parameters);
+//        parameters.put("device_info", WeChatH5PayConfig.device_info);
+        return parameters;
+    }
+
+    /**
+     * 微信支付——订单格外数据(购买权益商品）
+     */
+    public static String getAttachEquityGoods(String userId, String orderId, EquityPaymentDTO equityPaymentDTO) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("userId", userId);
+        pbp.put("orderId", orderId);
+        pbp.put("amount", equityPaymentDTO.getAmount());
+        pbp.put("account",equityPaymentDTO.getAccount());
+        pbp.put("productCode",equityPaymentDTO.getProductCode());
+        pbp.put("buyNum",equityPaymentDTO.getBuyNum());
+        pbp.put("isCallBack",equityPaymentDTO.getIsCallBack());
+        pbp.put("tradeType",equityPaymentDTO.getTradeType());
+        pbp.put("clientIP",equityPaymentDTO.getClientIP());
+        pbp.put("unitPrice",equityPaymentDTO.getUnitPrice());
+        pbp.put("totalPrice",equityPaymentDTO.getTotalPrice());
+        pbp.put("goodsId",equityPaymentDTO.getGoodsId());
+        pbp.put("integralAmount",equityPaymentDTO.getIntegralAmount());
+        pbp.put("rechargeType",equityPaymentDTO.getProductCode());
+        return StringUtil.transMapToStringOther(pbp);
+    }
 
     //封装parameters
     public static SortedMap<String, Object> getParameters(){
