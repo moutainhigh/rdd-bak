@@ -1,6 +1,9 @@
 package com.cqut.czb.bn.dao.mapper.integral;
 
+import com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO;
 import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
+
+import java.util.List;
 
 public interface IntegralDeductionInfoMapperExtra {
 
@@ -14,4 +17,6 @@ public interface IntegralDeductionInfoMapperExtra {
     int insertRecord(IntegralDeductionInfo record);
 
     IntegralDeductionInfo selectByCommodityId(IntegralDeductionInfo integralDeductionInfo);
+
+    List<IntegralDeductionInfoDTO> selectByCommodityType(IntegralDeductionInfo integralDeductionInfo);
 }

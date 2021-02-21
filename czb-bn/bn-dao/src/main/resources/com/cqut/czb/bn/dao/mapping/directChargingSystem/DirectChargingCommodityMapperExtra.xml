@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingCommodityMapperExtra" >
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity" >
+        <id column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
+        <result column="account" property="account" jdbcType="DOUBLE" />
+        <result column="discount" property="discount" jdbcType="DOUBLE" />
+        <result column="preferential_price" property="preferentialPrice" jdbcType="DOUBLE" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="commodity_type" property="commodityType" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    commodity_id, account, discount, preferential_price, state, create_at, update_at,
+    commodity_type
+    </sql>
+    <select id="selectAllCommodityTitle" resultMap="BaseResultMap">
+        select
+        commodity_id,
+        account,
+        commodity_type
+        from czb_direct_charging_commodity
+        where 1 = 1
+        <if test="commodityType1 != '' and commodityType1 != null">
+            and commodity_type = #{commodityType1,jdbcType=VARCHAR}
+        </if>
+        <if test="commodityType2 != '' and commodityType2 != null">
+            or commodity_type = #{commodityType2,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

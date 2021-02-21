@@ -30,4 +30,31 @@
         from czb_integral_deduction_info
         where commodity_id = #{commodityId}
     </select>
+    <select id="selectByCommodityType" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo">
+    SELECT
+    CASE
+        deduction_type
+    WHEN 1 THEN
+        (SELECT commodity_title FROM czb_wechat_commodity t2 WHERE t2.commodity_id = t1.commodity_id)
+    WHEN 2 THEN
+        (SELECT account FROM czb_direct_charging_commodity t2 WHERE t2.commodity_id = t1.commodity_id and t2.commodity_type=1)
+    WHEN 3 THEN
+        (SELECT account FROM czb_direct_charging_commodity t2 WHERE t2.commodity_id = t1.commodity_id and (t2.commodity_type=2 or t2.commodity_type=3))
+    WHEN 4 THEN
+        (SELECT goods_title FROM czb_equity_payment_commodity t2 WHERE t2.goods_id = t1.commodity_id)
+    END AS "commodityTitle",
+    integral_deduction_info_id AS integralDeductionInfoId,
+    commodity_id AS commodityId,
+    deduction_type AS deductionType,
+    max_deduction_amount AS maxDeductionAmount,
+    update_at AS updateAt
+    FROM
+        czb_integral_deduction_info t1
+    <if test="deductionType != '' and deductionType != null">
+        WHERE
+        t1.deduction_type = #{deductionType, jdbcType=VARCHAR}
+    </if>
+    ORDER BY update_at DESC
+    </select>
+
 </mapper>

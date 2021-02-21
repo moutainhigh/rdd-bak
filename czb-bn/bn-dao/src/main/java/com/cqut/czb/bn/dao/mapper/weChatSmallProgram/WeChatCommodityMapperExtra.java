@@ -21,6 +21,12 @@ public interface WeChatCommodityMapperExtra {
      */
     List<WxCommodityDTO> selectAllCommodity(WxCommodityDTO wxCommodityDTO);
 
+    /**
+     * 用于后台管理系统
+     * @return
+     */
+    List<WxCommodityDTO> selectAllCommodityTitle();
+
     int deleteByPrimaryKey(String commodityId);
 
     /**
