@@ -33,7 +33,7 @@ public class WeChatH5PayConfig {
 //    public static final String device_info = "WEB";
 
     // 商品描述
-    public static final String body = "代充值服务";
+    public static final String body = "充值服务";
 
     // 请求预支付接口
     public static final String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";

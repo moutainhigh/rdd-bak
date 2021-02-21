@@ -28,6 +28,8 @@ public class IntegralRechargeDTO {
 
     private Integer isReceived;
 
+    private Integer isBrowser;
+
     private Date createAt;
 
     private Date updateAt;
@@ -142,5 +144,13 @@ public class IntegralRechargeDTO {
 
     public void setThirdOrderId(String thirdOrderId) {
         this.thirdOrderId = thirdOrderId;
+    }
+
+    public Integer getIsBrowser() {
+        return isBrowser;
+    }
+
+    public void setIsBrowser(Integer isBrowser) {
+        this.isBrowser = isBrowser;
     }
 }

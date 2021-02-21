@@ -42,12 +42,19 @@ public class WeChatH5ParameterConfig {
     /**
      * 直充服务
      */
-    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount) {
+    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters = getParameters();
         String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount);
         parameters.put("attach",attach);
+        if (isBrowser == 0) {
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        } else if (isBrowser == 1) {
+            parameters.put("trade_type", "JSAPI");
+        } else if (isBrowser == 2) {
+            parameters.put("trade_type", "APP");
+        }
         parameters.put("detail","微信支付直充服务");//支付的类容备注
         parameters.put("nonce_str", nonceStrTemp);
         parameters.put("notify_url", WeChatH5PayConfig.Direct_url);//通用一个接口（购买和充值）
@@ -75,23 +82,6 @@ public class WeChatH5ParameterConfig {
         return StringUtil.transMapToStringOther(pbp);
     }
 
-    //中石化码商和无卡加油使用
-    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity){
-        SortedMap<String,Object> parameters = new TreeMap<String, Object>();
-        parameters=getParameters();
-        parameters.put("nonce_str",nonceStrTemp);
-        parameters.put("out_trade_no",orgId);
-        parameters.put("openid",userAccount);
-        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
-        parameters.put("total_fee",totalFee);
-        parameters.put("notify_url",WeChatH5PayConfig.Applet_url);
-        parameters.put("detail","微信小程序支付");
-        String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId());
-        parameters.put("attach",attach);
-        parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
-        return parameters;
-    }
-
     /**
      * 微信支付-中石化码商和无卡加油使用
      * @param orgId
@@ -114,11 +104,23 @@ public class WeChatH5ParameterConfig {
     /**
      * 购买积分服务
      */
-    public static SortedMap<String, Object> getParametersIntegral(String nonceStrTemp, String orderId, String userId, Double amount, Integer integralAmount) {
+    public static SortedMap<String, Object> getParametersIntegral(String nonceStrTemp, String orderId, String userId, Double amount, Integer integralAmount, Integer isBrowser) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters = getParameters();
         String attach=getAttachIntegral(userId, orderId, amount, integralAmount);
+        if (isBrowser == 1) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", "JSAPI");
+        } else if (isBrowser == 0) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        } else if (isBrowser == 2) {
+            parameters.put("trade_type", "APP");
+            parameters.put("appid", "wxec50dac5d04a0c9f");
+        }
+        System.out.println("9999"+parameters);
+        System.out.println(isBrowser);
         parameters.put("attach",attach);
         parameters.put("detail","微信支付积分购买服务");//支付的类容备注
         parameters.put("nonce_str", nonceStrTemp);
@@ -142,20 +144,39 @@ public class WeChatH5ParameterConfig {
         pbp.put("userId", userId);
         pbp.put("orderId", orderId);
         pbp.put("amount", amount);
+        pbp.put("integralAmount", integralAmount);
         return StringUtil.transMapToStringOther(pbp);
+    }
+
+    //微信库存商品使用
+    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity){
+        SortedMap<String,Object> parameters = new TreeMap<String, Object>();
+        parameters=getParameters();
+        parameters.put("appid", WeChatH5PayConfig.app_id);
+        parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        parameters.put("nonce_str",nonceStrTemp);
+        parameters.put("out_trade_no",orgId);
+        parameters.put("openid",userAccount);
+        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("total_fee",totalFee);
+        parameters.put("notify_url",WeChatH5PayConfig.Applet_url);
+        parameters.put("detail","微信石化码商支付");
+        String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId());
+        parameters.put("attach",attach);
+        parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
+        return parameters;
+
     }
 
 
     //封装parameters
     public static SortedMap<String, Object> getParameters(){
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
-        parameters.put("appid", WeChatH5PayConfig.app_id);
         parameters.put("body", WeChatH5PayConfig.body);
         parameters.put("mch_id", WeChatH5PayConfig.mch_id);
 //        parameters.put("device_info", WeChatH5PayConfig.device_info);
         parameters.put("sign_type", WeChatH5PayConfig.sign_type);
         parameters.put("spbill_create_ip", WeChatH5PayConfig.spbill_create_ip);
-        parameters.put("trade_type", WeChatH5PayConfig.trade_type);
         return parameters;
     }
 

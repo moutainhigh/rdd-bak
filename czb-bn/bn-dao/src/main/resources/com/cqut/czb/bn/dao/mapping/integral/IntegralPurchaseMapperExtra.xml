@@ -27,7 +27,7 @@
         update czb_integral_purchase_record
         set third_trade_num = #{thirdTradeNum,jdbcType=VARCHAR}
           ,update_at = #{updateAt,jdbcType=TIMESTAMP}
-          ,isReceived = #{isReceived ,jdbcType=INTEGER}
+          ,is_received = #{isReceived ,jdbcType=INTEGER}
         where
             integral_purchase_record_id = #{integralPurchaseRecordId,jdbcType=VARCHAR}
     </update>
@@ -40,6 +40,7 @@
                                                   integral_amount,
                                                   order_id,
                                                   before_integral_amount,
+                                                  remark,
                                                   create_at,
                                                   update_at)
         values (#{integralLogId,jdbcType=VARCHAR},
@@ -49,14 +50,16 @@
                 #{integralAmount,jdbcType=INTEGER},
                 #{orderId,jdbcType=VARCHAR},
                 #{beforeIntegralAmount,jdbcType=INTEGER},
+                "购买",
                 now(),
-                now(),
+                now()
                )
     </insert>
 
-    <update id="updateIntegralInfo">
+    <update id="updateIntegralInfo" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
         update czb_integral_info
-        set current_total = #{currentTotal,jdbcType=INTEGER}
+        set current_total = #{currentTotal,jdbcType=INTEGER},
+            got_total = #{gotTotal,jdbcType=INTEGER}
         where
             user_id = #{userId,jdbcType=VARCHAR}
     </update>

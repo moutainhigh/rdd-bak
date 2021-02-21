@@ -36,4 +36,18 @@ public class H5PaymentBuyCommodityController {
         }
         return new JSONResult( h5PaymentBuyCommodityService.WeChatAppletPaymentBuyCommodity(user,payInputDTO));
     }
+
+    /**
+     * 支付宝商品支付
+     * @param   principal,payInputDTO
+     * @return
+     */
+    @RequestMapping(value = "/AliAppletPayment", method = RequestMethod.POST)
+    public JSONResult AliAppletPayment(Principal principal, @RequestBody PayInputDTO payInputDTO) {
+        User user = (User)redisUtils.get(principal.getName());
+        if(user==null){
+            return new JSONResult("未登录",405,null);
+        }
+        return new JSONResult( h5PaymentBuyCommodityService.AliAppletPaymentBuyCommodity(user,payInputDTO));
+    }
 }

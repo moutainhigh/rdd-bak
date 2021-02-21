@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.directChargingSystem;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -34,7 +35,9 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String cardholder;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Integer isBrowser;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
     @DateTimeFormat(pattern ="yyyy-MM-dd")
@@ -198,6 +201,14 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setCardholder(String cardholder) {
         this.cardholder = cardholder;
+    }
+
+    public Integer getIsBrowser() {
+        return isBrowser;
+    }
+
+    public void setIsBrowser(Integer isBrowser) {
+        this.isBrowser = isBrowser;
     }
 
     @Override

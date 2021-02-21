@@ -2,6 +2,10 @@ package com.cqut.czb.bn.service.impl.paymentNewServiceImpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
@@ -9,10 +13,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.AttributeMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatStockMapperExtra;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatBackDTO;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatParameterConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
+import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.*;
@@ -142,6 +143,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         //计时器——4分钟之后执行
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
+            @Override
             public void run() {
                 System.out.println("改变状态状态计时器");
                 int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
@@ -165,12 +167,152 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         double fyMoney= (double) map.get("fyMoney");
 
         //插入订单
-        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,ids);
+        inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,ids,2);
 
-        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
+        SortedMap<String,Object> parameters = WeChatH5ParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
 
         return getBackObject(jsonObject);
+    }
+
+    /**
+     * 支付宝库存商品支付
+     * @param user
+     * @param payInputDTO
+     * @return
+     */
+    @Transactional
+    @Override
+    public synchronized String AliAppletPaymentBuyCommodity(User user, PayInputDTO payInputDTO) {
+        //商品信息为空
+        if (payInputDTO == null){
+            return null;
+        }
+
+        //查出商品信息
+        WeChatCommodity weChatCommodity=weChatCommodityMapper.selectByPrimaryKey(payInputDTO.getCommodityId());
+        if(weChatCommodity==null){
+            return null;
+        }
+
+//        if(weChatCommodity.getTakeWay() != 3){
+//            return weChatAppletPayService.WeChatAppletBuyCommodity(user,payInputDTO);
+//        }
+
+        //一次最多购买2条
+        if (payInputDTO.getCommodityNum() > 2){
+            return null;
+        }
+
+        int noPay = weChatStockMapperExtra.selectStockStateNotPay(user.getUserId());
+        if (noPay > 0){
+            int updateStock = weChatStockMapperExtra.updateNotPay(user.getUserId());
+            System.out.println("修改未支付库存状态"+updateStock);
+        }
+
+        List<String> attrIds = new ArrayList<String>(Arrays.asList(payInputDTO.getCommodityAttrIds().split(",")));
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("commodityId",payInputDTO.getCommodityId());
+        params.put("commodityNum",payInputDTO.getCommodityNum());
+        params.put("attrIds",attrIds);
+        int chatStock = weChatStockMapperExtra.getStockNum(params);
+
+        //库存不够时
+        if (chatStock < payInputDTO.getCommodityNum()){
+            return null;
+        }
+        //限购
+        int limitDay = weChatStockMapperExtra.getLimitNumByDay(payInputDTO.getCommodityId(),user.getUserId());
+        int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
+        if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum())){
+            return null;
+        }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum())){
+            return null;
+        }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum()) || weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum()))){
+            return null;
+        }
+
+        //提取库存
+        List<WeChatStock> stackState = weChatStockMapperExtra.getStockId(params);
+        List<WeChatStock> ids = new ArrayList<>();
+        for (WeChatStock weChatStock:stackState){
+            WeChatStock weChatStock1 = new WeChatStock();
+            weChatStock1.setBuyerId(user.getUserId());
+            weChatStock1.setStockId(weChatStock.getStockId());
+            weChatStock1.setState("1");
+            ids.add(weChatStock1);
+        }
+        //提取stockId
+        String [] stockId = new String[stackState.size()];
+        for (int i=0; i<stackState.size();i++){
+            stockId[i] =stackState.get(i).getStockId();
+        }
+        String stockIds = StringUtils.join(stockId,",");
+        System.out.println(stockIds);
+
+        //修改状态
+        boolean updateStock = weChatStockMapperExtra.updateStock(ids) > 0;
+
+        if (!updateStock){
+            return null;
+        }
+        //计时器——4分钟之后执行
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("改变状态状态计时器");
+                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+                if (weChatStocks != 0 && weChatStocks == payInputDTO.getCommodityNum()){
+                    timer.cancel();
+                }else {
+                    //修改回库存商品原来状态
+                    weChatStockMapperExtra.update(ids);
+                }
+            }
+        }, 300000);
+
+        //计算价格
+        Map map = getPayment(weChatCommodity,payInputDTO);
+
+        double couponMoney = 0.0;
+        double money= (double) map.get("money");
+        double fyMoney= (double) map.get("fyMoney");
+        //生成起调参数串
+        //生成起吊参数
+        //用于保存起调参数,
+        String orderString = null;
+        //"0"为购买积分
+        AlipayNewClientConfig alipayClientConfig = AlipayNewClientConfig.getInstance("1");
+        AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
+        AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
+        //订单标识
+        String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+        //支付金额
+        double actualPrice= BigDecimal.valueOf(money).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
+//
+//        购买者id
+//        String ownerId = user.getUserId();
+//                String userId = user.getUserId();
+//        String ownerId = "703614235874580972";
+        String ownerId = user.getUserId();
+//        integralRechargeDTO.setUserId(ownerId);
+        System.out.println("积分userId" + ownerId);
+        //支付订单
+        request.setBizModel(AliParameterNewConfig.getBizModelICommodityCoupons(actualPrice,thirdOrder,stockIds,user.getUserId(),weChatCommodity));
+        request.setReturnUrl(AliPayH5Config.CommodityReturn_url);
+        //支付回调接口
+        request.setNotifyUrl(AliPayH5Config.CommodityRecharge_url);
+        try {
+            AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);;
+            orderString = response.getBody();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        //插入订单
+        inputOrder(thirdOrder, weChatCommodity,user,payInputDTO,fyMoney,money,ids,1);
+        return orderString;
     }
 
     /**
@@ -224,9 +366,10 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
      * @param fyMoney
      * @param money
      * @param ids
+     * @param payMethod
      * @return
      */
-    public boolean inputOrder(String orgId, WeChatCommodity weChatCommodity, User user, PayInputDTO payInputDTO, double fyMoney, double money, List<WeChatStock> ids){
+    public boolean inputOrder(String orgId, WeChatCommodity weChatCommodity, User user, PayInputDTO payInputDTO, double fyMoney, double money, List<WeChatStock> ids,Integer payMethod){
         //插入预支付订单
         WeChatCommodityOrder weChatCommodityOrder=new WeChatCommodityOrder();
         weChatCommodityOrder.setOrderId(orgId);
@@ -238,7 +381,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         weChatCommodityOrder.setActualPrice(money);
 
         weChatCommodityOrder.setPayStatus(0);
-        weChatCommodityOrder.setPayMethod(2);
+        weChatCommodityOrder.setPayMethod(payMethod);
         weChatCommodityOrder.setRemark(payInputDTO.getRemark());
 
         //插入电子码；

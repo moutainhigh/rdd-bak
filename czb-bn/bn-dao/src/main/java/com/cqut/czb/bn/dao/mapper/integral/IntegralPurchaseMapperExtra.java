@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.integral;
 
+import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
@@ -13,5 +14,5 @@ public interface IntegralPurchaseMapperExtra {
 
     int updateIntegralPurchaseRecord(IntegralPurchaseRecord integralPurchaseRecord);
 
-    int updateIntegralInfo(@Param("currentTotal")int currentTotal, @Param("userId")String userId);
+    int updateIntegralInfo(IntegralInfoDTO integralInfoDTO);
 }

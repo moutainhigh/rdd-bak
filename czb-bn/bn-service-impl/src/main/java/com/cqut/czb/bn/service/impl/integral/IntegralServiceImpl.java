@@ -477,6 +477,11 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
+    public IntegralInfoDTO getGotTotal(String userId) {
+        return integralInfoMapperExtra.getGotTotal(userId);
+    }
+
+    @Override
     public JSONResult insertIntegralValue(IntegralManageDTO integralManageDTO) {
         integralManageDTO.setId(StringUtil.createId());
         if (integralManageMapper.insertSelective(integralManageDTO) == 1) {
