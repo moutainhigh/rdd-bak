@@ -71,8 +71,7 @@
             current_total = #{currentTotal,jdbcType=INTEGER},
             create_at = #{createAt,jdbcType=TIMESTAMP}
         WHERE
-              integral_info_id = #{integralInfoId,jdbcType=VARCHAR} AND
-              update_at = #{updateAt,jdbcType=TIMESTAMP}
+              integral_info_id = #{integralInfoId,jdbcType=VARCHAR}
     </update>
 
     <select id="getIntegralInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO">
