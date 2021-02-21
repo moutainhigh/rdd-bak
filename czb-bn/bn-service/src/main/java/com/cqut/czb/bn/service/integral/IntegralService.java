@@ -146,6 +146,8 @@ public interface IntegralService {
 
     JSONResult updateMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo);
 
+    IntegralInfoDTO getGotTotal(String userId);
+
     /**
      * 根据商品类型查询下属商品
      * @param type

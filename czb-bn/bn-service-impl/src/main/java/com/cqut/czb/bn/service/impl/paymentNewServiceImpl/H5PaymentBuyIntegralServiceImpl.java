@@ -57,8 +57,10 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
         //购买者id
 //        String ownerId = user.getUserId();
         //        String userId = user.getUserId();
-        String ownerId = "703614235874580972";
+//        String ownerId = "703614235874580972";
+        String ownerId = user.getUserId();
         integralRechargeDTO.setUserId(ownerId);
+        System.out.println("积分userId" + ownerId);
         //支付订单
         request.setBizModel(AliParameterNewConfig.getBizModelIntegralCoupons(thirdOrder,integralRechargeDTO));
         request.setReturnUrl(AliPayH5Config.Return_url);
@@ -102,9 +104,11 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
 //        String userId = user.getUserId();
         String userId = "703610893704287052";
 
+        Integer isBrowser = integralRechargeDTO.getIsBrowser();
+
 
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersIntegral(nonceStrTemp, orderId, userId, amount, integralAmount);
+        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersIntegral(nonceStrTemp, orderId, userId, amount, integralAmount, isBrowser);
         Boolean insertOrder = insertBuyIntegral(orderId, userId, integralRechargeDTO,2);
         return WeChatH5ParameterConfig.getSign(parameters, nonceStrTemp);
     }

@@ -20,4 +20,6 @@ public interface IntegralInfoMapperExtra {
     int getUserAmount();
 
     IntegralLogDTO getIntegralInfo(@Param("userId")String userId);
+
+    IntegralInfoDTO getGotTotal(@Param("userId")String userId);
 }

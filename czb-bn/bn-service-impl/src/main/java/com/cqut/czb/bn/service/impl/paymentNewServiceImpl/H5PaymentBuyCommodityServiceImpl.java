@@ -9,10 +9,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.AttributeMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatStockMapperExtra;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatBackDTO;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatParameterConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
+import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.*;
@@ -167,7 +164,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         //插入订单
         inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,ids);
 
-        SortedMap<String,Object> parameters = WeChatParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
+        SortedMap<String,Object> parameters = WeChatH5ParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
 
         return getBackObject(jsonObject);

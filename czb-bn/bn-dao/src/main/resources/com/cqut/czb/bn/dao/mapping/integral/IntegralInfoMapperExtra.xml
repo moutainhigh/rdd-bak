@@ -82,6 +82,12 @@
         where user_id = #{userId, jdbcType=VARCHAR}
     </select>
 
+    <select id="getGotTotal" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
+        select got_total gotTotal
+        from czb_integral_info
+        where user_id = #{userId, jdbcType=VARCHAR}
+    </select>
+
     <select id="getUserAmount" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM czb_integral_info
     </select>

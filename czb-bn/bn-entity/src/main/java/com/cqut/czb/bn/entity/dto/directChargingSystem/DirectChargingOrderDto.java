@@ -34,6 +34,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String cardholder;
 
+    private Integer isBrowser;
+
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
 
@@ -198,6 +200,14 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setCardholder(String cardholder) {
         this.cardholder = cardholder;
+    }
+
+    public Integer getIsBrowser() {
+        return isBrowser;
+    }
+
+    public void setIsBrowser(Integer isBrowser) {
+        this.isBrowser = isBrowser;
     }
 
     @Override
