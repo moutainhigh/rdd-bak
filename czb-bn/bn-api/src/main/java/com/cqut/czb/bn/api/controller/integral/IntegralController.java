@@ -317,11 +317,11 @@ public class IntegralController {
 
     /**
      * 根据商品类型分页查询商品
-     * @param integralDeductionInfo
+     * @param integralDeductionInfoDTO
      * @return
      */
     @RequestMapping(value = "/getCommodityByPage", method = RequestMethod.GET)
-    public JSONResult getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO) {
-        return new JSONResult(integralService.getCommodityByPage(integralDeductionInfo, pageDTO));
+    public JSONResult getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.getCommodityByPage(integralDeductionInfoDTO, pageDTO));
     }
 }

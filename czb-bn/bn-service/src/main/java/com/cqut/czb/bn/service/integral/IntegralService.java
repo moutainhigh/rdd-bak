@@ -157,8 +157,8 @@ public interface IntegralService {
 
     /**
      * 根据商品类型分页查询商品
-     * @param integralDeductionInfo
+     * @param integralDeductionInfoDTO
      * @return
      */
-    PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO);
+    PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO);
 }

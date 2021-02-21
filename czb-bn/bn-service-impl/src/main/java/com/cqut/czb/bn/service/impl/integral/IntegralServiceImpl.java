@@ -581,9 +581,9 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO) {
+    public PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
-        List<IntegralDeductionInfoDTO> integralExchangeLogIdDTOList =  integralDeductionInfoMapperExtra.selectByCommodityType(integralDeductionInfo);
+        List<IntegralDeductionInfoDTO> integralExchangeLogIdDTOList =  integralDeductionInfoMapperExtra.selectByCommodityType(integralDeductionInfoDTO);
         return new PageInfo<>(integralExchangeLogIdDTOList);
     }
 
