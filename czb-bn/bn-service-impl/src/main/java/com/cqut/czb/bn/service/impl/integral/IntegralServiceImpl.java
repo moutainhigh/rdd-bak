@@ -528,6 +528,7 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Override
     public JSONResult insertMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo) {
+
         if (integralDeductionInfoMapperExtra.selectByCommodityId(integralDeductionInfo) != null) {
             return new JSONResult("新增失败，此商品的抵扣额度已存在");
         }
