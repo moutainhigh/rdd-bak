@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.integral;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class IntegralDeductionInfoDTO {
@@ -15,6 +17,7 @@ public class IntegralDeductionInfoDTO {
 
     private Date createAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateAt;
 
     private String beginDate;
