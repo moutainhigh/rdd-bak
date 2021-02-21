@@ -24,6 +24,15 @@
         <if test="integralAmount != '' and integralAmount != null">
             AND t1.integral_amount = #{integralAmount}
         </if>
+        <if test="rechargeWay != '' and rechargeWay != null">
+            AND t1.recharge_way = #{rechargeWay}
+        </if>
+        <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
+            AND
+            (t1.update_at &lt;= #{overDate}
+            AND
+            t1.update_at &gt;= #{beginDate})
+        </if>
         <if test="userAccount != '' and userAccount != null">
             AND t2.user_account = #{userAccount}
         </if>

@@ -23,6 +23,10 @@ public class IntegralPurchaseRecordDTO {
 
     private Date updateAt;
 
+    private String beginDate;
+
+    private String overDate;
+
     public String getIntegralPurchaseRecordId() {
         return integralPurchaseRecordId;
     }
@@ -101,5 +105,21 @@ public class IntegralPurchaseRecordDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getOverDate() {
+        return overDate;
+    }
+
+    public void setOverDate(String overDate) {
+        this.overDate = overDate;
     }
 }
