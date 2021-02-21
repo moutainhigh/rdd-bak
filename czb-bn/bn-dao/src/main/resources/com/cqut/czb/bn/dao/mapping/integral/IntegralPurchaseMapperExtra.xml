@@ -57,27 +57,32 @@
     </insert>
 
     <insert id="insertEquityGoodsOrder" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO">
-        insert into czb_integral_log (integral_log_id,
-                                      integral_info_id,
-                                      user_id,
-                                      integral_log_type,
-                                      integral_amount,
-                                      order_id,
-                                      before_integral_amount,
-                                      remark,
-                                      create_at,
-                                      update_at)
-        values (#{integralLogId,jdbcType=VARCHAR},
-                #{integralInfoId,jdbcType=VARCHAR},
-                #{userId,jdbcType=VARCHAR},
-                #{integralLogType,jdbcType=INTEGER},
-                #{integralAmount,jdbcType=INTEGER},
-                #{orderId,jdbcType=VARCHAR},
-                #{beforeIntegralAmount,jdbcType=INTEGER},
-                "购买",
-                now(),
-                now()
-               )
+        insert into
+        czb_equity_payment_order (
+          order_id,
+          recharge_account,
+          product_code,
+          buy_num,
+          client_ip,
+          unit_price,
+          goods_id,
+          pay_status,
+          order_state,
+          create_at,
+          update_at
+        ) values (
+            #{orderId,jdbcType=VARCHAR},
+            #{account,jdbcType=VARCHAR},
+            #{productCode,jdbcType=VARCHAR},
+            #{buyNum,jdbcType=INTEGER},
+            #{clientIP,jdbcType=INTEGER},
+            #{unitPrice,jdbcType=DOUBLE},
+            #{goodsId,jdbcType=VARCHAR},
+            0,
+            0,
+            now(),
+            now()
+        )
     </insert>
 
     <update id="updateIntegralInfo" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
