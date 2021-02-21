@@ -37,4 +37,21 @@ public class AliYunPaymentController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * h5支付宝库存商品支付
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/aliYunBuyCommodity", method= RequestMethod.POST)
+    public synchronized void aliYunBuyCommodity(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("支付宝回调——购买积分");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("content-type", "text/html;charset=utf-8");
+        try {
+            response.getWriter().write(orderPaymentService.AliOrderPaymentNotify(request,"H5Commodity"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
