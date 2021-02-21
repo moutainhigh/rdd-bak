@@ -171,9 +171,6 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Override
     public JSONResult exchangeIntegral(IntegralExchangeDTO integralExchangeDTO, String userId) {
-        // 兑换者信息
-        final IntegralInfo[] integralInfoGiven = new IntegralInfo[1];
-
         // 主人兑换码信息
         IntegralExchange integralExchangeMng;
 
@@ -217,7 +214,6 @@ public class IntegralServiceImpl implements IntegralService {
             integralExchangeLogId.setCreateAt(new Date());
             integralExchangeLogIdMapper.insert(integralExchangeLogId);
         }
-
         // 新增兑换码主人积分记录
         IntegralLog integralLog = new IntegralLog();
         new Thread(()-> {
@@ -242,29 +238,29 @@ public class IntegralServiceImpl implements IntegralService {
 
         // 新增兑换人积分记录
         new Thread(()->{
-            integralInfoGiven[0] = integralInfoMapperExtra.selectByUserId(userId);
+            // 兑换者信息
+            integralInfoMng[0] = integralInfoMapperExtra.selectByUserId(userId);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             integralLog.setIntegralLogId(StringUtil.createId());
-            integralLog.setIntegralInfoId(integralInfoGiven[0].getIntegralInfoId());
+            integralLog.setIntegralInfoId(integralInfoMng[0].getIntegralInfoId());
             integralLog.setUserId(userId);
             integralLog.setIntegralLogType(3);
             integralLog.setIntegralAmount(integralExchangeMng.getExchangeAmount());
-            integralLog.setBeforeIntegralAmount(integralInfoGiven[0].getCurrentTotal());
+            integralLog.setBeforeIntegralAmount(integralInfoMng[0].getCurrentTotal());
             integralLog.setRemark("被赠予");
             integralLog.setCreateAt(new Date());
             integralLog.setOrderId(StringUtil.createId());
             integralLogMapper.insert(integralLog);
 
-            integralInfoGiven[0] = integralInfoMapperExtra.selectByUserId(userId);
-            integralInfoGiven[0].setCurrentTotal(integralExchangeMng.getExchangeAmount());
-            integralInfoGiven[0].setGotTotal(integralExchangeMng.getExchangeAmount());
-            integralServiceImpl.updateIntegralInfo(integralInfoGiven[0]);
+            integralInfoMng[0] = integralInfoMapperExtra.selectByUserId(userId);
+            integralInfoMng[0].setCurrentTotal(integralExchangeMng.getExchangeAmount());
+            integralInfoMng[0].setGotTotal(integralExchangeMng.getExchangeAmount());
+            integralServiceImpl.updateIntegralInfo(integralInfoMng[0]);
         }).start();
-
         return new JSONResult("恭喜你成功兑换积分!");
     }
 
