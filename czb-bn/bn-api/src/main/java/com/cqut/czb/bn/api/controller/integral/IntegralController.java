@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
+import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
@@ -323,5 +324,15 @@ public class IntegralController {
     @RequestMapping(value = "/getCommodityByPage", method = RequestMethod.GET)
     public JSONResult getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO) {
         return new JSONResult(integralService.getCommodityByPage(integralDeductionInfoDTO, pageDTO));
+    }
+
+    /**
+     * 获取购买积分详情
+     * @param integralPurchaseRecordDTO
+     * @return
+     */
+    @RequestMapping(value = "/getIntegralPurchaseList", method = RequestMethod.GET)
+    public JSONResult getIntegralPurchaseList(IntegralPurchaseRecordDTO integralPurchaseRecordDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.getIntegralPurchaseList(integralPurchaseRecordDTO, pageDTO));
     }
 }

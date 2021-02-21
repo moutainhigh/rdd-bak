@@ -67,6 +67,9 @@ public class IntegralServiceImpl implements IntegralService {
     IntegralExchangeLogIdMapperExtra integralExchangeLogIdMapperExtra;
 
     @Autowired
+    IntegralPurchaseRecordMapperExtra integralPurchaseRecordMapperExtra;
+
+    @Autowired
     UserMapperExtra userMapperExtra;
 
     @Autowired
@@ -587,6 +590,13 @@ public class IntegralServiceImpl implements IntegralService {
         return new PageInfo<>(integralExchangeLogIdDTOList);
     }
 
+    @Override
+    public PageInfo<IntegralPurchaseRecordDTO> getIntegralPurchaseList(IntegralPurchaseRecordDTO integralPurchaseRecordDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<IntegralPurchaseRecordDTO> integralPurchaseList = integralPurchaseRecordMapperExtra.getIntegralPurchaseList(integralPurchaseRecordDTO);
+        return new PageInfo<>(integralPurchaseList);
+    }
+
     /**
      * 同步修改积分info表
      * @param integralInfo
@@ -597,4 +607,5 @@ public class IntegralServiceImpl implements IntegralService {
         integralInfoModel.setGotTotal(integralInfoModel.getGotTotal() + integralInfo.getGotTotal());
         integralInfoMapperExtra.updateByPrimaryKeySync(integralInfoModel);
     }
+
 }

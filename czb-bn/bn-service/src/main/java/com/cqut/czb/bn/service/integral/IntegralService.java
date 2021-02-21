@@ -161,4 +161,11 @@ public interface IntegralService {
      * @return
      */
     PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO);
+
+    /**
+     * 获取购买积分详情
+     * @param integralPurchaseRecordDTO
+     * @return
+     */
+    PageInfo<IntegralPurchaseRecordDTO> getIntegralPurchaseList(IntegralPurchaseRecordDTO integralPurchaseRecordDTO, PageDTO pageDTO);
 }
