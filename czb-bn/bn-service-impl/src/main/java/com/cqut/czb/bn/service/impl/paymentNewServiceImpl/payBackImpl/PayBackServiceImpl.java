@@ -163,6 +163,8 @@ public class PayBackServiceImpl implements PayBackService {
             result.put("success", getAddBuyIntegralOrderWechat(restmap));
         } else if(consumptionType.equals("AppletPayment")){
             result.put("success", addAppletPaymentOrderWeChat(restmap));
+        } else if(consumptionType.equals("EquityGoods")){
+            result.put("success", getAddBuyEquityGoodsOrderWechat(restmap));
         } else {
             result.put("fail",0);
         }
@@ -522,5 +524,91 @@ public class PayBackServiceImpl implements PayBackService {
         integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal() + integralLogDTO.getIntegralAmount());
         integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
         return 1;
+    }
+
+    // 权益商品购买（微信）
+    public int getAddBuyEquityGoodsOrderWechat(Map<String, Object> restmap){
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        String[] temp;
+        String thirdOrderId = restmap.get("transaction_id").toString();
+        String orderId = "";
+        String userId = "";
+        double amount = 0;
+        String account = "";
+        String productCode = "";
+        int buyNum = 0;
+        int isCallBack = 0;
+        int tradeType = 0;
+        String clientIP = "";
+        double unitPrice = 0;
+        int totalPrice = 0;
+        String goodsId = "";
+        int rechargeType = 0;
+        int integralAmount = 0;
+
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orderId".equals(temp[0])) {
+                orderId = temp[1];
+            }
+            if ("userId".equals(temp[0])) {
+                userId = temp[1];
+            }
+            if ("integralAmount".equals(temp[0])) {
+                integralAmount = Integer.valueOf(temp[1]);
+            }
+            if ("amount".equals(temp[0])) {
+                amount = Double.valueOf(temp[1]);
+            }
+            if ("account".equals(temp[0])) {
+                account = temp[1];
+            }
+            if ("productCode".equals(temp[0])) {
+                productCode = temp[1];
+            }
+            if ("buyNum".equals(temp[0])) {
+                buyNum = Integer.valueOf(temp[1]);
+            }
+            if ("isCallBack".equals(temp[0])) {
+                isCallBack = Integer.valueOf(temp[1]);
+            }
+            if ("tradeType".equals(temp[0])) {
+                tradeType = Integer.valueOf(temp[1]);
+            }
+            if ("unitPrice".equals(temp[0])) {
+                unitPrice = Double.valueOf(temp[1]);
+            }
+            if ("totalPrice".equals(temp[0])) {
+                totalPrice = Integer.valueOf(temp[1]);
+            }
+            if ("goodsId".equals(temp[0])) {
+                goodsId = temp[1];
+            }
+            if ("rechargeType".equals(temp[0])) {
+                rechargeType = Integer.valueOf(temp[1]);
+            }
+        }
+
+
+
+        //插入log记录
+        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+        integralLogDTO.setOrderId(orderId);
+        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        integralLogDTO.setUserId(userId);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setIntegralAmount(integralAmount);
+        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setUserId(userId);
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        return 1;
+
     }
 }

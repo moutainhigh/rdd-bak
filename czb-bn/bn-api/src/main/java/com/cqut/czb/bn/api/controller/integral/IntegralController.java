@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
+import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
 import com.cqut.czb.bn.util.RSA.RSAUtils;
@@ -185,12 +186,12 @@ public class IntegralController {
 
     /**
      * 获取所有用户积分信息
-     * @param userAccount
+     * @param integralInfoDTO
      * @return
      */
     @RequestMapping(value = "/selectIntegralInfoList", method = RequestMethod.POST)
-    public JSONResult selectIntegralInfoList(String userAccount, PageDTO pageDTO) {
-        return new JSONResult(integralService.selectIntegralInfoList(userAccount, pageDTO));
+    public JSONResult selectIntegralInfoList(IntegralInfoDTO integralInfoDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.selectIntegralInfoList(integralInfoDTO, pageDTO));
     }
 
     /**
@@ -317,11 +318,21 @@ public class IntegralController {
 
     /**
      * 根据商品类型分页查询商品
-     * @param integralDeductionInfo
+     * @param integralDeductionInfoDTO
      * @return
      */
     @RequestMapping(value = "/getCommodityByPage", method = RequestMethod.GET)
-    public JSONResult getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO) {
-        return new JSONResult(integralService.getCommodityByPage(integralDeductionInfo, pageDTO));
+    public JSONResult getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.getCommodityByPage(integralDeductionInfoDTO, pageDTO));
+    }
+
+    /**
+     * 获取购买积分详情
+     * @param integralPurchaseRecordDTO
+     * @return
+     */
+    @RequestMapping(value = "/getIntegralPurchaseList", method = RequestMethod.GET)
+    public JSONResult getIntegralPurchaseList(IntegralPurchaseRecordDTO integralPurchaseRecordDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.getIntegralPurchaseList(integralPurchaseRecordDTO, pageDTO));
     }
 }

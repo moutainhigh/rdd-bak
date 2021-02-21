@@ -18,5 +18,5 @@ public interface IntegralDeductionInfoMapperExtra {
 
     IntegralDeductionInfo selectByCommodityId(IntegralDeductionInfo integralDeductionInfo);
 
-    List<IntegralDeductionInfoDTO> selectByCommodityType(IntegralDeductionInfo integralDeductionInfo);
+    List<IntegralDeductionInfoDTO> selectByCommodityType(IntegralDeductionInfoDTO integralDeductionInfoDTO);
 }

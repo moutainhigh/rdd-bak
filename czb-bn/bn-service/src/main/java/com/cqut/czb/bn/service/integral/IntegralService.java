@@ -78,10 +78,10 @@ public interface IntegralService {
 
     /**
      * 获取所有用户积分信息
-     * @param userAccount
+     * @param integralInfoDTO
      * @return
      */
-    PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO);
+    PageInfo<IntegralInfoDTO> selectIntegralInfoList(IntegralInfoDTO integralInfoDTO, PageDTO pageDTO);
 
     PageInfo<IntegralDistributionDTO> getIntegralDistributionDetails(String userAccount, IntegralDistributionDTO integralDistributionDTO);
 
@@ -157,8 +157,15 @@ public interface IntegralService {
 
     /**
      * 根据商品类型分页查询商品
-     * @param integralDeductionInfo
+     * @param integralDeductionInfoDTO
      * @return
      */
-    PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfo integralDeductionInfo, PageDTO pageDTO);
+    PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO);
+
+    /**
+     * 获取购买积分详情
+     * @param integralPurchaseRecordDTO
+     * @return
+     */
+    PageInfo<IntegralPurchaseRecordDTO> getIntegralPurchaseList(IntegralPurchaseRecordDTO integralPurchaseRecordDTO, PageDTO pageDTO);
 }

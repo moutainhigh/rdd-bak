@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseRecordMapperExtra">
+    <select id="getIntegralPurchaseList" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralPurchaseRecordDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralPurchaseRecordDTO">
+        SELECT
+            t1.integral_purchase_record_id AS integralPurchaseRecordId,
+            t1.user_id AS userId,
+            t1.amount AS amount,
+            t1.recharge_way AS rechargeWay,
+            t1.is_received AS isReceived,
+            t1.integral_amount AS integralAmount,
+            t1.third_trade_num AS thirdTradeNum,
+            t1.create_at AS createAt,
+            t1.update_at AS updateAt,
+	        t2.user_account AS userAccount
+        FROM
+	        czb_integral_purchase_record t1
+	    JOIN czb.czb_user t2 ON t2.user_id = t1.user_id
+        WHERE 1 = 1
+            AND t1.is_received = 1
+        <if test="amount != '' and amount != null">
+            AND t1.amount = #{amount}
+        </if>
+        <if test="integralAmount != '' and integralAmount != null">
+            AND t1.integral_amount = #{integralAmount}
+        </if>
+        <if test="rechargeWay != '' and rechargeWay != null">
+            AND t1.recharge_way = #{rechargeWay}
+        </if>
+        <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
+            AND
+            (t1.update_at &lt;= #{overDate}
+            AND
+            t1.update_at &gt;= #{beginDate})
+        </if>
+        <if test="userAccount != '' and userAccount != null">
+            AND t2.user_account = #{userAccount}
+        </if>
+        ORDER BY
+	        t1.create_at DESC
+    </select>
+</mapper>
