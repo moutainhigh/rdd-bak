@@ -379,10 +379,18 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO) {
-        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
-        IntegralInfoDTO integralInfoDTO = new IntegralInfoDTO();
-        integralInfoDTO.setUserAccount(userAccount);
+    public PageInfo<IntegralInfoDTO> selectIntegralInfoList(IntegralInfoDTO integralInfoDTO, PageDTO pageDTO) {
+        if (integralInfoDTO.getOrderBy() != null && !integralInfoDTO.getOrderBy().equals("")) {
+            if (integralInfoDTO.getSort() != null && integralInfoDTO.getSort().equals("1")) {
+                PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), "a." + integralInfoDTO.getOrderBy() + " DESC");
+            }
+            if (integralInfoDTO.getSort() != null && integralInfoDTO.getSort().equals("0")) {
+                PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), "a." + integralInfoDTO.getOrderBy() + " ASC");
+            }
+        } else {
+            PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        }
+
         List<IntegralInfoDTO> integralInfoList = integralInfoMapperExtra.selectIntegralInfoList(integralInfoDTO);
         return new PageInfo<>(integralInfoList);
     }

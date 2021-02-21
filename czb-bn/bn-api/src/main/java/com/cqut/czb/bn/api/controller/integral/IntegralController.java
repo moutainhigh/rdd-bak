@@ -185,12 +185,12 @@ public class IntegralController {
 
     /**
      * 获取所有用户积分信息
-     * @param userAccount
+     * @param integralInfoDTO
      * @return
      */
     @RequestMapping(value = "/selectIntegralInfoList", method = RequestMethod.POST)
-    public JSONResult selectIntegralInfoList(String userAccount, PageDTO pageDTO) {
-        return new JSONResult(integralService.selectIntegralInfoList(userAccount, pageDTO));
+    public JSONResult selectIntegralInfoList(IntegralInfoDTO integralInfoDTO, PageDTO pageDTO) {
+        return new JSONResult(integralService.selectIntegralInfoList(integralInfoDTO, pageDTO));
     }
 
     /**

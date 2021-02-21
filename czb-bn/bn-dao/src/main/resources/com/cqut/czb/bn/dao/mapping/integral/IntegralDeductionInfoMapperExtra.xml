@@ -30,7 +30,7 @@
         from czb_integral_deduction_info
         where commodity_id = #{commodityId}
     </select>
-    <select id="selectByCommodityType" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo">
+    <select id="selectByCommodityType" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO">
     SELECT
     CASE
         deduction_type
@@ -50,10 +50,18 @@
     update_at AS updateAt
     FROM
         czb_integral_deduction_info t1
-    <if test="deductionType != '' and deductionType != null">
-        WHERE
-        t1.deduction_type = #{deductionType, jdbcType=VARCHAR}
-    </if>
+    WHERE
+        1 = 1
+        <if test="deductionType != '' and deductionType != null">
+            and
+            t1.deduction_type = #{deductionType, jdbcType=VARCHAR}
+        </if>
+        <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
+            and
+            (t1.update_at &lt; #{overDate}
+            and
+            t1.update_at &gt; #{beginDate})
+        </if>
     ORDER BY update_at DESC
     </select>
 

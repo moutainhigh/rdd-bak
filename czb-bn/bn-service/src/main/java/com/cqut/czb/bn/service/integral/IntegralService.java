@@ -78,10 +78,10 @@ public interface IntegralService {
 
     /**
      * 获取所有用户积分信息
-     * @param userAccount
+     * @param integralInfoDTO
      * @return
      */
-    PageInfo<IntegralInfoDTO> selectIntegralInfoList(String userAccount, PageDTO pageDTO);
+    PageInfo<IntegralInfoDTO> selectIntegralInfoList(IntegralInfoDTO integralInfoDTO, PageDTO pageDTO);
 
     PageInfo<IntegralDistributionDTO> getIntegralDistributionDetails(String userAccount, IntegralDistributionDTO integralDistributionDTO);
 

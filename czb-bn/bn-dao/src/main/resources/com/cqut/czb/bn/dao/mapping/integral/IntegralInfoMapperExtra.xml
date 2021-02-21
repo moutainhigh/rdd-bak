@@ -61,7 +61,9 @@
         <if test="userAccount != '' and userAccount != null">
             WHERE b.user_account = #{userAccount,jdbcType=VARCHAR}
         </if>
-        ORDER BY a.create_at DESC
+        <if test="orderBy =='' or orderBy== null">
+            ORDER BY a.update_at DESC
+        </if>
     </select>
 
     <update id="updateByPrimaryKeySync" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralInfo" >
