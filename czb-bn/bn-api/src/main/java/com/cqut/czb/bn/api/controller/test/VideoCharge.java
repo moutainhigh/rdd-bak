@@ -5,12 +5,17 @@ import com.cqut.czb.bn.api.controller.test.model.VideoChargeDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
 import com.cqut.czb.bn.util.md5.MD5Util;
+import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.bind.DatatypeConverter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import static com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.RequestLuPayServiceImpl.getNowDate;
@@ -110,5 +115,50 @@ public class VideoCharge {
         String sr= HttpRequest.httpRequestGet(URL, params);
 
         return new JSONResult<String>(sr);
+    }
+
+    @GetMapping("/qz")
+    public JSONResult qz() throws NoSuchAlgorithmException {
+        String URL="https://live-test.qianzhu8.com/api/v1/platform/getToken";
+
+        String platformId = "10340";
+        String nickname = "cs";
+        String platformUniqueId = "123";
+        String secret = "8x6f3ud5m38qz2ad";
+        long timestamp = new Date().getTime();
+
+        String params = "nickname=" + nickname + "&platformId=" + platformId +
+                "&platformUniqueId=" + platformUniqueId +
+                "&timestamp=" + timestamp;
+
+        String sign = md5(params + "" + secret).toLowerCase();
+
+        params = params + "&sign=" + sign;
+
+        System.out.println(URL+"?"+params);
+
+        String sr= HttpRequest.httpRequestGet(URL, params);
+
+        System.out.println(sr);
+        sr = sr.replaceAll("null", "\"\"");
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+
+        System.out.println(jsonObject);
+
+        return new JSONResult(jsonObject);
+    }
+
+    /**
+     * 将字符串进行MD5加密
+     *
+     * @param content 要加密的内容
+     * @return 加密后的内容
+     * @throws NoSuchAlgorithmException
+     */
+    public static String md5(String content) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(content.getBytes(Charset.forName("utf-8")));
+        byte[] digest = md.digest();
+        return DatatypeConverter.printHexBinary(digest);
     }
 }
