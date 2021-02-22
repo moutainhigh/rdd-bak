@@ -48,7 +48,7 @@ public class PurchaseFilmController {
         // 正式
         String URL="https://live.qianzhu8.com/api/v1/platform/getToken";
 
-        User user = (User)redisUtils.get(principal.getName());
+//        User user = (User)redisUtils.get(principal.getName());
         String platformId = "10387";
 //        String nickname = user.getUserAccount();
 //        String platformUniqueId = user.getUserAccount();
