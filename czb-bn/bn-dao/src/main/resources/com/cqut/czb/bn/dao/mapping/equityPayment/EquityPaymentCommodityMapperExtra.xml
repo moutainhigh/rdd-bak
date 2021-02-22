@@ -9,7 +9,7 @@
     <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
         goods_id as id,
-        goods_title as name,
+        CONCAT(goods_title,"  价格为：",IFNULL(selling_price,0)) as name,
         true as isLeaf
         from czb_equity_payment_commodity
     </select>
