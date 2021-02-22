@@ -14,6 +14,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
+import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.entity.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -118,46 +119,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Override
     public List<IntegralDetailsDTO> getOfferIntegralDetail(String userId) {
-        List<IntegralLogDTO> integralLogDTOList = integrallogMapperExtra.getIntegralDetailsList(userId);
-        List<IntegralExchange> integralExchangeList = integralExchangeMapperExtra.getExchangeList(userId);
-        List<IntegralDetailsDTO> integralDetailsDTOS = new ArrayList<>();
+        List<IntegralDetailsDTO> integralDetailsDTOList = integrallogMapperExtra.getOfferIntegralDetail(userId);
 
-        for (int i = 0; i < integralLogDTOList.size(); i++) {
-            IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
-            IntegralLogDTO integralLogDTO = integralLogDTOList.get(i);
-            if (integralLogDTO.getIntegralLogType() == 2) {
-                integralDetailsDTO.setIntegralAmount(integralLogDTO.getIntegralAmount());
-                integralDetailsDTO.setIntegralLogType(integralLogDTO.getIntegralLogType());
-                integralDetailsDTO.setUserId(userId);
-                integralDetailsDTO.setRemark(integralLogDTO.getRemark());
-                integralDetailsDTO.setCreateAt(integralLogDTO.getCreateAt());
-                integralDetailsDTO.setUpdateAt(integralLogDTO.getUpdateAt());
-                integralDetailsDTOS.add(integralDetailsDTO);
-            }
-        }
-
-        for (int i = 0; i < integralExchangeList.size(); i++) {
-            IntegralDetailsDTO integralDetailsDTO = new IntegralDetailsDTO();
-            IntegralExchange integralExchange = integralExchangeList.get(i);
-            integralDetailsDTO.setIntegralAmount(integralExchange.getExchangeAmount() * integralExchange.getExchangeTimesCurrent());
-            integralDetailsDTO.setIntegralLogType(1);
-            integralDetailsDTO.setUserId(userId);
-            integralDetailsDTO.setRemark("兑换码赠送");
-            integralDetailsDTO.setIntegralExchange(integralExchange.getIntegralExchange());
-            integralDetailsDTO.setExchangeType(integralExchange.getExchangeType());
-            integralDetailsDTO.setCreateAt(integralExchange.getCreateAt());
-            integralDetailsDTO.setUpdateAt(integralExchange.getUpdateAt());
-            integralDetailsDTOS.add(integralDetailsDTO);
-        }
-
-        integralDetailsDTOS.sort(new Comparator<IntegralDetailsDTO>() {
-            @Override
-            public int compare(IntegralDetailsDTO o1, IntegralDetailsDTO o2) {
-                return o2.getCreateAt().compareTo(o1.getCreateAt());
-            }
-        });
-
-        return integralDetailsDTOS;
+        return integralDetailsDTOList;
     }
 
     @Override
@@ -568,9 +532,15 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public JSONResult getCommodityByType(String type) {
+    public JSONResult getCommodityByType(String type, String commodityId) {
         if(type.equals("1")) {
-            return new JSONResult(weChatCommodityMapperExtra.selectAllCommodityTitle());
+            if (commodityId == null || commodityId.equals("")) {
+                return new JSONResult(weChatCommodityMapperExtra.selectAllCommodityTitle());
+            } else {
+                WxAttributeDTO wxAttributeDTO = new WxAttributeDTO();
+                wxAttributeDTO.setCommodityId(commodityId);
+                return new JSONResult(weChatCommodityMapperExtra.selectAllWxAttribute(wxAttributeDTO));
+            }
         }
         if(type.equals("2")) {
             return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("1", null));

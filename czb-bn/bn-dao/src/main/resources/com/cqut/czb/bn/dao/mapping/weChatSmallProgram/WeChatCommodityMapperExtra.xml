@@ -141,7 +141,7 @@
     </select>
     <select id="selectAllCommodityTitle" resultMap="BaseResultMap">
         select
-            commodity_id, commodity_title
+            commodity_id, commodity_title, sale_price
         from czb_wechat_commodity
     </select>
     <!-- 查询商品属性信息-->

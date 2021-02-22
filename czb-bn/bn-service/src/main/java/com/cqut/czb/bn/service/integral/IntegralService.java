@@ -153,7 +153,7 @@ public interface IntegralService {
      * @param type
      * @return
      */
-    JSONResult getCommodityByType(String type);
+    JSONResult getCommodityByType(String type, String commodityId);
 
     /**
      * 根据商品类型分页查询商品

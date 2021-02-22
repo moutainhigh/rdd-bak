@@ -324,8 +324,8 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/getCommodityByType", method = RequestMethod.GET)
-    public JSONResult getCommodityByType(String type) {
-        return integralService.getCommodityByType(type);
+    public JSONResult getCommodityByType(String type, String commodityId) {
+        return integralService.getCommodityByType(type, commodityId);
     }
 
     /**
