@@ -26,4 +26,43 @@
         where user_id = #{userId,jdbcType=VARCHAR}
         order by create_at desc
     </select>
+
+    <select id="getOfferIntegralDetail" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO" parameterType="java.lang.String">
+        SELECT
+            *
+        FROM
+            ((
+                 SELECT
+                     integral_amount integralAmount,
+                     integral_log_type integralLogType,
+                     user_id userId,
+                     remark,
+                     NULL AS integralExchange,
+                     NULL AS exchangeType,
+                     create_at createAt,
+                     update_at updateAt
+                 FROM
+                     `czb_integral_log`
+                 WHERE
+                     integral_log_type = 2
+                   AND user_id = #{userId,jdbcType=VARCHAR}
+             ) UNION ALL
+             (
+                 SELECT
+                     exchange_amount * exchange_times_current integralAmount,
+                     1 AS integralLogType,
+                     exchange_source_id userId,
+                     "兑换码赠送" AS remark,
+                     integral_exchange integralExchange,
+                     exchange_type exchangeType,
+                     create_at createAt,
+                     update_at updateAt
+                 FROM
+                     `czb_integral_exchange`
+                 WHERE
+                     exchange_source_id = #{userId,jdbcType=VARCHAR}
+             )) AS fnd
+        ORDER BY
+            fnd.createAt DESC
+    </select>
 </mapper>

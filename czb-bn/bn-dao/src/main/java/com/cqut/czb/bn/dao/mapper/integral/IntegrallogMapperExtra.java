@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.integral;
 
+import com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface IntegrallogMapperExtra {
      * @return
      */
     List<IntegralLogDTO> getIntegralDetailsList(String userId);
+
+    List<IntegralDetailsDTO> getOfferIntegralDetail(String userId);
 }
