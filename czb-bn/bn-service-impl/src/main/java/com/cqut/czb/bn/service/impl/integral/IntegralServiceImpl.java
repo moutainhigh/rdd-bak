@@ -534,13 +534,7 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult getCommodityByType(String type, String commodityId) {
         if(type.equals("1")) {
-            if (commodityId == null || commodityId.equals("")) {
-                return new JSONResult(weChatCommodityMapperExtra.selectAllCommodityTitle());
-            } else {
-                WxAttributeDTO wxAttributeDTO = new WxAttributeDTO();
-                wxAttributeDTO.setCommodityId(commodityId);
-                return new JSONResult(weChatCommodityMapperExtra.selectAllWxAttribute(wxAttributeDTO));
-            }
+            return new JSONResult(weChatCommodityMapperExtra.selectAllCommodityTitle());
         }
         if(type.equals("2")) {
             return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("1", null));
@@ -550,6 +544,11 @@ public class IntegralServiceImpl implements IntegralService {
         }
         if(type.equals("4")) {
             return new JSONResult(equityPaymentCommodityMapperExtra.selectAllCommodityTitle());
+        }
+        if (commodityId != null || !commodityId.equals("")) {
+            WxAttributeDTO wxAttributeDTO = new WxAttributeDTO();
+            wxAttributeDTO.setCommodityId(commodityId);
+            return new JSONResult(weChatCommodityMapperExtra.selectAllWxAttribute(wxAttributeDTO));
         }
         else {
             return new JSONResult("请求无效", 500);
