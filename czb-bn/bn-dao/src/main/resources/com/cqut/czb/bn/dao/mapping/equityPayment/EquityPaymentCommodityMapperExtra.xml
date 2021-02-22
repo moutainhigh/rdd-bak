@@ -6,10 +6,11 @@
         <result column="goods_title" property="goodsTitle" jdbcType="VARCHAR" />
     </resultMap>
 
-    <select id="selectAllCommodityTitle" resultMap="BaseResultMap">
+    <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
-        goods_id,
-        goods_title
+        goods_id as id,
+        goods_title as name,
+        true as isLeaf
         from czb_equity_payment_commodity
     </select>
 </mapper>
