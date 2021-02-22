@@ -43,6 +43,9 @@ public class EquityPaymentDTO {
     // 充值类型
     private Integer rechargeType;
 
+    // 第三方订单号
+    private String thirdOrder;
+
     private Integer isBrowser;
 
     public String getOrderId() {
@@ -155,5 +158,13 @@ public class EquityPaymentDTO {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public String getThirdOrder() {
+        return thirdOrder;
+    }
+
+    public void setThirdOrder(String thirdOrder) {
+        this.thirdOrder = thirdOrder;
     }
 }

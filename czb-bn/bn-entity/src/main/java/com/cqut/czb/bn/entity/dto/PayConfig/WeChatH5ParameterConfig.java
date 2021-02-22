@@ -118,7 +118,7 @@ public class WeChatH5ParameterConfig {
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
         } else if (isBrowser == 2) {
             parameters.put("trade_type", "APP");
-            parameters.put("appid", "wxec50dac5d04a0c9f");
+            parameters.put("appid", "wx1d9987e1abf4c05e");
         }
         System.out.println("9999"+parameters);
         System.out.println(isBrowser);
@@ -185,7 +185,7 @@ public class WeChatH5ParameterConfig {
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
         } else if (equityPaymentDTO.getIsBrowser() == 2) {
             parameters.put("trade_type", "APP");
-            parameters.put("appid", "wxec50dac5d04a0c9f");
+            parameters.put("appid", "wx1d9987e1abf4c05e");
         }
         System.out.println("9999"+parameters);
         parameters.put("attach",attach);

@@ -17,5 +17,7 @@ public interface IntegralPurchaseMapperExtra {
 
     int updateIntegralPurchaseRecord(IntegralPurchaseRecord integralPurchaseRecord);
 
+    int updateEquityGoodsRecord(EquityPaymentDTO equityPaymentDTO);
+
     int updateIntegralInfo(IntegralInfoDTO integralInfoDTO);
 }

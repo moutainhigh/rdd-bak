@@ -56,6 +56,13 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
      */
     public Boolean insertBuyEquityGoods(String orderId, String userId, EquityPaymentDTO equityPaymentDTO,int rechargeWay) {
         EquityPaymentDTO equityPaymentDTO1 = new EquityPaymentDTO();
+        equityPaymentDTO1.setOrderId(orderId);
+        equityPaymentDTO1.setAccount(equityPaymentDTO.getAccount());
+        equityPaymentDTO1.setProductCode(equityPaymentDTO.getProductCode());
+        equityPaymentDTO1.setBuyNum(equityPaymentDTO.getBuyNum());
+        equityPaymentDTO1.setClientIP(equityPaymentDTO.getClientIP());
+        equityPaymentDTO1.setUnitPrice(equityPaymentDTO.getUnitPrice());
+        equityPaymentDTO1.setGoodsId(equityPaymentDTO.getGoodsId());
         Boolean insertRecords = integralPurchaseMapperExtra.insertEquityGoodsOrder(equityPaymentDTO1) > 0;
         return insertRecords;
     }

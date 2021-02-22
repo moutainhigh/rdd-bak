@@ -32,6 +32,16 @@
             integral_purchase_record_id = #{integralPurchaseRecordId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateEquityGoodsRecord" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO">
+        update czb_equity_payment_order
+        set third_order = #{thirdOrder,jdbcType=VARCHAR}
+          ,update_at = now()
+          ,pay_status = 1
+          ,order_state = 1
+        where
+            order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
     <insert id="insertIntegralLog" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO">
         insert into czb_integral_log (integral_log_id,
                                                   integral_info_id,

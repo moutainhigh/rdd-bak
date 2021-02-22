@@ -10,6 +10,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatStockMapperExtra;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
@@ -592,6 +593,12 @@ public class PayBackServiceImpl implements PayBackService {
             }
         }
 
+        // 更新
+        EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
+        equityPaymentDTO.setOrderId(orderId);
+        equityPaymentDTO.setThirdOrder(thirdOrderId);
+        System.out.println("更新成功");
+        boolean update = integralPurchaseMapperExtra.updateEquityGoodsRecord(equityPaymentDTO) > 0;
 
 
         //插入log记录

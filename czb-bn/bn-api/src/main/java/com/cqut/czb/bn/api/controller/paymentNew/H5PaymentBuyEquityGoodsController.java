@@ -30,7 +30,7 @@ public class H5PaymentBuyEquityGoodsController {
     /**
      * 微信
      */
-    @RequestMapping(value = "/WeChatBuyIntegral", method = RequestMethod.POST)
+    @RequestMapping(value = "/WeChatBuyEquityGoods", method = RequestMethod.POST)
     public JSONResult WeChatRechargeDirect(Principal principal, @RequestBody EquityPaymentDTO equityPaymentDTO) {
 //        User user = (User)redisUtils.get(principal.getName());
         User user = new User();
