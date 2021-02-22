@@ -141,8 +141,10 @@
     </select>
     <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         SELECT
-            commodity_id AS id, commodity_title AS name, false AS isLeaf
-        FROM czb_wechat_commodity
+            t1.commodity_id AS id,
+            t1.commodity_title AS name,
+            t1.commodity_id NOT IN (SELECT t2.commodity_id FROM czb_wechat_commodity_attr t2) AS isLeaf
+        FROM czb_wechat_commodity t1;
     </select>
     <!-- 查询商品属性信息-->
     <select id="selectAllWxAttribute" parameterType="com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO" resultMap="BaseAttributeMap">
@@ -1292,13 +1294,13 @@
     <select id="selectAllWxCommodityDetails" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         SELECT
             CONCAT(IFNULL(t2.content,""),"  价格为：",(t1.extra_sale_money + t3.sale_price)) AS name,
-            t1.commodity_id as id,
+            t1.commodity_attr_id as id,
             true AS isLeaf
         FROM
             czb_wechat_commodity_attr t1
                 LEFT JOIN czb_attribute t2 ON t1.attribute_id = t2.attribute_id
                 LEFT JOIN czb_wechat_commodity t3 ON t3.commodity_id = t1.commodity_id
         WHERE
-            t1.commodity_id = #{commodityId};
+            t1.commodity_id = #{commodityId}
     </select>
 </mapper>
