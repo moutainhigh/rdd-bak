@@ -545,6 +545,9 @@ public class IntegralServiceImpl implements IntegralService {
             return new JSONResult("更新失败，原商品已经不存在");
         }
 
+        integralDeductionInfo.setCreateAt(oldIntegralDeductionInfo.getCreateAt());
+        integralDeductionInfo.setUpdateAt(new Date());
+
         if (oldIntegralDeductionInfo.getCommodityId().equals(integralDeductionInfo.getCommodityId())) {
             if (integralDeductionInfoMapper.updateByPrimaryKey(integralDeductionInfo) == 1) {
                 return new JSONResult("更新成功");

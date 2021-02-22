@@ -296,11 +296,23 @@ public class IntegralController {
         return new JSONResult(integralService.getExchangeLogDetails(pageDTO, integralExchangeLogIdDTO));
     }
 
+    /**
+     * 新增商品最高抵扣额度
+     * @param principal
+     * @param integralDeductionInfo
+     * @return
+     */
     @RequestMapping(value = "/insertMaxDeductionAmount", method = RequestMethod.POST)
     public JSONResult insertMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
         return integralService.insertMaxDeductionAmount(integralDeductionInfo);
     }
 
+    /**
+     * 更新商品最高抵扣额度
+     * @param principal
+     * @param integralDeductionInfo
+     * @return
+     */
     @RequestMapping(value = "/updateMaxDeductionAmount", method = RequestMethod.POST)
     public JSONResult updateMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
         return integralService.updateMaxDeductionAmount(integralDeductionInfo);
