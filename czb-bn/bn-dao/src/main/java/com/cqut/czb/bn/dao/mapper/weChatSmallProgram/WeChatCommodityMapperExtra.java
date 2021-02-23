@@ -3,6 +3,7 @@ package com.cqut.czb.bn.dao.mapper.weChatSmallProgram;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatCommodityDTO;
+import com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
 import com.github.pagehelper.PageInfo;
@@ -25,7 +26,7 @@ public interface WeChatCommodityMapperExtra {
      * 用于后台管理系统
      * @return
      */
-    List<WxCommodityDTO> selectAllCommodityTitle();
+    List<CommodityDetailsDTO> selectAllCommodityTitle();
 
     int deleteByPrimaryKey(String commodityId);
 
@@ -107,4 +108,6 @@ public interface WeChatCommodityMapperExtra {
     List<WCPCommodityOutputDTO> selectAllCommodityTitleByArea(WCPCommodityOutputDTO wcpCommodityOutputDTO);
 
     List<String> getContent();
+
+    List<CommodityDetailsDTO> selectAllWxCommodityDetails(String commodityId);
 }

@@ -15,11 +15,11 @@
     commodity_id, account, discount, preferential_price, state, create_at, update_at,
     commodity_type
     </sql>
-    <select id="selectAllCommodityTitle" resultMap="BaseResultMap">
+    <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
-        commodity_id,
-        account,
-        commodity_type
+        commodity_id as id,
+        account as name,
+        true as isLeaf
         from czb_direct_charging_commodity
         where 1 = 1
         <if test="commodityType1 != '' and commodityType1 != null">
