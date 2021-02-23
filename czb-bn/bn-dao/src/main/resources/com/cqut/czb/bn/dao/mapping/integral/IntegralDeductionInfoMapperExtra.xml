@@ -8,7 +8,7 @@
         <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
-        <result column="commodity_attr_id" property="commodityAttrId" javaType="VARCHAR" />
+        <result column="commodity_attr_id" property="commodityAttrId" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
         integral_deduction_info_id, deduction_type, max_deduction_amount, commodity_id, create_at,
@@ -63,7 +63,7 @@
         1 = 1
         <if test="deductionType != '' and deductionType != null">
             and
-            t1.deduction_type = #{deductionType, jdbcType=VARCHAR}
+            t1.deduction_type = #{deductionType,jdbcType=INTEGER}
         </if>
         <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
             and
