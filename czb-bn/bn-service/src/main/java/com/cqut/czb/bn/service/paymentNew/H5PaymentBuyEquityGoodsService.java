@@ -8,4 +8,6 @@ import com.cqut.czb.bn.entity.entity.User;
 public interface H5PaymentBuyEquityGoodsService {
 
     JSONObject WeChatBuyEquityGoods(User user, EquityPaymentDTO equityPaymentDTO);
+
+    String AliBuyEquityGoods(User user, EquityPaymentDTO equityPaymentDTO);
 }

@@ -22,7 +22,7 @@ public class AliYunPaymentController {
     OrderPaymentService orderPaymentService;
 
     /**
-     * 微信购买
+     * 支付宝购买积分
      * @param request
      * @param response
      */
@@ -50,6 +50,23 @@ public class AliYunPaymentController {
         response.setHeader("content-type", "text/html;charset=utf-8");
         try {
             response.getWriter().write(orderPaymentService.AliOrderPaymentNotify(request,"H5Commodity"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 支付宝购买权益商品
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/aliYunBuyEquityGoods", method= RequestMethod.POST)
+    public synchronized void aliYunBuyEquityGoods(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("支付宝回调——购买权益");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("content-type", "text/html;charset=utf-8");
+        try {
+            response.getWriter().print(orderPaymentService.AliOrderPaymentNotify(request,"EquityGoods"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -41,15 +41,15 @@ public class H5PaymentBuyEquityGoodsController {
             return  new JSONResult("购买成功",200,info);
         }
     }
-//    @RequestMapping(value = "AliBuyIntegral",method = RequestMethod.POST)
-//    public JSONResult AliBuyIntegral(Principal principal, @RequestBody IntegralRechargeDTO integralRechargeDTO){
-//        User user = (User)redisUtils.get(principal.getName());
-////        User user = new User();
-//        String info =h5PaymentBuyIntegralService.AliBuyIntegral(user,integralRechargeDTO);
-//        if(info==null){
-//            return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
-//        }else {
-//            return  new JSONResult("购买成功",200,info);
-//        }
-//    }
+    @RequestMapping(value = "AliBuyEquityGoods",method = RequestMethod.POST)
+    public JSONResult AliBuyEquityGoods(Principal principal, @RequestBody EquityPaymentDTO equityPaymentDTO){
+        User user = (User)redisUtils.get(principal.getName());
+//        User user = new User();
+        String info =h5PaymentBuyEquityGoodsService.AliBuyEquityGoods(user,equityPaymentDTO);
+        if(info==null){
+            return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
+        }else {
+            return  new JSONResult("购买成功",200,info);
+        }
+    }
 }

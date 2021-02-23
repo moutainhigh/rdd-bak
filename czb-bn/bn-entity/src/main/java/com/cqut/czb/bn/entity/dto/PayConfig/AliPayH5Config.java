@@ -27,12 +27,21 @@ public class AliPayH5Config {
     //购买积分-回调
     public static String IntegralRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliYunPayment/aliYunBuyIntegral";
 
-    //购买积分-回调
+    //购买库存-回调
     public static String CommodityRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliYunPayment/aliYunBuyCommodity";
 
+    //购买权益-回调
+    public static String EquityRecharge_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliYunPayment/aliYunBuyEquityGoods";
+
+    //积分返回页面
     public static String Return_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/h5IntegralExchangeAndPurchase";
 
+    //无卡加油返回页面
     public static String CommodityReturn_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/h5IntegralExchangeAndPurchase";
+
+
+    //权益返回页面
+    public static String EquityReturn_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/h5IntegralExchangeAndPurchase";
 
     // 加密方式
     public static String sign_type = "RSA2";

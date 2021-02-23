@@ -141,8 +141,12 @@ public class PayBackServiceImpl implements PayBackService {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }
-        }
-        else {
+        }else if (consumptionType.equals("EquityGoods")){
+            if (getEquityGoodsOrderAli(params) == 1) {
+                result.put("success", AlipayConfig.response_success);
+                return result;
+            }
+        } else {
             result.put("fail", AlipayConfig.response_fail);
             return result;
         }
@@ -287,7 +291,7 @@ public class PayBackServiceImpl implements PayBackService {
     }
 
     /**
-     * 小程序库存支付成功(微信)
+     * 小程序库存支付成功(支付宝)
      * @param params
      * @return
      */
@@ -401,7 +405,7 @@ public class PayBackServiceImpl implements PayBackService {
         return 1;
     }
     /**
-     * 积分购买
+     * 积分购买-支付宝
      * @param params
      * @return
      */
@@ -474,6 +478,106 @@ public class PayBackServiceImpl implements PayBackService {
 
     }
 
+    /**
+     * 权益商品购买-支付宝
+     * @param params
+     * @return
+     */
+    private int getEquityGoodsOrderAli(Map<String, String> params) {
+        String[] resDate = params.get("passback_params").split("\\^");
+        String[] temp;
+        String thirdOrderId = params.get("trade_no");
+        System.out.println("第三方订单" + params.get("trade_no"));
+        String orderId = "";
+        String userId = "";
+        double amount = 0.0;
+        String account = "";
+        String productCode = "";
+        int buyNum = 0;
+        int isCallBack = 0;
+        int tradeType = 0;
+        String clientIP = "";
+        double unitPrice = 0;
+        int totalPrice = 0;
+        String goodsId = "";
+        int rechargeType = 0;
+        int integralAmount = 0;
+
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("trade_no".equals(temp[0])) {
+                System.out.println("该交易在支付宝系统中的交易流水号:" + temp[1]+ "\n" + thirdOrderId);
+            }
+            if ("out_trade_no".equals(temp[0])) {
+                System.out.println("商户网站唯一订单号:" + temp[1]);
+            }
+            if ("orderId".equals(temp[0])) {
+                orderId = temp[1];
+            }
+            if ("userId".equals(temp[0])) {
+                userId = temp[1];
+            }
+            if ("integralAmount".equals(temp[0])) {
+                integralAmount = Integer.valueOf(temp[1]);
+            }
+            if ("amount".equals(temp[0])) {
+                amount = Double.valueOf(temp[1]);
+            }
+            if ("account".equals(temp[0])) {
+                account = temp[1];
+            }
+            if ("productCode".equals(temp[0])) {
+                productCode = temp[1];
+            }
+            if ("buyNum".equals(temp[0])) {
+                buyNum = Integer.valueOf(temp[1]);
+            }
+            if ("isCallBack".equals(temp[0])) {
+                isCallBack = Integer.valueOf(temp[1]);
+            }
+            if ("tradeType".equals(temp[0])) {
+                tradeType = Integer.valueOf(temp[1]);
+            }
+            if ("unitPrice".equals(temp[0])) {
+                unitPrice = Double.valueOf(temp[1]);
+            }
+            if ("totalPrice".equals(temp[0])) {
+                totalPrice = Integer.valueOf(temp[1]);
+            }
+            if ("goodsId".equals(temp[0])) {
+                goodsId = temp[1];
+            }
+            if ("rechargeType".equals(temp[0])) {
+                rechargeType = Integer.valueOf(temp[1]);
+            }
+        }
+        // 更新
+        EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
+        equityPaymentDTO.setOrderId(orderId);
+        equityPaymentDTO.setThirdOrder(thirdOrderId);
+        System.out.println("更新成功");
+        boolean update = integralPurchaseMapperExtra.updateEquityGoodsRecord(equityPaymentDTO) > 0;
+
+
+        //插入log记录
+        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+        integralLogDTO.setOrderId(orderId);
+        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        integralLogDTO.setUserId(userId);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setIntegralAmount(integralAmount);
+        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setUserId(userId);
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        return 1;
+    }
     // 积分购买（微信）
     public int getAddBuyIntegralOrderWechat(Map<String, Object> restmap){
         String[] resDate = restmap.get("attach").toString().split("\\^");
