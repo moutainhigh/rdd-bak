@@ -487,7 +487,7 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public JSONResult insertMaxDeductionAmount(IntegralDeductionInfo integralDeductionInfo) {
 
-        if (integralDeductionInfoMapperExtra.selectByCommodityId(integralDeductionInfo) != null) {
+        if (integralDeductionInfoMapperExtra.selectByCommodityIdAndCommodityAttrId(integralDeductionInfo) != null) {
             return new JSONResult("新增失败，此商品的抵扣额度已存在");
         }
 
@@ -512,14 +512,15 @@ public class IntegralServiceImpl implements IntegralService {
         integralDeductionInfo.setCreateAt(oldIntegralDeductionInfo.getCreateAt());
         integralDeductionInfo.setUpdateAt(new Date());
 
-        if (oldIntegralDeductionInfo.getCommodityId().equals(integralDeductionInfo.getCommodityId())) {
+        oldIntegralDeductionInfo = integralDeductionInfoMapperExtra.selectByCommodityIdAndCommodityAttrId(integralDeductionInfo);
+        if (oldIntegralDeductionInfo != null && oldIntegralDeductionInfo.getIntegralDeductionInfoId().equals(integralDeductionInfo.getIntegralDeductionInfoId())) {
             if (integralDeductionInfoMapper.updateByPrimaryKey(integralDeductionInfo) == 1) {
                 return new JSONResult("更新成功");
             } else {
                 return new JSONResult("更新失败");
             }
         } else {
-            if (integralDeductionInfoMapperExtra.selectByCommodityId(integralDeductionInfo) != null) {
+            if (oldIntegralDeductionInfo != null) {
                 return new JSONResult("更新失败，此商品的抵扣额度已存在");
             } else {
                 if (integralDeductionInfoMapper.updateByPrimaryKey(integralDeductionInfo) == 1) {

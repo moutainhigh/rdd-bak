@@ -11,6 +11,8 @@ public class IntegralDeductionInfo {
 
     private String commodityId;
 
+    private String commodityAttrId;
+
     private Date createAt;
 
     private Date updateAt;
@@ -45,6 +47,14 @@ public class IntegralDeductionInfo {
 
     public void setCommodityId(String commodityId) {
         this.commodityId = commodityId == null ? null : commodityId.trim();
+    }
+
+    public String getCommodityAttrId() {
+        return commodityAttrId;
+    }
+
+    public void setCommodityAttrId(String commodityAttrId) {
+        this.commodityAttrId = commodityAttrId;
     }
 
     public Date getCreateAt() {

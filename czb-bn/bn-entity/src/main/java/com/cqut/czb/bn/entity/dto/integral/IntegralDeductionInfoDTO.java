@@ -13,6 +13,8 @@ public class IntegralDeductionInfoDTO {
 
     private String commodityId;
 
+    private String commodityAttrId;
+
     private String commodityTitle;
 
     private Date createAt;
@@ -54,6 +56,14 @@ public class IntegralDeductionInfoDTO {
 
     public void setCommodityId(String commodityId) {
         this.commodityId = commodityId == null ? null : commodityId.trim();
+    }
+
+    public String getCommodityAttrId() {
+        return commodityAttrId;
+    }
+
+    public void setCommodityAttrId(String commodityAttrId) {
+        this.commodityAttrId = commodityAttrId;
     }
 
     public Date getCreateAt() {

@@ -8,10 +8,11 @@
         <result column="commodity_id" property="commodityId" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="commodity_attr_id" property="commodityAttrId" javaType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
         integral_deduction_info_id, deduction_type, max_deduction_amount, commodity_id, create_at,
-    update_at
+    update_at, commodity_attr_id
     </sql>
     <select id="getMaxDeductionAmount" resultType="java.lang.Double" parameterType="java.lang.String">
         select
@@ -21,14 +22,22 @@
     </select>
 
     <insert id="insertRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">
-        insert into czb_integral_deduction_info
+        insert into czb_integral_deduction_info (integral_deduction_info_id, deduction_type,
+                                                 max_deduction_amount, commodity_id, create_at,
+                                                 update_at,commodity_attr_id)
+        values (#{integralDeductionInfoId,jdbcType=VARCHAR}, #{deductionType,jdbcType=INTEGER},
+                #{maxDeductionAmount,jdbcType=DOUBLE}, #{commodityId,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+                #{updateAt,jdbcType=TIMESTAMP}, #{commodity_attr_id,jdbcType=VARCHAR})
     </insert>
 
-    <select id="selectByCommodityId" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" resultMap="BaseResultMap">
+    <select id="selectByCommodityIdAndCommodityAttrId" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from czb_integral_deduction_info
         where commodity_id = #{commodityId}
+        <if test="commodityAttrId!=null and commodityAttrId!=''">
+            and commodity_attr_id = #{commodityAttrId}
+        </if>
     </select>
     <select id="selectByCommodityType" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO">
     SELECT
