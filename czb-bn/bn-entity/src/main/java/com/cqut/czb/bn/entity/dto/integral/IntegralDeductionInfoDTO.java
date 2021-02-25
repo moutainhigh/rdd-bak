@@ -30,8 +30,6 @@ public class IntegralDeductionInfoDTO {
 
     private String extraSaleMoney;
 
-    private String content;
-
     private String salePrice;
 
     public String getIntegralDeductionInfoId() {
@@ -128,14 +126,6 @@ public class IntegralDeductionInfoDTO {
 
     public void setExtraSaleMoney(String extraSaleMoney) {
         this.extraSaleMoney = extraSaleMoney;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getSalePrice() {

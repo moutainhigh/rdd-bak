@@ -52,20 +52,23 @@
         WHEN 4 THEN
         (SELECT goods_title FROM czb_equity_payment_commodity t2 WHERE t2.goods_id = t1.commodity_id)
         END AS "commodityTitle",
+        CASE
+        t1.deduction_type
+        WHEN 1 THEN
+        (SELECT t2.extra_sale_money FROM czb_wechat_commodity_attr t2 WHERE t1.commodity_attr_id = t2.commodity_attr_id)
+        END AS "extraSaleMoney",
+        CASE
+        t1.deduction_type
+        WHEN 1 THEN
+        (SELECT t2.sale_price FROM czb_wechat_commodity t2 WHERE t1.commodity_id = t2.commodity_id)
+        END AS "salePrice",
         t1.integral_deduction_info_id AS integralDeductionInfoId,
         t1.commodity_id AS commodityId,
         t1.deduction_type AS deductionType,
         t1.max_deduction_amount AS maxDeductionAmount,
-        t1.update_at AS updateAt,
-        t2.attribute_id AS attributeId,
-        t2.extra_sale_money AS extraSaleMoney,
-        t3.content AS content,
-        t4.sale_price AS salePrice
+        t1.update_at AS updateAt
         FROM
         czb_integral_deduction_info t1
-        LEFT JOIN czb_wechat_commodity_attr t2 on t1.commodity_id = t2.commodity_id
-        LEFT JOIN czb_attribute t3 on t2.attr_order = t3.attribute_id
-        LEFT JOIN czb_wechat_commodity t4 on t4.commodity_id = t1.commodity_id
     WHERE
         1 = 1
         <if test="deductionType != '' and deductionType != null">
