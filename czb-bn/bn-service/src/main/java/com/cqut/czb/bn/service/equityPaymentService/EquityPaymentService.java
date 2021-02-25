@@ -15,6 +15,14 @@ import java.util.List;
  * 创建时间： 2021/2/25
  */
 public interface EquityPaymentService {
+
+    /**
+     * 获取商品列表
+     * @param equityPaymentCommodityDTO
+     * @param pageDTO
+     * @return
+     */
+    PageInfo<EquityPaymentCommodityDTO> getCommodityList(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO);
     /**
      * 获取商品订单详情
      * @return

@@ -24,9 +24,13 @@ public class EquityPaymentController {
     @Autowired
     EquityPaymentService equityPaymentService;
 
-    @RequestMapping(value = "/getCommodityView", method = RequestMethod.GET)
-    public JSONResult getCommodityView() {
-        return null;
+    /**
+     * 获取商品列表
+     * @return
+     */
+    @RequestMapping(value = "/getCommodityList", method = RequestMethod.GET)
+    public JSONResult getCommodityList(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO) {
+        return new JSONResult(equityPaymentService.getCommodityList(equityPaymentCommodityDTO, pageDTO));
     }
 
     /**
