@@ -23,7 +23,7 @@
 	    czb_equity_payment_order t1,
 	    czb_equity_payment_commodity t2
     WHERE
-	    t1.goods_id = t2.goods_id;
+	    t1.goods_id = t2.goods_id
 	    <if test="account != '' and account != null">
             and
             t1.recharge_account = #{account}
@@ -36,7 +36,16 @@
         </if>
     ORDER BY t1.create_at DESC
     </select>
-	<select id="getCategoryAndType">
-
+	<select id="getCategoryAndType" resultType="com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO">
+	SELECT
+		t1.category_id AS categoryId,
+		t1.category_name AS categoryName,
+		t2.type_id AS typeId,
+		t2.type_name AS typeName
+	FROM
+		czb_equity_payment_category t1,
+		czb_equity_payment_type t2
+	WHERE
+		t1.category_id = t2.category_id
 	</select>
 </mapper>
