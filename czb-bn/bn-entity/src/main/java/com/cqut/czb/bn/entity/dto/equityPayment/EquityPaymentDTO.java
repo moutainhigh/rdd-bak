@@ -44,7 +44,7 @@ public class EquityPaymentDTO {
     private String goodsId;
 
     //订单状态
-    private String orderType;
+    private String orderState;
 
     // 商品名称
     private String goodsTitle;
@@ -246,10 +246,10 @@ public class EquityPaymentDTO {
     }
 
     public String getOrderType() {
-        return orderType;
+        return orderState;
     }
 
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
+    public void setOrderType(String orderState) {
+        this.orderState = orderState;
     }
 }
