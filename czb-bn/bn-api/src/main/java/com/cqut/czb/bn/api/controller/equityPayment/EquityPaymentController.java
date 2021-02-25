@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.equityPayment;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.equityPaymentService.EquityPaymentService;
@@ -43,6 +44,15 @@ public class EquityPaymentController {
      */
     @RequestMapping(value = "/getCategoryAndType", method = RequestMethod.GET)
     public JSONResult getCategoryAndType() {
-        return equityPaymentService.getCategoryAndType();
+        return new JSONResult(equityPaymentService.getCategoryAndType());
+    }
+
+    /**
+     * 分页查询权益商品
+     * @return
+     */
+    @RequestMapping(value = "/getEquityPaymentByPage", method = RequestMethod.GET)
+    public JSONResult getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO) {
+        return new JSONResult(equityPaymentService.getEquityPaymentByPage(equityPaymentCommodityDTO, pageDTO));
     }
 }

@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.equityPayment;
 
+import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
@@ -9,5 +11,7 @@ public interface EquityPaymentRecordMapperExtra {
 
     List<EquityPaymentDTO> getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO);
 
-    JSONResult getCategoryAndType();
+    List<CategoryAndTypeDTO> getCategoryAndType();
+
+    List<EquityPaymentCommodityDTO> getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
 }

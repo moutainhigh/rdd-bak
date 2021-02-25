@@ -1,6 +1,8 @@
 package com.cqut.czb.bn.service.impl.equityPaymentServiceImpl;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentRecordMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -32,7 +34,14 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public JSONResult getCategoryAndType() {
+    public List<CategoryAndTypeDTO> getCategoryAndType() {
         return equityPaymentRecordMapperExtra.getCategoryAndType();
+    }
+
+    @Override
+    public PageInfo<EquityPaymentCommodityDTO> getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
+        List<EquityPaymentCommodityDTO> equityPaymentCommodityDTOList =  equityPaymentRecordMapperExtra.getEquityPaymentByPage(equityPaymentCommodityDTO);
+        return new PageInfo<>(equityPaymentCommodityDTOList);
     }
 }

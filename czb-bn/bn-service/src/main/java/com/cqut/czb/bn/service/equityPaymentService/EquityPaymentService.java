@@ -1,9 +1,13 @@
 package com.cqut.czb.bn.service.equityPaymentService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 /**
  * 作者： 袁菘壑 侯家领
@@ -21,5 +25,11 @@ public interface EquityPaymentService {
      * 级联选择-类目-类别
      * @return
      */
-    JSONResult getCategoryAndType();
+    List<CategoryAndTypeDTO> getCategoryAndType();
+
+    /**
+     * 分页查询权益商品
+     * @return
+     */
+    PageInfo<EquityPaymentCommodityDTO> getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO);
 }

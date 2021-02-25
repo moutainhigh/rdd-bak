@@ -48,4 +48,19 @@
 	WHERE
 		t1.category_id = t2.category_id
 	</select>
+
+	<select id="getEquityPaymentByPage" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
+	SELECT
+		t1.goods_id AS goodsId,
+		t1.goods_title goodsTitle,
+		t1.fy_mount AS fyMount,
+		t1.purchase_price AS purchasePrice,
+		t1.selling_price AS sellingPrice,
+		t1.unit_price AS unitPrice,
+		t1.is_hot AS isHot,
+		t1.sold_number AS soldNumber,
+		t1.goods_pic AS goodsPic
+	FROM
+		czb_equity_payment_commodity t1;
+	</select>
 </mapper>
