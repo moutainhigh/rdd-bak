@@ -557,6 +557,23 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
+    public JSONResult getCommodityPrice(IntegralDeductionInfo integralDeductionInfo) {
+        if (integralDeductionInfo.getDeductionType() == 1) {
+            return new JSONResult(weChatCommodityMapperExtra.getCommodityPrice(integralDeductionInfo));
+        }
+        if (integralDeductionInfo.getDeductionType() == 2 || integralDeductionInfo.getDeductionType() == 3) {
+            return new JSONResult(directChargingCommodityMapperExtra.getCommodityPriceByCommodityId(integralDeductionInfo.getCommodityId()));
+        }
+        if (integralDeductionInfo.getDeductionType() == 4) {
+            return new JSONResult(equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(integralDeductionInfo.getCommodityId()).getSellingPrice());
+        }
+        else {
+            return new JSONResult("请求无效", 500);
+        }
+
+    }
+
+    @Override
     public PageInfo<IntegralDeductionInfoDTO> getCommodityByPage(IntegralDeductionInfoDTO integralDeductionInfoDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
         List<IntegralDeductionInfoDTO> integralExchangeLogIdDTOList =  integralDeductionInfoMapperExtra.selectByCommodityType(integralDeductionInfoDTO);

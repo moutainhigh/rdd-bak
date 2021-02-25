@@ -29,4 +29,7 @@
             or commodity_type = #{commodityType2,jdbcType=VARCHAR}
         </if>
     </select>
+    <select id="getCommodityPriceByCommodityId" resultType="java.lang.Double">
+        select account from czb_direct_charging_commodity where commodity_id = #{commodityId, jdbcType=VARCHAR}
+    </select>
 </mapper>

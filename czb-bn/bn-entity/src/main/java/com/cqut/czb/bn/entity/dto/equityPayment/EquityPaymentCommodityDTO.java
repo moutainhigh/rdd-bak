@@ -43,6 +43,8 @@ public class EquityPaymentCommodityDTO {
 
     private Date updateAt;
 
+    private Integer soldNumber;
+
     public String getGoodsId() {
         return goodsId;
     }
@@ -193,5 +195,13 @@ public class EquityPaymentCommodityDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getSoldNumber() {
+        return soldNumber;
+    }
+
+    public void setSoldNumber(Integer soldNumber) {
+        this.soldNumber = soldNumber;
     }
 }
