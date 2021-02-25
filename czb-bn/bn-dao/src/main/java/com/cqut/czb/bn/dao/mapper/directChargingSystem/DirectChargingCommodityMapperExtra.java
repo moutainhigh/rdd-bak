@@ -14,4 +14,6 @@ public interface DirectChargingCommodityMapperExtra {
      */
     List<CommodityDetailsDTO> selectAllCommodityTitle(@Param("commodityType1") String commodityType1, @Param("commodityType2") String commodityType2);
 
+    Double getCommodityPriceByCommodityId(@Param("commodityId") String commodityId);
+
 }

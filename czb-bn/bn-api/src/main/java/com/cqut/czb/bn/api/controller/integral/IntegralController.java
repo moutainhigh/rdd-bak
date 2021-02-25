@@ -329,6 +329,16 @@ public class IntegralController {
     }
 
     /**
+     * 获取商品价格
+     * @param integralDeductionInfo
+     * @return
+     */
+    @RequestMapping(value = "/getCommodityPrice", method = RequestMethod.GET)
+    public JSONResult getCommodityPrice(IntegralDeductionInfo integralDeductionInfo) {
+        return integralService.getCommodityPrice(integralDeductionInfo);
+    }
+
+    /**
      * 根据商品类型分页查询商品
      * @param integralDeductionInfoDTO
      * @return

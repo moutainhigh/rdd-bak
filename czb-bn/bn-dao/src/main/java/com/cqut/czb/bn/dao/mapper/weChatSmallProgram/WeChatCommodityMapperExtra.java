@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatCommodityDTO;
 import com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxAttributeDTO;
 import com.cqut.czb.bn.entity.dto.wechatAppletCommodity.WxCommodityDTO;
+import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -110,4 +111,6 @@ public interface WeChatCommodityMapperExtra {
     List<String> getContent();
 
     List<CommodityDetailsDTO> selectAllWxCommodityDetails(String commodityId);
+
+    Double getCommodityPrice(IntegralDeductionInfo integralDeductionInfo);
 }

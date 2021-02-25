@@ -156,6 +156,13 @@ public interface IntegralService {
     JSONResult getCommodityByType(String type, String commodityId);
 
     /**
+     * 获取商品的价格
+     * @param integralDeductionInfo
+     * @return
+     */
+    JSONResult getCommodityPrice(IntegralDeductionInfo integralDeductionInfo);
+
+    /**
      * 根据商品类型分页查询商品
      * @param integralDeductionInfoDTO
      * @return

@@ -3,8 +3,31 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra" >
     <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO" >
         <id column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+        <result column="trade_type" property="tradeType" jdbcType="INTEGER" />
+        <result column="type_id" property="typeId" jdbcType="VARCHAR" />
         <result column="goods_title" property="goodsTitle" jdbcType="VARCHAR" />
+        <result column="goods_type" property="goodsType" jdbcType="INTEGER" />
+        <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+        <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+        <result column="selling_price" property="sellingPrice" jdbcType="DOUBLE" />
+        <result column="goods_pic" property="goodsPic" jdbcType="VARCHAR" />
+        <result column="unit_price" property="unitPrice" jdbcType="DOUBLE" />
+        <result column="is_game" property="isGame" jdbcType="INTEGER" />
+        <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <result column="on_sale" property="onSale" jdbcType="INTEGER" />
+        <result column="fy_mount" property="fyMount" jdbcType="DOUBLE" />
+        <result column="order" property="order" jdbcType="INTEGER" />
+        <result column="is_hot" property="isHot" jdbcType="INTEGER" />
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+        <result column="sold_number" property="soldNumber" jdbcType="INTEGER" />
     </resultMap>
+    <sql id="Base_Column_List" >
+      goods_id, trade_type, type_id, goods_title, goods_type, product_code, purchase_price, selling_price,
+      goods_pic, unit_price, is_game, `desc`, on_sale, fy_mount, `order`, is_hot, is_delete, create_at,
+      update_at, sold_number
+    </sql>
 
     <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
@@ -12,5 +35,11 @@
         CONCAT(goods_title,"  价格为：",IFNULL(selling_price,0)) as name,
         true as isLeaf
         from czb_equity_payment_commodity
+    </select>
+    <select id="selectCommodityByGoodsId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from czb_equity_payment_commodity
+        where goods_id = #{goodsId,jdbcType=VARCHAR}
     </select>
 </mapper>

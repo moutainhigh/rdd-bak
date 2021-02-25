@@ -11,4 +11,6 @@ public interface EquityPaymentCommodityMapperExtra {
      * @return
      */
     List<CommodityDetailsDTO> selectAllCommodityTitle();
+
+    EquityPaymentCommodityDTO selectCommodityByGoodsId(String goodsId);
 }
