@@ -26,6 +26,14 @@ public class IntegralDeductionInfoDTO {
 
     private String overDate;
 
+    private String attributeId;
+
+    private String extraSaleMoney;
+
+    private String content;
+
+    private String salePrice;
+
     public String getIntegralDeductionInfoId() {
         return integralDeductionInfoId;
     }
@@ -104,5 +112,37 @@ public class IntegralDeductionInfoDTO {
 
     public void setOverDate(String overDate) {
         this.overDate = overDate;
+    }
+
+    public String getAttributeId() {
+        return attributeId;
+    }
+
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
+    }
+
+    public String getExtraSaleMoney() {
+        return extraSaleMoney;
+    }
+
+    public void setExtraSaleMoney(String extraSaleMoney) {
+        this.extraSaleMoney = extraSaleMoney;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(String salePrice) {
+        this.salePrice = salePrice;
     }
 }

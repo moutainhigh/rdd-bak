@@ -41,24 +41,31 @@
     </select>
     <select id="selectByCommodityType" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO">
     SELECT
-    CASE
-        deduction_type
-    WHEN 1 THEN
+        CASE
+        t1.deduction_type
+        WHEN 1 THEN
         (SELECT commodity_title FROM czb_wechat_commodity t2 WHERE t2.commodity_id = t1.commodity_id)
-    WHEN 2 THEN
+        WHEN 2 THEN
         (SELECT account FROM czb_direct_charging_commodity t2 WHERE t2.commodity_id = t1.commodity_id and t2.commodity_type=1)
-    WHEN 3 THEN
+        WHEN 3 THEN
         (SELECT account FROM czb_direct_charging_commodity t2 WHERE t2.commodity_id = t1.commodity_id and (t2.commodity_type=2 or t2.commodity_type=3))
-    WHEN 4 THEN
+        WHEN 4 THEN
         (SELECT goods_title FROM czb_equity_payment_commodity t2 WHERE t2.goods_id = t1.commodity_id)
-    END AS "commodityTitle",
-    integral_deduction_info_id AS integralDeductionInfoId,
-    commodity_id AS commodityId,
-    deduction_type AS deductionType,
-    max_deduction_amount AS maxDeductionAmount,
-    update_at AS updateAt
-    FROM
+        END AS "commodityTitle",
+        t1.integral_deduction_info_id AS integralDeductionInfoId,
+        t1.commodity_id AS commodityId,
+        t1.deduction_type AS deductionType,
+        t1.max_deduction_amount AS maxDeductionAmount,
+        t1.update_at AS updateAt,
+        t2.attribute_id AS attributeId,
+        t2.extra_sale_money AS extraSaleMoney,
+        t3.content AS content,
+        t4.sale_price AS salePrice
+        FROM
         czb_integral_deduction_info t1
+        LEFT JOIN czb_wechat_commodity_attr t2 on t1.commodity_id = t2.commodity_id
+        LEFT JOIN czb_attribute t3 on t2.attr_order = t3.attribute_id
+        LEFT JOIN czb_wechat_commodity t4 on t4.commodity_id = t1.commodity_id
     WHERE
         1 = 1
         <if test="deductionType != '' and deductionType != null">
@@ -71,7 +78,7 @@
             and
             t1.update_at &gt;= #{beginDate})
         </if>
-    ORDER BY update_at DESC
+    ORDER BY t1.update_at DESC
     </select>
 
 </mapper>
