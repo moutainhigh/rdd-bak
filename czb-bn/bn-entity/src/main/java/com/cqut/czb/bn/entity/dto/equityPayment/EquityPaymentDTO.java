@@ -43,6 +43,9 @@ public class EquityPaymentDTO {
     // 商品编号
     private String goodsId;
 
+    //订单状态
+    private String orderType;
+
     // 商品名称
     private String goodsTitle;
 
@@ -240,5 +243,13 @@ public class EquityPaymentDTO {
 
     public void setOverDate(String overDate) {
         this.overDate = overDate;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 }

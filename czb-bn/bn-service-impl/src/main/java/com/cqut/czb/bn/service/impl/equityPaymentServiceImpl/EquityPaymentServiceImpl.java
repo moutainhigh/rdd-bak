@@ -30,4 +30,9 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         List<EquityPaymentDTO> equityPaymentRecordList =  equityPaymentRecordMapperExtra.getEquityPaymentRecord(equityPaymentDTO);
         return new PageInfo<>(equityPaymentRecordList);
     }
+
+    @Override
+    public JSONResult getCategoryAndType() {
+        return equityPaymentRecordMapperExtra.getCategoryAndType();
+    }
 }

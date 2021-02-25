@@ -16,4 +16,10 @@ public interface EquityPaymentService {
      * @return
      */
     PageInfo<EquityPaymentDTO> getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO);
+
+    /**
+     * 级联选择-类目-类别
+     * @return
+     */
+    JSONResult getCategoryAndType();
 }

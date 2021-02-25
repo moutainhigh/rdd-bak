@@ -41,7 +41,7 @@
     </select>
     <select id="selectByCommodityType" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO">
     SELECT
-        CASE
+    CASE
         t1.deduction_type
         WHEN 1 THEN
         (SELECT commodity_title FROM czb_wechat_commodity t2 WHERE t2.commodity_id = t1.commodity_id)
@@ -52,17 +52,22 @@
         WHEN 4 THEN
         (SELECT goods_title FROM czb_equity_payment_commodity t2 WHERE t2.goods_id = t1.commodity_id)
         END AS "commodityTitle",
-        CASE
+    CASE
         t1.deduction_type
         WHEN 1 THEN
         (SELECT t2.extra_sale_money FROM czb_wechat_commodity_attr t2 WHERE t1.commodity_attr_id = t2.commodity_attr_id)
         END AS "extraSaleMoney",
-        CASE
+    CASE
+        t1.deduction_type
+        WHEN 1 THEN
+        (SELECT t3.attribute_id FROM czb_wechat_commodity_attr t2 JOIN czb_attribute t3 on t3.attribute_id = t2.attribute_id WHERE t1.commodity_attr_id = t2.commodity_attr_id)
+        END AS "commodityAttrId",
+    CASE
         t1.deduction_type
         WHEN 1 THEN
         (SELECT CONCAT(t3.name,":",t3.content) FROM czb_wechat_commodity_attr t2 JOIN czb_attribute t3 on t3.attribute_id = t2.attribute_id WHERE t1.commodity_attr_id = t2.commodity_attr_id)
         END AS "commodityAttr",
-        CASE
+    CASE
         t1.deduction_type
         WHEN 1 THEN
         (SELECT t2.sale_price FROM czb_wechat_commodity t2 WHERE t1.commodity_id = t2.commodity_id)
@@ -74,7 +79,7 @@
         t1.deduction_type AS deductionType,
         t1.max_deduction_amount AS maxDeductionAmount,
         t1.update_at AS updateAt
-        FROM
+    FROM
         czb_integral_deduction_info t1
     WHERE
         1 = 1

@@ -36,4 +36,13 @@ public class EquityPaymentController {
     public JSONResult getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO) {
         return new JSONResult(equityPaymentService.getEquityPaymentRecord(equityPaymentDTO, pageDTO));
     }
+
+    /**
+     * 级联选择-类目-类别
+     * @return
+     */
+    @RequestMapping(value = "/getCategoryAndType", method = RequestMethod.GET)
+    public JSONResult getCategoryAndType() {
+        return equityPaymentService.getCategoryAndType();
+    }
 }
