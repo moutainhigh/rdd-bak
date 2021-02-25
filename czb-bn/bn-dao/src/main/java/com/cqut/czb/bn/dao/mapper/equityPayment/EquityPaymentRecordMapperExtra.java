@@ -13,5 +13,4 @@ public interface EquityPaymentRecordMapperExtra {
 
     List<CategoryAndTypeDTO> getCategoryAndType();
 
-    List<EquityPaymentCommodityDTO> getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
 }

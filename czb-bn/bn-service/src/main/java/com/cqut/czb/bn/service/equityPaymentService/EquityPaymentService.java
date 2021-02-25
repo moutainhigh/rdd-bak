@@ -35,9 +35,4 @@ public interface EquityPaymentService {
      */
     List<CategoryAndTypeDTO> getCategoryAndType();
 
-    /**
-     * 分页查询权益商品
-     * @return
-     */
-    PageInfo<EquityPaymentCommodityDTO> getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO);
 }

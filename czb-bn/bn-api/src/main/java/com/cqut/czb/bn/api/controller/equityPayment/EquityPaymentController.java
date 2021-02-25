@@ -51,12 +51,4 @@ public class EquityPaymentController {
         return new JSONResult(equityPaymentService.getCategoryAndType());
     }
 
-    /**
-     * 分页查询权益商品
-     * @return
-     */
-    @RequestMapping(value = "/getEquityPaymentByPage", method = RequestMethod.GET)
-    public JSONResult getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO) {
-        return new JSONResult(equityPaymentService.getEquityPaymentByPage(equityPaymentCommodityDTO, pageDTO));
-    }
 }

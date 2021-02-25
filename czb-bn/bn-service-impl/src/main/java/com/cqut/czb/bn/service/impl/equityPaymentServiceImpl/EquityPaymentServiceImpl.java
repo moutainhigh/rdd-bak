@@ -46,10 +46,4 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         return equityPaymentRecordMapperExtra.getCategoryAndType();
     }
 
-    @Override
-    public PageInfo<EquityPaymentCommodityDTO> getEquityPaymentByPage(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO) {
-        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
-        List<EquityPaymentCommodityDTO> equityPaymentCommodityDTOList =  equityPaymentRecordMapperExtra.getEquityPaymentByPage(equityPaymentCommodityDTO);
-        return new PageInfo<>(equityPaymentCommodityDTOList);
-    }
 }
