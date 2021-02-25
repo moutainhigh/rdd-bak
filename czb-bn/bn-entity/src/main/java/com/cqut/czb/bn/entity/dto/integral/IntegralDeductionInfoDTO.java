@@ -32,6 +32,8 @@ public class IntegralDeductionInfoDTO {
 
     private String salePrice;
 
+    private String commodityAttr;
+
     public String getIntegralDeductionInfoId() {
         return integralDeductionInfoId;
     }
@@ -134,5 +136,13 @@ public class IntegralDeductionInfoDTO {
 
     public void setSalePrice(String salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public String getCommodityAttr() {
+        return commodityAttr;
+    }
+
+    public void setCommodityAttr(String commodityAttr) {
+        this.commodityAttr = commodityAttr;
     }
 }

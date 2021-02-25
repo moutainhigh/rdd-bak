@@ -60,6 +60,11 @@
         CASE
         t1.deduction_type
         WHEN 1 THEN
+        (SELECT CONCAT(t3.name,":",t3.content) FROM czb_wechat_commodity_attr t2 JOIN czb_attribute t3 on t3.attribute_id = t2.attribute_id WHERE t1.commodity_attr_id = t2.commodity_attr_id)
+        END AS "commodityAttr",
+        CASE
+        t1.deduction_type
+        WHEN 1 THEN
         (SELECT t2.sale_price FROM czb_wechat_commodity t2 WHERE t1.commodity_id = t2.commodity_id)
         WHEN 4 THEN
         (SELECT t2.selling_price FROM czb_equity_payment_commodity t2 WHERE t1.commodity_attr_id = t2.goods_id)
