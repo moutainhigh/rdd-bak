@@ -53,5 +53,6 @@
         <if test="typeId != null and typeId != ''">
             and type_id = #{typeId,jdbcType=VARCHAR}
         </if>
+        order by sold_number desc
     </select>
 </mapper>
