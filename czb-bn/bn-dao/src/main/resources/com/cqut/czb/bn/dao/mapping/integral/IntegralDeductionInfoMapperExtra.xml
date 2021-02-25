@@ -60,11 +60,6 @@
     CASE
         t1.deduction_type
         WHEN 1 THEN
-        (SELECT t3.attribute_id FROM czb_wechat_commodity_attr t2 JOIN czb_attribute t3 on t3.attribute_id = t2.attribute_id WHERE t1.commodity_attr_id = t2.commodity_attr_id)
-        END AS "commodityAttrId",
-    CASE
-        t1.deduction_type
-        WHEN 1 THEN
         (SELECT CONCAT(t3.name,":",t3.content) FROM czb_wechat_commodity_attr t2 JOIN czb_attribute t3 on t3.attribute_id = t2.attribute_id WHERE t1.commodity_attr_id = t2.commodity_attr_id)
         END AS "commodityAttr",
     CASE
@@ -78,6 +73,7 @@
         t1.commodity_id AS commodityId,
         t1.deduction_type AS deductionType,
         t1.max_deduction_amount AS maxDeductionAmount,
+        t1.commodity_attr_id AS commodityAttrId,
         t1.update_at AS updateAt
     FROM
         czb_integral_deduction_info t1
