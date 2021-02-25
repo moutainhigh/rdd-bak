@@ -28,11 +28,23 @@ public class EquityPaymentDTO {
     // 单位面值
     private Double unitPrice;
 
+    //售价
+    private String sellingPrice;
+
+    // 进价
+    private String purchasePrice;
+
+    //支付价格
+    private String payPrice;
+
     // 总交易面额
     private Integer totalPrice;
 
     // 商品编号
     private String goodsId;
+
+    // 商品名称
+    private String goodsTitle;
 
     // 支付金额
     private Double amount;
@@ -47,6 +59,12 @@ public class EquityPaymentDTO {
     private String thirdOrder;
 
     private Integer isBrowser;
+
+    private Date createAt;
+
+    private String beginDate;
+
+    private String overDate;
 
     public String getOrderId() {
         return orderId;
@@ -120,6 +138,14 @@ public class EquityPaymentDTO {
         this.goodsId = goodsId;
     }
 
+    public String getGoodsTitle() {
+        return goodsTitle;
+    }
+
+    public void setGoodsTitle(String goodsTitle) {
+        this.goodsTitle = goodsTitle;
+    }
+
     public Double getAmount() {
         return amount;
     }
@@ -166,5 +192,53 @@ public class EquityPaymentDTO {
 
     public void setThirdOrder(String thirdOrder) {
         this.thirdOrder = thirdOrder;
+    }
+
+    public String getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(String sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public String getPayPrice() {
+        return payPrice;
+    }
+
+    public void setPayPrice(String payPrice) {
+        this.payPrice = payPrice;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getOverDate() {
+        return overDate;
+    }
+
+    public void setOverDate(String overDate) {
+        this.overDate = overDate;
     }
 }

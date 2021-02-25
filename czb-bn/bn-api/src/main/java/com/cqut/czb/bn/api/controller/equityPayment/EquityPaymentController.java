@@ -1,6 +1,11 @@
 package com.cqut.czb.bn.api.controller.equityPayment;
 
+import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.equityPaymentService.EquityPaymentService;
+import net.sf.json.JSON;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/equityPayment")
 public class EquityPaymentController {
+
+    @Autowired
+    EquityPaymentService equityPaymentService;
+
     @RequestMapping(value = "/getCommodityView", method = RequestMethod.GET)
     public JSONResult getCommodityView() {
         return null;
+    }
+
+    /**
+     * 获取商品订单详情
+     * @return
+     */
+    @RequestMapping(value = "/getEquityPaymentRecord", method = RequestMethod.GET)
+    public JSONResult getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO) {
+        return new JSONResult(equityPaymentService.getEquityPaymentRecord(equityPaymentDTO, pageDTO));
     }
 }
