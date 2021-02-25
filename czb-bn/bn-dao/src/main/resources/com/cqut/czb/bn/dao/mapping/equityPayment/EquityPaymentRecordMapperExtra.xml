@@ -30,9 +30,9 @@
         </if>
         <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
             and
-            (t1.update_at &lt;= #{overDate}
+            (t1.create_at &lt;= #{overDate}
             and
-            t1.update_at &gt;= #{beginDate})
+            t1.create_at &gt;= #{beginDate})
         </if>
     ORDER BY t1.create_at DESC
     </select>
