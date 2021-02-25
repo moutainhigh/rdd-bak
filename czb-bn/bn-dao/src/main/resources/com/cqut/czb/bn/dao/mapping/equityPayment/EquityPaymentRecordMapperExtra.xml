@@ -36,17 +36,27 @@
         </if>
     ORDER BY t1.create_at DESC
     </select>
-	<select id="getCategoryAndType" resultType="com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO">
+	<select id="getCategoryAndType" resultType="com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO">
 	SELECT
-		t1.category_id AS categoryId,
-		t1.category_name AS categoryName,
-		t2.type_id AS typeId,
-		t2.type_name AS typeName
+		<if test="categoryId == '' or categoryId == null">
+			t1.category_id AS categoryId,
+			t1.category_name AS categoryName,
+			t1.is_hot AS categoryIsHot
+		</if>
+		<if test="categoryId !='' and categoryId != null">
+			t2.type_id AS typeId,
+			t2.is_hot AS typeIsHot,
+			t2.type_name AS typeName
+		</if>
 	FROM
-		czb_equity_payment_category t1,
-		czb_equity_payment_type t2
-	WHERE
-		t1.category_id = t2.category_id
+		<if test="categoryId == '' or categoryId == null">
+			czb_equity_payment_category t1
+		</if>
+		<if test="categoryId !='' and categoryId != null">
+			czb_equity_payment_type t2
+			WHERE
+			t2.category_id = #{categoryId}
+		</if>
 	</select>
 
 </mapper>

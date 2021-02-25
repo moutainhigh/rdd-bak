@@ -6,9 +6,13 @@ public class CategoryAndTypeDTO {
 
     private String categoryName;
 
+    private String categoryIsHot;
+
     private String typeId;
 
     private String typeName;
+
+    private String typeIsHot;
 
     public String getCategoryId() {
         return categoryId;
@@ -40,5 +44,21 @@ public class CategoryAndTypeDTO {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public String getCategoryIsHot() {
+        return categoryIsHot;
+    }
+
+    public void setCategoryIsHot(String categoryIsHot) {
+        this.categoryIsHot = categoryIsHot;
+    }
+
+    public String getTypeIsHot() {
+        return typeIsHot;
+    }
+
+    public void setTypeIsHot(String typeIsHot) {
+        this.typeIsHot = typeIsHot;
     }
 }

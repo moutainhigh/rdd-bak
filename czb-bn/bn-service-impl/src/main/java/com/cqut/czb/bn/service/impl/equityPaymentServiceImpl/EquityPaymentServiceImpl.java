@@ -42,8 +42,8 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public List<CategoryAndTypeDTO> getCategoryAndType() {
-        return equityPaymentRecordMapperExtra.getCategoryAndType();
+    public List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO) {
+        return equityPaymentRecordMapperExtra.getCategoryAndType(categoryAndTypeDTO);
     }
 
 }

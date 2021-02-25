@@ -33,6 +33,6 @@ public interface EquityPaymentService {
      * 级联选择-类目-类别
      * @return
      */
-    List<CategoryAndTypeDTO> getCategoryAndType();
+    List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO);
 
 }
