@@ -67,7 +67,7 @@
         WHEN 1 THEN
         (SELECT t2.sale_price FROM czb_wechat_commodity t2 WHERE t1.commodity_id = t2.commodity_id)
         WHEN 4 THEN
-        (SELECT t2.selling_price FROM czb_equity_payment_commodity t2 WHERE t1.commodity_attr_id = t2.goods_id)
+        (SELECT t2.selling_price FROM czb_equity_payment_commodity t2 WHERE t1.commodity_id = t2.goods_id)
         END AS "salePrice",
         t1.integral_deduction_info_id AS integralDeductionInfoId,
         t1.commodity_id AS commodityId,
