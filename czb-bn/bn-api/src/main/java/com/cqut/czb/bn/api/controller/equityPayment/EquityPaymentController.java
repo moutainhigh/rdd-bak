@@ -3,9 +3,7 @@ package com.cqut.czb.bn.api.controller.equityPayment;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -110,6 +108,59 @@ public class EquityPaymentController {
         return new JSONResult(equityPaymentService.insertEquityPayment(equityPaymentCommodityDTO));
     }
 
+    /**
+     * 新增类目
+     * @return
+     */
+    @RequestMapping(value = "/insertCategory", method = RequestMethod.POST)
+    public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        return new JSONResult(equityPaymentService.insertCategory(equityPaymentCategoryDTO));
+    }
+
+    /**
+     * 修改类目
+     * @return
+     */
+    @RequestMapping(value = "/updateCategory", method = RequestMethod.POST)
+    public JSONResult updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        return new JSONResult(equityPaymentService.updateCategory(equityPaymentCategoryDTO));
+    }
+
+    /**
+     * 删除类目
+     * @return
+     */
+    @RequestMapping(value = "/deleteCategory", method = RequestMethod.POST)
+    public JSONResult deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        return new JSONResult(equityPaymentService.deleteCategory(equityPaymentCategoryDTO));
+    }
+
+    /**
+     * 新增类别
+     * @return
+     */
+    @RequestMapping(value = "/insertType", method = RequestMethod.POST)
+    public JSONResult insertType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        return new JSONResult(equityPaymentService.insertType(equityPaymentTypeDTO));
+    }
+
+    /**
+     * 修改类别
+     * @return
+     */
+    @RequestMapping(value = "/updateType", method = RequestMethod.POST)
+    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        return new JSONResult(equityPaymentService.updateType(equityPaymentTypeDTO));
+    }
+
+    /**
+     * 删除类别
+     * @return
+     */
+    @RequestMapping(value = "/deleteType", method = RequestMethod.POST)
+    public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        return new JSONResult(equityPaymentService.deleteType(equityPaymentTypeDTO));
+    }
 //    /**
 //     * 修改商品
 //     * @return

@@ -1,10 +1,9 @@
 package com.cqut.czb.bn.service.impl.equityPaymentServiceImpl;
+import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentRecordMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.equityPaymentService.EquityPaymentService;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +21,9 @@ import java.util.List;
 
 @Service
 public class EquityPaymentServiceImpl implements EquityPaymentService {
+
+    @Autowired
+    EquityPaymentCategoryMapperExtra equityPaymentCategoryMapperExtra;
 
     @Autowired
     EquityPaymentRecordMapperExtra equityPaymentRecordMapperExtra;
@@ -58,6 +60,36 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO) {
         return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
+    }
+
+    @Override
+    public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        return new JSONResult(equityPaymentCategoryMapperExtra.insertCategory(equityPaymentCategoryDTO) > 0);
+    }
+
+    @Override
+    public JSONResult updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        return null;
+    }
+
+    @Override
+    public JSONResult deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        return null;
+    }
+
+    @Override
+    public JSONResult insertType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        return null;
+    }
+
+    @Override
+    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        return null;
+    }
+
+    @Override
+    public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        return null;
     }
 
 }

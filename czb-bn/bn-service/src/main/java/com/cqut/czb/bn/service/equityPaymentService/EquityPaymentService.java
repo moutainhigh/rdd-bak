@@ -1,9 +1,7 @@
 package com.cqut.czb.bn.service.equityPaymentService;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
-import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
@@ -51,4 +49,40 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
+
+    /**
+     * 新增类目
+     * @return
+     */
+    JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
+
+    /**
+     * 修改类目
+     * @return
+     */
+    JSONResult updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
+
+    /**
+     * 删除类目
+     * @return
+     */
+    JSONResult deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
+
+    /**
+     * 新增类别
+     * @return
+     */
+    JSONResult insertType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+
+    /**
+     * 修改类别
+     * @return
+     */
+    JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+
+    /**
+     * 删除类别
+     * @return
+     */
+    JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO);
 }
