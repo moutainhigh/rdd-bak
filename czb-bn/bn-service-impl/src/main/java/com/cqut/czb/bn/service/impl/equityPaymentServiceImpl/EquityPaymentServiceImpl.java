@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.equityPaymentServiceImpl;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentRecordMapperExtra;
+import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentTypeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -25,6 +26,9 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Autowired
     EquityPaymentCategoryMapperExtra equityPaymentCategoryMapperExtra;
+
+    @Autowired
+    EquityPaymentTypeMapperExtra equityPaymentTypeMapperExtra;
 
     @Autowired
     EquityPaymentRecordMapperExtra equityPaymentRecordMapperExtra;
@@ -81,17 +85,17 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Override
     public JSONResult insertType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
-        return null;
+        return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
     }
 
     @Override
     public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
-        return null;
+        return new JSONResult(equityPaymentTypeMapperExtra.updateType(equityPaymentTypeDTO) > 0);
     }
 
     @Override
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
-        return null;
+        return new JSONResult(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0);
     }
 
 }

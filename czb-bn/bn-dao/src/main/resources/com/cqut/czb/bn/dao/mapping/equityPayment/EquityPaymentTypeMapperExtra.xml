@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentTypeMapperExtra" >
+    <select id="insertType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+    insert into czb_equity_payment_type (
+    type_id,
+    category_id,
+    type_name,
+    pic,
+    order,
+    is_hot,
+    is_delete
+    )
+    values (
+    #{typeId},
+    #{categoryId},
+    #{typeName},
+    #{pic},
+    #{order},
+    #{isHot},
+    #{isDelete}
+    )
+    </select>
+    <update id="updateType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+        update czb_equity_payment_type
+        <set >
+            <if test="categoryId != null" >
+                category_id = #{categoryId},
+            </if>
+            <if test="typeName != null" >
+                type_name = #{typeName},
+            </if>
+            <if test="pic != null" >
+                pic = #{pic},
+            </if>
+            <if test="order != null" >
+                order = #{order,jdbcType=VARCHAR},
+            </if>
+            <if test="isHot != null" >
+                is_hot = #{isHot,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null" >
+                is_delete = #{isDelete,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where type_id = #{typeId,jdbcType=VARCHAR}
+    </update>
 
+    <update id="deleteType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+        update czb_equity_payment_type
+        <set >
+            <if test="isDelete != null" >
+                is_delete = 1,
+            </if>
+        </set>
+        where type_id = #{typeId,jdbcType=VARCHAR}
+    </update>
 </mapper>
