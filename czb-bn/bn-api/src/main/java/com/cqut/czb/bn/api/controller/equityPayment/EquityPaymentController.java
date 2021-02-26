@@ -41,7 +41,7 @@ public class EquityPaymentController {
      */
     @RequestMapping(value = "/getCommodityDetails", method = RequestMethod.GET)
     public JSONResult getCommodityDetails(String goodsId) {
-        return new JSONResult(equityPaymentService.getCommodityDetails(goodsId));
+        return equityPaymentService.getCommodityDetails(goodsId);
     }
 
     /**
