@@ -66,6 +66,16 @@ public class EquityPaymentController {
     }
 
     /**
+     * 通过商品id删除商品
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/deleteCommodity", method = RequestMethod.GET)
+    public JSONResult deleteCommodity(String goodsId) {
+        return equityPaymentService.deleteCommodity(goodsId);
+    }
+
+    /**
      * 后台管理系统
      * 获取商品订单详情分页
      * @param equityPaymentDTO

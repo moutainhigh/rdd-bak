@@ -1293,7 +1293,7 @@
     </select>
     <select id="selectAllWxCommodityDetails" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         SELECT
-            CONCAT(IFNULL(t2.content,""),"  价格为：",(t1.extra_sale_money + t3.sale_price)) AS name,
+            CONCAT(IFNULL(t2.content,""),"  价格为：",(t1.extra_sale_money + t3.sale_price),"元") AS name,
             t1.commodity_attr_id as id,
             true AS isLeaf
         FROM

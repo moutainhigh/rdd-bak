@@ -43,6 +43,12 @@ public class EquityPaymentCommodityDTO {
 
     private Integer soldNumber;
 
+    private String typeName;
+
+    private String categoryId;
+
+    private String categoryName;
+
     public String getGoodsId() {
         return goodsId;
     }
@@ -201,5 +207,29 @@ public class EquityPaymentCommodityDTO {
 
     public void setSoldNumber(Integer soldNumber) {
         this.soldNumber = soldNumber;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
