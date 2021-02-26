@@ -35,6 +35,16 @@ public class EquityPaymentController {
     }
 
     /**
+     * 获取商品详情
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/getCommodityDetails", method = RequestMethod.GET)
+    public JSONResult getCommodityDetails(String goodsId) {
+        return new JSONResult(equityPaymentService.getCommodityDetails(goodsId));
+    }
+
+    /**
      * 获取商品订单详情
      * @return
      */

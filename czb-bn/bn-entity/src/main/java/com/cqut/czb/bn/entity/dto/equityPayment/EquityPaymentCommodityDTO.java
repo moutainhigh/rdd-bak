@@ -17,7 +17,7 @@ public class EquityPaymentCommodityDTO {
 
     private String productCode;
 
-    private Double purchasePrice;
+    private Double currentPrice;
 
     private Double sellingPrice;
 
@@ -93,12 +93,12 @@ public class EquityPaymentCommodityDTO {
         this.productCode = productCode;
     }
 
-    public Double getPurchasePrice() {
-        return purchasePrice;
+    public Double getCurrentPrice() {
+        return currentPrice;
     }
 
-    public void setPurchasePrice(Double purchasePrice) {
-        this.purchasePrice = purchasePrice;
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public Double getSellingPrice() {

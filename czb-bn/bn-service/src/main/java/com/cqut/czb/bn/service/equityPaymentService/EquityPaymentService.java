@@ -23,6 +23,13 @@ public interface EquityPaymentService {
      * @return
      */
     PageInfo<EquityPaymentCommodityDTO> getCommodityList(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO);
+
+    /**
+     * 获取商品详情
+     * @param goodsId
+     * @return
+     */
+    JSONResult getCommodityDetails(String goodsId);
     /**
      * 获取商品订单详情
      * @return

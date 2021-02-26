@@ -8,7 +8,7 @@
         <result column="goods_title" property="goodsTitle" jdbcType="VARCHAR" />
         <result column="goods_type" property="goodsType" jdbcType="INTEGER" />
         <result column="product_code" property="productCode" jdbcType="VARCHAR" />
-        <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+        <result column="current_price" property="currentPrice" jdbcType="DOUBLE" />
         <result column="selling_price" property="sellingPrice" jdbcType="DOUBLE" />
         <result column="goods_pic" property="goodsPic" jdbcType="VARCHAR" />
         <result column="unit_price" property="unitPrice" jdbcType="DOUBLE" />
@@ -24,7 +24,7 @@
         <result column="sold_number" property="soldNumber" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List" >
-      goods_id, trade_type, type_id, goods_title, goods_type, product_code, purchase_price, selling_price,
+      goods_id, trade_type, type_id, goods_title, goods_type, product_code, current_price, selling_price,
       goods_pic, unit_price, is_game, `desc`, on_sale, fy_mount, `order`, is_hot, is_delete, create_at,
       update_at, sold_number
     </sql>

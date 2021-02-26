@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.equityPaymentService.EquityPaymentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -32,6 +33,14 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
         List<EquityPaymentCommodityDTO> equityPaymentCommodityList = equityPaymentCommodityMapperExtra.getCommodityList(equityPaymentCommodityDTO);
         return new PageInfo<>(equityPaymentCommodityList);
+    }
+
+    public JSONResult getCommodityDetails(String goodsId) {
+        EquityPaymentCommodityDTO equityPaymentCommodityDTO = equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(goodsId);
+        if (equityPaymentCommodityDTO == null) {
+            return new JSONResult("查询失败，不存在该商品");
+        }
+        return new JSONResult(equityPaymentCommodityDTO);
     }
 
     @Override
