@@ -39,13 +39,8 @@ public class EquityPaymentController {
     RedisUtils redisUtils;
 
     @Autowired
-    FileMapperExtra fileMapperExtra;
-
-    @Autowired
     EquityPaymentService equityPaymentService;
 
-    @Autowired
-    AnnouncementServiceImpl announcementServiceImpl;
 
     /**
      * 获取商品列表
@@ -114,19 +109,7 @@ public class EquityPaymentController {
     @RequestMapping(value = "/insertEquityPayment", method = RequestMethod.POST)
     public JSONResult insertEquityPayment(Principal principal, EquityPaymentCommodityDTO equityPaymentCommodityDTO, @RequestParam("files")MultipartFile files) {
         User user = (User) redisUtils.get(principal.getName());
-        String address = "";
-        try {
-            if (files!=null||!files.isEmpty()) {
-                address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
-            }
-        } catch (IOException ioException) {
-            return new JSONResult("文件读取错误");
-        }
-
-        File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, user.getUserId(),new Date());
-        fileMapperExtra.insertSelective(file);
-        equityPaymentCommodityDTO.setGoodsPic(file.getFileId());
-        return new JSONResult(equityPaymentService.insertEquityPayment(equityPaymentCommodityDTO));
+        return new JSONResult(equityPaymentService.insertEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files));
     }
 
     /**
@@ -163,19 +146,7 @@ public class EquityPaymentController {
     @RequestMapping(value = "/insertType", method = RequestMethod.POST)
     public JSONResult insertType(Principal principal, EquityPaymentTypeDTO equityPaymentTypeDTO, @RequestParam("files")MultipartFile files) {
         User user = (User) redisUtils.get(principal.getName());
-        String address = "";
-        try {
-            if (files!=null||!files.isEmpty()) {
-                address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
-            }
-        } catch (IOException ioException) {
-            return new JSONResult("文件读取错误");
-        }
-
-        File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, user.getUserId(),new Date());
-        fileMapperExtra.insertSelective(file);
-        equityPaymentTypeDTO.setPic(file.getFileId());
-        return new JSONResult(equityPaymentService.insertType(equityPaymentTypeDTO));
+        return new JSONResult(equityPaymentService.insertType(user.getUserId(), equityPaymentTypeDTO, files));
     }
 
     /**

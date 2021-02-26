@@ -1,18 +1,25 @@
 package com.cqut.czb.bn.service.impl.equityPaymentServiceImpl;
+import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCategoryMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentRecordMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentTypeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.*;
+import com.cqut.czb.bn.entity.entity.File;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.equityPaymentService.EquityPaymentService;
+import com.cqut.czb.bn.service.impl.AnnouncementServiceImpl;
+import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +30,12 @@ import java.util.List;
 
 @Service
 public class EquityPaymentServiceImpl implements EquityPaymentService {
+
+    @Autowired
+    FileMapperExtra fileMapperExtra;
+
+    @Autowired
+    AnnouncementServiceImpl announcementServiceImpl;
 
     @Autowired
     EquityPaymentCategoryMapperExtra equityPaymentCategoryMapperExtra;
@@ -82,7 +95,19 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO) {
+    public JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) {
+        String address = "";
+        try {
+            if (files!=null||!files.isEmpty()) {
+                address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
+            }
+        } catch (IOException ioException) {
+            return new JSONResult("文件读取错误");
+        }
+
+        File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
+        fileMapperExtra.insertSelective(file);
+        equityPaymentCommodityDTO.setGoodsPic(file.getFileId());
         return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
     }
 
@@ -103,7 +128,19 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public JSONResult insertType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+    public JSONResult insertType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile files) {
+        String address = "";
+        try {
+            if (files!=null||!files.isEmpty()) {
+                address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
+            }
+        } catch (IOException ioException) {
+            return new JSONResult("文件读取错误");
+        }
+
+        File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
+        fileMapperExtra.insertSelective(file);
+        equityPaymentTypeDTO.setPic(file.getFileId());
         return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
     }
 

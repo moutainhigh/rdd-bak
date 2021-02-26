@@ -4,6 +4,8 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
+import com.sun.org.apache.xpath.internal.operations.Mult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -57,7 +59,7 @@ public interface EquityPaymentService {
      * 新增商品
      * @return
      */
-    JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
+    JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile file);
 
     /**
      * 新增类目
@@ -81,7 +83,7 @@ public interface EquityPaymentService {
      * 新增类别
      * @return
      */
-    JSONResult insertType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+    JSONResult insertType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile file);
 
     /**
      * 修改类别
