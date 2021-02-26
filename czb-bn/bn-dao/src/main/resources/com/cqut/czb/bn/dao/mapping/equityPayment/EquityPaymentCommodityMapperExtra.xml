@@ -119,10 +119,10 @@
 	    goods_pic,
 	    unit_price,
 	    is_game,
-	    desc,
+	    `desc`,
 	    on_sale,
 	    fy_mount,
-	    order,
+	    `order`,
 	    is_hot,
 	    sold_number,
 	    current_price
