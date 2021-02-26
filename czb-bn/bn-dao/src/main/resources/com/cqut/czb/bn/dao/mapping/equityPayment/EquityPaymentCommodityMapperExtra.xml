@@ -125,7 +125,9 @@
 	    `order`,
 	    is_hot,
 	    sold_number,
-	    current_price
+	    current_price,
+	    is_delete,
+	    create_at
     )
     VALUES(
         #{goodsId},
@@ -144,7 +146,9 @@
 	    #{order},
 	    #{isHot},
 	    #{soldNumber},
-	    #{currentPrice}
+	    #{currentPrice},
+	    #{isDelete},
+	    #{createAt}
     )
     </insert>
     <update id="deleteCommodity">
