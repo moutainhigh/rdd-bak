@@ -142,8 +142,8 @@ public class IntegralController {
      * @return
      */
     @RequestMapping(value = "/getMaxDeductionAmount", method = RequestMethod.GET)
-    public JSONResult getMaxDeductionAmount(String commodityId) {
-        return integralService.getMaxDeductionAmount(commodityId);
+    public JSONResult getMaxDeductionAmount(IntegralDeductionInfoDTO integralDeductionInfoDTO) {
+        return integralService.getMaxDeductionAmount(integralDeductionInfoDTO);
     }
 
     /**

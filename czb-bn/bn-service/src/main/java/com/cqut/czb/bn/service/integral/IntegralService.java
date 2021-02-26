@@ -51,7 +51,7 @@ public interface IntegralService {
     /**
      * 商品抵扣最高额度
      */
-    JSONResult getMaxDeductionAmount(String commodityId);
+    JSONResult getMaxDeductionAmount(IntegralDeductionInfoDTO integralDeductionInfoDTO);
 
     /**
      * 积分抵扣
