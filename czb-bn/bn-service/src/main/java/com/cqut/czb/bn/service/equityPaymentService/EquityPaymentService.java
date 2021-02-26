@@ -55,6 +55,8 @@ public interface EquityPaymentService {
      */
     List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO);
 
+    List<CategoryAndTypeDTO> getAllType(CategoryAndTypeDTO categoryAndTypeDTO);
+
     /**
      * 新增商品
      * @return

@@ -114,6 +114,16 @@ public class EquityPaymentController {
     }
 
     /**
+     * 获取所有的类型
+     * @param categoryAndTypeDTO
+     * @return
+     */
+    @RequestMapping(value = "/getAllType", method = RequestMethod.GET)
+    public JSONResult getAllType(CategoryAndTypeDTO categoryAndTypeDTO) {
+        return new JSONResult(equityPaymentService.getAllType(categoryAndTypeDTO));
+    }
+
+    /**
      * 新增商品
      * @return
      */

@@ -49,6 +49,12 @@ public class EquityPaymentDTO {
     // 商品名称
     private String goodsTitle;
 
+    // 商品图片
+    private String goodsPic;
+
+    // 是否为游戏
+    private boolean isGame;
+
     // 支付金额
     private Double amount;
 
@@ -153,6 +159,22 @@ public class EquityPaymentDTO {
 
     public void setGoodsTitle(String goodsTitle) {
         this.goodsTitle = goodsTitle;
+    }
+
+    public String getGoodsPic() {
+        return goodsPic;
+    }
+
+    public void setGoodsPic(String goodsPic) {
+        this.goodsPic = goodsPic;
+    }
+
+    public boolean isGame() {
+        return isGame;
+    }
+
+    public void setGame(boolean game) {
+        isGame = game;
     }
 
     public Double getAmount() {
