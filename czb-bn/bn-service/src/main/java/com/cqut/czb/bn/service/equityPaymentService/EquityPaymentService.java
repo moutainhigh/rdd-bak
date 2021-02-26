@@ -55,6 +55,8 @@ public interface EquityPaymentService {
      */
     List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO);
 
+    List<CategoryAndTypeDTO> getAllType(CategoryAndTypeDTO categoryAndTypeDTO);
+
     /**
      * 新增商品
      * @return
@@ -96,4 +98,11 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+
+    /**
+     * 获取用户订单列表
+     * @param userId
+     * @return
+     */
+    JSONResult getUserEquityPaymentOrders(String userId);
 }

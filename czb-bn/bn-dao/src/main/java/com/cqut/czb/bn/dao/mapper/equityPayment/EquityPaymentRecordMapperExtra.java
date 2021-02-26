@@ -12,6 +12,9 @@ public interface EquityPaymentRecordMapperExtra {
 
     List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO);
 
+    List<CategoryAndTypeDTO> getAllType(CategoryAndTypeDTO categoryAndTypeDTO);
+
     EquityPaymentDTO getEquityPaymentOrderDetails(@Param("orderId") String orderId);
 
+    List<EquityPaymentDTO> getUserEquityPaymentOrders(String userId);
 }

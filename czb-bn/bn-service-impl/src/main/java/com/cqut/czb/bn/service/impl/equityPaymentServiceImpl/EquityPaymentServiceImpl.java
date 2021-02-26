@@ -95,6 +95,11 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
+    public List<CategoryAndTypeDTO> getAllType(CategoryAndTypeDTO categoryAndTypeDTO) {
+        return equityPaymentRecordMapperExtra.getAllType(categoryAndTypeDTO);
+    }
+
+    @Override
     public JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) {
         String address = "";
         try {
@@ -157,6 +162,12 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
         return new JSONResult(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0);
+    }
+
+    @Override
+    public JSONResult getUserEquityPaymentOrders(String userId) {
+        List<EquityPaymentDTO> userEquityPaymentOrders = equityPaymentRecordMapperExtra.getUserEquityPaymentOrders(userId);
+        return new JSONResult(userEquityPaymentOrders);
     }
 
 }

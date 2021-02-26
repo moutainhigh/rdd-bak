@@ -94,12 +94,33 @@ public class EquityPaymentController {
     }
 
     /**
+     * 获取用户订单列表
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/getUserEquityPaymentOrders", method = RequestMethod.GET)
+    public JSONResult getUserEquityPaymentOrders(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(equityPaymentService.getUserEquityPaymentOrders(user.getUserId()));
+    }
+
+    /**
      * 级联选择-类目-类别
      * @return
      */
     @RequestMapping(value = "/getCategoryAndType", method = RequestMethod.GET)
     public JSONResult getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO) {
         return new JSONResult(equityPaymentService.getCategoryAndType(categoryAndTypeDTO));
+    }
+
+    /**
+     * 获取所有的类型
+     * @param categoryAndTypeDTO
+     * @return
+     */
+    @RequestMapping(value = "/getAllType", method = RequestMethod.GET)
+    public JSONResult getAllType(CategoryAndTypeDTO categoryAndTypeDTO) {
+        return new JSONResult(equityPaymentService.getAllType(categoryAndTypeDTO));
     }
 
     /**
