@@ -107,7 +107,7 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/insertEquityPayment", method = RequestMethod.POST)
-    public JSONResult insertEquityPayment(Principal principal, EquityPaymentCommodityDTO equityPaymentCommodityDTO, @RequestParam("files")MultipartFile files) {
+    public JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile files) {
         User user = (User) redisUtils.get(principal.getName());
         return new JSONResult(equityPaymentService.insertEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files));
     }
