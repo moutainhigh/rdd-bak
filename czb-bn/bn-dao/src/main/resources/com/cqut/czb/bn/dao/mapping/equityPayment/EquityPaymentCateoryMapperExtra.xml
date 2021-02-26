@@ -17,4 +17,32 @@
     #{isDelete}
     )
     </select>
+    <update id="updateCategory" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
+        update czb_equity_payment_category
+        <set >
+            <if test="categoryName != null" >
+                category_name = #{categoryName},
+            </if>
+            <if test="order != null" >
+                order = #{order,jdbcType=VARCHAR},
+            </if>
+            <if test="isHot != null" >
+                is_hot = #{isHot,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null" >
+                is_delete = #{isDelete,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where category_id = #{categoryId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="deleteCategory" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
+        update czb_equity_payment_category
+        <set >
+            <if test="isDelete != null" >
+                is_delete = 1,
+            </if>
+        </set>
+        where category_id = #{categoryId,jdbcType=VARCHAR}
+    </update>
 </mapper>

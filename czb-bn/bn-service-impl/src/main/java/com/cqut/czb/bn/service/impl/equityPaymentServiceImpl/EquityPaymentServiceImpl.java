@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.equityPaymentService.EquityPaymentService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,17 +74,18 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Override
     public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        equityPaymentCategoryDTO.setCategoryId(StringUtil.createId());
         return new JSONResult(equityPaymentCategoryMapperExtra.insertCategory(equityPaymentCategoryDTO) > 0);
     }
 
     @Override
     public JSONResult updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
-        return null;
+        return new JSONResult(equityPaymentCategoryMapperExtra.updateCategory(equityPaymentCategoryDTO) > 0);
     }
 
     @Override
     public JSONResult deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
-        return null;
+        return new JSONResult(equityPaymentCategoryMapperExtra.deleteCategory(equityPaymentCategoryDTO) > 0);
     }
 
     @Override
