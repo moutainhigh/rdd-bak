@@ -18,6 +18,7 @@
 	    t1.order_state AS orderState,
 	    t1.buy_num AS buyNum,
 	    t1.create_at AS createAt,
+	    t1.code AS code,
 	    t2.goods_title AS goodsTitle
     FROM
 	    czb_equity_payment_order t1,
