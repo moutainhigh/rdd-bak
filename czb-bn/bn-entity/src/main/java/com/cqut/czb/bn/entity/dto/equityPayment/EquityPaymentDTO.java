@@ -245,11 +245,11 @@ public class EquityPaymentDTO {
         this.overDate = overDate;
     }
 
-    public String getOrderType() {
+    public String getOrderState() {
         return orderState;
     }
 
-    public void setOrderType(String orderState) {
+    public void setOrderState(String orderState) {
         this.orderState = orderState;
     }
 }
