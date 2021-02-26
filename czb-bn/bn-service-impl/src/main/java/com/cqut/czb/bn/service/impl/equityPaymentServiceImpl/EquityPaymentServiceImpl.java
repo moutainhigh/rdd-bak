@@ -95,6 +95,11 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
+    public List<CategoryAndTypeDTO> getAllType(CategoryAndTypeDTO categoryAndTypeDTO) {
+        return equityPaymentRecordMapperExtra.getAllType(categoryAndTypeDTO);
+    }
+
+    @Override
     public JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) {
         String address = "";
         try {
