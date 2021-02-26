@@ -67,6 +67,16 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
+    public JSONResult getEquityPaymentOrderDetails(String orderId) {
+        EquityPaymentDTO equityPaymentDTO = equityPaymentRecordMapperExtra.getEquityPaymentOrderDetails(orderId);
+        if (equityPaymentDTO == null) {
+            return new JSONResult("此订单已不存在");
+        }
+
+        return new JSONResult(equityPaymentDTO);
+    }
+
+    @Override
     public List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO) {
         return equityPaymentRecordMapperExtra.getCategoryAndType(categoryAndTypeDTO);
     }

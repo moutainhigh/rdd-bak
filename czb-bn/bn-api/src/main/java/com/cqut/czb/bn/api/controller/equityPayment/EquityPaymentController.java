@@ -14,6 +14,7 @@ import com.cqut.czb.bn.util.file.FileUploadUtil;
 import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,6 +86,16 @@ public class EquityPaymentController {
     @RequestMapping(value = "/getEquityPaymentRecord", method = RequestMethod.GET)
     public JSONResult getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO) {
         return new JSONResult(equityPaymentService.getEquityPaymentRecord(equityPaymentDTO, pageDTO));
+    }
+
+    /**
+     * 获取订单详情
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/getEquityPaymentOrderDetails", method = RequestMethod.GET)
+    public JSONResult getEquityPaymentOrderDetails(String orderId) {
+        return new JSONResult(equityPaymentService.getEquityPaymentOrderDetails(orderId));
     }
 
     /**

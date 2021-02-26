@@ -61,6 +61,12 @@ public class EquityPaymentDTO {
     // 第三方订单号
     private String thirdOrder;
 
+    // 支付方式
+    private Integer payMethod;
+
+    // 卡密链接
+    private String code;
+
     private Integer isBrowser;
 
     private Date createAt;
@@ -195,6 +201,22 @@ public class EquityPaymentDTO {
 
     public void setThirdOrder(String thirdOrder) {
         this.thirdOrder = thirdOrder;
+    }
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getSellingPrice() {

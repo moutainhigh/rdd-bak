@@ -45,6 +45,8 @@ public interface EquityPaymentService {
      */
     PageInfo<EquityPaymentDTO> getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO);
 
+    JSONResult getEquityPaymentOrderDetails(String orderId);
+
     /**
      * 级联选择-类目-类别
      * @return
