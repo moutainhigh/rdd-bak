@@ -94,6 +94,17 @@ public class EquityPaymentController {
     }
 
     /**
+     * 获取用户订单列表
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/getUserEquityPaymentOrders", method = RequestMethod.GET)
+    public JSONResult getUserEquityPaymentOrders(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(equityPaymentService.getUserEquityPaymentOrders(user.getUserId()));
+    }
+
+    /**
      * 级联选择-类目-类别
      * @return
      */

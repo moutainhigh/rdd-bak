@@ -14,4 +14,5 @@ public interface EquityPaymentRecordMapperExtra {
 
     EquityPaymentDTO getEquityPaymentOrderDetails(@Param("orderId") String orderId);
 
+    List<EquityPaymentDTO> getUserEquityPaymentOrders(String userId);
 }

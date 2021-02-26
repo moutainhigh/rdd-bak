@@ -76,4 +76,26 @@
 		    left join czb_equity_payment_commodity t2 on t1.goods_id = t2.goods_id
 		where t1.order_id = #{orderId, jdbcType = VARCHAR}
 	</select>
+
+	<select id="getUserEquityPaymentOrders" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO" parameterType="java.lang.String">
+		SELECT
+			t1.order_id AS orderId,
+	    	t1.user_id AS userId,
+	    	t1.goods_id AS goodsId,
+	    	t1.third_order AS thirdOrder,
+	    	t1.unit_price AS unitPrice,
+	    	t1.order_state AS orderState,
+	    	t1.buy_num AS buyNum,
+	    	t1.create_at AS createAt,
+	    	t1.code AS code,
+	    	t2.goods_title AS goodsTitle
+		FROM
+	    	czb_equity_payment_order t1,
+	    	czb_equity_payment_commodity t2
+    	WHERE
+	    	t1.goods_id = t2.goods_id
+	    AND
+			user_id = #{userId}
+		ORDER BY t1.create_at DESC
+	</select>
 </mapper>

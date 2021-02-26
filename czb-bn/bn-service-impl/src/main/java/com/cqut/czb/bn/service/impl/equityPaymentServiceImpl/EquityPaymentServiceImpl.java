@@ -154,4 +154,10 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         return new JSONResult(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0);
     }
 
+    @Override
+    public JSONResult getUserEquityPaymentOrders(String userId) {
+        List<EquityPaymentDTO> userEquityPaymentOrders = equityPaymentRecordMapperExtra.getUserEquityPaymentOrders(userId);
+        return new JSONResult(userEquityPaymentOrders);
+    }
+
 }

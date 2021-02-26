@@ -96,4 +96,11 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+
+    /**
+     * 获取用户订单列表
+     * @param userId
+     * @return
+     */
+    JSONResult getUserEquityPaymentOrders(String userId);
 }
