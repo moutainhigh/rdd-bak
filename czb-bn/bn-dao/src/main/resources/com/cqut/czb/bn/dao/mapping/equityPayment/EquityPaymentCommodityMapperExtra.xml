@@ -107,7 +107,7 @@
         </if>
         order by sold_number desc
     </select>
-    <select id="insertEquityPayment"  parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
+    <insert id="insertEquityPayment"  parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
     INSERT INTO czb_equity_payment_commodity (
 	    goods_id,
 	    trade_type,
@@ -146,7 +146,7 @@
 	    #{soldNumber},
 	    #{currentPrice}
     )
-    </select>
+    </insert>
     <update id="deleteCommodity">
         update czb_equity_payment_commodity
         set is_delete = #{isDelete,jdbcType=INTEGER}
