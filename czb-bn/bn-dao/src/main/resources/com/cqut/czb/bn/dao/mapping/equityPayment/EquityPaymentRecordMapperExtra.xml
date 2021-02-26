@@ -14,7 +14,7 @@
 	    t1.purchase_price AS purchasePrice,
 	    t1.unit_price AS unitPrice,
 	    t1.product_code AS productCode,
-	    t1.client_ip AS clientIp,
+	    t1.client_ip AS clientIP,
 	    t1.order_state AS orderState,
 	    t1.buy_num AS buyNum,
 	    t1.create_at AS createAt,
