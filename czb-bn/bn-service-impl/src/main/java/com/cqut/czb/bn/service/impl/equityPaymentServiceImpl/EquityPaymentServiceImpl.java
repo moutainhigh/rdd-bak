@@ -112,6 +112,10 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
         fileMapperExtra.insertSelective(file);
+        equityPaymentCommodityDTO.setGoodsId(StringUtil.createId());
+        equityPaymentCommodityDTO.setCreateAt(new Date());
+        equityPaymentCommodityDTO.setSoldNumber(0);
+        equityPaymentCommodityDTO.setIsDelete(0);
         equityPaymentCommodityDTO.setGoodsPic(file.getFileId());
         return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
     }
@@ -145,6 +149,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
         fileMapperExtra.insertSelective(file);
+        equityPaymentTypeDTO.setCategoryId(StringUtil.createId());
         equityPaymentTypeDTO.setPic(file.getFileId());
         return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
     }
