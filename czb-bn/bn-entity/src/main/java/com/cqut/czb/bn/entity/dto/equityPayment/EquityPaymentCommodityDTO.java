@@ -1,7 +1,5 @@
 package com.cqut.czb.bn.entity.dto.equityPayment;
 
-import io.swagger.models.auth.In;
-
 import java.util.Date;
 
 public class EquityPaymentCommodityDTO {

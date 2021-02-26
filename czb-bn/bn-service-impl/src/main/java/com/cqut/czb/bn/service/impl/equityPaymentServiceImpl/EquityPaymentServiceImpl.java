@@ -55,4 +55,9 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         return equityPaymentRecordMapperExtra.getCategoryAndType(categoryAndTypeDTO);
     }
 
+    @Override
+    public JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO) {
+        return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
+    }
+
 }

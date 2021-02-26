@@ -55,4 +55,44 @@
         </if>
         order by sold_number desc
     </select>
+    <select id="insertEquityPayment"  parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
+    INSERT INTO czb_equity_payment_commodity (
+	    goods_id,
+	    trade_type,
+	    type_id,
+	    goods_title,
+	    goods_type,
+	    product_code,
+	    selling_price,
+	    goods_pic,
+	    unit_price,
+	    is_game,
+	    desc,
+	    on_sale,
+	    fy_mount,
+	    order,
+	    is_hot,
+	    sold_number,
+	    current_price
+    )
+    VALUES(
+        #{goodsId},
+	    #{tradeType},
+	    #{typeId},
+	    #{goodsTitle},
+	    #{goodsType},
+	    #{productCode},
+	    #{sellingPrice},
+	    #{goodsPic},
+	    #{unitPrice},
+	    #{isGame},
+	    #{desc},
+	    #{onSale},
+	    #{fyMount},
+	    #{order},
+	    #{isHot},
+	    #{soldNumber},
+	    #{currentPrice}
+    )
+    </select>
 </mapper>

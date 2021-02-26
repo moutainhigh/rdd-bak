@@ -30,8 +30,12 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult getCommodityDetails(String goodsId);
+
     /**
-     * 获取商品订单详情
+     * 后台管理系统
+     * 获取商品订单详情分页
+     * @param equityPaymentDTO
+     * @param pageDTO
      * @return
      */
     PageInfo<EquityPaymentDTO> getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO);
@@ -42,4 +46,9 @@ public interface EquityPaymentService {
      */
     List<CategoryAndTypeDTO> getCategoryAndType(CategoryAndTypeDTO categoryAndTypeDTO);
 
+    /**
+     * 新增商品
+     * @return
+     */
+    JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
 }
