@@ -9,10 +9,10 @@ public interface IntegralDeductionInfoMapperExtra {
 
     /**
      * 获取最高抵扣额度
-     * @param commodityId
+     * @param integralDeductionInfoDTO
      * @return
      */
-    Double getMaxDeductionAmount(String commodityId);
+    Double getMaxDeductionAmount(IntegralDeductionInfoDTO integralDeductionInfoDTO);
 
     int insertRecord(IntegralDeductionInfoDTO record);
 

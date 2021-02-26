@@ -14,11 +14,17 @@
         integral_deduction_info_id, deduction_type, max_deduction_amount, commodity_id, create_at,
     update_at, commodity_attr_id
     </sql>
-    <select id="getMaxDeductionAmount" resultType="java.lang.Double" parameterType="java.lang.String">
+    <select id="getMaxDeductionAmount" resultType="java.lang.Double" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO">
         select
             max_deduction_amount
         from czb_integral_deduction_info
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
+          <if test="deductionType != null and deductionType != ''">
+              and deduction_type = #{deductionType, jdbcType = INTEGER}
+          </if>
+          <if test="commodityAttrId != null and commodityAttrId != ''">
+              and commodity_attr_id = #{commodityAttrId, jdbcType = VARCHAR}
+          </if>
     </select>
 
     <insert id="insertRecord" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO">

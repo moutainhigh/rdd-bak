@@ -29,6 +29,13 @@ public interface EquityPaymentService {
      */
     JSONResult getCommodityDetails(String goodsId);
 
+
+    /**
+     * 删除商品
+     * @param goodsId
+     * @return
+     */
+    JSONResult deleteCommodity(String goodsId);
     /**
      * 后台管理系统
      * 获取商品订单详情分页

@@ -237,8 +237,8 @@ public class IntegralServiceImpl implements IntegralService {
     }
 
     @Override
-    public JSONResult getMaxDeductionAmount(String commodityId) {
-        return new JSONResult(integralDeductionInfoMapperExtra.getMaxDeductionAmount(commodityId));
+    public JSONResult getMaxDeductionAmount(IntegralDeductionInfoDTO integralDeductionInfoDTO) {
+        return new JSONResult(integralDeductionInfoMapperExtra.getMaxDeductionAmount(integralDeductionInfoDTO));
     }
 
     @Override

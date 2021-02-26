@@ -22,6 +22,9 @@
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
         <result column="sold_number" property="soldNumber" jdbcType="INTEGER" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+        <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+        <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
       goods_id, trade_type, type_id, goods_title, goods_type, product_code, current_price, selling_price,
@@ -32,26 +35,51 @@
     <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
         goods_id as id,
-        CONCAT(goods_title,"  价格为：",IFNULL(selling_price,0)) as name,
+        CONCAT(goods_title,"  价格为：",IFNULL(selling_price,0),"元") as name,
         true as isLeaf
         from czb_equity_payment_commodity
     </select>
     <select id="selectCommodityByGoodsId" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
-        from czb_equity_payment_commodity
-        where goods_id = #{goodsId,jdbcType=VARCHAR}
+            t1.goods_id, t1.trade_type, t1.type_id, t1.goods_title, goods_type, t1.product_code, t1.current_price, t1.selling_price,
+            t1.goods_pic, t1.unit_price, t1.is_game, t1.desc, t1.on_sale, t1.fy_mount, t1.order, t1.is_hot, t1.is_delete, t1.create_at,
+            t1.update_at, t1.sold_number, t2.type_id, t2.type_name, t3.category_id, t3.category_name
+        from
+            czb_equity_payment_commodity t1
+                left join czb_equity_payment_type t2 on t1.type_id = t2.type_id
+                left join czb_equity_payment_category t3 on t2.category_id = t3.category_id
+        where t1.goods_id = #{goodsId, jdbcType = VARCHAR}
     </select>
     <select id="getCommodityList" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
-        from czb_equity_payment_commodity
-        where 1 = 1
-        <if test="goodsTitle != null and goodsTitle != ''">
-            and goods_title like concat('%',#{goodsTitle,jdbcType=VARCHAR},'%')
-        </if>
+            t1.goods_id,
+            t1.goods_title,
+            t1.type_id,
+            t2.type_name,
+            t1.selling_price,
+            t1.unit_price,
+            t1.current_price,
+            t1.fy_mount,
+            t1.sold_number,
+            t1.on_sale,
+            t3.category_id,
+            t3.category_name
+        from
+            czb_equity_payment_commodity t1
+                left join czb_equity_payment_type t2 on t1.type_id = t2.type_id
+                left join czb_equity_payment_category t3 on t2.category_id = t3.category_id
+        where t1.is_delete = 0
         <if test="typeId != null and typeId != ''">
-            and type_id = #{typeId,jdbcType=VARCHAR}
+            and t1.type_id = #{typeId, jdbcType = VARCHAR}
+        </if>
+        <if test="goodsTitle != null and goodsTitle != ''">
+            and t1.goods_title like concat("%",#{goodsTitle, jdbcType = VARCHAR}, "%")
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+            and t3.category_id = #{categoryId, jdbcType = VARCHAR}
+        </if>
+        <if test="isHot != null and isHot != ''">
+            and t1.is_hot = #{isHot, jdbcType = INTEGER}
         </if>
         order by sold_number desc
     </select>
@@ -95,4 +123,9 @@
 	    #{currentPrice}
     )
     </select>
+    <update id="deleteCommodity">
+        update czb_equity_payment_commodity
+        set is_delete = #{isDelete,jdbcType=INTEGER}
+        where goods_id = #{goodsId,jdbcType=VARCHAR}
+    </update>
 </mapper>

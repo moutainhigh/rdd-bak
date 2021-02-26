@@ -18,7 +18,7 @@
     <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
         commodity_id as id,
-        account as name,
+        concat("价格为：",account,"元") as name,
         true as isLeaf
         from czb_direct_charging_commodity
         where 1 = 1

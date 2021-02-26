@@ -50,6 +50,15 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         return new JSONResult(equityPaymentCommodityDTO);
     }
 
+    public JSONResult deleteCommodity(String goodsId) {
+        int column = equityPaymentCommodityMapperExtra.deleteCommodity(goodsId, true);
+        if (column == 0) {
+            return new JSONResult("删除商品失败");
+        }
+
+        return new JSONResult("删除商品成功");
+    }
+
     @Override
     public PageInfo<EquityPaymentDTO> getEquityPaymentRecord(EquityPaymentDTO equityPaymentDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
