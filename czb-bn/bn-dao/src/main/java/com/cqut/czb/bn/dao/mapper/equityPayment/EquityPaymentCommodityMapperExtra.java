@@ -21,4 +21,6 @@ public interface EquityPaymentCommodityMapperExtra {
     int deleteCommodity(@Param("goodsId") String goodsId, @Param("isDelete") boolean isDelete);
 
     int insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
+
+    int updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
 }

@@ -186,13 +186,19 @@ public class EquityPaymentController {
     @RequestMapping(value = "/deleteType", method = RequestMethod.POST)
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
         return new JSONResult(equityPaymentService.deleteType(equityPaymentTypeDTO));
+
     }
-//    /**
-//     * 修改商品
-//     * @return
-//     */
-//    @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.GET)
-//    public JSONResult updateEquityPayment( ) {
-//        return new JSONResult(equityPaymentService.updateEquityPayment());
-//    }
+    /**
+     * 修改商品
+     * @return
+     */
+    @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.GET)
+    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile files) {
+        User user = (User) redisUtils.get(principal.getName());
+        try {
+            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files);
+        } catch (IOException exception) {
+            return new JSONResult("图片上传错误");
+        }
+    }
 }

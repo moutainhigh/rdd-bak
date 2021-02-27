@@ -170,4 +170,15 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         return new JSONResult(userEquityPaymentOrders);
     }
 
+    @Override
+    public JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException {
+        equityPaymentCommodityDTO.setUpdateAt(new Date());
+        File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
+        file1.setSavePath(FileUploadUtil.putObject(files.getOriginalFilename(),files.getInputStream()));
+        file1.setFileName(files.getOriginalFilename());
+        file1.setUploader(userId);
+        file1.setUpdateAt(new Date());
+        fileMapperExtra.updateByPrimaryKeySelective(file1);
+        return new JSONResult((equityPaymentCommodityMapperExtra.updateEquityPayment(equityPaymentCommodityDTO)>0));
+    }
 }

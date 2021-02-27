@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -105,4 +106,10 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult getUserEquityPaymentOrders(String userId);
+
+    /**
+     * 修改商品
+     * @return
+     */
+    JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException;
 }
