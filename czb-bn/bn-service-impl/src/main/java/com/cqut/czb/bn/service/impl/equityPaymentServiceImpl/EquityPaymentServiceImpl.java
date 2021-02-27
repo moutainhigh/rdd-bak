@@ -107,7 +107,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
                 address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
             }
         } catch (IOException ioException) {
-            return new JSONResult("文件读取错误");
+            return new JSONResult("文件读取错误", 500);
         }
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
@@ -142,7 +142,11 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         if (count != 0) {
             return new JSONResult("此类目下存在类别不能删除");
         }
-        return new JSONResult(equityPaymentCategoryMapperExtra.deleteCategory(equityPaymentCategoryDTO) > 0);
+        if (equityPaymentCategoryMapperExtra.deleteCategory(equityPaymentCategoryDTO) > 0) {
+            return new JSONResult("删除成功");
+        } else {
+            return new JSONResult("删除失败");
+        }
     }
 
     @Override
@@ -153,7 +157,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
                 address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
             }
         } catch (IOException ioException) {
-            return new JSONResult("文件读取错误");
+            return new JSONResult("文件读取错误", 500);
         }
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
@@ -178,7 +182,11 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         if (count != 0) {
             return new JSONResult("此类别下存在商品不能删除");
         }
-        return new JSONResult(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0);
+        if(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0) {
+            return new JSONResult("删除成功");
+        } else {
+            return new JSONResult("删除失败");
+        }
     }
 
     @Override
