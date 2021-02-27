@@ -207,4 +207,12 @@
         set is_delete = #{isDelete,jdbcType=INTEGER}
         where goods_id = #{goodsId,jdbcType=VARCHAR}
     </update>
+    <select id="getCountOfCommodityByType" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+        select
+	        COUNT(*)
+        from
+	        czb_equity_payment_commodity
+        where
+	        type_id = #{typeId}
+    </select>
 </mapper>

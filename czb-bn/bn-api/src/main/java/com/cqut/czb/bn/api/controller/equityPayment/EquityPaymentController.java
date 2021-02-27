@@ -189,7 +189,7 @@ public class EquityPaymentController {
      * 修改商品
      * @return
      */
-    @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.GET)
+    @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.POST)
     public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile files) {
         User user = (User) redisUtils.get(principal.getName());
         try {

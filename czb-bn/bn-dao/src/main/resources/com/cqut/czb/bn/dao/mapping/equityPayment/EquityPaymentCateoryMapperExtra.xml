@@ -39,9 +39,7 @@
     <update id="deleteCategory" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
         update czb_equity_payment_category
         <set >
-            <if test="isDelete != null" >
-                is_delete = 1
-            </if>
+            is_delete = 1
         </set>
         where category_id = #{categoryId,jdbcType=VARCHAR}
     </update>

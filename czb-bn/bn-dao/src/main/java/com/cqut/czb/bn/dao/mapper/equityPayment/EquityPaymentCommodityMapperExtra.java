@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper.equityPayment;
 
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO;
+import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO;
 import com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO;
 import org.apache.ibatis.annotations.Param;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -23,4 +24,6 @@ public interface EquityPaymentCommodityMapperExtra {
     int insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
 
     int updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO);
+
+    int getCountOfCommodityByType(EquityPaymentTypeDTO equityPaymentTypeDTO);
 }

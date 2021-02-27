@@ -124,6 +124,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
         equityPaymentCategoryDTO.setCategoryId(StringUtil.createId());
+        equityPaymentCategoryDTO.setIsDelete(0);
         equityPaymentCategoryDTO.setCreateAt(new Date());
         equityPaymentCategoryDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentCategoryMapperExtra.insertCategory(equityPaymentCategoryDTO) > 0);
@@ -137,6 +138,10 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Override
     public JSONResult deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        int count = equityPaymentTypeMapperExtra.getCountOfType(equityPaymentCategoryDTO);
+        if (count != 0) {
+            return new JSONResult("此类目下存在类别不能删除");
+        }
         return new JSONResult(equityPaymentCategoryMapperExtra.deleteCategory(equityPaymentCategoryDTO) > 0);
     }
 
@@ -155,6 +160,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         fileMapperExtra.insertSelective(file);
         equityPaymentTypeDTO.setCategoryId(StringUtil.createId());
         equityPaymentTypeDTO.setPic(file.getFileId());
+        equityPaymentTypeDTO.setIsDelete(0);
         equityPaymentTypeDTO.setCreateAt(new Date());
         equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
@@ -168,6 +174,10 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Override
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        int count = equityPaymentCommodityMapperExtra.getCountOfCommodityByType(equityPaymentTypeDTO);
+        if (count != 0) {
+            return new JSONResult("此类别下存在商品不能删除");
+        }
         return new JSONResult(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0);
     }
 

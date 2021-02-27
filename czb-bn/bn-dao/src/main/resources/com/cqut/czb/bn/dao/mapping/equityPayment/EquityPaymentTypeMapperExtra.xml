@@ -49,10 +49,16 @@
     <update id="deleteType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
         update czb_equity_payment_type
         <set >
-            <if test="isDelete != null" >
-                is_delete = 1
-            </if>
+            is_delete = 1
         </set>
         where type_id = #{typeId,jdbcType=VARCHAR}
     </update>
+    <select id="getCountOfType" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
+        select
+	        COUNT(*)
+        from
+	        czb_equity_payment_type
+        where
+	        category_id = #{categoryId}
+    </select>
 </mapper>
