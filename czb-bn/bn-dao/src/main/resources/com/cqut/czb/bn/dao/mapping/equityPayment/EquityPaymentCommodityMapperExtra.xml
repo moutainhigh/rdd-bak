@@ -129,7 +129,8 @@
 	    sold_number,
 	    current_price,
 	    is_delete,
-	    create_at
+	    create_at,
+	    update_at
     )
     VALUES(
         #{goodsId},
@@ -150,7 +151,8 @@
 	    #{soldNumber},
 	    #{currentPrice},
 	    #{isDelete},
-	    #{createAt}
+	    #{createAt},
+	    #{updateAt}
     )
     </insert>
     <update id="updateEquityPayment" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
