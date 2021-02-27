@@ -40,7 +40,7 @@
         update czb_equity_payment_category
         <set >
             <if test="isDelete != null" >
-                is_delete = 1,
+                is_delete = 1
             </if>
         </set>
         where category_id = #{categoryId,jdbcType=VARCHAR}

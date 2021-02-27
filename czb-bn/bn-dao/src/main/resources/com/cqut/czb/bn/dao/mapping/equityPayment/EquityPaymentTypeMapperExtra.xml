@@ -50,7 +50,7 @@
         update czb_equity_payment_type
         <set >
             <if test="isDelete != null" >
-                is_delete = 1,
+                is_delete = 1
             </if>
         </set>
         where type_id = #{typeId,jdbcType=VARCHAR}
