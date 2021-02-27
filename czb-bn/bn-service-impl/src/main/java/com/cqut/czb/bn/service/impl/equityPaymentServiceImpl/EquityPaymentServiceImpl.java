@@ -114,6 +114,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         fileMapperExtra.insertSelective(file);
         equityPaymentCommodityDTO.setGoodsId(StringUtil.createId());
         equityPaymentCommodityDTO.setCreateAt(new Date());
+        equityPaymentCommodityDTO.setUpdateAt(new Date());
         equityPaymentCommodityDTO.setSoldNumber(0);
         equityPaymentCommodityDTO.setIsDelete(0);
         equityPaymentCommodityDTO.setGoodsPic(file.getFileId());
@@ -123,11 +124,14 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
         equityPaymentCategoryDTO.setCategoryId(StringUtil.createId());
+        equityPaymentCategoryDTO.setCreateAt(new Date());
+        equityPaymentCategoryDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentCategoryMapperExtra.insertCategory(equityPaymentCategoryDTO) > 0);
     }
 
     @Override
     public JSONResult updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        equityPaymentCategoryDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentCategoryMapperExtra.updateCategory(equityPaymentCategoryDTO) > 0);
     }
 
@@ -151,11 +155,14 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         fileMapperExtra.insertSelective(file);
         equityPaymentTypeDTO.setCategoryId(StringUtil.createId());
         equityPaymentTypeDTO.setPic(file.getFileId());
+        equityPaymentTypeDTO.setCreateAt(new Date());
+        equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
     }
 
     @Override
     public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.updateType(equityPaymentTypeDTO) > 0);
     }
 

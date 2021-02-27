@@ -15,10 +15,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
