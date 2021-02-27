@@ -186,7 +186,7 @@ public class EquityPaymentController {
 
     }
     /**
-     * 修改商品
+     * 修改商品+图片
      * @return
      */
     @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.POST)
@@ -194,6 +194,20 @@ public class EquityPaymentController {
         User user = (User) redisUtils.get(principal.getName());
         try {
             return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files);
+        } catch (IOException exception) {
+            return new JSONResult("图片上传错误");
+        }
+    }
+
+    /**
+     * 修改商品+无图片
+     * @return
+     */
+    @RequestMapping(value = "/updateEquityPaymentNoPic", method = RequestMethod.POST)
+    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        try {
+            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, null);
         } catch (IOException exception) {
             return new JSONResult("图片上传错误");
         }
