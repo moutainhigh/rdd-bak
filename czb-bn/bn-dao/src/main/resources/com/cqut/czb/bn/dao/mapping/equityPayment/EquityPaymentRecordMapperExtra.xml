@@ -71,6 +71,7 @@
 		SELECT t1.type_id typeId,
 		       t1.type_name typeName,
 		       t1.pic pic,
+		       t1.is_hot typeIsHot,
 		       t2.category_id categoryId,
 		       t2.category_name categoryName,
 		       t3.save_path AS src
