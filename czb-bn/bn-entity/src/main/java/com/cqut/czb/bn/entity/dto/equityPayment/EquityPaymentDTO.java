@@ -73,6 +73,9 @@ public class EquityPaymentDTO {
     // 卡密链接
     private String code;
 
+    // 图片
+    private String pic;
+
     private Integer isBrowser;
 
     private Date createAt;

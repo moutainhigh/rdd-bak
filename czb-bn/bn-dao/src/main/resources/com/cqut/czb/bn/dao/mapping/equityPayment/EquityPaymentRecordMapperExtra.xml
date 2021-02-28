@@ -98,9 +98,11 @@
 			   t1.product_code productCode,
 		       t2.goods_title goodsTitle,
 		       t2.goods_pic goodsPic,
-		       t2.is_game isGame
+		       t2.is_game isGame,
+		       t3.save_path pic
 		from czb_equity_payment_order t1
 		    left join czb_equity_payment_commodity t2 on t1.goods_id = t2.goods_id
+			left join czb_file t3 on t3.file_id = t2.goods_pic
 		where t1.order_id = #{orderId, jdbcType = VARCHAR}
 	</select>
 
