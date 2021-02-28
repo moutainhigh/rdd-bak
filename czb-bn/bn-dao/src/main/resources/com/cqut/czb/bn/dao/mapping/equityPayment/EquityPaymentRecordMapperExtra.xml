@@ -47,7 +47,9 @@
 		<if test="categoryId !='' and categoryId != null">
 			t2.type_id AS typeId,
 			t2.is_hot AS typeIsHot,
-			t2.type_name AS typeName
+			t2.type_name AS typeName,
+			t2.pic AS pic,
+			t3.save_path AS src
 		</if>
 	FROM
 		<if test="categoryId == '' or categoryId == null">
@@ -57,6 +59,8 @@
 		</if>
 		<if test="categoryId !='' and categoryId != null">
 			czb_equity_payment_type t2
+			LEFT JOIN
+			czb_file t3 ON t2.pic = t3.file_id
 			WHERE
 			t2.category_id = #{categoryId}
 			AND

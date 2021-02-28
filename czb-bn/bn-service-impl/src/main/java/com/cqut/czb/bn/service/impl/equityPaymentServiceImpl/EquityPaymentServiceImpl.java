@@ -187,6 +187,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
         int count = equityPaymentCommodityMapperExtra.getCountOfCommodityByType(equityPaymentTypeDTO);
+        fileMapperExtra.deleteByPrimaryKey(equityPaymentTypeDTO.getPic());
         if (count != 0) {
             return new JSONResult("此类别下存在商品不能删除");
         }
