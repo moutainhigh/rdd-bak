@@ -77,7 +77,7 @@
 		FROM czb_equity_payment_type t1
 		    LEFT JOIN czb_equity_payment_category t2 ON t1.category_id = t2.category_id
 		    LEFT JOIN czb_file t3 ON t3.file_id = t1.pic
-		WHERE is_delete = 0
+		WHERE t1.is_delete = 0
 		<if test="categoryId != null and categoryId != ''">
 			AND t1.category_id = #{categoryId, jdbcType = VARCHAR}
 		</if>
