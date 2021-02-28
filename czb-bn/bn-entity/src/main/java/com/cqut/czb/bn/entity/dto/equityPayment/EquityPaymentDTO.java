@@ -299,4 +299,12 @@ public class EquityPaymentDTO {
     public void setOrderState(String orderState) {
         this.orderState = orderState;
     }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
 }
