@@ -172,8 +172,26 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/updateType", method = RequestMethod.POST)
-    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
-        return new JSONResult(equityPaymentService.updateType(equityPaymentTypeDTO));
+    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO, Principal principal, @RequestParam("files")MultipartFile files) {
+        User user = (User) redisUtils.get(principal.getName());
+        try {
+            return new JSONResult(equityPaymentService.updateType(user.getUserId(), equityPaymentTypeDTO, files));
+        } catch (IOException e) {
+            return new JSONResult("图片上传错误");
+        }
+    }
+
+    /**
+     * 修改类别
+     * @return
+     */
+    @RequestMapping(value = "/updateTypeNoPic", method = RequestMethod.POST)
+    public JSONResult updateTypeNoPic(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        try {
+            return new JSONResult(equityPaymentService.updateType(null, equityPaymentTypeDTO, null));
+        } catch (IOException e) {
+            return new JSONResult("图片上传错误");
+        }
     }
 
     /**

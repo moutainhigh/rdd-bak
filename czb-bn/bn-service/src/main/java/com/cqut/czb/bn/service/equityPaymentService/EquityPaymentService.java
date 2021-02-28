@@ -92,7 +92,7 @@ public interface EquityPaymentService {
      * 修改类别
      * @return
      */
-    JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+    JSONResult updateType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile file) throws IOException;
 
     /**
      * 删除类别

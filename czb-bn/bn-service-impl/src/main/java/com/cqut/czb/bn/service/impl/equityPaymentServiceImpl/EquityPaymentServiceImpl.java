@@ -153,7 +153,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     public JSONResult insertType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile files) {
         String address = "";
         try {
-            if (files!=null||!files.isEmpty()) {
+            if (files!=null) {
                 address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
             }
         } catch (IOException ioException) {
@@ -171,7 +171,15 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+    public JSONResult updateType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile files) throws IOException {
+        if (files != null) {
+            File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentTypeDTO.getPic());
+            file1.setSavePath(FileUploadUtil.putObject(files.getOriginalFilename(),files.getInputStream()));
+            file1.setFileName(files.getOriginalFilename());
+            file1.setUploader(userId);
+            file1.setUpdateAt(new Date());
+            fileMapperExtra.updateByPrimaryKeySelective(file1);
+        }
         equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.updateType(equityPaymentTypeDTO) > 0);
     }
@@ -198,7 +206,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException {
         equityPaymentCommodityDTO.setUpdateAt(new Date());
-        if (files != null || !files.isEmpty()) {
+        if (files != null) {
             File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
             file1.setSavePath(FileUploadUtil.putObject(files.getOriginalFilename(),files.getInputStream()));
             file1.setFileName(files.getOriginalFilename());
