@@ -9,7 +9,9 @@
     pic,
     `order`,
     is_hot,
-    is_delete
+    is_delete,
+    create_at,
+    update_at
     )
     values (
     #{typeId},
@@ -18,7 +20,9 @@
     #{pic},
     #{order},
     #{isHot},
-    #{isDelete}
+    #{isDelete},
+    #{createAt},
+    #{updateAt}
     )
     </insert>
     <update id="updateType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">

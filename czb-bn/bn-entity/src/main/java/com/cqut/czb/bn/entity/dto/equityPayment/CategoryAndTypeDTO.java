@@ -66,11 +66,11 @@ public class CategoryAndTypeDTO {
         this.typeIsHot = typeIsHot;
     }
 
-    public String getSave_path() {
+    public String getPic() {
         return pic;
     }
 
-    public void setSave_path(String pic) {
+    public void setPic(String pic) {
         this.pic = pic;
     }
 
