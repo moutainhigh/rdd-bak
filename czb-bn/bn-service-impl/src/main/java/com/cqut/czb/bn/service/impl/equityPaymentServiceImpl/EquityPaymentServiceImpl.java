@@ -64,9 +64,16 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     public JSONResult deleteCommodity(String goodsId) {
-        int column = equityPaymentCommodityMapperExtra.deleteCommodity(goodsId, true);
-        if (column == 0) {
+        EquityPaymentCommodityDTO equityPaymentCommodityDTO = equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(goodsId);
+        int column1 = equityPaymentCommodityMapperExtra.deleteCommodity(goodsId, true);
+        if (column1 == 0) {
             return new JSONResult("删除商品失败");
+        }
+        if (equityPaymentCommodityDTO.getGoodsPic() != null || !equityPaymentCommodityDTO.getGoodsPic().equals("")) {
+            int column2 = fileMapperExtra.deleteByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
+            if (column2 == 0) {
+                return new JSONResult("删除商品失败");
+            }
         }
 
         return new JSONResult("删除商品成功");
