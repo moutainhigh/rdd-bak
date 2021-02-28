@@ -162,7 +162,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
         fileMapperExtra.insertSelective(file);
-        equityPaymentTypeDTO.setCategoryId(StringUtil.createId());
+        equityPaymentTypeDTO.setTypeId(StringUtil.createId());
         equityPaymentTypeDTO.setPic(file.getFileId());
         equityPaymentTypeDTO.setIsDelete(0);
         equityPaymentTypeDTO.setCreateAt(new Date());
