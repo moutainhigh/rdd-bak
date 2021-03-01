@@ -54,7 +54,7 @@
 	    t1.DESC,
 	    t1.on_sale,
 	    t1.fy_mount,
-	    t1.ORDER,
+	    t1.order,
 	    t1.is_hot,
 	    t1.goods_pic,
 	    t1.is_delete,
@@ -107,7 +107,7 @@
         <if test="isHot != null and isHot != ''">
             and t1.is_hot = #{isHot, jdbcType = INTEGER}
         </if>
-        order by sold_number desc
+        order by sold_number desc, t1.create_at desc
     </select>
     <insert id="insertEquityPayment"  parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
     INSERT INTO czb_equity_payment_commodity (

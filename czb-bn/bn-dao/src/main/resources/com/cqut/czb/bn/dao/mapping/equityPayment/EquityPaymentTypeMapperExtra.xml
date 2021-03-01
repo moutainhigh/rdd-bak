@@ -38,7 +38,7 @@
                 pic = #{pic},
             </if>
             <if test="order != null" >
-                `order` = #{order,jdbcType=VARCHAR},
+                `order` = #{order,jdbcType=INTEGER},
             </if>
             <if test="isHot != null" >
                 is_hot = #{isHot,jdbcType=TIMESTAMP},
@@ -65,4 +65,11 @@
         where
 	        category_id = #{categoryId}
     </select>
+
+    <update id="updateTypeOrder" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+        update czb_equity_payment_type
+        set `order` = `order` + 1
+        where `order` >= #{order} and
+              #{order} in (select t1.order from (select `order` from czb_equity_payment_type) as t1)
+    </update>
 </mapper>

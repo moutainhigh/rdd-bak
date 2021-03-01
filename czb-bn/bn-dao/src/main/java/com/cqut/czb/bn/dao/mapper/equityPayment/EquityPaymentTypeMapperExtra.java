@@ -11,4 +11,6 @@ public interface EquityPaymentTypeMapperExtra {
     int deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO);
 
     int getCountOfType(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
+
+    int updateTypeOrder(EquityPaymentTypeDTO equityPaymentTypeDTO);
 }

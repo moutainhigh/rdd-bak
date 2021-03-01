@@ -8,4 +8,6 @@ public interface EquityPaymentCategoryMapperExtra {
     int updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
 
     int deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
+
+    int updateCategoryOrder(EquityPaymentCategoryDTO equityPaymentCategoryDTO);
 }

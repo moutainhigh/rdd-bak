@@ -7,7 +7,7 @@ public class EquityPaymentCategoryDTO {
 
     private String categoryName;
 
-    private String order;
+    private Integer order;
 
     private Integer isHot;
 
@@ -33,11 +33,11 @@ public class EquityPaymentCategoryDTO {
         this.categoryName = categoryName;
     }
 
-    public String getOrder() {
+    public Integer getOrder() {
         return order;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(Integer order) {
         this.order = order;
     }
 
