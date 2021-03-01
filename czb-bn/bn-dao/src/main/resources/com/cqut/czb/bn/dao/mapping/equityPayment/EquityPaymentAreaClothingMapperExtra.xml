@@ -18,6 +18,16 @@
 	    product_code productCode
     FROM
 	    czb_equity_payment_area_clothing
+	WHERE
+	    1=1
+	    <if test="gameName !='' and gameName != null">
+            and
+            game_name = #{gameName}
+        </if>
+        <if test="areaName !='' and areaName != null">
+            and
+            area_name = #{areaName}
+        </if>
     </select>
     <insert id="insertAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
     INSERT INTO
