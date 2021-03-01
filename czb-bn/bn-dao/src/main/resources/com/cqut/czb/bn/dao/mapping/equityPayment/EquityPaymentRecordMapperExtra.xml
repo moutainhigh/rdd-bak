@@ -29,6 +29,26 @@
             and
             t1.recharge_account = #{account}
         </if>
+		<if test="orderId != null and orderId != ''">
+			and
+			t1.order_id like concat('%', #{orderId, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="thirdOrder != null and thirdOrder != ''">
+			and
+			t1.third_order like concat('%', #{thirdOrder, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="orderState != null and orderState != ''">
+			and
+			t1.order_state = #{orderState}
+		</if>
+		<if test="clientIP != null and clientIP != ''">
+			and
+			t1.client_ip like concat('%', #{clientIP, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="goodsType != null and goodsType != ''">
+			and
+			t2.goods_type = #{goodsType}
+		</if>
         <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
             and
             (t1.create_at &lt;= #{overDate}
@@ -42,35 +62,52 @@
 		<if test="categoryId == '' or categoryId == null">
 			t1.category_id AS categoryId,
 			t1.category_name AS categoryName,
-			t1.is_hot AS categoryIsHot
+			t1.is_hot AS categoryIsHot,
+			t1.order AS categoryOrder
 		</if>
 		<if test="categoryId !='' and categoryId != null">
 			t2.type_id AS typeId,
 			t2.is_hot AS typeIsHot,
-			t2.type_name AS typeName
+			t2.type_name AS typeName,
+	        t2.order AS typeOrder,
+			t2.pic AS pic,
+			t3.save_path AS src
 		</if>
 	FROM
 		<if test="categoryId == '' or categoryId == null">
 			czb_equity_payment_category t1
+			WHERE
+			t1.is_delete = 0
+			ORDER BY t1.order
 		</if>
 		<if test="categoryId !='' and categoryId != null">
 			czb_equity_payment_type t2
+			LEFT JOIN
+			czb_file t3 ON t2.pic = t3.file_id
 			WHERE
 			t2.category_id = #{categoryId}
+			AND
+			t2.is_delete = 0
+			ORDER BY t2.order
 		</if>
 	</select>
 	<select id="getAllType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO" resultType="com.cqut.czb.bn.entity.dto.equityPayment.CategoryAndTypeDTO">
-		select t1.type_id typeId,
+		SELECT t1.type_id typeId,
 		       t1.type_name typeName,
+		       t1.pic pic,
+		       t1.is_hot typeIsHot,
 		       t2.category_id categoryId,
-		       t2.category_name categoryName
-		from czb_equity_payment_type t1
-		    left join czb_equity_payment_category t2 on t1.category_id = t2.category_id
-		where 1 = 1
+		       t2.category_name categoryName,
+		       t3.save_path AS src,
+		       t1.order AS typeOrder
+		FROM czb_equity_payment_type t1
+		    LEFT JOIN czb_equity_payment_category t2 ON t1.category_id = t2.category_id
+		    LEFT JOIN czb_file t3 ON t3.file_id = t1.pic
+		WHERE t1.is_delete = 0
 		<if test="categoryId != null and categoryId != ''">
-			and t1.category_id = #{categoryId, jdbcType = VARCHAR}
+			AND t1.category_id = #{categoryId, jdbcType = VARCHAR}
 		</if>
-		order by t1.order
+		ORDER BY t1.order
 	</select>
 	<select id="getEquityPaymentOrderDetails" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO">
 		select t1.order_id orderId,
@@ -87,9 +124,11 @@
 			   t1.product_code productCode,
 		       t2.goods_title goodsTitle,
 		       t2.goods_pic goodsPic,
-		       t2.is_game isGame
+		       t2.is_game isGame,
+		       t3.save_path pic
 		from czb_equity_payment_order t1
 		    left join czb_equity_payment_commodity t2 on t1.goods_id = t2.goods_id
+			left join czb_file t3 on t3.file_id = t2.goods_pic
 		where t1.order_id = #{orderId, jdbcType = VARCHAR}
 	</select>
 
@@ -100,8 +139,10 @@
 	    	t1.goods_id AS goodsId,
 	    	t1.third_order AS thirdOrder,
 	    	t1.unit_price AS unitPrice,
+	    	t1.pay_price AS payPrice,
 	    	t1.order_state AS orderState,
 	    	t1.buy_num AS buyNum,
+	    	t1.recharge_account AS account,
 	    	t1.create_at AS createAt,
 	    	t1.code AS code,
 	    	t2.goods_title AS goodsTitle

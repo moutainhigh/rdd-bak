@@ -49,6 +49,8 @@ public class EquityPaymentCommodityDTO {
 
     private String categoryName;
 
+    private String src;
+
     public String getGoodsId() {
         return goodsId;
     }
@@ -231,5 +233,13 @@ public class EquityPaymentCommodityDTO {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getSrc() {
+        return src;
+    }
+
+    public void setSrc(String src) {
+        this.src = src;
     }
 }

@@ -221,7 +221,7 @@ public class AliParameterConfig {
         return model;
     }
 
-    public static AlipayTradeWapPayModel getPetrolPill(String orderId,double amount, double rechargeAmount, Integer recordType, String userAccount, String cardNum) {
+    public static AlipayTradeWapPayModel getPetrolPill(String orderId,double amount, double rechargeAmount, Integer recordType, String cardNum, String userAccount) {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("RDD油卡直充");
         model.setSubject("RDD油卡直充");

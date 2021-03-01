@@ -14,6 +14,14 @@ public class CategoryAndTypeDTO {
 
     private String typeIsHot;
 
+    private String pic;
+
+    private String src;
+
+    private Integer typeOrder;
+
+    private Integer categoryOrder;
+
     public String getCategoryId() {
         return categoryId;
     }
@@ -60,5 +68,37 @@ public class CategoryAndTypeDTO {
 
     public void setTypeIsHot(String typeIsHot) {
         this.typeIsHot = typeIsHot;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getSrc() {
+        return src;
+    }
+
+    public void setSrc(String src) {
+        this.src = src;
+    }
+
+    public Integer getTypeOrder() {
+        return typeOrder;
+    }
+
+    public void setTypeOrder(Integer typeOrder) {
+        this.typeOrder = typeOrder;
+    }
+
+    public Integer getCategoryOrder() {
+        return categoryOrder;
+    }
+
+    public void setCategoryOrder(Integer categoryOrder) {
+        this.categoryOrder = categoryOrder;
     }
 }

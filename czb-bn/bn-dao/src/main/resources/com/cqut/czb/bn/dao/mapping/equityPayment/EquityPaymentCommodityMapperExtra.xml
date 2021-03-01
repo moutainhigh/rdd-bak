@@ -54,8 +54,9 @@
 	    t1.DESC,
 	    t1.on_sale,
 	    t1.fy_mount,
-	    t1.ORDER,
+	    t1.order,
 	    t1.is_hot,
+	    t1.goods_pic,
 	    t1.is_delete,
 	    t1.create_at,
 	    t1.update_at,
@@ -64,7 +65,7 @@
 	    t2.type_name,
 	    t3.category_id,
 	    t3.category_name,
-	    t4.save_path AS goods_pic
+	    t4.save_path AS src
     FROM
 	    czb_equity_payment_commodity t1
 	LEFT JOIN czb_equity_payment_type t2 ON t1.type_id = t2.type_id
@@ -82,11 +83,12 @@
         t1.unit_price,
         t1.current_price,
         t1.fy_mount,
+        t1.goods_pic,
         t1.sold_number,
         t1.on_sale,
         t3.category_id,
         t3.category_name,
-        t4.save_path AS goods_pic
+        t4.save_path AS src
         from
         czb_equity_payment_commodity t1
         left join czb_equity_payment_type t2 on t1.type_id = t2.type_id
@@ -105,7 +107,7 @@
         <if test="isHot != null and isHot != ''">
             and t1.is_hot = #{isHot, jdbcType = INTEGER}
         </if>
-        order by sold_number desc
+        order by sold_number desc, t1.create_at desc
     </select>
     <insert id="insertEquityPayment"  parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
     INSERT INTO czb_equity_payment_commodity (
@@ -127,7 +129,8 @@
 	    sold_number,
 	    current_price,
 	    is_delete,
-	    create_at
+	    create_at,
+	    update_at
     )
     VALUES(
         #{goodsId},
@@ -148,12 +151,72 @@
 	    #{soldNumber},
 	    #{currentPrice},
 	    #{isDelete},
-	    #{createAt}
+	    #{createAt},
+	    #{updateAt}
     )
     </insert>
+    <update id="updateEquityPayment" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
+        update czb_equity_payment_commodity
+        <set >
+            <if test="goodsTitle != null" >
+                goods_title = #{goodsTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null" >
+                type_id = #{typeId,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null" >
+                product_code = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sellingPrice != null" >
+                selling_price = #{sellingPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="fyMount != null" >
+                fy_mount = #{fyMount,jdbcType=DOUBLE},
+            </if>
+            <if test="tradeType != null" >
+                trade_type = #{tradeType,jdbcType=INTEGER},
+            </if>
+            <if test="goodsType != null" >
+                goods_type = #{goodsType,jdbcType=INTEGER},
+            </if>
+            <if test="currentPrice != null" >
+                current_price = #{currentPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="unitPrice != null" >
+                unit_price = #{unitPrice,jdbcType=INTEGER},
+            </if>
+            <if test="desc != null" >
+                `desc` = #{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="isGame != null" >
+                is_game = #{isGame,jdbcType=INTEGER},
+            </if>
+            <if test="onSale != null" >
+                on_sale = #{onSale,jdbcType=INTEGER},
+            </if>
+            <if test="isHot != null" >
+                is_hot = #{isHot,jdbcType=INTEGER},
+            </if>
+            <if test="goodsPic != null" >
+                goods_pic = #{goodsPic,jdbcType=VARCHAR},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where goods_id = #{goodsId,jdbcType=VARCHAR}
+    </update>
     <update id="deleteCommodity">
         update czb_equity_payment_commodity
         set is_delete = #{isDelete,jdbcType=INTEGER}
         where goods_id = #{goodsId,jdbcType=VARCHAR}
     </update>
+    <select id="getCountOfCommodityByType" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+        select
+	        COUNT(*)
+        from
+	        czb_equity_payment_commodity
+        where
+	        type_id = #{typeId}
+    </select>
 </mapper>

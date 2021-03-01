@@ -4,9 +4,9 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -91,7 +91,7 @@ public interface EquityPaymentService {
      * 修改类别
      * @return
      */
-    JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO);
+    JSONResult updateType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile file) throws IOException;
 
     /**
      * 删除类别
@@ -105,4 +105,10 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult getUserEquityPaymentOrders(String userId);
+
+    /**
+     * 修改商品
+     * @return
+     */
+    JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException;
 }

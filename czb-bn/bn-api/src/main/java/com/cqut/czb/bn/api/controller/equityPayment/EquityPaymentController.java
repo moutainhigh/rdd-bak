@@ -15,10 +15,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import net.sf.json.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -165,7 +162,7 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/insertType", method = RequestMethod.POST)
-    public JSONResult insertType(Principal principal, EquityPaymentTypeDTO equityPaymentTypeDTO, @RequestParam("files")MultipartFile files) {
+    public JSONResult insertType(Principal principal, EquityPaymentTypeDTO equityPaymentTypeDTO, @RequestParam("file")MultipartFile files) {
         User user = (User) redisUtils.get(principal.getName());
         return new JSONResult(equityPaymentService.insertType(user.getUserId(), equityPaymentTypeDTO, files));
     }
@@ -175,8 +172,26 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/updateType", method = RequestMethod.POST)
-    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
-        return new JSONResult(equityPaymentService.updateType(equityPaymentTypeDTO));
+    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO, Principal principal, @RequestParam("file")MultipartFile files) {
+        User user = (User) redisUtils.get(principal.getName());
+        try {
+            return new JSONResult(equityPaymentService.updateType(user.getUserId(), equityPaymentTypeDTO, files));
+        } catch (IOException e) {
+            return new JSONResult("图片上传错误");
+        }
+    }
+
+    /**
+     * 修改类别
+     * @return
+     */
+    @RequestMapping(value = "/updateTypeNoPic", method = RequestMethod.POST)
+    public JSONResult updateTypeNoPic(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+        try {
+            return new JSONResult(equityPaymentService.updateType(null, equityPaymentTypeDTO, null));
+        } catch (IOException e) {
+            return new JSONResult("图片上传错误");
+        }
     }
 
     /**
@@ -186,13 +201,33 @@ public class EquityPaymentController {
     @RequestMapping(value = "/deleteType", method = RequestMethod.POST)
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
         return new JSONResult(equityPaymentService.deleteType(equityPaymentTypeDTO));
+
     }
-//    /**
-//     * 修改商品
-//     * @return
-//     */
-//    @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.GET)
-//    public JSONResult updateEquityPayment( ) {
-//        return new JSONResult(equityPaymentService.updateEquityPayment());
-//    }
+    /**
+     * 修改商品+图片
+     * @return
+     */
+    @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.POST)
+    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile files) {
+        User user = (User) redisUtils.get(principal.getName());
+        try {
+            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files);
+        } catch (IOException exception) {
+            return new JSONResult("图片上传错误");
+        }
+    }
+
+    /**
+     * 修改商品+无图片
+     * @return
+     */
+    @RequestMapping(value = "/updateEquityPaymentNoPic", method = RequestMethod.POST)
+    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        try {
+            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, null);
+        } catch (IOException exception) {
+            return new JSONResult("图片上传错误");
+        }
+    }
 }

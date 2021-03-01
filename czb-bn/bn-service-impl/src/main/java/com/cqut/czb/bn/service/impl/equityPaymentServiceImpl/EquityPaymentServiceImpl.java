@@ -64,9 +64,16 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     public JSONResult deleteCommodity(String goodsId) {
-        int column = equityPaymentCommodityMapperExtra.deleteCommodity(goodsId, true);
-        if (column == 0) {
+        EquityPaymentCommodityDTO equityPaymentCommodityDTO = equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(goodsId);
+        int column1 = equityPaymentCommodityMapperExtra.deleteCommodity(goodsId, true);
+        if (column1 == 0) {
             return new JSONResult("删除商品失败");
+        }
+        if (equityPaymentCommodityDTO.getGoodsPic() != null || !equityPaymentCommodityDTO.getGoodsPic().equals("")) {
+            int column2 = fileMapperExtra.deleteByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
+            if (column2 == 0) {
+                return new JSONResult("删除商品失败");
+            }
         }
 
         return new JSONResult("删除商品成功");
@@ -107,13 +114,14 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
                 address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
             }
         } catch (IOException ioException) {
-            return new JSONResult("文件读取错误");
+            return new JSONResult("文件读取错误", 500);
         }
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
         fileMapperExtra.insertSelective(file);
         equityPaymentCommodityDTO.setGoodsId(StringUtil.createId());
         equityPaymentCommodityDTO.setCreateAt(new Date());
+        equityPaymentCommodityDTO.setUpdateAt(new Date());
         equityPaymentCommodityDTO.setSoldNumber(0);
         equityPaymentCommodityDTO.setIsDelete(0);
         equityPaymentCommodityDTO.setGoodsPic(file.getFileId());
@@ -123,45 +131,81 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     @Override
     public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
         equityPaymentCategoryDTO.setCategoryId(StringUtil.createId());
+        equityPaymentCategoryDTO.setIsDelete(0);
+        equityPaymentCategoryDTO.setOrder(equityPaymentCategoryDTO.getOrder());
+        equityPaymentCategoryDTO.setCreateAt(new Date());
+        equityPaymentCategoryDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentCategoryMapperExtra.insertCategory(equityPaymentCategoryDTO) > 0);
     }
 
     @Override
     public JSONResult updateCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
+        equityPaymentCategoryDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentCategoryMapperExtra.updateCategory(equityPaymentCategoryDTO) > 0);
     }
 
     @Override
     public JSONResult deleteCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
-        return new JSONResult(equityPaymentCategoryMapperExtra.deleteCategory(equityPaymentCategoryDTO) > 0);
+        int count = equityPaymentTypeMapperExtra.getCountOfType(equityPaymentCategoryDTO);
+        if (count != 0) {
+            return new JSONResult("此类目下存在类别不能删除");
+        }
+        if (equityPaymentCategoryMapperExtra.deleteCategory(equityPaymentCategoryDTO) > 0) {
+            return new JSONResult("删除成功");
+        } else {
+            return new JSONResult("删除失败");
+        }
     }
 
     @Override
     public JSONResult insertType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile files) {
         String address = "";
         try {
-            if (files!=null||!files.isEmpty()) {
+            if (files!=null) {
                 address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
             }
         } catch (IOException ioException) {
-            return new JSONResult("文件读取错误");
+            return new JSONResult("文件读取错误", 500);
         }
 
         File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
         fileMapperExtra.insertSelective(file);
-        equityPaymentTypeDTO.setCategoryId(StringUtil.createId());
+        equityPaymentTypeDTO.setTypeId(StringUtil.createId());
+        equityPaymentTypeDTO.setCategoryId(equityPaymentTypeDTO.getCategoryId());
         equityPaymentTypeDTO.setPic(file.getFileId());
+        equityPaymentTypeDTO.setIsDelete(0);
+        equityPaymentTypeDTO.setOrder(equityPaymentTypeDTO.getOrder());
+        equityPaymentTypeDTO.setCreateAt(new Date());
+        equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
     }
 
     @Override
-    public JSONResult updateType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
+    public JSONResult updateType(String userId, EquityPaymentTypeDTO equityPaymentTypeDTO, MultipartFile files) throws IOException {
+        if (files != null) {
+            File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentTypeDTO.getPic());
+            file1.setSavePath(FileUploadUtil.putObject(files.getOriginalFilename(),files.getInputStream()));
+            file1.setFileName(files.getOriginalFilename());
+            file1.setUploader(userId);
+            file1.setUpdateAt(new Date());
+            fileMapperExtra.updateByPrimaryKeySelective(file1);
+        }
+        equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.updateType(equityPaymentTypeDTO) > 0);
     }
 
     @Override
     public JSONResult deleteType(EquityPaymentTypeDTO equityPaymentTypeDTO) {
-        return new JSONResult(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0);
+        int count = equityPaymentCommodityMapperExtra.getCountOfCommodityByType(equityPaymentTypeDTO);
+        fileMapperExtra.deleteByPrimaryKey(equityPaymentTypeDTO.getPic());
+        if (count != 0) {
+            return new JSONResult("此类别下存在商品不能删除");
+        }
+        if(equityPaymentTypeMapperExtra.deleteType(equityPaymentTypeDTO) > 0) {
+            return new JSONResult("删除成功");
+        } else {
+            return new JSONResult("删除失败");
+        }
     }
 
     @Override
@@ -170,4 +214,17 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         return new JSONResult(userEquityPaymentOrders);
     }
 
+    @Override
+    public JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException {
+        equityPaymentCommodityDTO.setUpdateAt(new Date());
+        if (files != null) {
+            File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
+            file1.setSavePath(FileUploadUtil.putObject(files.getOriginalFilename(),files.getInputStream()));
+            file1.setFileName(files.getOriginalFilename());
+            file1.setUploader(userId);
+            file1.setUpdateAt(new Date());
+            fileMapperExtra.updateByPrimaryKeySelective(file1);
+        }
+        return new JSONResult((equityPaymentCommodityMapperExtra.updateEquityPayment(equityPaymentCommodityDTO)>0));
+    }
 }

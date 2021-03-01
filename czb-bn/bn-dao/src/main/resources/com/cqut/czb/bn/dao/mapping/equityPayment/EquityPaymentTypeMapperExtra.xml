@@ -9,7 +9,9 @@
     pic,
     `order`,
     is_hot,
-    is_delete
+    is_delete,
+    create_at,
+    update_at
     )
     values (
     #{typeId},
@@ -18,7 +20,9 @@
     #{pic},
     #{order},
     #{isHot},
-    #{isDelete}
+    #{isDelete},
+    #{createAt},
+    #{updateAt}
     )
     </insert>
     <update id="updateType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
@@ -34,7 +38,7 @@
                 pic = #{pic},
             </if>
             <if test="order != null" >
-                order = #{order,jdbcType=VARCHAR},
+                `order` = #{order,jdbcType=INTEGER},
             </if>
             <if test="isHot != null" >
                 is_hot = #{isHot,jdbcType=TIMESTAMP},
@@ -49,10 +53,23 @@
     <update id="deleteType" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
         update czb_equity_payment_type
         <set >
-            <if test="isDelete != null" >
-                is_delete = 1,
-            </if>
+            is_delete = 1
         </set>
         where type_id = #{typeId,jdbcType=VARCHAR}
+    </update>
+    <select id="getCountOfType" resultType="java.lang.Integer" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
+        select
+	        COUNT(*)
+        from
+	        czb_equity_payment_type
+        where
+	        category_id = #{categoryId}
+    </select>
+
+    <update id="updateTypeOrder" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentTypeDTO">
+        update czb_equity_payment_type
+        set `order` = `order` + 1
+        where `order` >= #{order} and
+              #{order} in (select t1.order from (select `order` from czb_equity_payment_type) as t1)
     </update>
 </mapper>

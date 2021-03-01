@@ -275,7 +275,7 @@
                 now(),
                 #{recordType,jdbcType=INTEGER },
                 #{realPrice,jdbcType=DOUBLE},
-                #{rechargeAccount,jdbcType=VARCHAR}
+                #{rechargeAccount,jdbcType=VARCHAR},
                 #{cardholder,jdbcType=VARCHAR}
                )
     </insert>

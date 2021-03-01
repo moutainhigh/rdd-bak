@@ -73,6 +73,11 @@ public class EquityPaymentDTO {
     // 卡密链接
     private String code;
 
+    // 图片
+    private String pic;
+
+    private Integer goodsType;
+
     private Integer isBrowser;
 
     private Date createAt;
@@ -295,5 +300,21 @@ public class EquityPaymentDTO {
 
     public void setOrderState(String orderState) {
         this.orderState = orderState;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public Integer getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(Integer goodsType) {
+        this.goodsType = goodsType;
     }
 }

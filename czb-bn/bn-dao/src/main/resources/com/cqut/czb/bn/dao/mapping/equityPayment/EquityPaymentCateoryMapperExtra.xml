@@ -7,14 +7,18 @@
     category_name,
     `order`,
     is_hot,
-    is_delete
+    is_delete,
+    create_at,
+    update_at
     )
     values (
     #{categoryId},
     #{categoryName},
     #{order},
     #{isHot},
-    #{isDelete}
+    #{isDelete},
+    #{createAt},
+    #{updateAt}
     )
     </insert>
     <update id="updateCategory" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
@@ -24,7 +28,7 @@
                 category_name = #{categoryName},
             </if>
             <if test="order != null" >
-                order = #{order,jdbcType=VARCHAR},
+                `order` = #{order,jdbcType=INTEGER},
             </if>
             <if test="isHot != null" >
                 is_hot = #{isHot,jdbcType=TIMESTAMP},
@@ -39,10 +43,15 @@
     <update id="deleteCategory" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
         update czb_equity_payment_category
         <set >
-            <if test="isDelete != null" >
-                is_delete = 1,
-            </if>
+            is_delete = 1
         </set>
         where category_id = #{categoryId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateCategoryOrder" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCategoryDTO">
+        update czb_equity_payment_category
+        set `order` = `order` + 1
+        where `order` >= #{order} and
+              #{order} in (select t1.order from (select `order` from czb_equity_payment_category) as t1)
     </update>
 </mapper>
