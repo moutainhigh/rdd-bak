@@ -6,4 +6,12 @@ import java.util.List;
 
 public interface EquityPaymentAreaClothingMapperExtra {
     List<EquityPaymentAreaClothingDTO> getDistrictServiceInformation(String productCode);
+
+    List<EquityPaymentAreaClothingDTO> getAreaClothingList(EquityPaymentAreaClothingDTO equityPaymentAreaClothingDTO);
+
+    int insertAreaClothing(EquityPaymentAreaClothingDTO equityPaymentAreaClothingDTO);
+
+    int updateAreaClothing(EquityPaymentAreaClothingDTO equityPaymentAreaClothingDTO);
+
+    int deleteAreaClothing(EquityPaymentAreaClothingDTO equityPaymentAreaClothingDTO);
 }

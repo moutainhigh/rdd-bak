@@ -2,6 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentAreaClothingMapperExtra">
     <select id="getDistrictServiceInformation" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
-        
+
     </select>
+    <select id="getAreaClothingList" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
+    SELECT
+	    area_id areaId,
+	    game_name gameName,
+	    area_name areaName,
+	    product_code productCode
+    FROM
+	    czb_equity_payment_area_clothing
+    </select>
+    <insert id="insertAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
+    INSERT INTO
+    czb_equity_payment_area_clothing
+    (
+    area_id,
+    game_name,
+    area_name,
+    product_code )
+    VALUES
+	(#{areaId},
+	 #{gameName},
+	 #{areaName},
+	 #{productCode}
+	 )
+    </insert>
+    <update id="updateAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
+        update czb_equity_payment_area_clothing
+        <set >
+            <if test="gameName != null" >
+                game_name = #{gameName},
+            </if>
+            <if test="areaName != null" >
+                area_name = #{areaName},
+            </if>
+            <if test="productCode != null" >
+                product_code = #{productCode},
+            </if>
+        </set>
+        where area_id = #{areaId}
+    </update>
+    <delete id="deleteAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
+    DELETE
+    FROM
+	    czb_equity_payment_area_clothing
+    WHERE
+	    area_id = #{areaId}
+    </delete>
 </mapper>
