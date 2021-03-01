@@ -227,4 +227,9 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         }
         return new JSONResult((equityPaymentCommodityMapperExtra.updateEquityPayment(equityPaymentCommodityDTO)>0));
     }
+
+    @Override
+    public JSONResult getDistrictServiceInformation(String productCode) {
+        return null;
+    }
 }

@@ -111,4 +111,11 @@ public interface EquityPaymentService {
      * @return
      */
     JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException;
+
+    /**
+     * 获取区服信息
+     * @param productCode
+     * @return
+     */
+    JSONResult getDistrictServiceInformation(String productCode);
 }

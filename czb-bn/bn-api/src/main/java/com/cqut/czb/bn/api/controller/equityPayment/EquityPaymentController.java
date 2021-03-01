@@ -230,4 +230,14 @@ public class EquityPaymentController {
             return new JSONResult("图片上传错误");
         }
     }
+
+    /**
+     * 获取区服信息
+     * @param productCode
+     * @return
+     */
+    @RequestMapping(value = "/getDistrictServiceInformation", method = RequestMethod.GET)
+    public JSONResult getDistrictServiceInformation(String productCode) {
+        return equityPaymentService.getDistrictServiceInformation(productCode);
+    }
 }
