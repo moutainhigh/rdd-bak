@@ -29,6 +29,26 @@
             and
             t1.recharge_account = #{account}
         </if>
+		<if test="orderId != null and orderId != ''">
+			and
+			t1.order_id like concat('%', #{orderId, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="thirdOrder != null and thirdOrder != ''">
+			and
+			t1.third_order like concat('%', #{thirdOrder, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="orderState != null and orderState != ''">
+			and
+			t1.order_state = #{orderState}
+		</if>
+		<if test="clientIP != null and clientIP != ''">
+			and
+			t1.client_ip like concat('%', #{clientIP, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="goodsType != null and goodsType != ''">
+			and
+			t2.goods_type = #{goodsType}
+		</if>
         <if test="beginDate != '' and beginDate != null and overDate != '' and overDate != null">
             and
             (t1.create_at &lt;= #{overDate}
