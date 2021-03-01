@@ -24,7 +24,7 @@
                 category_name = #{categoryName},
             </if>
             <if test="order != null" >
-                order = #{order,jdbcType=VARCHAR},
+                `order` = #{order,jdbcType=VARCHAR},
             </if>
             <if test="isHot != null" >
                 is_hot = #{isHot,jdbcType=TIMESTAMP},

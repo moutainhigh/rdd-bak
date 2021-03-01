@@ -132,6 +132,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     public JSONResult insertCategory(EquityPaymentCategoryDTO equityPaymentCategoryDTO) {
         equityPaymentCategoryDTO.setCategoryId(StringUtil.createId());
         equityPaymentCategoryDTO.setIsDelete(0);
+        equityPaymentCategoryDTO.setOrder(equityPaymentCategoryDTO.getOrder());
         equityPaymentCategoryDTO.setCreateAt(new Date());
         equityPaymentCategoryDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentCategoryMapperExtra.insertCategory(equityPaymentCategoryDTO) > 0);
@@ -173,6 +174,7 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         equityPaymentTypeDTO.setCategoryId(equityPaymentTypeDTO.getCategoryId());
         equityPaymentTypeDTO.setPic(file.getFileId());
         equityPaymentTypeDTO.setIsDelete(0);
+        equityPaymentTypeDTO.setOrder(equityPaymentTypeDTO.getOrder());
         equityPaymentTypeDTO.setCreateAt(new Date());
         equityPaymentTypeDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentTypeMapperExtra.insertType(equityPaymentTypeDTO) > 0);
