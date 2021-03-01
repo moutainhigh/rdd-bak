@@ -558,9 +558,13 @@ public class PayBackServiceImpl implements PayBackService {
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
         equityPaymentDTO.setOrderId(orderId);
         equityPaymentDTO.setThirdOrder(thirdOrderId);
+        equityPaymentDTO.setGoodsId(goodsId);
+        equityPaymentDTO.setBuyNum(buyNum);
         System.out.println("更新成功");
         boolean update = integralPurchaseMapperExtra.updateEquityGoodsRecord(equityPaymentDTO) > 0;
 
+        //更新销量
+        boolean updateSoldNumber = integralPurchaseMapperExtra.updateSoldNumber(equityPaymentDTO) > 0;
 
         //插入log记录
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
