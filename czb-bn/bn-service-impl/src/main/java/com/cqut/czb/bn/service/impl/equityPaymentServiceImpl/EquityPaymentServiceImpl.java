@@ -1,9 +1,6 @@
 package com.cqut.czb.bn.service.impl.equityPaymentServiceImpl;
 import com.cqut.czb.bn.dao.mapper.FileMapperExtra;
-import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCategoryMapperExtra;
-import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
-import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentRecordMapperExtra;
-import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentTypeMapperExtra;
+import com.cqut.czb.bn.dao.mapper.equityPayment.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.*;
 import com.cqut.czb.bn.entity.entity.File;
@@ -48,6 +45,9 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Autowired
     EquityPaymentCommodityMapperExtra equityPaymentCommodityMapperExtra;
+
+    @Autowired
+    EquityPaymentAreaClothingMapperExtra equityPaymentAreaClothingMapperExtra;
 
     public PageInfo<EquityPaymentCommodityDTO> getCommodityList(EquityPaymentCommodityDTO equityPaymentCommodityDTO, PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize(), true);
@@ -230,6 +230,11 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
 
     @Override
     public JSONResult getDistrictServiceInformation(String productCode) {
-        return null;
+        List<EquityPaymentAreaClothingDTO> equityPaymentAreaClothingDTOList = equityPaymentAreaClothingMapperExtra.getDistrictServiceInformation(productCode);
+        if (equityPaymentAreaClothingDTOList == null) {
+            return new JSONResult("没有区服信息");
+        }
+
+        return new JSONResult(equityPaymentAreaClothingDTOList);
     }
 }
