@@ -18,6 +18,10 @@ public class CategoryAndTypeDTO {
 
     private String src;
 
+    private String typeOrder;
+
+    private String categoryOrder;
+
     public String getCategoryId() {
         return categoryId;
     }
@@ -80,5 +84,21 @@ public class CategoryAndTypeDTO {
 
     public void setSrc(String src) {
         this.src = src;
+    }
+
+    public String getTypeOrder() {
+        return typeOrder;
+    }
+
+    public void setTypeOrder(String typeOrder) {
+        this.typeOrder = typeOrder;
+    }
+
+    public String getCategoryOrder() {
+        return categoryOrder;
+    }
+
+    public void setCategoryOrder(String categoryOrder) {
+        this.categoryOrder = categoryOrder;
     }
 }

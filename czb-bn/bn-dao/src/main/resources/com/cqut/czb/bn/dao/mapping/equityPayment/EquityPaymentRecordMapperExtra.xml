@@ -42,12 +42,14 @@
 		<if test="categoryId == '' or categoryId == null">
 			t1.category_id AS categoryId,
 			t1.category_name AS categoryName,
-			t1.is_hot AS categoryIsHot
+			t1.is_hot AS categoryIsHot,
+			t1.order AS categoryOrder
 		</if>
 		<if test="categoryId !='' and categoryId != null">
 			t2.type_id AS typeId,
 			t2.is_hot AS typeIsHot,
 			t2.type_name AS typeName,
+	        t2.order AS typeOrder,
 			t2.pic AS pic,
 			t3.save_path AS src
 		</if>
@@ -76,7 +78,8 @@
 		       t1.is_hot typeIsHot,
 		       t2.category_id categoryId,
 		       t2.category_name categoryName,
-		       t3.save_path AS src
+		       t3.save_path AS src,
+		       t1.order AS typeOrder
 		FROM czb_equity_payment_type t1
 		    LEFT JOIN czb_equity_payment_category t2 ON t1.category_id = t2.category_id
 		    LEFT JOIN czb_file t3 ON t3.file_id = t1.pic
