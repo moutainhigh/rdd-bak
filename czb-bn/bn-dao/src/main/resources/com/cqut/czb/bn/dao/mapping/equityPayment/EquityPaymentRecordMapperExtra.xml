@@ -119,8 +119,10 @@
 	    	t1.goods_id AS goodsId,
 	    	t1.third_order AS thirdOrder,
 	    	t1.unit_price AS unitPrice,
+	    	t1.pay_price AS payPrice,
 	    	t1.order_state AS orderState,
 	    	t1.buy_num AS buyNum,
+	    	t1.recharge_account AS account,
 	    	t1.create_at AS createAt,
 	    	t1.code AS code,
 	    	t2.goods_title AS goodsTitle
