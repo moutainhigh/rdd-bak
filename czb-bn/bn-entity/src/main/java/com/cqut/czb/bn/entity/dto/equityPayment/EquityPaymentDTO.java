@@ -76,6 +76,8 @@ public class EquityPaymentDTO {
     // 图片
     private String pic;
 
+    private Integer goodsType;
+
     private Integer isBrowser;
 
     private Date createAt;
@@ -306,5 +308,13 @@ public class EquityPaymentDTO {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public Integer getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(Integer goodsType) {
+        this.goodsType = goodsType;
     }
 }
