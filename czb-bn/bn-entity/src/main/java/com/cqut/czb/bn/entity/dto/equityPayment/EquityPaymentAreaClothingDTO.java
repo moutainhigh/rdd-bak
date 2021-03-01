@@ -15,6 +15,8 @@ public class EquityPaymentAreaClothingDTO {
 
     private String productCode;
 
+    private String districtServiceName;
+
     public String getAreaId() {
         return areaId;
     }
@@ -61,5 +63,13 @@ public class EquityPaymentAreaClothingDTO {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public String getDistrictServiceName() {
+        return districtServiceName;
+    }
+
+    public void setDistrictServiceName(String districtServiceName) {
+        this.districtServiceName = districtServiceName;
     }
 }
