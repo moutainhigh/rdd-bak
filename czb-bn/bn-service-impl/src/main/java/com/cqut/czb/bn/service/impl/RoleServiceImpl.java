@@ -160,4 +160,9 @@ public class RoleServiceImpl implements IRoleService {
 
         return roleMenuDTOList;
     }
+
+    @Override
+    public Role getRoleName(User user) {
+        return roleMapperExtra.getRoleName(user);
+    }
 }

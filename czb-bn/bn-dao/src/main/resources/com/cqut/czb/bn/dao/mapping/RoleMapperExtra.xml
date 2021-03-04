@@ -101,4 +101,15 @@
 			) result
 		LEFT JOIN czb_role cr ON cr.role_id = result.role_id
   </select>
+
+  <select id="getRoleName" parameterType="com.cqut.czb.bn.entity.entity.User" resultType="com.cqut.czb.bn.entity.entity.Role">
+    SELECT
+      t3.role_id roleId,
+      t3.role_name roleName
+    FROM
+      czb_user t1
+        LEFT JOIN czb_user_role t2 ON t1.user_id = t2.user_id
+        LEFT JOIN czb_role t3 ON t2.role_id = t3.role_id
+    WHERE t1.user_id = #{userId} AND t3.role_name = '直充合伙人'
+  </select>
 </mapper>

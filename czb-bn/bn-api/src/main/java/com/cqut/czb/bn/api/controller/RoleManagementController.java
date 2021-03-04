@@ -78,5 +78,18 @@ public class RoleManagementController {
 
         return new JSONResult(roleService.getRoleToPage(user));
     }
+
+    /**
+     * 获取用户的角色
+     * 更新时间:2021/3/4
+     * 创建人:侯家领
+     * @param principal
+     * @return
+     */
+    @GetMapping("/getRoleName")
+    public JSONResult getRoleName(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        return new JSONResult(roleService.getRoleName(user));
+    }
 }
 

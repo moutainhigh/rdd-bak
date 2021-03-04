@@ -28,4 +28,6 @@ public interface RoleMapperExtra {
     String selectRoleIdByRoleName(String roleName);
 
     List<Role> getRoleToPage(User user);
+
+    Role getRoleName(User user);
 }
