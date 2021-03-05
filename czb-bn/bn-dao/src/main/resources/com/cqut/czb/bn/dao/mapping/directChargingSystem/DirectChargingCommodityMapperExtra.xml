@@ -32,4 +32,9 @@
     <select id="getCommodityPriceByCommodityId" resultType="java.lang.Double">
         select account from czb_direct_charging_commodity where commodity_id = #{commodityId, jdbcType=VARCHAR}
     </select>
+    <select id="getAllCommodity" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from czb_direct_charging_commodity
+    </select>
 </mapper>

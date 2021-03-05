@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.directChargingSystem;
 
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingCommodityDto;
 import com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity;
 import org.apache.ibatis.annotations.Param;
@@ -15,5 +16,7 @@ public interface DirectChargingCommodityMapperExtra {
     List<CommodityDetailsDTO> selectAllCommodityTitle(@Param("commodityType1") String commodityType1, @Param("commodityType2") String commodityType2);
 
     Double getCommodityPriceByCommodityId(@Param("commodityId") String commodityId);
+
+    List<DirectChargingCommodityDto> getAllCommodity();
 
 }
