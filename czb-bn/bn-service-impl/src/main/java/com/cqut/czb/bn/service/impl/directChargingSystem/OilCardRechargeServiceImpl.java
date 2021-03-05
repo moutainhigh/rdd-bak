@@ -174,6 +174,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         //直充类型
         Integer recordType = directChargingOrderDto.getRecordType();
         String userAccount = directChargingOrderDto.getUserAccount();
+        String cardholder = directChargingOrderDto.getCardholder();
+        String rechargeAccount = directChargingOrderDto.getRechargeAccount();
         String cardNum = "";
         if (recordType == 2){
             cardNum = directChargingOrderDto.getPetrolChinaPetrolNum();
@@ -183,9 +185,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         request.setReturnUrl(AliPayConfig.Return_url);
 //        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
         if (recordType == 1){
-            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum));
+            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum,cardholder,rechargeAccount));
         }else{
-            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount));
+            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount,cardholder,rechargeAccount));
         }
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
@@ -293,6 +295,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String userAccount = "";
         int recordType = 0;
         String cardNum = "";
+        String cardholder = "";
+        String rechargeAccount = "";
         double rechargeAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
@@ -314,6 +318,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             if ("rechargeAmount".equals(temp[0])) {
                 rechargeAmount = Double.parseDouble(temp[1]);
             }
+            if ("cardholder".equals(temp[0])) {
+                cardholder = temp[1];
+            }
+            if ("rechargeAccount".equals(temp[0])) {
+                rechargeAccount = temp[1];
+            }
         }
         System.out.println(userAccount);
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
@@ -322,6 +332,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrderDto.setUserAccount(userAccount);
         directChargingOrderDto.setPetrolChinaPetrolNum(cardNum);
         directChargingOrderDto.setRechargeAmount(rechargeAmount);
+        directChargingOrderDto.setCardholder(cardholder);
+        directChargingOrderDto.setRechargeAccount(rechargeAccount);
         directChargingOrderDto.setUpdateAt(new Date());
         return directChargingOrderDto;
     }
@@ -433,10 +445,10 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String ordersn = directChargingOrderDto.getOrderId();
 
         // 油卡号
-        String gasUserid = directChargingOrderDto.getPetrolChinaPetrolNum();
+        String gasUserid = directChargingOrderDto.getRechargeAccount();
 
         // 持卡人手机号
-        String gasMobile = directChargingOrderDto.getUserAccount();
+        String gasMobile = directChargingOrderDto.getCardholder();
 
         // 金额
         Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();

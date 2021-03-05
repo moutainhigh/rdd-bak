@@ -23,7 +23,7 @@ import java.util.Map;
 import static com.cqut.czb.bn.entity.dto.until.WXSign.httpRequest;
 
 @RestController
-@RequestMapping("/api/oilCardRecharge")
+@RequestMapping("/oilCardRecharge")
 public class OilCardRechargeController {
     @Autowired
     OilCardRechargeService oilCardRechargeService;

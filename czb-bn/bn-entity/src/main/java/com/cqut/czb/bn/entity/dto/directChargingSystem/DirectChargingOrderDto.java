@@ -213,7 +213,7 @@ public class DirectChargingOrderDto extends PageDTO {
 
     @Override
     public String toString() {
-        return "4444444444"+"DirectChargingOrderDto{" +
+        return "DirectChargingOrderDto{" +
                 "orderId='" + orderId + '\'' +
                 ", thirdOrderId='" + thirdOrderId + '\'' +
                 ", userAccount='" + userAccount + '\'' +
@@ -225,6 +225,10 @@ public class DirectChargingOrderDto extends PageDTO {
                 ", paymentMethod=" + paymentMethod +
                 ", state=" + state +
                 ", superiorAccount='" + superiorAccount + '\'' +
+                ", isNeedLogin=" + isNeedLogin +
+                ", rechargeAccount='" + rechargeAccount + '\'' +
+                ", cardholder='" + cardholder + '\'' +
+                ", isBrowser=" + isBrowser +
                 ", createAt=" + createAt +
                 ", updateAt=" + updateAt +
                 ", startTime=" + startTime +

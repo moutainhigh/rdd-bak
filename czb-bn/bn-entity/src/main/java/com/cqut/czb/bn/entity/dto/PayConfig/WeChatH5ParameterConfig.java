@@ -117,8 +117,12 @@ public class WeChatH5ParameterConfig {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
         } else if (isBrowser == 2) {
-            parameters.put("trade_type", "APP");
-            parameters.put("appid", "wx1d9987e1abf4c05e");
+//            parameters.put("trade_type", "APP");
+//            parameters.put("appid", "wx1d9987e1abf4c05e");
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         }
         System.out.println("9999"+parameters);
         System.out.println(isBrowser);

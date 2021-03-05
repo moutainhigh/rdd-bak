@@ -41,7 +41,7 @@ public class AliPayH5Config {
 
 
     //权益返回页面
-    public static String EquityReturn_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/h5IntegralExchangeAndPurchase";
+    public static String EquityReturn_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/h5paySuccess";
 
     // 加密方式
     public static String sign_type = "RSA2";
