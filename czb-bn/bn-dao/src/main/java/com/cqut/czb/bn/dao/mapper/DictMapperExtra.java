@@ -16,6 +16,8 @@ public interface DictMapperExtra {
 
     int updateDict(DictInputDTO dictInputDTO);
 
+    int updateDictByName(DictInputDTO dictInputDTO);
+
     int deleteDict(String dictId);
 
     int insertDict(DictInputDTO dictInputDTO);

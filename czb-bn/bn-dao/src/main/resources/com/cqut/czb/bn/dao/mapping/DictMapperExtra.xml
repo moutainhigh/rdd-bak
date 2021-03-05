@@ -80,6 +80,18 @@
     </set>
     where dict_id = #{dictId,jdbcType=VARCHAR}
   </update>
+  <update id="updateDictByName" parameterType="com.cqut.czb.bn.entity.dto.dict.DictInputDTO">
+    update czb_dict
+    <set>
+      <if test="name != null and name != ''" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null and content != ''" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+        where name = #{name,jdbcType=VARCHAR}
+  </update>
   <delete id="deleteDict" parameterType="java.lang.String" >
     delete from czb_dict
     where dict_id = #{dictId,jdbcType=VARCHAR}

@@ -7,6 +7,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
@@ -52,6 +53,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private DictMapperExtra dictMapperExtra;
 
 
     @Override
@@ -247,6 +251,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     Object[] param = { params };
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
+                        if (dictMapperExtra.selectDictByName("is_direct_recharge").equals("0")) {
+                            return new String("尚未开通充值");
+                        }
                         if (directChargingOrderDto.getRecordType()==1){
                             phoneRechargeSubmission(directChargingOrderDto);
                             System.out.println("充值参数"+directChargingOrderDto.toString());

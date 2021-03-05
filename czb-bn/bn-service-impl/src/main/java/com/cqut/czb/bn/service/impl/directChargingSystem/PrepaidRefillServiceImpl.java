@@ -1,7 +1,9 @@
 package com.cqut.czb.bn.service.impl.directChargingSystem;
 
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.PrepaidRefillMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingCommodityDto;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.UserCardRelationDto;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingCommodity;
@@ -10,6 +12,7 @@ import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import jodd.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,9 @@ import java.util.List;
 public class PrepaidRefillServiceImpl implements PrepaidRefillService {
     @Autowired
     PrepaidRefillMapperExtra prepaidRefillMapperExtra;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     @Override
     public List<DirectChargingCommodity> getGoodsPrice(Integer type) {
@@ -58,5 +64,18 @@ public class PrepaidRefillServiceImpl implements PrepaidRefillService {
         String[] ids = commodityIds.split(",");
         boolean isSuccess = prepaidRefillMapperExtra.saleStatusCommodity(ids,state) > 0;
         return isSuccess ? new JSONResult(200) : new JSONResult(500);
+    }
+
+    @Override
+    public JSONResult updateDirectRecharge(int status) {
+        DictInputDTO dictInputDTO = new DictInputDTO();
+        dictInputDTO.setName("is_direct_recharge");
+        dictInputDTO.setContent(Util.toString(status));
+        int column = dictMapperExtra.updateDictByName(dictInputDTO);
+        if (column == 0) {
+            return new JSONResult("更新失败");
+        } else {
+            return new JSONResult("更新成功");
+        }
     }
 }

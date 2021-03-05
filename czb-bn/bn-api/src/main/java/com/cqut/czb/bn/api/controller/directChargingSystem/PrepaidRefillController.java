@@ -60,4 +60,9 @@ public class PrepaidRefillController {
         User user = (User)redisUtils.get(principal.getName());
         return new JSONResult(prepaidRefillService.getInfoNum(user.getUserId()));
     }
+
+    @PostMapping("/updateDirectRecharge")
+    public JSONResult updateDirectRecharge(int status) {
+        return prepaidRefillService.updateDirectRecharge(status);
+    }
 }
