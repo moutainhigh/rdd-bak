@@ -541,9 +541,12 @@ public class IntegralServiceImpl implements IntegralService {
             return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("1", null));
         }
         if(type.equals("3")) {
-            return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("2", "3"));
+            return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("2", null));
         }
         if(type.equals("4")) {
+            return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("3", null));
+        }
+        if (type.equals("5")) {
             return new JSONResult(equityPaymentCommodityMapperExtra.selectAllCommodityTitle());
         }
         if (commodityId != null || !commodityId.equals("")) {
@@ -561,10 +564,10 @@ public class IntegralServiceImpl implements IntegralService {
         if (integralDeductionInfo.getDeductionType() == 1) {
             return new JSONResult(weChatCommodityMapperExtra.getCommodityPrice(integralDeductionInfo));
         }
-        if (integralDeductionInfo.getDeductionType() == 2 || integralDeductionInfo.getDeductionType() == 3) {
+        if (integralDeductionInfo.getDeductionType() == 2 || integralDeductionInfo.getDeductionType() == 3 || integralDeductionInfo.getDeductionType() == 4) {
             return new JSONResult(directChargingCommodityMapperExtra.getCommodityPriceByCommodityId(integralDeductionInfo.getCommodityId()));
         }
-        if (integralDeductionInfo.getDeductionType() == 4) {
+        if (integralDeductionInfo.getDeductionType() == 5) {
             return new JSONResult(equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(integralDeductionInfo.getCommodityId()).getSellingPrice());
         }
         else {

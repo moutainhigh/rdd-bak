@@ -38,6 +38,7 @@
         CONCAT(goods_title,"  价格为：",IFNULL(selling_price,0),"元") as name,
         true as isLeaf
         from czb_equity_payment_commodity
+        where is_delete = 0
     </select>
     <select id="selectCommodityByGoodsId" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
