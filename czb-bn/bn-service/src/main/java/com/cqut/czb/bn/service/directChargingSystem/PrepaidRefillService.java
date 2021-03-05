@@ -27,4 +27,6 @@ public interface PrepaidRefillService {
     JSONResult saleStatusCommodity(String commodityIds, Integer state);
 
     JSONResult updateDirectRecharge(int status);
+
+    JSONResult getDirectRecharge();
 }

@@ -65,4 +65,9 @@ public class PrepaidRefillController {
     public JSONResult updateDirectRecharge(int status) {
         return prepaidRefillService.updateDirectRecharge(status);
     }
+
+    @GetMapping("/getDirectRecharge")
+    public JSONResult getDirectRecharge() {
+        return prepaidRefillService.getDirectRecharge();
+    }
 }

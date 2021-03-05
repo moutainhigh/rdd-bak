@@ -253,7 +253,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     Object[] param = { params };
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
-                        if (dictMapperExtra.selectDictByName("is_direct_recharge").equals("0")) {
+                        if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
                             return new String("尚未开通充值");
                         }
                         if (directChargingOrderDto.getRecordType()==1){

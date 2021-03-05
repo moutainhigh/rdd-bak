@@ -78,4 +78,13 @@ public class PrepaidRefillServiceImpl implements PrepaidRefillService {
             return new JSONResult("更新成功");
         }
     }
+
+    @Override
+    public JSONResult getDirectRecharge() {
+        try {
+            return new JSONResult(Integer.parseInt(dictMapperExtra.selectDictByName("is_direct_recharge").getContent()));
+        } catch (Exception e) {
+            return new JSONResult("直充状态出错");
+        }
+    }
 }
