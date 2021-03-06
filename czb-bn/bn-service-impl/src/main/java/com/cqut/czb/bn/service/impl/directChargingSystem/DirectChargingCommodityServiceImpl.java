@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.directChargingSystem;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingCommodityMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingCommodityDto;
+import com.cqut.czb.bn.entity.dto.integral.IntegralDeductionInfoDTO;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingCommodityService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,9 +18,9 @@ public class DirectChargingCommodityServiceImpl implements DirectChargingCommodi
     DirectChargingCommodityMapperExtra directChargingCommodityMapperExtra;
 
     @Override
-    public PageInfo<DirectChargingCommodityDto> getAllCommodity(PageDTO pageDTO) {
+    public PageInfo<IntegralDeductionInfoDTO> getAllCommodity(PageDTO pageDTO) {
         PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        List<DirectChargingCommodityDto> directChargingCommodityDtoList = directChargingCommodityMapperExtra.getAllCommodity();
+        List<IntegralDeductionInfoDTO> directChargingCommodityDtoList = directChargingCommodityMapperExtra.getAllCommodity();
         return new PageInfo<>(directChargingCommodityDtoList);
     }
 }
