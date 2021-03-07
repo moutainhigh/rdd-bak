@@ -29,11 +29,20 @@ public class DirectChargingPartnerController {
         return new JSONResult(directChargingPartnerService.getDirectChargingPartnerList(directChargingOrderDto));
     }
 
+    /**
+     * 获取直充合伙人详情
+     * @param directChargingOrderDto
+     * @return
+     */
     @GetMapping("/getDirectChargingPartnerOrder")
     public JSONResult getDirectChargingPartnerOrder(DirectChargingOrderDto directChargingOrderDto) {
         return new JSONResult(directChargingPartnerService.getDirectChargingPartnerOrder(directChargingOrderDto));
     }
 
+    /**
+     * 获取总额
+     * @return
+     */
     @GetMapping("/getTotalRechargeAmount")
     public JSONResult getTotalRechargeAmount() {
         return directChargingPartnerService.getTotalRechargeAmount();
