@@ -31,5 +31,10 @@ public class DirectChargingPartnerServiceImpl implements DirectChargingPartnerSe
         return new PageInfo<>(directChargingOrderDtoList);
     }
 
+    @Override
+    public JSONResult getTotalRechargeAmount() {
+        return new JSONResult(directChargingOrderMapperExtra.getTotalRechargeAmount());
+    }
+
 
 }

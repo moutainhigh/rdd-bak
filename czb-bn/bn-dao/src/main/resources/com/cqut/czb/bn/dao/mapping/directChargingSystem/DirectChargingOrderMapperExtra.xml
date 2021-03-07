@@ -54,4 +54,9 @@
             </if>
         ORDER BY t1.create_at DESC
     </select>
+
+    <select id="getTotalRechargeAmount" resultType="double">
+        SELECT SUM(IFNULL(recharge_amount,0)) AS total
+        FROM czb_direct_charging_order
+    </select>
 </mapper>

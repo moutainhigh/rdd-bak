@@ -33,4 +33,9 @@ public class DirectChargingPartnerController {
     public JSONResult getDirectChargingPartnerOrder(DirectChargingOrderDto directChargingOrderDto) {
         return new JSONResult(directChargingPartnerService.getDirectChargingPartnerOrder(directChargingOrderDto));
     }
+
+    @GetMapping("/getTotalRechargeAmount")
+    public JSONResult getTotalRechargeAmount() {
+        return directChargingPartnerService.getTotalRechargeAmount();
+    }
 }
