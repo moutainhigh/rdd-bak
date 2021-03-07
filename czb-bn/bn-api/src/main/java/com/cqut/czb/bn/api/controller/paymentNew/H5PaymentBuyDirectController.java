@@ -40,8 +40,8 @@ public class H5PaymentBuyDirectController {
     @RequestMapping(value = "/AlipayRechargeDirect", method = RequestMethod.POST)
     public JSONResult AlipayRechargeDirect(Principal principal, @RequestBody DirectChargingOrderDto directChargingOrderDto) {
 //        if (directChargingOrderDto.getIsNeedLogin() == 1) {
-            User user = (User)redisUtils.get(principal.getName());
-            directChargingOrderDto.setUserId(user.getUserId());
+        User user = (User)redisUtils.get(principal.getName());
+        directChargingOrderDto.setUserId(user.getUserId());
 //        }
 //        User user = (User)redisUtils.get(principal.getName());
 //        directChargingOrderDto.setUserId(user.getUserId());
@@ -64,7 +64,6 @@ public class H5PaymentBuyDirectController {
 //        user.setUserId("155892403286206");
 //        rechargeVipDTO.setArea("重庆市");
         User user = (User)redisUtils.get(principal.getName());
-        directChargingOrderDto.setUserId(user.getUserId());
         directChargingOrderDto.setUserId(user.getUserId());
         JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
         if(info==null){

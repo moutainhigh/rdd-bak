@@ -176,6 +176,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String userAccount = directChargingOrderDto.getUserAccount();
         String cardholder = directChargingOrderDto.getCardholder();
         String rechargeAccount = directChargingOrderDto.getRechargeAccount();
+        Integer integralAmount = directChargingOrderDto.getIntegralAmount();
         String cardNum = "";
         if (recordType == 2){
             cardNum = directChargingOrderDto.getPetrolChinaPetrolNum();
@@ -185,9 +186,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         request.setReturnUrl(AliPayConfig.Return_url);
 //        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
         if (recordType == 1){
-            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum,cardholder,rechargeAccount));
+            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount));
         }else{
-            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount,cardholder,rechargeAccount));
+            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount,cardholder,rechargeAccount,integralAmount));
         }
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {
@@ -254,12 +255,15 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
+                            System.out.println("尚未开通充值");
                             return new String("尚未开通充值");
                         }
                         if (directChargingOrderDto.getRecordType()==1){
+                            System.out.println("开通充值");
                             phoneRechargeSubmission(directChargingOrderDto);
                             System.out.println("充值参数"+directChargingOrderDto.toString());
                         }else{
+                            System.out.println("开通充值");
                             onlineorderSubmission(directChargingOrderDto);
                         }
                         return AlipayConfig.response_success;
