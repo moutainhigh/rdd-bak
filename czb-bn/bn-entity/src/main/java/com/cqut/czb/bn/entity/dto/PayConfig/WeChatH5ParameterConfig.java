@@ -43,11 +43,11 @@ public class WeChatH5ParameterConfig {
     /**
      * 直充服务
      */
-    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser) {
+    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser, String userId, Integer integralAmount) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters = getParameters();
-        String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount);
+        String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount, userId, integralAmount);
         parameters.put("attach",attach);
         if (isBrowser == 0) {
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
@@ -73,13 +73,15 @@ public class WeChatH5ParameterConfig {
     /**
      * 微信支付——订单格外数据(直充）
      */
-    public static String getAttachDirect(String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount) {
+    public static String getAttachDirect(String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, String userId, Integer integralAmount) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orderId", orgId);
         pbp.put("rechargeAmount", rechargeAmount);
 //        pbp.put("userId", userId);
         pbp.put("recordType",String.valueOf(recordType));
         pbp.put("userAccount",userAccount);
+        pbp.put("userId",userId);
+        pbp.put("integralAmount",integralAmount);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -92,13 +94,14 @@ public class WeChatH5ParameterConfig {
      * @param commodityId
      * @return
      */
-    private static String getAttachAppletPayment(String orgId, String userId,String stockIds, Double money, String commodityId) {
+    private static String getAttachAppletPayment(String orgId, String userId,String stockIds, Double money, String commodityId,int integralAmount) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", orgId);
         pbp.put("ownerId", userId);
         pbp.put("money",money);
         pbp.put("commodityId",commodityId);
         pbp.put("stockIds",stockIds);
+        pbp.put("integralAmount",integralAmount);
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -154,7 +157,7 @@ public class WeChatH5ParameterConfig {
     }
 
     //微信库存商品使用
-    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity){
+    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity,int integralAmount){
         SortedMap<String,Object> parameters = new TreeMap<String, Object>();
         parameters=getParameters();
         parameters.put("appid", WeChatH5PayConfig.app_id);
@@ -166,7 +169,7 @@ public class WeChatH5ParameterConfig {
         parameters.put("total_fee",totalFee);
         parameters.put("notify_url",WeChatH5PayConfig.Applet_url);
         parameters.put("detail","微信石化码商支付");
-        String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId());
+        String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId(),integralAmount);
         parameters.put("attach",attach);
         parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
         return parameters;

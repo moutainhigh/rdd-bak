@@ -425,6 +425,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         String userAccount = "";
         int recordType = 0;
         String cardNum = "";
+        String userId = "";
+        int integralAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -442,6 +444,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if ("userAccount".equals(temp[0])) {
                 userAccount = temp[1];
             }
+            if ("userId".equals(temp[0])) {
+                userId = temp[1];
+            }
         }
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
         directChargingOrderDto.setOrderId(orgId);
@@ -456,6 +461,21 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         System.out.println("更新成功");
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
+
+        //插入log记录
+        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+        integralLogDTO.setOrderId(orgId);
+        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        integralLogDTO.setUserId(userId);
+        integralLogDTO.setIntegralLogType(4);
+        integralLogDTO.setIntegralAmount(integralAmount);
+        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getIntegralAmount() + integralLogDTO.getBeforeIntegralAmount());
+        integralInfoDTO.setUserId(userId);
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal() + integralLogDTO.getIntegralAmount());
+        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
         return 1;
     }
 

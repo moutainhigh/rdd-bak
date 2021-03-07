@@ -37,6 +37,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer isBrowser;
 
+    private Integer integralAmount;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
@@ -211,6 +213,14 @@ public class DirectChargingOrderDto extends PageDTO {
         this.isBrowser = isBrowser;
     }
 
+    public Integer getIntegralAmount() {
+        return integralAmount;
+    }
+
+    public void setIntegralAmount(Integer integralAmount) {
+        this.integralAmount = integralAmount;
+    }
+
     @Override
     public String toString() {
         return "DirectChargingOrderDto{" +
@@ -229,6 +239,7 @@ public class DirectChargingOrderDto extends PageDTO {
                 ", rechargeAccount='" + rechargeAccount + '\'' +
                 ", cardholder='" + cardholder + '\'' +
                 ", isBrowser=" + isBrowser +
+                ", integralAmount=" + integralAmount +
                 ", createAt=" + createAt +
                 ", updateAt=" + updateAt +
                 ", startTime=" + startTime +

@@ -165,11 +165,12 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
 
         double money= (double) map.get("money");
         double fyMoney= (double) map.get("fyMoney");
+        int integralAmount = payInputDTO.getIntegralAmount();
 
         //插入订单
         inputOrder(orgId, weChatCommodity,user,payInputDTO,fyMoney,money,ids,2);
 
-        SortedMap<String,Object> parameters = WeChatH5ParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity);
+        SortedMap<String,Object> parameters = WeChatH5ParameterConfig.getParametersPaymentApplet(user.getUserAccount(),money,nonceStrTemp,orgId,stockIds,user.getUserId(),weChatCommodity,integralAmount);
         JSONObject jsonObject = WeChatParameterConfig.getSign(parameters,nonceStrTemp);
 
         return getBackObject(jsonObject);

@@ -21,6 +21,8 @@ public class PayInputDTO {
     //属性id
     private String commodityAttrIds;
 
+    private Integer integralAmount;
+
 
     public String getCommodityAttrIds() {
         return commodityAttrIds;
@@ -70,4 +72,11 @@ public class PayInputDTO {
         this.commodityNum = commodityNum;
     }
 
+    public Integer getIntegralAmount() {
+        return integralAmount;
+    }
+
+    public void setIntegralAmount(Integer integralAmount) {
+        this.integralAmount = integralAmount;
+    }
 }
