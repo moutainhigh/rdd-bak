@@ -10,4 +10,6 @@ public interface DirectChargingOrderMapperExtra {
     List<DirectChargingOrderDto> getDirectChargingPartnerOrder(DirectChargingOrderDto directChargingOrderDto);
 
     double getTotalRechargeAmount();
+
+    double getUserTotalRechargeAmount(String userId);
 }

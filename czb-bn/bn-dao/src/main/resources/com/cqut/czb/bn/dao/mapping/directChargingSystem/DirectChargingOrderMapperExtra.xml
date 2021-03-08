@@ -68,4 +68,10 @@
                 LEFT JOIN czb_role t3 ON t2.role_id = t3.role_id
         WHERE t3.role_name = '直充合伙人'
     </select>
+
+    <select id="getUserTotalRechargeAmount" resultType="double">
+        SELECT SUM(recharge_amount)
+        FROM czb_direct_charging_order
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
