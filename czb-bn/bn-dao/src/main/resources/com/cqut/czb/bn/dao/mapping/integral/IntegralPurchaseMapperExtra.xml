@@ -77,6 +77,7 @@
         insert into
         czb_equity_payment_order (
           order_id,
+          user_id,
           recharge_account,
           product_code,
           buy_num,
@@ -89,6 +90,7 @@
           update_at
         ) values (
             #{orderId,jdbcType=VARCHAR},
+            #{userId,jdbcType=VARCHAR},
             #{account,jdbcType=VARCHAR},
             #{productCode,jdbcType=VARCHAR},
             #{buyNum,jdbcType=INTEGER},
@@ -109,4 +111,21 @@
         where
             user_id = #{userId,jdbcType=VARCHAR}
     </update>
+
+    <select id="getEquityGoodsRecord" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO">
+        select order_id orderId,
+               recharge_account account,
+               goods_id goodsId,
+               pay_price payPrice,
+               third_order thirdOrder,
+               product_code productCode,
+               client_ip clientIP,
+               buy_num buyNum,
+               code code,
+               purchase_price purchasePrice,
+               selling_price sellingPrice,
+               unit_price unitPrice
+        from czb_equity_payment_order
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -35,8 +35,8 @@ public class H5PaymentBuyIntegralController {
      */
     @RequestMapping(value = "/WeChatBuyIntegral", method = RequestMethod.POST)
     public JSONResult WeChatRechargeDirect(Principal principal, @RequestBody IntegralRechargeDTO integralRechargeDTO) {
-//        User user = (User)redisUtils.get(principal.getName());
-        User user = new User();
+        User user = (User)redisUtils.get(principal.getName());
+//        User user = new User();
         JSONObject info =h5PaymentBuyIntegralService.WeChatBuyIntegral(user, integralRechargeDTO);
         if(info==null){
             return new JSONResult("购买失败", ResponseCodeConstants.FAILURE);

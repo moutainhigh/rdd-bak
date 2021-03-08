@@ -20,12 +20,14 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.DealWithPetrolCouponsService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
+import com.cqut.czb.bn.service.impl.equityPaymentServiceImpl.EquityPaymentThirdImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -194,6 +196,7 @@ public class PayBackServiceImpl implements PayBackService {
         System.out.println("微信小程序支付:"+money);
         String ownerId = "";
         String stockIds = "";
+        int integralAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {
@@ -206,6 +209,10 @@ public class PayBackServiceImpl implements PayBackService {
             //用户id
             if ("ownerId".equals(temp[0])) {
                 ownerId = temp[1];
+            }
+
+            if("integralAmount".equals(temp[0])){
+                integralAmount = Integer.valueOf(temp[1]);
             }
 
             if("stockIds".equals(temp[0])){
@@ -287,6 +294,21 @@ public class PayBackServiceImpl implements PayBackService {
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
 
+        //插入log记录
+        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
+        integralLogDTO.setOrderId(orgId);
+        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        integralLogDTO.setUserId(ownerId);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setIntegralAmount(integralAmount);
+        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setUserId(ownerId);
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+
         return 1;
     }
 
@@ -304,6 +326,7 @@ public class PayBackServiceImpl implements PayBackService {
         String ownerId = "";
         String stockIds = "";
         double money = 0.0 ;
+        int integralAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {
@@ -325,6 +348,10 @@ public class PayBackServiceImpl implements PayBackService {
 
             if("stockIds".equals(temp[0])){
                 stockIds = temp[1];
+            }
+
+            if("integralAmount".equals(temp[0])){
+                integralAmount = Integer.valueOf(temp[1]);
             }
         }
         System.out.println(ownerId);
@@ -402,6 +429,20 @@ public class PayBackServiceImpl implements PayBackService {
         //插入消费记录
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 1);
 
+        //插入log记录
+        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
+        integralLogDTO.setOrderId(orgId);
+        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        integralLogDTO.setUserId(ownerId);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setIntegralAmount(integralAmount);
+        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setUserId(ownerId);
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
         return 1;
     }
     /**
@@ -554,6 +595,22 @@ public class PayBackServiceImpl implements PayBackService {
                 rechargeType = Integer.valueOf(temp[1]);
             }
         }
+
+        // 获取订单信息
+        EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
+        equityPaymentDTO1.setOrderId(orderId);
+        EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
+        equityPaymentDTO2.toString();
+        JSONResult<String> stringJSONResult = null;
+        if(equityPaymentDTO2.getRechargeType() == 1){
+            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+        }else if (equityPaymentDTO2.getRechargeType() == 2){
+            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+        }else {
+            throw new RuntimeException("充值类型错误！");
+        }
+        System.out.println(stringJSONResult);
+
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
         equityPaymentDTO.setOrderId(orderId);
@@ -700,6 +757,21 @@ public class PayBackServiceImpl implements PayBackService {
                 rechargeType = Integer.valueOf(temp[1]);
             }
         }
+
+        // 获取订单信息
+        EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
+        equityPaymentDTO1.setOrderId(orderId);
+        EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
+        equityPaymentDTO2.toString();
+        JSONResult<String> stringJSONResult = null;
+        if(equityPaymentDTO2.getRechargeType() == 1){
+            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+        }else if (equityPaymentDTO2.getRechargeType() == 2){
+            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+        }else {
+            throw new RuntimeException("充值类型错误！");
+        }
+        System.out.println(stringJSONResult);
 
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();

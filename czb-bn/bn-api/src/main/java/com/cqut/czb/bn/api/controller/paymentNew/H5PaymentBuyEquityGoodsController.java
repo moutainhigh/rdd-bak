@@ -32,13 +32,13 @@ public class H5PaymentBuyEquityGoodsController {
      */
     @RequestMapping(value = "/WeChatBuyEquityGoods", method = RequestMethod.POST)
     public JSONResult WeChatRechargeDirect(Principal principal, @RequestBody EquityPaymentDTO equityPaymentDTO) {
-//        User user = (User)redisUtils.get(principal.getName());
-        User user = new User();
+        User user = (User)redisUtils.get(principal.getName());
+//        User user = new User();
         JSONObject info =h5PaymentBuyEquityGoodsService.WeChatBuyEquityGoods(user, equityPaymentDTO);
         if(info==null){
             return new JSONResult("购买失败", ResponseCodeConstants.FAILURE);
         }else {
-            return  new JSONResult("购买成功",200,info);
+            return new JSONResult("购买成功",200,info);
         }
     }
     @RequestMapping(value = "AliBuyEquityGoods",method = RequestMethod.POST)
@@ -49,7 +49,7 @@ public class H5PaymentBuyEquityGoodsController {
         if(info==null){
             return new JSONResult("无法生成订单", ResponseCodeConstants.FAILURE);
         }else {
-            return  new JSONResult("购买成功",200,info);
+            return new JSONResult("购买成功",200,info);
         }
     }
 }

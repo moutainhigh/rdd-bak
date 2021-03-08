@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapperExtra" >
+    <select id="getDirectChargingPartnerList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        t1.user_id userId,
+        SUM( t4.recharge_amount ) rechargeAmount,
+        MAX( t4.create_at ) createAt,
+        t1.user_account userAccount
+        FROM
+        czb_user t1
+        LEFT JOIN czb_user_role t2 ON t1.user_id = t2.user_id
+        LEFT JOIN czb_role t3 ON t3.role_id = t2.role_id
+        LEFT JOIN czb_direct_charging_order t4 ON t4.user_id = t1.user_id
+        WHERE
+        t3.role_name = '直充合伙人'
+        GROUP BY
+        t1.user_id
+        ) AS fnd
+        WHERE 1 = 1
+            <if test="startTime!=null and endTime!=null">
+                AND fnd.createAt &gt;= #{startTime}
+                AND fnd.createAt &lt;= #{endTime}
+            </if>
+            <if test="userAccount!=null and userAccount!=''">
+                AND fnd.userAccount LIKE CONCAT('%',#{userAccount},'%')
+            </if>
+        ORDER BY fnd.createAt DESC
+    </select>
+
+    <select id="getDirectChargingPartnerOrder" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            t2.user_account userAccount,
+            t1.recharge_account rechargeAccount,
+            t1.recharge_amount rechargeAmount,
+            t1.record_type recordType,
+            t1.create_at createAt
+        FROM
+            czb_direct_charging_order t1
+                LEFT JOIN czb_user t2 ON t1.user_id = t2.user_id
+        WHERE 1 = 1
+            <if test="userId != null and userId != ''">
+                AND t1.user_id = #{userId}
+            </if>
+            <if test="recordType != null and recordType != ''">
+                AND t1.record_type = #{recordType}
+            </if>
+            <if test="startTime != null and endTime != null">
+                AND t1.create_at &gt;= #{startTime}
+                AND t1.create_at &lt;= #{endTime}
+            </if>
+            <if test="rechargeAccount != null and rechargeAccount != ''">
+                AND t1.recharge_account LIKE CONCAT('%',#{rechargeAccount},'%')
+            </if>
+        ORDER BY t1.create_at DESC
+    </select>
+
+    <select id="getTotalRechargeAmount" resultType="double">
+        SELECT
+            SUM(t1.recharge_amount)
+        FROM
+            czb_direct_charging_order t1
+                LEFT JOIN czb_user_role t2 ON t1.user_id = t2.user_id
+                LEFT JOIN czb_role t3 ON t2.role_id = t3.role_id
+        WHERE t3.role_name = '直充合伙人'
+    </select>
+
+    <select id="getUserTotalRechargeAmount" resultType="double">
+        SELECT SUM(recharge_amount)
+        FROM czb_direct_charging_order
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

@@ -7,6 +7,8 @@ public class EquityPaymentDTO {
     // 订单号
     private String orderId;
 
+    private String userId;
+
     // 充值账号
     private String account;
 
@@ -316,5 +318,49 @@ public class EquityPaymentDTO {
 
     public void setGoodsType(Integer goodsType) {
         this.goodsType = goodsType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "权益商品：EquityPaymentDTO{" +
+                "orderId='" + orderId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", account='" + account + '\'' +
+                ", productCode='" + productCode + '\'' +
+                ", buyNum=" + buyNum +
+                ", isCallBack=" + isCallBack +
+                ", tradeType=" + tradeType +
+                ", clientIP='" + clientIP + '\'' +
+                ", unitPrice=" + unitPrice +
+                ", sellingPrice='" + sellingPrice + '\'' +
+                ", purchasePrice='" + purchasePrice + '\'' +
+                ", payPrice='" + payPrice + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", goodsId='" + goodsId + '\'' +
+                ", orderState='" + orderState + '\'' +
+                ", goodsTitle='" + goodsTitle + '\'' +
+                ", goodsPic='" + goodsPic + '\'' +
+                ", isGame=" + isGame +
+                ", amount=" + amount +
+                ", integralAmount=" + integralAmount +
+                ", rechargeType=" + rechargeType +
+                ", thirdOrder='" + thirdOrder + '\'' +
+                ", payMethod=" + payMethod +
+                ", code='" + code + '\'' +
+                ", pic='" + pic + '\'' +
+                ", goodsType=" + goodsType +
+                ", isBrowser=" + isBrowser +
+                ", createAt=" + createAt +
+                ", beginDate='" + beginDate + '\'' +
+                ", overDate='" + overDate + '\'' +
+                '}';
     }
 }
