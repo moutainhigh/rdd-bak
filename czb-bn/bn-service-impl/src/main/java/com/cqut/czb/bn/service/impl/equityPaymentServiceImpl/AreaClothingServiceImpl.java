@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,11 +30,14 @@ public class AreaClothingServiceImpl implements AreaClothingService {
     @Override
     public JSONResult insertAreaClothing(EquityPaymentAreaClothingDTO equityPaymentAreaClothingDTO) {
         equityPaymentAreaClothingDTO.setAreaId(StringUtil.createId());
+        equityPaymentAreaClothingDTO.setUpdateAt(new Date());
+        equityPaymentAreaClothingDTO.setCreateAt(new Date());
         return new JSONResult(equityPaymentAreaClothingMapperExtra.insertAreaClothing(equityPaymentAreaClothingDTO));
     }
 
     @Override
     public JSONResult updateAreaClothing(EquityPaymentAreaClothingDTO equityPaymentAreaClothingDTO) {
+        equityPaymentAreaClothingDTO.setUpdateAt(new Date());
         return new JSONResult(equityPaymentAreaClothingMapperExtra.updateAreaClothing(equityPaymentAreaClothingDTO));
     }
 
