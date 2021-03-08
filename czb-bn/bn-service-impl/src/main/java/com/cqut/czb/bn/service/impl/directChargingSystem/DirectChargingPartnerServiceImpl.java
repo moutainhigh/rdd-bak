@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl.directChargingSystem;
 
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingPartnerService;
 import com.github.pagehelper.PageHelper;
@@ -34,6 +35,11 @@ public class DirectChargingPartnerServiceImpl implements DirectChargingPartnerSe
     @Override
     public JSONResult getTotalRechargeAmount() {
         return new JSONResult(directChargingOrderMapperExtra.getTotalRechargeAmount());
+    }
+
+    @Override
+    public JSONResult getUserTotalRechargeAmount(User user) {
+        return new JSONResult(directChargingOrderMapperExtra.getUserTotalRechargeAmount(user.getUserId()));
     }
 
 

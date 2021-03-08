@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingPartnerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,13 @@ public class DirectChargingPartnerController {
     @GetMapping("/getTotalRechargeAmount")
     public JSONResult getTotalRechargeAmount() {
         return directChargingPartnerService.getTotalRechargeAmount();
+    }
+
+    /**
+     * 获取个人的总额
+     */
+    @GetMapping("/getUserTotalRechargeAmount")
+    public JSONResult getUserTotalRechargeAmount(User user) {
+        return directChargingPartnerService.getUserTotalRechargeAmount(user);
     }
 }
