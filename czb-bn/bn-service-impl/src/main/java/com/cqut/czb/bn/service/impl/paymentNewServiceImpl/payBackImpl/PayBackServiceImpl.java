@@ -20,12 +20,14 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatGoodsDeliveryRecords;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.DataProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.DealWithPetrolCouponsService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
+import com.cqut.czb.bn.service.impl.equityPaymentServiceImpl.EquityPaymentThirdImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -599,6 +601,15 @@ public class PayBackServiceImpl implements PayBackService {
         equityPaymentDTO1.setOrderId(orderId);
         EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
         equityPaymentDTO2.toString();
+        JSONResult<String> stringJSONResult = null;
+        if(equityPaymentDTO2.getRechargeType() == 1){
+            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+        }else if (equityPaymentDTO2.getRechargeType() == 2){
+            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+        }else {
+            throw new RuntimeException("充值类型错误！");
+        }
+        System.out.println(stringJSONResult);
 
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
@@ -752,6 +763,15 @@ public class PayBackServiceImpl implements PayBackService {
         equityPaymentDTO1.setOrderId(orderId);
         EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
         equityPaymentDTO2.toString();
+        JSONResult<String> stringJSONResult = null;
+        if(equityPaymentDTO2.getRechargeType() == 1){
+            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+        }else if (equityPaymentDTO2.getRechargeType() == 2){
+            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+        }else {
+            throw new RuntimeException("充值类型错误！");
+        }
+        System.out.println(stringJSONResult);
 
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
