@@ -593,6 +593,13 @@ public class PayBackServiceImpl implements PayBackService {
                 rechargeType = Integer.valueOf(temp[1]);
             }
         }
+
+        // 获取订单信息
+        EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
+        equityPaymentDTO1.setOrderId(orderId);
+        EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
+        equityPaymentDTO2.toString();
+
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
         equityPaymentDTO.setOrderId(orderId);
@@ -739,6 +746,12 @@ public class PayBackServiceImpl implements PayBackService {
                 rechargeType = Integer.valueOf(temp[1]);
             }
         }
+
+        // 获取订单信息
+        EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
+        equityPaymentDTO1.setOrderId(orderId);
+        EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
+        equityPaymentDTO2.toString();
 
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();

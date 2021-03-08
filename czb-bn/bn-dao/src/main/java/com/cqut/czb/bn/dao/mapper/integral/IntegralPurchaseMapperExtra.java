@@ -22,4 +22,6 @@ public interface IntegralPurchaseMapperExtra {
     int updateIntegralInfo(IntegralInfoDTO integralInfoDTO);
 
     int updateSoldNumber(EquityPaymentDTO equityPaymentDTO);
+
+    EquityPaymentDTO getEquityGoodsRecord(EquityPaymentDTO equityPaymentDTO);
 }

@@ -23,6 +23,8 @@ public class PayInputDTO {
 
     private Integer integralAmount;
 
+    private Double price;
+
 
     public String getCommodityAttrIds() {
         return commodityAttrIds;
@@ -78,5 +80,13 @@ public class PayInputDTO {
 
     public void setIntegralAmount(Integer integralAmount) {
         this.integralAmount = integralAmount;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

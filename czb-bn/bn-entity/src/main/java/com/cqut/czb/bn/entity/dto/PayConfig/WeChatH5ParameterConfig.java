@@ -54,7 +54,10 @@ public class WeChatH5ParameterConfig {
         } else if (isBrowser == 1) {
             parameters.put("trade_type", "JSAPI");
         } else if (isBrowser == 2) {
-            parameters.put("trade_type", "APP");
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         }
         parameters.put("detail","微信支付直充服务");//支付的类容备注
         parameters.put("nonce_str", nonceStrTemp);
@@ -191,8 +194,10 @@ public class WeChatH5ParameterConfig {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
         } else if (equityPaymentDTO.getIsBrowser() == 2) {
-            parameters.put("trade_type", "APP");
-            parameters.put("appid", "wx1d9987e1abf4c05e");
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         }
         System.out.println("9999"+parameters);
         parameters.put("attach",attach);
@@ -217,18 +222,18 @@ public class WeChatH5ParameterConfig {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("userId", userId);
         pbp.put("orderId", orderId);
-        pbp.put("amount", equityPaymentDTO.getAmount());
-        pbp.put("account",equityPaymentDTO.getAccount());
-        pbp.put("productCode",equityPaymentDTO.getProductCode());
+//        pbp.put("amount", equityPaymentDTO.getAmount());
+//        pbp.put("account",equityPaymentDTO.getAccount());
+//        pbp.put("productCode",equityPaymentDTO.getProductCode());
         pbp.put("buyNum",equityPaymentDTO.getBuyNum());
-        pbp.put("isCallBack",equityPaymentDTO.getIsCallBack());
-        pbp.put("tradeType",equityPaymentDTO.getTradeType());
-        pbp.put("clientIP",equityPaymentDTO.getClientIP());
-        pbp.put("unitPrice",equityPaymentDTO.getUnitPrice());
-        pbp.put("totalPrice",equityPaymentDTO.getTotalPrice());
+//        pbp.put("isCallBack",equityPaymentDTO.getIsCallBack());
+//        pbp.put("tradeType",equityPaymentDTO.getTradeType());
+//        pbp.put("clientIP",equityPaymentDTO.getClientIP());
+//        pbp.put("unitPrice",equityPaymentDTO.getUnitPrice());
+//        pbp.put("totalPrice",equityPaymentDTO.getTotalPrice());
         pbp.put("goodsId",equityPaymentDTO.getGoodsId());
-        pbp.put("integralAmount",equityPaymentDTO.getIntegralAmount());
-        pbp.put("rechargeType",equityPaymentDTO.getProductCode());
+//        pbp.put("integralAmount",equityPaymentDTO.getIntegralAmount());
+//        pbp.put("rechargeType",equityPaymentDTO.getProductCode());
         return StringUtil.transMapToStringOther(pbp);
     }
 
