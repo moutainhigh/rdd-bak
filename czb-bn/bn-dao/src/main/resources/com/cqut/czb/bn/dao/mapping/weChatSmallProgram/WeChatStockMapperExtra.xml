@@ -16,6 +16,17 @@
             </foreach>
         </where>
     </select>
+
+    <select id="getIsBuyer"  resultType="java.util.List" parameterType="java.util.List">
+        SELECT buyer_id
+        FROM czb_wechat_stock
+        <where>
+            <foreach collection="ids" item="item" index="index" >
+                stock_id like concat('%',#{item,jdbcType=VARCHAR},'%')
+            </foreach>
+        </where>
+    </select>
+
     <select id="getStockId" parameterType="java.util.Map" resultType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock">
      SELECT
       a.stock_id as stockId,

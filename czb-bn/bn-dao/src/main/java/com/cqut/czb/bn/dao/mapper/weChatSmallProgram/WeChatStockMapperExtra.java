@@ -66,4 +66,6 @@ public interface WeChatStockMapperExtra {
     int selectStockStateNotPay(@Param("userId") String userId);
 
     Integer updateNotPay(@Param("userId")String userId);
+
+    List<String> getIsBuyer(List<String> ids);
 }

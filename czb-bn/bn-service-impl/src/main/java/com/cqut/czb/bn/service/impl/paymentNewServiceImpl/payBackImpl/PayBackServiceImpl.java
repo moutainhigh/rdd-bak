@@ -28,6 +28,7 @@ import com.cqut.czb.bn.service.PaymentProcess.DealWithPetrolCouponsService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.PaymentProcess.PetrolRecharge;
 import com.cqut.czb.bn.service.impl.equityPaymentServiceImpl.EquityPaymentThirdImpl;
+import com.cqut.czb.bn.service.impl.paymentNewServiceImpl.H5PaymentBuyCommodityServiceImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -122,6 +123,9 @@ public class PayBackServiceImpl implements PayBackService {
     @Autowired
     WeChatStockMapperExtra weChatStockMapperExtra;
 
+    @Autowired
+    H5PaymentBuyCommodityServiceImpl h5PaymentBuyCommodityService;
+
     /**
      *
      * @Description： 支付宝回调
@@ -190,6 +194,7 @@ public class PayBackServiceImpl implements PayBackService {
         //微信交易订单号
         String thirdOrderId = restmap.get("transaction_id").toString();
         String[] temp;
+        int flag = 0;
         String orgId = "";
         double money = Double.valueOf(restmap.get("total_fee").toString());
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
@@ -231,85 +236,95 @@ public class PayBackServiceImpl implements PayBackService {
             weChatStock1.setStockId(weChatStock);
             ids.add(weChatStock1);
         }
-        //更改库存状态
-        int updateStock =  weChatStockMapperExtra.updateStockState(ids);
-        System.out.println("更改库存状态："+(updateStock>0));
 
-        //更改用户订单
-        WeChatCommodityOrder order=new WeChatCommodityOrder();
-        order.setOrderId(orgId);
-        order.setThirdOrder(thirdOrderId);
-        order.setUpdateAt(new Date());
-        order.setPayStatus(1);
-        order.setOrderState(1);
-        int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
-        System.out.println("更改用户订单："+(update>0));
+        if (h5PaymentBuyCommodityService.judgeChangeSte(0,null,null,ownerId,orgId,myList)) {
+            flag = 1;
+        } else {
+            return 0;
+        }
 
-        //判断是否邮寄
-        WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
-        WeChatCommodity weChatCommodity = weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
-        if(order1.getCommodityType()==1){
-            WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
-            records.setRecordId(StringUtil.createId());
-            records.setAddressId(order1.getAddressId());
-            records.setCreateAt(new Date());
-            records.setDeliveryState(0);
-            records.setOrderId(orgId);
-            weChatGoodsDeliveryRecordsMapper.insertSelective(records);
-        }else {
-            // 发送短信
-            //查出商家电话
-            Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
-            String title="";
-            if(weChatCommodity.getCommodityTitle().length()>20){
-                title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
+        if (flag == 1) {
+            //更改库存状态
+            int updateStock =  weChatStockMapperExtra.updateStockState(ids);
+            System.out.println("更改库存状态："+(updateStock>0));
+
+            //更改用户订单
+            WeChatCommodityOrder order=new WeChatCommodityOrder();
+            order.setOrderId(orgId);
+            order.setThirdOrder(thirdOrderId);
+            order.setUpdateAt(new Date());
+            order.setPayStatus(1);
+            order.setOrderState(1);
+            int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
+            System.out.println("更改用户订单："+(update>0));
+
+            //判断是否邮寄
+            WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
+            WeChatCommodity weChatCommodity = weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
+            if(order1.getCommodityType()==1){
+                WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
+                records.setRecordId(StringUtil.createId());
+                records.setAddressId(order1.getAddressId());
+                records.setCreateAt(new Date());
+                records.setDeliveryState(0);
+                records.setOrderId(orgId);
+                weChatGoodsDeliveryRecordsMapper.insertSelective(records);
             }else {
-                title=weChatCommodity.getCommodityTitle();
+                // 发送短信
+                //查出商家电话
+                Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
+                String title="";
+                if(weChatCommodity.getCommodityTitle().length()>20){
+                    title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
+                }else {
+                    title=weChatCommodity.getCommodityTitle();
+                }
+                PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode(),shop.getShopPhone());
             }
-            PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode(),shop.getShopPhone());
+
+            //更改商品数量
+            WeChatCommodity commodity=new WeChatCommodity();
+            commodity.setCommodityId(order1.getCommodityId());
+            //计算商品的总库存量
+            int num=weChatCommodity.getCommodityNum()-order1.getCommodityNum();
+            if(num>=0){
+                commodity.setCommodityNum(num);
+            }else {
+                commodity.setCommodityNum(0);
+            }
+            //计算商品的总销售量
+            int saleNum=weChatCommodity.getSalesVolume()+order1.getCommodityNum();
+            commodity.setSalesVolume(saleNum);
+            weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
+
+            //查询是否为首次消费
+            dataProcessService.isHaveConsumption(ownerId);
+
+            Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());
+            System.out.println("返佣"+isSucceed);
+
+            //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务，5为点餐,6小程序购物
+            //插入消费记录
+            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
+
+            //插入log记录
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
+            integralLogDTO.setOrderId(orgId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(ownerId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setIntegralAmount(integralAmount);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(ownerId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+
+            return 1;
         }
-
-        //更改商品数量
-        WeChatCommodity commodity=new WeChatCommodity();
-        commodity.setCommodityId(order1.getCommodityId());
-        //计算商品的总库存量
-        int num=weChatCommodity.getCommodityNum()-order1.getCommodityNum();
-        if(num>=0){
-            commodity.setCommodityNum(num);
-        }else {
-            commodity.setCommodityNum(0);
-        }
-        //计算商品的总销售量
-        int saleNum=weChatCommodity.getSalesVolume()+order1.getCommodityNum();
-        commodity.setSalesVolume(saleNum);
-        weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
-
-        //查询是否为首次消费
-        dataProcessService.isHaveConsumption(ownerId);
-
-        Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());
-        System.out.println("返佣"+isSucceed);
-
-        //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务，5为点餐,6小程序购物
-        //插入消费记录
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
-
-        //插入log记录
-        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
-        integralLogDTO.setOrderId(orgId);
-        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-        integralLogDTO.setUserId(ownerId);
-        integralLogDTO.setIntegralLogType(5);
-        integralLogDTO.setIntegralAmount(integralAmount);
-        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-
-        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-        integralInfoDTO.setUserId(ownerId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
-
-        return 1;
+        return 0;
     }
 
     /**
@@ -600,7 +615,8 @@ public class PayBackServiceImpl implements PayBackService {
         EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
         equityPaymentDTO1.setOrderId(orderId);
         EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
-        equityPaymentDTO2.toString();
+        equityPaymentDTO2.setRechargeType(rechargeType);
+        System.out.println(equityPaymentDTO2.toString());
         JSONResult<String> stringJSONResult = null;
         if(equityPaymentDTO2.getRechargeType() == 1){
             stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
@@ -726,52 +742,17 @@ public class PayBackServiceImpl implements PayBackService {
             if ("integralAmount".equals(temp[0])) {
                 integralAmount = Integer.valueOf(temp[1]);
             }
-            if ("amount".equals(temp[0])) {
-                amount = Double.valueOf(temp[1]);
-            }
-            if ("account".equals(temp[0])) {
-                account = temp[1];
-            }
-            if ("productCode".equals(temp[0])) {
-                productCode = temp[1];
-            }
             if ("buyNum".equals(temp[0])) {
                 buyNum = Integer.valueOf(temp[1]);
-            }
-            if ("isCallBack".equals(temp[0])) {
-                isCallBack = Integer.valueOf(temp[1]);
-            }
-            if ("tradeType".equals(temp[0])) {
-                tradeType = Integer.valueOf(temp[1]);
-            }
-            if ("unitPrice".equals(temp[0])) {
-                unitPrice = Double.valueOf(temp[1]);
-            }
-            if ("totalPrice".equals(temp[0])) {
-                totalPrice = Integer.valueOf(temp[1]);
-            }
-            if ("goodsId".equals(temp[0])) {
-                goodsId = temp[1];
             }
             if ("rechargeType".equals(temp[0])) {
                 rechargeType = Integer.valueOf(temp[1]);
             }
+            if ("goodsId".equals(temp[0])) {
+                goodsId = temp[1];
+            }
         }
 
-        // 获取订单信息
-        EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
-        equityPaymentDTO1.setOrderId(orderId);
-        EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
-        equityPaymentDTO2.toString();
-        JSONResult<String> stringJSONResult = null;
-        if(equityPaymentDTO2.getRechargeType() == 1){
-            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
-        }else if (equityPaymentDTO2.getRechargeType() == 2){
-            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
-        }else {
-            throw new RuntimeException("充值类型错误！");
-        }
-        System.out.println(stringJSONResult);
 
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
@@ -781,6 +762,23 @@ public class PayBackServiceImpl implements PayBackService {
         equityPaymentDTO.setBuyNum(buyNum);
         System.out.println("更新成功");
         boolean update = integralPurchaseMapperExtra.updateEquityGoodsRecord(equityPaymentDTO) > 0;
+
+        // 获取订单信息
+        System.out.println("获取订单信息");
+        EquityPaymentDTO equityPaymentDTO1  = new EquityPaymentDTO();
+        equityPaymentDTO1.setOrderId(orderId);
+        EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
+        equityPaymentDTO2.setRechargeType(rechargeType);
+        System.out.println(equityPaymentDTO2.toString());
+        JSONResult<String> stringJSONResult = null;
+        if(equityPaymentDTO2.getRechargeType() == 1){
+            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+        }else if (equityPaymentDTO2.getRechargeType() == 2){
+            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+        }else {
+            throw new RuntimeException("充值类型错误！");
+        }
+        System.out.println(stringJSONResult);
 
         //更新销量
         boolean updateSoldNumber = integralPurchaseMapperExtra.updateSoldNumber(equityPaymentDTO) > 0;

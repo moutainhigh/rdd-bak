@@ -18,6 +18,7 @@ import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.*;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
+import com.cqut.czb.bn.service.impl.paymentNewServiceImpl.payBackImpl.PayBackServiceImpl;
 import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyCommodityService;
 import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyIntegralService;
 import com.cqut.czb.bn.util.md5.MD5Util;
@@ -57,8 +58,35 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
     @Autowired
     DictMapperExtra dictMapperExtra;
 
+    @Autowired
+    PayBackServiceImpl payBackService;
+
     private ReentrantLock lock = new ReentrantLock();
 
+    public synchronized boolean judgeChangeSte(int flag,List<WeChatStock> ids,PayInputDTO payInputDTO,String userId,String orderId,List<String> myList) {
+        // 状态改变
+        if (flag == 0) {
+            // 判断锁定人和购买人是否一致
+            List<String> buyerIds = weChatStockMapperExtra.getIsBuyer(myList);
+            for (int i = 0; i < buyerIds.size(); i++) {
+                if (!buyerIds.get(i).equals(userId)) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (flag == 1) {
+            System.out.println("改变状态状态计时器");
+            int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+            if (weChatStocks != 0 && weChatStocks == payInputDTO.getCommodityNum()){
+                return false;
+            }else {
+                //修改回库存商品原来状态
+                weChatStockMapperExtra.update(ids);
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 微信小程序库存商品支付
      * @param user
@@ -134,6 +162,11 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         String stockIds = StringUtils.join(stockId,",");
         System.out.println(stockIds);
 
+
+//        judgeChangeSte(0,ids,payInputDTO,user);
+
+
+
         //修改状态
         boolean updateStock = weChatStockMapperExtra.updateStock(ids) > 0;
 
@@ -145,13 +178,10 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("改变状态状态计时器");
-                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
-                if (weChatStocks != 0 && weChatStocks == payInputDTO.getCommodityNum()){
+//                System.out.println("改变状态状态计时器");
+//                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+                if (!judgeChangeSte(1,ids,payInputDTO,null,null,null)){
                     timer.cancel();
-                }else {
-                    //修改回库存商品原来状态
-                    weChatStockMapperExtra.update(ids);
                 }
             }
         }, 300000);
