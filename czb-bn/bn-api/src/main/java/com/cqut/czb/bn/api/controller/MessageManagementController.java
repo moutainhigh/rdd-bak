@@ -62,6 +62,12 @@ public class MessageManagementController {
         return new JSONResult(messageManagementService.sendMessage(msgModelId));
     }
 
+    @PermissionCheck(role = "管理员")
+    @PostMapping("/sendMessageByMap")
+    public JSONResult sendMessageByMap(@RequestBody Map<String, String> content) {
+        return new JSONResult(messageManagementService.sendMessage(content.get("msgModelId"), content));
+    }
+
 
     @PostMapping("/sendMessageToOne")
     public JSONResult sendMessageToOne(@RequestBody Map<String, String> map, Principal principal) {

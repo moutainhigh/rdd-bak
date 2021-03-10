@@ -24,5 +24,7 @@ public interface MessageManagementService {
 
     Boolean sendMessage(String msgModelId);
 
+    Boolean sendMessage(String msgModelId, Map<String, String> content);
+
     boolean sendMessageToOne(Map<String, String> maps, String userId);
 }
