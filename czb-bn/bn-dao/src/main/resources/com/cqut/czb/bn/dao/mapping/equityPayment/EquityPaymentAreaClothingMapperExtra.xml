@@ -28,6 +28,7 @@
             and
             area_name = #{areaName}
         </if>
+    ORDER BY gameName, LENGTH(SUBSTRING_INDEX(areaName,'-',1)), areaName;
     </select>
     <insert id="insertAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
     INSERT INTO
@@ -36,12 +37,16 @@
     area_id,
     game_name,
     area_name,
-    product_code )
+    product_code
+    create_at,
+    update_at)
     VALUES
 	(#{areaId},
 	 #{gameName},
 	 #{areaName},
-	 #{productCode}
+	 #{productCode},
+	 #{createAt},
+	 #{updateAt}
 	 )
     </insert>
     <update id="updateAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
@@ -55,6 +60,9 @@
             </if>
             <if test="productCode != null" >
                 product_code = #{productCode},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt},
             </if>
         </set>
         where area_id = #{areaId}
