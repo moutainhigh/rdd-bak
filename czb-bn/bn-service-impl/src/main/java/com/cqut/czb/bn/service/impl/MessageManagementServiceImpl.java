@@ -2,10 +2,14 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.MsgModelMapper;
 import com.cqut.czb.bn.dao.mapper.MsgModelMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.MessageManagement.MessageListDTO;
 import com.cqut.czb.bn.entity.dto.appMessageManage.MsgRecordDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.MsgModel;
 import com.cqut.czb.bn.entity.entity.MsgRecord;
+import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.MessageManagementService;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -30,6 +34,9 @@ public class MessageManagementServiceImpl implements MessageManagementService {
 
     @Autowired
     MsgModelMapper msgModelMapper;
+
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     private static Random random = new Random();
 
@@ -88,6 +95,33 @@ public class MessageManagementServiceImpl implements MessageManagementService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Boolean sendMessage(String msgModelId, Map<String, String> content) {
+        try {
+            MsgModel msgModel = msgModelMapper.selectByPrimaryKey(msgModelId);
+            List<MsgRecord> msgRecordList = msgModelMapperExtra.getMessageRecordList(msgModelId,msgModel.getReceiverType());
+            for (Map.Entry<String, String> entry : content.entrySet()) {
+                String mapKey = entry.getKey();
+                String mapValue = entry.getValue();
+                mapKey = "${" + mapKey + "}";
+                if (msgModel.getMsgContent().contains(mapKey)) {
+                    msgModel.setMsgContent(msgModel.getMsgContent().replace(mapKey, mapValue));
+                }
+            }
+            String idPrex = String.valueOf(System.currentTimeMillis());
+            for (int i = 0; i < msgRecordList.size(); i++) {
+                msgRecordList.get(i).setMsgRecordId(idPrex + String.valueOf(i));
+                msgRecordList.get(i).setMsgModelId(msgModelId);
+                msgRecordList.get(i).setContent(msgModel.getMsgContent());
+            }
+            return msgModelMapperExtra.insertMessages(msgRecordList) > 0;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     public static String createMillisTimestamp() {

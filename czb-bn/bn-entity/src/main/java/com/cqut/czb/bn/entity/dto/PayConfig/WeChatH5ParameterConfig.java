@@ -232,8 +232,8 @@ public class WeChatH5ParameterConfig {
 //        pbp.put("unitPrice",equityPaymentDTO.getUnitPrice());
 //        pbp.put("totalPrice",equityPaymentDTO.getTotalPrice());
         pbp.put("goodsId",equityPaymentDTO.getGoodsId());
-//        pbp.put("integralAmount",equityPaymentDTO.getIntegralAmount());
-//        pbp.put("rechargeType",equityPaymentDTO.getProductCode());
+        pbp.put("integralAmount",equityPaymentDTO.getIntegralAmount());
+        pbp.put("rechargeType",equityPaymentDTO.getRechargeType());
         return StringUtil.transMapToStringOther(pbp);
     }
 

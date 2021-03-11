@@ -205,7 +205,7 @@ public class EquityPaymentDTO {
     }
 
     public void setRechargeType(Integer rechargeType) {
-        rechargeType = rechargeType;
+        this.rechargeType = rechargeType;
     }
 
     public Integer getIsBrowser() {

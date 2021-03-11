@@ -318,6 +318,10 @@ public class IntegralServiceImpl implements IntegralService {
             return new JSONResult("你的积分不足");
         }
 
+        if(integralExchange.getExchangeType() == 1 && integralExchange.getExchangeTimesTotal() == null) {
+            integralExchange.setExchangeTimesTotal(Integer.MAX_VALUE);
+        }
+
         if (integralExchange.getFailureTime().compareTo(new Date()) < 0) {
             return new JSONResult("失效时间比当前时间早");
         }
