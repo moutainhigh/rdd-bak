@@ -28,7 +28,7 @@
             and
             area_name = #{areaName}
         </if>
-    ORDER BY gameName, LENGTH(SUBSTRING_INDEX(areaName,'-',1)), areaName;
+    ORDER BY gameName, LENGTH(SUBSTRING_INDEX(areaName,'-',1)), areaName
     </select>
     <insert id="insertAreaClothing" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
     INSERT INTO
@@ -37,7 +37,7 @@
     area_id,
     game_name,
     area_name,
-    product_code
+    product_code,
     create_at,
     update_at)
     VALUES
