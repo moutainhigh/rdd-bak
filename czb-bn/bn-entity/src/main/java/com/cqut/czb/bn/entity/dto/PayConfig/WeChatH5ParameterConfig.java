@@ -227,7 +227,7 @@ public class WeChatH5ParameterConfig {
 //        pbp.put("productCode",equityPaymentDTO.getProductCode());
         pbp.put("buyNum",equityPaymentDTO.getBuyNum());
 //        pbp.put("isCallBack",equityPaymentDTO.getIsCallBack());
-//        pbp.put("tradeType",equityPaymentDTO.getTradeType());
+        pbp.put("tradeType",equityPaymentDTO.getTradeType());
 //        pbp.put("clientIP",equityPaymentDTO.getClientIP());
 //        pbp.put("unitPrice",equityPaymentDTO.getUnitPrice());
 //        pbp.put("totalPrice",equityPaymentDTO.getTotalPrice());

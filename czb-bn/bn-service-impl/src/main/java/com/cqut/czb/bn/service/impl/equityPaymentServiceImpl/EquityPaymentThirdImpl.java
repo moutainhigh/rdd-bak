@@ -24,7 +24,7 @@ public class EquityPaymentThirdImpl {
         // 商品编号
         String goodsId = equityPayment.getGoodsId();
         Integer buyNum = equityPayment.getBuyNum();
-        Integer isCallBack = equityPayment.getIsCallBack();
+        Integer isCallBack = equityPayment.getIsCallBack() == null ? 0 : equityPayment.getIsCallBack();
         // appId
         String apiId = "20201605199061";
         String appKey = "124FEE100E3FAE06BBEF09A59C72E5CD";
@@ -43,6 +43,7 @@ public class EquityPaymentThirdImpl {
         params = params + "&Sign=" + sign;
         System.out.println(params);
         String sr= HttpRequest.httpRequestGet(URL, params);
+        System.out.println(sr);
         return new JSONResult<String>(sr);
     }
 
@@ -53,13 +54,13 @@ public class EquityPaymentThirdImpl {
         Integer tradeType = equityPayment.getTradeType();
         String account = equityPayment.getAccount();
         double unitPriceDouble = equityPayment.getUnitPrice() * 1000;
-        int unitPrice = (int)(unitPriceDouble * 1000);
+        int unitPrice = (int)(unitPriceDouble);
 
         Integer buyNum = equityPayment.getBuyNum();
         int totalPrice = unitPrice * buyNum;
         String orderId = equityPayment.getOrderId();
         String createTime = getNowDate(new Date());
-        Integer isCallBack = equityPayment.getIsCallBack();
+        Integer isCallBack = equityPayment.getIsCallBack() == null ? 0 : equityPayment.getIsCallBack();
         String goodsId = equityPayment.getGoodsId();
         String clientIP = "";
         if (equityPayment.getClientIP() == null || "".equals(equityPayment.getClientIP())){
@@ -91,6 +92,7 @@ public class EquityPaymentThirdImpl {
         System.out.println(params);
 
         String sr= HttpRequest.httpRequestGet(URL, params);
+        System.out.println(sr);
 
         return new JSONResult<String>(sr);
     }

@@ -748,6 +748,9 @@ public class PayBackServiceImpl implements PayBackService {
             if ("rechargeType".equals(temp[0])) {
                 rechargeType = Integer.valueOf(temp[1]);
             }
+            if ("tradeType".equals(temp[0])) {
+                tradeType = Integer.valueOf(temp[1]);
+            }
             if ("goodsId".equals(temp[0])) {
                 goodsId = temp[1];
             }
@@ -769,6 +772,7 @@ public class PayBackServiceImpl implements PayBackService {
         equityPaymentDTO1.setOrderId(orderId);
         EquityPaymentDTO equityPaymentDTO2 = integralPurchaseMapperExtra.getEquityGoodsRecord(equityPaymentDTO1);
         equityPaymentDTO2.setRechargeType(rechargeType);
+        equityPaymentDTO2.setTradeType(tradeType);
         System.out.println(equityPaymentDTO2.toString());
         JSONResult<String> stringJSONResult = null;
         if(equityPaymentDTO2.getRechargeType() == 1){
