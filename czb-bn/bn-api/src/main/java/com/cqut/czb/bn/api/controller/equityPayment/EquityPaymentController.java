@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 作者： 袁菘壑 侯家领
@@ -125,7 +126,7 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/insertEquityPayment", method = RequestMethod.POST)
-    public JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile files) {
+    public JSONResult insertEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile[] files) {
         User user = (User) redisUtils.get(principal.getName());
         return new JSONResult(equityPaymentService.insertEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files));
     }
@@ -208,10 +209,10 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/updateEquityPayment", method = RequestMethod.POST)
-    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal, @RequestParam("file")MultipartFile files) {
+    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO,@RequestParam(value = "commodityPic", required=false) MultipartFile commodityPic, @RequestParam(value = "detailsPic", required = false) MultipartFile detailsPic, Principal principal) {
         User user = (User) redisUtils.get(principal.getName());
         try {
-            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, files);
+            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, commodityPic, detailsPic);
         } catch (IOException exception) {
             return new JSONResult("图片上传错误");
         }
@@ -222,10 +223,10 @@ public class EquityPaymentController {
      * @return
      */
     @RequestMapping(value = "/updateEquityPaymentNoPic", method = RequestMethod.POST)
-    public JSONResult updateEquityPayment(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal) {
+    public JSONResult updateEquityPaymentNoPic(EquityPaymentCommodityDTO equityPaymentCommodityDTO, Principal principal) {
         User user = (User) redisUtils.get(principal.getName());
         try {
-            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, null);
+            return equityPaymentService.updateEquityPayment(user.getUserId(), equityPaymentCommodityDTO, null, null);
         } catch (IOException exception) {
             return new JSONResult("图片上传错误");
         }

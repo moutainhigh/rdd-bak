@@ -61,7 +61,7 @@ public interface EquityPaymentService {
      * 新增商品
      * @return
      */
-    JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile file);
+    JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile[] file);
 
     /**
      * 新增类目
@@ -110,7 +110,7 @@ public interface EquityPaymentService {
      * 修改商品
      * @return
      */
-    JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException;
+    JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile commodityPic, MultipartFile detailsPic) throws IOException;
 
     /**
      * 获取区服信息

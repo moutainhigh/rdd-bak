@@ -107,24 +107,33 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) {
-        String address = "";
+    public JSONResult insertEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile[] files) {
+        String addressOne = "";
+        String addressTwo = "";
         try {
-            if (files!=null||!files.isEmpty()) {
-                address = FileUploadUtil.putObject(files.getOriginalFilename(), files.getInputStream());//返回图片储存路径
+            if (files!=null) {
+                if (files[0] != null || !files[0].isEmpty()) {
+                    addressOne = FileUploadUtil.putObject(files[0].getOriginalFilename(), files[0].getInputStream());//返回图片储存路径
+                }
+                if (files[1] != null || !files[1].isEmpty()) {
+                    addressTwo = FileUploadUtil.putObject(files[1].getOriginalFilename(), files[1].getInputStream());//返回图片储存路径
+                }
             }
         } catch (IOException ioException) {
             return new JSONResult("文件读取错误", 500);
         }
 
-        File file = announcementServiceImpl.setFile(files.getOriginalFilename(),address, userId,new Date());
-        fileMapperExtra.insertSelective(file);
+        File fileOne = announcementServiceImpl.setFile(files[0].getOriginalFilename(),addressOne, userId,new Date());
+        File fileTwo = announcementServiceImpl.setFile(files[1].getOriginalFilename(),addressTwo, userId,new Date());
+        fileMapperExtra.insertSelective(fileOne);
+        fileMapperExtra.insertSelective(fileTwo);
         equityPaymentCommodityDTO.setGoodsId(StringUtil.createId());
         equityPaymentCommodityDTO.setCreateAt(new Date());
         equityPaymentCommodityDTO.setUpdateAt(new Date());
         equityPaymentCommodityDTO.setSoldNumber(0);
         equityPaymentCommodityDTO.setIsDelete(0);
-        equityPaymentCommodityDTO.setGoodsPic(file.getFileId());
+        equityPaymentCommodityDTO.setGoodsPic(fileOne.getFileId());
+        equityPaymentCommodityDTO.setProductDetails(fileTwo.getFileId());
         return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
     }
 
@@ -215,16 +224,24 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
     }
 
     @Override
-    public JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile files) throws IOException {
+    public JSONResult updateEquityPayment(String userId, EquityPaymentCommodityDTO equityPaymentCommodityDTO, MultipartFile commodityPic, MultipartFile detailsPic) throws IOException {
         equityPaymentCommodityDTO.setUpdateAt(new Date());
-        if (files != null) {
-            File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
-            file1.setSavePath(FileUploadUtil.putObject(files.getOriginalFilename(),files.getInputStream()));
-            file1.setFileName(files.getOriginalFilename());
-            file1.setUploader(userId);
-            file1.setUpdateAt(new Date());
-            fileMapperExtra.updateByPrimaryKeySelective(file1);
-        }
+//            for (MultipartFile file: files) {
+//                File file1 = fileMapperExtra.selectByPrimaryKey(equityPaymentCommodityDTO.getGoodsPic());
+//                file1.setSavePath(FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream()));
+//                file1.setFileName(file.getOriginalFilename());
+//                file1.setUploader(userId);
+//                file1.setUpdateAt(new Date());
+//                fileMapperExtra.updateByPrimaryKeySelective(file1);
+//            }
+            if (commodityPic != null && !commodityPic.isEmpty()) {
+                updatePic(commodityPic, equityPaymentCommodityDTO.getGoodsPic(), userId);
+            }
+
+            if (detailsPic != null && !detailsPic.isEmpty()) {
+                updatePic(detailsPic, equityPaymentCommodityDTO.getProductDetails(), userId);
+            }
+
         return new JSONResult((equityPaymentCommodityMapperExtra.updateEquityPayment(equityPaymentCommodityDTO)>0));
     }
 
@@ -236,5 +253,19 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         }
 
         return new JSONResult(equityPaymentAreaClothingDTOList);
+    }
+
+    public boolean updatePic(MultipartFile file, String pic, String userId) throws IOException {
+        File file1 = fileMapperExtra.selectByPrimaryKey(pic);
+        file1.setSavePath(FileUploadUtil.putObject(file.getOriginalFilename(), file.getInputStream()));
+        file1.setFileName(file.getOriginalFilename());
+        file1.setUploader(userId);
+        file1.setUpdateAt(new Date());
+        int num = fileMapperExtra.updateByPrimaryKeySelective(file1);
+        if (num == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

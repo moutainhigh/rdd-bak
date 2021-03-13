@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto.equityPayment;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
 public class EquityPaymentCommodityDTO {
@@ -50,6 +52,10 @@ public class EquityPaymentCommodityDTO {
     private String categoryName;
 
     private String src;
+
+    private String productDetails;
+
+    private String detailSrc;
 
     public String getGoodsId() {
         return goodsId;
@@ -241,5 +247,21 @@ public class EquityPaymentCommodityDTO {
 
     public void setSrc(String src) {
         this.src = src;
+    }
+
+    public String getProductDetails() {
+        return productDetails;
+    }
+
+    public void setProductDetails(String productDetails) {
+        this.productDetails = productDetails;
+    }
+
+    public String getDetailSrc() {
+        return detailSrc;
+    }
+
+    public void setDetailSrc(String detailSrc) {
+        this.detailSrc = detailSrc;
     }
 }
