@@ -9,6 +9,7 @@
                product_code productCode
         from `czb_equity_payment_area_clothing`
         where product_code = #{productCode, jdbcType = VARCHAR}
+        ORDER BY gameName, LENGTH(SUBSTRING_INDEX(areaName,'-',1)), areaName
     </select>
     <select id="getAreaClothingList" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO" resultType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentAreaClothingDTO">
     SELECT
