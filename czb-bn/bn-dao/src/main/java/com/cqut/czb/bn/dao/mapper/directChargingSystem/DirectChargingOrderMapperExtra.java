@@ -12,4 +12,8 @@ public interface DirectChargingOrderMapperExtra {
     double getTotalRechargeAmount();
 
     double getUserTotalRechargeAmount(String userId);
+
+    int updateRecordByOrderId(DirectChargingOrderDto directChargingOrderDto);
+
+    DirectChargingOrderDto getRecordByOrderId(String orderId);
 }

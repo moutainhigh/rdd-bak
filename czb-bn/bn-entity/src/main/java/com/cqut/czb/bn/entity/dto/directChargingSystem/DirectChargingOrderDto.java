@@ -7,6 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class DirectChargingOrderDto extends PageDTO {
+    private String oldOrderId;
+
     private String orderId;
 
     private String thirdOrderId;
@@ -52,6 +54,14 @@ public class DirectChargingOrderDto extends PageDTO {
     private Date endTime;
 
     private Integer recordType; // 1 话费 2 中石油 3 中石化
+
+    public String getOldOrderId() {
+        return oldOrderId;
+    }
+
+    public void setOldOrderId(String oldOrderId) {
+        this.oldOrderId = oldOrderId;
+    }
 
     public String getOrderId() {
         return orderId;
