@@ -166,7 +166,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 return result;
             }
         }else if(consumptionType.equals("Direct")) {//直冲系统
-            if (getAddBuyDirectOrderAli(params) == 1) {
+//            if (getAddBuyDirectOrderAli(params) == 1) {
+            if (addBuyDirectOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }
@@ -223,6 +224,58 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         System.out.println("购买失败删除后" + PetrolCache.AllpetrolMap + ":" + PetrolCache.currentPetrolMap);
     }
 
+    //直冲系统（支付宝）
+    public int addBuyDirectOrderAli(Map<String, String> params){
+        String[] resDate = params.get("passback_params").split("\\^");
+        String[] temp;
+        String thirdOrderId = params.get("trade_no");
+        String orgId = "";
+        double money = 0;
+        String ownerId = "";
+        String userId = "";
+        String userAccount = "";
+        int recordType = 0;
+        String cardNum = "";
+        Integer integralAmount = 0;
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orderId".equals(temp[0])) {
+                orgId = temp[1];
+            }
+            if ("rechargeAmount".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+            }
+            if ("userId".equals(temp[0])) {
+                ownerId = temp[1];
+                userId = temp[1];
+            }
+            if ("recordType".equals(temp[0])) {
+                recordType = Integer.valueOf(temp[1]);
+            }
+            if ("userAccount".equals(temp[0])) {
+                userAccount = temp[1];
+            }
+            if ("cardNum".equals(temp[0])) {
+                cardNum = temp[1];
+            }
+        }
+        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+        directChargingOrderDto.setOrderId(orgId);
+        directChargingOrderDto.setThirdOrderId(thirdOrderId);
+        directChargingOrderDto.setUpdateAt(new Date());
+        directChargingOrderDto.setState(1);
+        if (recordType == 1){
+            ownerId = userAccount;
+        }else{
+            ownerId = cardNum;
+        }
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
+        return 1;
+    }
 
     //直冲系统（支付宝）
     public int getAddBuyDirectOrderAli(Map<String, String> params){
