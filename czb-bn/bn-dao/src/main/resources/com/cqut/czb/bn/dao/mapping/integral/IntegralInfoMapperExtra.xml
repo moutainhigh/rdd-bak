@@ -59,7 +59,7 @@
         FROM czb_integral_info a
         JOIN czb_user b ON a.user_id = b.user_id
         <if test="userAccount != '' and userAccount != null">
-            WHERE b.user_account = #{userAccount,jdbcType=VARCHAR}
+            WHERE b.user_account like concat('%',#{userAccount, jdbcType=VARCHAR},'%')
         </if>
         <if test="orderBy =='' or orderBy== null">
             ORDER BY a.update_at DESC
