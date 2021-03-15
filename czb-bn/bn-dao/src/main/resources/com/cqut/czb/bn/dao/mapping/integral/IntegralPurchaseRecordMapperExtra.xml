@@ -34,7 +34,7 @@
             t1.update_at &gt;= #{beginDate})
         </if>
         <if test="userAccount != '' and userAccount != null">
-            AND t2.user_account = #{userAccount}
+            AND t2.user_account like concat('%',#{userAccount},'%')
         </if>
         ORDER BY
 	        t1.create_at DESC
