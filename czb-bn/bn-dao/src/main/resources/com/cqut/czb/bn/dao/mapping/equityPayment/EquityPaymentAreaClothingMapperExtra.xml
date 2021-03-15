@@ -27,7 +27,7 @@
         </if>
         <if test="areaName !='' and areaName != null">
             and
-            area_name = #{areaName}
+            area_name like concat('%',#{areaName},'%')
         </if>
     ORDER BY gameName, LENGTH(SUBSTRING_INDEX(areaName,'-',1)), areaName
     </select>
