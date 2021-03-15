@@ -12,6 +12,7 @@ import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -127,14 +128,18 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
         File fileTwo = announcementServiceImpl.setFile(files[1].getOriginalFilename(),addressTwo, userId,new Date());
         fileMapperExtra.insertSelective(fileOne);
         fileMapperExtra.insertSelective(fileTwo);
-        equityPaymentCommodityDTO.setGoodsId(StringUtil.createId());
+        equityPaymentCommodityDTO.setGoodsId(equityPaymentCommodityDTO.getProductCode());
         equityPaymentCommodityDTO.setCreateAt(new Date());
         equityPaymentCommodityDTO.setUpdateAt(new Date());
         equityPaymentCommodityDTO.setSoldNumber(0);
         equityPaymentCommodityDTO.setIsDelete(0);
         equityPaymentCommodityDTO.setGoodsPic(fileOne.getFileId());
         equityPaymentCommodityDTO.setProductDetails(fileTwo.getFileId());
-        return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
+        try {
+            return new JSONResult(equityPaymentCommodityMapperExtra.insertEquityPayment(equityPaymentCommodityDTO) > 0);
+        } catch (DuplicateKeyException e) {
+            return new JSONResult("商品编码重复");
+        }
     }
 
     @Override
@@ -242,7 +247,11 @@ public class EquityPaymentServiceImpl implements EquityPaymentService {
                 updatePic(detailsPic, equityPaymentCommodityDTO.getProductDetails(), userId);
             }
 
-        return new JSONResult((equityPaymentCommodityMapperExtra.updateEquityPayment(equityPaymentCommodityDTO)>0));
+            try {
+                return new JSONResult((equityPaymentCommodityMapperExtra.updateEquityPayment(equityPaymentCommodityDTO) > 0));
+            } catch (DuplicateKeyException e) {
+                return new JSONResult("商品编码重复");
+            }
     }
 
     @Override

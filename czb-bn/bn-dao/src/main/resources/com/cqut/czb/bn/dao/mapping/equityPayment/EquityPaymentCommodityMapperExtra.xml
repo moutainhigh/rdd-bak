@@ -175,6 +175,7 @@
             </if>
             <if test="productCode != null" >
                 product_code = #{productCode,jdbcType=VARCHAR},
+                goods_id = #{productCode,jdbcType=VARCHAR},
             </if>
             <if test="sellingPrice != null" >
                 selling_price = #{sellingPrice,jdbcType=DOUBLE},
