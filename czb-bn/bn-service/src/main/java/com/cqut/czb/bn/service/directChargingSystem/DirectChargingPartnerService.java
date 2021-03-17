@@ -13,4 +13,6 @@ public interface DirectChargingPartnerService {
     JSONResult getTotalRechargeAmount();
 
     JSONResult getUserTotalRechargeAmount(User user);
+
+    JSONResult deleteDirectChargingPartnerOrder(User user);
 }
