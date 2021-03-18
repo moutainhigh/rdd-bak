@@ -58,4 +58,6 @@ public interface OilCardRechargeService{
 
     String wechatPayReturn(HttpServletRequest request,String consumptionType);
 
+    String getAccount(String userId);
+
 }

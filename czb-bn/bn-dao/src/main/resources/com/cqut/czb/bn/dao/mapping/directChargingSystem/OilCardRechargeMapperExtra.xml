@@ -288,4 +288,23 @@
         where
             order_id = #{orderId,jdbcType=VARCHAR}
     </update>
+
+    <select id="getOrder" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+            order_id orderId,
+            recharge_amount rechargeAmount,
+            record_type recordType,
+            real_price realPrice,
+            recharge_account rechargeAccount,
+            cardholder cardholder
+        FROM czb_direct_charging_order
+        WHERE order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getAccount" resultType="java.lang.String">
+        SELECT
+            user_account
+        FROM czb_user
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+    </select>
 </mapper>

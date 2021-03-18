@@ -313,6 +313,7 @@ public class PayBackServiceImpl implements PayBackService {
             integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
             integralLogDTO.setUserId(ownerId);
             integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
             integralLogDTO.setIntegralAmount(integralAmount);
             integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
@@ -450,6 +451,7 @@ public class PayBackServiceImpl implements PayBackService {
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(ownerId);
         integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setRemark("抵扣");
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
@@ -522,6 +524,7 @@ public class PayBackServiceImpl implements PayBackService {
         integralLogDTO.setUserId(userId);
         integralLogDTO.setOrderId(orgId);
         integralLogDTO.setIntegralLogType(4);
+        integralLogDTO.setRemark("购买");
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
@@ -645,6 +648,7 @@ public class PayBackServiceImpl implements PayBackService {
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(userId);
         integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setRemark("抵扣");
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
@@ -794,6 +798,7 @@ public class PayBackServiceImpl implements PayBackService {
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(userId);
         integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setRemark("抵扣");
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 

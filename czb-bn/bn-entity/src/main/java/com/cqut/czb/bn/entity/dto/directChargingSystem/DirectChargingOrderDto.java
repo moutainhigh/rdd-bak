@@ -41,6 +41,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer integralAmount;
 
+    private Integer isDirectPartner;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
@@ -229,6 +231,14 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setIntegralAmount(Integer integralAmount) {
         this.integralAmount = integralAmount;
+    }
+
+    public Integer getIsDirectPartner() {
+        return isDirectPartner;
+    }
+
+    public void setIsDirectPartner(Integer isDirectPartner) {
+        this.isDirectPartner = isDirectPartner;
     }
 
     @Override

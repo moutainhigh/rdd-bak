@@ -778,4 +778,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         }
     }
 
+    // 获取电话号码
+    public String getAccount(String userId) {
+        return oilCardRechargeMapperExtra.getAccount(userId);
+    }
+
 }

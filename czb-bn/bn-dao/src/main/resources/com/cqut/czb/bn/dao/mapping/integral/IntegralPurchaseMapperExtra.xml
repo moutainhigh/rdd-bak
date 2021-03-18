@@ -67,7 +67,7 @@
                 #{integralAmount,jdbcType=INTEGER},
                 #{orderId,jdbcType=VARCHAR},
                 #{beforeIntegralAmount,jdbcType=INTEGER},
-                "购买",
+                #{remark,jdbcType=VARCHAR},
                 now(),
                 now()
                )

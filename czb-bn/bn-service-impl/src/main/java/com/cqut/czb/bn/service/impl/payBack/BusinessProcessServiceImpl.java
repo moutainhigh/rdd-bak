@@ -29,6 +29,7 @@ import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.*;
 import com.cqut.czb.bn.service.InfoSpreadService;
+import com.cqut.czb.bn.service.impl.directChargingSystem.OilCardRechargeServiceImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
@@ -125,6 +126,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     @Autowired
     IntegralPurchaseMapperExtra integralPurchaseMapperExtra;
+
+    @Autowired
+    OilCardRechargeServiceImpl oilCardRechargeServiceImpl;
 
     @Autowired
     public IntegralService integralService;
@@ -335,14 +339,15 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         integralLogDTO.setOrderId(orgId);
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(userId);
-        integralLogDTO.setIntegralLogType(4);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setRemark("抵扣");
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
         IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getIntegralAmount() + integralLogDTO.getBeforeIntegralAmount());
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
         integralInfoDTO.setUserId(userId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal() + integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
         integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
         return 1;
     }
@@ -520,6 +525,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             if ("userId".equals(temp[0])) {
                 userId = temp[1];
             }
+            if ("integralAmount".equals(temp[0])) {
+                integralAmount = Integer.valueOf(temp[1]);
+            }
         }
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
         directChargingOrderDto.setOrderId(orgId);
@@ -536,19 +544,38 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
 
         //插入log记录
+        System.out.println("插入log记录");
         IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
         integralLogDTO.setOrderId(orgId);
         integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         integralLogDTO.setUserId(userId);
-        integralLogDTO.setIntegralLogType(4);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setRemark("抵扣");
         integralLogDTO.setIntegralAmount(integralAmount);
         integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
         IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getIntegralAmount() + integralLogDTO.getBeforeIntegralAmount());
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
         integralInfoDTO.setUserId(userId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal() + integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
         integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+
+        DirectChargingOrderDto directChargingOrderDto1 = oilCardRechargeMapperExtra.getOrder(orgId);
+        if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
+            System.out.println("尚未开通充值");
+            return 1;
+        }
+        if (directChargingOrderDto1.getRecordType()==1){
+            System.out.println("开通充值");
+            directChargingOrderDto1.setUserAccount(directChargingOrderDto1.getRechargeAccount());
+            directChargingOrderDto1.setRechargeAmount(directChargingOrderDto1.getRealPrice());
+            oilCardRechargeServiceImpl.phoneRechargeSubmission(directChargingOrderDto1);
+            System.out.println("充值参数"+directChargingOrderDto1.toString());
+        }else{
+            System.out.println("开通充值");
+            directChargingOrderDto1.setRechargeAmount(directChargingOrderDto1.getRealPrice());
+            oilCardRechargeServiceImpl.onlineorderSubmission(directChargingOrderDto1);
+        }
         return 1;
     }
 

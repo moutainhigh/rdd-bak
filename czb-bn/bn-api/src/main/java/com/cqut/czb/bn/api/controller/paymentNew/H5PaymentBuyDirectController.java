@@ -45,6 +45,10 @@ public class H5PaymentBuyDirectController {
 //        }
 //        User user = (User)redisUtils.get(principal.getName());
 //        directChargingOrderDto.setUserId(user.getUserId());
+        if (directChargingOrderDto.getIsDirectPartner() != 1 && directChargingOrderDto.getRecordType() != 1) {
+            directChargingOrderDto.setCardholder(oilCardRechargeService.getAccount(user.getUserId()));
+        }
+
         String info =oilCardRechargeService.AlipayRechargeDirect(directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
@@ -65,6 +69,9 @@ public class H5PaymentBuyDirectController {
 //        rechargeVipDTO.setArea("重庆市");
         User user = (User)redisUtils.get(principal.getName());
         directChargingOrderDto.setUserId(user.getUserId());
+        if (directChargingOrderDto.getIsDirectPartner() != 1 && directChargingOrderDto.getRecordType() != 1) {
+            directChargingOrderDto.setCardholder(oilCardRechargeService.getAccount(user.getUserId()));
+        }
         JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
