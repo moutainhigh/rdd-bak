@@ -76,6 +76,11 @@
               integral_info_id = #{integralInfoId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateAll" parameterType="com.cqut.czb.bn.entity.entity.integral.IntegralLog">
+        UPDATE czb_integral_info
+        SET current_total = current_total + #{integralAmount,jdbcType=INTEGER}, got_total = got_total + #{integralAmount,jdbcType=INTEGER}
+    </update>
+
     <select id="getIntegralInfo" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO">
         select current_total beforeIntegralAmount,
                integral_info_id integralInfoId

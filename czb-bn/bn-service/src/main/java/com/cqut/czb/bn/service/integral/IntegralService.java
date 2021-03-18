@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
+import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
@@ -75,6 +76,13 @@ public interface IntegralService {
      * @return
      */
     JSONResult createExchangeCode(IntegralExchangeDTO integralExchange);
+
+    /**
+     * 全体发放
+     * @param integralLog
+     * @return
+     */
+    public JSONResult giveIntegralForAllUsers(IntegralLog integralLog);
 
     /**
      * 获取所有用户积分信息

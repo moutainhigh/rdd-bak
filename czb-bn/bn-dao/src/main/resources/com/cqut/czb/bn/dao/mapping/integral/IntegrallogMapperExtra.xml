@@ -65,4 +65,24 @@
         ORDER BY
             fnd.createAt DESC
     </select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into czb_integral_log
+        <include refid="Base_Column_List"></include>
+            values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (
+            #{item.integralLogId,jdbcType=VARCHAR},
+            #{item.integralInfoId,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.integralLogType,jdbcType=INTEGER},
+            #{item.integralAmount,jdbcType=INTEGER},
+            #{item.orderId,jdbcType=VARCHAR},
+            #{item.beforeIntegralAmount,jdbcType=INTEGER},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.createAt,jdbcType=TIMESTAMP},
+            #{item.updateAt,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
 </mapper>

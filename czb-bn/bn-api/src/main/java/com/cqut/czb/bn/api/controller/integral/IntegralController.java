@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.integral.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.integral.IntegralDeductionInfo;
+import com.cqut.czb.bn.entity.entity.integral.IntegralLog;
 import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.integral.IntegralService;
@@ -182,6 +183,14 @@ public class IntegralController {
         User user = (User) redisUtils.get(principal.getName());
         integralExchange.setExchangeSourceId(user.getUserId());
         return integralService.createExchangeCode(integralExchange);
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @RequestMapping(value = "/giveIntgeralForAllUser", method = RequestMethod.POST)
+    public JSONResult giveIntegralForAllUser(Principal principal, IntegralLog integralLog) {
+        User user = (User) redisUtils.get(principal.getName());
+        integralLog.setUserId(user.getUserId());
+        return integralService.giveIntegralForAllUsers(integralLog);
     }
 
     /**

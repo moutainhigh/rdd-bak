@@ -17,6 +17,8 @@ public interface IntegralInfoMapperExtra {
 
     int updateByPrimaryKeySync(IntegralInfo record);
 
+    int updateAll(IntegralLog record);
+
     int getUserAmount();
 
     IntegralLogDTO getIntegralInfo(@Param("userId")String userId);

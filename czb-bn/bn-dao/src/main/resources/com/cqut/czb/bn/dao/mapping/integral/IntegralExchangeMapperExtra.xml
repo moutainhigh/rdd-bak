@@ -82,31 +82,49 @@
     </insert>
 
     <select id="getIntegralDistributionDetails" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDistributionDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralDistributionDTO">
-        select * from
-        ((select a.integral_amount integralAmount,
-                 b.user_account userAccount,
-                 null as isComplete,
-                 null as failureTime,
-                 a.create_at createAt,
-                 2 as type, null as integralExchange,
-                 null as exchangeCode
-        from `czb_integral_log` a left join `czb_user` b on a.user_id = b.user_id
-        where a.integral_log_type = 7 and a.remark = "手机号补贴")
-        union all (select exchange_amount as integralAmount,
-                          null as userAccount,
-                          is_complete isComplete,
-                          failure_time failureTime,
-                          create_at createAt,
-                          1 as `type`,
-                          integral_exchange integralExchange,
-                          exchange_code exchangeCode from `czb_integral_exchange`)) as fnd
-        where 1 = 1
+<!--        select * from-->
+<!--        ((select a.integral_amount integralAmount,-->
+<!--                 b.user_account userAccount,-->
+<!--                 null as isComplete,-->
+<!--                 null as failureTime,-->
+<!--                 a.create_at createAt,-->
+<!--                 2 as type, null as integralExchange,-->
+<!--                 null as exchangeCode-->
+<!--        from `czb_integral_log` a left join `czb_user` b on a.user_id = b.user_id-->
+<!--        where a.integral_log_type = 7 and a.remark = "手机号补贴")-->
+<!--        union all (select exchange_amount as integralAmount,-->
+<!--                          null as userAccount,-->
+<!--                          is_complete isComplete,-->
+<!--                          failure_time failureTime,-->
+<!--                          create_at createAt,-->
+<!--                          1 as `type`,-->
+<!--                          integral_exchange integralExchange,-->
+<!--                          exchange_code exchangeCode from `czb_integral_exchange`)) as fnd-->
+<!--        where 1 = 1-->
+<!--        <if test="userAccount != null and userAccount != ''">-->
+<!--            and fnd.userAccount like concat('%', #{userAccount},'%')-->
+<!--        </if>-->
+<!--        <if test="type != null and type != ''">-->
+<!--            and fnd.type = #{type}-->
+<!--        </if>-->
+<!--        order by fnd.createAt desc-->
+        SELECT
+        t2.user_account userAccount,
+        IF
+        ( t1.remark = '手机号补贴', 2, 1 ) type,
+        t1.integral_amount integralAmount,
+        t1.create_at createAt
+        FROM
+        czb_integral_log t1
+        LEFT JOIN czb_user t2 ON t1.user_id = t2.user_id
+        WHERE
+        t1.integral_log_type = 7
         <if test="userAccount != null and userAccount != ''">
-            and fnd.userAccount like concat('%', #{userAccount},'%')
+            and t2.user_account like concat('%', #{userAccount},'%')
         </if>
         <if test="type != null and type != ''">
-            and fnd.type = #{type}
+            and t1.remark = IF(#{type},'专属福利','手机号补贴')
         </if>
-        order by fnd.createAt desc
+        order by t1.create_at desc
     </select>
 </mapper>

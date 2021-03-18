@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.integral;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.*;
@@ -347,6 +348,23 @@ public class IntegralServiceImpl implements IntegralService {
             return new JSONResult("密钥不合法");
         }
 
+    }
+
+    @Override
+    public JSONResult giveIntegralForAllUsers(IntegralLog integralLog) {
+        Date currentTime = new Date();
+        int num = integralInfoMapperExtra.updateAll(integralLog);
+        IntegralInfo integralInfo = integralInfoMapperExtra.selectByUserId(integralLog.getUserId());
+        integralLog.setIntegralInfoId(integralInfo.getIntegralInfoId());
+        integralLog.setIntegralLogId(StringUtil.createId());
+        integralLog.setIntegralLogType(7);
+        integralLog.setOrderId(StringUtil.createId());
+        integralLog.setBeforeIntegralAmount(integralInfo.getCurrentTotal());
+        integralLog.setRemark("专属福利");
+        integralLog.setCreateAt(currentTime);
+        integralLog.setUpdateAt(currentTime);
+        integralLogMapper.insert(integralLog);
+        return new JSONResult("发放成功");
     }
 
     @Override
