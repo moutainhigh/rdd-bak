@@ -28,6 +28,7 @@ public class WeChatPaymentController {
         System.out.println("微信回调——购买积分");
         response.setCharacterEncoding("utf-8");
         response.setHeader("content-type", "text/html;charset=utf-8");
+        response.setContentType("text/xml");
         try {
             response.getWriter().print(orderPaymentService.WeChatOrderPaymentNotify(request,"Integral"));
         } catch (IOException e) {
@@ -61,6 +62,7 @@ public class WeChatPaymentController {
         System.out.println("微信回调——购买权益商品");
         response.setCharacterEncoding("utf-8");
         response.setHeader("content-type", "text/html;charset=utf-8");
+        response.setContentType("text/xml");
         try {
             response.getWriter().print(orderPaymentService.WeChatOrderPaymentNotify(request,"EquityGoods"));
         } catch (IOException e) {
