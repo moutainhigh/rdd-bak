@@ -45,6 +45,7 @@ public class DirectChargingPayController {
         }
 //        User user = (User)redisUtils.get(principal.getName());
 //        directChargingOrderDto.setUserId(user.getUserId());
+        directChargingOrderDto.setIsNew(0);
         String info =oilCardRechargeService.AlipayRechargeDirect(directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);

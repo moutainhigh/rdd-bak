@@ -43,6 +43,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer isDirectPartner;
 
+    private Integer isNew;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
@@ -241,10 +243,19 @@ public class DirectChargingOrderDto extends PageDTO {
         this.isDirectPartner = isDirectPartner;
     }
 
+    public Integer getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(Integer isNew) {
+        this.isNew = isNew;
+    }
+
     @Override
     public String toString() {
         return "DirectChargingOrderDto{" +
-                "orderId='" + orderId + '\'' +
+                "oldOrderId='" + oldOrderId + '\'' +
+                ", orderId='" + orderId + '\'' +
                 ", thirdOrderId='" + thirdOrderId + '\'' +
                 ", userAccount='" + userAccount + '\'' +
                 ", rechargeAmount=" + rechargeAmount +
@@ -260,6 +271,8 @@ public class DirectChargingOrderDto extends PageDTO {
                 ", cardholder='" + cardholder + '\'' +
                 ", isBrowser=" + isBrowser +
                 ", integralAmount=" + integralAmount +
+                ", isDirectPartner=" + isDirectPartner +
+                ", isNew=" + isNew +
                 ", createAt=" + createAt +
                 ", updateAt=" + updateAt +
                 ", startTime=" + startTime +

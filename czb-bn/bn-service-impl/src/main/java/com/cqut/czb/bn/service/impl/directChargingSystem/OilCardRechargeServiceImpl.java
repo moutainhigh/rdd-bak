@@ -177,6 +177,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String cardholder = directChargingOrderDto.getCardholder();
         String rechargeAccount = directChargingOrderDto.getRechargeAccount();
         Integer integralAmount = directChargingOrderDto.getIntegralAmount();
+        Integer isNew = directChargingOrderDto.getIsNew();
         String cardNum = "";
         if (recordType == 2){
             cardNum = directChargingOrderDto.getPetrolChinaPetrolNum();
@@ -186,9 +187,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         request.setReturnUrl(AliPayConfig.Return_url);
 //        request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, userId, recordType,cardNum,userAccount));//支付订单
         if (recordType == 1){
-            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount,userId));
+            request.setBizModel(AliParameterConfig.getPhonePill(orderId,amount, rechargeAmount, recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount,userId,isNew));
         }else{
-            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount,cardholder,rechargeAccount,integralAmount,userId));
+            request.setBizModel(AliParameterConfig.getPetrolPill(orderId,amount, rechargeAmount, recordType,cardNum,userAccount,cardholder,rechargeAccount,integralAmount,userId,isNew));
         }
         request.setNotifyUrl(AliPayConfig.Direct_url);//支付回调接口
         try {

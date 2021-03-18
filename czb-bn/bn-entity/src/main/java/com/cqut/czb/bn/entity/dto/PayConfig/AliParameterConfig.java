@@ -205,7 +205,7 @@ public class AliParameterConfig {
 //        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
 //        return model;
 //    }
-    public static AlipayTradeWapPayModel getPhonePill(String orderId,double amount, double rechargeAmount, Integer recordType, String userAccount, String cardNum,String cardholder,String rechargeAccount, Integer integralAmount,String userId) {
+    public static AlipayTradeWapPayModel getPhonePill(String orderId,double amount, double rechargeAmount, Integer recordType, String userAccount, String cardNum,String cardholder,String rechargeAccount, Integer integralAmount,String userId,Integer isNew) {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("RDD话费直充");
         model.setSubject("RDD话费直充");
@@ -217,11 +217,11 @@ public class AliParameterConfig {
         model.setSellerId("2088731798282131");
         System.out.println(userAccount);
 //        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
-        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount ,recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount,userId));
+        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount ,recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount,userId,isNew));
         return model;
     }
 
-    public static AlipayTradeWapPayModel getPetrolPill(String orderId,double amount, double rechargeAmount, Integer recordType, String cardNum, String userAccount,String cardholder,String rechargeAccount, Integer integralAmount,String userId) {
+    public static AlipayTradeWapPayModel getPetrolPill(String orderId,double amount, double rechargeAmount, Integer recordType, String cardNum, String userAccount,String cardholder,String rechargeAccount, Integer integralAmount,String userId,Integer isNew) {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("RDD油卡直充");
         model.setSubject("RDD油卡直充");
@@ -233,13 +233,13 @@ public class AliParameterConfig {
         model.setSellerId("2088731798282131");
         System.out.println(userAccount);
 //        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
-        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount ,recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount,userId));
+        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount ,recordType,userAccount,cardNum,cardholder,rechargeAccount,integralAmount,userId,isNew));
         return model;
     }
 
 
     //支付宝支付—— 直充值相关参数配置
-    public static String getPhonePillParams(String orderId, double rechargeAmount, Integer recordType,String userAccount,String cardNum,String cardholder,String rechargeAccount,Integer integralAmount,String userId) {
+    public static String getPhonePillParams(String orderId, double rechargeAmount, Integer recordType,String userAccount,String cardNum,String cardholder,String rechargeAccount,Integer integralAmount,String userId,Integer isNew) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orderId", orderId);
         pbp.put("rechargeAmount", rechargeAmount);
@@ -249,6 +249,7 @@ public class AliParameterConfig {
         pbp.put("userId",userId);
         pbp.put("rechargeAccount",rechargeAccount);
         pbp.put("integralAmount",integralAmount);
+        pbp.put("isNew",isNew);
         if (recordType != 1){
             pbp.put("cardNum",cardNum);
             pbp.put("cardholder",cardholder);

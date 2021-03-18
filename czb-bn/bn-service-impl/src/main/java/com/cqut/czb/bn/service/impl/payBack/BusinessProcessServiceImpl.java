@@ -170,8 +170,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 return result;
             }
         }else if(consumptionType.equals("Direct")) {//直冲系统
-//            if (getAddBuyDirectOrderAli(params) == 1) {
-            if (addBuyDirectOrderAli(params) == 1) {
+            if (getAddBuyDirectOrderAli(params) == 1) {
+//            if (addBuyDirectOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
             }
@@ -294,6 +294,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         int recordType = 0;
         String cardNum = "";
         Integer integralAmount = 0;
+        Integer isNew = 0;
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -311,6 +312,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
             if ("recordType".equals(temp[0])) {
                 recordType = Integer.valueOf(temp[1]);
+            }
+            if ("isNew".equals(temp[0])) {
+                isNew = Integer.valueOf(temp[1]);
             }
             if ("integralAmount".equals(temp[0])) {
                 integralAmount = Integer.valueOf(temp[1]);
@@ -334,21 +338,24 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         }
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
-        //插入log记录
-        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-        integralLogDTO.setOrderId(orgId);
-        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-        integralLogDTO.setUserId(userId);
-        integralLogDTO.setIntegralLogType(5);
-        integralLogDTO.setRemark("抵扣");
-        integralLogDTO.setIntegralAmount(integralAmount);
-        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-        integralInfoDTO.setUserId(userId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        if (isNew == 1) {
+            //插入log记录
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+            integralLogDTO.setOrderId(orgId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(userId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
+            integralLogDTO.setIntegralAmount(integralAmount);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(userId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        }
         return 1;
     }
 

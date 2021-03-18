@@ -48,7 +48,7 @@ public class H5PaymentBuyDirectController {
         if (directChargingOrderDto.getIsDirectPartner() != 1 && directChargingOrderDto.getRecordType() != 1) {
             directChargingOrderDto.setCardholder(oilCardRechargeService.getAccount(user.getUserId()));
         }
-
+        directChargingOrderDto.setIsNew(1);
         String info =oilCardRechargeService.AlipayRechargeDirect(directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
