@@ -163,7 +163,7 @@
                 record_type = 1
             </if>
             <if test="recordType != 1">
-                record_type = 2 or record_type = 3
+                (record_type = 2 or record_type = 3)
             </if>
             <if test="startTime!= null and endTime!= null">
                 and create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -171,6 +171,9 @@
             </if>
             <if test="rechargeAccount!= null and rechargeAccount!= ''">
                 and recharge_account = #{rechargeAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null">
+                and `state` = #{state,jdbcType=INTEGER}
             </if>
         </where>
         order by create_at DESC

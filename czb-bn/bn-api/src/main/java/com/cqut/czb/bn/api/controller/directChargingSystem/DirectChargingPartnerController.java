@@ -6,6 +6,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingPartnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class DirectChargingPartnerController {
     @Autowired
     DirectChargingPartnerService directChargingPartnerService;
+
+
 
     /**
      * 分页查询直充管理人
@@ -55,5 +58,15 @@ public class DirectChargingPartnerController {
     @GetMapping("/getUserTotalRechargeAmount")
     public JSONResult getUserTotalRechargeAmount(User user) {
         return directChargingPartnerService.getUserTotalRechargeAmount(user);
+    }
+
+    /**
+     * 删除直充合伙人
+     * @param user
+     * @return
+     */
+    @PostMapping("/deleteDirectChargingPartnerOrder")
+    public JSONResult deleteDirectChargingPartnerOrder(User user) {
+        return directChargingPartnerService.deleteDirectChargingPartnerOrder(user);
     }
 }
