@@ -339,6 +339,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
 
+        System.out.println("isNew"+isNew);
         if (isNew == 1) {
             //插入log记录
             IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
@@ -349,6 +350,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             integralLogDTO.setRemark("抵扣");
             integralLogDTO.setIntegralAmount(integralAmount);
             integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+            System.out.println("插入log记录");
 
             IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
             integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());

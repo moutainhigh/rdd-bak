@@ -11,6 +11,7 @@
             b.user_account userAccount,
             sinopec_petrol_num sinopecPetrolNum,
             petrolChina_petrol_num petrolChinaPetrolNum,
+            recharge_account rechargeAccount,
             record_type recordType,
             a.create_at createAt
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
@@ -30,6 +31,7 @@
             sinopec_petrol_num sinopecPetrolNum,
             petrolChina_petrol_num petrolChinaPetrolNum,
             record_type recordType,
+            recharge_account rechargeAccount,
             a.create_at createAt
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
                                          left join czb_user_card_relation c on a.user_id = c.user_id

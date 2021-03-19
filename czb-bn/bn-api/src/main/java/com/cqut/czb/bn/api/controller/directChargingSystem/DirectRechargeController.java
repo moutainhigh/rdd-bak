@@ -27,14 +27,14 @@ public class DirectRechargeController {
      */
     @PostMapping("/getOrderInfoList")
     public JSONResult getInfoNum(Principal principal, DirectChargingOrderDto directChargingOrderDto){
-        String userId = "";
-        if (directChargingOrderDto.getIsNeedLogin() == 1) {
-            userId = ((User)redisUtils.get(principal.getName())).getUserId();
+
+//        if (directChargingOrderDto.getIsNeedLogin() == 1) {
+        String userId = ((User)redisUtils.get(principal.getName())).getUserId();
             return new JSONResult(oilCardRechargeService.getOrderInfoList(userId, directChargingOrderDto.getRecordType()));
-        } else {
-            userId = directChargingOrderDto.getUserId();
-            return new JSONResult(oilCardRechargeService.getOnceOrderInfoList(userId, directChargingOrderDto.getRecordType()));
-        }
+//        } else {
+//            userId = directChargingOrderDto.getUserId();
+//            return new JSONResult(oilCardRechargeService.getOnceOrderInfoList(userId, directChargingOrderDto.getRecordType()));
+//        }
     }
 
     /**

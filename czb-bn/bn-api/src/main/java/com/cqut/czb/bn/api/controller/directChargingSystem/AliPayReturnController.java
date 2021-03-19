@@ -45,6 +45,7 @@ public class AliPayReturnController {
         System.out.println("支付宝回调——直冲");
         response.setCharacterEncoding("utf-8");
         response.setHeader("content-type", "text/html;charset=utf-8");
+        response.setContentType("text/xml");
         try {
             response.getWriter().print(oilCardRechargeService.aliPayReturn(request,"Direct"));
         } catch (IOException e) {

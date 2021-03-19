@@ -179,6 +179,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         Integer integralAmount = directChargingOrderDto.getIntegralAmount();
         Integer isNew = directChargingOrderDto.getIsNew();
         String cardNum = "";
+        System.out.println("起吊参数" + directChargingOrderDto.toString());
         if (recordType == 2){
             cardNum = directChargingOrderDto.getPetrolChinaPetrolNum();
         }else if(recordType == 3){
@@ -257,7 +258,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     if (AlipayConfig.response_success.equals(result.get("success"))) {
                         if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
                             System.out.println("尚未开通充值");
-                            return new String("尚未开通充值");
+                            return AlipayConfig.response_success;
                         }
                         if (directChargingOrderDto.getRecordType()==1){
                             System.out.println("开通充值");
