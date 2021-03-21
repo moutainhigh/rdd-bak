@@ -28,14 +28,15 @@
         <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
         <result column="bindingId" property="bindingid" jdbcType="VARCHAR" />
         <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
+        <result column="mall_partner" property="mallPartner" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-    user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
+        user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
     partner, old_superior, first_level_partner, second_level_partner, is_vip, avatar_url,
-    bindingId, is_special
-  </sql>
+    bindingId, is_special, mall_partner
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />
@@ -43,31 +44,31 @@
         where user_id = #{userId,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from czb_user
-    where user_id = #{userId,jdbcType=VARCHAR}
-  </delete>
+        delete from czb_user
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
     <insert id="insert" parameterType="com.cqut.czb.bn.entity.entity.User" >
-    insert into czb_user (user_id, user_account, user_psw,
-      user_type, user_rank, is_identified,
-      superior_user, is_login_pc, user_name,
-      user_id_card, create_at, update_at,
-      user_yun_id, is_deleted, commission_level_one,
-      commission_level_two, mission_start_time,
-      mission_end_time, partner, old_superior,
-      first_level_partner, second_level_partner,
-      is_vip, avatar_url, bindingId,
-      is_special)
-    values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR},
-      #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER},
-      #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
-      #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
-      #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR},
-      #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP},
-      #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR},
-      #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR},
-      #{isVip,jdbcType=INTEGER}, #{avatarUrl,jdbcType=VARCHAR}, #{bindingid,jdbcType=VARCHAR},
-      #{isSpecial,jdbcType=INTEGER})
-  </insert>
+        insert into czb_user (user_id, user_account, user_psw,
+                              user_type, user_rank, is_identified,
+                              superior_user, is_login_pc, user_name,
+                              user_id_card, create_at, update_at,
+                              user_yun_id, is_deleted, commission_level_one,
+                              commission_level_two, mission_start_time,
+                              mission_end_time, partner, old_superior,
+                              first_level_partner, second_level_partner,
+                              is_vip, avatar_url, bindingId,
+                              is_special, mall_partner)
+        values (#{userId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR},
+                #{userType,jdbcType=INTEGER}, #{userRank,jdbcType=INTEGER}, #{isIdentified,jdbcType=INTEGER},
+                #{superiorUser,jdbcType=VARCHAR}, #{isLoginPc,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+                #{userIdCard,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+                #{userYunId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{commissionLevelOne,jdbcType=VARCHAR},
+                #{commissionLevelTwo,jdbcType=VARCHAR}, #{missionStartTime,jdbcType=TIMESTAMP},
+                #{missionEndTime,jdbcType=TIMESTAMP}, #{partner,jdbcType=INTEGER}, #{oldSuperior,jdbcType=VARCHAR},
+                #{firstLevelPartner,jdbcType=VARCHAR}, #{secondLevelPartner,jdbcType=VARCHAR},
+                #{isVip,jdbcType=INTEGER}, #{avatarUrl,jdbcType=VARCHAR}, #{bindingid,jdbcType=VARCHAR},
+                #{isSpecial,jdbcType=INTEGER}, #{mallPartner,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.User" >
         insert into czb_user
         <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -149,6 +150,9 @@
             <if test="isSpecial != null" >
                 is_special,
             </if>
+            <if test="mallPartner != null" >
+                mall_partner,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="userId != null" >
@@ -228,6 +232,9 @@
             </if>
             <if test="isSpecial != null" >
                 #{isSpecial,jdbcType=INTEGER},
+            </if>
+            <if test="mallPartner != null" >
+                #{mallPartner,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -309,36 +316,40 @@
             <if test="isSpecial != null" >
                 is_special = #{isSpecial,jdbcType=INTEGER},
             </if>
+            <if test="mallPartner != null" >
+                mall_partner = #{mallPartner,jdbcType=VARCHAR},
+            </if>
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.cqut.czb.bn.entity.entity.User" >
-    update czb_user
-    set user_account = #{userAccount,jdbcType=VARCHAR},
-      user_psw = #{userPsw,jdbcType=VARCHAR},
-      user_type = #{userType,jdbcType=INTEGER},
-      user_rank = #{userRank,jdbcType=INTEGER},
-      is_identified = #{isIdentified,jdbcType=INTEGER},
-      superior_user = #{superiorUser,jdbcType=VARCHAR},
-      is_login_pc = #{isLoginPc,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR},
-      user_id_card = #{userIdCard,jdbcType=VARCHAR},
-      create_at = #{createAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      user_yun_id = #{userYunId,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=INTEGER},
-      commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
-      commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
-      mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
-      mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
-      partner = #{partner,jdbcType=INTEGER},
-      old_superior = #{oldSuperior,jdbcType=VARCHAR},
-      first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
-      second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
-      is_vip = #{isVip,jdbcType=INTEGER},
-      avatar_url = #{avatarUrl,jdbcType=VARCHAR},
-      bindingId = #{bindingid,jdbcType=VARCHAR},
-      is_special = #{isSpecial,jdbcType=INTEGER}
-    where user_id = #{userId,jdbcType=VARCHAR}
-  </update>
+        update czb_user
+        set user_account = #{userAccount,jdbcType=VARCHAR},
+            user_psw = #{userPsw,jdbcType=VARCHAR},
+            user_type = #{userType,jdbcType=INTEGER},
+            user_rank = #{userRank,jdbcType=INTEGER},
+            is_identified = #{isIdentified,jdbcType=INTEGER},
+            superior_user = #{superiorUser,jdbcType=VARCHAR},
+            is_login_pc = #{isLoginPc,jdbcType=INTEGER},
+            user_name = #{userName,jdbcType=VARCHAR},
+            user_id_card = #{userIdCard,jdbcType=VARCHAR},
+            create_at = #{createAt,jdbcType=TIMESTAMP},
+            update_at = #{updateAt,jdbcType=TIMESTAMP},
+            user_yun_id = #{userYunId,jdbcType=VARCHAR},
+            is_deleted = #{isDeleted,jdbcType=INTEGER},
+            commission_level_one = #{commissionLevelOne,jdbcType=VARCHAR},
+            commission_level_two = #{commissionLevelTwo,jdbcType=VARCHAR},
+            mission_start_time = #{missionStartTime,jdbcType=TIMESTAMP},
+            mission_end_time = #{missionEndTime,jdbcType=TIMESTAMP},
+            partner = #{partner,jdbcType=INTEGER},
+            old_superior = #{oldSuperior,jdbcType=VARCHAR},
+            first_level_partner = #{firstLevelPartner,jdbcType=VARCHAR},
+            second_level_partner = #{secondLevelPartner,jdbcType=VARCHAR},
+            is_vip = #{isVip,jdbcType=INTEGER},
+            avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+            bindingId = #{bindingid,jdbcType=VARCHAR},
+            is_special = #{isSpecial,jdbcType=INTEGER},
+            mall_partner = #{mallPartner,jdbcType=VARCHAR}
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
 </mapper>

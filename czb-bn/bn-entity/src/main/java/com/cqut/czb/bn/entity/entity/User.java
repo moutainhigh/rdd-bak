@@ -55,6 +55,8 @@ public class User {
 
     private Integer isSpecial;
 
+    private String mallPartner;
+
     public String getUserId() {
         return userId;
     }
@@ -261,5 +263,13 @@ public class User {
 
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
+    }
+
+    public String getMallPartner() {
+        return mallPartner;
+    }
+
+    public void setMallPartner(String mallPartner) {
+        this.mallPartner = mallPartner == null ? null : mallPartner.trim();
     }
 }
