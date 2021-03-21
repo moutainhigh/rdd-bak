@@ -122,4 +122,15 @@ public class UserManagementController {
         return  new JSONResult(bindingFlag);
     }
 
+    /**
+     * 获取用户的商城合伙人
+     * 设计者：侯家领
+     * 更新时间：2021.3.21
+     */
+    @GetMapping("/getMallPartner")
+    public JSONResult getMallPartner(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        return userService.getMallPartner(user);
+    }
+
 }

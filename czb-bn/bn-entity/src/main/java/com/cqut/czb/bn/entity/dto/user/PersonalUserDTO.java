@@ -16,6 +16,10 @@ public class PersonalUserDTO {
 
     private String avatarUrl;
 
+    private String mallPartner;
+
+    private String mallPartnerAccount;
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -70,5 +74,21 @@ public class PersonalUserDTO {
 
     public void setSuperiorUser(String superiorUser) {
         this.superiorUser = superiorUser;
+    }
+
+    public String getMallPartner() {
+        return mallPartner;
+    }
+
+    public void setMallPartner(String mallPartner) {
+        this.mallPartner = mallPartner;
+    }
+
+    public String getMallPartnerAccount() {
+        return mallPartnerAccount;
+    }
+
+    public void setMallPartnerAccount(String mallPartnerAccount) {
+        this.mallPartnerAccount = mallPartnerAccount;
     }
 }

@@ -2,6 +2,7 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO;
@@ -11,6 +12,7 @@ import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.*;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.service.ShopManagementService;
 import com.cqut.czb.bn.util.RedisUtil;
@@ -498,6 +500,29 @@ public class UserServiceImpl implements IUserService {
                 return "绑定成功";
             }
             return "绑定失败:请联系管理员";
+        }
+    }
+
+    @Override
+    public JSONResult getMallPartner(User user) {
+        UserDTO userDTO = userMapperExtra.findUserDTOById(user.getUserId());
+        if (userDTO.getMallPartner() == null) {
+            UserRoleDTO userRoleDTO = new UserRoleDTO();
+            userRoleDTO.setUserId(userDTO.getUserId());
+            List<UserRoleDTO> userRoleList = userRoleMapperExtra.selectUserRoleName(userRoleDTO);
+            for (UserRoleDTO userRole: userRoleList) {
+                if (userRole.getRoleName().equals("商城合伙人")) {
+                    return new JSONResult(userDTO.getUserAccount());
+                }
+            }
+            return new JSONResult(null);
+        } else {
+            UserDTO mallPartner = userMapperExtra.findUserDTOById(userDTO.getMallPartner());
+            if (mallPartner.getIsDeleted() == 1) {
+                return new JSONResult(null);
+            } else {
+                return new JSONResult(mallPartner.getUserAccount());
+            }
         }
     }
 }

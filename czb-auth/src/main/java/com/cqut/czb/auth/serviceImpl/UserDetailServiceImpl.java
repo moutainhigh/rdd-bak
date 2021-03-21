@@ -10,6 +10,7 @@ import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
@@ -74,6 +75,11 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
+
+        if (personalUserDTO.getMallPartner() != null) {
+            User mallPartner = userMapperExtra.findUserByAccount(personalUserDTO.getMallPartnerAccount());
+            personalUserDTO.setMallPartner(mallPartner.getUserId());
+        }
 
         User user = BeanMapper.map(personalUserDTO, User.class);
         user.setUserId(StringUtil.createId());

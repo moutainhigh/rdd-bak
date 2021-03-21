@@ -86,6 +86,7 @@
     <result column="second_level_partner" jdbcType="VARCHAR" property="secondLevelPartner" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
+    <result column="mall_partner" property="mallPartner" jdbcType="VARCHAR" />
     <collection property="roles" column="{userId = user_id}" javaType="list" select="selectRoleList"></collection>
   </resultMap>
   <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >

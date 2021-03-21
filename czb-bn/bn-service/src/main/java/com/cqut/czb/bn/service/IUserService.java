@@ -7,6 +7,7 @@ import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.global.JSONResult;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -38,4 +39,6 @@ public interface IUserService {
 
 
     String bindingUser(UserInputDTO userInputDTO,String userId);
+
+    JSONResult getMallPartner(User user);
 }
