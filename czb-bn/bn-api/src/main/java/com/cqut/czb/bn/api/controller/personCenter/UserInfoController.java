@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.security.Principal;
 
-/**
- * 作者：谭深化
- * 模块：app个人中心，我的钱包
- * 业务：提现
- */
 @RestController
 @RequestMapping("/api/userInfo")
 public class UserInfoController {
@@ -31,8 +26,8 @@ public class UserInfoController {
     RedisUtils redisUtils;
 
 
-    @RequestMapping(value = "/getWithdrawLog", method = RequestMethod.GET)
-    public String getWithdrawLog(Principal principal) {
+    @RequestMapping(value = "/getUserAccount", method = RequestMethod.GET)
+    public String getUserAccount(Principal principal) {
         User user = (User) redisUtils.get(principal.getName());
         return userInfoService.getUserAccount(user.getUserId());
     }
