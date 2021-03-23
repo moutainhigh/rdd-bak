@@ -1,6 +1,5 @@
 package com.cqut.czb.bn.entity.dto.infoSpread;
 
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.Date;
 import java.util.List;

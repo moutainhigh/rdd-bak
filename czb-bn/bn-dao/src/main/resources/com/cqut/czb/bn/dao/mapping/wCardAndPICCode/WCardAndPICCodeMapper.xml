@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.wCardAndPICCode.WCardAndPICCodeMapper" >
-    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.wCardAndPICCode.WCardAndPICCode" >
-        <id column="orderId" property="orderId" jdbcType="VARCHAR" />
-        <result column="actualPrice" property="actualPrice" jdbcType="DOUBLE" />
-        <result column="commodityId" property="commodityId" jdbcType="VARCHAR" />
-        <result column="electronicCode" property="electronicCode" jdbcType="VARCHAR" />
-        <result column="orderState" property="orderState" jdbcType="VARCHAR" />
-    </resultMap>
-    <select id="selectCommodityOrder" resultMap="BaseResultMap">
-        SELECT
-          order_id orderId,
-          actual_price actualPrice,
-          czb_wechat_commodity_order.commodity_id commodityId,
-          czb_wechat_commodity.commodity_title commodityTitle,
-          electronic_code electronicCode,
-          order_state orderState,
-          original_price originalPrice,
-          czb_wechat_commodity_order.create_at createAt
-        FROM
-          czb_wechat_commodity_order
-          LEFT JOIN czb_wechat_commodity ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
+    <select id="selectCommodityOrder" resultType="com.cqut.czb.bn.entity.dto.H5StockDTO">
+        select
+         czb_h5_stock.stock_id stockId,
+         czb_h5_stock.commodity_id commodityId,
+         commodity_title commodityTitle,
+         czb_h5_stock.content,
+         czb_h5_stock.state,
+         czb_h5_stock.create_at createAt,
+         czb_h5_stock.update_at updateAt,
+         czb_h5_stock.record_type recordType,
+         czb_h5_stock.user_id userId,
+         czb_h5_stock.price,
+         czb_h5_stock.third_order thirdOrder
+        from czb_h5_stock
+        join czb_h5_commodity on czb_h5_stock.commodity_id = czb_h5_commodity.commodity_id
         <where>
-          czb_wechat_commodity_order.user_id = #{userId, jdbcType = VARCHAR}
-          <if test="type == 1">
-              and czb_wechat_commodity_order.commodity_id = '1593258997465'
+            czb_h5_stock.user_id = #{userId, jdbcType = VARCHAR}
+          <if test="recordType == 1">
+              and czb_h5_stock.commodity_id = '1592814211782'
           </if>
-          <if test="type == 2">
-              and czb_wechat_commodity_order.commodity_id = '1608017728685'
+          <if test="recordType == 2">
+              and czb_h5_stock.commodity_id = '1592814211785'
           </if>
         </where>
-        ORDER BY
-          czb_wechat_commodity_order.create_at DESC
+        order by czb_h5_stock.create_at desc
   </select>
 </mapper>

@@ -31,4 +31,6 @@ public class WCardAndPICCodeController {
         String userId = ((User)redisUtils.get(principal.getName())).getUserId();
         return new JSONResult(wCardAndPICCodeService.getCommodityOrder(userId, type));
     }
+
+
 }
