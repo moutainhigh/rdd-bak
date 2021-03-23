@@ -9,6 +9,7 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatStockMapperExtra;
+import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
@@ -126,6 +127,9 @@ public class PayBackServiceImpl implements PayBackService {
     @Autowired
     H5PaymentBuyCommodityServiceImpl h5PaymentBuyCommodityService;
 
+    @Autowired
+    H5PaymentBuyCommodityMapperExtra h5PaymentBuyCommodityMapperExtra;
+
     /**
      *
      * @Description： 支付宝回调
@@ -195,12 +199,12 @@ public class PayBackServiceImpl implements PayBackService {
         String thirdOrderId = restmap.get("transaction_id").toString();
         String[] temp;
         int flag = 0;
-        String orgId = "";
+        String stockId = "";
         double money = Double.valueOf(restmap.get("total_fee").toString());
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
         System.out.println("微信小程序支付:"+money);
         String ownerId = "";
-        String stockIds = "";
+        String userId = "";
         int integralAmount = 0;
         for (String data : resDate) {
             temp = data.split("\'");
@@ -208,124 +212,47 @@ public class PayBackServiceImpl implements PayBackService {
                 continue;
             }
             //商家订单
-            if ("orgId".equals(temp[0])) {
-                orgId = temp[1];
+            if ("stockId".equals(temp[0])) {
+                stockId = temp[1];
             }
             //用户id
-            if ("ownerId".equals(temp[0])) {
-                ownerId = temp[1];
+            if ("userId".equals(temp[0])) {
+                userId = temp[1];
             }
 
             if("integralAmount".equals(temp[0])){
                 integralAmount = Integer.valueOf(temp[1]);
             }
 
-            if("stockIds".equals(temp[0])){
-                stockIds = temp[1];
-            }
-        }
-        System.out.println(ownerId);
-        System.out.println(stockIds);
-        List<String> myList = new ArrayList<String>(Arrays.asList(stockIds.split(",")));
-
-        List<WeChatStock> ids = new ArrayList<>();
-
-        for (String weChatStock:myList){
-            WeChatStock weChatStock1 = new WeChatStock();
-            weChatStock1.setBuyerId(ownerId);
-            weChatStock1.setStockId(weChatStock);
-            ids.add(weChatStock1);
         }
 
-        if (h5PaymentBuyCommodityService.judgeChangeSte(0,null,null,ownerId,orgId,myList)) {
-            flag = 1;
-        } else {
-            return 0;
-        }
+        // 更新
+        H5StockDTO h5StockDTO = new H5StockDTO();
+        h5StockDTO.setStockId(stockId);
+        h5StockDTO.setThirdOrder(thirdOrderId);
 
-        if (flag == 1) {
-            //更改库存状态
-            int updateStock =  weChatStockMapperExtra.updateStockState(ids);
-            System.out.println("更改库存状态："+(updateStock>0));
+        // 判断支付人和付款人是否是同一个
 
-            //更改用户订单
-            WeChatCommodityOrder order=new WeChatCommodityOrder();
-            order.setOrderId(orgId);
-            order.setThirdOrder(thirdOrderId);
-            order.setUpdateAt(new Date());
-            order.setPayStatus(1);
-            order.setOrderState(1);
-            int update= weChatCommodityOrderMapper.updateByPrimaryKeySelective(order);
-            System.out.println("更改用户订单："+(update>0));
+        System.out.println("库存更新成功");
+        boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
 
-            //判断是否邮寄
-            WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
-            WeChatCommodity weChatCommodity = weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
-            if(order1.getCommodityType()==1){
-                WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
-                records.setRecordId(StringUtil.createId());
-                records.setAddressId(order1.getAddressId());
-                records.setCreateAt(new Date());
-                records.setDeliveryState(0);
-                records.setOrderId(orgId);
-                weChatGoodsDeliveryRecordsMapper.insertSelective(records);
-            }else {
-                // 发送短信
-                //查出商家电话
-                Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
-                String title="";
-                if(weChatCommodity.getCommodityTitle().length()>20){
-                    title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
-                }else {
-                    title=weChatCommodity.getCommodityTitle();
-                }
-                PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode(),shop.getShopPhone());
-            }
 
-            //更改商品数量
-            WeChatCommodity commodity=new WeChatCommodity();
-            commodity.setCommodityId(order1.getCommodityId());
-            //计算商品的总库存量
-            int num=weChatCommodity.getCommodityNum()-order1.getCommodityNum();
-            if(num>=0){
-                commodity.setCommodityNum(num);
-            }else {
-                commodity.setCommodityNum(0);
-            }
-            //计算商品的总销售量
-            int saleNum=weChatCommodity.getSalesVolume()+order1.getCommodityNum();
-            commodity.setSalesVolume(saleNum);
-            weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
+        //插入log记录
+        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+        integralLogDTO.setOrderId(stockId);
+        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        integralLogDTO.setUserId(userId);
+        integralLogDTO.setIntegralLogType(5);
+        integralLogDTO.setRemark("抵扣");
+        integralLogDTO.setIntegralAmount(integralAmount);
+        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-            //查询是否为首次消费
-            dataProcessService.isHaveConsumption(ownerId);
-
-            Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());
-            System.out.println("返佣"+isSucceed);
-
-            //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务，5为点餐,6小程序购物
-            //插入消费记录
-            dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "6", 2);
-
-            //插入log记录
-            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
-            integralLogDTO.setOrderId(orgId);
-            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-            integralLogDTO.setUserId(ownerId);
-            integralLogDTO.setIntegralLogType(5);
-            integralLogDTO.setRemark("抵扣");
-            integralLogDTO.setIntegralAmount(integralAmount);
-            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-
-            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
-            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-            integralInfoDTO.setUserId(ownerId);
-            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
-
-            return 1;
-        }
-        return 0;
+        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+        integralInfoDTO.setUserId(userId);
+        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        return 1;
     }
 
     /**

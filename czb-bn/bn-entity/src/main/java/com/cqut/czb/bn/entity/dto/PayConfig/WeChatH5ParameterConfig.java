@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.entity.dto.PayConfig;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -90,21 +91,14 @@ public class WeChatH5ParameterConfig {
 
     /**
      * 微信支付-中石化码商和无卡加油使用
-     * @param orgId
-     * @param userId
-     * @param stockIds
-     * @param money
-     * @param commodityId
      * @return
      */
-    private static String getAttachAppletPayment(String orgId, String userId,String stockIds, Double money, String commodityId,int integralAmount) {
+    private static String getAttachAppletPayment(H5StockDTO h5StockDTO) {
         Map<String, Object> pbp = new HashMap<>();
-        pbp.put("orgId", orgId);
-        pbp.put("ownerId", userId);
-        pbp.put("money",money);
-        pbp.put("commodityId",commodityId);
-        pbp.put("stockIds",stockIds);
-        pbp.put("integralAmount",integralAmount);
+        pbp.put("stockId", h5StockDTO.getStockId());
+        pbp.put("userId", h5StockDTO.getUserId());
+        pbp.put("payPrice", h5StockDTO.getPayPrice());
+        pbp.put("integralAmount",h5StockDTO.getIntegralAmount());
         return StringUtil.transMapToStringOther(pbp);
     }
 
@@ -160,20 +154,31 @@ public class WeChatH5ParameterConfig {
     }
 
     //微信库存商品使用
-    public static SortedMap<String ,Object> getParametersPaymentApplet(String userAccount, Double money, String nonceStrTemp, String orgId,  String stockIds,String userId, WeChatCommodity weChatCommodity,int integralAmount){
+    public static SortedMap<String ,Object> getParametersPaymentApplet(String nonceStrTemp, H5StockDTO h5StockDTO){
         SortedMap<String,Object> parameters = new TreeMap<String, Object>();
-        parameters=getParameters();
-        parameters.put("appid", WeChatH5PayConfig.app_id);
-        parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        parameters = getParameters();
+        String attach=getAttachAppletPayment(h5StockDTO);
+        parameters.put("attach",attach);
+        if (h5StockDTO.getIsBrowser() == 1) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", "JSAPI");
+        } else if (h5StockDTO.getIsBrowser() == 0) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+        } else if (h5StockDTO.getIsBrowser() == 2) {
+//            parameters.put("trade_type", "APP");
+//            parameters.put("appid", "wx1d9987e1abf4c05e");
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
+        }
         parameters.put("nonce_str",nonceStrTemp);
-        parameters.put("out_trade_no",orgId);
-        parameters.put("openid",userAccount);
-        BigInteger totalFee = BigDecimal.valueOf(money).multiply(new BigDecimal(100)).toBigInteger();
+        parameters.put("out_trade_no",h5StockDTO.getStockId());
+        BigInteger totalFee = BigDecimal.valueOf(h5StockDTO.getPayPrice()).multiply(new BigDecimal(100)).toBigInteger();
         parameters.put("total_fee",totalFee);
         parameters.put("notify_url",WeChatH5PayConfig.Applet_url);
         parameters.put("detail","微信石化码商支付");
-        String attach = getAttachAppletPayment(orgId,userId,stockIds,money,weChatCommodity.getCommodityId(),integralAmount);
-        parameters.put("attach",attach);
         parameters.put("sign",WeChatUtils.createRddSign("UTF-8",parameters));
         return parameters;
 

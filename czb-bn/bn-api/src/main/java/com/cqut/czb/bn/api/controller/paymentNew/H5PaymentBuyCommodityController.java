@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.paymentNew;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.PayInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -29,12 +30,12 @@ public class H5PaymentBuyCommodityController {
      * @return
      */
     @RequestMapping(value = "/WeChatAppletPayment", method = RequestMethod.POST)
-    public JSONResult WeChatAppletPayment(Principal principal, @RequestBody PayInputDTO payInputDTO) {
+    public JSONResult WeChatAppletPayment(Principal principal, @RequestBody H5StockDTO h5StockDTO) {
         User user = (User)redisUtils.get(principal.getName());
         if(user==null){
             return new JSONResult("未登录",405,null);
         }
-        return new JSONResult( h5PaymentBuyCommodityService.WeChatAppletPaymentBuyCommodity(user,payInputDTO));
+        return new JSONResult( h5PaymentBuyCommodityService.WeChatAppletPaymentBuyCommodity(user,h5StockDTO));
     }
 
     /**

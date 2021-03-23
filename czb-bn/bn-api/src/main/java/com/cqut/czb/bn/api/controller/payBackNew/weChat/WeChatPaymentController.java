@@ -44,6 +44,7 @@ public class WeChatPaymentController {
     @RequestMapping(value="/verifyAppletPaymentWeChat", method= RequestMethod.POST)
     public synchronized void verifyAppletPaymentWeChat(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-type", "text/html;charset=utf-8");
         response.setContentType("text/xml");
         try {
             response.getWriter().write(orderPaymentService.WeChatOrderPaymentNotify(request,"AppletPayment"));
