@@ -7,9 +7,9 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import java.util.List;
 
 public interface H5StockMapper {
-    JSONResult<List<H5StockDTO>> h5StockList(H5StockDTO h5StockDTO);
+    List<H5StockDTO> h5StockList(H5StockDTO h5StockDTO);
 
-    JSONResult<List<H5CommodityDTO>> h5CommodityList(H5CommodityDTO commodityDTO);
+    List<H5CommodityDTO> h5CommodityList(H5CommodityDTO commodityDTO);
 
-    JSONResult<List<Double>> h5CommodityStockPriceGroup(String commodityId);
+    List<Double> h5CommodityStockPriceGroup(String commodityId);
 }

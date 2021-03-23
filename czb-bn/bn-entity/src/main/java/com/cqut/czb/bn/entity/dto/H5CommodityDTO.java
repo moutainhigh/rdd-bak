@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -9,9 +11,13 @@ public class H5CommodityDTO extends PageDTO {
     private String commodityId;
     private String commodityTitle;
     private Integer isDelete;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date updateAt;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
     public String getCommodityId() {

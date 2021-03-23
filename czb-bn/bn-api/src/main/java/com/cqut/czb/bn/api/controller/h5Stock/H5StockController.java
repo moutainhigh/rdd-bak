@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -34,6 +35,6 @@ public class H5StockController {
 
     @GetMapping("/priceGroup")
     public JSONResult<List<Double>> h5CommodityStockPriceGroup(String commodityId){
-        return stockService.h5CommodityStockPriceGroup(commodityId);
+        return new JSONResult<>(stockService.h5CommodityStockPriceGroup(commodityId));
     }
 }

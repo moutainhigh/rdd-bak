@@ -19,7 +19,7 @@
         from czb_h5_stock
 		join czb_h5_commodity on czb_h5_stock.commodity_id = czb_h5_commodity.commodity_id
 		<where>
-            commodity_id = #{commodityId}
+            czb_h5_commodity.commodity_id = #{commodityId}
             <if test="commodityTitle != null and commodityTitle != ''">
                 and commodity_title = #{commodityTitle}
             </if>
@@ -31,7 +31,6 @@
                 and czb_h5_stock.create_at &lt; #{endTime}
             </if>
         </where>
-        limit #{currentPage}, #{pageSize}
     </select>
 
     <select id="h5CommodityList" parameterType="com.cqut.czb.bn.entity.dto.H5CommodityDTO"
@@ -53,7 +52,6 @@
                 and czb_h5_stock.create_at &lt; #{endTime}
             </if>
         </where>
-        limit #{currentPage}, #{pageSize}
     </select>
 
     <select id="h5CommodityStockPriceGroup" resultType="java.lang.Double">

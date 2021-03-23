@@ -1,5 +1,7 @@
 package com.cqut.czb.bn.entity.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class H5StockDTO extends PageDTO{
@@ -8,7 +10,9 @@ public class H5StockDTO extends PageDTO{
     private String commodityTitle;
     private String content;
     private int state;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createAt;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date updateAt;
     private int recordType;
     private String userId;
@@ -17,7 +21,9 @@ public class H5StockDTO extends PageDTO{
     private int integralAmount;
     private int isBrowser;
     private String thirdOrder;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
     public String getStockId() {
