@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.h5Stock.H5StockMapperExtra">
+    <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
+        select
+        price as id,
+        concat("价格为：",price,"元") as name,
+        true as isLeaf
+        from czb_h5_stock
+        where 1 = 1
+        <if test="commodityType1 != '' and commodityType1 != null">
+            and record_type = #{commodityType1,jdbcType=VARCHAR}
+        </if>
+        <if test="commodityType2 != '' and commodityType2 != null">
+            or record_type = #{commodityType2,jdbcType=VARCHAR}
+        </if>
+        group by price
+    </select>
+</mapper>

@@ -4,6 +4,7 @@ import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
+import com.cqut.czb.bn.dao.mapper.h5Stock.H5StockMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.*;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralDeductionInfoMapperExtra;
@@ -94,6 +95,9 @@ public class IntegralServiceImpl implements IntegralService {
 
     @Autowired
     IntegralManageMapper integralManageMapper;
+
+    @Autowired
+    H5StockMapperExtra h5StockMapperExtra;
 
     public JSONResult getCurrentTotalIntegral(String userId, String userAccount) {
         if (userAccount == null || userAccount.equals("")) {
@@ -571,6 +575,12 @@ public class IntegralServiceImpl implements IntegralService {
         if (type.equals("5")) {
             return new JSONResult(equityPaymentCommodityMapperExtra.selectAllCommodityTitle());
         }
+        if (type.equals("6")) {
+            return new JSONResult(h5StockMapperExtra.selectAllCommodityTitle("1",null));
+        }
+        if (type.equals("7")) {
+            return new JSONResult(h5StockMapperExtra.selectAllCommodityTitle("2",null));
+        }
         if (commodityId != null || !commodityId.equals("")) {
             WxAttributeDTO wxAttributeDTO = new WxAttributeDTO();
             wxAttributeDTO.setCommodityId(commodityId);
@@ -591,6 +601,9 @@ public class IntegralServiceImpl implements IntegralService {
         }
         if (integralDeductionInfo.getDeductionType() == 5) {
             return new JSONResult(equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(integralDeductionInfo.getCommodityId()).getSellingPrice());
+        }
+        if (integralDeductionInfo.getDeductionType() == 6 || integralDeductionInfo.getDeductionType() == 7) {
+            return new JSONResult(integralDeductionInfo.getCommodityId());
         }
         else {
             return new JSONResult("请求无效", 500);
