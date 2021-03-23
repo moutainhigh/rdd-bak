@@ -48,8 +48,8 @@
                 and commodity_title = #{commodityTitle}
             </if>
             <if test="startTime != null and endTime != null">
-                and czb_h5_stock.create_at &gt; #{startTime}
-                and czb_h5_stock.create_at &lt; #{endTime}
+                and create_at &gt; #{startTime}
+                and create_at &lt; #{endTime}
             </if>
         </where>
     </select>
