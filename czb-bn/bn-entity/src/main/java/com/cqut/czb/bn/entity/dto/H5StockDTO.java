@@ -2,9 +2,10 @@ package com.cqut.czb.bn.entity.dto;
 
 import java.util.Date;
 
-public class H5StockDTO {
+public class H5StockDTO extends PageDTO{
     private String stockId;
     private String commodityId;
+    private String commodityTitle;
     private String content;
     private int state;
     private Date createAt;
@@ -16,6 +17,8 @@ public class H5StockDTO {
     private int integralAmount;
     private int isBrowser;
     private String thirdOrder;
+    private Date startTime;
+    private Date endTime;
 
     public String getStockId() {
         return stockId;
@@ -119,5 +122,29 @@ public class H5StockDTO {
 
     public void setThirdOrder(String thirdOrder) {
         this.thirdOrder = thirdOrder;
+    }
+
+    public String getCommodityTitle() {
+        return commodityTitle;
+    }
+
+    public void setCommodityTitle(String commodityTitle) {
+        this.commodityTitle = commodityTitle;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }
