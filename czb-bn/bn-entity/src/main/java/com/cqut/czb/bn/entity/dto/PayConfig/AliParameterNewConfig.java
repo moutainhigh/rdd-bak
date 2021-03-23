@@ -3,6 +3,7 @@ package com.cqut.czb.bn.entity.dto.PayConfig;
 import com.alipay.api.AlipayObject;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
+import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
@@ -40,7 +41,7 @@ public class AliParameterNewConfig {
         return StringUtil.transMapToStringOther(pbp);
     }
 
-    public static AlipayTradeWapPayModel getBizModelICommodityCoupons(double money, String thirdOrder, String stockIds, String userId, WeChatCommodity weChatCommodity) {
+    public static AlipayTradeWapPayModel getBizModelICommodityCoupons(double money, String thirdOrder,String userId, H5StockDTO h5StockDTO) {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("库存商品");
         model.setSubject("库存商品");
@@ -50,17 +51,17 @@ public class AliParameterNewConfig {
         model.setProductCode(AliPayH5Config.product_wap_code);
         model.setQuitUrl(AliPayH5Config.CommodityReturn_url);
         model.setSellerId(AliPayH5Config.pay_account);
-        model.setPassbackParams(getParamsCommodityCoupons(thirdOrder,userId,stockIds,money,weChatCommodity.getCommodityId()));
+        model.setPassbackParams(getParamsCommodityCoupons(thirdOrder,userId,money,h5StockDTO));
         return model;
     }
 
-    private static String getParamsCommodityCoupons(String thirdOrder, String userId, String stockIds, double money, String commodityId) {
+    private static String getParamsCommodityCoupons(String thirdOrder, String userId, double money,H5StockDTO h5StockDTO) {
         Map<String, Object> pbp = new HashMap<>();
         pbp.put("orgId", thirdOrder);
         pbp.put("ownerId", userId);
         pbp.put("money", money);
-        pbp.put("commodityId",commodityId);
-        pbp.put("stockIds", stockIds);
+        pbp.put("stockId", h5StockDTO.getStockId());
+        pbp.put("integralAmount",h5StockDTO.getIntegralAmount());
         return StringUtil.transMapToStringOther(pbp);
     }
 

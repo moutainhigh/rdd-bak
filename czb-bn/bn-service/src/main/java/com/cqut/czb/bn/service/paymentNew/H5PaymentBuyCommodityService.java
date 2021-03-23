@@ -8,5 +8,5 @@ import com.cqut.czb.bn.entity.entity.User;
 public interface H5PaymentBuyCommodityService {
     com.alibaba.fastjson.JSONObject WeChatAppletPaymentBuyCommodity(User user, H5StockDTO h5StockDTO);
 
-    String AliAppletPaymentBuyCommodity(User user, PayInputDTO payInputDTO);
+    String AliAppletPaymentBuyCommodity(User user, H5StockDTO h5StockDTO);
 }
