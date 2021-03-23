@@ -44,11 +44,11 @@ public class H5PaymentBuyCommodityController {
      * @return
      */
     @RequestMapping(value = "/AliAppletPayment", method = RequestMethod.POST)
-    public JSONResult AliAppletPayment(Principal principal, @RequestBody PayInputDTO payInputDTO) {
+    public JSONResult AliAppletPayment(Principal principal, @RequestBody H5StockDTO h5StockDTO) {
         User user = (User)redisUtils.get(principal.getName());
         if(user==null){
             return new JSONResult("未登录",405,null);
         }
-        return new JSONResult( h5PaymentBuyCommodityService.AliAppletPaymentBuyCommodity(user,payInputDTO));
+        return new JSONResult( h5PaymentBuyCommodityService.AliAppletPaymentBuyCommodity(user,h5StockDTO));
     }
 }
