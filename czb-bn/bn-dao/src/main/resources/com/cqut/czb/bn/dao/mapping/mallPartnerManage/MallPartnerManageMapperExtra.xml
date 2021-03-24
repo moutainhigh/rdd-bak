@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.mallPartnerManage.MallPartnerManageMapperExtra">
+    <select id="statisticsMoney" resultType="double">
+        SELECT
+            SUM(
+                        IFNULL( t2.recharge_amount, 0 ) + IFNULL( t3.price, 0 ) + IFNULL( t4.amount, 0 )) totalMoney
+        FROM
+            czb_user t1
+                LEFT JOIN czb_direct_charging_order t2 ON t1.user_id = t2.user_id
+                LEFT JOIN czb_h5_stock t3 ON t1.user_id = t3.user_id
+                LEFT JOIN czb_integral_purchase_record t4 ON t1.user_id = t4.user_id
+                LEFT JOIN czb_user_role t5 ON t1.mall_partner = t5.user_id
+                LEFT JOIN czb_role t6 ON t6.role_id = t5.role_id
+                LEFT JOIN czb_user t7 ON t7.user_id = t1.mall_partner
+        WHERE
+            t6.role_name = '商城合伙人'
+    </select>
+
+    <select id="selectMallPartnerList" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
+        SELECT
+            SUM(
+                        IFNULL( t2.recharge_amount, 0 ) + IFNULL( t3.price, 0 ) + IFNULL( t4.amount, 0 )) totalMoney,
+            t7.user_account userAccount,
+            t7.create_at createAt,
+            t7.user_id userId
+        FROM
+            czb_user t1
+                LEFT JOIN czb_direct_charging_order t2 ON t1.user_id = t2.user_id
+                LEFT JOIN czb_h5_stock t3 ON t1.user_id = t3.user_id
+                LEFT JOIN czb_integral_purchase_record t4 ON t1.user_id = t4.user_id
+                LEFT JOIN czb_user_role t5 ON t1.mall_partner = t5.user_id
+                LEFT JOIN czb_role t6 ON t6.role_id = t5.role_id
+                LEFT JOIN czb_user t7 ON t7.user_id = t1.mall_partner
+        WHERE
+            t6.role_name = '商城合伙人'
+        <if test="userAccount != null and userAccount != ''">
+            AND t7.user_account like concat('%',#{userAccount,jdbcType = VARCHAR},'%')
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND t7.create_at &gt;= #{startTime}
+            AND t7.create_at &lt;= #{endTime}
+        </if>
+        GROUP BY
+            t1.mall_partner
+    </select>
+
+    <select id="selectMallPartnerConsumptionDetails" parameterType="com.cqut.czb.bn.entity.entity.User" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.ConsumptionDetailsDTO">
+        SELECT
+            SUM( fnd.money ) AS totalMoney,
+            fnd.type
+        FROM
+            ((
+                 SELECT
+                     t1.mall_partner,
+                     t2.recharge_amount AS money,
+                     CASE
+                         record_type
+                         WHEN 1 THEN
+                             1
+                         WHEN 2 THEN
+                             2
+                         WHEN 3 THEN
+                             2
+                         END AS type
+                 FROM
+                     czb_user t1
+                         LEFT JOIN czb_direct_charging_order t2 ON t1.user_id = t2.user_id
+             ) UNION ALL
+             (
+                 SELECT
+                     t1.mall_partner,
+                     t2.price AS money,
+                     CASE
+                         record_type
+                         WHEN 1 THEN
+                             3
+                         WHEN 2 THEN
+                             4
+                         END AS type
+                 FROM
+                     czb_user t1
+                         LEFT JOIN czb_h5_stock t2 ON t1.user_id = t2.user_id
+             ) UNION ALL
+             (
+                 SELECT
+                     t1.mall_partner,
+                     t2.amount AS money,
+                     5 AS type
+                 FROM
+                     czb_user t1
+                         LEFT JOIN czb_integral_purchase_record t2 ON t1.user_id = t2.user_id
+             )) AS fnd
+        WHERE fnd.mall_partner = #{userId,jdbcType=VARCHAR}
+        GROUP BY
+            fnd.type
+    </select>
+</mapper>
