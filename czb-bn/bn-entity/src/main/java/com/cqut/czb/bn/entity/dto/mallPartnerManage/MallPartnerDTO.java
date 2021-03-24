@@ -11,6 +11,7 @@ public class MallPartnerDTO {
     private String userAccount;
 
     private double totalMoney;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
 
     private Date createAt;
 
