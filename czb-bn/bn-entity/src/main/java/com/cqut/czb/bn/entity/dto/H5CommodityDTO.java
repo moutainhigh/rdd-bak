@@ -19,6 +19,9 @@ public class H5CommodityDTO extends PageDTO {
     private Date startTime;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
+    private Integer maxDeductionAmount;
+    private Double salePrice;
+    private Integer deductionType;
 
     public String getCommodityId() {
         return commodityId;
@@ -74,5 +77,29 @@ public class H5CommodityDTO extends PageDTO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getMaxDeductionAmount() {
+        return maxDeductionAmount;
+    }
+
+    public void setMaxDeductionAmount(Integer maxDeductionAmount) {
+        this.maxDeductionAmount = maxDeductionAmount;
+    }
+
+    public Double getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(Double salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public Integer getDeductionType() {
+        return deductionType;
+    }
+
+    public void setDeductionType(Integer deductionType) {
+        this.deductionType = deductionType;
     }
 }

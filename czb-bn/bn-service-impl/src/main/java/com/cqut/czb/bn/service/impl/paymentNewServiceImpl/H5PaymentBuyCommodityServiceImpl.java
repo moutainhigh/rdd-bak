@@ -76,27 +76,17 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
     private ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
             new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
 
-    public synchronized boolean judgeChangeSte(int flag,String stockId) {
+    public synchronized boolean judgeChangeSte(int flag,String stockId,String userId) {
         // 状态改变
         if (flag == 0) {
-            // 判断锁定人和购买人是否一致
-//            List<String> buyerIds = weChatStockMapperExtra.getIsBuyer(myList);
-//            for (int i = 0; i < buyerIds.size(); i++) {
-//                if (!buyerIds.get(i).equals(userId)) {
-//                    return false;
-//                }
-//            }
-//            return true;
+            String buyerId = h5PaymentBuyCommodityMapperExtra.getBuyerId(stockId);
+
+            if (!buyerId.equals(userId)) {
+                return false;
+            }
+            return true;
         } else if (flag == 1) {
-//            System.out.println("改变状态状态计时器");
-//            int weChatStocks = h5PaymentBuyCommodityMapperExtra.selectStockState(ids);
-//            if (weChatStocks != 0 && weChatStocks == payInputDTO.getCommodityNum()){
-//                return false;
-//            }else {
-//                //修改回库存商品原来状态
-//                weChatStockMapperExtra.update(ids);
-//                return true;
-//            }
+            return !(h5PaymentBuyCommodityMapperExtra.updateTheStockState(stockId) > 0);
         }
         return false;
     }
@@ -114,7 +104,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         if (h5StockDTO == null){
             return null;
         }
-        String stockId = h5PaymentBuyCommodityMapperExtra.getStockId();
+        String stockId = h5PaymentBuyCommodityMapperExtra.getStockId(h5StockDTO);
         if (stockId != null) {
             h5StockDTO.setStockId(stockId);
         } else {
@@ -128,7 +118,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                if (!judgeChangeSte(1, stockId)){
+                if (!judgeChangeSte(1, stockId, null)){
                     scheduledExecutorService.shutdown();
                 }
             }
@@ -169,7 +159,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         }
 
         //抓取数据
-        String stockId = h5PaymentBuyCommodityMapperExtra.getStockId();
+        String stockId = h5PaymentBuyCommodityMapperExtra.getStockId(h5StockDTO);
         if (stockId != null) {
             h5StockDTO.setStockId(stockId);
         } else {
@@ -183,7 +173,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                if (!judgeChangeSte(1, stockId)){
+                if (!judgeChangeSte(1, stockId,null)){
                     scheduledExecutorService.shutdown();
                 }
             }

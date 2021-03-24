@@ -51,7 +51,10 @@ public class WeChatH5ParameterConfig {
         String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount, userId, integralAmount);
         parameters.put("attach",attach);
         if (isBrowser == 0) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         } else if (isBrowser == 1) {
             parameters.put("trade_type", "JSAPI");
         } else if (isBrowser == 2) {
@@ -116,6 +119,8 @@ public class WeChatH5ParameterConfig {
         } else if (isBrowser == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         } else if (isBrowser == 2) {
 //            parameters.put("trade_type", "APP");
 //            parameters.put("appid", "wx1d9987e1abf4c05e");
@@ -165,6 +170,8 @@ public class WeChatH5ParameterConfig {
         } else if (h5StockDTO.getIsBrowser() == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         } else if (h5StockDTO.getIsBrowser() == 2) {
 //            parameters.put("trade_type", "APP");
 //            parameters.put("appid", "wx1d9987e1abf4c05e");
@@ -198,6 +205,8 @@ public class WeChatH5ParameterConfig {
         } else if (equityPaymentDTO.getIsBrowser() == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
         } else if (equityPaymentDTO.getIsBrowser() == 2) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);

@@ -40,4 +40,9 @@ public class H5StockServiceImpl implements H5StockService {
     public List<Double> h5CommodityStockPriceGroup(String commodityId) {
         return mapper.h5CommodityStockPriceGroup(commodityId);
     }
+
+    @Override
+    public List<H5StockDTO> getCommodity() {
+        return mapper.getCommodity();
+    }
 }

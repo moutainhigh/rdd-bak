@@ -37,4 +37,9 @@ public class H5StockController {
     public JSONResult<List<Double>> h5CommodityStockPriceGroup(String commodityId){
         return new JSONResult<>(stockService.h5CommodityStockPriceGroup(commodityId));
     }
+
+    @GetMapping("/getCommodity")
+    public JSONResult getCommodity(){
+        return new JSONResult(stockService.getCommodity());
+    }
 }

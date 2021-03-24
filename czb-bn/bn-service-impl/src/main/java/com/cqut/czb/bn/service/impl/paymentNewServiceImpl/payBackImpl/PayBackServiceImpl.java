@@ -233,25 +233,25 @@ public class PayBackServiceImpl implements PayBackService {
 
         // 判断支付人和付款人是否是同一个
 
-        System.out.println("库存更新成功");
-        boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
+        if (h5PaymentBuyCommodityService.judgeChangeSte(0, stockId, userId)) {
+            System.out.println("库存更新成功");
+            boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
+            //插入log记录
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+            integralLogDTO.setOrderId(stockId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(userId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
+            integralLogDTO.setIntegralAmount(integralAmount);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-
-        //插入log记录
-        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-        integralLogDTO.setOrderId(stockId);
-        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-        integralLogDTO.setUserId(userId);
-        integralLogDTO.setIntegralLogType(5);
-        integralLogDTO.setRemark("抵扣");
-        integralLogDTO.setIntegralAmount(integralAmount);
-        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-
-        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-        integralInfoDTO.setUserId(userId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(userId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        }
         return 1;
     }
 

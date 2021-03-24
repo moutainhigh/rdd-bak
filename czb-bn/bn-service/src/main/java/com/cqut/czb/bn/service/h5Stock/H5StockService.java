@@ -13,4 +13,6 @@ public interface H5StockService {
     JSONResult<List<H5CommodityDTO>> h5CommodityList(H5CommodityDTO commodityDTO);
 
     List<Double> h5CommodityStockPriceGroup(String commodityId);
+
+    List<H5StockDTO> getCommodity();
 }

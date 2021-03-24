@@ -23,7 +23,7 @@
             <if test="commodityTitle != null and commodityTitle != ''">
                 and commodity_title = #{commodityTitle}
             </if>
-            <if test="state != null and state != ''">
+            <if test="state != 3">
                 and czb_h5_stock.state = #{state}
             </if>
             <if test="startTime != null and endTime != null">
@@ -60,6 +60,19 @@
         from czb_h5_stock
         where commodity_id = #{commodityId}
         group by price
+    </select>
+
+
+    <select id="getCommodity" resultType="com.cqut.czb.bn.entity.dto.H5CommodityDTO">
+        select
+            DISTINCT
+            t2.price salePrice,
+            t1.deduction_type deductionType,
+            t1.max_deduction_amount maxDeductionAmount,
+            t2.commodity_id commodityId
+        from czb_integral_deduction_info t1
+                 join czb_h5_stock t2 on t1.commodity_id = t2.price
+        where deduction_type = 6 or deduction_type = 7
     </select>
 
 </mapper>
