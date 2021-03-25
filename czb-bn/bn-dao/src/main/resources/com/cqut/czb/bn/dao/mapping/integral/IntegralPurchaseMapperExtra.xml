@@ -78,6 +78,8 @@
         czb_equity_payment_order (
           order_id,
           user_id,
+          pay_price,
+          pay_method,
           recharge_account,
           product_code,
           buy_num,
@@ -91,6 +93,8 @@
         ) values (
             #{orderId,jdbcType=VARCHAR},
             #{userId,jdbcType=VARCHAR},
+            #{payPrice,jdbcType=VARCHAR},
+            #{payMethod,jdbcType=INTEGER},
             #{account,jdbcType=VARCHAR},
             #{productCode,jdbcType=VARCHAR},
             #{buyNum,jdbcType=INTEGER},
