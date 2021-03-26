@@ -11,6 +11,7 @@ import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
@@ -52,6 +53,9 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Autowired
     IntegralInfoMapper integralInfoMapper;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
 
     @Value("${recharge.common.userType}")
     private Integer commonType;
@@ -138,12 +142,20 @@ public class UserDetailServiceImpl implements UserDetailService {
             return String.valueOf("用户收益信息添加失败");
         }
 
+        // 注册发放积分
+        Dict dict = dictMapperExtra.selectDictByName("original_integral");
+
         // 开通积分
         IntegralInfo integralInfo = new IntegralInfo();
         integralInfo.setIntegralInfoId(StringUtil.createId());
         integralInfo.setUserId(user.getUserId());
-        integralInfo.setGotTotal(0);
-        integralInfo.setCurrentTotal(0);
+        if (dict != null && dict.getContent() != null) {
+            integralInfo.setGotTotal(Integer.valueOf(dict.getContent()));
+            integralInfo.setCurrentTotal(Integer.valueOf(dict.getContent()));
+        } else {
+            integralInfo.setGotTotal(0);
+            integralInfo.setCurrentTotal(0);
+        }
         integralInfo.setCreateAt(new Date());
         integralInfo.setUpdateAt(new Date());
         integralInfoMapper.insert(integralInfo);
