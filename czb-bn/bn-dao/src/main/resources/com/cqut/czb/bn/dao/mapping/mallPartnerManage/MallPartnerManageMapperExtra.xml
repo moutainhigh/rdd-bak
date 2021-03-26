@@ -13,27 +13,47 @@
                 LEFT JOIN czb_user_role t5 ON t1.mall_partner = t5.user_id
                 LEFT JOIN czb_role t6 ON t6.role_id = t5.role_id
                 LEFT JOIN czb_user t7 ON t7.user_id = t1.mall_partner
+                LEFT JOIN czb_user_role t8 ON t8.user_id = t1.user_id
+                LEFT JOIN czb_role t9 ON t9.role_id = t8.role_id
         WHERE
-            t6.role_name = '商城合伙人'
+            t6.role_name = '商城合伙人' or t9.role_name = '商城合伙人'
     </select>
 
     <select id="selectMallPartnerList" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
-            SUM(
-                        IFNULL( t2.recharge_amount, 0 ) + IFNULL( t3.price, 0 ) + IFNULL( t4.amount, 0 )) totalMoney,
-            t7.user_account userAccount,
-            t7.create_at createAt,
-            t7.user_id userId
+        IFNULL(fnd.totalMoney,0) + IFNULL( t4.recharge_amount, 0 ) + IFNULL( t5.price, 0 ) + IFNULL( t6.amount, 0 ) totalMoney,
+        t1.user_id userId,
+        t1.create_at createAt,
+        t1.user_account userAccount
         FROM
-            czb_user t1
-                LEFT JOIN czb_direct_charging_order t2 ON t1.user_id = t2.user_id
-                LEFT JOIN czb_h5_stock t3 ON t1.user_id = t3.user_id
-                LEFT JOIN czb_integral_purchase_record t4 ON t1.user_id = t4.user_id
-                LEFT JOIN czb_user_role t5 ON t1.mall_partner = t5.user_id
-                LEFT JOIN czb_role t6 ON t6.role_id = t5.role_id
-                LEFT JOIN czb_user t7 ON t7.user_id = t1.mall_partner
+        czb_user t1
+        LEFT JOIN (
+        SELECT
+        SUM(
+        IFNULL( t2.recharge_amount, 0 ) + IFNULL( t3.price, 0 ) + IFNULL( t4.amount, 0 )) totalMoney,
+        t7.user_account userAccount,
+        t7.create_at createAt,
+        t7.user_id userId
+        FROM
+        czb_user t1
+        LEFT JOIN czb_direct_charging_order t2 ON t1.user_id = t2.user_id
+        LEFT JOIN czb_h5_stock t3 ON t1.user_id = t3.user_id
+        LEFT JOIN czb_integral_purchase_record t4 ON t1.user_id = t4.user_id
+        LEFT JOIN czb_user_role t5 ON t1.mall_partner = t5.user_id
+        LEFT JOIN czb_role t6 ON t6.role_id = t5.role_id
+        LEFT JOIN czb_user t7 ON t7.user_id = t1.mall_partner
         WHERE
-            t6.role_name = '商城合伙人'
+        t6.role_name = '商城合伙人'
+        GROUP BY
+        t1.mall_partner
+        ) AS fnd ON t1.user_id = fnd.userId
+        LEFT JOIN czb_user_role t2 ON t1.user_id = t2.user_id
+        LEFT JOIN czb_role t3 ON t2.role_id = t3.role_id
+        LEFT JOIN czb_direct_charging_order t4 ON t1.user_id = t4.user_id
+        LEFT JOIN czb_h5_stock t5 ON t1.user_id = t5.user_id
+        LEFT JOIN czb_integral_purchase_record t6 ON t1.user_id = t6.user_id
+        WHERE
+        t3.role_name = '商城合伙人'
         <if test="userAccount != null and userAccount != ''">
             AND t7.user_account like concat('%',#{userAccount,jdbcType = VARCHAR},'%')
         </if>
@@ -41,8 +61,7 @@
             AND t7.create_at &gt;= #{startTime}
             AND t7.create_at &lt;= #{endTime}
         </if>
-        GROUP BY
-            t1.mall_partner
+        ORDER BY t1.create_at DESC
     </select>
 
     <select id="selectMallPartnerConsumptionDetails" parameterType="com.cqut.czb.bn.entity.entity.User" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.ConsumptionDetailsDTO">
@@ -53,6 +72,7 @@
             ((
                  SELECT
                      t1.mall_partner,
+                     t1.user_id,
                      t2.recharge_amount AS money,
                      CASE
                          record_type
@@ -70,6 +90,7 @@
              (
                  SELECT
                      t1.mall_partner,
+                     t1.user_id,
                      t2.price AS money,
                      CASE
                          record_type
@@ -85,13 +106,14 @@
              (
                  SELECT
                      t1.mall_partner,
+                     t1.user_id,
                      t2.amount AS money,
                      5 AS type
                  FROM
                      czb_user t1
                          LEFT JOIN czb_integral_purchase_record t2 ON t1.user_id = t2.user_id
              )) AS fnd
-        WHERE fnd.mall_partner = #{userId,jdbcType=VARCHAR}
+        WHERE fnd.mall_partner = #{userId,jdbcType=VARCHAR} or fnd.user_id = #{userId,jdbcType=VARCHAR}
         GROUP BY
             fnd.type
     </select>

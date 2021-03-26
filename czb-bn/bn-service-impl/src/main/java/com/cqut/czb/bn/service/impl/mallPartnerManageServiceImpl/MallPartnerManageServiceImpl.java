@@ -46,7 +46,6 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
             boolean isType = false;
             for (ConsumptionDetailsDTO consumptionDetailsDTO : consumptionDetailsDTOList) {
                 if (consumptionDetailsDTO == null) {
-                    consumptionDetailsDTOList.remove(consumptionDetailsDTO);
                     continue;
                 }
                 if (consumptionDetailsDTO.getType() == types[i]) {
@@ -54,10 +53,18 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
                     break;
                 }
             }
+
             if (!isType) {
                 ConsumptionDetailsDTO consumptionDetailsDTO = new ConsumptionDetailsDTO();
                 consumptionDetailsDTO.setType(types[i]);
                 consumptionDetailsDTOList.add(consumptionDetailsDTO);
+            }
+        }
+
+        for (int i = 0; i < consumptionDetailsDTOList.size(); i++) {
+            if (consumptionDetailsDTOList.get(i) == null) {
+                consumptionDetailsDTOList.remove(i);
+                i = i - 1;
             }
         }
 
