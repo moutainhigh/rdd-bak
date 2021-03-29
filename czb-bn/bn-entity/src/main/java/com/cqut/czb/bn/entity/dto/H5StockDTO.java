@@ -21,6 +21,7 @@ public class H5StockDTO extends PageDTO{
     private int integralAmount;
     private int isBrowser;
     private String thirdOrder;
+    private String openId;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
@@ -152,5 +153,13 @@ public class H5StockDTO extends PageDTO{
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

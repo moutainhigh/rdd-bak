@@ -8,6 +8,8 @@ public class WeChatH5PayConfig {
     // 账号ID
     public static final String app_id = "ww537eb30a09eaa286";
 
+    public static final String public_app_id = "wx0a4273c49edc6e4a";
+
     // 商户号
     public static final String mch_id = "1566253131";
 

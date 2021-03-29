@@ -27,16 +27,28 @@ public class WeChatH5ParameterConfig {
         System.out.println(jsonObject.getString("mweb_url"));
         // 生成调起支付sign
         SortedMap<String, Object> signParam = new TreeMap<String, Object>();
+        SortedMap<String, Object> paySignParam = new TreeMap<String, Object>();
+        paySignParam.put("appId", jsonObject.getString("appid"));
+        paySignParam.put("nonceStr", jsonObject.getString("nonce_str"));
+        String a = System.currentTimeMillis() + "";
+        paySignParam.put("timeStamp", a.substring(0, 10));
+        paySignParam.put("package", "prepay_id=" + jsonObject.getString("prepay_id"));
+        paySignParam.put("signType", "MD5");
+        System.out.println("paySignParam:" + paySignParam.toString());
         signParam.put("appid", jsonObject.getString("appid"));
+        signParam.put("mch_id", jsonObject.getString("mch_id"));
+        signParam.put("device_info", "WEB");
+        signParam.put("body", jsonObject.getString("body"));
         signParam.put("mweb_url", jsonObject.getString("mweb_url"));
         System.out.println(jsonObject.getString("appid"));
         signParam.put("partnerid", jsonObject.getString("mch_id"));
         signParam.put("prepayid", jsonObject.getString("prepay_id"));
         signParam.put("package", "Sign=WXPay");
-        signParam.put("noncestr", nonceStrTemp);
-        String a = System.currentTimeMillis() + "";
+        signParam.put("noncestr", jsonObject.getString("nonce_str"));
         signParam.put("timestamp", a.substring(0, 10));
-        signParam.put("sign", WeChatUtils.createSign("UTF-8", signParam));
+        System.out.println("paySign:" + WeChatUtils.createH5Sign("UTF-8", paySignParam));
+        signParam.put("paySign", WeChatUtils.createH5Sign("UTF-8", paySignParam));
+        signParam.put("sign", WeChatUtils.createH5Sign("UTF-8", signParam));
         JSONObject orderString = (JSONObject) JSONObject.toJSON(signParam);
         return orderString;
     }
@@ -44,19 +56,22 @@ public class WeChatH5ParameterConfig {
     /**
      * 直充服务
      */
-    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser, String userId, Integer integralAmount) {
+    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser, String userId, Integer integralAmount, String openId) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters = getParameters();
         String attach=getAttachDirect(orgId, amount, rechargeAmount, recordType, userAccount, userId, integralAmount);
         parameters.put("attach",attach);
+        System.out.println("直充浏览器类型:" + isBrowser);
         if (isBrowser == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
             String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
             parameters.put("scene_info", sceneInfo);
         } else if (isBrowser == 1) {
+            parameters.put("appid", "wx0a4273c49edc6e4a");
             parameters.put("trade_type", "JSAPI");
+            parameters.put("openid", openId);
         } else if (isBrowser == 2) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
@@ -108,14 +123,16 @@ public class WeChatH5ParameterConfig {
     /**
      * 购买积分服务
      */
-    public static SortedMap<String, Object> getParametersIntegral(String nonceStrTemp, String orderId, String userId, Double amount, Integer integralAmount, Integer isBrowser) {
+    public static SortedMap<String, Object> getParametersIntegral(String nonceStrTemp, String orderId, String userId, Double amount, Integer integralAmount, Integer isBrowser, String openId) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters = getParameters();
         String attach=getAttachIntegral(userId, orderId, amount, integralAmount);
+        System.out.println("积分浏览器类型:" + isBrowser);
         if (isBrowser == 1) {
-            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("appid", "wx0a4273c49edc6e4a");
             parameters.put("trade_type", "JSAPI");
+            parameters.put("openid", openId);
         } else if (isBrowser == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
@@ -164,9 +181,11 @@ public class WeChatH5ParameterConfig {
         parameters = getParameters();
         String attach=getAttachAppletPayment(h5StockDTO);
         parameters.put("attach",attach);
+        System.out.println("库存浏览器类型:" + h5StockDTO.getIsBrowser());
         if (h5StockDTO.getIsBrowser() == 1) {
-            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("appid", "wx0a4273c49edc6e4a");
             parameters.put("trade_type", "JSAPI");
+            parameters.put("openid", h5StockDTO.getOpenId());
         } else if (h5StockDTO.getIsBrowser() == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);
@@ -200,8 +219,9 @@ public class WeChatH5ParameterConfig {
         parameters = getParameters();
         String attach=getAttachEquityGoods(userId, orderId, equityPaymentDTO);
         if (equityPaymentDTO.getIsBrowser() == 1) {
-            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("appid", "wx0a4273c49edc6e4a");
             parameters.put("trade_type", "JSAPI");
+            parameters.put("openid", equityPaymentDTO.getOpenId());
         } else if (equityPaymentDTO.getIsBrowser() == 0) {
             parameters.put("appid", WeChatH5PayConfig.app_id);
             parameters.put("trade_type", WeChatH5PayConfig.trade_type);

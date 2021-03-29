@@ -88,6 +88,8 @@ public class EquityPaymentDTO {
 
     private String overDate;
 
+    private String openId;
+
     public String getOrderId() {
         return orderId;
     }
@@ -326,6 +328,14 @@ public class EquityPaymentDTO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     @Override

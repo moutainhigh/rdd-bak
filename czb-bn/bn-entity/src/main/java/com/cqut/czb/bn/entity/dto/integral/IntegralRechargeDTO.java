@@ -34,6 +34,8 @@ public class IntegralRechargeDTO {
 
     private Date updateAt;
 
+    private String openId;
+
     public String getIntegralLogId() {
         return integralLogId;
     }
@@ -152,5 +154,13 @@ public class IntegralRechargeDTO {
 
     public void setIsBrowser(Integer isBrowser) {
         this.isBrowser = isBrowser;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

@@ -45,6 +45,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer isNew;
 
+    private String openId;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
@@ -251,6 +253,14 @@ public class DirectChargingOrderDto extends PageDTO {
         this.isNew = isNew;
     }
 
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
     @Override
     public String toString() {
         return "DirectChargingOrderDto{" +
@@ -273,6 +283,7 @@ public class DirectChargingOrderDto extends PageDTO {
                 ", integralAmount=" + integralAmount +
                 ", isDirectPartner=" + isDirectPartner +
                 ", isNew=" + isNew +
+                ", openId='" + openId + '\'' +
                 ", createAt=" + createAt +
                 ", updateAt=" + updateAt +
                 ", startTime=" + startTime +

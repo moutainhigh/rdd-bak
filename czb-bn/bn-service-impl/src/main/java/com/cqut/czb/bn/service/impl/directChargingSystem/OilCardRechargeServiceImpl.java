@@ -709,8 +709,10 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         Integer integralAmount = directChargingOrderDto.getIntegralAmount();
 
         String cardNum = "";
+
+        String openId = directChargingOrderDto.getOpenId();
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersDirect(nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount, isBrowser, userId, integralAmount);
+        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersDirect(nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount, isBrowser, userId, integralAmount,openId);
         boolean insertSalesRecords = false;
         if (recordType == 1){
             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);

@@ -106,9 +106,11 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
 
         Integer isBrowser = integralRechargeDTO.getIsBrowser();
 
+        String openId = integralRechargeDTO.getOpenId();
+
 
         // 设置参数
-        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersIntegral(nonceStrTemp, orderId, userId, amount, integralAmount, isBrowser);
+        SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersIntegral(nonceStrTemp, orderId, userId, amount, integralAmount, isBrowser, openId);
         Boolean insertOrder = insertBuyIntegral(orderId, userId, integralRechargeDTO,2);
         return WeChatH5ParameterConfig.getSign(parameters, nonceStrTemp);
     }

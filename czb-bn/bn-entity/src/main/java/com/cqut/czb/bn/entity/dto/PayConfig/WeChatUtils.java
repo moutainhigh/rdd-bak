@@ -62,6 +62,7 @@ public class WeChatUtils {
             }
         }
         sb.append("key=" + WeChatH5PayConfig.key);
+        System.out.println("字符串:" + sb);
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
         return sign;
     }
