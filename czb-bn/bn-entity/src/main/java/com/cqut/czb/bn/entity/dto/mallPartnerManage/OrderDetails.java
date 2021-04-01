@@ -22,7 +22,7 @@ public class OrderDetails {
     private double rechargeAmount;
 
     @Excel(name = "支付金额")
-    private double realAmount;
+    private double realPrice;
 
     @Excel(name = "时间")
     private Date createAt;
@@ -68,12 +68,12 @@ public class OrderDetails {
         this.rechargeAmount = rechargeAmount;
     }
 
-    public double getRealAmount() {
-        return realAmount;
+    public double getRealPrice() {
+        return realPrice;
     }
 
-    public void setRealAmount(double realAmount) {
-        this.realAmount = realAmount;
+    public void setRealPrice(double realPrice) {
+        this.realPrice = realPrice;
     }
 
     public Date getCreateAt() {
