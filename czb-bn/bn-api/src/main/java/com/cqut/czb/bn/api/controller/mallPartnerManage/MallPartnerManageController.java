@@ -64,6 +64,10 @@ public class MallPartnerManageController {
     @GetMapping(value = "/downloadMallPartnerListExcel")
     public void downloadMallPartnerListExcel(MallPartnerDTO mallPartnerDTO, HttpServletResponse response) {
         List<MallPartnerDTO> mallPartnerDTOList = mallPartnerManageService.getMallPartnerList(mallPartnerDTO, new PageDTO()).getList();
+        // 设置响应输出的头类型(设置响应类型)
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称(设置下载文件的默认名称)
+        response.setHeader("Content-Disposition", "attachment;filename=address.xls");
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String title = simpleDateFormat.format(new Date()) + "  商城合伙人总收益表";
@@ -81,6 +85,10 @@ public class MallPartnerManageController {
     @GetMapping(value = "/downloadMallPartnerConsumptionExcel")
     public void downloadMallPartnerConsumptionExcel(User user, HttpServletResponse response) {
         List<MallPartnerDTO> mallPartnerDTOList = mallPartnerManageService.getMallPartnerConsumptionDetails(user);
+        // 设置响应输出的头类型(设置响应类型)
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称(设置下载文件的默认名称)
+        response.setHeader("Content-Disposition", "attachment;filename=address.xls");
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String title = simpleDateFormat.format(new Date()) + "  " + userInfoService.getUserAccount(user.getUserId()) + "  各类消费收益表";
@@ -99,6 +107,10 @@ public class MallPartnerManageController {
     @GetMapping(value = "/downloadEveryOrderDetailsExcel")
     public void downloadEveryOrderDetailsExcel(OrderDetails orderDetails, HttpServletResponse response) {
         List<OrderDetails> everyOrderDetailsList = mallPartnerManageService.getEveryOrderDetails(orderDetails, new PageDTO()).getList();
+        // 设置响应输出的头类型(设置响应类型)
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称(设置下载文件的默认名称)
+        response.setHeader("Content-Disposition", "attachment;filename=address.xls");
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String title = simpleDateFormat.format(new Date()) + "  " + userInfoService.getUserAccount(orderDetails.getUserId()) + "  订单表";
