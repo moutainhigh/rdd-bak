@@ -206,6 +206,7 @@ public class PayBackServiceImpl implements PayBackService {
         String ownerId = "";
         String userId = "";
         int integralAmount = 0;
+        double payPrice = 0;
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {
@@ -224,12 +225,17 @@ public class PayBackServiceImpl implements PayBackService {
                 integralAmount = Integer.valueOf(temp[1]);
             }
 
+            if("payPrice".equals(temp[0])){
+                payPrice = Double.valueOf(temp[1]);
+            }
+
         }
 
         // 更新
         H5StockDTO h5StockDTO = new H5StockDTO();
         h5StockDTO.setStockId(stockId);
         h5StockDTO.setThirdOrder(thirdOrderId);
+        h5StockDTO.setPayPrice(payPrice);
 
         // 判断支付人和付款人是否是同一个
 
@@ -280,7 +286,7 @@ public class PayBackServiceImpl implements PayBackService {
                 orgId = temp[1];
             }
             if("money".equals(temp[0])){
-                money = Double.valueOf(temp[1]);;
+                money = Double.valueOf(temp[1]);
                 money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
 
             }

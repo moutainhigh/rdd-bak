@@ -19,7 +19,8 @@
     <update id="updateState" parameterType="com.cqut.czb.bn.entity.dto.H5StockDTO">
         update czb_h5_stock
         set user_id = #{userId,jdbcType=VARCHAR},
-            state = 1
+            state = 1,
+            recharge_amount = #{payPrice}
         where stock_id = #{stockId,jdbcType=VARCHAR}
     </update>
 
@@ -27,6 +28,7 @@
         update czb_h5_stock
         set user_id = #{userId,jdbcType=VARCHAR},
             third_order = #{thirdOrder,jdbcType=VARCHAR},
+            payPrice = #{payPrice},
             state = 2
         where stock_id = #{stockId,jdbcType=VARCHAR}
     </update>
@@ -34,7 +36,8 @@
     <update id="updateTheStockState" parameterType="java.lang.String">
         update czb_h5_stock
         set user_id = null,
-            state = 0
+            state = 0,
+            recharge_amount = null
         where stock_id = #{stockId,jdbcType=VARCHAR}
     </update>
 </mapper>

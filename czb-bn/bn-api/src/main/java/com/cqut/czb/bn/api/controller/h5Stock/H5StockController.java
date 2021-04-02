@@ -6,8 +6,10 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.h5Stock.H5StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -36,6 +38,17 @@ public class H5StockController {
     @GetMapping("/priceGroup")
     public JSONResult<List<Double>> h5CommodityStockPriceGroup(String commodityId){
         return new JSONResult<>(stockService.h5CommodityStockPriceGroup(commodityId));
+    }
+
+    @PostMapping("/importData")
+    public JSONResult h5ImportData(MultipartFile file, Integer recordType) {
+        try {
+            stockService.h5ImportData(file, recordType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONResult(500, "failed");
+        }
+        return new JSONResult(200, "success");
     }
 
     @GetMapping("/getCommodity")

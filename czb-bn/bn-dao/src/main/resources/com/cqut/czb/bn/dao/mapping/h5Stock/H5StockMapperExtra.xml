@@ -16,4 +16,20 @@
         </if>
         group by price
     </select>
+
+    <!--  导入更新Excel-->
+    <insert id="importData" parameterType="com.cqut.czb.bn.entity.dto.H5StockDTO" >
+        insert into czb_h5_stock
+        (stock_id, commodity_id, content, state, create_at, record_type, price)
+        values
+        <foreach collection="list" item="stockList" separator=",">
+            (#{stockList.stockId},
+            #{stockList.commodityId},
+            #{stockList.content},
+            #{stockList.state},
+            #{stockList.createAt},
+            #{stockList.recordType},
+            #{stockList.price})
+        </foreach>
+    </insert>
 </mapper>
