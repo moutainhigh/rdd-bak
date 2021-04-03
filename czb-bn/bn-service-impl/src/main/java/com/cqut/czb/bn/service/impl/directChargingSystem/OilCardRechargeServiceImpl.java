@@ -97,6 +97,11 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public JSONResult getTotalConsumption(int type) {
+        return new JSONResult(oilCardRechargeMapperExtra.getTotalConsumption(type));
+    }
+
+    @Override
     public JSONResult isNeedLogin() {
         String isNeedLogin = oilCardRechargeMapperExtra.isNeedLogin();
         return new JSONResult("查询成功", 200, isNeedLogin);

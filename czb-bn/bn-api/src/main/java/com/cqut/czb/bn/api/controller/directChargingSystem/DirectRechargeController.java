@@ -56,6 +56,15 @@ public class DirectRechargeController {
     }
 
     /**
+     * 获取直充总消费
+     * @return
+     */
+    @GetMapping(value = "/getTotalConsumption")
+    public JSONResult getTotalConsumption(int type) {
+        return oilCardRechargeService.getTotalConsumption(type);
+    }
+
+    /**
      * 绑定油卡
      * @param principal
      * @param oilCardBinging

@@ -161,11 +161,12 @@
         cardholder cardholder
         FROM czb_direct_charging_order
         <where>
+            `state` != 0
             <if test="recordType == 1">
-                record_type = 1
+                and record_type = 1
             </if>
             <if test="recordType != 1">
-                (record_type = 2 or record_type = 3)
+                and (record_type = 2 or record_type = 3)
             </if>
             <if test="startTime!= null and endTime!= null">
                 and create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -177,8 +178,52 @@
             <if test="state != null">
                 and `state` = #{state,jdbcType=INTEGER}
             </if>
+            <if test="cardholder != null and cardholder != ''">
+                and card_holder like CONCAT('%',#{cardholder,jdbcType=VARCHAR},'%')
+            </if>
         </where>
         order by create_at DESC
+    </select>
+
+    <select id="getTotalConsumption" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.TotalConsumptionDto">
+        SELECT
+            *
+        FROM
+            (
+                SELECT SUM( real_price ) realPrice,
+                       SUM( recharge_amount ) rechargeAmount,
+                       COUNT( order_id ) orderNumber
+                FROM
+                    czb_direct_charging_order
+                WHERE
+                    `state` != 0
+                    AND `state` != 3
+                    <if test="type == 1">
+                        AND record_type = 1
+                    </if>
+                    <if test="type == 2">
+                        AND (record_type = 2 OR record_type = 3)
+                    </if>
+            ) AS fnd1
+                JOIN (
+                SELECT
+                    SUM( real_price ) todayRealPrice,
+                    SUM( recharge_amount ) todayRechargeAmount,
+                    COUNT( order_id ) todayOrderNumber
+                FROM
+                    czb_direct_charging_order
+                WHERE
+                    `state` != 0
+                    AND `state` != 3
+                  AND TO_DAYS( create_at ) - TO_DAYS(
+                        NOW()) = 0
+                <if test="type == 1">
+                    AND record_type = 1
+                </if>
+                <if test="type == 2">
+                    AND (record_type = 2 OR record_type = 3)
+                </if>
+            ) AS fnd2
     </select>
 
     <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
