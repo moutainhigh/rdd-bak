@@ -5,7 +5,7 @@
         ( SELECT
               t2.mall_partner,
               t2.user_id,
-              t1.recharge_amount * 0.2 AS money,
+              t1.recharge_amount * 0.02 AS money,
               CASE
                   record_type
                   WHEN 1 THEN
@@ -26,7 +26,7 @@
             SELECT
                 t2.mall_partner,
                 t2.user_id,
-                t1.price * 0.1 AS money,
+                t1.price * 0.01 AS money,
                 CASE
                     record_type
                     WHEN 1 THEN
@@ -153,7 +153,7 @@
     <select id="selectSubordinateDirectChargeOrderTotal" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
         SUM( t1.recharge_amount ) grossSales,
-        SUM( t1.recharge_amount ) * 0.2 totalRevenue,
+        SUM( t1.recharge_amount ) * 0.02 totalRevenue,
         COUNT( t1.user_id ) orderNumber
         FROM
         czb_direct_charging_order t1
@@ -182,7 +182,7 @@
     <select id="selectSubordinateIntegralPurchaseTotal" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
             SUM( t1.amount ) grossSales,
-            SUM( t1.amount ) * 0.1 totalRevenue,
+            SUM( t1.amount ) * 0.01 totalRevenue,
             COUNT( t1.integral_purchase_record_id ) orderNumber
         FROM
             czb_integral_purchase_record t1
@@ -203,7 +203,7 @@
     <select id="selectSubordinateH5StockOrderTotal" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
             SUM( t1.price ) grossSales,
-            SUM( t1.price ) * 0.1 totalRevenue,
+            SUM( t1.price ) * 0.01 totalRevenue,
             COUNT( t1.stock_id ) orderNumber
         FROM
             czb_h5_stock t1
@@ -231,7 +231,7 @@
     <select id="selectMallPartnerDirectChargeOrderTotal" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
         SUM( t1.recharge_amount ) grossSales,
-        SUM( t1.recharge_amount ) * 0.2 totalRevenue,
+        SUM( t1.recharge_amount ) * 0.02 totalRevenue,
         COUNT( t1.user_id ) orderNumber
         FROM
         czb_direct_charging_order t1
@@ -257,7 +257,7 @@
     <select id="selectMallPartnerIntegralPurchaseTotal" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
         SUM( t1.amount ) grossSales,
-        SUM( t1.amount ) * 0.1 totalRevenue,
+        SUM( t1.amount ) * 0.01 totalRevenue,
         COUNT( t1.integral_purchase_record_id ) orderNumber
         FROM
         czb_integral_purchase_record t1
@@ -275,7 +275,7 @@
     <select id="selectMallPartnerH5StockOrderTotal" parameterType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
         SELECT
             SUM( t1.price ) grossSales,
-            SUM( t1.price ) * 0.1 totalRevenue,
+            SUM( t1.price ) * 0.01 totalRevenue,
             COUNT( t1.stock_id ) orderNumber
         FROM
             czb_h5_stock t1
