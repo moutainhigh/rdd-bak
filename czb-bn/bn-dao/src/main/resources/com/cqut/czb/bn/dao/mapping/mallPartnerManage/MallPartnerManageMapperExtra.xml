@@ -6,8 +6,6 @@
               t2.mall_partner,
               t2.user_id,
               t1.recharge_amount * 0.2 AS money,
-              t2.create_at userCreateAt,
-              t2.user_name,
               CASE
                   record_type
                   WHEN 1 THEN
@@ -29,8 +27,6 @@
                 t2.mall_partner,
                 t2.user_id,
                 t1.price * 0.1 AS money,
-                t2.create_at userCreateAt,
-                t2.user_name,
                 CASE
                     record_type
                     WHEN 1 THEN
@@ -362,12 +358,12 @@
         </if>
     </select>
     <select id="getMyFriends" parameterType="com.cqut.czb.bn.entity.entity.User" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
-        SELECT fnd.user_name userName,
-               fnd.userCreateAt createAt,
-               SUM(fnd.money) totalRevenue,
-               fnd.user_id userId
-        FROM (<include refid="Base_Column_List" />) AS fnd
-        WHERE fnd.mall_partner = #{userId, jdbcType = VARCHAR}
-        GROUP BY fnd.user_id, fnd.userCreateAt, fnd.user_name
+        SELECT t1.user_name userName,
+               t1.create_at createAt,
+               SUM(ifnull(fnd.money, 0)) totalRevenue,
+               t1.user_id userId
+        FROM czb_user t1 LEFT JOIN (<include refid="Base_Column_List" />) AS fnd ON t1.user_id = fnd.user_id
+        WHERE t1.mall_partner = #{userId, jdbcType = VARCHAR}
+        GROUP BY t1.user_id
     </select>
 </mapper>
