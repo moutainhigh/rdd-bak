@@ -19,4 +19,6 @@ public interface MallPartnerManageMapperExtra {
     List<OrderDetails> selectDirectChargeOrderDetails(OrderDetails orderDetails);
 
     List<OrderDetails> selectH5StockOrderDetails(OrderDetails orderDetails);
+
+    List<MallPartnerDTO> getMyFriends(User user);
 }

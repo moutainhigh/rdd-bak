@@ -1,8 +1,10 @@
 package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.dao.mapper.mallPartnerManage.MallPartnerManageMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
+import com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.partnerVipIncome.PartnerVipIncomeDTO;
@@ -61,6 +63,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private ShopMapperExtra shopMapperExtra;
+
+    @Autowired
+    MallPartnerManageMapperExtra mallPartnerManageMapperExtra;
 
     @Autowired
     public UserServiceImpl(UserMapper userMapper, UserMapperExtra userMapperExtra, UserRoleMapperExtra userRoleMapperExtra, RoleMapperExtra roleMapperExtra, DictMapperExtra dictMapperExtra, IndicatorRecordMapperExtra indicatorRecordMapperExtra, IndicatorRecordMapper indicatorRecordMapper, RedisUtil redisUtil, PartnerVipIncomeMapperExtra partnerVipIncomeMapperExtra, PartnerChangeRecordMapper partnerChangeRecordMapper, BCryptPasswordEncoder bCryptPasswordEncoder, ShopManagementService shopManagementService) {
@@ -524,5 +529,10 @@ public class UserServiceImpl implements IUserService {
                 return new JSONResult(mallPartner.getUserAccount());
             }
         }
+    }
+
+    @Override
+    public JSONResult getMyFriends(User user) {
+        return new JSONResult<>(mallPartnerManageMapperExtra.getMyFriends(user));
     }
 }

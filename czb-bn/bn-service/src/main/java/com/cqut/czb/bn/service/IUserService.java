@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service;
 
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.myTeam.TeamDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
@@ -41,4 +42,6 @@ public interface IUserService {
     String bindingUser(UserInputDTO userInputDTO,String userId);
 
     JSONResult getMallPartner(User user);
+
+    JSONResult getMyFriends(User user);
 }

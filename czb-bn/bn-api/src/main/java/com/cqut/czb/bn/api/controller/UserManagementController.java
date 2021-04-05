@@ -133,4 +133,16 @@ public class UserManagementController {
         return userService.getMallPartner(user);
     }
 
+    /**
+     * 获取我的好友
+     * 设计者：侯家领
+     * 更新时间：2021.4.05
+     */
+
+    @GetMapping(value = "/getMyFriends")
+    public JSONResult getMyFriends(Principal principal) {
+        User user = (User) redisUtils.get(principal.getName());
+        return userService.getMyFriends(user);
+    }
+
 }

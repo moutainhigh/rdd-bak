@@ -2,39 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cqut.czb.bn.dao.mapper.mallPartnerManage.MallPartnerManageMapperExtra">
     <sql id="Base_Column_List" >
-        (
-            SELECT
-                CASE
-
-                    WHEN
-                        ( ISNULL( t2.mall_partner ) OR t2.mall_partner = '' ) THEN
-                        t2.user_id ELSE t2.mall_partner
-                    END AS mall_partner,
-                t2.user_id,
-                t1.recharge_amount AS money,
-                CASE
-                    record_type
-                    WHEN 1 THEN
-                        1
-                    WHEN 2 THEN
-                        2
-                    WHEN 3 THEN
-                        2
-                    END AS type
-            FROM
-                czb_direct_charging_order t1
-                    LEFT JOIN czb_user t2 ON t1.user_id = t2.user_id
+        ( SELECT
+              t2.mall_partner,
+              t2.user_id,
+              t1.recharge_amount * 0.2 AS money,
+              t2.create_at userCreateAt,
+              t2.user_name,
+              CASE
+                  record_type
+                  WHEN 1 THEN
+                      1
+                  WHEN 2 THEN
+                      2
+                  WHEN 3 THEN
+                      2
+                  END AS type
+          FROM
+              czb_direct_charging_order t1
+                  LEFT JOIN czb_user t2 ON t1.user_id = t2.user_id
+          WHERE
+              t1.state != 0
+		AND t1.state != 3
         ) UNION ALL
         (
             SELECT
-                CASE
-
-                    WHEN
-                        ( ISNULL( t2.mall_partner ) OR t2.mall_partner = '' ) THEN
-                        t2.user_id ELSE t2.mall_partner
-                    END AS mall_partner,
+                t2.mall_partner,
                 t2.user_id,
-                t1.price AS money,
+                t1.price * 0.1 AS money,
+                t2.create_at userCreateAt,
+                t2.user_name,
                 CASE
                     record_type
                     WHEN 1 THEN
@@ -45,21 +41,8 @@
             FROM
                 czb_h5_stock t1
                     LEFT JOIN czb_user t2 ON t1.user_id = t2.user_id
-        ) UNION ALL
-        (
-            SELECT
-                CASE
-
-                    WHEN
-                        ( ISNULL( t2.mall_partner ) OR t2.mall_partner = '' ) THEN
-                        t2.user_id ELSE t2.mall_partner
-                    END AS mall_partner,
-                t2.user_id,
-                t1.amount AS money,
-                5 AS type
-            FROM
-                czb_integral_purchase_record t1
-                    LEFT JOIN czb_user t2 ON t1.user_id = t2.user_id
+            WHERE
+                t1.state = 2
         )
     </sql>
     <select id="statisticsMoney" resultType="double">
@@ -377,5 +360,14 @@
             AND t2.create_at &gt;= #{startTime}
             AND t2.create_at &lt;= #{endTime}
         </if>
+    </select>
+    <select id="getMyFriends" parameterType="com.cqut.czb.bn.entity.entity.User" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
+        SELECT fnd.user_name userName,
+               fnd.userCreateAt createAt,
+               SUM(fnd.money) totalRevenue,
+               fnd.user_id userId
+        FROM (<include refid="Base_Column_List" />) AS fnd
+        WHERE fnd.mall_partner = #{userId, jdbcType = VARCHAR}
+        GROUP BY fnd.user_id, fnd.userCreateAt, fnd.user_name
     </select>
 </mapper>
