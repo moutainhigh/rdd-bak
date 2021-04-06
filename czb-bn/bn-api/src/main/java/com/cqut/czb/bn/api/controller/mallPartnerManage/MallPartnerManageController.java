@@ -47,8 +47,8 @@ public class MallPartnerManageController {
     }
 
     @GetMapping(value = "/getMallPartnerConsumptionDetails")
-    public JSONResult getMallPartnerConsumptionDetails(User user) {
-        return new JSONResult(mallPartnerManageService.getMallPartnerConsumptionDetails(user));
+    public JSONResult getMallPartnerConsumptionDetails(MallPartnerDTO mallPartnerDTO) {
+        return new JSONResult(mallPartnerManageService.getMallPartnerConsumptionDetails(mallPartnerDTO));
     }
 
     @GetMapping(value = "/getEveryOrderDetails")
@@ -79,19 +79,19 @@ public class MallPartnerManageController {
 
     /**
      * 商城合伙人各类消费excel下载
-     * @param user
+     * @param mallPartnerDTO
      * @param response
      */
     @GetMapping(value = "/downloadMallPartnerConsumptionExcel")
-    public void downloadMallPartnerConsumptionExcel(User user, HttpServletResponse response) {
-        List<MallPartnerDTO> mallPartnerDTOList = mallPartnerManageService.getMallPartnerConsumptionDetails(user);
+    public void downloadMallPartnerConsumptionExcel(MallPartnerDTO mallPartnerDTO, HttpServletResponse response) {
+        List<MallPartnerDTO> mallPartnerDTOList = mallPartnerManageService.getMallPartnerConsumptionDetails(mallPartnerDTO);
         // 设置响应输出的头类型(设置响应类型)
         response.setHeader("content-Type", "application/vnd.ms-excel");
         // 下载文件的默认名称(设置下载文件的默认名称)
         response.setHeader("Content-Disposition", "attachment;filename=address.xls");
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String title = simpleDateFormat.format(new Date()) + "  " + userInfoService.getUserAccount(user.getUserId()) + "  各类消费收益表";
+            String title = simpleDateFormat.format(new Date()) + "  " + userInfoService.getUserAccount(mallPartnerDTO.getUserId()) + "  各类消费收益表";
             ExcelUtil.exportExcel(mallPartnerDTOList, title, "sheet1", MallPartnerDTO.class, title + ".xlsx", response);
         } catch (NormalException e) {
             return;

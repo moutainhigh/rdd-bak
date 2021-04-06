@@ -55,10 +55,8 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
     }
 
     @Override
-    public List<MallPartnerDTO> getMallPartnerConsumptionDetails(User user) {
+    public List<MallPartnerDTO> getMallPartnerConsumptionDetails(MallPartnerDTO mallPartnerDTO) {
         List<MallPartnerDTO> mallPartnerDTOList = new ManagedList<>();
-        MallPartnerDTO mallPartnerDTO = new MallPartnerDTO();
-        mallPartnerDTO.setUserId(user.getUserId());
 
         mallPartnerDTO.setType(1);
         MallPartnerDTO newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateDirectChargeOrderTotal(mallPartnerDTO);

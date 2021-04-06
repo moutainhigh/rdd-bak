@@ -14,7 +14,7 @@ public interface MallPartnerManageService {
 
     PageInfo<MallPartnerDTO> getMallPartnerList(MallPartnerDTO mallPartnerDTO, PageDTO pageDTO);
 
-    List<MallPartnerDTO> getMallPartnerConsumptionDetails(User user);
+    List<MallPartnerDTO> getMallPartnerConsumptionDetails(MallPartnerDTO mallPartnerDTO);
 
     PageInfo<OrderDetails> getEveryOrderDetails(OrderDetails orderDetails, PageDTO pageDTO);
 }
