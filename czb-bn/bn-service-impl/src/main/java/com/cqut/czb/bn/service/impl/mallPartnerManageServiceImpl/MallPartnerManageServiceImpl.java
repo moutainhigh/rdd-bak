@@ -24,19 +24,22 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
     MallPartnerManageMapperExtra mallPartnerManageMapperExtra;
 
     @Override
-    public JSONResult statisticsMoney() {
+    public JSONResult statisticsOrder() {
         double sum = 0;
         MallPartnerDTO mallPartnerDTO = new MallPartnerDTO();
         MallPartnerDTO newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateDirectChargeOrderTotal(mallPartnerDTO);
         if (newSubordinateDTO != null) {
-            sum += newSubordinateDTO.getGrossSales();
+            mallPartnerDTO.setGrossSales(newSubordinateDTO.getGrossSales() + mallPartnerDTO.getGrossSales());
+            mallPartnerDTO.setOrderNumber(newSubordinateDTO.getOrderNumber() + mallPartnerDTO.getOrderNumber());
         }
 
         newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateH5StockOrderTotal(mallPartnerDTO);
         if (newSubordinateDTO != null) {
-            sum += newSubordinateDTO.getGrossSales();
+            mallPartnerDTO.setGrossSales(newSubordinateDTO.getGrossSales() + mallPartnerDTO.getGrossSales());
+            mallPartnerDTO.setOrderNumber(newSubordinateDTO.getOrderNumber() + mallPartnerDTO.getOrderNumber());
         }
-        return new JSONResult(sum);
+
+        return new JSONResult(mallPartnerDTO);
     }
 
     @Override
@@ -45,10 +48,12 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
         List<MallPartnerDTO> mallPartnerDTOList = mallPartnerManageMapperExtra.selectMallPartnerList(mallPartnerDTO);
 
         for (MallPartnerDTO temp : mallPartnerDTOList) {
-            MallPartnerDTO newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateDirectChargeOrderTotal(temp);
+            MallPartnerDTO temp1 = new MallPartnerDTO();
+            temp1.setUserId(temp.getUserId());
+            MallPartnerDTO newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateDirectChargeOrderTotal(temp1);
             getAmountTotal(temp, newSubordinateDTO);
 
-            newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateH5StockOrderTotal(temp);
+            newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateH5StockOrderTotal(temp1);
             getAmountTotal(temp, newSubordinateDTO);
         }
         return new PageInfo<>(mallPartnerDTOList);
@@ -57,6 +62,7 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
     @Override
     public List<MallPartnerDTO> getMallPartnerConsumptionDetails(MallPartnerDTO mallPartnerDTO) {
         List<MallPartnerDTO> mallPartnerDTOList = new ManagedList<>();
+        mallPartnerDTO.setUserAccount(null);
 
         mallPartnerDTO.setType(1);
         MallPartnerDTO newSubordinateDTO = mallPartnerManageMapperExtra.selectSubordinateDirectChargeOrderTotal(mallPartnerDTO);
@@ -101,6 +107,19 @@ public class MallPartnerManageServiceImpl implements MallPartnerManageService {
             return new PageInfo<>(orderDetailsList);
         }
         return null;
+    }
+
+    @Override
+    public JSONResult getEveryTotalMoney(MallPartnerDTO mallPartnerDTO) {
+        if (mallPartnerDTO.getType() == 1 || mallPartnerDTO.getType() == 2) {
+            return new JSONResult(mallPartnerManageMapperExtra.selectSubordinateDirectChargeOrderTotal(mallPartnerDTO).getGrossSales());
+        }
+
+        if (mallPartnerDTO.getType() == 3 || mallPartnerDTO.getType() == 4) {
+            return new JSONResult(mallPartnerManageMapperExtra.selectSubordinateH5StockOrderTotal(mallPartnerDTO).getGrossSales());
+        }
+
+        return new JSONResult("查询失败");
     }
 
     public void sortConsumptionDetailsDTOList(List<MallPartnerDTO> mallPartnerDTOList) {

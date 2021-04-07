@@ -10,11 +10,13 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface MallPartnerManageService {
-    JSONResult statisticsMoney();
+    JSONResult statisticsOrder();
 
     PageInfo<MallPartnerDTO> getMallPartnerList(MallPartnerDTO mallPartnerDTO, PageDTO pageDTO);
 
     List<MallPartnerDTO> getMallPartnerConsumptionDetails(MallPartnerDTO mallPartnerDTO);
 
     PageInfo<OrderDetails> getEveryOrderDetails(OrderDetails orderDetails, PageDTO pageDTO);
+
+    JSONResult getEveryTotalMoney(MallPartnerDTO mallPartnerDTO);
 }

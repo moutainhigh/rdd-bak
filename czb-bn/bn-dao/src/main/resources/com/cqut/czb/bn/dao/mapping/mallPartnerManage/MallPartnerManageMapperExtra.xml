@@ -5,7 +5,7 @@
         ( SELECT
               t2.mall_partner,
               t2.user_id,
-              t1.recharge_amount * 0.02 AS money,
+              t1.recharge_amount AS money,
               CASE
                   record_type
                   WHEN 1 THEN
@@ -26,7 +26,7 @@
             SELECT
                 t2.mall_partner,
                 t2.user_id,
-                t1.price * 0.01 AS money,
+                t1.recharge_amount AS money,
                 CASE
                     record_type
                     WHEN 1 THEN
@@ -166,8 +166,7 @@
         AND t2.mall_partner IS NOT NULL
         AND t2.mall_partner != ''
         AND t5.role_name = '商城合伙人'
-        AND t1.state != 0
-        AND t1.state != 3
+        AND t1.state = 2
         <if test="type != null and type == 1">
             AND t1.record_type = 1
         </if>
@@ -176,6 +175,9 @@
         </if>
         <if test="userId != null and userId != ''">
             AND t2.mall_partner = #{userId, jdbcType = VARCHAR}
+        </if>
+        <if test="userAccount != null and userAccount != ''">
+            AND t2.user_account LIKE CONCAT('%', #{userAccount, jdbcType = VARCHAR}, '%')
         </if>
         <if test="startTime != null and endTime != null">
             AND (t1.create_at &gt;= #{startTime}
@@ -201,6 +203,9 @@
           AND t5.role_name = '商城合伙人'
         <if test="userId != null and userId != ''">
             AND t2.mall_partner = #{userId, jdbcType = VARCHAR}
+        </if>
+        <if test="userAccount != null and userAccount != ''">
+            AND t2.user_account LIKE CONCAT('%', #{userAccount, jdbcType = VARCHAR}, '%')
         </if>
         <if test="startTime != null and endTime != null">
             AND (t1.create_at &gt;= #{startTime}
@@ -234,6 +239,9 @@
         <if test="userId != null and userId != ''">
             AND t2.mall_partner = #{userId, jdbcType = VARCHAR}
         </if>
+        <if test="userAccount != null and userAccount != ''">
+            AND t2.user_account LIKE CONCAT('%', #{userAccount, jdbcType = VARCHAR}, '%')
+        </if>
         <if test="startTime != null and endTime != null">
             AND (t1.create_at &gt;= #{startTime}
             AND t1.create_at &lt;= #{endTime})
@@ -253,8 +261,7 @@
         WHERE
         t2.is_deleted = 0
         AND t4.role_name = '商城合伙人'
-        AND t1.state != 0
-        AND t1.state != 3
+        AND t1.state = 2
         <if test="type != null and type == 1">
             AND t1.record_type = 1
         </if>
@@ -335,8 +342,7 @@
                 LEFT JOIN czb_direct_charging_order t2 ON t1.user_id = t2.user_id
         WHERE
             t1.mall_partner = #{userId, jdbcType = VARCHAR}
-            AND t2.state != 0
-            AND t2.state != 3
+            AND t2.state = 2
         <if test="type != null and type == 1">
             AND t2.record_type = 1
         </if>
@@ -347,8 +353,8 @@
             AND t1.user_account LIKE CONCAT('%', #{userAccount, jdbcType = VARCHAR}, '%')
         </if>
         <if test="endTime != null and startTime != null">
-            AND t2.create_at &gt;= #{startTime}
-            AND t2.create_at &lt;= #{endTime}
+            AND (t2.create_at &gt;= #{startTime}
+            AND t2.create_at &lt;= #{endTime})
         </if>
     </select>
 
@@ -377,12 +383,12 @@
             AND t1.user_account like CONCAT('%', #{userAccount, jdbcType = VARCHAR}, '%')
         </if>
         <if test="endTime != null and startTime != null">
-            AND t2.create_at &gt;= #{startTime}
-            AND t2.create_at &lt;= #{endTime}
+            AND (t2.create_at &gt;= #{startTime}
+            AND t2.create_at &lt;= #{endTime})
         </if>
     </select>
     <select id="getMyFriends" parameterType="com.cqut.czb.bn.entity.entity.User" resultType="com.cqut.czb.bn.entity.dto.mallPartnerManage.MallPartnerDTO">
-        SELECT t1.user_name userName,
+        SELECT t1.user_account userAccount,
                t1.create_at createAt,
                SUM(ifnull(fnd.money, 0)) totalRevenue,
                t1.user_id userId

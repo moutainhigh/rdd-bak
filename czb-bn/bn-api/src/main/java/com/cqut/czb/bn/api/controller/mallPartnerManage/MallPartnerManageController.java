@@ -36,9 +36,9 @@ public class MallPartnerManageController {
      * 统计总金额
      * @return
      */
-    @GetMapping(value = "/statisticsMoney")
-    public JSONResult statisticsMoney() {
-        return mallPartnerManageService.statisticsMoney();
+    @GetMapping(value = "/statisticsOrder")
+    public JSONResult statisticsOrder() {
+        return mallPartnerManageService.statisticsOrder();
     }
 
     @GetMapping(value = "/getMallPartnerList")
@@ -54,6 +54,14 @@ public class MallPartnerManageController {
     @GetMapping(value = "/getEveryOrderDetails")
     public JSONResult getEveryOrderDetails(OrderDetails orderDetails, PageDTO pageDTO) {
         return new JSONResult(mallPartnerManageService.getEveryOrderDetails(orderDetails, pageDTO));
+    }
+
+    /**
+     * 统计不同类型的消费总额
+     */
+    @GetMapping(value = "/getEveryTotalMoney")
+    public JSONResult getEveryTotalMoney(MallPartnerDTO mallPartnerDTO) {
+        return mallPartnerManageService.getEveryTotalMoney(mallPartnerDTO);
     }
 
     /**
