@@ -511,7 +511,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public JSONResult getMallPartner(User user) {
         UserDTO userDTO = userMapperExtra.findUserDTOById(user.getUserId());
-        if (userDTO.getMallPartner() == null) {
+        if (userDTO.getMallPartner() == null || userDTO.getMallPartner().equals("")) {
             UserRoleDTO userRoleDTO = new UserRoleDTO();
             userRoleDTO.setUserId(userDTO.getUserId());
             List<UserRoleDTO> userRoleList = userRoleMapperExtra.selectUserRoleName(userRoleDTO);
