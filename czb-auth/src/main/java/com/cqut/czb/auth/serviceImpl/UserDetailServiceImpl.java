@@ -74,7 +74,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
 
     @Override
-    synchronized public String registerPersonalUser(PersonalUserDTO personalUserDTO) {
+    public synchronized String registerPersonalUser(PersonalUserDTO personalUserDTO) {
         if(userMapperExtra.checkAccount(personalUserDTO.getUserAccount())) return "亲，您的手机号已注册，换一个吧";
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
