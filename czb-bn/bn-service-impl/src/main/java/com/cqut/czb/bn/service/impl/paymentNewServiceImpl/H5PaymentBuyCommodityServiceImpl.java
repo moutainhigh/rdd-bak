@@ -73,8 +73,6 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
 
     private ReentrantLock lock = new ReentrantLock();
 
-    private ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
-            new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
 
     public synchronized boolean judgeChangeSte(int flag,String stockId,String userId) {
         // 状态改变
@@ -113,6 +111,9 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
 
         // 修改状态
         int modify = h5PaymentBuyCommodityMapperExtra.updateState(h5StockDTO);
+
+        ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
+                new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
 
         //计时器——5分钟之后执行
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -168,6 +169,9 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
 
         // 修改状态
         int modify = h5PaymentBuyCommodityMapperExtra.updateState(h5StockDTO);
+
+        ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
+                new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
 
         //计时器——5分钟之后执行
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
