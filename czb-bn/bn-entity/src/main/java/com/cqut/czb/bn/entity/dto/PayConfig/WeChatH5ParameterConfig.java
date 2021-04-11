@@ -200,7 +200,7 @@ public class WeChatH5ParameterConfig {
             parameters.put("scene_info", sceneInfo);
         }
         parameters.put("nonce_str",nonceStrTemp);
-        parameters.put("out_trade_no",h5StockDTO.getStockId());
+        parameters.put("out_trade_no",h5StockDTO.getOrderId());
         BigInteger totalFee = BigDecimal.valueOf(h5StockDTO.getPayPrice()).multiply(new BigDecimal(100)).toBigInteger();
         parameters.put("total_fee",totalFee);
         parameters.put("notify_url",WeChatH5PayConfig.Applet_url);

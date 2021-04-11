@@ -39,5 +39,6 @@
             state = 0,
             recharge_amount = null
         where stock_id = #{stockId,jdbcType=VARCHAR}
+            and state = 1
     </update>
 </mapper>

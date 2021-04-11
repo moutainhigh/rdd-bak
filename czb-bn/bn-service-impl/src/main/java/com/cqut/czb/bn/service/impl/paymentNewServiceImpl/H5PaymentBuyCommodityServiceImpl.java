@@ -104,6 +104,8 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         }
         String stockId = h5PaymentBuyCommodityMapperExtra.getStockId(h5StockDTO);
         if (stockId != null) {
+            String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
+            h5StockDTO.setOrderId(orgId);
             h5StockDTO.setStockId(stockId);
         } else {
             System.out.println("未找到数据");

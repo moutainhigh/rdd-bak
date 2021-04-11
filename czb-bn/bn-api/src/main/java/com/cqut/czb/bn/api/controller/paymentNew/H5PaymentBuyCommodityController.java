@@ -34,6 +34,8 @@ public class H5PaymentBuyCommodityController {
         User user = (User)redisUtils.get(principal.getName());
         if(user==null){
             return new JSONResult("未登录",405,null);
+        }else {
+            h5StockDTO.setUserId(user.getUserId());
         }
         return new JSONResult( h5PaymentBuyCommodityService.WeChatAppletPaymentBuyCommodity(user,h5StockDTO));
     }

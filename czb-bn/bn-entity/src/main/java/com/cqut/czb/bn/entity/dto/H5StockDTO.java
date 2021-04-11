@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class H5StockDTO extends PageDTO{
     private String stockId;
+    private String orderId;
     private String commodityId;
     private String commodityTitle;
     private String content;
@@ -161,5 +162,13 @@ public class H5StockDTO extends PageDTO{
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }
