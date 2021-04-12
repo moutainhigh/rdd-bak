@@ -70,7 +70,7 @@ public class H5StockServiceImpl implements H5StockService {
                 p.setCreateAt(new Date());
                 contentStr = p.getContent().split(",");
                 for(int n = 0; n < contentStr.length; n++) {
-                    split = contentStr[n].split(":");
+                    split = contentStr[n].split(":",2);
                     map.put(split[0], split[1]);
                 }
                 p.setContent(JSONObject.toJSONString(map));
@@ -88,5 +88,10 @@ public class H5StockServiceImpl implements H5StockService {
     @Override
     public List<H5StockDTO> getCommodity() {
         return mapper.getCommodity();
+    }
+
+    @Override
+    public JSONResult getTotalConsumption(H5StockDTO h5StockDTO) {
+        return new JSONResult(mapper.getTotalConsumption(h5StockDTO));
     }
 }

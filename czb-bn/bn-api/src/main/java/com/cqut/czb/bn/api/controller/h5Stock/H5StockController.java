@@ -55,4 +55,9 @@ public class H5StockController {
     public JSONResult getCommodity(){
         return new JSONResult(stockService.getCommodity());
     }
+
+    @GetMapping("/getTotalConsumption")
+    public JSONResult getTotalConsumption(H5StockDTO h5StockDTO) {
+        return stockService.getTotalConsumption(h5StockDTO);
+    }
 }

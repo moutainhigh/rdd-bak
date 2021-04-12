@@ -75,4 +75,13 @@
         where deduction_type = 6 or deduction_type = 7
     </select>
 
+    <select id="getTotalConsumption" parameterType="com.cqut.czb.bn.entity.dto.H5StockDTO" resultType="Double">
+        select SUM(recharge_amount)
+        from czb_h5_stock
+        where 1 = 1
+        <if test="commodityId != null and commodityId != ''">
+            and commodity_id = #{commodityId, jdbcType = INTEGER}
+        </if>
+    </select>
+
 </mapper>
