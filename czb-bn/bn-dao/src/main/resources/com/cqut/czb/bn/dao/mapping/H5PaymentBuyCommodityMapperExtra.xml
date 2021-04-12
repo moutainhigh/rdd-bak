@@ -28,7 +28,7 @@
         update czb_h5_stock
         set user_id = #{userId,jdbcType=VARCHAR},
             third_order = #{thirdOrder,jdbcType=VARCHAR},
-            payPrice = #{payPrice},
+            recharge_amount = #{payPrice},
             state = 2
         where stock_id = #{stockId,jdbcType=VARCHAR}
     </update>

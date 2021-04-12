@@ -19,6 +19,7 @@ public class H5StockDTO extends PageDTO{
     private String userId;
     private double price;
     private double payPrice;
+    private double rechargeAmount;
     private int integralAmount;
     private int isBrowser;
     private String thirdOrder;
@@ -170,5 +171,13 @@ public class H5StockDTO extends PageDTO{
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public double getRechargeAmount() {
+        return rechargeAmount;
+    }
+
+    public void setRechargeAmount(double rechargeAmount) {
+        this.rechargeAmount = rechargeAmount;
     }
 }

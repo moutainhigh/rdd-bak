@@ -114,30 +114,30 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         // 修改状态
         int modify = h5PaymentBuyCommodityMapperExtra.updateState(h5StockDTO);
 
-        ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
-                new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
-
-        //计时器——5分钟之后执行
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                if (!judgeChangeSte(1, stockId, null)){
-                    scheduledExecutorService.shutdown();
-                }
-            }
-        },0,5, TimeUnit.MINUTES);
-        //计时器——5分钟之后执行
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
+//        ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
+//                new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
+//
+//        //计时器——5分钟之后执行
+//        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 //            @Override
 //            public void run() {
-////                System.out.println("改变状态状态计时器");
-////                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
-//                if (!judgeChangeSte(1, stockId)){
-//                    timer.cancel();
+//                if (!judgeChangeSte(1, stockId, null)){
+//                    scheduledExecutorService.shutdown();
 //                }
 //            }
-//        }, 300000);
+//        },0,5, TimeUnit.MINUTES);
+        //计时器——5分钟之后执行
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+//                System.out.println("改变状态状态计时器");
+//                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+                if (!judgeChangeSte(1, stockId, null)){
+                    timer.cancel();
+                }
+            }
+        }, 300000);
         String nonceStrTemp = WeChatUtils.getRandomStr();
 
         SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersPaymentApplet(nonceStrTemp,h5StockDTO);
@@ -172,18 +172,31 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         // 修改状态
         int modify = h5PaymentBuyCommodityMapperExtra.updateState(h5StockDTO);
 
-        ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
-                new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
+//        ScheduledExecutorService scheduledExecutorService= new ScheduledThreadPoolExecutor(2,
+//                new BasicThreadFactory.Builder().namingPattern("H5StockDTO-schedule-pool-%d").daemon(true).build());;
+//
+//        //计时器——5分钟之后执行
+//        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (!judgeChangeSte(1, stockId,null)){
+//                    scheduledExecutorService.shutdown();
+//                }
+//            }
+//        },0,5, TimeUnit.MINUTES);
 
         //计时器——5分钟之后执行
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!judgeChangeSte(1, stockId,null)){
-                    scheduledExecutorService.shutdown();
+//                System.out.println("改变状态状态计时器");
+//                int weChatStocks = weChatStockMapperExtra.selectStockState(ids);
+                if (!judgeChangeSte(1, stockId, null)){
+                    timer.cancel();
                 }
             }
-        },0,5, TimeUnit.MINUTES);
+        }, 300000);
 
         double couponMoney = 0.0;
         //生成起调参数串
@@ -197,7 +210,7 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
-        double actualPrice= BigDecimal.valueOf(h5StockDTO.getPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
+        double actualPrice= BigDecimal.valueOf(h5StockDTO.getPayPrice()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
 //
 //        购买者id
 //        String ownerId = user.getUserId();

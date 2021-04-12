@@ -234,6 +234,7 @@ public class PayBackServiceImpl implements PayBackService {
         // 更新
         H5StockDTO h5StockDTO = new H5StockDTO();
         h5StockDTO.setStockId(stockId);
+        h5StockDTO.setUserId(userId);
         h5StockDTO.setThirdOrder(thirdOrderId);
         h5StockDTO.setPayPrice(payPrice);
 
@@ -287,7 +288,7 @@ public class PayBackServiceImpl implements PayBackService {
             }
             if("money".equals(temp[0])){
                 money = Double.valueOf(temp[1]);
-                money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+//                money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
 
             }
             if ("stockId".equals(temp[0])) {
@@ -304,31 +305,57 @@ public class PayBackServiceImpl implements PayBackService {
         }
         System.out.println(ownerId);
         // 更新
+//        H5StockDTO h5StockDTO = new H5StockDTO();
+//        h5StockDTO.setStockId(stockId);
+//        h5StockDTO.setThirdOrder(thirdOrderId);
+
         H5StockDTO h5StockDTO = new H5StockDTO();
         h5StockDTO.setStockId(stockId);
+        h5StockDTO.setUserId(ownerId);
         h5StockDTO.setThirdOrder(thirdOrderId);
+        h5StockDTO.setPayPrice(money);
 
         // 判断支付人和付款人是否是同一个
 
-        System.out.println("库存更新成功");
-        boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
+//        System.out.println("库存更新成功");
+//        boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
+//
+//
+//        //插入log记录
+//        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
+//        integralLogDTO.setOrderId(orgId);
+//        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+//        integralLogDTO.setUserId(ownerId);
+//        integralLogDTO.setIntegralLogType(5);
+//        integralLogDTO.setRemark("抵扣");
+//        integralLogDTO.setIntegralAmount(integralAmount);
+//        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+//
+//        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
+//        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+//        integralInfoDTO.setUserId(ownerId);
+//        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+//        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+//        return 1;
+        if (h5PaymentBuyCommodityService.judgeChangeSte(0, stockId, ownerId)) {
+            System.out.println("库存更新成功");
+            boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
+            //插入log记录
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
+            integralLogDTO.setOrderId(stockId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(ownerId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
+            integralLogDTO.setIntegralAmount(integralAmount);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-
-        //插入log记录
-        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
-        integralLogDTO.setOrderId(orgId);
-        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-        integralLogDTO.setUserId(ownerId);
-        integralLogDTO.setIntegralLogType(5);
-        integralLogDTO.setRemark("抵扣");
-        integralLogDTO.setIntegralAmount(integralAmount);
-        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-
-        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-        integralInfoDTO.setUserId(ownerId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(ownerId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        }
         return 1;
     }
     /**

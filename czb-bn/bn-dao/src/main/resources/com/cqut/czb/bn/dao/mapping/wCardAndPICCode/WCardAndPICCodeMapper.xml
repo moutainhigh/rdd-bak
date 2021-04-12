@@ -13,6 +13,7 @@
          czb_h5_stock.record_type recordType,
          czb_h5_stock.user_id userId,
          czb_h5_stock.price,
+         czb_h5_stock.recharge_amount rechargeAmount,
          czb_h5_stock.third_order thirdOrder
         from czb_h5_stock
         join czb_h5_commodity on czb_h5_stock.commodity_id = czb_h5_commodity.commodity_id
