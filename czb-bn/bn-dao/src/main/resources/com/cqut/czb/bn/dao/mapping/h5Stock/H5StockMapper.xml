@@ -79,6 +79,7 @@
         select SUM(recharge_amount)
         from czb_h5_stock
         where 1 = 1
+          and `state` = 2
         <if test="commodityId != null and commodityId != ''">
             and commodity_id = #{commodityId, jdbcType = INTEGER}
         </if>
