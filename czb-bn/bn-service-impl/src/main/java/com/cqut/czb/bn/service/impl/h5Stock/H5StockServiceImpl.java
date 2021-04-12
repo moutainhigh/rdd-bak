@@ -92,6 +92,12 @@ public class H5StockServiceImpl implements H5StockService {
 
     @Override
     public JSONResult getTotalConsumption(H5StockDTO h5StockDTO) {
-        return new JSONResult(mapper.getTotalConsumption(h5StockDTO));
+        Map<String, Double> map = new HashMap<>();
+        map.put("totalConsumption",mapper.getTotalConsumption(h5StockDTO));
+        h5StockDTO.setRecordType(1);
+        map.put("moveTotalConsumption",mapper.getTotalConsumption(h5StockDTO));
+        h5StockDTO.setRecordType(2);
+        map.put("oilTotalConsumption",mapper.getTotalConsumption(h5StockDTO));
+        return new JSONResult(map);
     }
 }
