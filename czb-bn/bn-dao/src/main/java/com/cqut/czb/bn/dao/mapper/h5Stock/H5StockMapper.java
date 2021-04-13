@@ -9,6 +9,8 @@ import java.util.List;
 public interface H5StockMapper {
     List<H5StockDTO> h5StockList(H5StockDTO h5StockDTO);
 
+    List<H5StockDTO> h5StockOrderList(H5StockDTO h5StockDTO);
+
     List<H5CommodityDTO> h5CommodityList(H5CommodityDTO commodityDTO);
 
     List<Double> h5CommodityStockPriceGroup(String commodityId);

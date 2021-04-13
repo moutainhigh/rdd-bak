@@ -36,13 +36,20 @@ public class H5StockServiceImpl implements H5StockService {
 
     @Override
     public JSONResult<List<H5StockDTO>> h5StockList(H5StockDTO h5StockDTO) {
-        List<H5StockDTO> withdrawList = mapper.h5StockList(h5StockDTO);
+        PageHelper.startPage(h5StockDTO.getCurrentPage(), h5StockDTO.getPageSize(),true);
+        List<H5StockDTO> withdrawList = new ArrayList<>();
+        if (h5StockDTO.getCommodityId() != null && !h5StockDTO.getCommodityId().equals("")) {
+            withdrawList = mapper.h5StockList(h5StockDTO);
+        } else {
+            withdrawList = mapper.h5StockOrderList(h5StockDTO);
+        }
         PageInfo<H5StockDTO> pageInfo = new PageInfo<>(withdrawList);
         return new JSONResult("列表数据查询成功", 200, pageInfo);
     }
 
     @Override
     public JSONResult<List<H5CommodityDTO>> h5CommodityList(H5CommodityDTO commodityDTO) {
+        PageHelper.startPage(commodityDTO.getCurrentPage(), commodityDTO.getPageSize(),true);
         List<H5CommodityDTO> withdrawList = mapper.h5CommodityList(commodityDTO);
         PageInfo<H5CommodityDTO> pageInfo = new PageInfo<>(withdrawList);
         return new JSONResult("列表数据查询成功", 200, pageInfo);

@@ -88,6 +88,26 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         }
         return false;
     }
+
+    /**
+     * 是否有库存
+     * @param h5StockDTO
+     * @return
+     */
+    public synchronized boolean isStock(H5StockDTO h5StockDTO) {
+        //商品信息为空
+        if (h5StockDTO == null){
+            return false;
+        }
+
+        //抓取数据
+        String stockId = h5PaymentBuyCommodityMapperExtra.getStockId(h5StockDTO);
+        if (stockId != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     /**
      * 微信小程序库存商品支付
      * @param user

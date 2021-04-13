@@ -23,6 +23,7 @@ public class H5StockDTO extends PageDTO{
     private int integralAmount;
     private int isBrowser;
     private String thirdOrder;
+    private String userAccount;
     private String openId;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
@@ -179,5 +180,13 @@ public class H5StockDTO extends PageDTO{
 
     public void setRechargeAmount(double rechargeAmount) {
         this.rechargeAmount = rechargeAmount;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 }

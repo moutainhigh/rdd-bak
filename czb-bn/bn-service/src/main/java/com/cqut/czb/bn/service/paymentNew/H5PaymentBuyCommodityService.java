@@ -9,4 +9,6 @@ public interface H5PaymentBuyCommodityService {
     com.alibaba.fastjson.JSONObject WeChatAppletPaymentBuyCommodity(User user, H5StockDTO h5StockDTO);
 
     String AliAppletPaymentBuyCommodity(User user, H5StockDTO h5StockDTO);
+
+    boolean isStock(H5StockDTO h5StockDTO);
 }

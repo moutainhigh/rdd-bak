@@ -25,6 +25,16 @@ public class H5PaymentBuyCommodityController {
     H5PaymentBuyCommodityService h5PaymentBuyCommodityService;
 
     /**
+     * 是否有库存
+     * @param   h5StockDTO
+     * @return
+     */
+    @RequestMapping(value = "/isStock", method = RequestMethod.POST)
+    public JSONResult isStock(@RequestBody H5StockDTO h5StockDTO) {
+        return new JSONResult( h5PaymentBuyCommodityService.isStock(h5StockDTO));
+    }
+
+    /**
      * 微信商品支付
      * @param   principal,payInputDTO
      * @return

@@ -80,7 +80,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
 
-        if (personalUserDTO.getMallPartnerAccount() != null || !personalUserDTO.getMallPartnerAccount().equals("")) {
+        if (personalUserDTO.getMallPartnerAccount() != null && !personalUserDTO.getMallPartnerAccount().equals("")) {
             User mallPartner = userMapperExtra.findUserByAccount(personalUserDTO.getMallPartnerAccount());
             personalUserDTO.setMallPartner(mallPartner.getUserId());
         }
