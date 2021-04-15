@@ -20,6 +20,8 @@ public class PersonalUserDTO {
 
     private String mallPartnerAccount;
 
+    private Integer isH5Register;
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -90,5 +92,13 @@ public class PersonalUserDTO {
 
     public void setMallPartnerAccount(String mallPartnerAccount) {
         this.mallPartnerAccount = mallPartnerAccount;
+    }
+
+    public Integer getIsH5Register() {
+        return isH5Register;
+    }
+
+    public void setIsH5Register(Integer isH5Register) {
+        this.isH5Register = isH5Register;
     }
 }

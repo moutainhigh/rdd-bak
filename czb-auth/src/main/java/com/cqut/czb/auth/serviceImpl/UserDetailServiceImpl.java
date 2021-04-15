@@ -79,10 +79,15 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
-
-        if (personalUserDTO.getMallPartnerAccount() != null && !personalUserDTO.getMallPartnerAccount().equals("")) {
-            User mallPartner = userMapperExtra.findUserByAccount(personalUserDTO.getMallPartnerAccount());
-            personalUserDTO.setMallPartner(mallPartner.getUserId());
+        System.out.println("personalUserDTO" + personalUserDTO);
+        if (personalUserDTO.getIsH5Register() == 1) {
+            if (personalUserDTO.getMallPartnerAccount() != null && !personalUserDTO.getMallPartnerAccount().equals("")) {
+                User mallPartner = userMapperExtra.findUserByAccount(personalUserDTO.getMallPartnerAccount());
+                personalUserDTO.setMallPartner(mallPartner.getUserId());
+            } else {
+                System.out.println("合伙人账号：" + personalUserDTO.getMallPartnerAccount());
+                return String.valueOf("无法注册,请联系客服");
+            }
         }
 
         User user = BeanMapper.map(personalUserDTO, User.class);
