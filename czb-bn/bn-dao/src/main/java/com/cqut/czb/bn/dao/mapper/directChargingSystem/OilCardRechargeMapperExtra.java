@@ -74,4 +74,8 @@ public interface OilCardRechargeMapperExtra {
     DirectChargingOrderDto getOrder(String orderId);
 
     String getAccount(String userId);
+
+    Double getDirectRechargeAmount(@Param("commodityId")String commodityId);
+
+    Double getMaxIntegralAmount(@Param("commodityId")String commodityId);
 }

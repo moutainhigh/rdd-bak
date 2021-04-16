@@ -24,4 +24,8 @@ public interface IntegralPurchaseMapperExtra {
     int updateSoldNumber(EquityPaymentDTO equityPaymentDTO);
 
     EquityPaymentDTO getEquityGoodsRecord(EquityPaymentDTO equityPaymentDTO);
+
+    Double getEquityGoodsCurrentPrice(String goodsId);
+
+    Double getMaxIntegralAmount(String goodsId);
 }

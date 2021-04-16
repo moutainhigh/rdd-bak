@@ -171,9 +171,30 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         //支付的金额
 //        Double money=backMoney( petrol,petrolInputDTO);
-        Double rechargeAmount = directChargingOrderDto.getRealPrice();
+        // 获取金额
+        Double rechargeAmount = oilCardRechargeMapperExtra.getDirectRechargeAmount(directChargingOrderDto.getCommodityId());
 
-        Double amount = directChargingOrderDto.getRechargeAmount();
+        if (rechargeAmount == null) {
+            System.out.println("直冲无此价格");
+            return null;
+        }
+//        if ((oilCardRechargeMapperExtra.getDirectRechargeAmount(directChargingOrderDto.getRealPrice())==null)) {
+//            System.out.println("直充无此价格");
+//            return null;
+//        }
+        // 积分校验
+        int integralAmount = 0;
+        if (directChargingOrderDto.getIntegralAmount() <= oilCardRechargeMapperExtra.getMaxIntegralAmount(directChargingOrderDto.getCommodityId())) {
+            integralAmount = directChargingOrderDto.getIntegralAmount();
+        } else {
+            System.out.println("积分超过本商品最高抵扣额度");
+            return null;
+        }
+        Double amount = rechargeAmount - integralAmount;
+
+        directChargingOrderDto.setRechargeAmount(amount);
+        directChargingOrderDto.setRealPrice(rechargeAmount);
+
         // userId
         String userId = directChargingOrderDto.getUserId();
         //直充类型
@@ -181,7 +202,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String userAccount = directChargingOrderDto.getUserAccount();
         String cardholder = directChargingOrderDto.getCardholder();
         String rechargeAccount = directChargingOrderDto.getRechargeAccount();
-        Integer integralAmount = directChargingOrderDto.getIntegralAmount();
+//        Integer integralAmount = directChargingOrderDto.getIntegralAmount();
         Integer isNew = directChargingOrderDto.getIsNew();
         String cardNum = "";
         System.out.println("起吊参数" + directChargingOrderDto.toString());
@@ -699,9 +720,32 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         //支付的金额
 //        Double money=backMoney( petrol,petrolInputDTO);
-        Double rechargeAmount = directChargingOrderDto.getRealPrice();
+//        Double rechargeAmount = directChargingOrderDto.getRealPrice();
 
-        Double amount = directChargingOrderDto.getRechargeAmount();
+        // 获取金额校验
+        Double rechargeAmount = oilCardRechargeMapperExtra.getDirectRechargeAmount(directChargingOrderDto.getCommodityId());
+
+        if (rechargeAmount == null) {
+            System.out.println("直冲无此价格");
+            return null;
+        }
+//        if ((oilCardRechargeMapperExtra.getDirectRechargeAmount(directChargingOrderDto.getRealPrice())==null)) {
+//            System.out.println("直充无此价格");
+//            return null;
+//        }
+
+        // 积分校验
+        int integralAmount = 0;
+        if (directChargingOrderDto.getIntegralAmount() <= oilCardRechargeMapperExtra.getMaxIntegralAmount(directChargingOrderDto.getCommodityId())) {
+            integralAmount = directChargingOrderDto.getIntegralAmount();
+        } else {
+            System.out.println("积分超过本商品最高抵扣额度");
+            return null;
+        }
+        Double amount = rechargeAmount - integralAmount;
+
+        directChargingOrderDto.setRechargeAmount(amount);
+        directChargingOrderDto.setRealPrice(rechargeAmount);
         // userId
         String userId = directChargingOrderDto.getUserId();
         //直充类型
@@ -711,7 +755,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         Integer isBrowser = directChargingOrderDto.getIsBrowser();
 
-        Integer integralAmount = directChargingOrderDto.getIntegralAmount();
+//        Integer integralAmount = directChargingOrderDto.getIntegralAmount();
 
         String cardNum = "";
 

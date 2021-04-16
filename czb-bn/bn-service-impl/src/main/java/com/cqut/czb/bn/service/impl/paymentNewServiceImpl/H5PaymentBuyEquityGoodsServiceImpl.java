@@ -45,6 +45,26 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
         String userId = user.getUserId();
 //        String userId = "703610893704287052";
 
+        // 获取真实金额
+        Double currentPrice = integralPurchaseMapperExtra.getEquityGoodsCurrentPrice(equityPaymentDTO.getGoodsId());
+
+        if (currentPrice == null) {
+            System.out.println("权益无此价格");
+            return null;
+        }
+
+        // 积分校验
+        double integralAmount = 0;
+        if (equityPaymentDTO.getIntegralAmount() <= integralPurchaseMapperExtra.getMaxIntegralAmount(equityPaymentDTO.getGoodsId())) {
+            integralAmount = equityPaymentDTO.getIntegralAmount();
+        } else {
+            System.out.println("积分超过本商品最高抵扣额度");
+            return null;
+        }
+
+        equityPaymentDTO.setAmount(currentPrice - integralAmount);
+
+
         // 设置参数
         SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersEquityGoods(nonceStrTemp, orderId, userId, equityPaymentDTO);
         Boolean insertOrder = insertBuyEquityGoods(orderId, userId, equityPaymentDTO,2);
@@ -70,6 +90,24 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
         //支付金额
+        // 获取真实金额
+        Double currentPrice = integralPurchaseMapperExtra.getEquityGoodsCurrentPrice(equityPaymentDTO.getGoodsId());
+
+        if (currentPrice == null) {
+            System.out.println("权益无此价格");
+            return null;
+        }
+
+        double integralAmount = 0;
+        if (equityPaymentDTO.getIntegralAmount() <= integralPurchaseMapperExtra.getMaxIntegralAmount(equityPaymentDTO.getGoodsId())) {
+            integralAmount = equityPaymentDTO.getIntegralAmount();
+        } else {
+            System.out.println("积分超过本商品最高抵扣额度");
+            return null;
+        }
+
+        equityPaymentDTO.setAmount(currentPrice - integralAmount);
+
         double actualPrice= BigDecimal.valueOf(equityPaymentDTO.getAmount()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
 
         //购买者id

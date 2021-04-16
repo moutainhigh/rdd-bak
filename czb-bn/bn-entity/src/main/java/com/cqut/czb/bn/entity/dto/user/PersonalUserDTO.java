@@ -20,7 +20,7 @@ public class PersonalUserDTO {
 
     private String mallPartnerAccount;
 
-    private Integer isH5Register;
+    private int isH5Register;
 
     public String getAvatarUrl() {
         return avatarUrl;
@@ -94,11 +94,11 @@ public class PersonalUserDTO {
         this.mallPartnerAccount = mallPartnerAccount;
     }
 
-    public Integer getIsH5Register() {
+    public int getIsH5Register() {
         return isH5Register;
     }
 
-    public void setIsH5Register(Integer isH5Register) {
+    public void setIsH5Register(int isH5Register) {
         this.isH5Register = isH5Register;
     }
 }

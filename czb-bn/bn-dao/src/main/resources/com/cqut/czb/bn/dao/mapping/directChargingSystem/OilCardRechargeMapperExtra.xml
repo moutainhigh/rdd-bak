@@ -357,4 +357,18 @@
         FROM czb_user
         WHERE user_id = #{userId,jdbcType=VARCHAR}
     </select>
+
+    <select id="getDirectRechargeAmount" resultType="java.lang.Double">
+        SELECT
+            account
+        FROM czb_direct_charging_commodity
+        WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
+    </select>
+
+    <select id="getMaxIntegralAmount" resultMap="java.lang.Double">
+        SELECT
+            max_deduction_amount
+        FROM czb_integral_deduction_info
+        WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
+    </select>
 </mapper>

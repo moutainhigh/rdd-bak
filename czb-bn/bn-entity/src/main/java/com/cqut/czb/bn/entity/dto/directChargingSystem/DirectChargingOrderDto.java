@@ -47,6 +47,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String openId;
 
+    private String commodityId;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
@@ -259,6 +261,14 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
     }
 
     @Override

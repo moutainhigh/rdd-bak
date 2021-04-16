@@ -36,6 +36,7 @@
         select
         t1.account salePrice,
         t2.deduction_type deductionType,
+        t2.integral_deduction_info_id integralDeductionInfoId,
         t2.max_deduction_amount maxDeductionAmount,
         t2.commodity_id commodityId
         from czb_direct_charging_commodity t1
