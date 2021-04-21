@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.integral;
 
+import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
@@ -178,6 +179,7 @@ public class IntegralController {
      * @param integralExchange
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/createExchangeCode", method = RequestMethod.POST)
     public JSONResult createExchangeCode(Principal principal, IntegralExchangeDTO integralExchange ) {
         User user = (User) redisUtils.get(principal.getName());
@@ -221,6 +223,7 @@ public class IntegralController {
      * @param integralAmount
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     @RequestMapping(value = "/subsidyIntegralByPhone/{integralAmount}", method = RequestMethod.POST)
     public JSONResult subsidyIntegralByPhone(Principal principal,@PathVariable("integralAmount") Integer integralAmount,@RequestBody List<String> receiverPhones) {
@@ -242,6 +245,7 @@ public class IntegralController {
      * @param dictInputDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updateIntegralRate", method = RequestMethod.POST)
     public JSONResult updateIntegralRate(DictInputDTO dictInputDTO) {
         return integralService.updateIntegralRate(dictInputDTO);
@@ -252,6 +256,7 @@ public class IntegralController {
      * @param integralManageDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/insertIntegralValue", method = RequestMethod.POST)
     public JSONResult insertIntegralValue(IntegralManageDTO integralManageDTO) {
         return integralService.insertIntegralValue(integralManageDTO);
@@ -262,6 +267,7 @@ public class IntegralController {
      * @param integralManageDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updateIntegralValue", method = RequestMethod.POST)
     public JSONResult updateIntegralValue(IntegralManageDTO integralManageDTO) {
         return integralService.updateIntegralValue(integralManageDTO);
@@ -272,6 +278,7 @@ public class IntegralController {
      * @param integralManageDTO
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/deleteIntegralValue", method = RequestMethod.POST)
     public JSONResult deleteIntegralValue(IntegralManageDTO integralManageDTO) {
         return integralService.deleteIntegralValue(integralManageDTO);
@@ -311,6 +318,7 @@ public class IntegralController {
      * @param integralDeductionInfo
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/insertMaxDeductionAmount", method = RequestMethod.POST)
     public JSONResult insertMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
         return integralService.insertMaxDeductionAmount(integralDeductionInfo);
@@ -322,6 +330,7 @@ public class IntegralController {
      * @param integralDeductionInfo
      * @return
      */
+    @PermissionCheck(role = "管理员")
     @RequestMapping(value = "/updateMaxDeductionAmount", method = RequestMethod.POST)
     public JSONResult updateMaxDeductionAmount(Principal principal, IntegralDeductionInfo integralDeductionInfo) {
         return integralService.updateMaxDeductionAmount(integralDeductionInfo);

@@ -603,7 +603,8 @@ public class IntegralServiceImpl implements IntegralService {
             return new JSONResult(equityPaymentCommodityMapperExtra.selectCommodityByGoodsId(integralDeductionInfo.getCommodityId()).getSellingPrice());
         }
         if (integralDeductionInfo.getDeductionType() == 6 || integralDeductionInfo.getDeductionType() == 7) {
-            return new JSONResult(integralDeductionInfo.getCommodityId());
+//            return new JSONResult(integralDeductionInfo.getCommodityId());
+            return new JSONResult(h5StockMapperExtra.getCommodityPriceByPriceId(integralDeductionInfo.getCommodityId()));
         }
         else {
             return new JSONResult("请求无效", 500);

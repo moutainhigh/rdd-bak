@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class H5CommodityDTO extends PageDTO {
     private String commodityId;
+    private String priceId;
     private String commodityTitle;
     private Integer isDelete;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
@@ -101,5 +102,13 @@ public class H5CommodityDTO extends PageDTO {
 
     public void setDeductionType(Integer deductionType) {
         this.deductionType = deductionType;
+    }
+
+    public String getPriceId() {
+        return priceId;
+    }
+
+    public void setPriceId(String priceId) {
+        this.priceId = priceId;
     }
 }

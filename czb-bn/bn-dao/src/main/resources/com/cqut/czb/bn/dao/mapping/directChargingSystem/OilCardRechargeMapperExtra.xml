@@ -365,7 +365,7 @@
         WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
     </select>
 
-    <select id="getMaxIntegralAmount" resultMap="java.lang.Double">
+    <select id="getMaxIntegralAmount" resultType="java.lang.Double">
         SELECT
             max_deduction_amount
         FROM czb_integral_deduction_info

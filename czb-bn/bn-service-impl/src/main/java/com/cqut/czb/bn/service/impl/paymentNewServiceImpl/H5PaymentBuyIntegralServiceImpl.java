@@ -6,8 +6,10 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
+import com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.dto.PayConfig.WeChatH5ParameterConfig;
@@ -15,6 +17,7 @@ import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
 import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import com.cqut.czb.bn.service.paymentNew.H5PaymentBuyIntegralService;
 import com.cqut.czb.bn.util.string.StringUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,9 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
     @Autowired
     IntegralPurchaseMapperExtra integralPurchaseMapperExtra;
 
+    @Autowired
+    DictMapperExtra dictMapperExtra;
+
     @Override
     public String AliBuyIntegral(User user, IntegralRechargeDTO integralRechargeDTO) {
 
@@ -40,6 +46,22 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
 //            System.out.println("用户信息不全");
 //            return null;
 //        }
+
+        //获取购买比例
+        IntegralManageDTO integralManageDTO = integralPurchaseMapperExtra.getIntegralAmount(integralRechargeDTO.getId());
+
+        Integer integralAmount = Integer.parseInt(integralManageDTO.getDenomination());
+
+        Double amount;
+        //获取支付的金额
+        if (integralManageDTO != null) {
+            amount = Integer.parseInt(integralManageDTO.getDenomination()) * integralManageDTO.getProportion();
+            integralRechargeDTO.setIntegralAmount(Integer.parseInt(integralManageDTO.getDenomination()));
+            integralRechargeDTO.setAmount(amount);
+        }else {
+            System.out.println("无此积分商品");
+            return null;
+        }
 
         Double couponMoney=0.0;
         //生成起吊参数
@@ -95,10 +117,23 @@ public class H5PaymentBuyIntegralServiceImpl implements H5PaymentBuyIntegralServ
 
         String nonceStrTemp = WeChatUtils.getRandomStr();
 
-        //支付的金额
-        Double amount = integralRechargeDTO.getAmount();
+        IntegralManageDTO integralManageDTO = integralPurchaseMapperExtra.getIntegralAmount(integralRechargeDTO.getId());
 
-        Integer integralAmount = integralRechargeDTO.getIntegralAmount();
+        Integer integralAmount = Integer.parseInt(integralManageDTO.getDenomination());
+
+        Double amount;
+        //获取支付的金额
+        if (integralManageDTO != null) {
+            amount = Integer.parseInt(integralManageDTO.getDenomination()) * integralManageDTO.getProportion();
+            integralRechargeDTO.setIntegralAmount(Integer.parseInt(integralManageDTO.getDenomination()));
+            integralRechargeDTO.setAmount(amount);
+        }else {
+            System.out.println("无此积分商品");
+            return null;
+        }
+
+//        integral_matters_need_attention
+
 
         // userId
         String userId = user.getUserId();

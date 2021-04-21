@@ -10,4 +10,8 @@ public interface H5StockMapperExtra {
     List<CommodityDetailsDTO> selectAllCommodityTitle(@Param("commodityType1") String commodityType1, @Param("commodityType2") String commodityType2);
 
     int importData(List<H5StockDTO> stockList);
+
+    String getPriceId(@Param("price") Double price, @Param("commodityId")String commodityId);
+
+    Double getCommodityPriceByPriceId(@Param("commodityId")String commodityId);
 }

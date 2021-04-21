@@ -10,6 +10,7 @@ import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.H5PaymentBuyCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.VipAreaConfigMapperExtra;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.AttributeMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityAttrMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
@@ -70,6 +71,9 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
 
     @Autowired
     H5PaymentBuyCommodityMapperExtra h5PaymentBuyCommodityMapperExtra;
+
+    @Autowired
+    OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
 
     private ReentrantLock lock = new ReentrantLock();
 
@@ -160,6 +164,14 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
         }, 300000);
         String nonceStrTemp = WeChatUtils.getRandomStr();
 
+        // 积分校验
+        if (h5StockDTO.getIntegralAmount() <= oilCardRechargeMapperExtra.getMaxIntegralAmount(h5StockDTO.getPriceId())) {
+            System.out.println("积分未超过本商品最高抵扣额度");
+        } else {
+            System.out.println("积分超过本商品最高抵扣额度");
+            return null;
+        }
+
         SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersPaymentApplet(nonceStrTemp,h5StockDTO);
 
         return WeChatH5ParameterConfig.getSign(parameters, nonceStrTemp);
@@ -217,6 +229,21 @@ public class H5PaymentBuyCommodityServiceImpl implements H5PaymentBuyCommoditySe
                 }
             }
         }, 300000);
+
+        // 积分校验
+//        if (h5StockDTO.getIntegralAmount() <= oilCardRechargeMapperExtra.getMaxIntegralAmount(h5StockDTO.getCommodityId())) {
+//            System.out.println("积分未超过本商品最高抵扣额度");
+//        } else {
+//            System.out.println("积分超过本商品最高抵扣额度");
+//            return null;
+//        }
+
+        if (h5StockDTO.getIntegralAmount() <= oilCardRechargeMapperExtra.getMaxIntegralAmount(h5StockDTO.getPriceId())) {
+            System.out.println("积分未超过本商品最高抵扣额度");
+        } else {
+            System.out.println("积分超过本商品最高抵扣额度");
+            return null;
+        }
 
         double couponMoney = 0.0;
         //生成起调参数串

@@ -13,6 +13,8 @@ public class IntegralManageDTO {
 
     private Date updateAt;
 
+    private Double proportion;
+
     public String getId() {
         return id;
     }
@@ -51,5 +53,13 @@ public class IntegralManageDTO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Double getProportion() {
+        return proportion;
+    }
+
+    public void setProportion(Double proportion) {
+        this.proportion = proportion;
     }
 }

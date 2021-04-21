@@ -3,6 +3,7 @@ package com.cqut.czb.bn.dao.mapper.integral;
 import com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
 import com.cqut.czb.bn.entity.entity.integral.IntegralPurchaseRecord;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +29,6 @@ public interface IntegralPurchaseMapperExtra {
     Double getEquityGoodsCurrentPrice(String goodsId);
 
     Double getMaxIntegralAmount(String goodsId);
+
+    IntegralManageDTO getIntegralAmount(@Param("id") String id);
 }

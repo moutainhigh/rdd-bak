@@ -3,7 +3,7 @@
 <mapper namespace="com.cqut.czb.bn.dao.mapper.h5Stock.H5StockMapperExtra">
     <select id="selectAllCommodityTitle" resultType="com.cqut.czb.bn.entity.dto.integral.CommodityDetailsDTO">
         select
-        price as id,
+        price_id as id,
         concat("价格为：",price,"元") as name,
         true as isLeaf
         from czb_h5_stock
@@ -14,13 +14,13 @@
         <if test="commodityType2 != '' and commodityType2 != null">
             or record_type = #{commodityType2,jdbcType=VARCHAR}
         </if>
-        group by price
+        group by price_id,price
     </select>
 
     <!--  导入更新Excel-->
     <insert id="importData" parameterType="com.cqut.czb.bn.entity.dto.H5StockDTO" >
         insert into czb_h5_stock
-        (stock_id, commodity_id, content, state, create_at, record_type, price)
+        (stock_id, commodity_id, content, state, create_at, record_type, price, price_id)
         values
         <foreach collection="list" item="stockList" separator=",">
             (#{stockList.stockId},
@@ -29,7 +29,22 @@
             #{stockList.state},
             #{stockList.createAt},
             #{stockList.recordType},
-            #{stockList.price})
+            #{stockList.price},
+            #{stockList.priceId})
         </foreach>
     </insert>
+
+    <select id="getPriceId" resultType="java.lang.String">
+        select price_id
+        from czb_h5_stock
+        where commodity_id = #{commodityId,jdbcType=VARCHAR}
+            and price = #{price,jdbcType=DOUBLE}
+    </select>
+
+    <select id="getCommodityPriceByPriceId" resultType="java.lang.Double">
+        select DISTINCT
+               price
+        from czb_h5_stock
+        where price_id = #{commodityId,jdbcType=VARCHAR}
+    </select>
 </mapper>

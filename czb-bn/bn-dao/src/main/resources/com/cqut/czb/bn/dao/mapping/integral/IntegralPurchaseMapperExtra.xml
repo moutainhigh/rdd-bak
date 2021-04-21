@@ -139,9 +139,16 @@
         where goods_id = #{goodsId,jdbcType=VARCHAR}
     </select>
 
-    <select id="getMaxIntegralAmount" resultMap="java.lang.Double">
+    <select id="getMaxIntegralAmount" resultType="java.lang.Double">
         select max_deduction_amount
         from czb_integral_deduction_info
         where commodity_id = #{goodsId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getIntegralAmount" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralManageDTO">
+        select denomination,proportion
+        from czb_integral_manage
+        where id = #{id,jdbcType=VARCHAR}
+            and state = 1
     </select>
 </mapper>

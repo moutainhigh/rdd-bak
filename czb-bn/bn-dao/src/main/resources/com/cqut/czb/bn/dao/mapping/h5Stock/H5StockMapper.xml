@@ -113,6 +113,7 @@
             t2.price salePrice,
             t1.deduction_type deductionType,
             t1.max_deduction_amount maxDeductionAmount,
+            t2.price_id priceId,
             t2.commodity_id commodityId
         from czb_integral_deduction_info t1
                  join czb_h5_stock t2 on t1.commodity_id = t2.price

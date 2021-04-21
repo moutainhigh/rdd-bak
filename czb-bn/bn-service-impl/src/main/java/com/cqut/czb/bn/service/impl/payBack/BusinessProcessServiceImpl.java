@@ -510,6 +510,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         double money = 0;
         String ownerId = "";
         String userAccount = "";
+        String commodityId = "";
         int recordType = 0;
         String cardNum = "";
         String userId = "";
@@ -533,6 +534,9 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             }
             if ("userId".equals(temp[0])) {
                 userId = temp[1];
+            }
+            if ("commodityId".equals(temp[0])) {
+                commodityId = temp[1];
             }
             if ("integralAmount".equals(temp[0])) {
                 integralAmount = Integer.valueOf(temp[1]);

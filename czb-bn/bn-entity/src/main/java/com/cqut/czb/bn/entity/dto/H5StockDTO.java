@@ -25,6 +25,7 @@ public class H5StockDTO extends PageDTO{
     private String thirdOrder;
     private String userAccount;
     private String openId;
+    private String priceId;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
@@ -188,5 +189,13 @@ public class H5StockDTO extends PageDTO{
 
     public void setUserAccount(String userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public String getPriceId() {
+        return priceId;
+    }
+
+    public void setPriceId(String priceId) {
+        this.priceId = priceId;
     }
 }

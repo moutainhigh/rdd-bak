@@ -75,6 +75,12 @@ public class H5StockServiceImpl implements H5StockService {
                 p.setState(0);
                 p.setRecordType(recordType);
                 p.setCreateAt(new Date());
+                String priceId = h5StockMapperExtra.getPriceId(p.getPrice(),p.getCommodityId());
+                if (priceId == null) {
+                    p.setPriceId(StringUtil.createId());
+                }else {
+                    p.setPriceId(priceId);
+                }
                 contentStr = p.getContent().split(",");
                 for(int n = 0; n < contentStr.length; n++) {
                     split = contentStr[n].split(":",2);

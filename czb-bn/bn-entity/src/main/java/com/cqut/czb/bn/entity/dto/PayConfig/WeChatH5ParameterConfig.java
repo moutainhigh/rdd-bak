@@ -56,7 +56,7 @@ public class WeChatH5ParameterConfig {
     /**
      * 直充服务
      */
-    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser, String userId, Integer integralAmount, String openId) {
+    public static SortedMap<String, Object> getParametersDirect(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, Integer recordType, String userAccount, Integer isBrowser, String userId, Integer integralAmount, String openId, String commodityId) {
 //        nonceStrTemp,orgId, amount, rechargeAmount, recordType,userAccount
         SortedMap<String, Object> parameters = new TreeMap<String, Object>();
         parameters = getParameters();
@@ -104,6 +104,7 @@ public class WeChatH5ParameterConfig {
         pbp.put("userAccount",userAccount);
         pbp.put("userId",userId);
         pbp.put("integralAmount",integralAmount);
+//        pbp.put("commodityId",commodityId);
         return StringUtil.transMapToStringOther(pbp);
     }
 

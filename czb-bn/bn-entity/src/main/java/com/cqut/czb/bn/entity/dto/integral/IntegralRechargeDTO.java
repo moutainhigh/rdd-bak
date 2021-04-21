@@ -6,6 +6,8 @@ public class IntegralRechargeDTO {
 
     private String integralLogId;
 
+    private String id;
+
     private String integralInfoId;
 
     private String userId;
@@ -162,5 +164,13 @@ public class IntegralRechargeDTO {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
