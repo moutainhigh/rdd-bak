@@ -12,7 +12,7 @@ public interface DirectChargingOrderMapperExtra {
 
     double getTotalRechargeAmount();
 
-    double getUserTotalRechargeAmount(String userId);
+    double getUserTotalRechargeAmount(DirectChargingOrderDto directChargingOrderDto);
 
     int updateRecordByOrderId(DirectChargingOrderDto directChargingOrderDto);
 

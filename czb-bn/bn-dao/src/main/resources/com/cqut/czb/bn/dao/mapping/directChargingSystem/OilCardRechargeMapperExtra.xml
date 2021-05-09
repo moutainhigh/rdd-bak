@@ -179,7 +179,7 @@
                 and `state` = #{state,jdbcType=INTEGER}
             </if>
             <if test="cardholder != null and cardholder != ''">
-                and card_holder like CONCAT('%',#{cardholder,jdbcType=VARCHAR},'%')
+                and cardholder like CONCAT('%',#{cardholder,jdbcType=VARCHAR},'%')
             </if>
         </where>
         order by create_at DESC

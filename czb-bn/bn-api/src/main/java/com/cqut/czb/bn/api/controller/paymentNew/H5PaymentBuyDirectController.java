@@ -46,7 +46,8 @@ public class H5PaymentBuyDirectController {
 //        User user = (User)redisUtils.get(principal.getName());
 //        directChargingOrderDto.setUserId(user.getUserId());
         if (directChargingOrderDto.getIsDirectPartner() != 1 && directChargingOrderDto.getRecordType() != 1) {
-            directChargingOrderDto.setCardholder(oilCardRechargeService.getAccount(user.getUserId()));
+            directChargingOrderDto.setCardholder(user.getUserAccount());
+            directChargingOrderDto.setUserAccount(user.getUserAccount());
         }
         directChargingOrderDto.setIsNew(1);
         String info =oilCardRechargeService.AlipayRechargeDirect(directChargingOrderDto);
@@ -70,7 +71,8 @@ public class H5PaymentBuyDirectController {
         User user = (User)redisUtils.get(principal.getName());
         directChargingOrderDto.setUserId(user.getUserId());
         if (directChargingOrderDto.getIsDirectPartner() != 1 && directChargingOrderDto.getRecordType() != 1) {
-            directChargingOrderDto.setCardholder(oilCardRechargeService.getAccount(user.getUserId()));
+            directChargingOrderDto.setCardholder(user.getUserAccount());
+            directChargingOrderDto.setUserAccount(user.getUserAccount());
         }
         JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
         if(info==null){

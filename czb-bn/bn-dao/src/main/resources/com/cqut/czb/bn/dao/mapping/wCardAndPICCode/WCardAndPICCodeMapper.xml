@@ -19,6 +19,7 @@
         join czb_h5_commodity on czb_h5_stock.commodity_id = czb_h5_commodity.commodity_id
         <where>
             czb_h5_stock.user_id = #{userId, jdbcType = VARCHAR}
+            and czb_h5_stock.state = 2
           <if test="recordType == 1">
               and czb_h5_stock.commodity_id = '1592814211782'
           </if>

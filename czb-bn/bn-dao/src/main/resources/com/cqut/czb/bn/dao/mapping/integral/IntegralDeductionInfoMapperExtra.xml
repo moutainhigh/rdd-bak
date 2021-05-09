@@ -60,9 +60,9 @@
         WHEN 5 THEN
         (SELECT goods_title FROM czb_equity_payment_commodity t2 WHERE t2.goods_id = t1.commodity_id and t2.is_delete=0)
         WHEN 6 THEN
-        (SELECT price FROM czb_h5_stock t2 WHERE t2.price = t1.commodity_id and t2.record_type=1 GROUP BY t2.price)
+        (SELECT price FROM czb_h5_stock t2 WHERE t2.price_id = t1.commodity_id and t2.record_type=1 GROUP BY t2.price,t2.price_id)
         WHEN 7 THEN
-        (SELECT price FROM czb_h5_stock t2 WHERE t2.price = t1.commodity_id and t2.record_type=2 GROUP BY t2.price)
+        (SELECT price FROM czb_h5_stock t2 WHERE t2.price_id = t1.commodity_id and t2.record_type=2 GROUP BY t2.price,t2.price_id)
         END AS "commodityTitle",
     CASE
         t1.deduction_type

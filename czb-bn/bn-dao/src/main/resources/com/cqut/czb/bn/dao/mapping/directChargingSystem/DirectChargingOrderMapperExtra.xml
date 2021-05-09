@@ -69,10 +69,20 @@
         WHERE t3.role_name = '直充合伙人'
     </select>
 
-    <select id="getUserTotalRechargeAmount" resultType="double">
+    <select id="getUserTotalRechargeAmount" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="double">
         SELECT SUM(recharge_amount)
         FROM czb_direct_charging_order
         WHERE user_id = #{userId}
+        <if test="recordType != null and recordType != ''">
+            AND record_type = #{recordType}
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND create_at &gt;= #{startTime}
+            AND create_at &lt;= #{endTime}
+        </if>
+        <if test="rechargeAccount != null and rechargeAccount != ''">
+            AND recharge_account LIKE CONCAT('%',#{rechargeAccount},'%')
+        </if>
     </select>
     <update id="updateRecordByOrderId" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         update czb_direct_charging_order

@@ -51,8 +51,8 @@ public class DirectChargingPartnerServiceImpl implements DirectChargingPartnerSe
     }
 
     @Override
-    public JSONResult getUserTotalRechargeAmount(User user) {
-        return new JSONResult(directChargingOrderMapperExtra.getUserTotalRechargeAmount(user.getUserId()));
+    public JSONResult getUserTotalRechargeAmount(DirectChargingOrderDto directChargingOrderDto) {
+        return new JSONResult(directChargingOrderMapperExtra.getUserTotalRechargeAmount(directChargingOrderDto));
     }
 
     @Override

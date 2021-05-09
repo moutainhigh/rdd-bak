@@ -56,8 +56,8 @@ public class DirectChargingPartnerController {
      * 获取个人的总额
      */
     @GetMapping("/getUserTotalRechargeAmount")
-    public JSONResult getUserTotalRechargeAmount(User user) {
-        return directChargingPartnerService.getUserTotalRechargeAmount(user);
+    public JSONResult getUserTotalRechargeAmount(DirectChargingOrderDto directChargingOrderDto) {
+        return directChargingPartnerService.getUserTotalRechargeAmount(directChargingOrderDto);
     }
 
     /**

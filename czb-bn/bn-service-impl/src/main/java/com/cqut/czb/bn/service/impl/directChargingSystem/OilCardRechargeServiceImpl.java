@@ -231,6 +231,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         if (recordType == 1){
              insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
         }else{
+            directChargingOrderDto.setCardholder(directChargingOrderDto.getUserAccount());
             directChargingOrderDto.setUserAccount(cardNum);
              insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
         }
@@ -767,6 +768,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);
             System.out.println("插入成功");
         }else{
+            directChargingOrderDto.setCardholder(directChargingOrderDto.getUserAccount());
             directChargingOrderDto.setUserAccount(cardNum);
             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orgId);
         }

@@ -35,7 +35,7 @@
     </insert>
 
     <select id="getPriceId" resultType="java.lang.String">
-        select price_id
+        select distinct price_id
         from czb_h5_stock
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
             and price = #{price,jdbcType=DOUBLE}
