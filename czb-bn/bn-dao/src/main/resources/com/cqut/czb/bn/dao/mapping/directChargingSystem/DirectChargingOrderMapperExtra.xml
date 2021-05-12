@@ -97,7 +97,10 @@
                 recharge_account = #{rechargeAccount,jdbcType=VARCHAR},
             </if>
             <if test="cardholder != null and cardholder != ''">
-                cardholder = #{cardholder,jdbcType=VARCHAR}
+                cardholder = #{cardholder,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state}
             </if>
         </set>
         where order_id = #{oldOrderId,jdbcType=VARCHAR}
@@ -107,6 +110,7 @@
             t1.order_id orderId,
             t1.recharge_account rechargeAccount,
             t1.cardholder,
+            t1.state,
             t2.user_account
         from
             czb_direct_charging_order t1
