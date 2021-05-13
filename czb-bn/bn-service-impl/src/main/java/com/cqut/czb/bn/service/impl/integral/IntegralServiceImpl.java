@@ -188,6 +188,7 @@ public class IntegralServiceImpl implements IntegralService {
         }
         // 新增兑换码主人积分记录
         IntegralLog integralLog = new IntegralLog();
+        String redeemedPerson = integralInfoMng[0].getUserId();
         new Thread(()-> {
             integralLog.setIntegralLogId(StringUtil.createId());
             integralLog.setIntegralInfoId(integralInfoMng[0].getIntegralInfoId());
@@ -198,6 +199,7 @@ public class IntegralServiceImpl implements IntegralService {
             integralLog.setRemark("赠予他人");
             integralLog.setCreateAt(new Date());
             integralLog.setOrderId(StringUtil.createId());
+            integralLog.setConvertorId(userId);
             integralLogMapper.insert(integralLog);
             if (integralExchangeMng.getExchangeType() == 2) {
                 integralInfoMng[0] = integralInfoMapperExtra.selectByUserId(integralExchangeMng.getExchangeSourceId());
@@ -226,6 +228,7 @@ public class IntegralServiceImpl implements IntegralService {
             integralLog.setRemark("被赠予");
             integralLog.setCreateAt(new Date());
             integralLog.setOrderId(StringUtil.createId());
+            integralLog.setConvertorId(redeemedPerson);
             integralLogMapper.insert(integralLog);
 
             integralInfoMng[0] = integralInfoMapperExtra.selectByUserId(userId);
@@ -298,6 +301,7 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setCreateAt(new Date());
         integralLog.setUpdateAt(new Date());
         integralLog.setOrderId(StringUtil.createId());
+        integralLog.setConvertorId(receiver.getUserId());
         integralLogMapper.insert(integralLog);
 
         // 新增被赠送人积分记录
@@ -311,6 +315,7 @@ public class IntegralServiceImpl implements IntegralService {
         integralLog.setCreateAt(new Date());
         integralLog.setUpdateAt(new Date());
         integralLog.setOrderId(StringUtil.createId());
+        integralLog.setConvertorId(providerInfo.getUserId());
         integralLogMapper.insert(integralLog);
 
         return new JSONResult("恭喜你赠送积分成功!");

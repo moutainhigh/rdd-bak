@@ -23,6 +23,8 @@ public class IntegralLog {
 
     private Date updateAt;
 
+    private String convertorId;
+
     public String getIntegralLogId() {
         return integralLogId;
     }
@@ -101,5 +103,13 @@ public class IntegralLog {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getConvertorId() {
+        return convertorId;
+    }
+
+    public void setConvertorId(String convertorId) {
+        this.convertorId = convertorId;
     }
 }

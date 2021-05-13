@@ -10,21 +10,32 @@
         <result column="order_id" property="orderId" jdbcType="VARCHAR" />
         <result column="before_integral_amount" property="beforeIntegralAmount" jdbcType="INTEGER" />
         <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         integral_log_id, integral_info_id, user_id, integral_log_type, integral_amount, order_id,
-    before_integral_amount, remark, create_at, update_at
+    before_integral_amount, remark, create_at, update_at, user_account
     </sql>
 
-    <select id="getIntegralDetailsList" resultMap="BaseResultMap" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO" >
+    <select id="getIntegralDetailsList" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO" parameterType="com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO" >
         select
-        <include refid="Base_Column_List" />
-        from czb_integral_log
-        where user_id = #{userId,jdbcType=VARCHAR}
-        order by create_at desc
+        integral_log_id integralLogId,
+        integral_info_id integralInfoId,
+        a.user_id userId,
+        integral_log_type integralLogType,
+        integral_amount integralAmount,
+        order_id orderId,
+        before_integral_amount beforeIntegralAmount,
+        remark remark,
+        user_account userAccount,
+        a.create_at createAt,
+        a.update_at updateAt
+        from czb_integral_log a left join czb_user b on b.user_id = a.convertor_id
+        where a.user_id = #{userId,jdbcType=VARCHAR}
+        order by a.create_at desc
     </select>
 
     <select id="getOfferIntegralDetail" resultType="com.cqut.czb.bn.entity.dto.integral.IntegralDetailsDTO" parameterType="java.lang.String">

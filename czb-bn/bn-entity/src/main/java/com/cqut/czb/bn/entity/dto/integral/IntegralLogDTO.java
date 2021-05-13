@@ -21,6 +21,8 @@ public class IntegralLogDTO {
 
     private String remark;
 
+    private String userAccount;
+
     private Date createAt;
 
     private Date updateAt;
@@ -111,5 +113,13 @@ public class IntegralLogDTO {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 }
