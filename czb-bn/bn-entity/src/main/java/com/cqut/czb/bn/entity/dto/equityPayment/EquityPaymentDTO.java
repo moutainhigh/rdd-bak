@@ -66,6 +66,9 @@ public class EquityPaymentDTO {
     // 充值类型
     private Integer rechargeType;
 
+    // 是否为第三方
+    private Integer isThird;
+
     // 第三方订单号
     private String thirdOrder;
 
@@ -336,6 +339,14 @@ public class EquityPaymentDTO {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public Integer getIsThird() {
+        return isThird;
+    }
+
+    public void setIsThird(Integer isThird) {
+        this.isThird = isThird;
     }
 
     @Override

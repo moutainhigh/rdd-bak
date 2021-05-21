@@ -457,6 +457,7 @@ public class PayBackServiceImpl implements PayBackService {
         String goodsId = "";
         int rechargeType = 0;
         int integralAmount = 0;
+        int isThird = 0;
 
         for (String data : resDate) {
             temp = data.split("\'");
@@ -477,6 +478,9 @@ public class PayBackServiceImpl implements PayBackService {
             }
             if ("integralAmount".equals(temp[0])) {
                 integralAmount = Integer.valueOf(temp[1]);
+            }
+            if ("isThird".equals(temp[0])) {
+                isThird = Integer.valueOf(temp[1]);
             }
             if ("amount".equals(temp[0])) {
                 amount = Double.valueOf(temp[1]);
@@ -517,14 +521,16 @@ public class PayBackServiceImpl implements PayBackService {
         equityPaymentDTO2.setRechargeType(rechargeType);
         System.out.println(equityPaymentDTO2.toString());
         JSONResult<String> stringJSONResult = null;
-        if(equityPaymentDTO2.getRechargeType() == 1){
-            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
-        }else if (equityPaymentDTO2.getRechargeType() == 2){
-            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
-        }else {
-            throw new RuntimeException("充值类型错误！");
+        if (isThird == 1) {
+            if(equityPaymentDTO2.getRechargeType() == 1){
+                stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+            }else if (equityPaymentDTO2.getRechargeType() == 2){
+                stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+            }else {
+                throw new RuntimeException("充值类型错误！");
+            }
+            System.out.println(stringJSONResult);
         }
-        System.out.println(stringJSONResult);
 
         // 更新
         EquityPaymentDTO equityPaymentDTO = new EquityPaymentDTO();
@@ -628,6 +634,7 @@ public class PayBackServiceImpl implements PayBackService {
         String goodsId = "";
         int rechargeType = 0;
         int integralAmount = 0;
+        int isThird = 0;
 
         for (String data : resDate) {
             temp = data.split("\'");
@@ -642,6 +649,9 @@ public class PayBackServiceImpl implements PayBackService {
             }
             if ("integralAmount".equals(temp[0])) {
                 integralAmount = Integer.valueOf(temp[1]);
+            }
+            if ("isThird".equals(temp[0])) {
+                isThird = Integer.valueOf(temp[1]);
             }
             if ("buyNum".equals(temp[0])) {
                 buyNum = Integer.valueOf(temp[1]);
@@ -676,14 +686,17 @@ public class PayBackServiceImpl implements PayBackService {
         equityPaymentDTO2.setTradeType(tradeType);
         System.out.println(equityPaymentDTO2.toString());
         JSONResult<String> stringJSONResult = null;
-        if(equityPaymentDTO2.getRechargeType() == 1){
-            stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
-        }else if (equityPaymentDTO2.getRechargeType() == 2){
-            stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
-        }else {
-            throw new RuntimeException("充值类型错误！");
+
+        if (isThird == 1) {
+            if(equityPaymentDTO2.getRechargeType() == 1){
+                stringJSONResult = EquityPaymentThirdImpl.videoCharge(equityPaymentDTO2);
+            }else if (equityPaymentDTO2.getRechargeType() == 2){
+                stringJSONResult = EquityPaymentThirdImpl.gameCharge(equityPaymentDTO2);
+            }else {
+                throw new RuntimeException("充值类型错误！");
+            }
+            System.out.println(stringJSONResult);
         }
-        System.out.println(stringJSONResult);
 
         //更新销量
         boolean updateSoldNumber = integralPurchaseMapperExtra.updateSoldNumber(equityPaymentDTO) > 0;

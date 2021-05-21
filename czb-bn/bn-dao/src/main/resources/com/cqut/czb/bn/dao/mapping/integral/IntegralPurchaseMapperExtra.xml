@@ -139,6 +139,12 @@
         where goods_id = #{goodsId,jdbcType=VARCHAR}
     </select>
 
+    <select id="getEquityGoodsIsThird" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select is_third
+        from czb_equity_payment_commodity
+        where goods_id = #{goodsId,jdbcType=VARCHAR}
+    </select>
+
     <select id="getMaxIntegralAmount" resultType="java.lang.Double">
         select max_deduction_amount
         from czb_integral_deduction_info

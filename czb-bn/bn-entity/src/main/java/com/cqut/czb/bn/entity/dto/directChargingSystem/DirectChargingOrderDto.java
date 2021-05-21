@@ -17,7 +17,11 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Double rechargeAmount;
 
+    private Double totalRechargeAmount;
+
     private Double realPrice;
+
+    private Double totalRealPrice;
 
     private String sinopecPetrolNum;
 
@@ -269,6 +273,22 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setCommodityId(String commodityId) {
         this.commodityId = commodityId;
+    }
+
+    public Double getTotalRechargeAmount() {
+        return totalRechargeAmount;
+    }
+
+    public void setTotalRechargeAmount(Double totalRechargeAmount) {
+        this.totalRechargeAmount = totalRechargeAmount;
+    }
+
+    public Double getTotalRealPrice() {
+        return totalRealPrice;
+    }
+
+    public void setTotalRealPrice(Double totalRealPrice) {
+        this.totalRealPrice = totalRealPrice;
     }
 
     @Override

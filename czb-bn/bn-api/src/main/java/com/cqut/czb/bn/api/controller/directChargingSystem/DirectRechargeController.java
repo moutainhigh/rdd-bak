@@ -31,7 +31,7 @@ public class DirectRechargeController {
 
 //        if (directChargingOrderDto.getIsNeedLogin() == 1) {
         String userId = ((User)redisUtils.get(principal.getName())).getUserId();
-            return new JSONResult(oilCardRechargeService.getOrderInfoList(userId, directChargingOrderDto.getRecordType()));
+        return new JSONResult(oilCardRechargeService.getOrderInfoList(userId, directChargingOrderDto.getRecordType()));
 //        } else {
 //            userId = directChargingOrderDto.getUserId();
 //            return new JSONResult(oilCardRechargeService.getOnceOrderInfoList(userId, directChargingOrderDto.getRecordType()));
@@ -55,6 +55,16 @@ public class DirectRechargeController {
     public JSONResult getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto){
         return new JSONResult(oilCardRechargeService.getAllOnceOrderInfoList(directChargingOrderDto));
     }
+
+    /**
+     * 统计
+     * @return
+     */
+    @PostMapping ("/getTheStatics")
+    public JSONResult getTheStatics(DirectChargingOrderDto directChargingOrderDto){
+        return oilCardRechargeService.getTheStatics(directChargingOrderDto);
+    }
+
 
     /**
      * 获取直充总消费

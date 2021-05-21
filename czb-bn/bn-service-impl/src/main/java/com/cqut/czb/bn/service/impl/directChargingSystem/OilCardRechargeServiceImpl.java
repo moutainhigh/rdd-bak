@@ -97,6 +97,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public JSONResult getTheStatics(DirectChargingOrderDto directChargingOrderDto) {
+        DirectChargingOrderDto withdrawList = oilCardRechargeMapperExtra.getTheStatics(directChargingOrderDto);
+        return new JSONResult("列表数据查询成功", 200, withdrawList);
+    }
+
+    @Override
     public JSONResult getTotalConsumption(int type) {
         return new JSONResult(oilCardRechargeMapperExtra.getTotalConsumption(type));
     }

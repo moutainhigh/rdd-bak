@@ -18,6 +18,7 @@
         <result column="fy_mount" property="fyMount" jdbcType="DOUBLE" />
         <result column="order" property="order" jdbcType="INTEGER" />
         <result column="is_hot" property="isHot" jdbcType="INTEGER" />
+        <result column="is_third" property="isThird" jdbcType="INTEGER" />
         <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
         <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
@@ -29,7 +30,7 @@
     </resultMap>
     <sql id="Base_Column_List" >
       goods_id, trade_type, type_id, goods_title, goods_type, product_code, current_price, selling_price,
-      goods_pic, unit_price, is_game, `desc`, on_sale, fy_mount, `order`, is_hot, is_delete, create_at,
+      goods_pic, unit_price, is_game, `desc`, on_sale, fy_mount, `order`, is_hot, is_third, is_delete, create_at,
       update_at, sold_number
     </sql>
 
@@ -69,7 +70,8 @@
 	    t3.category_id,
 	    t3.category_name,
 	    t4.save_path AS src,
-        t5.save_path AS detailSrc
+        t5.save_path AS detailSrc,
+        t1.is_third
     FROM
 	    czb_equity_payment_commodity t1
 	LEFT JOIN czb_equity_payment_type t2 ON t1.type_id = t2.type_id
@@ -94,6 +96,7 @@
         t3.category_id,
         t3.category_name,
         t4.save_path AS src,
+        t1.is_third,
         t5.save_path AS detailSrc
         from
         czb_equity_payment_commodity t1
@@ -138,7 +141,8 @@
 	    is_delete,
 	    create_at,
 	    update_at,
-        product_details
+        product_details,
+        is_third
     )
     VALUES(
         #{goodsId},
@@ -161,7 +165,8 @@
 	    #{isDelete},
 	    #{createAt},
 	    #{updateAt},
-        #{productDetails}
+        #{productDetails},
+        #{isThird}
     )
     </insert>
     <update id="updateEquityPayment" parameterType="com.cqut.czb.bn.entity.dto.equityPayment.EquityPaymentCommodityDTO">
@@ -200,6 +205,9 @@
             </if>
             <if test="isGame != null" >
                 is_game = #{isGame,jdbcType=INTEGER},
+            </if>
+            <if test="isThird != null" >
+                is_third = #{isThird,jdbcType=INTEGER},
             </if>
             <if test="onSale != null" >
                 on_sale = #{onSale,jdbcType=INTEGER},

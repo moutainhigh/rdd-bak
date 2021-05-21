@@ -45,6 +45,10 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
         String userId = user.getUserId();
 //        String userId = "703610893704287052";
 
+        Integer isThird = integralPurchaseMapperExtra.getEquityGoodsIsThird(equityPaymentDTO.getGoodsId());
+
+        System.out.println("是否为权益: " + isThird);
+
         // 获取真实金额
         Double currentPrice = integralPurchaseMapperExtra.getEquityGoodsCurrentPrice(equityPaymentDTO.getGoodsId());
 
@@ -63,7 +67,7 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
         }
 
         equityPaymentDTO.setAmount(currentPrice - integralAmount);
-
+        equityPaymentDTO.setIsThird(isThird);
 
         // 设置参数
         SortedMap<String, Object> parameters = WeChatH5ParameterConfig.getParametersEquityGoods(nonceStrTemp, orderId, userId, equityPaymentDTO);
@@ -89,6 +93,9 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         //订单标识
         String thirdOrder = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+
+        Integer isThird = integralPurchaseMapperExtra.getEquityGoodsIsThird(equityPaymentDTO.getGoodsId());
+
         //支付金额
         // 获取真实金额
         Double currentPrice = integralPurchaseMapperExtra.getEquityGoodsCurrentPrice(equityPaymentDTO.getGoodsId());
@@ -107,6 +114,7 @@ public class H5PaymentBuyEquityGoodsServiceImpl implements H5PaymentBuyEquityGoo
         }
 
         equityPaymentDTO.setAmount(currentPrice - integralAmount);
+        equityPaymentDTO.setIsThird(isThird);
 
         double actualPrice= BigDecimal.valueOf(equityPaymentDTO.getAmount()).subtract(BigDecimal.valueOf(couponMoney)).doubleValue();
 

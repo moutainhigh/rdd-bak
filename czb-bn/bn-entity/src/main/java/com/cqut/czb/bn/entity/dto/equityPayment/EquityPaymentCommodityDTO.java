@@ -45,6 +45,8 @@ public class EquityPaymentCommodityDTO {
 
     private Integer soldNumber;
 
+    private Integer isThird;
+
     private String typeName;
 
     private String categoryId;
@@ -263,5 +265,13 @@ public class EquityPaymentCommodityDTO {
 
     public void setDetailSrc(String detailSrc) {
         this.detailSrc = detailSrc;
+    }
+
+    public Integer getIsThird() {
+        return isThird;
+    }
+
+    public void setIsThird(Integer isThird) {
+        this.isThird = isThird;
     }
 }

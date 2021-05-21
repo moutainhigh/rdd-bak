@@ -25,6 +25,8 @@ public interface OilCardRechargeService{
 
     JSONResult getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 
+    JSONResult getTheStatics(DirectChargingOrderDto directChargingOrderDto);
+
     JSONResult getTotalConsumption(int type);
 
     JSONResult bindingOilCard(String userId, OilCardBinging oilCardBinging);

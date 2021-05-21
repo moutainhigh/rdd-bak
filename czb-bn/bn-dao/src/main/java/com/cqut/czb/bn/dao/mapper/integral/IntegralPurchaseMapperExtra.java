@@ -28,6 +28,8 @@ public interface IntegralPurchaseMapperExtra {
 
     Double getEquityGoodsCurrentPrice(String goodsId);
 
+    Integer getEquityGoodsIsThird(String goodsId);
+
     Double getMaxIntegralAmount(String goodsId);
 
     IntegralManageDTO getIntegralAmount(@Param("id") String id);
