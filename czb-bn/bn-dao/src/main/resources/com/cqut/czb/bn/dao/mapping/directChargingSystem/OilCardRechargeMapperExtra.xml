@@ -153,6 +153,7 @@
         order_id orderId,
         third_order_id thirdOrderId,
         recharge_amount rechargeAmount,
+        real_price realPrice,
         state state,
         create_at createAt,
         recharge_account rechargeAccount,
