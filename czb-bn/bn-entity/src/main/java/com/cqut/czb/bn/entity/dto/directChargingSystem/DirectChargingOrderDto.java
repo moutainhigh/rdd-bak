@@ -67,6 +67,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer recordType; // 1 话费 2 中石油 3 中石化
 
+    private String customerNumber;
+
     public String getOldOrderId() {
         return oldOrderId;
     }
@@ -289,6 +291,14 @@ public class DirectChargingOrderDto extends PageDTO {
 
     public void setTotalRealPrice(Double totalRealPrice) {
         this.totalRealPrice = totalRealPrice;
+    }
+
+    public String getCustomerNumber() {
+        return customerNumber;
+    }
+
+    public void setCustomerNumber(String customerNumber) {
+        this.customerNumber = customerNumber;
     }
 
     @Override
