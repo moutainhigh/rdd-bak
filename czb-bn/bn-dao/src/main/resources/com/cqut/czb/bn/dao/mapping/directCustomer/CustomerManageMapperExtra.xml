@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.directCustomer.CustomerManageMapperExtra">
+    <select id="getCustomers" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        select
+         customer_id as customerId,
+         app_id as appId,
+         app_secret as appSecret,
+         customer_number as customerNumber,
+         recharge_amount as rechargeAmount,
+         balance,
+         consumption_amount as consumptionAmount,
+         amount_recovered as amountRecovered,
+         create_at as createAt,
+         customer_name as customerName
+         from czb_direct_customer
+    </select>
+
+</mapper>

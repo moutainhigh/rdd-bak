@@ -1,0 +1,12 @@
+package com.cqut.czb.bn.dao.mapper.directCustomer;
+
+import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
+import com.cqut.czb.bn.entity.global.JSONResult;
+
+import java.util.List;
+
+public interface CustomerManageMapperExtra {
+    List<CustomerManageDto> getCustomers(CustomerManageDto customerManageDto);
+
+    List<CustomerManageDto> recharge(CustomerManageDto customerManageDto);
+}
