@@ -28,6 +28,27 @@ public class CustomerManageServiceImpl implements CustomerManageService {
 
     @Override
     public JSONResult recharge(CustomerManageDto customerManageDto) {
-        return null;
+        CustomerManageDto customerManageDto1 = customerManageMapperExtra.findCustomer(customerManageDto);
+        customerManageDto1.setBalance(customerManageDto.getRechargeAmount()+customerManageDto1.getBalance());
+        customerManageDto1.setRechargeAmount(customerManageDto.getRechargeAmount() + customerManageDto1.getRechargeAmount());
+
+        int update = customerManageMapperExtra.recharge(customerManageDto1);
+        if (update > 0){
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public JSONResult recovered(CustomerManageDto customerManageDto) {
+        CustomerManageDto customerManageDto1 = customerManageMapperExtra.findCustomer(customerManageDto);
+        customerManageDto1.setBalance(customerManageDto1.getBalance() - customerManageDto.getAmountRecovered());
+        customerManageDto1.setAmountRecovered(customerManageDto.getAmountRecovered() + customerManageDto1.getAmountRecovered());
+
+        int update = customerManageMapperExtra.recovered(customerManageDto1);
+        if (update > 0){
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
     }
 }

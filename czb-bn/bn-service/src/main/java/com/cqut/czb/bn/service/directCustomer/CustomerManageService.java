@@ -8,4 +8,6 @@ public interface CustomerManageService {
     JSONResult getCustomers(CustomerManageDto customerManageDto);
 
     JSONResult recharge(CustomerManageDto customerManageDto);
+
+    JSONResult recovered(CustomerManageDto customerManageDto);
 }

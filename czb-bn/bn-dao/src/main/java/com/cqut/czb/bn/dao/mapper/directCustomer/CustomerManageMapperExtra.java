@@ -8,5 +8,9 @@ import java.util.List;
 public interface CustomerManageMapperExtra {
     List<CustomerManageDto> getCustomers(CustomerManageDto customerManageDto);
 
-    List<CustomerManageDto> recharge(CustomerManageDto customerManageDto);
+    CustomerManageDto findCustomer(CustomerManageDto customerManageDto);
+
+    int recharge(CustomerManageDto customerManageDto);
+
+    int recovered(CustomerManageDto customerManageDto);
 }

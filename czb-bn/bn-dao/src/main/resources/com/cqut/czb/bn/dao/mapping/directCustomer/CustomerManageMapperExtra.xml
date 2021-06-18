@@ -15,5 +15,36 @@
          customer_name as customerName
          from czb_direct_customer
     </select>
-
+    <update id="recharge" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        update czb_direct_customer
+        set
+        recharge_amount = #{rechargeAmount},
+        balance = #{balance}
+        where
+        customer_id = #{customerId}
+    </update>
+    <update id="recovered" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        update czb_direct_customer
+        set
+        amount_recovered = #{amountRecovered},
+        balance = #{balance}
+        where
+        customer_id = #{customerId}
+    </update>
+    <select id="findCustomer" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+         select
+         customer_id as customerId,
+         app_id as appId,
+         app_secret as appSecret,
+         customer_number as customerNumber,
+         recharge_amount as rechargeAmount,
+         balance,
+         consumption_amount as consumptionAmount,
+         amount_recovered as amountRecovered,
+         create_at as createAt,
+         customer_name as customerName
+         from czb_direct_customer
+         where
+         customer_id = #{customerId}
+    </select>
 </mapper>

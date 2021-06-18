@@ -25,4 +25,9 @@ public class CustomerManageController {
     public JSONResult recharge(CustomerManageDto customerManageDto){
         return customerManageService.recharge(customerManageDto);
     }
+
+    @GetMapping("/recovered")
+    public JSONResult recovered(CustomerManageDto customerManageDto){
+        return customerManageService.recovered(customerManageDto);
+    }
 }

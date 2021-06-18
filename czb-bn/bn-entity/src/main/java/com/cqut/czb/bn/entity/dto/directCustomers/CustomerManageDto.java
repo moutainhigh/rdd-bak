@@ -14,6 +14,14 @@ public class CustomerManageDto extends PageDTO {
     private String createAt;
     private String customerName;
 
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
     public String getAppId() {
         return appId;
     }
