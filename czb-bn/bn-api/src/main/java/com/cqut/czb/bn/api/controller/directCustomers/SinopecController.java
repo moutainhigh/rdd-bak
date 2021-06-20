@@ -17,13 +17,13 @@ public class SinopecController {
     SinopecService sinopecService;
 
 
-    // 话费充值提交文档
+    // 个人卡充值提交文档
     @PostMapping("/onlineorder")
     public JSONResult onlineorder(DirectCustomersDto directCustomersDto){
         return sinopecService.onlineorder(directCustomersDto);
     }
 
-    // 话费订单状态查询文档
+    // 个人卡订单状态查询文档
     @GetMapping("/ordersta")
     public JSONResult ordersta(DirectCustomersDto directCustomersDto){
         return sinopecService.ordersta(directCustomersDto);

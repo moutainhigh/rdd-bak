@@ -18,6 +18,7 @@ public class MobileServiceImpl implements MobileService {
     @Autowired
     MobileMapperExtra mobileMapperExtra;
 
+    @Autowired
     OilCardRechargeServiceImpl oilCardRechargeService;
 
     public synchronized JSONResult telorder(DirectCustomersDto directCustomersDto){

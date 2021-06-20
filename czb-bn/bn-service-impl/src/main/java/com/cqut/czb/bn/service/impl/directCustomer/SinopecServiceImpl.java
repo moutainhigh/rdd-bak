@@ -18,6 +18,7 @@ public class SinopecServiceImpl implements SinopecService {
     @Autowired
     MobileMapperExtra mobileMapperExtra;
 
+    @Autowired
     OilCardRechargeServiceImpl oilCardRechargeService;
 
     public synchronized JSONResult onlineorder(DirectCustomersDto directCustomersDto){
@@ -81,7 +82,6 @@ public class SinopecServiceImpl implements SinopecService {
                 mobileMapperExtra.getOrderState(directChargingOrderDto);
                 return new JSONResult("查询成功", 200, mobileMapperExtra.getOrderState(directChargingOrderDto));
             }
-
         }
         return new JSONResult("查询失败", 500);
     }
