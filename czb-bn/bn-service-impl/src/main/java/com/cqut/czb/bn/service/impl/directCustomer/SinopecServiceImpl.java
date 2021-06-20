@@ -23,6 +23,12 @@ public class SinopecServiceImpl implements SinopecService {
 
     public synchronized JSONResult onlineorder(DirectCustomersDto directCustomersDto){
         if (directCustomersDto != null) {
+            if (directCustomersDto.getCardnum().intValue() != 500 ||
+                    directCustomersDto.getCardnum().intValue() != 100 ||
+                    directCustomersDto.getCardnum().intValue() != 200) {
+                return new JSONResult("价格有误", 500);
+            }
+
             CustomerManageDto customerManageDto = mobileMapperExtra.getCustomer(directCustomersDto);
             String appSecret = customerManageDto.getAppSecret();
 
@@ -30,6 +36,7 @@ public class SinopecServiceImpl implements SinopecService {
                      directCustomersDto.getOrdersn() + String.valueOf(directCustomersDto.getCardnum().intValue()) + directCustomersDto.getGasMobile();
             // MD5加密
             String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
             if (customerManageDto.getBalance() >= directCustomersDto.getCardnum() &&
                     directCustomersDto.getSign().equals(sign) &&
                     customerManageDto.getBalance() > 0){
