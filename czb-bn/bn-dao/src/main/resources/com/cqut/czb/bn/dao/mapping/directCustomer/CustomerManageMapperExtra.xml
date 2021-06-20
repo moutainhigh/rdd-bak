@@ -56,4 +56,7 @@
          where
          customer_id = #{customerId}
     </select>
+    <select id="checkPassword" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto">
+        select content from czb_dict where name = #{name}
+    </select>
 </mapper>

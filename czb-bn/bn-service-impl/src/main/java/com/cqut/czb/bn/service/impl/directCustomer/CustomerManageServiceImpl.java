@@ -2,9 +2,11 @@ package com.cqut.czb.bn.service.impl.directCustomer;
 
 import com.cqut.czb.bn.dao.mapper.directCustomer.CustomerManageMapperExtra;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directCustomer.CustomerManageService;
+import com.cqut.czb.bn.util.md5.MD5Util;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +54,15 @@ public class CustomerManageServiceImpl implements CustomerManageService {
             }
         }
         return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public JSONResult checkPassword(CustomerLoginDto customerLoginDto) {
+        CustomerLoginDto customerLoginDto1 = customerManageMapperExtra.checkPassword(customerLoginDto);
+        String sign = MD5Util.MD5Encode(customerLoginDto.getContent(),"UTF-8").toLowerCase();
+        if (customerLoginDto1.getContent().equals(sign)) {
+            return new JSONResult("校验成功", 200, true);
+        }
+        return new JSONResult("校验失败", 500, false);
     }
 }

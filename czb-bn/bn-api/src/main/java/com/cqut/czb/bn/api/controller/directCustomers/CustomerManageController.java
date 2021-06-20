@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.api.controller.directCustomers;
 
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
@@ -32,5 +33,11 @@ public class CustomerManageController {
     @GetMapping("/recovered")
     public JSONResult recovered(CustomerManageDto customerManageDto){
         return customerManageService.recovered(customerManageDto);
+    }
+
+    //密碼判斷
+    @GetMapping("/checkPassword")
+    public JSONResult checkPassword(CustomerLoginDto customerLoginDto){
+        return customerManageService.checkPassword(customerLoginDto);
     }
 }

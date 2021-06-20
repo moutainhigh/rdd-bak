@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.dao.mapper.directCustomer;
 
+import com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
@@ -13,4 +14,6 @@ public interface CustomerManageMapperExtra {
     int recharge(CustomerManageDto customerManageDto);
 
     int recovered(CustomerManageDto customerManageDto);
+
+    CustomerLoginDto checkPassword(CustomerLoginDto customerLoginDto);
 }
