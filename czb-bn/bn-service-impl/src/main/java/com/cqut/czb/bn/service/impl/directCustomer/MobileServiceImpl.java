@@ -23,6 +23,13 @@ public class MobileServiceImpl implements MobileService {
 
     public synchronized JSONResult telorder(DirectCustomersDto directCustomersDto){
         if (directCustomersDto != null) {
+
+            if (directCustomersDto.getCardnum().intValue() != 50 ||
+                    directCustomersDto.getCardnum().intValue() != 100 ||
+                    directCustomersDto.getCardnum().intValue() != 200) {
+                return new JSONResult("价格有误", 500);
+            }
+
             CustomerManageDto customerManageDto = mobileMapperExtra.getCustomer(directCustomersDto);
             String appSecret = customerManageDto.getAppSecret();
 
@@ -30,6 +37,7 @@ public class MobileServiceImpl implements MobileService {
                     String.valueOf(directCustomersDto.getCardnum().intValue()) + directCustomersDto.getOrdersn();
             // MD5加密
             String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+
             if (customerManageDto.getBalance() >= directCustomersDto.getCardnum() &&
                     directCustomersDto.getSign().equals(sign) &&
                     customerManageDto.getBalance() > 0){
@@ -77,7 +85,7 @@ public class MobileServiceImpl implements MobileService {
             if (directCustomersDto.getSign().equals(sign)){
                 DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
                 directChargingOrderDto.setOrderId(directCustomersDto.getOrdersn());
-//                oilCardRechargeService.getPhoneOrderState(directChargingOrderDto);
+                oilCardRechargeService.getPhoneOrderState(directChargingOrderDto);
 
                 // 返回状态
                 mobileMapperExtra.getOrderState(directChargingOrderDto);
