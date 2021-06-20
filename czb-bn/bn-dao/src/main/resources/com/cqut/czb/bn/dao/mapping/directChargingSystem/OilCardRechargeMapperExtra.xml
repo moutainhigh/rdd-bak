@@ -175,6 +175,9 @@
             <if test="rechargeAccount!= null and rechargeAccount!= ''">
                 and recharge_account = #{rechargeAccount,jdbcType=VARCHAR}
             </if>
+            <if test="customerNumber!= null and customerNumber!= ''">
+                and customer_number = #{customerNumber,jdbcType=VARCHAR}
+            </if>
             <if test="state != null">
                 and `state` = #{state,jdbcType=INTEGER}
             </if>

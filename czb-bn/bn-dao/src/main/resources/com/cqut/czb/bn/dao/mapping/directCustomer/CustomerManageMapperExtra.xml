@@ -14,6 +14,15 @@
          create_at as createAt,
          customer_name as customerName
          from czb_direct_customer
+        <where>
+            <if test="customerNumber!= null and customerNumber!= ''">
+                customer_number like CONCAT('%',#{customerNumber,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
     </select>
     <update id="recharge" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
         update czb_direct_customer

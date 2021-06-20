@@ -53,6 +53,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String commodityId;
 
+    private String customerNumber;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 

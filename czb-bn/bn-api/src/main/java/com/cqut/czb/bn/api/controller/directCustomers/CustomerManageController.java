@@ -16,16 +16,19 @@ public class CustomerManageController {
     @Autowired
     CustomerManageService customerManageService;
 
+    //表单获取
     @GetMapping("/getCustomers")
     public JSONResult getCustomers(CustomerManageDto customerManageDto){
         return customerManageService.getCustomers(customerManageDto);
     }
 
+    //充值
     @GetMapping("/recharge")
     public JSONResult recharge(CustomerManageDto customerManageDto){
         return customerManageService.recharge(customerManageDto);
     }
 
+    //圈回
     @GetMapping("/recovered")
     public JSONResult recovered(CustomerManageDto customerManageDto){
         return customerManageService.recovered(customerManageDto);
