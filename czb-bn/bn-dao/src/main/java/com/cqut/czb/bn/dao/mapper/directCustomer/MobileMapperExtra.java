@@ -13,4 +13,8 @@ public interface MobileMapperExtra {
 
     int insertOilOrder(DirectChargingOrderDto directChargingOrderDto);
 
+    int updateConsumption(CustomerManageDto customerManageDto);
+
+    Integer getOrderState(DirectChargingOrderDto directChargingOrderDto);
+
 }

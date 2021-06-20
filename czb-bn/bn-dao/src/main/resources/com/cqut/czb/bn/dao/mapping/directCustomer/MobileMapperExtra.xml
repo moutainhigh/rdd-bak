@@ -56,12 +56,27 @@
     </insert>
 
     <select id="getCustomer" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomersDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
-        select app_secret appSecret,
+        select customer_id customerId,
+               app_secret appSecret,
                balance,
                consumption_amount consumptionAmount,
                customer_number customerNumber
             from czb_direct_customer
             where app_id = #{appId}
+    </select>
+
+    <update id="updateConsumption" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        update czb_direct_customer
+            set consumption_amount = #{consumptionAmount},
+                balance = #{balance}
+            where customer_id = #{customerId}
+    </update>
+
+    <select id="getOrderState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="java.lang.Integer">
+        select state
+        from czb_direct_charging_order
+        where order_id = #{orderId}
     </select>
 
 </mapper>
