@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.dao.mapper;
 
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.AutoDirectDto;
 import com.cqut.czb.bn.entity.entity.Dict;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,9 @@ public interface DictMapperExtra {
     int insertDict(DictInputDTO dictInputDTO);
 
     List<Dict> selectPetrolInfo();
+
+    int updateDictStateByAutoDirect(AutoDirectDto autoDirectDto);
+
+    int updateDictTimeByAutoDirect(AutoDirectDto autoDirectDto);
 
 }

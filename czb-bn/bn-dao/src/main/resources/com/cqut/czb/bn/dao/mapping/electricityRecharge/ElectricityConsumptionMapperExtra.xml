@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.electricityRecharge.ElectricityConsumptionMapperExtra">
+    <select id="getBalance" resultType="java.lang.Double" parameterType="java.lang.String" >
+        select offline_recharge_balance from czb_user_income_info where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getTotalRechargeAmount" resultType="java.lang.Double" parameterType="java.lang.String" >
+       SELECT sum(recharge_amount) as total
+       FROM czb_electricity_recharge_manager
+       where user_id = #{userId,jdbcType=VARCHAR} and state != 0
+    </select>
+
+    <insert id="insertConsumption" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+insert into
+        czb_electricity_recharge_manager (order_id,
+                                   user_id,
+                                   regional,
+                                   recharge_amount,
+                                   recharge_account,
+                                   state,
+                                   create_at,
+                                   finish_at,
+                                   record_type
+        )
+        values (#{orderId,jdbcType=VARCHAR},
+                #{userId,jdbcType=VARCHAR},
+                #{regional,jdbcType=VARCHAR},
+                #{rechargeAmount,jdbcType=DOUBLE},
+                #{rechargeAccount,jdbcType=VARCHAR},
+                1,
+                now(),
+                now(),
+                1
+               )
+    </insert>
+
+    <update id="changeBalance" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+        update czb_user_income_info set
+        offline_recharge_balance = #{balance,jdbcType=DOUBLE}
+        where
+        user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getCustomers" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+        select
+        a.user_id userId,
+        regional,
+        recharge_amount rechargeAmount,
+        real_amount realAmount,
+        recharge_account rechargeAccount,
+        a.create_at startTime,
+        finish_at endTime,
+        b.user_account account,
+        a.order_id orderId,
+        state,
+        third_order_account thirdAccount
+        from
+        czb_electricity_recharge_manager a
+        left join czb_user b on a.user_id = b.user_id
+        <where>
+            record_type = '1' and state != 0
+            <if test="userId != null and userId!= ''">
+                and a.user_id = #{userId,jdbcType=VARCHAR}
+            </if>
+            <if test="rechargeAccount != null and rechargeAccount!= ''">
+                and a.recharge_account = #{rechargeAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null and state!= ''">
+                and a.state = #{state,jdbcType=VARCHAR}
+            </if>
+            <if test="regional != null and regional!= ''">
+                and a.regional = #{regional,jdbcType=VARCHAR}
+            </if>
+            order by a.create_at DESC
+        </where>
+    </select>
+</mapper>

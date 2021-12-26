@@ -188,13 +188,14 @@
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
     <result column="partner" property="partner" jdbcType="INTEGER" />
     <result column="superior_user" property="superiorUser" jdbcType="VARCHAR" />
+    <result column="superior_user_name" property="superiorUserName" jdbcType="VARCHAR" />
     <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <collection property="roleList" column="user_id" javaType="list" select="selectRole" />
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.user_rank, u.partner, cu.user_account as 'superior_user', u.create_at,u.bindingid
+    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.user_rank, u.partner, cu.user_account as 'superior_user',cu.user_name as 'superior_user_name', u.create_at,u.bindingid
     from
     (select
     cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingid
@@ -234,6 +235,9 @@
       </if>
       <if test="superiorUser != null and superiorUser != ''">
         and cu.user_account like concat('%',#{superiorUser,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="superiorUserName != null and superiorUserName != ''">
+        and cu.user_name like concat('%',#{superiorUserName,jdbcType=VARCHAR},'%')
       </if>
     </where>
     order by u.create_at desc

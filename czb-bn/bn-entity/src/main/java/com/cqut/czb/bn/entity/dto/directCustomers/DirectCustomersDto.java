@@ -73,4 +73,18 @@ public class DirectCustomersDto {
     public void setGasMobile(String gasMobile) {
         this.gasMobile = gasMobile;
     }
+
+    @Override
+    public String toString() {
+        return "DirectCustomersDto{" +
+                "phoneno='" + phoneno + '\'' +
+                ", cardnum=" + cardnum +
+                ", ordersn='" + ordersn + '\'' +
+                ", appId='" + appId + '\'' +
+                ", appSecret='" + appSecret + '\'' +
+                ", sign='" + sign + '\'' +
+                ", gasUserid='" + gasUserid + '\'' +
+                ", gasMobile='" + gasMobile + '\'' +
+                '}';
+    }
 }

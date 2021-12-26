@@ -154,4 +154,8 @@
         AND #{endTime}
     </select>
 
+    <select id="getUserInfo" parameterType="java.lang.String" resultType="java.lang.String">
+        select info_id from czb_user_income_info
+        where user_id = #{userId}
+    </select>
 </mapper>

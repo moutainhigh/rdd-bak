@@ -53,10 +53,10 @@
         1 = 1
         </if>
         <if test="receiverType == 1">
-        OR partner = 0
+        partner = 0
         </if>
         <if test="receiverType == 2">
-        OR partner = 1
+        partner = 1
         OR partner = 2
         </if>
       </select>

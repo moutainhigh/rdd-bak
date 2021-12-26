@@ -200,13 +200,14 @@ public class PayBackServiceImpl implements PayBackService {
         String[] temp;
         int flag = 0;
         String stockId = "";
+        String orderId = "";
         double money = Double.valueOf(restmap.get("total_fee").toString());
         money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
         System.out.println("微信小程序支付:"+money);
         String ownerId = "";
+        double payPrice = 0;
         String userId = "";
         int integralAmount = 0;
-        double payPrice = 0;
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {
@@ -229,6 +230,9 @@ public class PayBackServiceImpl implements PayBackService {
                 payPrice = Double.valueOf(temp[1]);
             }
 
+            if("orderId".equals(temp[0])){
+                orderId = temp[1];
+            }
         }
 
         // 更新
@@ -244,21 +248,29 @@ public class PayBackServiceImpl implements PayBackService {
             System.out.println("库存更新成功");
             boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
             //插入log记录
-            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-            integralLogDTO.setOrderId(stockId);
-            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-            integralLogDTO.setUserId(userId);
-            integralLogDTO.setIntegralLogType(5);
-            integralLogDTO.setRemark("抵扣");
-            integralLogDTO.setIntegralAmount(integralAmount);
-            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+            if (integralAmount > 0){
+                IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+                integralLogDTO.setOrderId(stockId);
+                integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+                integralLogDTO.setUserId(userId);
+                integralLogDTO.setIntegralLogType(5);
+                integralLogDTO.setRemark("抵扣");
+                integralLogDTO.setIntegralAmount(integralAmount);
+                integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-            integralInfoDTO.setUserId(userId);
-            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+                IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+                integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+                integralInfoDTO.setUserId(userId);
+                integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+                integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+            }
         }
+
+        double actualPayment = money;
+        actualPayment = new BigDecimal(actualPayment).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        Boolean isSucceed = fanYongService.beginFanYong(9, "", userId, money + integralAmount, actualPayment, orderId);
+        System.out.println("返佣"+isSucceed);
+
         return 1;
     }
 
@@ -341,21 +353,29 @@ public class PayBackServiceImpl implements PayBackService {
             System.out.println("库存更新成功");
             boolean update = h5PaymentBuyCommodityMapperExtra.updateStockState(h5StockDTO) > 0;
             //插入log记录
-            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
-            integralLogDTO.setOrderId(stockId);
-            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-            integralLogDTO.setUserId(ownerId);
-            integralLogDTO.setIntegralLogType(5);
-            integralLogDTO.setRemark("抵扣");
-            integralLogDTO.setIntegralAmount(integralAmount);
-            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+            if (integralAmount > 0){
+                IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(ownerId);
+                integralLogDTO.setOrderId(stockId);
+                integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+                integralLogDTO.setUserId(ownerId);
+                integralLogDTO.setIntegralLogType(5);
+                integralLogDTO.setRemark("抵扣");
+                integralLogDTO.setIntegralAmount(integralAmount);
+                integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
-            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-            integralInfoDTO.setUserId(ownerId);
-            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+                IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(ownerId);
+                integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+                integralInfoDTO.setUserId(ownerId);
+                integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+                integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+            }
         }
+
+        double actualPayment = money;
+        actualPayment = new BigDecimal(actualPayment).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        Boolean isSucceed = fanYongService.beginFanYong(9, "", ownerId, money + integralAmount, actualPayment, orgId);
+        System.out.println("返佣"+isSucceed);
+
         return 1;
     }
     /**

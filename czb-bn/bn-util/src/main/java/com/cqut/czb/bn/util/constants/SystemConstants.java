@@ -145,6 +145,41 @@ public class SystemConstants {
      */
     public static final String[] WITHOUT_CARD_PETROL_SALE_EXCEL_HEAD={"所属油卡卡码","支付订单号","账号","消费时间","所购买商品","消费金额","消费地点"};
 
+    /**
+     * 导出订单记录excel的头部
+     */
+    public static final String[] OIL_CARD_RECHARGE_EXCEL_HEAD={"订单号","第三方订单号","充值账户","持卡人手机号","充值金额","支付金额","充值状态","客户账号","充值时间"};
+
+    /**
+     * 导出直充代理人记录excel的头部
+     */
+    public static final String[] DIRECT_AGENT_EXCEL_HEAD={"手机号","余额","消费支出","充值总额","圈回金额","分配角色时间"};
+
+    /**
+     * 导出水电费记录excel的头部
+     */
+    public static final String[] ELECTRICITY_EXCEL_HEAD={"户号","区域","充值金额","支付金额","充值人账号","充值时间","订单完成时间","充值状态","第三方账号"};
+
+    /**
+     * 导出直充代理人消费记录excel的头部
+     */
+    public static final String[] DIRECT_AGENT_CONSUMPTION_EXCEL_HEAD={"充值账号","消费金额","充值状态","代理人电话","消费时间"};
+
+    /**
+     * 导出直充代理人消费记录excel的头部
+     */
+    public static final String[] DIRECT_AGENT_RECHARGE_EXCEL_HEAD={"手机号","充值金额","圈回金额","余额","操作时间"};
+
+    /**
+     * 导出返佣记录excel的头部
+     */
+    public static final String[] FANYONG_EXCEL_HEAD={"消费账号","金额","分类","订单号","返佣账号","操作时间"};
+
+    /**
+     * 导出提现记录excel的头部
+     */
+    public static final String[] WITHDRAWALS_EXCEL_HEAD={"提现用户","提现金额","提现后金额","提现方式","提现时间"};
+
     public static final int PERSONAL_USER = 0;
     public static final int ENTERPRISE_USER = 1;
 }

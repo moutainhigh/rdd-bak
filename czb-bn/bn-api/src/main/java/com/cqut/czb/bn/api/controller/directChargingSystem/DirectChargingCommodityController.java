@@ -18,4 +18,9 @@ public class DirectChargingCommodityController {
     public JSONResult getAllCommodity(PageDTO pageDTO) {
         return new JSONResult(directChargingCommodityService.getAllCommodity(pageDTO));
     }
+
+    @GetMapping("/getElectricityCommodity")
+    public JSONResult getElectricityCommodity(PageDTO pageDTO) {
+        return new JSONResult(directChargingCommodityService.getElectricityCommodity(pageDTO));
+    }
 }

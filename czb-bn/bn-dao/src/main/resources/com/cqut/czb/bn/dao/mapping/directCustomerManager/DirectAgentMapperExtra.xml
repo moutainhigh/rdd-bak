@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.directCustomerManager.DirectAgentMapperExtra">
+    <select id="getBalance" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        select balance from czb_direct_customer_manager where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="changeBalance" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        update czb_direct_customer_manager set
+        balance = #{balance,jdbcType=DOUBLE}
+        where
+        user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="changeConsumption" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        update czb_direct_customer_manager set
+        consumption_amount = #{consumptionAmount,jdbcType=DOUBLE}
+        where
+        user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertRecharge" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        insert into
+        czb_direct_charging_order
+        (order_id,recharge_amount,real_price,user_id,create_at,update_at,recharge_account,record_type,state)
+        values
+        (
+        #{orderId,jdbcType=VARCHAR},
+        #{rechargeAmount,jdbcType=DOUBLE},
+        #{rechargeAmount,jdbcType=DOUBLE},
+        #{userId,jdbcType=VARCHAR},
+        NOW(),
+        NOW(),
+        #{rechargeAccount,jdbcType=VARCHAR},
+        '5',
+        1
+        )
+    </insert>
+
+    <select id="findAccountById" parameterType="java.lang.String" resultType="java.lang.String">
+        select user_account from czb_user where user_id = #{petrolNum,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findBalanceById" parameterType="java.lang.String" resultType="java.lang.Double">
+        select balance from czb_direct_customer_manager where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findConsumptionById" parameterType="java.lang.String" resultType="java.lang.Double">
+        select consumption_amount from czb_direct_customer_manager where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findTotalRecharge" parameterType="java.lang.String" resultType="java.lang.Double">
+        select sum(recharge_amount) from czb_direct_charging_order
+        where
+        user_id = #{userId,jdbcType=VARCHAR}
+                    and record_type = '5'
+    </select>
+
+    <select id="getRechargeDetails" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        select recharge_account account,
+        create_at registerTime,
+        recharge_amount rechargeAmount,
+        state
+        from
+        czb_direct_charging_order
+        <where>
+            user_id = #{userId,jdbcType=VARCHAR}
+            and record_type = '5'
+            <if test="account != null and account != ''">
+                and recharge_account LIKE concat(#{account,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        order by
+        create_at DESC
+    </select>
+</mapper>

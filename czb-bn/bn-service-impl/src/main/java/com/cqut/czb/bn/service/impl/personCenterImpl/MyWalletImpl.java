@@ -7,16 +7,18 @@ import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.cqut.czb.bn.dao.mapper.MyWalletMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
-import com.cqut.czb.bn.entity.dto.PayConfig.AliPayConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatPayConfig;
-import com.cqut.czb.bn.entity.dto.PayConfig.WeChatUtils;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatWithdrawMapperExtra;
+import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatBalanceRecord;
+import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatTOWithdrawDTO;
 import com.cqut.czb.bn.entity.dto.personCenter.myWallet.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.impl.personCenterImpl.entity.ResultEntity;
 import com.cqut.czb.bn.service.impl.personCenterImpl.entity.TransfersDto;
 import com.cqut.czb.bn.service.personCenterService.MyWallet;
+import com.cqut.czb.bn.service.weChatSmallProgram.WCPWithdrawService;
 import com.cqut.czb.bn.util.MD5Utils;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.method.HttpClient4;
@@ -43,6 +45,12 @@ public class MyWalletImpl implements MyWallet {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    WCPWithdrawService withdrawService;
+
+    @Autowired
+    WeChatWithdrawMapperExtra weChatWithdrawMapperExtra;
 
     @Override
     public BalanceAndInfoIdDTO getBalance(String userId) {
@@ -304,6 +312,88 @@ public class MyWalletImpl implements MyWallet {
         }
         return null;
          */
+    }
+
+    @Override
+    public JSONResult wxWithDraw(User user, WeiXinRecordDTO weiXinRecordDTO) {
+
+        System.out.println("打印openId："+weiXinRecordDTO.getOpenId());
+        //订单号
+        String orderId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
+
+        String nonce_str = WechatParameterConfig.getRandomStr();
+
+        Integer amount = new Double(weiXinRecordDTO.getAmount()*100).intValue();
+
+        String name = weiXinRecordDTO.getWxName();
+
+        String openId = weiXinRecordDTO.getOpenId();
+
+        if (weiXinRecordDTO.getAmount() < 1) {
+            return new JSONResult("提现金额无法小于1元",300);
+        }
+        WeChatTOWithdrawDTO weChatTOWithdrawDTO = new WeChatTOWithdrawDTO();
+        weChatTOWithdrawDTO.setPaymentName(name);
+        weChatTOWithdrawDTO.setMoney(BigDecimal.valueOf(weiXinRecordDTO.getAmount()));
+        weChatTOWithdrawDTO.setUserId(user.getUserId());
+        //查询user信息，完善后进行插入记录
+        String infoId = myWalletMapper.getUserInfo(user.getUserId());
+        if (infoId != null) {
+            weChatTOWithdrawDTO.setInfoId(infoId);
+        }else {
+            return new JSONResult("没有找到该用户",400);
+        }
+//        //比较，查询是否超支
+        WeChatBalanceRecord weChatBalanceRecord = weChatWithdrawMapperExtra.getBalance(infoId);
+        if (BigDecimal.valueOf(weiXinRecordDTO.getAmount()).compareTo(weChatBalanceRecord.getBalance()) > 0) {
+            return new JSONResult("提现金额超出余额", 300);
+        }
+
+        //密匙
+        String certPath = "/usr/local/new8090/cert/apiclient_cert.p12";
+        TransfersDto model = new TransfersDto();// 微信接口请求参数
+        model.setMch_appid(WCProgramConfig.app_id); // 申请商户号的appid或商户号绑定的appid
+        model.setMchid(WCProgramConfig.mchid); // 商户号
+        model.setOpenid(openId); // 商户appid下，某用户的openid
+        model.setAmount(weiXinRecordDTO.getAmount()); // 企业付款金额，这里单位为元
+        model.setDesc("囧途宝盒提现");
+        model.setPartner_trade_no(orderId); // 商户订单号
+
+        SortedMap<String, Object> parameters = WechatParameterConfig.getParametersWithDraw(nonce_str,amount,name,orderId,openId);
+
+        String info = WeChatUtils.map2xml(parameters);
+
+        String orderList = "";
+        try{
+            orderList = HttpRequestHandler.httpsRequest(WeChatH5PayConfig.wallet, info, model, certPath);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println(orderList);
+//        String orderList = WeChatHttpUtil.httpsRequest(WeChatH5PayConfig.wallet, "POST", info);
+        if (orderList.equals("")) {
+            return new JSONResult("提现失败",400);
+        }
+
+        JSONResult insert = withdrawService.toWithdraw(weChatTOWithdrawDTO);
+        if (insert.getCode() == 300) {
+            return new JSONResult(insert.getMessage(),300);
+        }else if (insert.getCode() == 500) {
+            return new JSONResult("插入记录或更新金额异常",300);
+        }
+
+        // 获取xml结果转换为jsonobject
+        Map<String, Object> result = new TreeMap<String, Object>();
+        result = WeChatUtils.xml2Map(orderList);
+        System.out.println(result);
+        return new JSONResult("提现成功",200,result);
+    }
+
+    @Override
+    public JSONResult wxPostDraw(User user, WeiXinRecordDTO weiXinRecordDTO) {
+        System.out.println("生成订单");
+        return null;
     }
 
     /**

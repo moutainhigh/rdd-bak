@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.directCustomerManager.DirectCustomerMapperExtra">
+    <select id="getCustomerList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        select
+        recharge_amount rechargeAmount,
+        balance,
+        consumption_amount consumptionAmount,
+        amount_recovered amountRecovered,
+        a.create_at registerTime,
+        b.user_account account
+        FROM
+        czb_direct_customer_manager a
+        left join czb_user b on a.user_id = b.user_id
+        <where>
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="userAccount!= null and userAccount!= ''">
+                and b.user_account = #{userAccount,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by a.create_at DESC
+    </select>
+
+    <select id="getConsumptionList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        SELECT
+        a.state state,
+        a.create_at registerTime,
+        b.user_account account,
+        a.recharge_account rechargeAccount,
+        a.recharge_amount rechargeAmount
+        FROM
+        czb_direct_charging_order AS a
+        JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            a.record_type = 5
+            <if test="state != null">
+                and a.state =  #{state}
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                and b.user_account LIKE concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="rechargeAccount != null and rechargeAccount != ''">
+                and a.recharge_account LIKE concat('%',#{rechargeAccount,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        ORDER BY
+        a.create_at DESC
+    </select>
+
+    <select id="getRechargeList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        SELECT
+        b.user_account account,
+        a.recharge_amount rechargeAmount,
+        a.amount_recovered amountRecovered,
+        a.balance balance,
+        a.create_at registerTime
+        FROM
+        czb_direct_agent_recharge AS a
+        JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and b.user_account LIKE concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER BY
+        direct_recharge_id DESC
+    </select>
+
+    <select id="getRechargeAccountList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        SELECT
+        b.user_account account,
+        a.balance balance
+        FROM
+        czb_direct_customer_manager AS a
+        JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and b.user_account LIKE concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        ORDER BY
+        a.user_id DESC
+    </select>
+
+    <select id="getTotalConsumption" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="java.lang.Double">
+        SELECT
+        sum(a.recharge_amount)
+        FROM
+        czb_direct_charging_order AS a
+        JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            a.record_type = 5
+            <if test="state != null">
+                and a.state =  #{state}
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                and b.user_account LIKE concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime!= null and endTime!= null">
+                and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="rechargeAccount != null and rechargeAccount != ''">
+                and a.recharge_account LIKE concat('%',#{rechargeAccount,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getTotalRecharge" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        SELECT
+        sum(a.recharge_amount) totalRecharge,
+        sum(a.amount_recovered) totalRecovered
+        FROM
+        czb_direct_agent_recharge AS a
+        JOIN czb_user AS b ON a.user_id = b.user_id
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and b.user_account LIKE concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findAccount" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        SELECT user_account account,
+        user_id userId
+        from czb_user
+        where user_account = #{account,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findUserId" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        SELECT
+        user_id userId
+        from czb_direct_customer_manager
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="addAgent" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        insert into czb_direct_customer_manager
+        (user_id,recharge_amount,balance,consumption_amount,create_at,amount_recovered)
+        values
+        (#{userId,jdbcType=VARCHAR},
+        0,0,0,NOW(),0)
+    </insert>
+
+    <insert id="addAgentRole" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        insert into czb_user_role
+        (id,role_id,user_id,create_at)
+        values
+        (#{orderId,jdbcType=VARCHAR},#{role,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},NOW())
+    </insert>
+
+    <select id="getAgentRole" resultType="java.lang.String">
+        select role_id from czb_role where role_name = '直充代理人'
+    </select>
+
+    <select id="getPassword" resultType="java.lang.String">
+        SELECT
+        content
+        FROM
+        `czb_dict`
+        <where>
+            NAME = 'agent_password'
+        </where>
+    </select>
+
+    <insert id="recharge" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        insert into
+        czb_direct_agent_recharge
+        (direct_recharge_id,user_id,recharge_amount,amount_recovered,balance,create_at)
+        values
+        (#{orderId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{rechargeAmount,jdbcType=DOUBLE},#{amountRecovered,jdbcType=DOUBLE}
+        ,#{balance,jdbcType=DOUBLE},NOW())
+    </insert>
+
+    <select id="getAccountBalance" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        select a.balance balance
+        from czb_direct_customer_manager a
+        join
+        czb_user b on a.user_id = b.user_id
+        where b.user_account = #{account};
+    </select>
+
+    <select id="getOneByAccount" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        select
+        recharge_amount rechargeAmount,
+        balance,
+        consumption_amount consumptionAmount,
+        amount_recovered amountRecovered,
+        a.create_at registerTime,
+        a.user_id userId
+        FROM
+        czb_direct_customer_manager a
+        left join czb_user b on a.user_id = b.user_id
+        <where>
+            <if test="account!= null and account!= ''">
+                and b.user_account = #{account,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by a.user_id DESC
+    </select>
+
+    <update id="changeBalance" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        update czb_direct_customer_manager set
+        balance = #{balance,jdbcType=DOUBLE},
+        recharge_amount = #{rechargeAmount,jdbcType=DOUBLE},
+        amount_recovered = #{amountRecovered,jdbcType=DOUBLE},
+        update_at = NOW()
+        where
+        user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="changePassword" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto">
+        update czb_dict set
+        content = #{newPwd,jdbcType=VARCHAR}
+        <where>
+            NAME = 'agent_password'
+        </where>
+    </update>
+</mapper>

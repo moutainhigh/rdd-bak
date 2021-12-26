@@ -12,11 +12,15 @@
          consumption_amount as consumptionAmount,
          amount_recovered as amountRecovered,
          create_at as createAt,
+         is_shut_recharge as isShutRecharge,
          customer_name as customerName
          from czb_direct_customer
         <where>
             <if test="customerNumber!= null and customerNumber!= ''">
                 customer_number like CONCAT('%',#{customerNumber,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="customerName!= null and customerName!= ''">
+                customer_name like CONCAT('%',#{customerName,jdbcType=VARCHAR},'%')
             </if>
             <if test="startTime!= null and endTime!= null">
                 and create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -24,6 +28,7 @@
             </if>
         </where>
     </select>
+
     <update id="recharge" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
         update czb_direct_customer
         set
@@ -32,6 +37,7 @@
         where
         customer_id = #{customerId}
     </update>
+
     <update id="recovered" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
         update czb_direct_customer
         set
@@ -40,6 +46,7 @@
         where
         customer_id = #{customerId}
     </update>
+
     <select id="findCustomer" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
          select
          customer_id as customerId,
@@ -56,7 +63,44 @@
          where
          customer_id = #{customerId}
     </select>
+
     <select id="checkPassword" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto">
         select content from czb_dict where name = #{name}
     </select>
+
+    <insert id="addCustomer" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        insert into
+            czb_direct_customer (customer_id,
+                                 app_id,
+                                 app_secret,
+                                 customer_number,
+                                 recharge_amount,
+                                 balance,
+                                 consumption_amount,
+                                 amount_recovered,
+                                 create_at,
+                                 update_at,
+                                 customer_name
+        )
+        values (#{customerId,jdbcType=VARCHAR},
+                #{appId,jdbcType=VARCHAR},
+                #{appSecret,jdbcType=VARCHAR},
+                #{customerNumber,jdbcType=VARCHAR},
+                #{rechargeAmount,jdbcType=DOUBLE},
+                #{balance,jdbcType=DOUBLE},
+                #{consumptionAmount,jdbcType=DOUBLE},
+                #{amountRecovered,jdbcType=DOUBLE},
+                now(),
+                now(),
+                #{customerName,jdbcType=VARCHAR}
+               )
+    </insert>
+
+    <update id="changeRecharge" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        update czb_direct_customer
+        set
+            is_shut_recharge = #{isShutRecharge}
+        where
+            customer_id = #{customerId}
+    </update>
 </mapper>

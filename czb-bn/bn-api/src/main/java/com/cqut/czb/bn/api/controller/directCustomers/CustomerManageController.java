@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.directCustomers;
 
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.CustomerLoginDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
@@ -40,4 +41,17 @@ public class CustomerManageController {
     public JSONResult checkPassword(CustomerLoginDto customerLoginDto){
         return customerManageService.checkPassword(customerLoginDto);
     }
+
+    //新增用户
+    @GetMapping("/addCustomer")
+    public JSONResult addCustomer(CustomerManageDto customerManageDto){
+        return customerManageService.addCustomer(customerManageDto);
+    }
+
+    //更改充值状态
+    @GetMapping("/changeRecharge")
+    public JSONResult changeRecharge(CustomerManageDto customerManageDto){
+        return customerManageService.changeRecharge(customerManageDto);
+    }
+
 }

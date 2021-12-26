@@ -11,9 +11,13 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String orderId;
 
+    private String ordersn;
+
     private String thirdOrderId;
 
     private String userAccount;
+
+    private String theUserAccount;
 
     private Double rechargeAmount;
 
@@ -43,6 +47,8 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer isBrowser;
 
+    private Integer payWay;
+
     private Integer integralAmount;
 
     private Integer isDirectPartner;
@@ -55,10 +61,16 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String customerNumber;
 
+    private String ourOrderId;
+
+    private String customerOrderId;
+
+    private String regional;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date updateAt;
 
     @DateTimeFormat(pattern ="yyyy-MM-dd")
@@ -69,7 +81,6 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private Integer recordType; // 1 话费 2 中石油 3 中石化
 
-    private String customerNumber;
 
     public String getOldOrderId() {
         return oldOrderId;
@@ -303,15 +314,67 @@ public class DirectChargingOrderDto extends PageDTO {
         this.customerNumber = customerNumber;
     }
 
+    public String getOrdersn() {
+        return ordersn;
+    }
+
+    public void setOrdersn(String ordersn) {
+        this.ordersn = ordersn;
+    }
+
+    public Integer getPayWay() {
+        return payWay;
+    }
+
+    public void setPayWay(Integer payWay) {
+        this.payWay = payWay;
+    }
+
+    public String getOurOrderId() {
+        return ourOrderId;
+    }
+
+    public void setOurOrderId(String ourOrderId) {
+        this.ourOrderId = ourOrderId;
+    }
+
+    public String getCustomerOrderId() {
+        return customerOrderId;
+    }
+
+    public void setCustomerOrderId(String customerOrderId) {
+        this.customerOrderId = customerOrderId;
+    }
+
+    public String getTheUserAccount() {
+        return theUserAccount;
+    }
+
+    public void setTheUserAccount(String theUserAccount) {
+        this.theUserAccount = theUserAccount;
+    }
+
+    public String getRegional() {
+        return regional;
+    }
+
+    public void setRegional(String regional) {
+        this.regional = regional;
+    }
+
     @Override
     public String toString() {
         return "DirectChargingOrderDto{" +
                 "oldOrderId='" + oldOrderId + '\'' +
                 ", orderId='" + orderId + '\'' +
+                ", ordersn='" + ordersn + '\'' +
                 ", thirdOrderId='" + thirdOrderId + '\'' +
                 ", userAccount='" + userAccount + '\'' +
+                ", theUserAccount='" + theUserAccount + '\'' +
                 ", rechargeAmount=" + rechargeAmount +
+                ", totalRechargeAmount=" + totalRechargeAmount +
                 ", realPrice=" + realPrice +
+                ", totalRealPrice=" + totalRealPrice +
                 ", sinopecPetrolNum='" + sinopecPetrolNum + '\'' +
                 ", petrolChinaPetrolNum='" + petrolChinaPetrolNum + '\'' +
                 ", userId='" + userId + '\'' +
@@ -322,10 +385,16 @@ public class DirectChargingOrderDto extends PageDTO {
                 ", rechargeAccount='" + rechargeAccount + '\'' +
                 ", cardholder='" + cardholder + '\'' +
                 ", isBrowser=" + isBrowser +
+                ", payWay=" + payWay +
                 ", integralAmount=" + integralAmount +
                 ", isDirectPartner=" + isDirectPartner +
                 ", isNew=" + isNew +
                 ", openId='" + openId + '\'' +
+                ", commodityId='" + commodityId + '\'' +
+                ", customerNumber='" + customerNumber + '\'' +
+                ", ourOrderId='" + ourOrderId + '\'' +
+                ", customerOrderId='" + customerOrderId + '\'' +
+                ", regional='" + regional + '\'' +
                 ", createAt=" + createAt +
                 ", updateAt=" + updateAt +
                 ", startTime=" + startTime +

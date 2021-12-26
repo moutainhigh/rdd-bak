@@ -53,6 +53,24 @@ public class AliPayReturnController {
         }
     }
 
+    /**
+     * 水电费充值
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/aliPayElectricityReturn", method= RequestMethod.POST)
+    public synchronized void aliPayElectricityReturn(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("支付宝回调——水电费充值");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("content-type", "text/html;charset=utf-8");
+        response.setContentType("text/xml");
+        try {
+            response.getWriter().print(oilCardRechargeService.aliElectricityReturn(request,"Electricity"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @GetMapping("/getGoodsPrice")
     public JSONResult getGoodsPrice(Integer type) {
         return new JSONResult(prepaidRefillService.getGoodsPrice(type));

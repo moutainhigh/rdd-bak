@@ -198,4 +198,31 @@ public class H5StockDTO extends PageDTO{
     public void setPriceId(String priceId) {
         this.priceId = priceId;
     }
+
+    @Override
+    public String toString() {
+        return "H5StockDTO{" +
+                "stockId='" + stockId + '\'' +
+                ", orderId='" + orderId + '\'' +
+                ", commodityId='" + commodityId + '\'' +
+                ", commodityTitle='" + commodityTitle + '\'' +
+                ", content='" + content + '\'' +
+                ", state=" + state +
+                ", createAt=" + createAt +
+                ", updateAt=" + updateAt +
+                ", recordType=" + recordType +
+                ", userId='" + userId + '\'' +
+                ", price=" + price +
+                ", payPrice=" + payPrice +
+                ", rechargeAmount=" + rechargeAmount +
+                ", integralAmount=" + integralAmount +
+                ", isBrowser=" + isBrowser +
+                ", thirdOrder='" + thirdOrder + '\'' +
+                ", userAccount='" + userAccount + '\'' +
+                ", openId='" + openId + '\'' +
+                ", priceId='" + priceId + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }

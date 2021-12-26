@@ -80,4 +80,8 @@ public interface OilCardRechargeMapperExtra {
     Double getDirectRechargeAmount(@Param("commodityId")String commodityId);
 
     Double getMaxIntegralAmount(@Param("commodityId")String commodityId);
+
+    List<DirectChargingOrderDto> getPartOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
+
+    int importState(DirectChargingOrderDto directChargingOrderDto);
 }

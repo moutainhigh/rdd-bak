@@ -97,4 +97,19 @@ public class OfflineConsumptionDTO extends PageDTO{
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
     }
+
+    @Override
+    public String toString() {
+        return "OfflineConsumptionDTO{" +
+                "recordId='" + recordId + '\'' +
+                ", petrolNum='" + petrolNum + '\'' +
+                ", amount=" + amount +
+                ", state='" + state + '\'' +
+                ", account='" + account + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", rechargeTime=" + rechargeTime +
+                ", isSpecial=" + isSpecial +
+                '}';
+    }
 }

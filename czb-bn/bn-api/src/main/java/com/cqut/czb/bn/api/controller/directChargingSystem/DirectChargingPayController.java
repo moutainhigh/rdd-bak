@@ -65,7 +65,7 @@ public class DirectChargingPayController {
         user.setUserId("155892403286206");
 //        rechargeVipDTO.setArea("重庆市");
         directChargingOrderDto.setUserId(user.getUserId());
-        JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
+        JSONObject info =oilCardRechargeService.WeChatRechargeDirect(directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
         }else {

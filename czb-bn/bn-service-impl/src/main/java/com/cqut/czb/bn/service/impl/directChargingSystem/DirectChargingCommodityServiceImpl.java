@@ -23,4 +23,11 @@ public class DirectChargingCommodityServiceImpl implements DirectChargingCommodi
         List<IntegralDeductionInfoDTO> directChargingCommodityDtoList = directChargingCommodityMapperExtra.getAllCommodity();
         return new PageInfo<>(directChargingCommodityDtoList);
     }
+
+    @Override
+    public PageInfo getElectricityCommodity(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        List<IntegralDeductionInfoDTO> directChargingCommodityDtoList = directChargingCommodityMapperExtra.getElectricityCommodity();
+        return new PageInfo<>(directChargingCommodityDtoList);
+    }
 }

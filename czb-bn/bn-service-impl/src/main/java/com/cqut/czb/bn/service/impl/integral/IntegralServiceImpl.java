@@ -3,6 +3,7 @@ package com.cqut.czb.bn.service.impl.integral;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingCommodityMapperExtra;
+import com.cqut.czb.bn.dao.mapper.electricityRecharge.ElectricityRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.equityPayment.EquityPaymentCommodityMapperExtra;
 import com.cqut.czb.bn.dao.mapper.h5Stock.H5StockMapperExtra;
 import com.cqut.czb.bn.dao.mapper.integral.*;
@@ -586,6 +587,9 @@ public class IntegralServiceImpl implements IntegralService {
         if (type.equals("7")) {
             return new JSONResult(h5StockMapperExtra.selectAllCommodityTitle("2",null));
         }
+        if (type.equals("8")) {
+            return new JSONResult(directChargingCommodityMapperExtra.selectAllCommodityTitle("4", null));
+        }
         if (commodityId != null || !commodityId.equals("")) {
             WxAttributeDTO wxAttributeDTO = new WxAttributeDTO();
             wxAttributeDTO.setCommodityId(commodityId);
@@ -601,7 +605,7 @@ public class IntegralServiceImpl implements IntegralService {
         if (integralDeductionInfo.getDeductionType() == 1) {
             return new JSONResult(weChatCommodityMapperExtra.getCommodityPrice(integralDeductionInfo));
         }
-        if (integralDeductionInfo.getDeductionType() == 2 || integralDeductionInfo.getDeductionType() == 3 || integralDeductionInfo.getDeductionType() == 4) {
+        if (integralDeductionInfo.getDeductionType() == 2 || integralDeductionInfo.getDeductionType() == 3 || integralDeductionInfo.getDeductionType() == 4 || integralDeductionInfo.getDeductionType() == 8) {
             return new JSONResult(directChargingCommodityMapperExtra.getCommodityPriceByCommodityId(integralDeductionInfo.getCommodityId()));
         }
         if (integralDeductionInfo.getDeductionType() == 5) {

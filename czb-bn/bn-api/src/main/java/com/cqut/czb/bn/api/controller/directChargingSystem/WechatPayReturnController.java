@@ -41,4 +41,22 @@ public class WechatPayReturnController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 微信购买
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/WeChatPayBackElectricity", method= RequestMethod.POST)
+    public synchronized void weChatPayBackElectricity(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("微信回调——水电费充值");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("content-type", "text/html;charset=utf-8");
+        response.setContentType("text/xml");
+        try {
+            response.getWriter().print(oilCardRechargeService.wechatPayReturn(request,"Electricity"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

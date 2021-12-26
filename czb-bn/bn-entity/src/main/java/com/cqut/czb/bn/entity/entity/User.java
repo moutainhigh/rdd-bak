@@ -17,6 +17,8 @@ public class User {
 
     private String superiorUser;
 
+    private String superiorUserName;
+
     private Integer isLoginPc;
 
     private String userName;
@@ -56,6 +58,8 @@ public class User {
     private Integer isSpecial;
 
     private String mallPartner;
+
+    private String openId;
 
     public String getUserId() {
         return userId;
@@ -271,5 +275,21 @@ public class User {
 
     public void setMallPartner(String mallPartner) {
         this.mallPartner = mallPartner == null ? null : mallPartner.trim();
+    }
+
+    public String getSuperiorUserName() {
+        return superiorUserName;
+    }
+
+    public void setSuperiorUserName(String superiorUserName) {
+        this.superiorUserName = superiorUserName;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

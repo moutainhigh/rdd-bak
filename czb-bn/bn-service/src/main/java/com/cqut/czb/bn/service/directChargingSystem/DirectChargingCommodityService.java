@@ -5,4 +5,6 @@ import com.github.pagehelper.PageInfo;
 
 public interface DirectChargingCommodityService {
     PageInfo getAllCommodity(PageDTO pageDTO);
+
+    PageInfo getElectricityCommodity(PageDTO pageDTO);
 }

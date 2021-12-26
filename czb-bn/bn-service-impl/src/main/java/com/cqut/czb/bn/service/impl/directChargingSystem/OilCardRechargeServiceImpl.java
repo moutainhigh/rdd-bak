@@ -9,36 +9,51 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
+import com.cqut.czb.bn.dao.mapper.electricityRecharge.ElectricityRechargeMapperExtra;
+import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.OnlineorderDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.TelorderDto;
+import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
+import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
+import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
+import com.cqut.czb.bn.service.fanyong.FanyongLogService;
+import com.cqut.czb.bn.service.impl.h5Stock.H5StockDelivery;
+import com.cqut.czb.bn.service.impl.payBack.FanYongServiceImpl;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
+import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import net.sf.json.JSONObject;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.Buffer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Service
 public class OilCardRechargeServiceImpl implements OilCardRechargeService {
@@ -57,6 +72,16 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     @Autowired
     private DictMapperExtra dictMapperExtra;
 
+    @Autowired
+    private ElectricityRechargeService electricityRechargeService;
+
+    @Autowired
+    private FanYongService fanYongService;
+
+    @Autowired
+    private FanyongLogService fanyongLogService;
+
+    private TimeTaskManager timeTaskManager = new TimeTaskManager();
 
     @Override
     public List<DirectChargingOrderDto> getOrderInfoList(String userId, Integer type) {
@@ -124,6 +149,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     @Override
     public JSONResult updateOrderState(DirectChargingOrderDto directChargingOrderDto) {
         int update = oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto);
+        if (update > 0 && directChargingOrderDto.getState() == 2){
+            directFanyong(directChargingOrderDto);
+        }
         if (update > 0) {
             return new JSONResult("更新成功", 200);
         }
@@ -158,7 +186,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
 
-//    直充支付--支付宝
+    //    直充支付--支付宝
     @Override
     public String AlipayRechargeDirect(DirectChargingOrderDto directChargingOrderDto) {
         //检验是否都为空
@@ -172,8 +200,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         AlipayClient alipayClient = alipayClientConfig.getAlipayClient();
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
 
-        //订单标识
         String orderId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
+
 
         //支付的金额
 //        Double money=backMoney( petrol,petrolInputDTO);
@@ -197,6 +225,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             return null;
         }
         Double amount = rechargeAmount - integralAmount;
+        amount = new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
         directChargingOrderDto.setRechargeAmount(amount);
         directChargingOrderDto.setRealPrice(rechargeAmount);
@@ -235,11 +264,11 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         boolean insertSalesRecords = false;
         //插入购买信息
         if (recordType == 1){
-             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
+            insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
         }else{
             directChargingOrderDto.setCardholder(directChargingOrderDto.getUserAccount());
             directChargingOrderDto.setUserAccount(cardNum);
-             insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
+            insertSalesRecords= insertPhonePillRecords(directChargingOrderDto,orderId);
         }
         System.out.println("新增直充充值记录完毕"+insertSalesRecords);
         return orderString;
@@ -256,6 +285,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrder.setPaymentMethod(1);
         directChargingOrder.setRealPrice(directChargingOrderDto.getRealPrice());
         directChargingOrder.setState(0);
+        directChargingOrder.setCustomerOrderId(directChargingOrderDto.getCustomerOrderId());
         directChargingOrder.setRechargeAccount(directChargingOrderDto.getRechargeAccount());
         if (directChargingOrderDto.getRecordType() == 1) {
             insertRecords=oilCardRechargeMapperExtra.insertOrder(directChargingOrder)>0;
@@ -278,7 +308,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         boolean signVerfied = false;
         try {
             signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_wap_public_key,
-                        AliPayConfig.charset, AliPayConfig.sign_type);
+                    AliPayConfig.charset, AliPayConfig.sign_type);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -327,6 +357,69 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         return AlipayConfig.response_fail;
     }
 
+    @Override
+    public String aliElectricityReturn(HttpServletRequest request, String consumptionType) {
+        // 获取支付宝POST过来反馈信息
+        System.out.println(1);
+        Map<String, String> params = new HashMap<String, String>();
+        Map requestParams = request.getParameterMap();
+        params=parseOrder(params,requestParams);
+        DirectChargingOrderDto directChargingOrderDto = getParams(params);
+
+        //是否被篡改的标识
+        boolean signVerfied = false;
+        try {
+            signVerfied = AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_wap_public_key,
+                    AliPayConfig.charset, AliPayConfig.sign_type);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (signVerfied) {
+//				支付账单是否一致
+                if (isCorrectDataH5(params)) {//交易成功
+                    Object[] param = { params };
+                    Map result = refuelingCard.AliPayback(param,consumptionType);//7为支付宝支付（用于拓展）
+                    if (AlipayConfig.response_success.equals(result.get("success"))) {
+                        if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
+                            System.out.println("尚未开通充值");
+                            return AlipayConfig.response_success;
+                        }
+                        if (directChargingOrderDto.getRecordType()==1){
+                            System.out.println("开通充值");
+                            //TODO 第三方充值
+//                            phoneRechargeSubmission(directChargingOrderDto);
+                            System.out.println("充值参数"+directChargingOrderDto.toString());
+                        }else{System.out.println
+                                ("开通充值");
+                            onlineorderSubmission(directChargingOrderDto);
+                        }
+                        return AlipayConfig.response_success;
+                    } else if (AlipayConfig.response_fail.equals(result.get("fail"))) {
+                        directChargingOrderDto.setState(3);
+                        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+                        return AlipayConfig.response_fail;
+                    } else
+                        return null;
+                } else {//交易失败
+                    Object[] param = { params };
+                    directChargingOrderDto.setState(3);
+                    boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+                    return AlipayConfig.response_fail;
+                }
+            } else {
+                directChargingOrderDto.setState(3);
+                boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+                return AlipayConfig.response_fail;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        directChargingOrderDto.setState(3);
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        return AlipayConfig.response_fail;
+    }
+
     private DirectChargingOrderDto getParams(Map<String, String> param) {
         String[] resDate = param.get("passback_params").split("\\^");
         String[] temp;
@@ -337,6 +430,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         String cardholder = "";
         String rechargeAccount = "";
         double rechargeAmount = 0;
+
         for (String data : resDate) {
             temp = data.split("\'");
             if (temp.length < 2) {//判空
@@ -373,7 +467,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrderDto.setRechargeAmount(rechargeAmount);
         directChargingOrderDto.setCardholder(cardholder);
         directChargingOrderDto.setRechargeAccount(rechargeAccount);
-        directChargingOrderDto.setUpdateAt(new Date());
         return directChargingOrderDto;
     }
 
@@ -425,10 +518,10 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         //设置请求参数
         String params = "appId=" + appId +
-                    "&phoneno=" + phoneno +
-                    "&cardnum=" + cardnum +
-                    "&ordersn=" + ordersn +
-                    "&sign=" + sign;
+                "&phoneno=" + phoneno +
+                "&cardnum=" + cardnum +
+                "&ordersn=" + ordersn +
+                "&sign=" + sign;
 
         System.out.println(params);
 
@@ -546,9 +639,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     private boolean isCorrectDataH5(Map<String, String> params) {
 
         // 验证app_id是否一致
-            if (!params.get("app_id").equals(AliPayConfig.app_wap_id)) {
-                return false;
-            }
+        if (!params.get("app_id").equals(AliPayConfig.app_wap_id)) {
+            return false;
+        }
 
         // 判断交易状态是否为TRADE_SUCCESS
         if (!params.get("trade_status").equals("TRADE_SUCCESS")) {
@@ -572,6 +665,21 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             params.put(name, valueStr);
         }
         return params;
+    }
+
+    public void directFanyong(DirectChargingOrderDto directChargingOrderDto){
+        System.out.println("直充返佣進入方法");
+        if (!fanyongLogService.isContainFanyongLog(directChargingOrderDto.getOrderId())){
+            String userId = directChargingOrderDto.getUserId();
+            Double actualPayment = directChargingOrderDto.getRealPrice();
+            actualPayment = new BigDecimal(actualPayment).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            Double money = actualPayment + directChargingOrderDto.getIntegralAmount();
+            String orgId = directChargingOrderDto.getOurOrderId();
+            boolean isSucceed = fanYongService.beginFanYong(7, "", userId, money, actualPayment, orgId);
+            System.out.println("返佣"+isSucceed + " " + directChargingOrderDto.getOrderId());
+        } else {
+            System.out.println("已存在返佣记录  " + directChargingOrderDto.getOrderId());
+        }
     }
 
     @Override
@@ -611,6 +719,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             directChargingOrderDto1.setState(5);
         } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 2) {
             directChargingOrderDto1.setState(2);
+
+            directFanyong(directChargingOrderDto);
+
         } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 3) {
             directChargingOrderDto1.setState(4);
         } else {
@@ -641,8 +752,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         //设置请求参数
         String params = "ordersn=" + ordersn +
-                    "&appId=" + appId +
-                    "&sign=" + sign;
+                "&appId=" + appId +
+                "&sign=" + sign;
 
         System.out.println(params);
 
@@ -660,6 +771,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             directChargingOrderDto1.setState(5);
         } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 2) {
             directChargingOrderDto1.setState(2);
+
+            directFanyong(directChargingOrderDto);
+
         } else if (Integer.parseInt(sr.substring(begin+14, begin+15)) == 3) {
             directChargingOrderDto1.setState(4);
         } else {
@@ -715,13 +829,14 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
-    public com.alibaba.fastjson.JSONObject WeChatRechargeDirect(User user, DirectChargingOrderDto directChargingOrderDto) {
+    public com.alibaba.fastjson.JSONObject WeChatRechargeDirect(DirectChargingOrderDto directChargingOrderDto) {
 
+        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
         /**
          * 生成起调参数串——返回给app（微信的支付订单）
          */
         //订单标识
-        String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
+
 
         String nonceStrTemp = WeChatUtils.getRandomStr();
 
@@ -845,4 +960,241 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         return oilCardRechargeMapperExtra.getAccount(userId);
     }
 
+    @Override
+    public Workbook exportOilCardRecord(DirectChargingOrderDto directChargingOrderDto) throws Exception {
+        List<DirectChargingOrderDto> list = oilCardRechargeMapperExtra.getAllOnceOrderInfoList(directChargingOrderDto);
+        if(list==null||list.size()==0){
+            return getOilCardRecord(null,directChargingOrderDto);
+        }
+        return getOilCardRecord(list, directChargingOrderDto);
+    }
+
+    @Override
+    public JSONResult automaticSubmitPhone(AutoDirectDto autoDirectDto){
+
+        System.out.println("传入的automaticSubmit为" + autoDirectDto.getState() + " : " + autoDirectDto.getTime());
+        autoDirectDto.setNameTitle("automatic_submit_phone");
+        autoDirectDto.setNameContent("automatic_phone_time");
+
+        int result = dictMapperExtra.updateDictStateByAutoDirect(autoDirectDto);
+        int result2 = dictMapperExtra.updateDictTimeByAutoDirect(autoDirectDto);
+
+        if (dictMapperExtra.selectDictByName("automatic_submit_phone").getContent().equals("0")){
+            timeTaskManager.deleteTimerTaskByCode("phone",true);
+            return new JSONResult("更新完成", 200);
+        }else if (autoDirectDto.getState().equals("1")){
+            int temp = timeTaskManager.findTimerTaskByCode("phone");
+            if (temp == 1) {
+                timeTaskManager.deleteTimerTaskByCode("phone",true);
+            }
+            AutoTimerTask test = new AutoBufferTimeTask("phone");
+            test.setPeriod(Long.parseLong(dictMapperExtra.selectDictByName("automatic_phone_time").getContent())*1000);
+            timeTaskManager.addTimerTask(test.getTaskCode(),test);
+            return new JSONResult("更新完成", 200);
+        }
+
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public JSONResult automaticSubmitOilCard(DictInputDTO dictInputDTO) {
+        System.out.println("传入的automaticSubmit为" + dictInputDTO.getName() + " : " + dictInputDTO.getContent());
+        int result = dictMapperExtra.updateDictByName(dictInputDTO);
+        if (result > 0 ) {
+//            bufferQueueThreadOilCard = new BufferQueueThread(Integer.parseInt(dictMapperExtra.selectDictByName("automatic_oilcard_time").getContent()));
+//            if (dictMapperExtra.selectDictByName("automatic_submit_oilcard").getContent().equals("0")) {
+//
+//            }else if (dictMapperExtra.selectDictByName("automatic_submit_oilcard").getContent().equals("1")) {
+//                if (bufferQueueThreadOilCard != null){
+//                    bufferQueueThreadOilCard.start();
+//                }
+//            }
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+
+    public List<DirectChargingOrderDto> getPartOrderInfoList(DirectChargingOrderDto directChargingOrderDto) {
+        System.out.println("进入查询" + directChargingOrderDto);
+        List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getPartOrderInfoList(directChargingOrderDto);
+        System.out.println(withdrawList.size());
+        return withdrawList;
+    }
+
+    @Override
+    public JSONResult getSelectPhoneOrderState(SelectOrderDto selectOrderDto) {
+        if (selectOrderDto.getOrderId() == null) {
+            return new JSONResult("更新成功", 200);
+        }
+        for (int i = 0; i < selectOrderDto.getOrderId().length; i++) {
+            DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+            directChargingOrderDto.setOrderId(selectOrderDto.getOrderId()[i]);
+            getPhoneOrderState(directChargingOrderDto);
+            if (i == selectOrderDto.getOrderId().length - 1) {
+                return new JSONResult("更新成功", 200);
+            }
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public JSONResult getSelectOilOrderState(SelectOrderDto selectOrderDto) {
+        for (int i = 0; i < selectOrderDto.getOrderId().length; i++) {
+            DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+            directChargingOrderDto.setOrderId(selectOrderDto.getOrderId()[i]);
+            getOilOrderState(directChargingOrderDto);
+            if (i == selectOrderDto.getOrderId().length - 1) {
+                return new JSONResult("更新成功", 200);
+            }
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public int importData(MultipartFile file, Integer recordType) throws Exception {
+        int result = 0;
+        InputStream inputStream = file.getInputStream();
+        List<DirectChargingOrderDto> deliveryList = null;
+        Map<String, DirectChargingOrderDto> deliveryMap = new HashMap<>();
+        System.out.println("读取Excel");
+        deliveryList = DirectChargingSystemDelivery.readExcel(file.getOriginalFilename(), inputStream);
+        System.out.println(deliveryList);
+        if(deliveryList != null){
+            for (DirectChargingOrderDto directChargingOrderDto : deliveryList){
+                result = oilCardRechargeMapperExtra.importState(directChargingOrderDto);
+
+                if (directChargingOrderDto.getState() == 2){
+                    directFanyong(directChargingOrderDto);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public JSONResult submitSelectState(SelectOrderDto selectOrderDto) {
+        int result = 0;
+        System.out.println(selectOrderDto);
+        for (int i = 0; i < selectOrderDto.getOrderId().length; i++) {
+            DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+            directChargingOrderDto.setOrderId(selectOrderDto.getOrderId()[i]);
+            directChargingOrderDto.setState(selectOrderDto.getState());
+            result = oilCardRechargeMapperExtra.importState(directChargingOrderDto);
+
+            if (directChargingOrderDto.getState() == 2){
+                directFanyong(directChargingOrderDto);
+            }
+            if(i == selectOrderDto.getOrderId().length - 1) {
+                return new JSONResult("更新成功", 200);
+            }
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    private Workbook getOilCardRecord(List<DirectChargingOrderDto> list, DirectChargingOrderDto directChargingOrderDto) throws Exception{
+        String[] consumptionHead = SystemConstants.OIL_CARD_RECHARGE_EXCEL_HEAD;
+        Workbook workbook = null;
+        DirectChargingOrderDto directChargingOrderDto1 = oilCardRechargeMapperExtra.getTheStatics(directChargingOrderDto);
+        Double totalRealPrice = directChargingOrderDto1.getTotalRealPrice();
+        Double totalRechargeAmount = oilCardRechargeMapperExtra.getTheStatics(directChargingOrderDto).getTotalRechargeAmount();
+        if(list == null) {
+            workbook = new SXSSFWorkbook(1);
+            Sheet sheet = workbook.createSheet("导出订单记录");//创建工作表
+            Row row =sheet.createRow(0);//创建行从第0行开始
+            Cell cell = row.createCell(0);
+            cell.setCellValue("该时间段无订单记录");
+            return workbook;
+        }
+        try{
+            workbook = new SXSSFWorkbook(list.size());
+        } catch (Exception e) {
+            throw new Exception("Excel数据量过大，请缩短时间间隔");
+        }
+        Sheet sheet = workbook.createSheet("导出订单记录");//创建工作表
+        Row row =sheet.createRow(0);//创建行从第0行开始
+        CellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER); //对齐方式
+        for (int i = 0; i < consumptionHead.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(consumptionHead[i]);
+            cell.setCellStyle(style);
+            sheet.setColumnWidth(i, (short) 7500); // 设置列宽
+        }
+        for (int i = 0; i < list.size(); i++){
+            int count = 0;
+            row = sheet.createRow(i+1);
+            row.createCell(count++).setCellValue(list.get(i).getOrderId());
+            row.createCell(count++).setCellValue(list.get(i).getThirdOrderId());
+            row.createCell(count++).setCellValue(list.get(i).getRechargeAccount());
+            row.createCell(count++).setCellValue(list.get(i).getCardholder());
+            if (list.get(i).getRealPrice() != null){
+                row.createCell(count++).setCellValue(list.get(i).getRealPrice());
+            }else {
+                row.createCell(count++).setCellValue("");
+            }
+            if (list.get(i).getRechargeAmount() != null){
+                row.createCell(count++).setCellValue(list.get(i).getRechargeAmount());
+            }else {
+                row.createCell(count++).setCellValue("");
+            }
+
+            if (1 == list.get(i).getState()){
+                row.createCell(count++).setCellValue("待充值");
+            }else if (0 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("未支付");
+            }else if (2 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("已充值");
+            }
+            else if (3 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("支付失败");
+            }
+            else if (4 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("充值失败");
+            }
+            else if (5 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("充值中");
+            }
+            else if (6 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("已退款");
+            }
+            else if (7 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("当日超次数");
+            }else if (8 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("携号转网");
+            }else {
+                row.createCell(count++).setCellValue("携号转网");
+            }
+            row.createCell(count++).setCellValue(list.get(i).getCustomerNumber());
+            row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getCreateAt()));
+        }
+        int index = 0;
+        row = sheet.createRow(list.size()+1);
+        row.createCell(index++).setCellValue("充值金额：");
+        if (totalRealPrice != null) {
+            row.createCell(index++).setCellValue(totalRealPrice);
+        } else {
+            row.createCell(index++).setCellValue(0);
+        }
+        row.createCell(index++).setCellValue("支付金额：");
+        if (totalRechargeAmount != null) {
+            row.createCell(index++).setCellValue(totalRechargeAmount);
+        } else {
+            row.createCell(index++).setCellValue(0);
+        }
+        return workbook;
+    }
+
+}
+
+class AutoBufferTimeTask extends AutoTimerTask{
+
+    public AutoBufferTimeTask(String _taskCode) {
+        super(_taskCode);
+    }
+
+    @Override
+    public void execute() {
+        System.out.println("开启自动提交订单");
+    }
 }

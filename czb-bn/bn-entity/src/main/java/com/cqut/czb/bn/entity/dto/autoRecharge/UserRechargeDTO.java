@@ -45,6 +45,16 @@ public class UserRechargeDTO extends PageDTO {
 
     private double currentPrice;  // 充值金额
 
+    private String regional;//地址
+
+    public String getRegional() {
+        return regional;
+    }
+
+    public void setRegional(String regional) {
+        this.regional = regional;
+    }
+
     public String getRecordId() {
         return recordId;
     }
@@ -195,5 +205,31 @@ public class UserRechargeDTO extends PageDTO {
 
     public void setCurrentPrice(double currentPrice) {
         this.currentPrice = currentPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRechargeDTO{" +
+                "recordId='" + recordId + '\'' +
+                ",\n petrolNums='" + petrolNums + '\'' +
+                ",\n petrolNum='" + petrolNum + '\'' +
+                ",\n buyerId='" + buyerId + '\'' +
+                ",\n paymentMethod=" + paymentMethod +
+                ",\n thirdOrderId='" + thirdOrderId + '\'' +
+                ",\n turnoverAmount=" + turnoverAmount +
+                ",\n transactionTime=" + transactionTime +
+                ",\n date='" + date + '\'' +
+                ",\n petrolId='" + petrolId + '\'' +
+                ",\n state=" + state +
+                ",\n contractId='" + contractId + '\'' +
+                ",\n createAt=" + createAt +
+                ",\n updateAt=" + updateAt +
+                ",\n recordType=" + recordType +
+                ",\n isRecharged=" + isRecharged +
+                ",\n petrolKind=" + petrolKind +
+                ",\n denomination=" + denomination +
+                ",\n currentPrice=" + currentPrice +
+                ",\n regional=" + regional +
+                '}';
     }
 }

@@ -60,6 +60,7 @@
                app_secret appSecret,
                balance,
                consumption_amount consumptionAmount,
+               is_shut_recharge as isShutRecharge,
                customer_number customerNumber
             from czb_direct_customer
             where app_id = #{appId}
@@ -72,11 +73,29 @@
             where customer_id = #{customerId}
     </update>
 
-    <select id="getOrderState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+    <select id="getState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
             resultType="java.lang.Integer">
         select state
         from czb_direct_charging_order
         where order_id = #{orderId}
+    </select>
+
+    <select id="getOrderState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="java.lang.Integer">
+        select state
+        from czb_direct_charging_order
+        where customer_order_id = #{customerOrderId}
+        ORDER BY create_at desc
+            limit 1
+    </select>
+
+    <select id="getTheBalance" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomersDto"
+            resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerBalanceDto">
+        select recharge_amount rechargeAmount,
+        balance balance,
+        consumption_amount consumptionAmount
+        from czb_direct_customer
+        where app_id = #{appId}
     </select>
 
 </mapper>

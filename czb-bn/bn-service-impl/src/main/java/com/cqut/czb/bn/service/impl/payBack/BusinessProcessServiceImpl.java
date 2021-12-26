@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.NoLoginDirectSystemMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.food.DishOrderMapper;
 import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra;
@@ -15,6 +16,7 @@ import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolSalesRecordsDTO;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto;
 import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.dto.integral.IntegralRechargeDTO;
@@ -29,6 +31,8 @@ import com.cqut.czb.bn.entity.global.PetrolCache;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.*;
 import com.cqut.czb.bn.service.InfoSpreadService;
+import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
+import com.cqut.czb.bn.service.impl.directChargingSystem.NoLoginDirectSystemServiceImpl;
 import com.cqut.czb.bn.service.impl.directChargingSystem.OilCardRechargeServiceImpl;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 
@@ -41,6 +45,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -133,10 +139,16 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     @Autowired
     public IntegralService integralService;
 
+    @Autowired
+    public ElectricityRechargeService electricityRechargeService;
+
+    @Autowired
+    public NoLoginDirectSystemServiceImpl noLoginDirectSystemService;
+
     @Override
     public synchronized Map AliPayback(Object[] param, String consumptionType) {
         // 支付宝支付
-        System.out.println("4");
+        System.out.println("支付宝回调 type："+consumptionType);
         Map<String, String> result = new HashMap<>();
         Map<String, String> params = (HashMap<String, String>) param[0];
         if(consumptionType.equals("Petrol")){//购油
@@ -170,7 +182,15 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
                 return result;
             }
         }else if(consumptionType.equals("Direct")) {//直冲系统
+            System.out.println("直冲回调");
             if (getAddBuyDirectOrderAli(params) == 1) {
+//            if (addBuyDirectOrderAli(params) == 1) {
+                result.put("success", AlipayConfig.response_success);
+                return result;
+            }
+        }else if(consumptionType.equals("Electricity")) {//水电费充值
+            System.out.println("水电费充值回调进入");
+            if (getAddElectricity(params) == 1) {
 //            if (addBuyDirectOrderAli(params) == 1) {
                 result.put("success", AlipayConfig.response_success);
                 return result;
@@ -184,7 +204,8 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
     }
 
     @Override
-    public synchronized Map WeChatPayBack(Object[] param, String consumptionType) {
+    public synchronized Map WeChatPayBack(Object[] param, String consumptionType){
+        System.out.println("微信回调 type："+consumptionType);
         Map<String, Object> restmap = (HashMap<String, Object>) param[0];
         Map<String, Integer> result = new HashMap<>();
         if(consumptionType.equals("Petrol")){
@@ -205,7 +226,10 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             result.put("success", weChatPayBackService.addRechargeVipOrderWeChat(restmap));
         }else if(consumptionType.equals("Direct")){
             result.put("success", getAddBuyDirectOrderWechat(restmap));
-        }else {
+        }else if(consumptionType.equals("Electricity")){
+            result.put("success",weChatPayBackService.addRechargeElectricityWechat(restmap));
+        }
+        else {
             result.put("fail",0);
         }
         return result;
@@ -281,6 +305,90 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         return 1;
     }
 
+    //水电费充值
+    public int getAddElectricity(Map<String, String> params){
+        System.out.println("切片水电费attach");
+        String[] resDate = params.get("passback_params").split("\\^");
+        String[] temp;
+        String thirdOrderId = params.get("trade_no");
+        String orgId = "";
+        double money = 0;
+        String userId = "";
+        String userAccount = "";
+        int recordType = 0;
+        Integer integralAmount = 0;
+
+        String tempTime = params.get("gmt_create");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date time = null;
+
+        try {
+            time = format.parse(tempTime);
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            System.out.println(temp[0] + " -------->" + temp[1]);
+            if ("orderId".equals(temp[0])) {
+                orgId = temp[1];
+            }
+            if ("rechargeAmount".equals(temp[0])) {
+                money = Double.valueOf(temp[1]);
+            }
+            if ("recordType".equals(temp[0])) {
+                recordType = Integer.valueOf(temp[1]);
+            }
+            if ("integralAmount".equals(temp[0])) {
+                integralAmount = Integer.valueOf(temp[1]);
+            }
+            if ("userAccount".equals(temp[0])) {
+                userAccount = temp[1];
+            }
+            if ("userId".equals(temp[0])) {
+                userId = temp[1];
+            }
+        }
+
+        //切换充值状态
+        int insert = electricityRechargeService.changeState(orgId);
+
+        ElectricityRechargeDto electricityRechargeDto = new ElectricityRechargeDto();
+        electricityRechargeDto.setOrderId(orgId);
+        electricityRechargeDto.setEndTime(time);
+        int update = electricityRechargeService.changeFinishTime(electricityRechargeDto);
+
+        double actualPayment = money - integralAmount;
+        actualPayment = new BigDecimal(actualPayment).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+        if (integralAmount > 0){
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+            integralLogDTO.setOrderId(orgId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(userId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
+            integralLogDTO.setIntegralAmount(integralAmount);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(userId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        }
+
+        Boolean isSucceed = fanYongService.beginFanYong(8, "", userId, money, actualPayment, orgId);
+        System.out.println("返佣"+isSucceed);
+
+        return 1;
+    }
+
     //直冲系统（支付宝）
     public int getAddBuyDirectOrderAli(Map<String, String> params){
         String[] resDate = params.get("passback_params").split("\\^");
@@ -337,27 +445,33 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             ownerId = cardNum;
         }
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
 
         System.out.println("isNew"+isNew);
-        if (isNew == 1) {
-            //插入log记录
-            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-            integralLogDTO.setOrderId(orgId);
-            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-            integralLogDTO.setUserId(userId);
-            integralLogDTO.setIntegralLogType(5);
-            integralLogDTO.setRemark("抵扣");
-            integralLogDTO.setIntegralAmount(integralAmount);
-            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-            System.out.println("插入log记录");
+        if (!userId.equals("18883790995157397")) {
+            if (isNew == 1) {
+                //插入log记录
+                IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+                integralLogDTO.setOrderId(orgId);
+                integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+                integralLogDTO.setUserId(userId);
+                integralLogDTO.setIntegralLogType(5);
+                integralLogDTO.setRemark("抵扣");
+                integralLogDTO.setIntegralAmount(integralAmount);
+                integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+                System.out.println("插入log记录");
 
-            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-            integralInfoDTO.setUserId(userId);
-            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+                IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+                integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+                integralInfoDTO.setUserId(userId);
+                integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+                integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+            }
+        }else if (userId.equals("18883790995157397")) {
+            noLoginDirectSystemService.updateState(orgId);
         }
+
         return 1;
     }
 
@@ -488,7 +602,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         commodity.setSalesVolume(saleNum);
         weChatCommodityMapper.updateByPrimaryKeySelective(commodity);
 
-       //查询是否为首次消费
+        //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
         Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());
@@ -556,22 +670,26 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
 
-        //插入log记录
-        System.out.println("插入log记录");
-        IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-        integralLogDTO.setOrderId(orgId);
-        integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-        integralLogDTO.setUserId(userId);
-        integralLogDTO.setIntegralLogType(5);
-        integralLogDTO.setRemark("抵扣");
-        integralLogDTO.setIntegralAmount(integralAmount);
-        integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+        if (!userId.equals("18883790995157397")) {
+            //插入log记录
+            System.out.println("插入log记录");
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+            integralLogDTO.setOrderId(orgId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(userId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
+            integralLogDTO.setIntegralAmount(integralAmount);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
 
-        IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-        integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-        integralInfoDTO.setUserId(userId);
-        integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-        integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(userId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        }else if (userId.equals("18883790995157397")){
+            boolean i = noLoginDirectSystemService.updateState(orgId);
+        }
 
         DirectChargingOrderDto directChargingOrderDto1 = oilCardRechargeMapperExtra.getOrder(orgId);
         if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
@@ -1209,7 +1327,7 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
         //发送购买成功推送给特定用户
         Map<String,String> content = new HashMap<>();
         if (ownerId == null && petrolNum == null){
-           return;
+            return;
         }
         if (petrolNum != null) {
             Petrol petrol = petrolMapperExtra.selectPetrolByNum(petrolNum);

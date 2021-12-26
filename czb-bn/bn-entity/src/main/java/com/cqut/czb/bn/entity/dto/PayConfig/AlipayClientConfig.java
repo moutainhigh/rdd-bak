@@ -60,6 +60,11 @@ public class AlipayClientConfig {
 					AliPayConfig.merchant_wap_private_key, AliPayConfig.format, AliPayConfig.charset,
 					AliPayConfig.alipay_wap_public_key, AliPayConfig.sign_type));
 			instance.setCallBackUrl(AliPayConfig.Direct_url);
+		}else if (operationType.equals("8")){//"8"代表水电费充值
+			instance.setAlipayClient(new DefaultAlipayClient(AliPayConfig.gatewayUrl, AliPayConfig.app_wap_id,
+					AliPayConfig.merchant_wap_private_key, AliPayConfig.format, AliPayConfig.charset,
+					AliPayConfig.alipay_wap_public_key, AliPayConfig.sign_type));
+			instance.setCallBackUrl(AliPayConfig.Electricity_url);
 		}
 		return instance;
 	}

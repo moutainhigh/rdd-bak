@@ -20,4 +20,6 @@ public interface DirectChargingCommodityMapperExtra {
 
     List<IntegralDeductionInfoDTO> getAllCommodity();
 
+    List<IntegralDeductionInfoDTO> getElectricityCommodity();
+
 }

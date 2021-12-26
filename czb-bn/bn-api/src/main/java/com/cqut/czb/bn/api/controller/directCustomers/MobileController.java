@@ -33,4 +33,16 @@ public class MobileController {
     public JSONResult ordersta(DirectCustomersDto directCustomersDto){
         return mobileService.ordersta(directCustomersDto);
     }
+
+    // 话费订单状态查询文档
+    @GetMapping("/getState")
+    public JSONResult getState(DirectCustomersDto directCustomersDto){
+        return mobileService.getState(directCustomersDto);
+    }
+
+    // 余额查询文档
+    @GetMapping("/getTheBalance")
+    public JSONResult getTheBalance(DirectCustomersDto directCustomersDto){
+        return mobileService.getTheBalance(directCustomersDto);
+    }
 }

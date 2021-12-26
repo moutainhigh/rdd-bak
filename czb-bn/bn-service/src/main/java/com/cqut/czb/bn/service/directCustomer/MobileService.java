@@ -9,4 +9,8 @@ public interface MobileService {
 
 
     JSONResult ordersta(DirectCustomersDto directCustomersDto);
+
+    JSONResult getState(DirectCustomersDto directCustomersDto);
+
+    JSONResult getTheBalance(DirectCustomersDto directCustomersDto);
 }

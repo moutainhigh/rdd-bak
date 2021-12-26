@@ -53,6 +53,8 @@ public class FanYongServiceImpl implements FanYongService {
      */
     @Override
     public boolean beginFanYong(int BusinessType, String area, String userId, double money, double actualPayment, String orgId) {
+        System.out.println(BusinessType+"\n"+area+"\n"+userId+"\n"+money+"\n"+actualPayment+"\n"+orgId);
+
         String userIdUp1 = userMapperExtra.selectUserId(userId);//上级用户id
         String userIdUp2;//上上级用户id
         double fangyong1 = 0;//一级返佣比例
@@ -93,26 +95,53 @@ public class FanYongServiceImpl implements FanYongService {
             dict1 = dictMapperExtra.selectDictByName("CarWashFY1");
             dict2 = dictMapperExtra.selectDictByName("CarWashFY2");
             dict3 = dictMapperExtra.selectDictByName("CarWashFY_rate");
+        } else if (BusinessType == 7) {//7为直冲系统
+            FyRemark = "直冲返佣";
+            dict1 = dictMapperExtra.selectDictByName("DirectFY1");
+            dict2 = dictMapperExtra.selectDictByName("DirectFY2");
+            dict3 = dictMapperExtra.selectDictByName("DirectFY_rate");
+        } else if (BusinessType == 8) {//8为水电费充值
+            FyRemark = "水电费充值返佣";
+            dict1 = dictMapperExtra.selectDictByName("ElectricityFY1");
+            dict2 = dictMapperExtra.selectDictByName("ElectricityFY2");
+            dict3 = dictMapperExtra.selectDictByName("Electricity_rate");
+        } else if (BusinessType == 9) {//9为购买库存
+            FyRemark = "购买库存返佣";
+            dict1 = dictMapperExtra.selectDictByName("CommodityFY1");
+            dict2 = dictMapperExtra.selectDictByName("CommodityFY2");
+            dict3 = dictMapperExtra.selectDictByName("Commodity_rate");
         }
 
-        if (dict1 != null || dict1.getContent() != null) {
+
+
+        if (dict1 != null && dict1.getContent() != null) {
             fangyong1 = Double.valueOf(dict1.getContent());
             System.out.println("fangyong1：" + fangyong1);
         }
-        if (dict2 != null || dict2.getContent() != null) {
+        if (dict2 != null && dict2.getContent() != null) {
             fangyong2 = Double.valueOf(dict2.getContent());
             System.out.println("fangyong2：" + fangyong2);
         }
-        if (dict3 != null || dict3.getContent() != null) {
+        if (dict3 != null && dict3.getContent() != null) {
             fangyongRate = Double.valueOf(dict3.getContent());
             System.out.println("fangyongRate：" + fangyongRate);
         }
 
 
         //如果返佣比例为零则表示已经停止了返佣
-        if (dict3 == null || dict3.getContent() == null || "0".equals(dict3.getContent())) {
+        if (dict3 == null && dict3.getContent() == null || "0".equals(dict3.getContent())) {
             System.out.println("fangyongRate为空");
             return true;
+        }
+
+        if (actualPayment <= 0){
+            System.out.println("支付信息有误");
+            return false;
+        }
+
+        if (fangyongRate <= 0 || fangyongRate > 1){
+            System.out.println("返佣比例有误：fanyongRate == " + fangyongRate);
+            return false;
         }
 
 
@@ -122,6 +151,7 @@ public class FanYongServiceImpl implements FanYongService {
             System.out.println("插入vip返佣完毕");
             return true;
         } else if (userIdUp1 != null) {//可能存在没有上级用户155888601787524
+            System.out.println("开始更新用户收益表");
             //对上级用户的操作
             UserIncomeInfo oldUserIncomeInfoUp1 = userIncomeInfoMapperExtra.selectOneUserIncomeInfo(userIdUp1);//查出原收益信息
             //对上级用户的(收益信息表，收益变更记录表)进行操作
@@ -135,6 +165,9 @@ public class FanYongServiceImpl implements FanYongService {
                 //对上上级用户的收益信息表，收益变更记录表进行操作
                 changeUserIncomeInfo(FyRemark, userId, userIdUp2, fangyongRate, oldUserIncomeInfoUp2, money, actualPayment, userIdUp2, 2, fangyong2, orgId);
             }
+            System.out.println("更新用户收益表完成");
+        } else {
+            System.out.println("无上级用户");
         }
         return true;
     }
@@ -580,19 +613,19 @@ public class FanYongServiceImpl implements FanYongService {
             insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId, create);
         }
         if (num == 2) {
-                level = 2;
-                if (type == 1) {
-                    FyMoney = mul(secondPetrolProportion,money);
-                    //ce
-                    PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
-                    create = petrolSalesRecords.getCreateAt();
-                } else if (type == 2) {
-                    FyMoney = mul(secondProportion,money);
-                    //ce
-                    VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
-                    create = vipRechargeRecords.getCreateAt();
-                }
-                insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId, create);
+            level = 2;
+            if (type == 1) {
+                FyMoney = mul(secondPetrolProportion,money);
+                //ce
+                PetrolSalesRecords petrolSalesRecords = petrolSalesRecordsMapper.selectByPrimaryKey(orgId);
+                create = petrolSalesRecords.getCreateAt();
+            } else if (type == 2) {
+                FyMoney = mul(secondProportion,money);
+                //ce
+                VipRechargeRecords vipRechargeRecords = vipRechargeRecordsMapper.selectByPrimaryKey(orgId);
+                create = vipRechargeRecords.getCreateAt();
+            }
+            insertFyIncomeLogTest(FyRemark, level, user.getUserId(), sourId, uuid.getInfoId(), FyMoney, 0, oldUserIncomeInfo, orgId, create);
         }
         return true;
     }

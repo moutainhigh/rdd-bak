@@ -95,8 +95,10 @@ public class OfflineDistributorOfAdministratorServiceImpl implements OfflineDist
     @Override
     public JSONResult passwordVerification(String password,Integer isSpecial) {
         boolean isLike = false;
+        System.out.println("123:" + isSpecial);
         if (isSpecial == 0){
             String OldPwd = offlineDistributorOfAdministratorMapperExtra.getPassword();
+            System.out.println("123:" + OldPwd);
              isLike=bCryptPasswordEncoder.matches(password, OldPwd);
         }else if (isSpecial == 1){
             String OldPwd = offlineDistributorOfAdministratorMapperExtra.getSpecialPassword();

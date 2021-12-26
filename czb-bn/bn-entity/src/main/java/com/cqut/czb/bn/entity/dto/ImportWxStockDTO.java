@@ -71,4 +71,17 @@ public class ImportWxStockDTO {
     public void setContent(String content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return "ImportWxStockDTO{" +
+                "StockID='" + StockID + '\'' +
+                ", StockAtrrID='" + StockAtrrID + '\'' +
+                ", AtrrID='" + AtrrID + '\'' +
+                ", commodityID='" + commodityID + '\'' +
+                ", commodityNo='" + commodityNo + '\'' +
+                ", attribute='" + attribute + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

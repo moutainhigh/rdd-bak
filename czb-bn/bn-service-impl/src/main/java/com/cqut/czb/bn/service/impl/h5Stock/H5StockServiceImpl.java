@@ -92,6 +92,7 @@ public class H5StockServiceImpl implements H5StockService {
         }
         List<H5StockDTO> deliveryListNoRepeat = new ArrayList<>();
         for (H5StockDTO p : deliveryMap.values()){
+            System.out.println("打印测试"+p);
             deliveryListNoRepeat.add(p);
         }
         int countForInsert = h5StockMapperExtra.importData(deliveryListNoRepeat);

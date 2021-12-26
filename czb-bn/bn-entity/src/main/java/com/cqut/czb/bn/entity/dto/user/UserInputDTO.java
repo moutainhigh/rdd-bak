@@ -28,6 +28,8 @@ public class UserInputDTO {
 
     private String superiorUser;
 
+    private String superiorUserName;
+
     private Integer userType;
 
     private Integer userRank;
@@ -230,5 +232,13 @@ public class UserInputDTO {
 
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
+    }
+
+    public String getSuperiorUserName() {
+        return superiorUserName;
+    }
+
+    public void setSuperiorUserName(String superiorUserName) {
+        this.superiorUserName = superiorUserName;
     }
 }

@@ -98,4 +98,19 @@ public class OfflineClientDTO extends PageDTO{
     public void setIsSpecial(Integer isSpecial) {
         this.isSpecial = isSpecial;
     }
+
+    @Override
+    public String toString() {
+        return "OfflineClientDTO{" +
+                "account='" + account + '\'' +
+                ", balance=" + balance +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", registerTime=" + registerTime +
+                ", totalConsumption=" + totalConsumption +
+                ", totalRecharge=" + totalRecharge +
+                ", totalTurn=" + totalTurn +
+                ", isSpecial=" + isSpecial +
+                '}';
+    }
 }

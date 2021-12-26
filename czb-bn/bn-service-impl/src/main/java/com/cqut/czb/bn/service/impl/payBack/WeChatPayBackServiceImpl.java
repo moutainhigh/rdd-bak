@@ -2,6 +2,8 @@ package com.cqut.czb.bn.service.impl.payBack;
 
 import com.cqut.czb.bn.dao.mapper.*;
 import com.cqut.czb.bn.dao.mapper.food.DishOrderMapper;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseMapperExtra;
+import com.cqut.czb.bn.dao.mapper.integral.IntegralPurchaseRecordMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.ServerCouponMapperExtra;
 import com.cqut.czb.bn.dao.mapper.vehicleService.VehicleCleanOrderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
@@ -9,6 +11,11 @@ import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatGoodsDeliveryRecordsMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatStockMapperExtra;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.PhoneCode;
+import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
+import com.cqut.czb.bn.entity.dto.directCustomers.DirectCustomerManagerDto;
+import com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto;
+import com.cqut.czb.bn.entity.dto.integral.IntegralInfoDTO;
+import com.cqut.czb.bn.entity.dto.integral.IntegralLogDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.Shop;
@@ -19,6 +26,8 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatStock;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.service.PartnerVipIncomeService;
 import com.cqut.czb.bn.service.PaymentProcess.*;
+import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
+import com.cqut.czb.bn.service.impl.integral.IntegralServiceImpl;
 import com.cqut.czb.bn.service.impl.vehicleServiceImpl.ServerOrderServiceImpl;
 import com.cqut.czb.bn.util.config.SendMesConfig.MesInfo;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -27,6 +36,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -48,6 +59,9 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
 
     @Autowired
     FanYongService fanYongService;
+
+    @Autowired
+    ElectricityRechargeService electricityRechargeService;
 
     @Autowired
     PetrolRecharge petrolRecharge;
@@ -102,6 +116,12 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
 
     @Autowired
     WeChatStockMapperExtra weChatStockMapperExtra;
+
+    @Autowired
+    IntegralServiceImpl integralService;
+
+    @Autowired
+    IntegralPurchaseMapperExtra integralPurchaseMapperExtra;
 
     @Override
     /**
@@ -275,7 +295,114 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
 //        editContent(ownerId,null, MesInfo.userId.BOSS.getUserId(),MesInfo.noticeId.RECHARGE_VIP.getNoticeId(), money);
         return 1;
     }
-    ;
+
+    @Override
+    public Integer addRechargeElectricityWechat(Map<String, Object> restmap) {
+        for (Map.Entry<String, Object> entry : restmap.entrySet()) {
+            System.out.println(entry.getKey() + "------>" + entry.getValue().toString());
+        }
+        String[] resDate = restmap.get("attach").toString().split("\\^");
+        //商户订单号
+        String out_trade_no = restmap.get("out_trade_no").toString();
+        //微信交易订单号
+        String thirdOrderId = restmap.get("transaction_id").toString();
+
+        String temp1 = restmap.get("time_end").toString();
+
+        String endTime = temp1.substring(0,4) + "-" + temp1.substring(4,6) + "-" + temp1.substring(6,8) + " " + temp1.substring(8,10)
+                + ":" + temp1.substring(10,12) + ":" + temp1.substring(12,14);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date time = null;
+
+        try {
+            time = format.parse(endTime);
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String orgId = "";
+        String rechargeAccount = "";
+        String integralAmount = "";
+        String rechargeAmount = "";
+        String userId = "";
+        String[] temp;
+        double money = Double.valueOf(restmap.get("total_fee").toString());
+        money = (BigDecimal.valueOf(money).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).doubleValue();
+
+        for (String data : resDate) {
+            temp = data.split("\'");
+            if (temp.length < 2) {//判空
+                continue;
+            }
+            if ("orderId".equals(temp[0])) {
+                orgId = temp[1];
+                System.out.println("orderId===>" + orgId);
+            }
+            if ("userId".equals(temp[0])) {
+                userId = temp[1];
+                System.out.println("userId===>" + userId);
+            }
+            if ("rechargeAmount".equals(temp[0])) {
+                rechargeAmount = temp[1];
+                System.out.println("rechargeAmount===>"+rechargeAmount);
+            }
+            if ("integralAmount".equals(temp[0])) {
+                integralAmount = temp[1];
+                System.out.println("integralAmount===>"+integralAmount);
+            }
+            if ("rechargeAccount".equals(temp[0])) {
+                rechargeAccount = temp[1];
+                System.out.println("rechargeAccount===>"+rechargeAccount);
+            }
+        }
+
+        String regional = electricityRechargeService.findRegional(orgId);
+        if (regional == null){
+            System.out.println("未找到城市对应得");
+            return 0;
+        }else {
+            System.out.println("regional===>"+regional);
+        }
+
+        int insert = electricityRechargeService.changeState(orgId);
+
+        if (insert > 0) {
+            System.out.println("改变充值状态");
+        }
+
+        ElectricityRechargeDto electricityRechargeDto = new ElectricityRechargeDto();
+        electricityRechargeDto.setViewTime(time);
+        electricityRechargeDto.setOrderId(orgId);
+        int timeChange = electricityRechargeService.changeFinishTime(electricityRechargeDto);
+
+        Integer integral = Integer.parseInt(integralAmount);
+
+        if (integral > 0){
+            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+            integralLogDTO.setOrderId(orgId);
+            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            integralLogDTO.setUserId(userId);
+            integralLogDTO.setIntegralLogType(5);
+            integralLogDTO.setRemark("抵扣");
+            integralLogDTO.setIntegralAmount(integral);
+            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+
+            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+            integralInfoDTO.setUserId(userId);
+            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+        }
+
+        //TODO 调用第三方接口水电费充值
+        System.out.println("调用第三方水电费接口");
+
+        Boolean isSucceed = fanYongService.beginFanYong(8, "", userId, Double.parseDouble(rechargeAmount), money, orgId);
+        System.out.println("返佣"+isSucceed);
+        return 1;
+    }
+
     public void editContent(String ownerId,String petrolNum,String userId,String noticeId, Double money) {
         //发送购买成功推送给特定用户
         Map<String,String> content = new HashMap<>();

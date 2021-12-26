@@ -221,6 +221,35 @@ public class AliParameterConfig {
         return model;
     }
 
+    public static AlipayTradeWapPayModel AlipayElectricityPayModel(String orderId,double amount, double rechargeAmount, Integer recordType, String rechargeAccount, Integer integralAmount,String userId,String commodityId,String regional) {
+        AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
+        model.setBody("RDD水电费充值");
+        model.setSubject("RDD水电费充值");
+        model.setOutTradeNo(orderId);
+        model.setTimeoutExpress(AliPayConfig.timeout_express);
+        model.setTotalAmount(String.valueOf(amount));
+        model.setProductCode(AliPayConfig.product_wap_code);
+        model.setQuitUrl("http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Web_port+"/recharge");
+        model.setSellerId("2088731798282131");
+//        model.setPassbackParams(getPhonePillParams(orderId, rechargeAmount , userId, recordType,userAccount,cardNum));
+        model.setPassbackParams(getElectricityPillParams(orderId, rechargeAmount ,recordType,integralAmount,userId,commodityId,regional));
+        return model;
+    }
+
+    //水电费参数
+    private static String getElectricityPillParams(String orderId, double rechargeAmount, Integer recordType, Integer integralAmount, String userId, String commodityId, String regional) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orderId", orderId);
+        pbp.put("rechargeAmount", rechargeAmount);
+//        pbp.put("userId", userId);
+        pbp.put("recordType",String.valueOf(recordType));
+        pbp.put("userId",userId);
+        pbp.put("integralAmount",integralAmount);
+        pbp.put("commodityId",commodityId);
+        pbp.put("regional",regional);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
     public static AlipayTradeWapPayModel getPetrolPill(String orderId,double amount, double rechargeAmount, Integer recordType, String cardNum, String userAccount,String cardholder,String rechargeAccount, Integer integralAmount,String userId,Integer isNew) {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody("RDD油卡直充");

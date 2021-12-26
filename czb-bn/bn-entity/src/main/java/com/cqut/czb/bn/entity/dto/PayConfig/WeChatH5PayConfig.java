@@ -22,6 +22,9 @@ public class WeChatH5PayConfig {
     //直充系统
     public static final String Direct_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WechatPayReturn/wechatPayReturn";
 
+    //水电费充值
+    public static final String Electricity_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WechatPayReturn/WeChatPayBackElectricity";
+
     //购买积分
     public static final String Integral_url = "http://" + UrlConfig.Domain_name + ":"+UrlConfig.Port+"/WeChatPayment/weChatBuyIntegral";
 
@@ -42,4 +45,7 @@ public class WeChatH5PayConfig {
 
     // 请求预支付接口
     public static final String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+    //微信提现接口
+    public static final String wallet = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 }

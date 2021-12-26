@@ -16,11 +16,22 @@ public class CustomerManageDto extends PageDTO {
     private double amountRecovered;
     private String createAt;
     private String customerName;
+    private int isShutRecharge;
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
 
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
+
+    private Boolean automaticSubmit;
+
+    public Boolean getAutomaticSubmit() {
+        return automaticSubmit;
+    }
+
+    public void setAutomaticSubmit(Boolean automaticSubmit) {
+        this.automaticSubmit = automaticSubmit;
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -116,5 +127,33 @@ public class CustomerManageDto extends PageDTO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public int getIsShutRecharge() {
+        return isShutRecharge;
+    }
+
+    public void setIsShutRecharge(int isShutRecharge) {
+        this.isShutRecharge = isShutRecharge;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerManageDto{" +
+                "customerId='" + customerId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", appSecret='" + appSecret + '\'' +
+                ", customerNumber='" + customerNumber + '\'' +
+                ", rechargeAmount=" + rechargeAmount +
+                ", balance=" + balance +
+                ", consumptionAmount=" + consumptionAmount +
+                ", amountRecovered=" + amountRecovered +
+                ", createAt='" + createAt + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", isShutRecharge=" + isShutRecharge +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", automaticSubmit=" + automaticSubmit +
+                '}';
     }
 }

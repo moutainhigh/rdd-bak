@@ -63,6 +63,8 @@
         (SELECT price FROM czb_h5_stock t2 WHERE t2.price_id = t1.commodity_id and t2.record_type=1 GROUP BY t2.price,t2.price_id)
         WHEN 7 THEN
         (SELECT price FROM czb_h5_stock t2 WHERE t2.price_id = t1.commodity_id and t2.record_type=2 GROUP BY t2.price,t2.price_id)
+        WHEN 8 THEN
+        (SELECT account FROM czb_direct_charging_commodity t2 WHERE t2.commodity_id = t1.commodity_id and t2.commodity_type=4)
         END AS "commodityTitle",
     CASE
         t1.deduction_type
@@ -90,6 +92,8 @@
         (SELECT t1.commodity_id FROM czb_integral_deduction_info t2 WHERE t2.commodity_id = t1.commodity_id)
         WHEN 7 THEN
         (SELECT t1.commodity_id FROM czb_integral_deduction_info t2 WHERE t2.commodity_id = t1.commodity_id)
+        WHEN 8 THEN
+        (SELECT account FROM czb_direct_charging_commodity t2 WHERE t2.commodity_id = t1.commodity_id and t2.commodity_type=4)
         END AS "salePrice",
         t1.integral_deduction_info_id AS integralDeductionInfoId,
         t1.commodity_id AS commodityId,

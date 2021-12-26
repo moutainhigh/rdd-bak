@@ -3,6 +3,9 @@ package com.cqut.czb.auth.controller;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.auth.util.SpringUtils;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.entity.dto.appCaptchaConfig.VerificationCodeDTO;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.AppRouterDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
@@ -46,6 +49,12 @@ public class AuthController {
 
     @Autowired
     ServerOrderServiceImpl serverOrderService;
+
+    @Autowired
+    private UserMapperExtra userMapperExtra;
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      *  个人用户注册
@@ -254,5 +263,39 @@ public class AuthController {
         }
     }
 
+    /**
+     * 2021-12-22
+     * 临时添加，APP用户信息更新
+     * 王健宇
+     */
+    @PostMapping("/updateAppUserInfo")
+    public JSONResult updateAppUserInfo(@Validated @RequestBody User wxUser){
+        int result = 0;
+
+        //判断用户是否存在过
+        if(userMapperExtra == null){
+            userMapperExtra = SpringUtils.getBean(UserMapperExtra.class);
+        }
+        User user = userMapperExtra.findUserByAccount(wxUser.getOpenId());
+        if (user == null){
+            return new JSONResult("未找到对应用户",400);
+        }
+
+        if(userMapper == null){
+            userMapper = SpringUtils.getBean(UserMapper.class);
+        }
+        //如果有用户信息改变就更新用户信息
+        if(!user.getUserName().equals(wxUser.getUserName()) || !user.getAvatarUrl().equals(wxUser.getAvatarUrl())){
+            User update = new User();
+            update.setUserId(user.getUserId());
+            update.setUserName(wxUser.getUserName());
+            update.setAvatarUrl(wxUser.getAvatarUrl());
+            result = userMapper.updateByPrimaryKeySelective(update);
+        }
+        if (result != 0){
+            return new JSONResult("更新成功",200);
+        }
+        return new JSONResult("更新失败",400);
+    }
 }
 

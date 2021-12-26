@@ -12,7 +12,7 @@
     dict_id, name, content, create_at, update_at
   </sql>
   <select id="selectDict" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select 
+    select
     <include refid="Base_Column_List" />
     from czb_dict
     <where>
@@ -91,6 +91,30 @@
       </if>
     </set>
         where name = #{name,jdbcType=VARCHAR}
+  </update>
+  <update id="updateDictStateByAutoDirect" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.AutoDirectDto">
+    update czb_dict
+    <set>
+      <if test="nameTitle != null and nameTitle != ''" >
+        name = #{nameTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null and state != ''" >
+        content = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where name = #{nameTitle,jdbcType=VARCHAR}
+  </update>
+  <update id="updateDictTimeByAutoDirect" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.AutoDirectDto">
+    update czb_dict
+    <set>
+      <if test="nameContent != null and nameContent != ''" >
+        name = #{nameContent,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null and time != ''" >
+        content = #{time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where name = #{nameContent,jdbcType=VARCHAR}
   </update>
   <delete id="deleteDict" parameterType="java.lang.String" >
     delete from czb_dict

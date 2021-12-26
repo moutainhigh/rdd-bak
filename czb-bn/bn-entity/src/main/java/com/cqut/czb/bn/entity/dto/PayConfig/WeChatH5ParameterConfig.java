@@ -16,7 +16,7 @@ public class WeChatH5ParameterConfig {
     public static JSONObject getSign(SortedMap<String, Object> parameters, String nonceStrTemp){
         // 转为xml格式
         String info = WeChatUtils.map2xml(parameters);
-        System.out.println(info);
+        System.out.println("info:" + info);
         String orderList = null;//用于保存起调参数,
         orderList = WeChatHttpUtil.httpsRequest(WeChatH5PayConfig.URL, "POST", info);
         System.out.println(orderList);
@@ -102,6 +102,21 @@ public class WeChatH5ParameterConfig {
 //        pbp.put("userId", userId);
         pbp.put("recordType",String.valueOf(recordType));
         pbp.put("userAccount",userAccount);
+        pbp.put("userId",userId);
+        pbp.put("integralAmount",integralAmount);
+//        pbp.put("commodityId",commodityId);
+        return StringUtil.transMapToStringOther(pbp);
+    }
+
+    /**
+     * 微信支付——订单格外数据(直充）
+     */
+    public static String getAttachElectricity(String orgId, Double amount, Double rechargeAmount, String userAccount, String userId, Integer integralAmount,String regional) {
+        Map<String, Object> pbp = new HashMap<>();
+        pbp.put("orderId", orgId);
+        pbp.put("rechargeAmount", rechargeAmount);
+//        pbp.put("userId", userId);
+        pbp.put("rechargeAccount",userAccount);
         pbp.put("userId",userId);
         pbp.put("integralAmount",integralAmount);
 //        pbp.put("commodityId",commodityId);
@@ -283,4 +298,38 @@ public class WeChatH5ParameterConfig {
         return parameters;
     }
 
+    public static SortedMap<String, Object> getParametersElectricityRecharge(String nonceStrTemp, String orgId, Double amount, Double rechargeAmount, String rechargeAccount, Integer isBrowser, String userId, int integralAmount, String openId, String commodityId,String regional) {
+        SortedMap<String, Object> parameters = new TreeMap<String, Object>();
+        parameters = getParameters();
+        String attach=getAttachElectricity(orgId,amount,rechargeAmount,rechargeAccount,userId,integralAmount,regional);
+        parameters.put("attach",attach);
+        System.out.println("直充浏览器类型:" + isBrowser);
+        if (isBrowser == 0) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
+        } else if (isBrowser == 1) {
+            parameters.put("appid", "wx0a4273c49edc6e4a");
+            parameters.put("trade_type", "JSAPI");
+            parameters.put("openid", openId);
+        } else if (isBrowser == 2) {
+            parameters.put("appid", WeChatH5PayConfig.app_id);
+            parameters.put("trade_type", WeChatH5PayConfig.trade_type);
+            String sceneInfo = "{\"h5_info\": {\"type\":\"Android\",\"app_name\": \"RenDuoDuo\",\"package_name\": \"com.example.chezubaoandroid\"}}";
+            parameters.put("scene_info", sceneInfo);
+        }
+        parameters.put("detail","水电费充值服务");//支付的类容备注
+        parameters.put("nonce_str", nonceStrTemp);
+        parameters.put("notify_url", WeChatH5PayConfig.Electricity_url);//通用一个接口（购买和充值）
+        parameters.put("out_trade_no", orgId);
+        BigInteger totalFee = (BigDecimal.valueOf(amount).multiply(new BigDecimal(100))).toBigInteger();
+        System.out.println(totalFee);
+        parameters.put("total_fee", totalFee);
+        parameters.put("sign", WeChatUtils.createH5Sign("UTF-8", parameters));//编码格式
+        System.out.println(WeChatUtils.createH5Sign("UTF-8", parameters));
+        System.out.println(parameters);
+//        parameters.put("device_info", WeChatH5PayConfig.device_info);
+        return parameters;
+    }
 }

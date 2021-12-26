@@ -39,4 +39,6 @@ public interface MyWalletMapperExtra {
     IncomeOutputDTO getAllInfo();
 
     IncomeOutputDTO todayAllInfo(IncomeInputDTO incomeInputDTO);
+
+    String getUserInfo(@Param("userId")String userId);
 }

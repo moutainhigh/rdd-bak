@@ -15,5 +15,9 @@ public interface CustomerManageMapperExtra {
 
     int recovered(CustomerManageDto customerManageDto);
 
+    int addCustomer(CustomerManageDto customerManageDto);
+
     CustomerLoginDto checkPassword(CustomerLoginDto customerLoginDto);
+
+    int changeRecharge(CustomerManageDto customerManageDto);
 }

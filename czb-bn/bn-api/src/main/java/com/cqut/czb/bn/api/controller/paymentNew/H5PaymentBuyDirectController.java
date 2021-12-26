@@ -74,13 +74,12 @@ public class H5PaymentBuyDirectController {
             directChargingOrderDto.setCardholder(user.getUserAccount());
             directChargingOrderDto.setUserAccount(user.getUserAccount());
         }
-        JSONObject info =oilCardRechargeService.WeChatRechargeDirect(user, directChargingOrderDto);
+        System.out.println(directChargingOrderDto);
+        JSONObject info =oilCardRechargeService.WeChatRechargeDirect(directChargingOrderDto);
         if(info==null){
             return new JSONResult("充值失败", ResponseCodeConstants.FAILURE);
         }else {
             return  new JSONResult("充值成功",200,info);
         }
     }
-
-
 }

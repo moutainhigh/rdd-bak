@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.electricityRecharge.ElectricityRechargeMapperExtra">
+    <select id="getCustomers" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+         select
+         a.user_id userId,
+         regional,
+         recharge_amount rechargeAmount,
+         real_amount realAmount,
+         recharge_account rechargeAccount,
+         a.create_at startTime,
+         finish_at endTime,
+         b.user_account account,
+         a.order_id orderId,
+         state,
+         third_order_account thirdAccount
+         from
+         czb_electricity_recharge_manager a
+        left join czb_user b on a.user_id = b.user_id
+         <where>
+         record_type = '1' and state != 0
+            <if test="state != null and state != ''">
+                and state=#{state}
+            </if>
+            <if test="userId != null and userId!= ''">
+                and a.user_id = #{userId,jdbcType=VARCHAR}
+            </if>
+             <if test="account != null and account!= ''">
+                 and b.user_account like CONCAT('%',#{account,jdbcType=VARCHAR},'%')
+             </if>
+             <if test="regional != null and regional!= ''">
+                 and regional like CONCAT('%',#{regional,jdbcType=VARCHAR},'%')
+             </if>
+             <if test="rechargeAccount != null and rechargeAccount!= ''">
+                 and recharge_account like CONCAT('%',#{rechargeAccount,jdbcType=VARCHAR},'%')
+             </if>
+             <if test="startTime!= null and endTime!= null">
+                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
+                 and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
+             </if>
+             <if test="orderId != null and orderId != ''">
+                 and a.order_id = #{orderId,jdbcType=VARCHAR}
+             </if>
+             order by a.create_at DESC
+         </where>
+    </select>
+
+    <update id="editOrder" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+        update czb_electricity_recharge_manager set
+        <if test="rechargeAccount != null and rechargeAccount!= ''">
+            recharge_account = #{rechargeAccount,jdbcType=VARCHAR},
+        </if>
+
+        <if test="regional != null and regional!= ''">
+            regional = #{regional,jdbcType=VARCHAR},
+        </if>
+        <if test="state != null and state!=''">
+            state = #{state}
+        </if>
+        where
+        order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getRechargeAmount" resultType="java.lang.Double">
+        SELECT
+            account
+        FROM czb_direct_charging_commodity
+        WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
+    </select>
+
+    <select id="getMaxIntegralAmount" resultType="java.lang.Double">
+        SELECT
+            max_deduction_amount
+        FROM czb_integral_deduction_info
+        WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
+    </select>
+
+    <select id="getRegional" resultType="java.lang.String">
+        SELECT
+            regional
+        FROM czb_electricity_recharge_manager
+        WHERE order_id = #{orderId,jdbcType=DOUBLE}
+    </select>
+
+    <update id="changeState" parameterType="java.lang.String">
+        update czb_electricity_recharge_manager set
+        state = '1'
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="changeFinishTime" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+        update czb_electricity_recharge_manager set
+        finish_at = #{viewTime,jdbcType=TIMESTAMP}
+        where
+        order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertOrder" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+        insert into
+        czb_electricity_recharge_manager (order_id,
+                                   user_id,
+                                   regional,
+                                   recharge_amount,
+                                   real_amount,
+                                   recharge_account,
+                                   state,
+                                   create_at,
+                                   record_type
+        )
+        values (#{orderId,jdbcType=VARCHAR},
+                #{userId,jdbcType=VARCHAR},
+                #{regional,jdbcType=VARCHAR},
+                #{rechargeAmount,jdbcType=DOUBLE},
+                #{realAmount,jdbcType=DOUBLE},
+                #{rechargeAccount,jdbcType=VARCHAR},
+                0,
+                now(),
+                1
+               )
+    </insert>
+
+    <insert id="insertThirdOrder" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityDto">
+        insert into
+        czb_electricity_recharge_manager (order_id,
+                                   user_id,
+                                   third_order_account,
+                                   regional,
+                                   recharge_amount,
+                                   recharge_account,
+                                   state,
+                                   create_at,
+                                   record_type
+        )
+        values (#{orderId,jdbcType=VARCHAR},
+                #{thirdAccount,jdbcType=VARCHAR},
+                #{thirdAccount,jdbcType=VARCHAR},
+                #{regional,jdbcType=VARCHAR},
+                #{amount,jdbcType=DOUBLE},
+                #{rechargeAccount,jdbcType=VARCHAR},
+                1,
+                #{time,jdbcType=TIMESTAMP},
+                '1'
+               )
+    </insert>
+
+    <select id="getCustomer" parameterType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityDto" resultType="com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto">
+        select customer_id customerId,
+               app_secret appSecret,
+               balance,
+               consumption_amount consumptionAmount,
+               is_shut_recharge as isShutRecharge,
+               customer_number customerNumber
+            from czb_direct_customer
+            where app_id = #{appId}
+    </select>
+</mapper>
