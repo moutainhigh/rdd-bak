@@ -1,15 +1,13 @@
 package com.cqut.czb.bn.api.controller.withDrawLog;
 
-import com.cqut.czb.bn.entity.dto.fanyong.FanyongLogDto;
+import com.cqut.czb.bn.entity.dto.withdrawals.WithdrawalsInsertDTO;
+import com.cqut.czb.bn.entity.dto.withdrawals.WithdrawalsSelectDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WithDrawLog.WithDrawalsService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,24 +25,24 @@ public class WithDrawalsController {
     WithDrawalsService withDrawalsService;
 
     @GetMapping("/getRecode")
-    public JSONResult getRecode(FanyongLogDto fanyongLogDto) {
-        return withDrawalsService.getRecode(fanyongLogDto);
+    public JSONResult getRecode(WithdrawalsSelectDTO withdrawalsSelectDTO) {
+        return withDrawalsService.getRecode(withdrawalsSelectDTO);
     }
 
     @GetMapping("/getTotal")
-    public JSONResult getTotal(FanyongLogDto fanyongLogDto) {
-        return withDrawalsService.getTotal(fanyongLogDto);
+    public JSONResult getTotal(WithdrawalsSelectDTO withdrawalsSelectDTO) {
+        return withDrawalsService.getTotal(withdrawalsSelectDTO);
     }
 
-    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
-    @RequestMapping(value = "/exportWithDrawals",method = RequestMethod.POST)
-    public JSONResult exportFanyongLog(HttpServletResponse response, HttpServletRequest request, FanyongLogDto fanyongLogDto){
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    @RequestMapping(value = "/exportWithDrawals", method = RequestMethod.POST)
+    public JSONResult exportFanyongLog(HttpServletResponse response, HttpServletRequest request, WithdrawalsSelectDTO withdrawalsSelectDTO) {
         Map<String, Object> result = new HashMap<>();
         String message = null;
-        Workbook workbook = null;
+        Workbook workbook;
         try {
-            workbook = withDrawalsService.export(fanyongLogDto);
-            if(workbook == null) {
+            workbook = withDrawalsService.export(withdrawalsSelectDTO);
+            if (workbook == null) {
                 message = "当前没有未导出的数据啦";
                 result.put("message", message);
                 return new JSONResult(result);
@@ -58,13 +56,13 @@ public class WithDrawalsController {
             String fileName = "水电费记录.xlsx";
             //System.out.println(fileName);
             //将中文转换为16进制
-            fileName = URLEncoder.encode(fileName,"utf-8");
+            fileName = URLEncoder.encode(fileName, "utf-8");
             //确保浏览器弹出对应文件的对话框
             response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
             OutputStream out = response.getOutputStream();
             workbook.write(out);
             out.close();
-        }  catch (IOException e) {
+        } catch (IOException e) {
             message = "导出Excel数据失败，请稍后再试";
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -73,4 +71,10 @@ public class WithDrawalsController {
         result.put("message", message);
         return new JSONResult(result);
     }
+
+    @PostMapping("/addMoney")
+    public JSONResult addMoney(WithdrawalsInsertDTO withdrawalsInsertDTO){
+        return withDrawalsService.addMoney(withdrawalsInsertDTO);
+    }
+
 }
