@@ -497,6 +497,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 //        System.out.println("话费直冲");
 //        System.out.println(body);
 
+        //2021-12-29
         String URL="https://huafei.renduoduo2019.com/api/mobile/telorder";
         //人多多的订单号（由我方生成）
         String ordersn = directChargingOrderDto.getOrderId();
@@ -524,8 +525,46 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                 "&sign=" + sign;
 
         System.out.println(params);
+//        String URL = "http://81.69.6.74:9099/v1/mobile/sloworder";
+//
+//        //平台编码
+//        String appKey = "30000503";
+//        //密匙
+//        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
+//        //订单号
+//        String orderId = directChargingOrderDto.getOrderId();
+//        //手机号
+//        String mobile = directChargingOrderDto.getUserAccount();
+//        //金额
+//        Double amount = directChargingOrderDto.getRechargeAmount();
+//        //第三方接口
+//        String notifyUrl = AliPayConfig.DirectPhone_url;
+//        //sign
+//        TreeMap map = new TreeMap();
+//        map.put("appKey",appKey);
+//        map.put("orderId",orderId);
+//        map.put("mobile",mobile);
+//        map.put("amount",amount);
+//        map.put("notifyUrl",notifyUrl);
+//        String string = "";
+//        Iterator iterator = map.entrySet().iterator();
+//        while (iterator.hasNext()){
+//            if (!string.equals("")){
+//                string+="&";
+//            }
+//            string += iterator.next();
+//        }
+//        string+="&key=" + appSecret;
+//        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
+//
+//        String params = "orderId=" + orderId +
+//                "&mobile=" + mobile +
+//                "&amount=" + amount +
+//                "&notifyUrl=" + notifyUrl +
+//                "&appKey=" + appKey +
+//                "&sign=" + sign;
 
-        //开始请求
+                //开始请求
         String sr= HttpRequest.httpRequestPost(URL, params);
         System.out.println(sr);
         net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
@@ -669,17 +708,26 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     public void directFanyong(DirectChargingOrderDto directChargingOrderDto){
         System.out.println("直充返佣進入方法");
-        if (!fanyongLogService.isContainFanyongLog(directChargingOrderDto.getOrderId())){
-            String userId = directChargingOrderDto.getUserId();
-            Double actualPayment = directChargingOrderDto.getRealPrice();
-            actualPayment = new BigDecimal(actualPayment).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            Double money = actualPayment + directChargingOrderDto.getIntegralAmount();
-            String orgId = directChargingOrderDto.getOurOrderId();
-            boolean isSucceed = fanYongService.beginFanYong(7, "", userId, money, actualPayment, orgId);
-            System.out.println("返佣"+isSucceed + " " + directChargingOrderDto.getOrderId());
-        } else {
-            System.out.println("已存在返佣记录  " + directChargingOrderDto.getOrderId());
+        try {
+            directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+            if (!fanyongLogService.isContainFanyongLog(directChargingOrderDto.getOrderId())){
+                String userId = directChargingOrderDto.getUserId();
+                Double actualPayment = directChargingOrderDto.getRechargeAmount();
+                Double money = directChargingOrderDto.getRealPrice();
+                if (actualPayment == null && money!=null){
+                    actualPayment = money;
+                }
+                String orgId = directChargingOrderDto.getOrderId();
+                boolean isSucceed = fanYongService.beginFanYong(7, "", userId, money, actualPayment, orgId);
+                System.out.println("返佣"+isSucceed + " " + directChargingOrderDto.getOrderId());
+            } else {
+                System.out.println("已存在返佣记录  " + directChargingOrderDto.getOrderId());
+            }
+        } catch (Exception e){
+            System.out.println("返佣失败");
+            e.printStackTrace();
         }
+
     }
 
     @Override

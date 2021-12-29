@@ -60,6 +60,9 @@ public class AliPayConfig {
 	//直充
 	public static String Direct_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliPayReturn/aliPayReturn";
 
+	//话费第三方回调
+	public static String DirectPhone_url="https://" + UrlConfig.NOTIGY_URL + ":" + UrlConfig.Port + "/mobile/DirectPhone";
+
 	//水电费充值
 	public static String Electricity_url="http://"+ UrlConfig.NOTIGY_URL+":"+UrlConfig.Port+"/AliPayReturn/aliPayElectricityReturn";
 
