@@ -153,4 +153,17 @@
             from czb_direct_customer
             where app_id = #{appId}
     </select>
+
+    <select id="getOrderById" parameterType="string" resultType="com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto">
+        select
+        user_id userId,
+        regional as regional,
+        recharge_amount rechargeAmount,
+        real_amount realAmount,
+        order_id orderId,
+        state as state
+        from
+        czb_electricity_recharge_manager
+        where order_id = #{orderId}
+    </select>
 </mapper>

@@ -383,9 +383,6 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
             integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
         }
 
-        Boolean isSucceed = fanYongService.beginFanYong(8, "", userId, money, actualPayment, orgId);
-        System.out.println("返佣"+isSucceed);
-
         return 1;
     }
 

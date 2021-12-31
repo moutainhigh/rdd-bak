@@ -398,8 +398,6 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
         //TODO 调用第三方接口水电费充值
         System.out.println("调用第三方水电费接口");
 
-        Boolean isSucceed = fanYongService.beginFanYong(8, "", userId, Double.parseDouble(rechargeAmount), money, orgId);
-        System.out.println("返佣"+isSucceed);
         return 1;
     }
 

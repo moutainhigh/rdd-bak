@@ -31,4 +31,6 @@ public interface ElectricityRechargeMapperExtra {
     CustomerManageDto getCustomer(ElectricityDto electricityDto);
 
     int insertThirdOrder(ElectricityDto electricityDto);
+
+    ElectricityRechargeDto getOrderById(String id);
 }

@@ -14,7 +14,9 @@ import com.cqut.czb.bn.entity.dto.directCustomers.ElectricityDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.ElectricityRechargeDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.ElectricityTotalDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
+import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
+import com.cqut.czb.bn.service.fanyong.FanyongLogService;
 import com.cqut.czb.bn.service.impl.directChargingSystem.DirectChargingSystemDelivery;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.md5.MD5Util;
@@ -40,6 +42,12 @@ public class ElectricityRechargeServiceImpl implements ElectricityRechargeServic
 
     @Autowired
     MobileMapperExtra mobileMapperExtra;
+
+    @Autowired
+    FanYongService fanyongService;
+
+    @Autowired
+    FanyongLogService fanyongLogService;
 
     @Override
     public JSONResult getCustomers(ElectricityRechargeDto electricityRechargeDto) {
@@ -87,10 +95,33 @@ public class ElectricityRechargeServiceImpl implements ElectricityRechargeServic
         return new JSONResult("查询成功",200,electricityTotalDto);
     }
 
+    private void electricFanyong(ElectricityRechargeDto electricityRechargeDto){
+        System.out.println("水电费返佣進入方法");
+        try {
+            electricityRechargeDto = electricityRechargeMapperExtra.getOrderById(electricityRechargeDto.getOrderId());
+            if (!fanyongLogService.isContainFanyongLog(electricityRechargeDto.getOrderId())){
+                String userId = electricityRechargeDto.getUserId();
+                Double actualPayment = electricityRechargeDto.getRealAmount();
+                Double money = electricityRechargeDto.getRechargeAmount();
+                String orgId = electricityRechargeDto.getOrderId();
+                System.out.println(userId+" "+actualPayment+" "+money+" "+orgId);
+                boolean isSucceed = fanyongService.beginFanYong(8, "", userId, money, actualPayment, orgId);
+                System.out.println("返佣"+isSucceed + " " + electricityRechargeDto.getOrderId());
+            } else {
+                System.out.println("已存在返佣记录  " + electricityRechargeDto.getOrderId());
+            }
+        } catch (Exception e){
+            System.out.println("返佣失败");
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public JSONResult editOrder(ElectricityRechargeDto electricityRechargeDto) {
         int result = electricityRechargeMapperExtra.editOrder(electricityRechargeDto);
         if (result > 0 ) {
+            if (electricityRechargeDto.getState().equals("2"))
+            electricFanyong(electricityRechargeDto);
             return new JSONResult("更新成功",200);
         }
         return new JSONResult("更新失败",500);
@@ -124,7 +155,7 @@ public class ElectricityRechargeServiceImpl implements ElectricityRechargeServic
     }
 
     @Override
-    public com.alibaba.fastjson.JSONObject WeChatRechargeDirect(DirectChargingOrderDto directChargingOrderDto) {
+    public JSONObject WeChatRechargeDirect(DirectChargingOrderDto directChargingOrderDto) {
 
         String orgId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", "");
         /**
@@ -282,6 +313,10 @@ public class ElectricityRechargeServiceImpl implements ElectricityRechargeServic
             electricityRechargeDto1.setOrderId(electricityRechargeDto.getOrders()[i]);
             electricityRechargeDto1.setState(electricityRechargeDto.getState());
             result = electricityRechargeMapperExtra.editOrder(electricityRechargeDto1);
+            if (result > 0){
+                if (electricityRechargeDto.getState().equals("2"))
+                electricFanyong(electricityRechargeDto);
+            }
         }
         if (result > 0) {
             return new JSONResult(200,"批量修改成功");
