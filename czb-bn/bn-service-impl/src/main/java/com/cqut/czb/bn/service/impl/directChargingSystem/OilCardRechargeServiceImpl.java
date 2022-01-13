@@ -34,6 +34,7 @@ import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -47,9 +48,11 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.Buffer;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -498,91 +501,98 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 //        System.out.println(body);
 
         //2021-12-29
-        String URL="https://huafei.renduoduo2019.com/api/mobile/telorder";
-        //人多多的订单号（由我方生成）
-        String ordersn = directChargingOrderDto.getOrderId();
-
-        // 电话号码
-        String phoneno = directChargingOrderDto.getUserAccount();
-
-        // 金额
-        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
-
-        // appId
-        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
-
-        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
-
-        String string = appId + appSecret + phoneno + String.valueOf(cardnum) + ordersn;
-        // sign
-        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
-
-        //设置请求参数
-        String params = "appId=" + appId +
-                "&phoneno=" + phoneno +
-                "&cardnum=" + cardnum +
-                "&ordersn=" + ordersn +
-                "&sign=" + sign;
-
-        System.out.println(params);
-//        String URL = "http://81.69.6.74:9099/v1/mobile/sloworder";
+//        String URL="https://huafei.renduoduo2019.com/api/mobile/telorder";
+//        //人多多的订单号（由我方生成）
+//        String ordersn = directChargingOrderDto.getOrderId();
 //
-//        //平台编码
-//        String appKey = "30000503";
-//        //密匙
-//        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
-//        //订单号
-//        String orderId = directChargingOrderDto.getOrderId();
-//        //手机号
-//        String mobile = directChargingOrderDto.getUserAccount();
-//        //金额
-//        Double amount = directChargingOrderDto.getRechargeAmount();
-//        //第三方接口
-//        String notifyUrl = AliPayConfig.DirectPhone_url;
-//        //sign
-//        TreeMap map = new TreeMap();
-//        map.put("appKey",appKey);
-//        map.put("orderId",orderId);
-//        map.put("mobile",mobile);
-//        map.put("amount",amount);
-//        map.put("notifyUrl",notifyUrl);
-//        String string = "";
-//        Iterator iterator = map.entrySet().iterator();
-//        while (iterator.hasNext()){
-//            if (!string.equals("")){
-//                string+="&";
-//            }
-//            string += iterator.next();
-//        }
-//        string+="&key=" + appSecret;
-//        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
+//        // 电话号码
+//        String phoneno = directChargingOrderDto.getUserAccount();
 //
-//        String params = "orderId=" + orderId +
-//                "&mobile=" + mobile +
-//                "&amount=" + amount +
-//                "&notifyUrl=" + notifyUrl +
-//                "&appKey=" + appKey +
+//        // 金额
+//        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
+//
+//        // appId
+//        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+//
+//        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+//
+//        String string = appId + appSecret + phoneno + String.valueOf(cardnum) + ordersn;
+//        // sign
+//        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+//
+//        //设置请求参数
+//        String params = "appId=" + appId +
+//                "&phoneno=" + phoneno +
+//                "&cardnum=" + cardnum +
+//                "&ordersn=" + ordersn +
 //                "&sign=" + sign;
+//
+//        System.out.println(params);
+
+        String URL = "https://api.36duojing.com/v1/mobile/sloworder";
+
+        //平台编码
+        String appKey = "30000503";
+        //密匙
+        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
+        //订单号
+        String orderId = directChargingOrderDto.getOrderId();
+        //手机号
+        String mobile = directChargingOrderDto.getUserAccount();
+        //金额
+        Double amount = directChargingOrderDto.getRechargeAmount();
+        //第三方接口
+        String notifyUrl = AliPayConfig.DirectPhone_url;
+        //sign
+        TreeMap map = new TreeMap();
+        map.put("appKey",appKey);
+        map.put("orderId",orderId);
+        map.put("mobile",mobile);
+        map.put("amount",amount);
+        map.put("notifyUrl",notifyUrl);
+        String string = "";
+        Iterator iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            if (!string.equals("")){
+                string+="&";
+            }
+            string += iterator.next();
+        }
+        string+="&key=" + appSecret;
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
+
+        String params = "orderId=" + orderId +
+                "&mobile=" + mobile +
+                "&amount=" + amount +
+                "&notifyUrl=" + notifyUrl +
+                "&appKey=" + appKey +
+                "&sign=" + sign;
 
                 //开始请求
         String sr= HttpRequest.httpRequestPost(URL, params);
         System.out.println(sr);
         net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
         System.out.println("话费充值");
-        System.out.println(sr);
         System.out.println(jsonObject);
-        int begin = sr.indexOf("code");
-        int end = sr.indexOf("result");
+//        int begin = sr.indexOf("code");
+//        int end = sr.indexOf("result");
+        String result_code = jsonObject.getString("result_code");
+        int return_code = jsonObject.getInt("return_code");
+
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if (sr.substring(begin+6, end-2).equals("0")) {
+        if (result_code.equals("SUCCESS")) {
             directChargingOrderDto1.setState(5);
-        } else {
+        }else {
             directChargingOrderDto1.setState(4);
         }
-        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+//        if (sr.substring(begin+6, end-2).equals("0")) {
+//            directChargingOrderDto1.setState(5);
+//        } else {
+//            directChargingOrderDto1.setState(4);
+//        }
+//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println("话费直冲");
-        System.out.println(sr);
     }
 
     @Override
@@ -1138,6 +1148,70 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             }
         }
         return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public boolean test() {
+        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+
+        directChargingOrderDto.setRechargeAmount(50.00);
+        directChargingOrderDto.setOrderId("641398771443602425");
+        directChargingOrderDto.setUserAccount("18523552621");
+
+        String URL = "https://api.36duojing.com/v1/mobile/sloworder";
+
+        //平台编码
+        String appKey = "30000503";
+        //密匙
+        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
+        //订单号
+        String orderId = directChargingOrderDto.getOrderId();
+        //手机号
+        String mobile = directChargingOrderDto.getUserAccount();
+        //金额
+        Double amount = directChargingOrderDto.getRechargeAmount();
+        //第三方接口
+        String notifyUrl = AliPayConfig.DirectPhone_url;
+        //sign
+        TreeMap map = new TreeMap();
+        map.put("appKey",appKey);
+        map.put("orderId",orderId);
+        map.put("mobile",mobile);
+        map.put("amount",new DecimalFormat("###0.00").format(amount));
+        map.put("notifyUrl",notifyUrl);
+        String string = "";
+        Iterator iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            if (!string.equals("")){
+                string+="&";
+            }
+            string += iterator.next();
+        }
+        string+="&key=" + appSecret;
+        System.out.println(string);
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
+        System.out.println(sign);
+
+        String params = "appKey=" + appKey +
+                "&orderId=" + orderId +
+                "&mobile=" + mobile +
+                "&amount=" + new DecimalFormat("###0.00").format(amount) +
+                "&notifyUrl=" + notifyUrl +
+                "&sign=" + sign;
+
+        System.out.println(params);
+        //开始请求
+        String sr= HttpRequest.httpRequestPost(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println("话费充值");
+        System.out.println(jsonObject);
+        int begin = sr.indexOf("code");
+        int end = sr.indexOf("result");
+        String result_code = jsonObject.getString("result_code");
+        int return_code = jsonObject.getInt("return_code");
+        System.out.println(jsonObject.get("data"));
+        return false;
     }
 
     private Workbook getOilCardRecord(List<DirectChargingOrderDto> list, DirectChargingOrderDto directChargingOrderDto) throws Exception{

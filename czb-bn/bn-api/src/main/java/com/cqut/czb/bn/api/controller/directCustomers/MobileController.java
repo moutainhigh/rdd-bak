@@ -8,11 +8,11 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
 import com.cqut.czb.bn.service.directCustomer.MobileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -44,5 +44,20 @@ public class MobileController {
     @GetMapping("/getTheBalance")
     public JSONResult getTheBalance(DirectCustomersDto directCustomersDto){
         return mobileService.getTheBalance(directCustomersDto);
+    }
+
+    //话费第三方回调
+    @RequestMapping(value="/DirectPhone", method= RequestMethod.POST)
+    public synchronized JSONResult DirectPhone(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("话费第三方回调");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("content-type", "text/html;charset=utf-8");
+        response.setContentType("text/xml");
+//        try {
+//            response.getWriter().print(mobileService.DirectPhone(request));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return mobileService.DirectPhone(request);
     }
 }

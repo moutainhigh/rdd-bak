@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.directCustomer;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directCustomer.MobileMapperExtra;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.directCustomers.CustomerManageDto;
@@ -14,10 +15,8 @@ import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Service
@@ -29,9 +28,12 @@ public class MobileServiceImpl implements MobileService {
     OilCardRechargeServiceImpl oilCardRechargeService;
 
     @Autowired
+    OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
+
+    @Autowired
     DictMapperExtra dictMapperExtra;
 
-    private BufferQueueThread bufferQueueThread;
+//    private BufferQueueThread bufferQueueThread;
 
     @Override
     public synchronized JSONResult telorder(DirectCustomersDto directCustomersDto){
@@ -148,42 +150,105 @@ public class MobileServiceImpl implements MobileService {
         return new JSONResult("查询失败", 500);
     }
 
-}
-
-class BufferQueueThread extends Thread{
-    private Queue queue = new ConcurrentLinkedDeque<DirectChargingOrderDto>();
-    private int bufferMillis;
-    private int pollCount;
-    private long lastCallBackMilliSecond = System.currentTimeMillis();
-
-    @Autowired
-    OilCardRechargeServiceImpl oilCardRechargeService = new OilCardRechargeServiceImpl();
-
-    public BufferQueueThread(int bufferMillis){
-        this.bufferMillis = bufferMillis * 1000;
-    }
-    public void add(DirectChargingOrderDto directChargingOrderDto){
-        queue.add(directChargingOrderDto);
-    }
-
     @Override
-    public void run() {
-        while (true){
-            pollCount = 0;
-            long currentTimeMillis = System.currentTimeMillis();
-            long diffMillis = currentTimeMillis - lastCallBackMilliSecond;
-            if (diffMillis < 0 || diffMillis > bufferMillis) {
-                pollCount = queue.size();
+    public JSONResult DirectPhone(HttpServletRequest request) {
+        System.out.println("进入36第三方接口回调");
+        Map<String, String> params = new HashMap<String, String>();
+        Map requestParams = request.getParameterMap();
+        String orderId = "";
+        String status = "";
+        Double amount = 0.00;
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
             }
-            if (pollCount > 0){
-                oilCardRechargeService.phoneRechargeSubmission((DirectChargingOrderDto)queue.poll());
-            }else {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            System.out.println(name + " : " + valueStr);
+            if (name.equals("orderId")) {
+                orderId = valueStr;
+            }
+            if (name.equals("status")) {
+                status = valueStr;
+            }
+            if (name.equals("amount")) {
+                amount = Double.parseDouble(valueStr);
             }
         }
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(orderId);
+        if (status.equals("SUCCESS")) {
+            directChargingOrderDto1.setState(2);
+        }else {
+            directChargingOrderDto1.setState(4);
+        }
+        //验证信息是否一致
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(orderId);
+        System.out.println(directChargingOrderDto);
+        if (directChargingOrderDto == null) {
+            return new JSONResult(300,"未找到对应账单");
+        }
+        if (Double.doubleToLongBits(directChargingOrderDto.getRechargeAmount()) != Double.doubleToLongBits(amount)) {
+            return new JSONResult(300,"金额与账单金额不一致");
+        }
+        int result = oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+        if (result == 1) {
+            return new JSONResult(200,"success");
+        }
+        return new JSONResult(400,"状态修改失败");
     }
+
+    public Map<String, String>  parseOrder(Map<String, String> params, Map requestParams){
+        //解读相应的信息
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+            }
+            params.put(name, valueStr);
+        }
+        return params;
+    }
+
 }
+
+//class BufferQueueThread extends Thread{
+//    private Queue queue = new ConcurrentLinkedDeque<DirectChargingOrderDto>();
+//    private int bufferMillis;
+//    private int pollCount;
+//    private long lastCallBackMilliSecond = System.currentTimeMillis();
+//
+//    @Autowired
+//    OilCardRechargeServiceImpl oilCardRechargeService = new OilCardRechargeServiceImpl();
+//
+//    public BufferQueueThread(int bufferMillis){
+//        this.bufferMillis = bufferMillis * 1000;
+//    }
+//    public void add(DirectChargingOrderDto directChargingOrderDto){
+//        queue.add(directChargingOrderDto);
+//    }
+//
+//    @Override
+//    public void run() {
+//        while (true){
+//            pollCount = 0;
+//            long currentTimeMillis = System.currentTimeMillis();
+//            long diffMillis = currentTimeMillis - lastCallBackMilliSecond;
+//            if (diffMillis < 0 || diffMillis > bufferMillis) {
+//                pollCount = queue.size();
+//            }
+//            if (pollCount > 0){
+//                oilCardRechargeService.phoneRechargeSubmission((DirectChargingOrderDto)queue.poll());
+//            }else {
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+//}

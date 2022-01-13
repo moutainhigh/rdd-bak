@@ -4,9 +4,11 @@ package com.cqut.czb.bn.api.controller.directChargingSystem;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.dto.until.WXSign;
 import com.cqut.czb.bn.entity.dto.weChatAppletPushNotification.sendNotification;
 import com.cqut.czb.bn.entity.entity.User;
+import com.cqut.czb.bn.entity.entity.directChargingSystem.DirectChargingOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
@@ -48,6 +50,7 @@ public class AliPayReturnController {
         response.setContentType("text/xml");
         try {
             response.getWriter().print(oilCardRechargeService.aliPayReturn(request,"Direct"));
+//            response.getWriter().print(oilCardRechargeService.test());
         } catch (IOException e) {
             e.printStackTrace();
         }
