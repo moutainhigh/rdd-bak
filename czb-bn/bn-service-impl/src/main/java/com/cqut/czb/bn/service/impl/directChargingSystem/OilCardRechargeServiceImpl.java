@@ -29,6 +29,7 @@ import com.cqut.czb.bn.service.impl.payBack.FanYongServiceImpl;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
+import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -742,6 +743,64 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Override
     public JSONResult  getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto){
+        String URL = "https://api.36duojing.com/v1/mobile/query";
+
+        //平台编码
+        String appKey = "30000503";
+        //密匙
+        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
+        //订单号
+        String orderId = directChargingOrderDto.getOrderId();
+
+        TreeMap<String,Object> map = new TreeMap();
+        map.put("appKey",appKey);
+        map.put("orderId",orderId);
+        String string = "";
+        for (Map.Entry<String, Object> stringObjectEntry : map.entrySet()) {
+            if (!string.equals("")) {
+                string += "&";
+            }
+            string += stringObjectEntry;
+        }
+        string+="&key=" + appSecret;
+        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
+
+        String params = "orderId=" + orderId +
+                "&appKey=" + appKey +
+                "&sign=" + sign;
+
+        //开始请求
+        String sr= HttpRequest.httpRequestPost(URL, params);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+
+        System.out.println("话费充值状态");
+        System.out.println(sr);
+        System.out.println(jsonObject);
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if(!jsonObject.get("result_code").equals("SUCCESS")){
+            return new JSONResult<>("状态查询失败", ResponseCodeConstants.FAILURE, jsonObject.get("return_msg"));
+        }
+        System.out.println(jsonObject.get("data"));
+        String status = (String) jsonObject.getJSONObject("data").get("status");
+        System.out.println("状态查询--"+status);
+        if (status.equals("WAIT")) {
+            directChargingOrderDto1.setState(5);
+        } else if (status.equals("SUCCESS")) {
+            directChargingOrderDto1.setState(2);
+
+            directFanyong(directChargingOrderDto);
+
+        } else if (status.equals("FAIL")) {
+            directChargingOrderDto1.setState(4);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+        System.out.println(directChargingOrderDto1.toString());
+        return new JSONResult<>("状态查询成功", 200);
+        /*
         String URL="https://huafei.renduoduo2019.com/api/mobile/ordersta";
         //人多多的订单号（由我方生成）
         String ordersn = directChargingOrderDto.getOrderId();
@@ -790,6 +849,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println("话费状态");
         System.out.println(sr);
         return new JSONResult("状态查询成功", 200);
+        */
     }
 
     @Override
