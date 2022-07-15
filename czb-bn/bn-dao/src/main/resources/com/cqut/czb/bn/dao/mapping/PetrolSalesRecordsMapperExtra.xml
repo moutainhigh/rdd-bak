@@ -655,6 +655,11 @@
         record_id=#{orgId,jdbcType = VARCHAR}
     </select>
 
+    <delete id="dropRecordById" parameterType="java.lang.String">
+        delete from czb_petrol_sales_records
+        where record_id=#{recordId,jdbcType = VARCHAR}
+    </delete>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.cqut.czb.bn.entity.entity.PetrolSalesRecords" >
         update czb_petrol_sales_records
         <set >

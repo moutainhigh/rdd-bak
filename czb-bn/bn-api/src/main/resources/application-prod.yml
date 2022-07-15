@@ -10,7 +10,7 @@ spring:
 #    password: ${MYSQL_PASS:Q@iG4#6F}
 
     #    本地链接正式服
-    url: jdbc:mysql://${MYSQL_URL:121.41.9.13:9525/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:121.41.9.13:9525/${MYSQL_DATABASE:czb}}?allowMultiQueries=true&characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CTT&useSSL=false&autoReconnect=true
     username: ${MYSQL_USER:tempRoot}
     password: ${MYSQL_PASS:8kkC&25%}
 
@@ -44,8 +44,8 @@ server:
   http:
     port: 8090
   ssl:
-    key-store: classpath:5870445__renduoduo2019.com.jks
-    key-store-password: fuE7Dqn1
+    key-store: classpath:8035535__renduoduo2019.com.pfx
+    key-store-password: 7OuydSwD
     key-alias: alias
     key-store-type: PKCS12
 

@@ -91,6 +91,15 @@ public class UserRechargeController {
         return new JSONResult(userRechargeService.insertBatchRecharge(user,userRechargeDTO));
     }
 
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    @PermissionCheck(role = "线下大客户, 管理员")
+    @RequestMapping(value = "/drawback",method = RequestMethod.POST)
+    public JSONResult drawback(String orderId){
+        if (userRechargeService.drawback(orderId)){
+            return new JSONResult("成功",200);
+        }
+        return new JSONResult("失败",500);
+    }
 
 
     /**
@@ -114,7 +123,8 @@ public class UserRechargeController {
      * @return
      */
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-    @PermissionCheck(role = "管理员")
+//    @PermissionCheck(role = "管理员")
+    @PermissionCheck(role = "管理员,线下大客户")
     @RequestMapping(value = "/updatePetrolNum", method = RequestMethod.POST)
     public JSONResult updatePetrolNum(Principal principal,UserRechargeDTO userRechargeDTO){
         User user = (User)redisUtils.get(principal.getName());

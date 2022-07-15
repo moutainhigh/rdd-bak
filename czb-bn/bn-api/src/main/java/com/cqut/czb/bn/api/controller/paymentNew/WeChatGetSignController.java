@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.paymentNew;
 
+import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +15,10 @@ public class WeChatGetSignController {
     public String getSign(@RequestParam String code){
         //获取用户的openid
         System.out.println("code" + code);
-        String appid="wx0a4273c49edc6e4a";//这里填写自己的appid和secret
-        String secret="5ba2f570dc17eea98c226d600ffce055";//这里填写自己的appid和secret
+        String appid= WCProgramConfig.app_id;//这里填写自己的appid和secret
+        String secret=WCProgramConfig.app_secret;//这里填写自己的appid和secret
 //        String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code="+code+"&grant_type=authorization_code";
-        String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code + "&grant_type=authorization_code";
+        String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret + "&js_code=" + code + "&grant_type=authorization_code";
         System.out.println("openid" + requestUrl);
         String Result = httpsRequest(requestUrl, "GET", null);
         JSONObject jsonObject = JSONObject.fromObject(Result);

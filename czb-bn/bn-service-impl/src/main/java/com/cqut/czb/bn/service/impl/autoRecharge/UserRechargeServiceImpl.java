@@ -1,9 +1,11 @@
 package com.cqut.czb.bn.service.impl.autoRecharge;
 
+import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeIog;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
+import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
@@ -27,6 +29,9 @@ public class UserRechargeServiceImpl implements UserRechargeService {
 
     @Autowired
     UserRechargeMapper userRechargeMapper;
+
+    @Autowired
+    PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
     private ReentrantLock lock = new ReentrantLock();
 
@@ -101,13 +106,30 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             //更新余额
             isBalance = userRechargeMapper.updateRecharge(user.getUserId(),afterBalance.doubleValue());
             if(isBalance && info)
-                return new JSONResult("充值成功",500);
+                return new JSONResult("充值成功",200);
             else
-                return new JSONResult("充值失败",200);
+                return new JSONResult("充值失败",500);
 
         }else {
             return new JSONResult("充值失败",200);
         }
+    }
+
+    @Override
+    public boolean drawback(String recordId){
+        int info = petrolSalesRecordsMapperExtra.dropRecordById(recordId);
+        if (info > 0){
+            PetrolSalesRecords order = petrolSalesRecordsMapperExtra.selectInfoByOrgId(recordId);
+            String userId = order.getBuyerId();
+            BigDecimal beforeBalance = new BigDecimal(String.valueOf(userRechargeMapper.getBalance(userId)));
+            BigDecimal afterBalance = null;
+            afterBalance = beforeBalance.add(BigDecimal.valueOf(order.getCurrentPrice()));
+            System.out.println(afterBalance.doubleValue());
+            //更新余额
+            boolean isBalance = userRechargeMapper.updateRecharge(userId,afterBalance.doubleValue());
+            return isBalance;
+        }
+        return false;
     }
 
     /**

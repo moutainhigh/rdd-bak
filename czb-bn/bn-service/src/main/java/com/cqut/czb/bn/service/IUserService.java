@@ -32,6 +32,10 @@ public interface IUserService {
 
     List<TeamDTO> selectTeam(String userId);
 
+    List<TeamDTO> selectTeamLimit(String userId, int start, int end);
+
+    int selectTeamTotal(String userId);
+
     RecommenderDTO selectRecommender(String userId);
 
     boolean changePartner(UserInputDTO userInputDTO);
@@ -44,4 +48,6 @@ public interface IUserService {
     JSONResult getMallPartner(User user);
 
     JSONResult getMyFriends(User user);
+
+    int getTotalVIP();
 }

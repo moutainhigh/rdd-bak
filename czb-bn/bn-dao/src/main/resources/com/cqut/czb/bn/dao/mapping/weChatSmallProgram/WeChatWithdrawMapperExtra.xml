@@ -20,7 +20,8 @@
 				c.user_type,
 				c.bindingId,
 				c.user_name,
-				b.user_account
+# 				b.user_account
+				c.user_account
 			FROM
 			czb_user c
 			LEFT JOIN ( SELECT d.user_id, d.user_account,d.user_name FROM czb_user d ) AS b ON c.bindingId = b.user_id

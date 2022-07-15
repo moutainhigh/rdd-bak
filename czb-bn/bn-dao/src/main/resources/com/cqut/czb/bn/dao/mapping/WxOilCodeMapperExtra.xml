@@ -27,6 +27,10 @@
     a.create_at desc
   </select>
 
+  <select id="getWxOilCodeSaleTotal">
+    SELECT count(DISTINCT item_no) FROM `czb_wechat_commodity` where take_way = 3
+  </select>
+
   <select id="getWxStockDetailsList" parameterType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO" resultType="com.cqut.czb.bn.entity.dto.WxStockDetailsDTO">
     SELECT
       a.stock_id as stockID,

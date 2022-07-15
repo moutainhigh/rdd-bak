@@ -90,6 +90,31 @@ public class UserManagementController {
         }
     }
 
+    @RequestMapping(value = "/selectTeamLimit", method = RequestMethod.GET)
+    public  JSONResult selectTeam(Principal principal,@Param("userId") String userId,@Param("start") int start, @Param("end") int end){
+        if(null == userId || "".equals(userId)) {
+            User user = (User) redisUtils.get(principal.getName());
+            return new JSONResult(userService.selectTeamLimit(user.getUserId(), start, end));
+        } else {
+            return new JSONResult(userService.selectTeamLimit(userId, start, end));
+        }
+    }
+
+    @RequestMapping(value = "selectTeamTotal", method = RequestMethod.GET)
+    public  JSONResult selectTeamTotal(Principal principal,@Param("userId") String userId){
+        if(null == userId || "".equals(userId)) {
+            User user = (User) redisUtils.get(principal.getName());
+            return new JSONResult(userService.selectTeamTotal(user.getUserId()));
+        } else {
+            return new JSONResult(userService.selectTeamTotal(userId));
+        }
+    }
+
+    @RequestMapping(value = "getTotalVip", method = RequestMethod.GET)
+    public  JSONResult getTotalVIP(){
+        return new JSONResult(userService.getTotalVIP());
+    }
+
     /**
      * 获取推荐人
      * */

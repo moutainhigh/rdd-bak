@@ -32,6 +32,8 @@ public interface WxOilCodeSaleMapperExtra {
 
     List<WxStockNumDTO> getCommdityTotal();
 
+    int getWxOilCodeSaleTotal();
+
     int updateWxCommodityTotalNum(List<WxStockNumDTO> list);
 
 }

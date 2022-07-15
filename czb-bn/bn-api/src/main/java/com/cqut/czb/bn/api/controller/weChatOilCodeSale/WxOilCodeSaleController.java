@@ -4,13 +4,16 @@ package com.cqut.czb.bn.api.controller.weChatOilCodeSale;
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.bn.entity.dto.CommodityStockDTO;
 
+import com.cqut.czb.bn.entity.dto.ImportWxStockDTO;
 import com.cqut.czb.bn.entity.dto.OfflineClientDTO;
 import com.cqut.czb.bn.entity.dto.WxStockDetailsDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.weChatOilCodeSale.WxOilCodeSaleService;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -75,6 +80,22 @@ public class WxOilCodeSaleController {
     public JSONResult importDate(MultipartFile file){
         try {
             return wxOilCodeSaleService.importDate(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JSONResult("导入失败",200,false);
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/importDateSimple",method = RequestMethod.POST)
+    public JSONResult importDate(@RequestBody ImportWxStockDTO importWxStockDTO){
+        try {
+            ImportWxStockDTO[] list = importWxStockDTO.getList();
+            for (ImportWxStockDTO item : list) {
+                item.setStockID(StringUtil.createId());
+            }
+            return wxOilCodeSaleService.importDate(Arrays.asList(list.clone()));
         } catch (Exception e) {
             e.printStackTrace();
         }

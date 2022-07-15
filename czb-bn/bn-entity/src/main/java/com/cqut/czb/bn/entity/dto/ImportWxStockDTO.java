@@ -1,6 +1,10 @@
 package com.cqut.czb.bn.entity.dto;
 
+import java.util.List;
+
 public class ImportWxStockDTO {
+
+    private ImportWxStockDTO[] list;
 
     private String StockID;
 
@@ -83,5 +87,13 @@ public class ImportWxStockDTO {
                 ", attribute='" + attribute + '\'' +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public ImportWxStockDTO[] getList() {
+        return list;
+    }
+
+    public void setList(ImportWxStockDTO[] list) {
+        this.list = list;
     }
 }

@@ -42,6 +42,9 @@
     from czb_user
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
+  <select id="getTotalVIP" resultType="int">
+    select count(user_id) from czb_user where is_vip = 1
+  </select>
 
 
   <select id="findUserByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -376,6 +379,51 @@
         cu.is_vip DESC,
         cu.create_at DESC,
         amount DESC
+  </select>
+
+  <select id="selectTeamTotal" resultType="int">
+    SELECT COUNT(user_id) FROM czb_user WHERE superior_user = #{userId, jdbcType = VARCHAR}
+  </select>
+
+  <select id="selectTeamLimit" resultMap="TeamResultMap">
+    SELECT
+      user_id,
+      user_account,
+      user_name,
+      sum( amount ) AS 'amount',
+      is_vip,
+      cu.create_at create_at,
+      avatar_url avatarUrl
+    FROM
+      (
+        SELECT
+          cu.user_id,
+          user_account,
+          user_name,
+          superior_user,
+          info_id,
+          cu.create_at,
+          is_vip,
+          cu.avatar_url
+        FROM
+          czb_user cu
+            LEFT JOIN czb_user_income_info cuii ON cu.user_id = cuii.user_id
+        WHERE
+          cu.superior_user = #{userId, jdbcType = VARCHAR}
+        ORDER BY
+          cu.is_vip DESC,
+          cu.create_at DESC
+        LIMIT #{start, jdbcType = INTEGER}, #{end, jdbcType = INTEGER}
+      ) cu
+        LEFT JOIN czb_income_log cil ON cil.info_id = cu.info_id
+        AND ( cil.is_settlement = 0 OR cil.is_settlement IS NULL )
+        AND ( type = 0 OR type IS NULL )
+    GROUP BY
+      cu.user_id
+    ORDER BY
+      cu.is_vip DESC,
+      cu.create_at DESC,
+      amount DESC
   </select>
   <!--<select id="selectSecondTeam" resultType="com.cqut.czb.bn.entity.dto.myTeam.TeamDTO">-->
   <!--select cu.user_id as 'userId', user_account as 'userAccount', user_name  as 'userName', sum(amount) as 'amount'-->

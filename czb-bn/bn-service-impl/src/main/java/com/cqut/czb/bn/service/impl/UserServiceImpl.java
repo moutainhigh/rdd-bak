@@ -238,6 +238,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public List<TeamDTO> selectTeamLimit(String userId, int start, int end) {
+        return userMapperExtra.selectTeamLimit(userId, start, end);
+    }
+
+    @Override
+    public int selectTeamTotal(String userId){
+        return userMapperExtra.selectTeamTotal(userId);
+    }
+
+    @Override
     public RecommenderDTO selectRecommender(String userId) {
         return userMapperExtra.selectRecommender(userId);
     }
@@ -534,5 +544,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public JSONResult getMyFriends(User user) {
         return new JSONResult<>(mallPartnerManageMapperExtra.getMyFriends(user));
+    }
+
+    @Override
+    public int getTotalVIP(){
+        return userMapperExtra.getTotalVIP();
     }
 }

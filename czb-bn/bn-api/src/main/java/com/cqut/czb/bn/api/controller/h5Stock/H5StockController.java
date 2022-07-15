@@ -1,5 +1,6 @@
 package com.cqut.czb.bn.api.controller.h5Stock;
 
+import com.alibaba.fastjson.JSON;
 import com.cqut.czb.bn.entity.dto.H5CommodityDTO;
 import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -59,5 +60,14 @@ public class H5StockController {
     @GetMapping("/getTotalConsumption")
     public JSONResult getTotalConsumption(H5StockDTO h5StockDTO) {
         return stockService.getTotalConsumption(h5StockDTO);
+    }
+
+    @PostMapping("/dropCommodityById")
+    public JSONResult dropCommodityById(String commodityId){
+        if (stockService.dropCommodityById(commodityId)){
+            return new JSONResult(200, "success");
+        } else {
+            return new JSONResult(500, "failed");
+        }
     }
 }

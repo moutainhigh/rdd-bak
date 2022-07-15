@@ -32,7 +32,9 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         PageHelper.startPage(commodityStockDTO.getCurrentPage(), commodityStockDTO.getPageSize(),true);
         PageInfo pageInfo = new PageInfo();
         List<CommodityStockDTO> list = wxOilCodeSaleMapperExtra.getWxOilCodeSaleList(commodityStockDTO);
+        int total = wxOilCodeSaleMapperExtra.getWxOilCodeSaleTotal();
         pageInfo.setList(list);
+        pageInfo.setTotal(total);
         return new JSONResult("列表数据查询成功", 200, pageInfo);
     }
 
@@ -71,8 +73,7 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
     }
 
     @Override
-    public JSONResult importDate(MultipartFile file) throws Exception {
-        List<ImportWxStockDTO> WxStockList = ImportWxStock.readExcel(file.getOriginalFilename(),file.getInputStream());
+    public JSONResult importDate(List<ImportWxStockDTO> WxStockList){
         if (WxStockList == null){
             return new JSONResult("表格为空",200,false);
         }
@@ -142,6 +143,12 @@ public class WxOilCodeSaleServiceImpl implements WxOilCodeSaleService {
         boolean result3 = wxOilCodeSaleMapperExtra.updateWxCommodityTotalNum(wxStockNumDTOS)>0;
         String result = "成功"+list2.size()+"条，失败"+(WxStockList.size()-list2.size())+"条";
         return new JSONResult(result,200,result1&&result2&&result3);
+    }
+
+    @Override
+    public JSONResult importDate(MultipartFile file) throws Exception {
+        List<ImportWxStockDTO> WxStockList = ImportWxStock.readExcel(file.getOriginalFilename(),file.getInputStream());
+        return importDate(WxStockList);
     }
 
     @Override

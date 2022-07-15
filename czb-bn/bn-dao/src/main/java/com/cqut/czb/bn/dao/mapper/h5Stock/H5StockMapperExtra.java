@@ -14,4 +14,6 @@ public interface H5StockMapperExtra {
     String getPriceId(@Param("price") Double price, @Param("commodityId")String commodityId);
 
     Double getCommodityPriceByPriceId(@Param("commodityId")String commodityId);
+
+    int dropCommodityById(@Param("commodityId")String commodityId);
 }

@@ -114,4 +114,9 @@ public class H5StockServiceImpl implements H5StockService {
         map.put("oilTotalConsumption",mapper.getTotalConsumption(h5StockDTO));
         return new JSONResult(map);
     }
+
+    @Override
+    public boolean dropCommodityById(String commodityId) {
+        return h5StockMapperExtra.dropCommodityById(commodityId) != 0;
+    }
 }

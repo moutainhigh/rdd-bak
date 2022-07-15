@@ -35,6 +35,10 @@ public interface UserMapperExtra {
 
     List<TeamDTO> selectTeam(@Param("userId") String userId);
 
+    List<TeamDTO> selectTeamLimit(@Param("userId") String userId,@Param("start") int start, @Param("end") int end);
+
+    int selectTeamTotal(@Param("userId") String userId);
+
     RecommenderDTO selectRecommender(String userId);
 
     List<User> getAllSubUser();
@@ -91,6 +95,7 @@ public interface UserMapperExtra {
      */
     int updateSuperUser(List<User> userList);
 
+    int getTotalVIP();
 
     List<User> getTest();
 

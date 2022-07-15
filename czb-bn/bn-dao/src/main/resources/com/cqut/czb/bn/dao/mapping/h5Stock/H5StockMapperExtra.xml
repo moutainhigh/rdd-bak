@@ -47,4 +47,8 @@
         from czb_h5_stock
         where price_id = #{commodityId,jdbcType=VARCHAR}
     </select>
+
+    <delete id="dropCommodityById">
+        delete from czb_h5_stock where stock_id = #{commodityId,jdbcType=VARCHAR}
+    </delete>
 </mapper>

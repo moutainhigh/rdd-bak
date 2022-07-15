@@ -20,4 +20,6 @@ public interface H5StockService {
     List<H5StockDTO> getCommodity();
 
     JSONResult getTotalConsumption(H5StockDTO h5StockDTO);
+
+    boolean dropCommodityById(String commodityId);
 }

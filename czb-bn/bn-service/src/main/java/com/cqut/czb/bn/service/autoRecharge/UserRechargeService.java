@@ -15,5 +15,7 @@ public interface UserRechargeService {
 
     JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO);
 
+    boolean drawback(String recordId);
+
     boolean updatePetrolNum(UserRechargeDTO userRechargeDTO);
 }

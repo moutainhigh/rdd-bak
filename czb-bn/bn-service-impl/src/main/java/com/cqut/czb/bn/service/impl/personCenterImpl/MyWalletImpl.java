@@ -329,8 +329,8 @@ public class MyWalletImpl implements MyWallet {
 
         String openId = weiXinRecordDTO.getOpenId();
 
-        if (weiXinRecordDTO.getAmount() < 1) {
-            return new JSONResult("提现金额无法小于1元",300);
+        if (weiXinRecordDTO.getAmount() < 0.1) {
+            return new JSONResult("提现金额无法小于0.1元",300);
         }
         WeChatTOWithdrawDTO weChatTOWithdrawDTO = new WeChatTOWithdrawDTO();
         weChatTOWithdrawDTO.setPaymentName(name);
@@ -376,6 +376,15 @@ public class MyWalletImpl implements MyWallet {
             return new JSONResult("提现失败",400);
         }
 
+        // 获取xml结果转换为jsonobject
+        Map<String, Object> result = new TreeMap<String, Object>();
+        result = WeChatUtils.xml2Map(orderList);
+        System.out.println(result);
+
+        if (result.get("result_code").equals("FAIL")){
+            return new JSONResult("提现失败",400);
+        }
+
         JSONResult insert = withdrawService.toWithdraw(weChatTOWithdrawDTO);
         if (insert.getCode() == 300) {
             return new JSONResult(insert.getMessage(),300);
@@ -383,10 +392,7 @@ public class MyWalletImpl implements MyWallet {
             return new JSONResult("插入记录或更新金额异常",300);
         }
 
-        // 获取xml结果转换为jsonobject
-        Map<String, Object> result = new TreeMap<String, Object>();
-        result = WeChatUtils.xml2Map(orderList);
-        System.out.println(result);
+
         return new JSONResult("提现成功",200,result);
     }
 

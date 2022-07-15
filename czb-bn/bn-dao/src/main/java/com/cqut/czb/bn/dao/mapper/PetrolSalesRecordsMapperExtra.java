@@ -65,6 +65,8 @@ public interface PetrolSalesRecordsMapperExtra {
      */
     PetrolSalesRecords selectInfoByOrgId(@Param("orgId") String orgId);
 
+    int dropRecordById(@Param("recordId") String recordId);
+
     /**
      * 更改购买信息
      *
