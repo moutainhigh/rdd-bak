@@ -27,7 +27,7 @@
     a.create_at desc
   </select>
 
-  <select id="getWxOilCodeSaleTotal">
+  <select id="getWxOilCodeSaleTotal" resultType="int">
     SELECT count(DISTINCT item_no) FROM `czb_wechat_commodity` where take_way = 3
   </select>
 

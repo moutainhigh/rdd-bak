@@ -15,6 +15,8 @@ public class TeamDTO {
 
     private String userName;
 
+    private String bindingPhone;
+
     private Double amount;
 
     private Integer isVip;
@@ -80,5 +82,13 @@ public class TeamDTO {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getBindingPhone() {
+        return bindingPhone;
+    }
+
+    public void setBindingPhone(String bindingPhone) {
+        this.bindingPhone = bindingPhone;
     }
 }

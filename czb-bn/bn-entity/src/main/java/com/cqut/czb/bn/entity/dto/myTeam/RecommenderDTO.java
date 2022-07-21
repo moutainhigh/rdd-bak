@@ -8,6 +8,8 @@ public class RecommenderDTO {
 
     private String userName;
 
+    private String bindingPhone;
+
     private Integer isVip;
 
     private String avatarUrl;
@@ -50,5 +52,13 @@ public class RecommenderDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getBindingPhone() {
+        return bindingPhone;
+    }
+
+    public void setBindingPhone(String bindingPhone) {
+        this.bindingPhone = bindingPhone;
     }
 }

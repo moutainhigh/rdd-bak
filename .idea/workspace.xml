@@ -4,40 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="话费查询修改">
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/8035535__renduoduo2019.com.jks" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/8035535__renduoduo2019.com.pfx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/jks-password.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/pfx-password.txt" afterDir="false" />
+    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="new gitlab --- lhn">
+      <change afterPath="$PROJECT_DIR$/czb-auth/src/main/java/com/cqut/czb/auth/util/AESUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/UserManagementController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/UserManagementController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/autoRecharge/UserRechargeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/autoRecharge/UserRechargeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/h5Stock/H5StockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/h5Stock/H5StockController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/paymentNew/WeChatGetSignController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/paymentNew/WeChatGetSignController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/weChatOilCodeSale/WxOilCodeSaleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/weChatOilCodeSale/WxOilCodeSaleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/PetrolSalesRecordsMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/PetrolSalesRecordsMapperExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/UserMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/UserMapperExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/WxOilCodeSaleMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/WxOilCodeSaleMapperExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/h5Stock/H5StockMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/h5Stock/H5StockMapperExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/PetrolSalesRecordsMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/PetrolSalesRecordsMapperExtra.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-auth/src/main/java/com/cqut/czb/auth/filter/JWTAuthenticationWCPFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-auth/src/main/java/com/cqut/czb/auth/filter/JWTAuthenticationWCPFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapperExtra.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/WxOilCodeMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/WxOilCodeMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/autoRecharge/UserRechargeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/autoRecharge/UserRechargeMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/h5Stock/H5StockMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/h5Stock/H5StockMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatWithdrawMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatWithdrawMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/ImportWxStockDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/ImportWxStockDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WxOilCodeSale/WxOilCodeSaleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WxOilCodeSale/WxOilCodeSaleServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/AutoRechargeimpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/AutoRechargeimpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/UserRechargeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/UserRechargeServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/h5Stock/H5StockServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/h5Stock/H5StockServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/personCenterImpl/MyWalletImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/personCenterImpl/MyWalletImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/IUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/autoRecharge/UserRechargeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/autoRecharge/UserRechargeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/h5Stock/H5StockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/h5Stock/H5StockService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/weChatOilCodeSale/WxOilCodeSaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/weChatOilCodeSale/WxOilCodeSaleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/RecommenderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/RecommenderDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/TeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/TeamDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/PersonalUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/PersonalUserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/UserInputDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/UserInputDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppHomePageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppHomePageServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +87,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
@@ -150,7 +134,7 @@
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.35287356" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="Console" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -164,13 +148,15 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.back:czb-bn:bn-api [bootRepackage]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="AESUtils" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cqut.czb.auth.util.AESUtils" />
+      <module name="czb.czb-auth.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cqut.czb.auth.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -248,6 +234,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.back:czb-bn:bn-api [bootRepackage]" />
+        <item itemvalue="应用程序.AESUtils" />
         <item itemvalue="Gradle.back:czb-bn:bn-api [testClasses]" />
         <item itemvalue="Gradle.back:czb-bn:bn-api [build]" />
       </list>
@@ -480,7 +467,12 @@
       <workItem from="1657419303463" duration="19694000" />
       <workItem from="1657461097989" duration="928000" />
       <workItem from="1657503586382" duration="5281000" />
-      <workItem from="1657682140069" duration="39335000" />
+      <workItem from="1657682140069" duration="40359000" />
+      <workItem from="1657973677947" duration="646000" />
+      <workItem from="1658019422617" duration="12852000" />
+      <workItem from="1658108645930" duration="7295000" />
+      <workItem from="1658194528417" duration="3896000" />
+      <workItem from="1658229520767" duration="1258000" />
     </task>
     <task id="LOCAL-00001" summary="水电返佣修改">
       <created>1640951174320</created>
@@ -496,7 +488,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642171701935</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="new gitlab --- lhn">
+      <created>1657885937312</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1657885937312</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -527,7 +526,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="水电返佣修改" />
     <MESSAGE value="话费查询修改" />
-    <option name="LAST_COMMIT_MESSAGE" value="话费查询修改" />
+    <MESSAGE value="new gitlab --- lhn" />
+    <option name="LAST_COMMIT_MESSAGE" value="new gitlab --- lhn" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -544,6 +544,10 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/czb$StackApplication.ic" NAME="StackApplication Coverage Results" MODIFIED="1587912920611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

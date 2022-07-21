@@ -35,6 +35,8 @@ public class UserInputDTO {
     private Integer userRank;
 
     private String roleId;
+
+    private String bindingPhone;
     /**
      * 注册时间
      * */
@@ -240,5 +242,13 @@ public class UserInputDTO {
 
     public void setSuperiorUserName(String superiorUserName) {
         this.superiorUserName = superiorUserName;
+    }
+
+    public String getBindingPhone() {
+        return bindingPhone;
+    }
+
+    public void setBindingPhone(String bindingPhone) {
+        this.bindingPhone = bindingPhone;
     }
 }

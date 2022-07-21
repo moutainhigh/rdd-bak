@@ -29,13 +29,14 @@
         <result column="bindingId" property="bindingid" jdbcType="VARCHAR" />
         <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
         <result column="mall_partner" property="mallPartner" jdbcType="VARCHAR" />
+        <result column="binding_phone" property="bindingPhone" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
         user_id, user_account, user_psw, user_type, user_rank, is_identified, superior_user,
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
     partner, old_superior, first_level_partner, second_level_partner, is_vip, avatar_url,
-    bindingId, is_special, mall_partner
+    bindingId, is_special, mall_partner, binding_phone
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
@@ -153,6 +154,9 @@
             <if test="mallPartner != null" >
                 mall_partner,
             </if>
+            <if test="bindingPhone != null" >
+                binding_phone,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="userId != null" >
@@ -235,6 +239,9 @@
             </if>
             <if test="mallPartner != null" >
                 #{mallPartner,jdbcType=VARCHAR},
+            </if>
+            <if test="bindingPhone != null" >
+                #{bindingPhone,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -319,6 +326,9 @@
             <if test="mallPartner != null" >
                 mall_partner = #{mallPartner,jdbcType=VARCHAR},
             </if>
+            <if test="bindingPhone != null" >
+                binding_phone = #{bindingPhone,jdbcType=VARCHAR},
+            </if>
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
@@ -349,7 +359,8 @@
             avatar_url = #{avatarUrl,jdbcType=VARCHAR},
             bindingId = #{bindingid,jdbcType=VARCHAR},
             is_special = #{isSpecial,jdbcType=INTEGER},
-            mall_partner = #{mallPartner,jdbcType=VARCHAR}
+            mall_partner = #{mallPartner,jdbcType=VARCHAR},
+            binding_phone = #{bindingPhone,jdbcType=VARCHAR}
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
 </mapper>

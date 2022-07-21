@@ -61,6 +61,8 @@ public class User {
 
     private String openId;
 
+    private String bindingPhone;
+
     public String getUserId() {
         return userId;
     }
@@ -291,5 +293,13 @@ public class User {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getBindingPhone() {
+        return bindingPhone;
+    }
+
+    public void setBindingPhone(String bindingPhone) {
+        this.bindingPhone = bindingPhone;
     }
 }

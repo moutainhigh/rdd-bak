@@ -1,4 +1,5 @@
 package com.cqut.czb.auth.filter;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.config.AuthConfig;
 import com.cqut.czb.auth.config.Config;
@@ -6,6 +7,7 @@ import com.cqut.czb.auth.jwt.JwtTool;
 import com.cqut.czb.auth.jwt.JwtUser;
 import com.cqut.czb.auth.service.UserDetailService;
 import com.cqut.czb.auth.serviceImpl.AuthUserServiceImpl;
+import com.cqut.czb.auth.util.AESUtils;
 import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.auth.util.SpringUtils;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
@@ -35,6 +37,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * @Description 该类用于微信小程序登录，登录成功后设置token信息
  * @auther nihao
@@ -71,6 +75,8 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
         String code = request.getParameter("code");
         String superiorUser = request.getParameter("superiorUser");
         String nickName = request.getParameter("nickName");
+        String phoneEncryptedData = request.getParameter("phoneEncryptedData");
+        String phoneIV = request.getParameter("phoneIV");
         if(nickName!=null) {
             nickName = filterEmoji(nickName);
         }
@@ -114,6 +120,18 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 this.setupResponseWrite(response, result);
                 return null;
             }
+            //解析用户电话号码
+            String json = AESUtils.decrypt(phoneEncryptedData, wcpLoginBack.getSession_key(), phoneIV);
+            String phone = null;
+            if (!Objects.equals(json, StringUtils.EMPTY)){
+                try {
+                    JSONObject obj = JSON.parseObject(json);
+                    phone = obj.getString("phoneNumber");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            logger.info(phone);
             //判断用户是否存在过
             if(userMapperExtra == null){
                 userMapperExtra = SpringUtils.getBean(UserMapperExtra.class);
@@ -129,6 +147,7 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                 }
                 personalUserDTO.setUserName(nickName);
                 personalUserDTO.setAvatarUrl(avatarUrl);
+                personalUserDTO.setBindingPhone(phone);
                 if(userDetailService == null){
                     userDetailService = SpringUtils.getBean(UserDetailService.class);
                 }
@@ -143,11 +162,18 @@ public class JWTAuthenticationWCPFilter extends UsernamePasswordAuthenticationFi
                     userMapper = SpringUtils.getBean(UserMapper.class);
                 }
                 //如果有用户信息改变就更新用户信息
-                if(!user.getUserName().equals(nickName) || !user.getAvatarUrl().equals(avatarUrl)){
+                if(!user.getUserName().equals(nickName)
+                        || !user.getAvatarUrl().equals(avatarUrl)
+                        || user.getBindingPhone() == null
+                        || phone != null && !user.getBindingPhone().equals(phone)
+                ){
                     User update = new User();
                     update.setUserId(user.getUserId());
                     update.setUserName(nickName);
                     update.setAvatarUrl(avatarUrl);
+                    if (phone != null){
+                        update.setBindingPhone(phone);
+                    }
                     userMapper.updateByPrimaryKeySelective(update);
                 }
 

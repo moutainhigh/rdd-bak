@@ -20,6 +20,8 @@ public class PersonalUserDTO {
 
     private String mallPartnerAccount;
 
+    private String bindingPhone;
+
     private int isH5Register;
 
     public String getAvatarUrl() {
@@ -100,5 +102,13 @@ public class PersonalUserDTO {
 
     public void setIsH5Register(int isH5Register) {
         this.isH5Register = isH5Register;
+    }
+
+    public String getBindingPhone() {
+        return bindingPhone;
+    }
+
+    public void setBindingPhone(String bindingPhone) {
+        this.bindingPhone = bindingPhone;
     }
 }

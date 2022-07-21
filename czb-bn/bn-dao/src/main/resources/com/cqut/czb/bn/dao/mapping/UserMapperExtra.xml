@@ -27,6 +27,7 @@
     <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
     <result column="bindingId" property="bindingid" jdbcType="VARCHAR" />
     <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
+    <result column="binding_phone" property="bindingPhone" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -34,7 +35,7 @@
     is_login_pc, user_name, user_id_card, create_at, update_at, user_yun_id, is_deleted,
     commission_level_one, commission_level_two, mission_start_time, mission_end_time,
     partner, old_superior, first_level_partner, second_level_partner,avatar_url, is_vip,
-    bindingid, is_special
+    bindingid, is_special, binding_phone
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
@@ -90,6 +91,7 @@
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="is_special" property="isSpecial" jdbcType="INTEGER" />
     <result column="mall_partner" property="mallPartner" jdbcType="VARCHAR" />
+    <result column="binding_phone" property="bindingPhone" jdbcType="VARCHAR" />
     <collection property="roles" column="{userId = user_id}" javaType="list" select="selectRoleList"></collection>
   </resultMap>
   <select id="findUserDTOByAccount" resultMap="dtoResultMap" parameterType="java.lang.String" >
@@ -169,6 +171,9 @@
       <if test="bindingid != null">
         bindingid = #{bindingid,jdbcType=VARCHAR}
       </if>
+      <if test="bindingPhone != null" >
+        binding_phone = #{bindingPhone,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
@@ -198,10 +203,10 @@
   </resultMap>
   <select id="selectUser" resultMap="UserResultMap" parameterType="com.cqut.czb.bn.entity.dto.user.UserInputDTO" >
     select
-    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.user_rank, u.partner, cu.user_account as 'superior_user',cu.user_name as 'superior_user_name', u.create_at,u.bindingid
+    u.user_id, u.user_account,u.user_type, u.user_name,u.is_vip, u.user_rank, u.partner, cu.user_account as 'superior_user',cu.user_name as 'superior_user_name', u.create_at,u.bindingid, u.binding_phone as 'bindingPhone'
     from
     (select
-    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingid
+    cu.user_id, user_account,user_type, user_name,is_vip, enterprise_name, user_rank, partner, superior_user, cu.create_at,cu.bindingid, binding_phone
     from czb_user cu
     left join czb_enterprise_info cei on cu.user_id = cei.user_id
     <where>
@@ -241,6 +246,9 @@
       </if>
       <if test="superiorUserName != null and superiorUserName != ''">
         and cu.user_name like concat('%',#{superiorUserName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="bindingPhone != null and bindingPhone != ''">
+        and u.binding_phone like concat('%',#{bindingPhone,jdbcType=VARCHAR},'%')
       </if>
     </where>
     order by u.create_at desc
@@ -338,6 +346,7 @@
     <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="binding_phone" property="bindingPhone" jdbcType="DOUBLE" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="is_vip" property="isVip" jdbcType="INTEGER" />
     <result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR" />
@@ -390,6 +399,7 @@
       user_id,
       user_account,
       user_name,
+      binding_phone,
       sum( amount ) AS 'amount',
       is_vip,
       cu.create_at create_at,
@@ -402,6 +412,7 @@
           user_name,
           superior_user,
           info_id,
+          binding_phone,
           cu.create_at,
           is_vip,
           cu.avatar_url
@@ -438,7 +449,7 @@
   <!--order by amount desc-->
   <!--</select>-->
   <select id="selectRecommender" resultType="com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO">
-    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName', is_vip as 'isVip', avatar_url as 'avatarUrl'
+    select user_id as 'userId', user_account as 'userAccount', user_name as 'userName', is_vip as 'isVip', avatar_url as 'avatarUrl', binding_phone as 'bindingPhone'
     from czb_user
     <where>
       user_id = (
