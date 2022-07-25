@@ -102,7 +102,7 @@ public class SystemConstants {
     /**
      * 导出小程序订单管理Excel的头部
      */
-    public static final String[] OREDER_MANAGE_EXCEL_HEAD = {"商店名","客户名称","客户电话","平台订单号","地址信息","商品名","商品数量","支付价格","支付状态","下单时间","快递公司","快递单号","快递状态"};
+    public static final String[] OREDER_MANAGE_EXCEL_HEAD = {"商店名","客户名称","客户电话","平台订单号","地址信息","商品名","商品数量","支付价格","支付状态","下单时间","快递公司","快递单号","快递状态","上级用户名","上级绑定电话","上上级用户名","上上级绑定电话"};
     /**
      * 导出自动充值记录Excel的头部
      */

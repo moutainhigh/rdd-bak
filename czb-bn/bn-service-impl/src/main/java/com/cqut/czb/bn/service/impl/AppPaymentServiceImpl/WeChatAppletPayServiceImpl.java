@@ -17,6 +17,7 @@ import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityAttr;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.service.appPaymentService.WeChatAppletPayService;
 import com.cqut.czb.bn.util.md5.MD5Util;
+import com.cqut.czb.bn.util.string.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -115,7 +116,11 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         //插入二维码
         weChatCommodityOrder.setQrcode("wx:shopId="+weChatCommodity.getShopId()+"&orderId="+orgId);
 
-        weChatCommodityOrder.setPhone(payInputDTO.getUserPhone());
+        String phone = payInputDTO.getUserPhone();
+        if (StringUtil.isNullOrEmpty(phone)){
+            phone = user.getBindingPhone();
+        }
+        weChatCommodityOrder.setPhone(phone);
         //来源
         weChatCommodityOrder.setCommoditySource("本地商家");
 

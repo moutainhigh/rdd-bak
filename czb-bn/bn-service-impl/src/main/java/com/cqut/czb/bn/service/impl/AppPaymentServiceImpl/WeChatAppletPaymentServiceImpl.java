@@ -110,11 +110,14 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         //限购
         int limitDay = weChatStockMapperExtra.getLimitNumByDay(payInputDTO.getCommodityId(),user.getUserId());
         int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
+        int limitMonth = weChatStockMapperExtra.getLimitNumByMonth(payInputDTO.getCommodityId(),user.getUserId());
         if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum())){
             return null;
         }else if (weChatCommodity.getLimitedType()== 2 && weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum())){
             return null;
         }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum()) || weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum()))){
+            return null;
+        }else if (weChatCommodity.getLimitedType()== 4 && weChatCommodity.getLimitedNum() < (limitMonth + payInputDTO.getCommodityNum())){
             return null;
         }
 
@@ -217,6 +220,7 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
 
         //限购
         int limitDay = weChatStockMapperExtra.getLimitNumByDay(payInputDTO.getCommodityId(),user.getUserId());
+        int limitMonth = weChatStockMapperExtra.getLimitNumByMonth(payInputDTO.getCommodityId(),user.getUserId());
         int limit = weChatStockMapperExtra.getLimitNum(payInputDTO.getCommodityId(),user.getUserId());
         String message = "";
         if (weChatCommodity.getLimitedType()== 1 && weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum())){
@@ -225,6 +229,8 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
             message = "超出商品限购总量";
         }else if (weChatCommodity.getLimitedType()== 3 && (weChatCommodity.getIdLimitedNum() < (limit + payInputDTO.getCommodityNum()) || weChatCommodity.getLimitedNum() < (limitDay + payInputDTO.getCommodityNum()))){
             message = "超出今日限购跟商品限购总量";
+        }else if (weChatCommodity.getLimitedType()== 4 && weChatCommodity.getLimitedNum() < (limitMonth + payInputDTO.getCommodityNum())){
+            message = "超出本月限购总量";
         }
         return message;
     }

@@ -543,6 +543,7 @@
     SELECT
     user_table.user_name as userName,
     user_account as userAccount,
+    user_table.user_id as userId,
     order_table.order_id as orderId,
     order_table.address_id as addressId,
     order_table.phone as phone,

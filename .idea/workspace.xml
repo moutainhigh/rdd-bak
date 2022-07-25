@@ -5,18 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="new gitlab --- lhn">
-      <change afterPath="$PROJECT_DIR$/czb-auth/src/main/java/com/cqut/czb/auth/util/AESUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/WeChatSmallProgram/WxTokenController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-auth/src/main/java/com/cqut/czb/auth/filter/JWTAuthenticationWCPFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-auth/src/main/java/com/cqut/czb/auth/filter/JWTAuthenticationWCPFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/UserMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/WxOilCodeMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/WxOilCodeMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/RecommenderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/RecommenderDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/TeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/myTeam/TeamDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/PersonalUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/PersonalUserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/UserInputDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/user/UserInputDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppHomePageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppHomePageServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/weChatSmallProgram/WeChatStockMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/weChatSmallProgram/WeChatStockMapperExtra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityOrderMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityOrderMapperExtra.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatStockMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatStockMapperExtra.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPayServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPayServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPaymentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/constants/SystemConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/constants/SystemConstants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,6 +154,17 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -473,6 +481,10 @@
       <workItem from="1658108645930" duration="7295000" />
       <workItem from="1658194528417" duration="3896000" />
       <workItem from="1658229520767" duration="1258000" />
+      <workItem from="1658375440665" duration="346000" />
+      <workItem from="1658636017839" duration="6972000" />
+      <workItem from="1658654504471" duration="840000" />
+      <workItem from="1658742516895" duration="1101000" />
     </task>
     <task id="LOCAL-00001" summary="水电返佣修改">
       <created>1640951174320</created>
@@ -495,7 +507,14 @@
       <option name="project" value="LOCAL" />
       <updated>1657885937312</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="new gitlab --- lhn">
+      <created>1658375505987</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1658375505987</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,6 +1,7 @@
 package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 
 import com.cqut.czb.bn.dao.mapper.AddressMapper;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
@@ -10,6 +11,7 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess;
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 
+import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -41,6 +43,8 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     AddressMapper addressMapper;
     @Autowired
     UserRoleMapperExtra userRoleMapperExtra;
+    @Autowired
+    UserMapperExtra userMapperExtra;
 
     @Override
     public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(WeChatCommodityOrderDTO input, PageDTO page) {
@@ -359,8 +363,8 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
                 }
             }
             if (i==wxOrderWithdrawDTOS.size()-1 && wxOrderWithdrawDTOS.size() > 1 && startRow != addRow) {
-                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
-                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 2, (short) 2));
+//                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 1, (short) 1));
+//                sheet.addMergedRegion(new CellRangeAddress(startRow1, addRow1, (short) 2, (short) 2));
                 row.createCell(count).setCellType(CellType.STRING);
                 row.createCell(count).setCellValue(wxOrderWithdrawDTOS.get(i).getUserName());
 
@@ -442,7 +446,22 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
             } else {
                 row.createCell(count++).setCellValue("暂无");
             }
+            String userId = wxOrderWithdrawDTOS.get(i).getUserId();
+            RecommenderDTO up1 = userMapperExtra.selectRecommender(userId);
+            if (up1 != null) {
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count++).setCellValue(up1.getUserName());
+                row.createCell(count).setCellType(CellType.STRING);
+                row.createCell(count++).setCellValue(up1.getBindingPhone());
 
+                RecommenderDTO up2 = userMapperExtra.selectRecommender(up1.getUserId());
+                if (up2 != null) {
+                    row.createCell(count).setCellType(CellType.STRING);
+                    row.createCell(count++).setCellValue(up2.getUserName());
+                    row.createCell(count).setCellType(CellType.STRING);
+                    row.createCell(count++).setCellValue(up2.getBindingPhone());
+                }
+            }
 
         }
         return workbook;
