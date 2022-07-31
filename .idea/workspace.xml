@@ -4,16 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="new gitlab --- lhn">
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/WeChatSmallProgram/WxTokenController.java" afterDir="false" />
+    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="限购">
+      <change afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatSmallProgram/WxTemplateMsg.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPNoticeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/weChatSmallProgram/WCPNoticeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/weChatSmallProgram/WeChatStockMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/weChatSmallProgram/WeChatStockMapperExtra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/WeChatSmallProgram/WxTokenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/WeChatSmallProgram/WxTokenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/weChatSmallProgram/WeChatCommodityOrderMapperExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/java/com/cqut/czb/bn/dao/mapper/weChatSmallProgram/WeChatCommodityOrderMapperExtra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityOrderMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityOrderMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatStockMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatStockMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPayServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPayServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPaymentServiceImpl/WeChatAppletPaymentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WCProgramConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WCProgramConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/constants/SystemConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/constants/SystemConstants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,8 +78,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -143,6 +143,9 @@
       <recent name="D:\WorkSpace\rdd\back\czb-bn\bn-dao\src\main\java\com\cqut\czb\bn\dao\mapper\electricityRecharge" />
       <recent name="D:\WorkSpace\rdd\back\czb-bn\bn-service-impl\src\main\java\com\cqut\czb\bn\service\impl\electricityRecharge" />
     </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.cqut.czb.bn.service.weChatSmallProgram" />
+    </key>
   </component>
   <component name="RunManager" selected="Gradle.back:czb-bn:bn-api [bootRepackage]">
     <configuration name="AESUtils" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -158,13 +161,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="WCPNoticeService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cqut.czb.bn.service.impl.WeChatSmallProgram.WCPNoticeService" />
+      <module name="czb.czb-bn.bn-service-impl.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cqut.czb.bn.service.impl.WeChatSmallProgram.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -242,6 +247,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.back:czb-bn:bn-api [bootRepackage]" />
+        <item itemvalue="应用程序.WCPNoticeService" />
         <item itemvalue="应用程序.AESUtils" />
         <item itemvalue="Gradle.back:czb-bn:bn-api [testClasses]" />
         <item itemvalue="Gradle.back:czb-bn:bn-api [build]" />
@@ -484,7 +490,9 @@
       <workItem from="1658375440665" duration="346000" />
       <workItem from="1658636017839" duration="6972000" />
       <workItem from="1658654504471" duration="840000" />
-      <workItem from="1658742516895" duration="1101000" />
+      <workItem from="1658742516895" duration="7108000" />
+      <workItem from="1659001654949" duration="8556000" />
+      <workItem from="1659236364868" duration="663000" />
     </task>
     <task id="LOCAL-00001" summary="水电返佣修改">
       <created>1640951174320</created>
@@ -514,7 +522,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658375505987</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="限购">
+      <created>1658743767259</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1658743767259</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -546,7 +561,8 @@
     <MESSAGE value="水电返佣修改" />
     <MESSAGE value="话费查询修改" />
     <MESSAGE value="new gitlab --- lhn" />
-    <option name="LAST_COMMIT_MESSAGE" value="new gitlab --- lhn" />
+    <MESSAGE value="限购" />
+    <option name="LAST_COMMIT_MESSAGE" value="限购" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

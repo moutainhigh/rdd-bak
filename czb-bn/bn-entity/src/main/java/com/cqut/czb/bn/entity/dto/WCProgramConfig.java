@@ -30,4 +30,10 @@ public class WCProgramConfig {
     // 微信商户号(重庆人多多科技有限公司)
     public static final String mchid = "1566253131";
 
+    // 微信公众号id
+    public static final String public_id = "wx0a4273c49edc6e4a";
+
+    // 订单处理消息模板
+    public static final String order_finish = "wKKS8Z8goyJy75YPeSAzwmfPMcLfmKSG3mMXN4nmjk8";
+
 }

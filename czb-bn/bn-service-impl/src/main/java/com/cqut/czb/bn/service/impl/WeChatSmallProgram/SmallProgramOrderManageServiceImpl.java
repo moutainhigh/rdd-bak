@@ -3,8 +3,11 @@ package com.cqut.czb.bn.service.impl.WeChatSmallProgram;
 import com.cqut.czb.bn.dao.mapper.AddressMapper;
 import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserRoleMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapper;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDTO;
 import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderDetail;
@@ -12,12 +15,16 @@ import com.cqut.czb.bn.entity.dto.WeChatSmallProgram.WeChatCommodityOrderProcess
 import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserRoleDTO;
 
 import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
+import com.cqut.czb.bn.service.weChatSmallProgram.WCPNoticeService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
+import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.*;
@@ -30,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.io.InputStream;
 import java.util.*;
 
@@ -40,11 +46,15 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     @Autowired
     WeChatCommodityOrderMapperExtra weChatCommodityOrderMapperExtra;
     @Autowired
+    WeChatCommodityOrderMapper weChatCommodityOrderMapper;
+    @Autowired
     AddressMapper addressMapper;
     @Autowired
     UserRoleMapperExtra userRoleMapperExtra;
     @Autowired
     UserMapperExtra userMapperExtra;
+    @Autowired
+    WCPNoticeService wcpNoticeService;
 
     @Override
     public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(WeChatCommodityOrderDTO input, PageDTO page) {
@@ -139,16 +149,24 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
             newOrderState.setOrderId(input.getOrderId());
             // 订单已完成
             newOrderState.setOrderState(2);
+            UserDTO user = weChatCommodityOrderMapperExtra.getOrderUserAccount(input.getOrderId());
+            System.out.println(user);
+            WeChatCommodityOrder order = weChatCommodityOrderMapper.selectByPrimaryKey(input.getOrderId());
+            if (user!=null && !StringUtil.isNullOrEmpty(user.getUserAccount()) && user.getUserType() == 2){
+                String[] values = new String[]{input.getOrderId(), user.getUserName(), order.getActualPrice()+"元", order.getCreateAt().toString()};
+                System.out.println(wcpNoticeService.pushOneUser(user.getUserAccount(), WCProgramConfig.order_finish, values, "订单处理通知", "您购买的产品已交付"));
+            }
             newOrderState.setHandler(input.getHandler());
             result = result && weChatCommodityOrderMapperExtra.dealOrderEl(newOrderState) > 0;
-        } else if (input.getTakeWay() == 2) { // 核销
+        } else { // 核销
             result = weChatCommodityOrderMapperExtra.dealOrderEl(input) > 0;
-        } else {
-            jsonResult.setData(false);
-            jsonResult.setCode(200);
-            jsonResult.setMessage("商品取件方式不明确！");
-            return jsonResult;
         }
+//        } else {
+//            jsonResult.setData(false);
+//            jsonResult.setCode(200);
+//            jsonResult.setMessage("商品取件方式不明确！");
+//            return jsonResult;
+//        }
         jsonResult.setData(result);
         jsonResult.setCode(200);
         jsonResult.setMessage("成功处理该订单");
@@ -482,6 +500,5 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
             return "";
         }
     }
-
 
 }

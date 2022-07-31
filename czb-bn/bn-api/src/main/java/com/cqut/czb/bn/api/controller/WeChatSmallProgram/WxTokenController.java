@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 @RestController
-@RequestMapping("/api/wxpublic")
+@RequestMapping("/wxpublic")
 public class WxTokenController {
     @RequestMapping("/verify_wx_token")
     public String verifyWXToken(HttpServletRequest request) throws Exception {
@@ -21,6 +21,8 @@ public class WxTokenController {
         }
         return null;
     }
+
+    private final static String AES_KEY = "Sk631hSbadYpCQXrkpsAZZEPuY9o1D9qG0eNIs8Pp7C";
 
     private final static String TOKEN = "rdd2019";
 

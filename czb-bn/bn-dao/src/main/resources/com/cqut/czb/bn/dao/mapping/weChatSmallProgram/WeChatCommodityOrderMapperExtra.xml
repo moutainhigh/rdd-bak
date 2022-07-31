@@ -608,4 +608,8 @@
     WHERE
         address_table.address_id = #{addressId,jdbcType=VARCHAR}
   </select>
+
+  <select id="getOrderUserAccount" parameterType="java.lang.String" resultType="com.cqut.czb.bn.entity.dto.user.UserDTO">
+    select u.user_account as userAccount, u.user_type as userType, u.user_name as userName from czb_user u right join czb_wechat_commodity_order c on u.user_id = c.user_id where c.order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
 </mapper>
