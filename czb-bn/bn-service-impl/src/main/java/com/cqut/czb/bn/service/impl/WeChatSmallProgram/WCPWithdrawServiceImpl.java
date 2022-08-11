@@ -60,7 +60,7 @@ public class WCPWithdrawServiceImpl implements WCPWithdrawService {
         incomeLog.setType(1);
         incomeLog.setWithdrawAmount(weChatTOWithdrawDTO.getMoney().doubleValue());
         incomeLog.setWithdrawTo(weChatTOWithdrawDTO.getPaymentAccount());
-        incomeLog.setWithdrawName(weChatTOWithdrawDTO.getPaymentName());
+        incomeLog.setWithdrawName(StringUtil.removeNonBmpUnicodes(weChatTOWithdrawDTO.getPaymentName()));
 
         // 更新用户已提现金额
         int updateBalance = weChatWithdrawMapperExtra.increaseWithdrawed(weChatTOWithdrawDTO.getInfoId(),weChatTOWithdrawDTO.getMoney().toString());

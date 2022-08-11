@@ -139,6 +139,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         // 设置处理时间与处理人
         input.setProcessingTime(new Date().toString());
         input.setHandler(userAccount);
+        System.out.println(input.getRemark());
 
         JSONResult<Boolean> jsonResult = new JSONResult<>();
         boolean result;
@@ -157,6 +158,7 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
                 System.out.println(wcpNoticeService.pushOneUser(user.getUserAccount(), WCProgramConfig.order_finish, values, "订单处理通知", "您购买的产品已交付"));
             }
             newOrderState.setHandler(input.getHandler());
+            newOrderState.setRemark(input.getRemark());
             result = result && weChatCommodityOrderMapperExtra.dealOrderEl(newOrderState) > 0;
         } else { // 核销
             result = weChatCommodityOrderMapperExtra.dealOrderEl(input) > 0;

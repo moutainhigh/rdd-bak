@@ -13,9 +13,16 @@ public class WeChatCommodityOrderProcess {
     private String processingTime; // 处理时间
     private String handler; // 处理人
     private Integer takeWay; // 商品取件方式
-
-
+    private String remark;
     private String contactNumber; // 客户电话(地址联系人电话)
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getContactNumber() {
         return contactNumber;

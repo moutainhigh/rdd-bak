@@ -119,4 +119,9 @@ public class StringUtil {
         return sb.toString();
     }
 
+
+    public static String removeNonBmpUnicodes(String str) {
+        return null == str ? null : str.replaceAll("[^\\u0000-\\uFFFF]", "");
+    }
+
 }

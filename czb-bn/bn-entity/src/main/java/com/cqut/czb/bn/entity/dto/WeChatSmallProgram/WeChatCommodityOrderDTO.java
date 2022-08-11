@@ -37,6 +37,15 @@ public class WeChatCommodityOrderDTO {
     private String city;
     private String area;
     private String detail;//订单地址信息
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getDeliveryNum() {
         return deliveryNum;
