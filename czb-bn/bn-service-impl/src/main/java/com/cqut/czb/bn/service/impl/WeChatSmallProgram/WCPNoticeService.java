@@ -20,41 +20,46 @@ public class WCPNoticeService implements com.cqut.czb.bn.service.weChatSmallProg
     /** * * @param access_token app的token * @param openid 用户openid * @param formId 表单ID * @param templateId 模板ID * @param keywords {与模板字段一一对应} * @return */
     @Override
     public String pushOneUser(String openid, String templateid, String[] values, String first, String remark) {
-        String access_token = getAccess_token();
+        try {
+            String access_token = getAccess_token();
 
-        String url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=" + access_token;
-        //拼接推送的模版
-        WxTemplateMsg msg = new WxTemplateMsg();
-        msg.setAppid(WCProgramConfig.public_id);
-        msg.setMiniprogram(new WxTemplateMsg.MiniProgram(WCProgramConfig.app_id, "pages/homePage/homePage"));
-        msg.setTemplate_id(templateid);
-        Map<String, WxTemplateMsg.MsgData> data = new HashMap<>();
-        if (first!=null){
-            data.put("first",new WxTemplateMsg.MsgData(first, null));
-        }
-        if (remark!=null){
-            data.put("remark",new WxTemplateMsg.MsgData(remark, null));
-        }
-        if(values.length>0){
-            for(int i=1;i<=values.length;i++){
-                WxTemplateMsg.MsgData keyword = new WxTemplateMsg.MsgData();
-                keyword.setValue(values[i-1]);
-                data.put("keyword"+i, keyword);
+            String url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=" + access_token;
+            //拼接推送的模版
+            WxTemplateMsg msg = new WxTemplateMsg();
+            msg.setAppid(WCProgramConfig.public_id);
+            msg.setMiniprogram(new WxTemplateMsg.MiniProgram(WCProgramConfig.app_id, "pages/homePage/homePage"));
+            msg.setTemplate_id(templateid);
+            Map<String, WxTemplateMsg.MsgData> data = new HashMap<>();
+            if (first!=null){
+                data.put("first",new WxTemplateMsg.MsgData(first, null));
             }
-            msg.setData(data);
-        }else{
+            if (remark!=null){
+                data.put("remark",new WxTemplateMsg.MsgData(remark, null));
+            }
+            if(values.length>0){
+                for(int i=1;i<=values.length;i++){
+                    WxTemplateMsg.MsgData keyword = new WxTemplateMsg.MsgData();
+                    keyword.setValue(values[i-1]);
+                    data.put("keyword"+i, keyword);
+                }
+                msg.setData(data);
+            }else{
+                return null;
+            }
+            Map<String, Object> postData = new HashMap<>();
+            postData.put("access_token", access_token);
+            postData.put("touser", openid);
+            postData.put("mp_template_msg", msg);
+            if(restTemplate==null){
+                restTemplate = new RestTemplate();
+            }
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, postData, String.class);
+            System.out.println("小程序推送结果=" + responseEntity.getBody());
+            return responseEntity.getBody();
+        } catch (Exception e){
             return null;
         }
-        Map<String, Object> postData = new HashMap<>();
-        postData.put("access_token", access_token);
-        postData.put("touser", openid);
-        postData.put("mp_template_msg", msg);
-        if(restTemplate==null){
-            restTemplate = new RestTemplate();
-        }
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, postData, String.class);
-        System.out.println("小程序推送结果=" + responseEntity.getBody());
-        return responseEntity.getBody();
+
     }
     /* * 获取access_token * appid和appsecret到小程序后台获取，当然也可以让小程序开发人员给你传过来 * */
     @Override
@@ -71,10 +76,10 @@ public class WCPNoticeService implements com.cqut.czb.bn.service.weChatSmallProg
         JSONObject myJson = JSONObject.parseObject(json);
         return myJson.get("access_token").toString();
     }
-//    public static void main(String[] args) {
-//        System.out.println(new WCPNoticeService().getAccess_token());
-//        WCPNoticeService weChatUtil = new WCPNoticeService();
-//        String[] values ={ "测试","测试","测试","2019-5-8 10:10:10"};
-//        System.out.println(weChatUtil.pushOneUser("otVKI5DebDtXNXtxo-nvoqUHC_9o", "wKKS8Z8goyJy75YPeSAzwmfPMcLfmKSG3mMXN4nmjk8", values, "订单处理通知", "您购买的产品已交付"));
-//    }
+    public static void main(String[] args) {
+        System.out.println(new WCPNoticeService().getAccess_token());
+        WCPNoticeService weChatUtil = new WCPNoticeService();
+        String[] values ={ "测试","测试"};
+        System.out.println(weChatUtil.pushOneUser("otVKI5DebDtXNXtxo-nvoqUHC_9o", "Z7U-IVM5XyO8Kfz759sxPmRC6lotrQp93Dt0pODHTUM", values, "订单处理通知", null));
+    }
 }

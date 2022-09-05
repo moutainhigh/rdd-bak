@@ -33,6 +33,26 @@ public class UserIncomeInfoDTO {
 
     private Date updateAt;
 
+    private Double moreIncome;
+
+    private Double moreIncome2;
+
+    public Double getMoreIncome2() {
+        return moreIncome2;
+    }
+
+    public void setMoreIncome2(Double moreIncome2) {
+        this.moreIncome2 = moreIncome2;
+    }
+
+    public Double getMoreIncome() {
+        return moreIncome;
+    }
+
+    public void setMoreIncome(Double moreIncome) {
+        this.moreIncome = moreIncome;
+    }
+
     public Double getWithdrawed() {
         return withdrawed;
     }

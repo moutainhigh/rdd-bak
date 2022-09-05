@@ -85,10 +85,10 @@ public class WeChatAppletPaymentServiceImpl implements WeChatAppletPaymentServic
         if(weChatCommodity.getTakeWay() != 3){
             return weChatAppletPayService.WeChatAppletBuyCommodity(user,payInputDTO);
         }
-        //一次最多购买2条
-        if (payInputDTO.getCommodityNum() > 2){
-            return null;
-        }
+//        //一次最多购买2条
+//        if (payInputDTO.getCommodityNum() > 2){
+//            return null;
+//        }
 
         int noPay = weChatStockMapperExtra.selectStockStateNotPay(user.getUserId());
         if (noPay > 0){

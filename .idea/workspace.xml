@@ -4,18 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="消息提示">
+    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="小程序">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/AppPersonalCenterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/AppPersonalCenterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/WeChatSmallProgram/WCPCommodityInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/WeChatSmallProgram/WCPCommodityInfoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityOrderMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/weChatSmallProgram/WeChatCommodityOrderMapperExtra.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatCommodity/WCPCommodityOutputDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatCommodity/WCPCommodityOutputDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatCommodity/WeChatCommodityDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatCommodity/WeChatCommodityDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatSmallProgram/WeChatCommodityOrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatSmallProgram/WeChatCommodityOrderDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatSmallProgram/WeChatCommodityOrderProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/WeChatSmallProgram/WeChatCommodityOrderProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPUserInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPUserInfoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPWithdrawServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPWithdrawServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/string/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-util/src/main/java/com/cqut/czb/bn/util/string/StringUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/appPersonalCenter/UserIncomeInfoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/appPersonalCenter/UserIncomeInfoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/wechatAppletCommodity/WxCommodityDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/wechatAppletCommodity/WxCommodityDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPersonalCenterImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/AppPersonalCenterImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPNoticeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/WCPNoticeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/BusinessProcessServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/BusinessProcessServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/FanYongServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/FanYongServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/WeChatPayBackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/WeChatPayBackServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/AppPersonalCenterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/AppPersonalCenterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/PaymentProcess/FanYongService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/PaymentProcess/FanYongService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +111,7 @@
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.35287356" />
-    <property name="settings.editor.selected.configurable" value="Console" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -130,6 +134,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.cqut.czb.auth.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WCPCommodityInfoController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cqut.czb.bn.api.controller.WeChatSmallProgram.WCPCommodityInfoController" />
+      <module name="czb.czb-bn.bn-api.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cqut.czb.bn.api.controller.WeChatSmallProgram.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -192,27 +209,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="back:czb-bn:bn-api [testClasses]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/czb-bn/bn-api" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="testClasses" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="StackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="czb.czb-bn.bn-api.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.cqut.czb.bn.api.StackApplication" />
@@ -223,10 +219,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.back:czb-bn:bn-api [bootRepackage]" />
+        <item itemvalue="应用程序.WCPCommodityInfoController" />
+        <item itemvalue="Gradle.back:czb-bn:bn-api [build]" />
         <item itemvalue="应用程序.WCPNoticeService" />
         <item itemvalue="应用程序.AESUtils" />
-        <item itemvalue="Gradle.back:czb-bn:bn-api [testClasses]" />
-        <item itemvalue="Gradle.back:czb-bn:bn-api [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -475,7 +471,18 @@
       <workItem from="1659620260924" duration="1879000" />
       <workItem from="1659672711360" duration="598000" />
       <workItem from="1659694376568" duration="2174000" />
-      <workItem from="1660207427985" duration="828000" />
+      <workItem from="1660207427985" duration="2055000" />
+      <workItem from="1660215578136" duration="2860000" />
+      <workItem from="1660446015959" duration="171000" />
+      <workItem from="1660446764719" duration="2403000" />
+      <workItem from="1660467995472" duration="605000" />
+      <workItem from="1660551421041" duration="8415000" />
+      <workItem from="1660743988087" duration="10506000" />
+      <workItem from="1660880123395" duration="6046000" />
+      <workItem from="1661080940514" duration="1326000" />
+      <workItem from="1661143607962" duration="1265000" />
+      <workItem from="1661409290112" duration="2621000" />
+      <workItem from="1662360516543" duration="23000" />
     </task>
     <task id="LOCAL-00001" summary="水电返佣修改">
       <created>1640951174320</created>
@@ -519,7 +526,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659237148277</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="小程序">
+      <created>1660208320138</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1660208320139</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -553,7 +567,8 @@
     <MESSAGE value="new gitlab --- lhn" />
     <MESSAGE value="限购" />
     <MESSAGE value="消息提示" />
-    <option name="LAST_COMMIT_MESSAGE" value="消息提示" />
+    <MESSAGE value="小程序" />
+    <option name="LAST_COMMIT_MESSAGE" value="小程序" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

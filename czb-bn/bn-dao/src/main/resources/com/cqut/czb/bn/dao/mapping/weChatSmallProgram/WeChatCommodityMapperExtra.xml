@@ -33,6 +33,7 @@
         <result column="limited_num" property="limitedNum" jdbcType="INTEGER" />
         <result column="id_limited_num" property="idLimitedNum" jdbcType="INTEGER" />
         <result column="limited_type" property="limitedType" jdbcType="INTEGER" />
+        <result column="jumpto" property="jumpto" jdbcType="VARCHAR" />
         <collection property="imgs" select="selectImgs" column="commodity_img_id"></collection>
         <collection property="posterImg" select="selectPosterImg" column="commodity_img_id"></collection>
     </resultMap>
@@ -115,7 +116,7 @@
         czb_wechat_commodity.end_time_business, commodity_source, commodity_num, is_sale, take_way, czb_shop.shop_name,
         czb_wechat_commodity.shop_phone, czb_wechat_commodity.shop_content, czb_wechat_commodity.shop_address, czb_wechat_commodity.longitude, czb_wechat_commodity.latitude, is_have_shop, show_place,
         show_order, czb_wechat_commodity.create_at, czb_wechat_commodity.update_at, czb_wechat_commodity.fy_money fyMoney, czb_wechat_commodity.commodity_introduce commodityIntroduce, area,sales_volume salesVolume,
-        czb_wechat_commodity.limited_num,czb_wechat_commodity.id_limited_num,czb_wechat_commodity.limited_type
+        czb_wechat_commodity.limited_num,czb_wechat_commodity.id_limited_num,czb_wechat_commodity.limited_type,czb_wechat_commodity.jumpto
         from czb_wechat_commodity
         LEFT JOIN czb_shop ON czb_wechat_commodity.shop_id = czb_shop.shop_id
         <where>
@@ -202,7 +203,7 @@
         shop_phone, shop_content, shop_address,
         longitude, latitude, is_have_shop,
         show_place, show_order, create_at,
-        update_at)
+        update_at, jumpto)
         values (#{commodityId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{commodityTitle,jdbcType=VARCHAR},
         #{commodityInfo,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, #{commodityImgId,jdbcType=VARCHAR},
         #{costPrice,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, #{salePrice,jdbcType=DOUBLE},
@@ -212,7 +213,7 @@
         #{shopPhone,jdbcType=VARCHAR}, #{shopContent,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR},
         #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{isHaveShop,jdbcType=INTEGER},
         #{showPlace,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP},
-        #{updateAt,jdbcType=TIMESTAMP})
+        #{updateAt,jdbcType=TIMESTAMP}, #{jumpto,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" >
         insert into czb_wechat_commodity
@@ -298,6 +299,9 @@
             <if test="updateAt != null" >
                 update_at,
             </if>
+            <if test="jumpto != null">
+                jumpto,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -380,6 +384,9 @@
             </if>
             <if test="updateAt != null" >
                 #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="jumpto != null">
+                #{jumpto,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
@@ -467,6 +474,9 @@
             <if test="fyMoney != null" >
                 fy_money = #{fyMoney,jdbcType=VARCHAR},
             </if>
+            <if test="jump != null">
+                jumpto = #{jumpto,jdbcType=VARCHAR},
+            </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>
@@ -497,7 +507,8 @@
         show_place = #{showPlace,jdbcType=VARCHAR},
         show_order = #{showOrder,jdbcType=INTEGER},
         create_at = #{createAt,jdbcType=TIMESTAMP},
-        update_at = #{updateAt,jdbcType=TIMESTAMP}
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+        jumpto = #{jumpto,jdbcType=VARCHAR}
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>
 
@@ -522,6 +533,7 @@
         <result column="commodityImgId" property="commodityImgId" jdbcType="VARCHAR" />
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
         <result column="salesVolume" property="salesVolume" jdbcType="INTEGER" />
+        <result column="jumpto" property="jumpto" jdbcType="VARCHAR" />
         <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
         <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
         <collection property="attrs" column="commodityId" javaType="list" select="selectCommodityAttrs"></collection>
@@ -549,6 +561,7 @@
         <result column="shopPhone" property="shopPhone" jdbcType="VARCHAR" />
         <result column="salesVolume" property="salesVolume" jdbcType="INTEGER" />
         <result column="limitedNum" property="limitedNum" jdbcType="INTEGER" />
+        <result column="jumpto" property="jumpto" jdbcType="VARCHAR" />
         <collection property="commodityImg" column="commodityImgId" javaType="list" select="selectCommodityImgList"/>
         <collection property="posterImg" column="commodityImgId" javaType="String" select="selectCommodityPosterImg"/>
         <collection property="attrs" column="commodityId" javaType="list" select="selectCommodityAttrs"></collection>
@@ -575,7 +588,8 @@
         czb_wechat_commodity.starting_time_business startingTimeBusiness,
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
-        czb_wechat_commodity.sales_volume salesVolume
+        czb_wechat_commodity.sales_volume salesVolume,
+        czb_wechat_commodity.jumpto
         FROM
         czb_wechat_commodity czb_wechat_commodity
         LEFT JOIN czb_wechat_commodity_order ON czb_wechat_commodity.commodity_id = czb_wechat_commodity_order.commodity_id
@@ -631,6 +645,7 @@
         czb_wechat_commodity.end_time_business endTimeBusiness,
         czb_wechat_commodity.commodity_introduce commodityIntroduce,
         czb_wechat_commodity.sales_volume salesVolume,
+        czb_wechat_commodity.jumpto,
         ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN((#{latitude}  * PI() / 180 - czb_shop.latitude * PI() / 180) / 2),2) +
         COS(#{latitude} * PI() / 180) * COS(czb_shop.latitude * PI() / 180) * POW(SIN(( #{longitude} * PI() / 180 - czb_shop.longitude * PI() / 180) / 2),2))) * 1000) AS distance
         FROM
@@ -645,23 +660,26 @@
         <if test = "content != null and content != '' and content != '全部'">
             AND czb_wechat_commodity.commmodity_type_id IN ( SELECT category_id FROM czb_category WHERE content = #{content} )
         </if>
+        <if test = "showPlace != null and showPlace != '' ">
+            AND show_place = #{showPlace, jdbcType = VARCHAR}
+        </if>
         <if test="commodityTitle != null and commodityTitle != ''">
             AND commodity_title LIKE #{commodityTitle}
         </if>
         <if test="salesVolume == 1">
-            ORDER BY  czb_wechat_commodity.sales_volume DESC
+            ORDER BY show_order, czb_wechat_commodity.sales_volume DESC
         </if>
         <if test="salesVolume == 2">
-            ORDER BY  czb_wechat_commodity.sales_volume ASC
+            ORDER BY show_order, czb_wechat_commodity.sales_volume ASC
         </if>
         <if test="salePrice == 1">
-            ORDER BY  czb_wechat_commodity.sale_price DESC
+            ORDER BY show_order, czb_wechat_commodity.sale_price DESC
         </if>
         <if test="salePrice == 2">
-            ORDER BY  czb_wechat_commodity.sale_price ASC
+            ORDER BY show_order, czb_wechat_commodity.sale_price ASC
         </if>
         <if test="distance == 1">
-            ORDER BY distance ASC
+            ORDER BY show_order, distance ASC
         </if>
         LIMIT #{page}, #{pageSize}
     </select>
@@ -931,6 +949,9 @@
             <if test="limitedType != null" >
                 limited_type,
             </if>
+            <if test="jumpto != null">
+                jumpto,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="commodityId != null" >
@@ -1034,6 +1055,9 @@
             </if>
             <if test="limitedType != null" >
                 #{limitedType},
+            </if>
+            <if test="jumpto != null">
+                #{jumpto,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
@@ -1211,6 +1235,9 @@
             </if>
             <if test="limitedType != null" >
                 limited_type = #{limitedType,jdbcType=INTEGER},
+            </if>
+            <if test="jumpto != null">
+                jumpto = #{jumpto,jdbcType=VARCHAR},
             </if>
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}

@@ -28,7 +28,7 @@ public interface FanYongService {
      * 小程序返佣
      * 返两级vip
      */
-    boolean AppletBeginFanYong(String userId, double money,String orgId,double fyMoney);
+    boolean AppletBeginFanYong(String userId, double money,String orgId,double fyMoney,String commodityName);
 
     /**
      * 小程序返佣

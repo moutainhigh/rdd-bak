@@ -28,6 +28,7 @@ public interface AppPersonalCenterService {
      */
     UserIncomeInfoDTO selectUserIncomeInfo(String userId);
 
+    String getMoreIncomeHelp();
     /**
      * 获取用户购买的国通卡
      *

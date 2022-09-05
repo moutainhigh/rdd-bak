@@ -5,6 +5,7 @@ import com.cqut.czb.bn.entity.dto.appPersonalCenter.UserIncomeInfoDTO;
 import com.cqut.czb.bn.entity.dto.vehicleService.IssueServerCouponDTO;
 import com.cqut.czb.bn.entity.entity.*;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
+import com.cqut.czb.bn.service.impl.WeChatSmallProgram.WCPNoticeService;
 import com.cqut.czb.bn.service.vehicleService.CouponManageService;
 import com.cqut.czb.bn.util.config.partnerVipIncomeConfig.PartnerVipIncomeConfig;
 import com.cqut.czb.bn.util.string.StringUtil;
@@ -46,6 +47,9 @@ public class FanYongServiceImpl implements FanYongService {
 
     @Autowired
     private PetrolSalesRecordsMapper petrolSalesRecordsMapper;
+
+    @Autowired
+    private WCPNoticeService wcpNoticeService;
 
     /**
      * 总体控制
@@ -292,6 +296,7 @@ public class FanYongServiceImpl implements FanYongService {
             System.out.println("amount为0");
             return true;
         }
+        sendWCPNotice(commissionSourceUser, commissionGotUser);
         if (userIncomeInfo == null) {//空则插入；不为空则修改
             //用户收益信息表——新增
             int type = 0;//0为反用
@@ -328,8 +333,16 @@ public class FanYongServiceImpl implements FanYongService {
         }
     }
 
+    private void sendWCPNotice(String commissionSourceUser, String commissionGotUser){
+        User from = userMapper.selectByPrimaryKey(commissionSourceUser);
+        User to = userMapper.selectByPrimaryKey(commissionGotUser);
+        String[] values = new String[]{from.getUserName(), from.getBindingPhone()};
+        String first = "您的好友"+from.getUserName()+"已下单，你有收益入账啦！ 请进入小程序查看";
+        wcpNoticeService.pushOneUser(to.getUserAccount(), "Z7U-IVM5XyO8Kfz759sxPmRC6lotrQp93Dt0pODHTUM",values,first,null);
+    }
+
     @Override
-    public boolean AppletBeginFanYong(String userId, double money, String orgId,double fyMoney) {
+    public boolean AppletBeginFanYong(String userId, double money, String orgId,double fyMoney,String commodityName) {
         int count=1;//标识第几级
         //查出自己的信息
         User userSelf = userMapper.selectByPrimaryKey(userId);
@@ -351,6 +364,9 @@ public class FanYongServiceImpl implements FanYongService {
         userId=userSelf.getSuperiorUser();
         String firstVipUserId="";
         UserIncomeInfo oldUserIncomeInfoUp1=null;
+        if (commodityName == null){
+            commodityName = "微信小程序购物返佣";
+        }
         while (true) {
             User user = userMapper.selectByPrimaryKey(userId);
             if (user != null) {
@@ -361,9 +377,9 @@ public class FanYongServiceImpl implements FanYongService {
                     if(count==1){
                         firstVipUserId=user.getUserId();
                         oldUserIncomeInfoUp1=oldUserIncomeInfoUp;
-                        changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney1, orgId);
+                        changeUserIncomeInfo(commodityName, userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney1, orgId);
                     }else if(count==2){
-                        changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney2, orgId);
+                        changeUserIncomeInfo(commodityName, userSelf.getUserId(), user.getUserId(), 1, oldUserIncomeInfoUp, fyMoney, 0, user.getUserId(), count,fyMoney2, orgId);
                     }
                     userId=user.getSuperiorUser();
                     count++;
@@ -376,7 +392,7 @@ public class FanYongServiceImpl implements FanYongService {
                         continue;
                     }else if(user.getSuperiorUser()==null){
                         if(count==2){
-                            changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
+                            changeUserIncomeInfo(commodityName, userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
                         }
                         return true;
                     }
@@ -386,7 +402,7 @@ public class FanYongServiceImpl implements FanYongService {
                 }
             } else {
                 if(count==2){
-                    changeUserIncomeInfo("小程序购物返佣", userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
+                    changeUserIncomeInfo(commodityName, userSelf.getUserId(), firstVipUserId, 1, oldUserIncomeInfoUp1, fyMoney, 0, firstVipUserId, count,fyMoney2, orgId);
                 }
                 return true;
             }

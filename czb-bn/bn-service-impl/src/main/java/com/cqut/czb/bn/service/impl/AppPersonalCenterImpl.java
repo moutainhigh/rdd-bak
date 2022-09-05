@@ -35,6 +35,9 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
     @Autowired
+    DictMapperExtra dictMapperExtra;
+
+    @Autowired
     AppRouterMapperExtra appRouterMapperExtra;
 
     @Autowired
@@ -72,7 +75,43 @@ public class AppPersonalCenterImpl implements AppPersonalCenterService {
             userIncomeInfoDTO.setBlance(balance);
             userIncomeInfoDTO.setTotalIncome(totalIncome);
         }
+
+        try {
+            Double teamIncome = this.getTeamIncome(userId);
+            userIncomeInfoDTO.setMoreIncome(teamIncome);
+            Double teamIncome2 = this.getTeamIncome2(userId);
+            userIncomeInfoDTO.setMoreIncome2(teamIncome2);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         return userIncomeInfoDTO;
+    }
+
+    @Override
+    public String getMoreIncomeHelp() {
+        Dict info = dictMapperExtra.selectDictByName("moreIncomeHelp");
+        return info.getContent();
+    }
+
+    private Double getTeamIncome(String userId) {
+        int num = userMapperExtra.selectTeamTotal(userId);
+        Dict teamIncomeOnePerson = dictMapperExtra.selectDictByName("teamIncomeOnePerson");
+        if (teamIncomeOnePerson!=null){
+            return num * Double.parseDouble(teamIncomeOnePerson.getContent());
+        } else {
+            return 0.0;
+        }
+    }
+
+    private Double getTeamIncome2(String userId) {
+        int num = userMapperExtra.selectTeamTotal(userId);
+        Dict teamIncomeOnePerson = dictMapperExtra.selectDictByName("teamIncomeOnePerson2");
+        if (teamIncomeOnePerson!=null){
+            return num * Double.parseDouble(teamIncomeOnePerson.getContent());
+        } else {
+            return 0.0;
+        }
     }
 
     @Override

@@ -79,6 +79,16 @@ public class WxCommodityDTO {
 
     private Double distance;
 
+    private String jumpto;
+
+    public String getJumpto() {
+        return jumpto;
+    }
+
+    public void setJumpto(String jumpto) {
+        this.jumpto = jumpto;
+    }
+
     public int getLimitedType() {
         return limitedType;
     }

@@ -53,6 +53,16 @@ public class WeChatCommodityDTO {
 
     private String area;
 
+    private String jumpto;
+
+    public String getJumpto() {
+        return jumpto;
+    }
+
+    public void setJumpto(String jumpto) {
+        this.jumpto = jumpto;
+    }
+
     private int limitedNum;
 
     private int idLimitedNum;

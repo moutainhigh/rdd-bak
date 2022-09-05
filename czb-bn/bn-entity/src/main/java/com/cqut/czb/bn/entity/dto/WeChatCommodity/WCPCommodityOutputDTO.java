@@ -61,6 +61,26 @@ public class WCPCommodityOutputDTO {
 
     private int pageSize;
 
+    private String jumpto;
+
+    private String showPlace;
+
+    public String getShowPlace() {
+        return showPlace;
+    }
+
+    public void setShowPlace(String showPlace) {
+        this.showPlace = showPlace;
+    }
+
+    public String getJumpto() {
+        return jumpto;
+    }
+
+    public void setJumpto(String jumpto) {
+        this.jumpto = jumpto;
+    }
+
     public int getPage() {
         return page;
     }

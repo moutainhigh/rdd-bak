@@ -189,6 +189,12 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
         //判断是否邮寄
         WeChatCommodityOrder order1=weChatCommodityOrderMapper.selectByPrimaryKey(orgId);
         WeChatCommodity weChatCommodity = weChatCommodityMapper.selectByPrimaryKey(order1.getCommodityId());
+        String title="";
+        if(weChatCommodity.getCommodityTitle().length()>10){
+            title=weChatCommodity.getCommodityTitle().substring(0,8)+"…";
+        }else {
+            title=weChatCommodity.getCommodityTitle();
+        }
         if(order1.getCommodityType()==1){
             WeChatGoodsDeliveryRecords records=new WeChatGoodsDeliveryRecords();
             records.setRecordId(StringUtil.createId());
@@ -201,12 +207,6 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
             // 发送短信
             //查出商家电话
             Shop shop=shopMapper.selectByPrimaryKey(weChatCommodity.getShopId());
-            String title="";
-            if(weChatCommodity.getCommodityTitle().length()>20){
-                title=weChatCommodity.getCommodityTitle().substring(0,15)+"…";
-            }else {
-                title=weChatCommodity.getCommodityTitle();
-            }
             PhoneCode.sendAppletShopMessage(order1.getPhone(),title,order1.getCommodityNum(),order1.getElectronicCode(),shop.getShopPhone());
         }
 
@@ -228,7 +228,7 @@ public class WeChatPayBackServiceImpl implements WeChatPayBackService {
         //查询是否为首次消费
         dataProcessService.isHaveConsumption(ownerId);
 
-        Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney());
+        Boolean isSucceed=fanYongService.AppletBeginFanYong(ownerId,money,orgId,order1.getFyMoney(),title);
         System.out.println("返佣"+isSucceed);
 
         //businessType对应0为油卡购买，1为油卡充值,2为充值vip，3为购买服务，4为洗车服务，5为点餐,6小程序购物

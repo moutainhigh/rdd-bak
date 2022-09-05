@@ -154,4 +154,9 @@ public class AppPersonalCenterController {
         return new JSONResult(appPersonalCenterService.selectUserIncomeInfo(user.getUserId()));
     }
 
+    @RequestMapping(value = "/getMoreIncomeHelp", method = RequestMethod.GET)
+    public JSONResult getMoreIncomeHelp(){
+        return new JSONResult(appPersonalCenterService.getMoreIncomeHelp());
+    }
+
 }
