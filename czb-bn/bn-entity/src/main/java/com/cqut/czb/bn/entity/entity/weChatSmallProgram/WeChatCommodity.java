@@ -75,6 +75,16 @@ public class WeChatCommodity {
 
     private String commodityIntroduce;
 
+    private Double pintuanTarget;
+
+    public Double getPintuanTarget() {
+        return pintuanTarget;
+    }
+
+    public void setPintuanTarget(Double pintuanTarget) {
+        this.pintuanTarget = pintuanTarget;
+    }
+
     public String getCommodityId() {
         return commodityId;
     }

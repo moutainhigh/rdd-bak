@@ -160,7 +160,19 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         weChatCommodityOrder.setCommmodityTypeId(weChatCommodity.getCommmodityTypeId());
         weChatCommodityOrder.setCreateAt(new Date());
         weChatCommodityOrder.setCommodityNum(Integer.valueOf(payInputDTO.getCommodityNum()));
-        return weChatCommodityOrderMapper.insertSelective(weChatCommodityOrder)>0;
+
+        boolean res = weChatCommodityOrderMapper.insertSelective(weChatCommodityOrder)>0;
+
+        if (res){
+            try {
+                dealPintuanOrders(weChatCommodity);
+            } catch (Exception e){
+                System.out.println("处理拼单失败");
+                e.printStackTrace();
+            }
+        }
+
+        return res;
     }
 
     public WeChatBackDTO getBackObject(JSONObject jsonObject){
@@ -208,6 +220,30 @@ public class WeChatAppletPayServiceImpl implements WeChatAppletPayService {
         map.put("money",money);
         map.put("fyMoney",fyMoney);
         return map;
+    }
+
+
+    private void dealPintuanOrders(WeChatCommodity commodityInfo){
+        if (commodityInfo.getPintuanTarget() == null){
+            return;
+        }
+        List<WeChatCommodityOrder> orders = weChatCommodityOrderMapper.selectByCommodityId(commodityInfo.getCommodityId(), 1);
+        Double total = 0.0;
+        List<WeChatCommodityOrder> ready = new ArrayList<>();
+        for (WeChatCommodityOrder o : orders) {
+            if (o.getCostPrice() != null){
+                total += o.getCostPrice();
+            }
+            ready.add(o);
+            if (total > commodityInfo.getPintuanTarget()){
+                for (WeChatCommodityOrder ro : ready) {
+                    // 已完成拼单
+                    ro.setOrderState(5);
+                }
+                ready.clear();
+            }
+        }
+
     }
 
 }

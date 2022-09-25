@@ -37,6 +37,7 @@
     <result column="limited_num" property="limitedNum" jdbcType="INTEGER" />
     <result column="id_limited_num" property="idLimitedNum" jdbcType="INTEGER" />
     <result column="limited_type" property="limitedType" jdbcType="INTEGER" />
+    <result column="pintuan_target" property="pintuanTarget" jdbcType="DOUBLE" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity" extends="BaseResultMap" >
     <result column="commodity_introduce" property="commodityIntroduce" jdbcType="LONGVARCHAR" />

@@ -2,17 +2,20 @@ package com.cqut.czb.bn.service.impl;
 
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityMapperExtra;
+import com.cqut.czb.bn.dao.mapper.weChatSmallProgram.WeChatCommodityOrderMapper;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityInputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WCPCommodityOutputDTO;
 import com.cqut.czb.bn.entity.dto.WeChatCommodity.WeChatCommodityDTO;
 import com.cqut.czb.bn.entity.dto.food.AppOrderPage.DistanceMeter;
 import com.cqut.czb.bn.entity.entity.Dict;
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.WCPCommodityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +28,9 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
 
     @Autowired
     WeChatCommodityMapperExtra weChatCommodityMapperExtra;
+
+    @Autowired
+    WeChatCommodityOrderMapper weChatCommodityOrderMapper;
 
     @Autowired
     DictMapperExtra dictMapperExtra;
@@ -102,6 +108,31 @@ public class WCPCommodityInfoServiceIpml implements WCPCommodityInfoService {
             wcpCommodityOutputDTO.setFyMoney((int)bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
         return wcpCommodityOutputDTO;
+    }
+
+    @Override
+    public Double getCurrentPintuanMoney(String commodityId) {
+        WeChatCommodityDTO wcpCommodityOutputDTO = weChatCommodityMapperExtra.selectCommodityInfo(commodityId);
+        if (wcpCommodityOutputDTO == null || wcpCommodityOutputDTO.getPintuanTarget() == null){
+            return null;
+        }
+        List<WeChatCommodityOrder> orders = weChatCommodityOrderMapper.selectByCommodityId(commodityId, 1);
+        Double total = 0.0;
+        List<WeChatCommodityOrder> ready = new ArrayList<>();
+        for (WeChatCommodityOrder o : orders) {
+            if (o.getCostPrice() != null){
+                total += o.getCostPrice();
+            }
+            ready.add(o);
+            if (total > wcpCommodityOutputDTO.getPintuanTarget()){
+                for (WeChatCommodityOrder ro : ready) {
+                    // 已完成拼单
+                    ro.setOrderState(5);
+                }
+                ready.clear();
+            }
+        }
+        return total;
     }
 
     @Override

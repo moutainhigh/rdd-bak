@@ -65,6 +65,16 @@ public class WCPCommodityOutputDTO {
 
     private String showPlace;
 
+    private Double pintuanTarget;
+
+    public Double getPintuanTarget() {
+        return pintuanTarget;
+    }
+
+    public void setPintuanTarget(Double pintuanTarget) {
+        this.pintuanTarget = pintuanTarget;
+    }
+
     public String getShowPlace() {
         return showPlace;
     }

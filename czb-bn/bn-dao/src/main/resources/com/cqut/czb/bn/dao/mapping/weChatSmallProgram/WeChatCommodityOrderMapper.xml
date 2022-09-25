@@ -44,6 +44,17 @@
     from czb_wechat_commodity_order
     where order_id = #{orderId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectByCommodityId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from czb_wechat_commodity_order
+    where commodity_id = #{commodityId,jdbcType=VARCHAR}
+    <if test = "state != null">
+      AND order_state = #{state}
+    </if>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from czb_wechat_commodity_order
     where order_id = #{orderId,jdbcType=VARCHAR}

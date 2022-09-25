@@ -17,6 +17,8 @@ public interface WCPCommodityInfoService {
 
     WCPCommodityOutputDTO getOneCommodityById(WCPCommodityInputDTO wcpCommodityInputDTO);
 
+    Double getCurrentPintuanMoney(String commodityId);
+
     List<String> getAreas();
 
     List<WCPCommodityOutputDTO> getClassification(WCPCommodityOutputDTO wcpCommodityOutputDTO);

@@ -79,6 +79,16 @@ public class WxCommodityDTO {
 
     private Double distance;
 
+    private Double pintuanTarget;
+
+    public Double getPintuanTarget() {
+        return pintuanTarget;
+    }
+
+    public void setPintuanTarget(Double pintuanTarget) {
+        this.pintuanTarget = pintuanTarget;
+    }
+
     private String jumpto;
 
     public String getJumpto() {

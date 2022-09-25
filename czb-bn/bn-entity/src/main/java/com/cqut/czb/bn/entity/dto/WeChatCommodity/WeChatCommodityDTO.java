@@ -63,6 +63,16 @@ public class WeChatCommodityDTO {
         this.jumpto = jumpto;
     }
 
+    private Double pintuanTarget;
+
+    public Double getPintuanTarget() {
+        return pintuanTarget;
+    }
+
+    public void setPintuanTarget(Double pintuanTarget) {
+        this.pintuanTarget = pintuanTarget;
+    }
+
     private int limitedNum;
 
     private int idLimitedNum;
