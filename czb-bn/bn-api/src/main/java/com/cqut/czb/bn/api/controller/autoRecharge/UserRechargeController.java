@@ -95,7 +95,7 @@ public class UserRechargeController {
     @PermissionCheck(role = "线下大客户, 管理员")
     @RequestMapping(value = "/drawback",method = RequestMethod.POST)
     public JSONResult drawback(String orderId){
-        if (userRechargeService.drawback(orderId)){
+        if (userRechargeService.drawback(orderId, true)){
             return new JSONResult("成功",200);
         }
         return new JSONResult("失败",500);

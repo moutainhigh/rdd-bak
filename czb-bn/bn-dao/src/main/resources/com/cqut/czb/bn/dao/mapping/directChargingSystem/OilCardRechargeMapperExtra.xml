@@ -403,7 +403,8 @@
                                        record_type,
                                        real_price,
                                        recharge_account,
-                                       cardholder
+                                       cardholder,
+                                        customer_number
         )
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
@@ -415,7 +416,8 @@
                 #{recordType,jdbcType=INTEGER },
                 #{realPrice,jdbcType=DOUBLE},
                 #{rechargeAccount,jdbcType=VARCHAR},
-                #{cardholder,jdbcType=VARCHAR}
+                #{cardholder,jdbcType=VARCHAR},
+                #{customerNumber,jdbcType=VARCHAR}
                )
     </insert>
 

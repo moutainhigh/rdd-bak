@@ -8,6 +8,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
+import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.dao.mapper.electricityRecharge.ElectricityRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.H5StockDTO;
@@ -15,12 +16,14 @@ import com.cqut.czb.bn.entity.dto.PayConfig.*;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
+import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
 import com.cqut.czb.bn.service.fanyong.FanyongLogService;
@@ -32,6 +35,7 @@ import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.md5.MD5Util;
+import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -41,6 +45,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,6 +89,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Autowired
     private FanyongLogService fanyongLogService;
+
+    @Autowired
+    private PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+
+    @Autowired
+    private UserRechargeService userRechargeService;
 
     private TimeTaskManager timeTaskManager = new TimeTaskManager();
 
@@ -597,83 +608,154 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
-    public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
-//        String url = "https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
-//        OnlineorderDto onlineorderDto = new OnlineorderDto();
-//        onlineorderDto.setGasUserid(directChargingOrderDto.getPetrolChinaPetrolNum());
-//        onlineorderDto.setGasMobile(directChargingOrderDto.getUserAccount());
-//        onlineorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-//        onlineorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
-//        onlineorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
-//        onlineorderDto.setSign(onlinemd5(onlineorderDto));
-//        System.out.println(onlineorderDto);
-//        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, onlineorderDto, String.class);
-//        String body = responseEntity.getBody();
-//        int begin = body.indexOf("code");
-//        int end = body.indexOf("result");
-//        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
-//        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-//        if (body.substring(begin+6, end-2) == "0") {
-//            directChargingOrderDto1.setState(2);
-//        } else {
-//            directChargingOrderDto1.setState(4);
-//        }
-//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
-//        System.out.println("油卡直冲");
-//        System.out.println(body);
+    public void onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto) {
 
-        String URL="https://huafei.renduoduo2019.com/api/sinopec/onlineorder";
-        //人多多的订单号（由我方生成）
-        String ordersn = directChargingOrderDto.getOrderId();
+    }
 
-        // 油卡号
-        String gasUserid = directChargingOrderDto.getRechargeAccount();
+    @Override
+    public String chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception {
+        String URL="http://47.108.60.212:8088/api/ykOrder";
 
-        // 持卡人手机号
-        String gasMobile = directChargingOrderDto.getCardholder();
+        if (directChargingOrderDto.getRechargeAmount().intValue() != 500){
+            System.out.println("暂时只支持500元");
+            throw new Exception("暂时只支持500元");
+        }
 
-        // 金额
-        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
+        String account = directChargingOrderDto.getCardholder();
 
-        // appId
-        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
+        Integer id = 9100661;
 
-        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
+        String key = "tcx16643742043021";
 
-        String string = appId + appSecret + gasUserid + ordersn + String.valueOf(cardnum) + gasMobile;
+        String cardNo = directChargingOrderDto.getRechargeAccount();
+        if (cardNo == null || cardNo.equals("")){
+            throw new Exception("油卡号为空");
+        }
 
-        // sign
-        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
+        String no = directChargingOrderDto.getOrderId();
+
+        String string = "account=" + account + "&id=" + id + "&key=" + key + "&no=" + no;
+
+        String sign = MD5Util.MD5Encode(string,"UTF-8");
 
         //设置请求参数
-        String params = "gasUserid=" + gasUserid +
-                "&gasMobile=" + gasMobile +
-                "&ordersn=" + ordersn +
-                "&cardnum=" + cardnum +
-                "&appId=" + appId +
-                "&sign=" + sign;
-
-        System.out.println(params);
+        Map<String, Object> params = new HashMap<>();
+        params.put("account", account);
+        params.put("id", id);
+        params.put("key", key);
+        params.put("cardNo", cardNo);
+        params.put("no", no);
+        params.put("sign", sign);
 
         //开始请求
-        String sr= HttpRequest.httpRequestPost(URL, params);
-        System.out.println(sr);
-        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        String sr = HttpClient4.doPost(URL, params);
         System.out.println("油卡充值");
-        System.out.println(sr);
+        System.out.println(no);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
         System.out.println(jsonObject);
-        int begin = sr.indexOf("code");
-        int end = sr.indexOf("result");
+        Integer code = (Integer) jsonObject.get("code");
+
         DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
         directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if (sr.substring(begin+6, end-2).equals("0")) {
+        if (code == 0) {
             directChargingOrderDto1.setState(5);
         } else {
             directChargingOrderDto1.setState(4);
+
+            if (null != petrolSalesRecordsMapperExtra.selectInfoByOrgId(directChargingOrderDto.getOrderId())){
+                petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
+                // 退款
+                userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
+                System.out.println("更变线下大客户充值订单成功");
+            }
         }
         oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
-        System.out.println("油卡直冲");
-        System.out.println(sr);
+
+
+        return sr;
+    }
+
+    @Override
+    public String oilCardRechargeCallBack(CallBackInfo backInfo) {
+        System.out.println("chenxie油卡充值回调");
+        System.out.println(backInfo);
+        if (backInfo.getNo() == null){
+            return "ok";
+        }
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getNo());
+        if (directChargingOrderDto == null){
+            System.out.println("未找到订单");
+            return "ok";
+        }
+
+        try {
+            if (backInfo.getStatus() == 2) {//交易成功
+                directChargingOrderDto.setState(2);
+                System.out.println("充值成功");
+                try {
+                    petrolSalesRecordsMapperExtra.recharge(directChargingOrderDto.getOrderId());
+                    System.out.println("更变线下大客户充值订单成功");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            } else if (backInfo.getStatus() == 3){//交易失败
+                directChargingOrderDto.setState(4);
+                System.out.println("充值失败");
+                try {
+                    // 标记问题卡号
+                    petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
+                    // 退款
+                    userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
+                    System.out.println("更变线下大客户充值订单成功");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "ok";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        directChargingOrderDto.setState(4);
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        return "ok";
+    }
+
+
+    //    插入订单
+    @Override
+    public boolean insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto) {
+        boolean insertRecords = false;
+        DirectChargingOrderDto directChargingOrder = new DirectChargingOrderDto();
+        directChargingOrder.setUserId(directChargingOrderDto.getUserId());
+        directChargingOrder.setOrderId(directChargingOrderDto.getOrderId());
+        if (directChargingOrder.getOrderId() == null){
+            directChargingOrder.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+        }
+        directChargingOrder.setRechargeAmount(directChargingOrderDto.getRechargeAmount());
+        directChargingOrder.setRecordType(2);
+        directChargingOrder.setPaymentMethod(1);
+        directChargingOrder.setRealPrice(directChargingOrderDto.getRealPrice());
+        directChargingOrder.setState(directChargingOrderDto.getState());
+        if (directChargingOrder.getState() == null){
+            directChargingOrder.setState(1);
+        }
+        directChargingOrder.setRechargeAccount(directChargingOrderDto.getRechargeAccount());
+        directChargingOrder.setCardholder(directChargingOrderDto.getCardholder());
+        directChargingOrder.setCustomerNumber(directChargingOrderDto.getCustomerNumber());
+
+        insertRecords=oilCardRechargeMapperExtra.insertOilOrder(directChargingOrder)>0;
+
+//        if (insertRecords){
+//            try {
+//                chenxieOilRechargeSubmit(directChargingOrder);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        return insertRecords;
     }
 
     private String onlinemd5(OnlineorderDto onlineorderDto) {
@@ -1119,18 +1201,42 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         System.out.println("传入的automaticSubmit为" + dictInputDTO.getName() + " : " + dictInputDTO.getContent());
         int result = dictMapperExtra.updateDictByName(dictInputDTO);
         if (result > 0 ) {
-//            bufferQueueThreadOilCard = new BufferQueueThread(Integer.parseInt(dictMapperExtra.selectDictByName("automatic_oilcard_time").getContent()));
-//            if (dictMapperExtra.selectDictByName("automatic_submit_oilcard").getContent().equals("0")) {
-//
-//            }else if (dictMapperExtra.selectDictByName("automatic_submit_oilcard").getContent().equals("1")) {
-//                if (bufferQueueThreadOilCard != null){
-//                    bufferQueueThreadOilCard.start();
-//                }
-//            }
+            String state = dictMapperExtra.selectDictByName("automatic_submit_oilcard").getContent();
+            if (state.equals("1")) {
+                Long rate = Long.parseLong(dictMapperExtra.selectDictByName("automatic_oilcard_time").getContent());
+                AutoTimerTask task = new AutoTimerTask("auto_oilcard_sub") {
+                    @Override
+                    public void execute() {
+                        autoSubmitOilCardM();
+                    }
+                };
+                task.setPeriod(rate);
+                timeTaskManager.deleteTimerTaskByCode("auto_oilcard_sub", true);
+                timeTaskManager.addTimerTask("auto_oilcard_sub", task);
+            } else {
+                timeTaskManager.deleteTimerTaskByCode("auto_oilcard_sub", true);
+            }
             return new JSONResult("更新成功", 200);
         }
         return new JSONResult("更新失败", 500);
     }
+
+    private void autoSubmitOilCardM(){
+        DirectChargingOrderDto q = new DirectChargingOrderDto();
+        System.out.println("油卡自动充值开始");
+        q.setState(1);
+        q.setRecordType(2);
+        List<DirectChargingOrderDto> list = oilCardRechargeMapperExtra.getAllOnceOrderInfoList(q);
+        if (list == null || list.isEmpty()){
+            return;
+        }
+        try {
+            chenxieOilRechargeSubmit(list.get(list.size()-1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public List<DirectChargingOrderDto> getPartOrderInfoList(DirectChargingOrderDto directChargingOrderDto) {
@@ -1202,6 +1308,17 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
             if (directChargingOrderDto.getState() == 2){
                 directFanyong(directChargingOrderDto);
+            }
+            if (directChargingOrderDto.getState() == 4){
+                try {
+                    // 标记问题卡号
+                    petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
+                    // 退款
+                    userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
+                    System.out.println("更变线下大客户充值订单成功");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             if(i == selectOrderDto.getOrderId().length - 1) {
                 return new JSONResult("更新成功", 200);

@@ -615,97 +615,98 @@ public class BusinessProcessServiceImpl implements BusinessProcessService {
 
     //直冲系统（微信）
     public int getAddBuyDirectOrderWechat(Map<String, Object> restmap){
-        String[] resDate = restmap.get("attach").toString().split("\\^");
-        String[] temp;
-        String thirdOrderId = restmap.get("transaction_id").toString();
-        String orgId = "";
-        double money = 0;
-        String ownerId = "";
-        String userAccount = "";
-        String commodityId = "";
-        int recordType = 0;
-        String cardNum = "";
-        String userId = "";
-        int integralAmount = 0;
-        for (String data : resDate) {
-            temp = data.split("\'");
-            if (temp.length < 2) {//判空
-                continue;
-            }
-            if ("orderId".equals(temp[0])) {
-                orgId = temp[1];
-            }
-            if ("rechargeAmount".equals(temp[0])) {
-                money = Double.valueOf(temp[1]);
-            }
-            if ("recordType".equals(temp[0])) {
-                recordType = Integer.valueOf(temp[1]);
-            }
-            if ("userAccount".equals(temp[0])) {
-                userAccount = temp[1];
-            }
-            if ("userId".equals(temp[0])) {
-                userId = temp[1];
-            }
-            if ("commodityId".equals(temp[0])) {
-                commodityId = temp[1];
-            }
-            if ("integralAmount".equals(temp[0])) {
-                integralAmount = Integer.valueOf(temp[1]);
-            }
-        }
-        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
-        directChargingOrderDto.setOrderId(orgId);
-        directChargingOrderDto.setThirdOrderId(thirdOrderId);
-        directChargingOrderDto.setUpdateAt(new Date());
-        directChargingOrderDto.setState(1);
-        if (recordType == 1){
-            ownerId = userAccount;
-        }else{
-            ownerId = cardNum;
-        }
-        System.out.println("更新成功");
-        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
-        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
-
-        if (!userId.equals("18883790995157397")) {
-            //插入log记录
-            System.out.println("插入log记录");
-            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
-            integralLogDTO.setOrderId(orgId);
-            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
-            integralLogDTO.setUserId(userId);
-            integralLogDTO.setIntegralLogType(5);
-            integralLogDTO.setRemark("抵扣");
-            integralLogDTO.setIntegralAmount(integralAmount);
-            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
-
-            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
-            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
-            integralInfoDTO.setUserId(userId);
-            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
-            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
-        }else if (userId.equals("18883790995157397")){
-            boolean i = noLoginDirectSystemService.updateState(orgId);
-        }
-
-        DirectChargingOrderDto directChargingOrderDto1 = oilCardRechargeMapperExtra.getOrder(orgId);
-        if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
-            System.out.println("尚未开通充值");
-            return 1;
-        }
-        if (directChargingOrderDto1.getRecordType()==1){
-            System.out.println("开通充值");
-            directChargingOrderDto1.setUserAccount(directChargingOrderDto1.getRechargeAccount());
-            directChargingOrderDto1.setRechargeAmount(directChargingOrderDto1.getRealPrice());
-            oilCardRechargeServiceImpl.phoneRechargeSubmission(directChargingOrderDto1);
-            System.out.println("充值参数"+directChargingOrderDto1.toString());
-        }else{
-            System.out.println("开通充值");
-            directChargingOrderDto1.setRechargeAmount(directChargingOrderDto1.getRealPrice());
-            oilCardRechargeServiceImpl.onlineorderSubmission(directChargingOrderDto1);
-        }
-        return 1;
+//        String[] resDate = restmap.get("attach").toString().split("\\^");
+//        String[] temp;
+//        String thirdOrderId = restmap.get("transaction_id").toString();
+//        String orgId = "";
+//        double money = 0;
+//        String ownerId = "";
+//        String userAccount = "";
+//        String commodityId = "";
+//        int recordType = 0;
+//        String cardNum = "";
+//        String userId = "";
+//        int integralAmount = 0;
+//        for (String data : resDate) {
+//            temp = data.split("\'");
+//            if (temp.length < 2) {//判空
+//                continue;
+//            }
+//            if ("orderId".equals(temp[0])) {
+//                orgId = temp[1];
+//            }
+//            if ("rechargeAmount".equals(temp[0])) {
+//                money = Double.valueOf(temp[1]);
+//            }
+//            if ("recordType".equals(temp[0])) {
+//                recordType = Integer.valueOf(temp[1]);
+//            }
+//            if ("userAccount".equals(temp[0])) {
+//                userAccount = temp[1];
+//            }
+//            if ("userId".equals(temp[0])) {
+//                userId = temp[1];
+//            }
+//            if ("commodityId".equals(temp[0])) {
+//                commodityId = temp[1];
+//            }
+//            if ("integralAmount".equals(temp[0])) {
+//                integralAmount = Integer.valueOf(temp[1]);
+//            }
+//        }
+//        DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
+//        directChargingOrderDto.setOrderId(orgId);
+//        directChargingOrderDto.setThirdOrderId(thirdOrderId);
+//        directChargingOrderDto.setUpdateAt(new Date());
+//        directChargingOrderDto.setState(1);
+//        if (recordType == 1){
+//            ownerId = userAccount;
+//        }else{
+//            ownerId = cardNum;
+//        }
+//        System.out.println("更新成功");
+//        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+//        dataProcessService.insertConsumptionRecord(orgId,thirdOrderId, money, ownerId, "7", 1);
+//
+//        if (!userId.equals("18883790995157397")) {
+//            //插入log记录
+//            System.out.println("插入log记录");
+//            IntegralLogDTO integralLogDTO = integralService.getIntegralInfo(userId);
+//            integralLogDTO.setOrderId(orgId);
+//            integralLogDTO.setIntegralLogId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+//            integralLogDTO.setUserId(userId);
+//            integralLogDTO.setIntegralLogType(5);
+//            integralLogDTO.setRemark("抵扣");
+//            integralLogDTO.setIntegralAmount(integralAmount);
+//            integralPurchaseMapperExtra.insertIntegralLog(integralLogDTO);
+//
+//            IntegralInfoDTO integralInfoDTO = integralService.getGotTotal(userId);
+//            integralInfoDTO.setCurrentTotal(integralLogDTO.getBeforeIntegralAmount() - integralLogDTO.getIntegralAmount());
+//            integralInfoDTO.setUserId(userId);
+//            integralInfoDTO.setGotTotal(integralInfoDTO.getGotTotal());
+//            integralPurchaseMapperExtra.updateIntegralInfo(integralInfoDTO);
+//        }else if (userId.equals("18883790995157397")){
+//            boolean i = noLoginDirectSystemService.updateState(orgId);
+//        }
+//
+//        DirectChargingOrderDto directChargingOrderDto1 = oilCardRechargeMapperExtra.getOrder(orgId);
+//        if (dictMapperExtra.selectDictByName("is_direct_recharge").getContent().equals("0")) {
+//            System.out.println("尚未开通充值");
+//            return 1;
+//        }
+//        if (directChargingOrderDto1.getRecordType()==1){
+//            System.out.println("开通充值");
+//            directChargingOrderDto1.setUserAccount(directChargingOrderDto1.getRechargeAccount());
+//            directChargingOrderDto1.setRechargeAmount(directChargingOrderDto1.getRealPrice());
+//            oilCardRechargeServiceImpl.phoneRechargeSubmission(directChargingOrderDto1);
+//            System.out.println("充值参数"+directChargingOrderDto1.toString());
+//        }else{
+//            System.out.println("开通充值");
+//            directChargingOrderDto1.setRechargeAmount(directChargingOrderDto1.getRealPrice());
+//            oilCardRechargeServiceImpl.onlineorderSubmission(directChargingOrderDto1);
+//        }
+//        return 1;
+        return 0;
     }
 
 

@@ -1,11 +1,13 @@
 package com.cqut.czb.bn.service.impl.directChargingSystem;
 
+import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapper;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
+import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingOrderService;
 import com.cqut.czb.bn.service.fanyong.FanyongLogService;
 import org.springframework.dao.DuplicateKeyException;
@@ -29,6 +31,12 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
 
     @Autowired
     OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
+
+    @Autowired
+    PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
+
+    @Autowired
+    UserRechargeService userRechargeService;
 
     @Override
     public JSONResult updateRecord(DirectChargingOrderDto directChargingOrderDto) {
@@ -57,6 +65,19 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
                     e.printStackTrace();
                 }
 
+            }
+            if (num == 1 && directChargingOrderDto.getState()==4){
+                // 充值失败
+                try {
+                    if (null != petrolSalesRecordsMapperExtra.selectInfoByOrgId(directChargingOrderDto.getOrderId())){
+                        petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
+                        // 退款
+                        userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
+                        System.out.println("更变线下大客户充值订单成功");
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             if (num == 1) {
                 return new JSONResult("更新成功");

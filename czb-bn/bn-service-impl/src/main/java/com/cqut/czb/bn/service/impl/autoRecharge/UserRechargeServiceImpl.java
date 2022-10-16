@@ -1,14 +1,18 @@
 package com.cqut.czb.bn.service.impl.autoRecharge;
 
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
+import com.cqut.czb.bn.dao.mapper.UserMapper;
+import com.cqut.czb.bn.dao.mapper.UserMapperExtra;
 import com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeIog;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
+import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,12 @@ public class UserRechargeServiceImpl implements UserRechargeService {
     @Autowired
     PetrolSalesRecordsMapperExtra petrolSalesRecordsMapperExtra;
 
+    @Autowired
+    OilCardRechargeService oilCardRechargeService;
+
+    @Autowired
+    UserMapper userMapper;
+
     private ReentrantLock lock = new ReentrantLock();
 
     /**
@@ -44,13 +54,30 @@ public class UserRechargeServiceImpl implements UserRechargeService {
     @Override
     @Transactional
     public synchronized JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO) {
+        String[] strs;
         String[] petrolNums;
+        String[] phones;
         boolean petr = false;
         boolean isBalance =false;
         boolean info = false;
 
+        User u = userMapper.selectByPrimaryKey(user.getUserId());
+        System.out.println("大客户油卡" + user);
+
+        if (u!=null){
+            user = u;
+        }
+
         if (userRechargeDTO.getPetrolNums() != null && userRechargeDTO.getPetrolNums() != " "){
-            petrolNums = userRechargeDTO.getPetrolNums().split(",");
+
+            strs = userRechargeDTO.getPetrolNums().split(",");
+            petrolNums = new String[strs.length];
+            phones = new String[strs.length];
+            for (int i=0;i<strs.length;i++) {
+                System.out.println(strs[i]);
+                petrolNums[i] =strs[i].split("/")[0];
+                phones[i] =strs[i].split("/")[1];
+            }
         }else {
             return new JSONResult("充值失败",200);
         }
@@ -67,6 +94,10 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         }
         else if(formatBlance == 0.00){
             return new JSONResult("充值失败，金额不能小于0.01",200);
+        }
+
+        if((int)userRechargeDTO.getTurnoverAmount() != 500) {
+            return new JSONResult("暂时只支持500元",500);
         }
 
         List<UserRecharge> userRecharge = new ArrayList<>();
@@ -90,6 +121,23 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             userRecharge.add(petrol);
         }
         petr = userRechargeMapper.insertBatchRecharge(userRecharge) > 0;
+
+        // 同时插入油卡充值管理
+        if (petr){
+            for (int i = 0;i < userRecharge.size(); i++) {
+                UserRecharge r = userRecharge.get(i);
+                DirectChargingOrderDto o = new DirectChargingOrderDto();
+                o.setOrderId(r.getRecordId());
+                o.setThirdOrderId(user.getUserId());
+                o.setCardholder(phones[i]);
+                o.setRechargeAccount(r.getPetrolNum());
+                o.setRechargeAmount(r.getTurnoverAmount());
+                o.setState(9);
+                o.setCustomerNumber(user.getUserAccount());
+                System.out.println(o);
+                oilCardRechargeService.insertOilCardOrder(o);
+            }
+        }
 
         if (petr){
             IncomeIog incomeInfo = new IncomeIog();
@@ -116,10 +164,9 @@ public class UserRechargeServiceImpl implements UserRechargeService {
     }
 
     @Override
-    public boolean drawback(String recordId){
-        int info = petrolSalesRecordsMapperExtra.dropRecordById(recordId);
-        if (info > 0){
-            PetrolSalesRecords order = petrolSalesRecordsMapperExtra.selectInfoByOrgId(recordId);
+    public boolean drawback(String recordId, boolean dropOrder){
+        PetrolSalesRecords order = petrolSalesRecordsMapperExtra.selectInfoByOrgId(recordId);
+        if (order != null){
             String userId = order.getBuyerId();
             BigDecimal beforeBalance = new BigDecimal(String.valueOf(userRechargeMapper.getBalance(userId)));
             BigDecimal afterBalance = null;
@@ -127,6 +174,10 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             System.out.println(afterBalance.doubleValue());
             //更新余额
             boolean isBalance = userRechargeMapper.updateRecharge(userId,afterBalance.doubleValue());
+            if (dropOrder){
+                petrolSalesRecordsMapperExtra.dropRecordById(recordId);
+            }
+            System.out.println("大客户退款 用户：" + userId + "订单：" + order);
             return isBalance;
         }
         return false;

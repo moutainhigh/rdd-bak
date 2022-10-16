@@ -5,10 +5,7 @@ import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
 import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.AutoDirectDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.SelectOrderDto;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
 import com.cqut.czb.bn.entity.entity.Petrol;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -42,6 +39,9 @@ public interface OilCardRechargeService{
 
     JSONResult getOilOrderState(DirectChargingOrderDto directChargingOrderDto);
 
+    //    插入订单
+    boolean insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto);
+
     JSONResult getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto);
 
     JSONResult isPhoneRecharge(DirectChargingOrderDto directChargingOrderDto);
@@ -71,6 +71,10 @@ public interface OilCardRechargeService{
     String wechatPayReturn(HttpServletRequest request,String consumptionType);
 
     String getAccount(String userId);
+
+    String chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
+
+    String oilCardRechargeCallBack(CallBackInfo backInfo);
 
     /**
      * 生成excel表

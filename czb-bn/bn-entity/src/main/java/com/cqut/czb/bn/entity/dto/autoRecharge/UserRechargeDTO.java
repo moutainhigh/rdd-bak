@@ -45,7 +45,7 @@ public class UserRechargeDTO extends PageDTO {
 
     private double currentPrice;  // 充值金额
 
-    private String regional;//地址
+    private String regional;//
 
     public String getRegional() {
         return regional;

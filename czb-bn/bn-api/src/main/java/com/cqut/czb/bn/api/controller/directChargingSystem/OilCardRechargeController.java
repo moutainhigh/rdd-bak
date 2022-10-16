@@ -6,10 +6,7 @@ import com.cqut.czb.auth.util.RedisUtils;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.WCProgramConfig;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.AutoDirectDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.SelectOrderDto;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
 import com.cqut.czb.bn.entity.dto.until.WXSign;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
@@ -29,6 +26,7 @@ import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.cqut.czb.bn.entity.dto.until.WXSign.httpRequest;
 
@@ -177,16 +175,16 @@ public class OilCardRechargeController {
         return new JSONResult("重新提交成功", 200);
     }
 
-    /**
-     * 油卡重新提交
-     * @return
-     */
-    @PostMapping("/onlineorderSubmission")
-    @ResponseBody
-    public JSONResult onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
-        oilCardRechargeService.onlineorderSubmission(directChargingOrderDto);
-        return new JSONResult("重新提交成功", 200);
-    }
+//    /**
+//     * 油卡重新提交
+//     * @return
+//     */
+//    @PostMapping("/onlineorderSubmission")
+//    @ResponseBody
+//    public JSONResult onlineorderSubmission(DirectChargingOrderDto directChargingOrderDto){
+//        oilCardRechargeService.onlineorderSubmission(directChargingOrderDto);
+//        return new JSONResult("重新提交成功", 200);
+//    }
 
     /**
      * 导出油卡、话费数据
@@ -274,6 +272,36 @@ public class OilCardRechargeController {
         System.out.println(selectOrderDto);
         return oilCardRechargeService.submitSelectState(selectOrderDto);
     }
+
+    @PostMapping("/callBack")
+    public String oilCardRechargeCallBack(CallBackInfo backInfo){
+        System.out.println(backInfo);
+        return oilCardRechargeService.oilCardRechargeCallBack(backInfo);
+    }
+
+    @PostMapping("/onlineorderSubmission")
+    @ResponseBody
+    public JSONResult chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto){
+        try {
+            if (directChargingOrderDto.getOrderId() == null){
+                directChargingOrderDto.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            }
+            String res = oilCardRechargeService.chenxieOilRechargeSubmit(directChargingOrderDto);
+            return new JSONResult(res, 200);
+        } catch (Exception e) {
+            return new JSONResult(e.getMessage(), 400);
+        }
+    }
+
+    @PostMapping("/insertOilCardOrder")
+    @ResponseBody
+    public JSONResult insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto){
+        if (oilCardRechargeService.insertOilCardOrder(directChargingOrderDto)){
+            return new JSONResult("新增成功", 200);
+        }
+        return new JSONResult("新增失败", 400);
+    }
+
 }
 
 
