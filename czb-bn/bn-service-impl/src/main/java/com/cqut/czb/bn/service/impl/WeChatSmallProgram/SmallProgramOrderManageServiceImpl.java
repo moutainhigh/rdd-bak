@@ -18,9 +18,11 @@ import com.cqut.czb.bn.entity.dto.myTeam.RecommenderDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.entity.Address;
 
+import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodity;
 import com.cqut.czb.bn.entity.entity.weChatSmallProgram.WeChatCommodityOrder;
 import com.cqut.czb.bn.entity.global.JSONResult;
 
+import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.weChatSmallProgram.SmallProgramOrderManageService;
 import com.cqut.czb.bn.service.weChatSmallProgram.WCPNoticeService;
 import com.cqut.czb.bn.util.constants.SystemConstants;
@@ -55,6 +57,10 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
     UserMapperExtra userMapperExtra;
     @Autowired
     WCPNoticeService wcpNoticeService;
+    @Autowired
+    FanYongService fanYongService;
+    @Autowired
+    WeChatCommodityMapper weChatCommodityMapper;
 
     @Override
     public JSONResult<PageInfo<WeChatCommodityOrderDTO>> getTableList(WeChatCommodityOrderDTO input, PageDTO page) {
@@ -142,6 +148,26 @@ public class SmallProgramOrderManageServiceImpl implements SmallProgramOrderMana
         System.out.println(input.getRemark());
 
         JSONResult<Boolean> jsonResult = new JSONResult<>();
+//        try {
+//            if (input.getDeliveryState() != null && input.getDeliveryState() == 2 || input.getOrderState() != null && input.getOrderState() == 2){
+//                //订单完成， 返佣
+//                System.out.println("小程序返佣"+input.getOrderId());
+//                WeChatCommodityOrder o = weChatCommodityOrderMapper.selectByPrimaryKey(input.getOrderId());
+//                WeChatCommodity weChatCommodity = weChatCommodityMapper.selectByPrimaryKey(o.getCommodityId());
+//                String title="";
+//                if(weChatCommodity.getCommodityTitle().length()>10){
+//                    title=weChatCommodity.getCommodityTitle().substring(0,8)+"…";
+//                }else {
+//                    title=weChatCommodity.getCommodityTitle();
+//                }
+//                Boolean isSucceed=fanYongService.AppletBeginFanYong(o.getUserId(),o.getActualPrice(),o.getOrderId(),o.getFyMoney(),o.getCommodityId());
+//                System.out.println("返佣"+isSucceed);
+//            }
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+
         boolean result;
         if (input.getTakeWay() == 1) { // 寄送
             result = weChatCommodityOrderMapperExtra.dealOrderSend(input) > 0;

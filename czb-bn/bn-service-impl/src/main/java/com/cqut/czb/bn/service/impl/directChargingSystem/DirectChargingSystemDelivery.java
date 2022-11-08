@@ -5,6 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -80,6 +81,7 @@ public class DirectChargingSystemDelivery {
             // Read the Row
             for (int rowNum = 1; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
                 XSSFRow xssfRow = xssfSheet.getRow(rowNum);
+                System.out.println(getValue(xssfRow.getCell(0)));
                 // 解析文档
                 if (xssfRow != null && xssfRow.getLastCellNum() >= 2 && xssfRow.getCell(0) != null) {
                     directChargingOrderDto = resolveXlsx(xssfRow);
@@ -103,12 +105,15 @@ public class DirectChargingSystemDelivery {
 
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
 
-        if (getValue(xssfRow.getCell(0)) == null || getValue(xssfRow.getCell(0)).equals("") ||
-                getValue(xssfRow.getCell(6)) == null || getValue(xssfRow.getCell(6)).equals("")) {
+        if (getValue(xssfRow.getCell(0)) == null || getValue(xssfRow.getCell(0)).equals("")) {
             return null;
         }
 
-        directChargingOrderDto.setOrderId(getStringValue(xssfRow.getCell(0)));
+        directChargingOrderDto.setRechargeAmount(Double.parseDouble(getStringValue(xssfRow.getCell(0))));
+        directChargingOrderDto.setRechargeAccount(getStringValue(xssfRow.getCell(1)));
+        directChargingOrderDto.setCardholder(getStringValue(xssfRow.getCell(2)));
+        directChargingOrderDto.setState(getState(getStringValue(xssfRow.getCell(3))));
+//        directChargingOrderDto.setOrderId(getStringValue(xssfRow.getCell(0)));
 //        directChargingOrderDto.setThirdOrderId(getStringValue(xssfRow.getCell(1)));
 //        directChargingOrderDto.setRechargeAccount(getStringValue(xssfRow.getCell(2)));
 //        directChargingOrderDto.setCardholder(getStringValue(xssfRow.getCell(3)));
@@ -118,7 +123,7 @@ public class DirectChargingSystemDelivery {
 //        }else {
 //            directChargingOrderDto.setRechargeAmount(Double.parseDouble(getValue(xssfRow.getCell(5))));
 //        }
-        directChargingOrderDto.setState(DirectChargingSystemDelivery.getState(getValue(xssfRow.getCell(6))));
+//        directChargingOrderDto.setState(DirectChargingSystemDelivery.getState(getValue(xssfRow.getCell(6))));
 //        directChargingOrderDto.setCustomerNumber(getStringValue(xssfRow.getCell(7)));
 //        directChargingOrderDto.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getValue(xssfRow.getCell(8))));
         return directChargingOrderDto;
@@ -162,18 +167,22 @@ public class DirectChargingSystemDelivery {
     private static DirectChargingOrderDto resolveXls(HSSFRow hssfRow) throws ParseException {
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
 
-        if (getValue(hssfRow.getCell(0)) == null || getValue(hssfRow.getCell(0)) == "" ||
-                getValue(hssfRow.getCell(6)) == null || getValue(hssfRow.getCell(6)) == "") {
+        if (getValue(hssfRow.getCell(0)) == null || getValue(hssfRow.getCell(0)) == "") {
             return null;
         }
 
-        directChargingOrderDto.setOrderId(getStringValue(hssfRow.getCell(0)));
+        directChargingOrderDto.setRechargeAmount(Double.parseDouble(getStringValue(hssfRow.getCell(0))));
+        directChargingOrderDto.setRechargeAccount(getStringValue(hssfRow.getCell(1)));
+        directChargingOrderDto.setCardholder(getStringValue(hssfRow.getCell(2)));
+        directChargingOrderDto.setState(getState(getStringValue(hssfRow.getCell(3))));
+
+//        directChargingOrderDto.setOrderId(getStringValue(hssfRow.getCell(0)));
 //        directChargingOrderDto.setThirdOrderId(getStringValue(hssfRow.getCell(1)));
 //        directChargingOrderDto.setRechargeAccount(getStringValue(hssfRow.getCell(2)));
 //        directChargingOrderDto.setCardholder(getStringValue(hssfRow.getCell(3)));
 //        directChargingOrderDto.setRealPrice(Double.parseDouble(getValue(hssfRow.getCell(4))));
 //        directChargingOrderDto.setRechargeAmount(Double.parseDouble(getValue(hssfRow.getCell(5))));
-        directChargingOrderDto.setState(Integer.parseInt(getValue(hssfRow.getCell(6))));
+//        directChargingOrderDto.setState(Integer.parseInt(getValue(hssfRow.getCell(6))));
 //        directChargingOrderDto.setCustomerNumber(getStringValue(hssfRow.getCell(7)));
 //        directChargingOrderDto.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(getValue(hssfRow.getCell(8))));
 
@@ -196,18 +205,14 @@ public class DirectChargingSystemDelivery {
     private static String getStringValue(HSSFCell hssfCell) {
         if (hssfCell == null)
             return null;
-//        hssfCell.setCellStyle();
-//        hssfCell.setCellType(Cell.CELL_TYPE_STRING);
-//        hssfCell.setCellType(CellType.STRING);
+        hssfCell.setCellType(CellType.STRING);
         return hssfCell.getStringCellValue();
     }
 
     private static String getStringValue(XSSFCell xssfCell) {
         if (xssfCell == null)
             return null;
-//        xssfCell.setCellStyle(XSSFCell.CELL_TYPE_STRING);
-//        xssfCell.setCellType(Cell.CELL_TYPE_STRING);
-//        xssfCell.setCellType(CellType.STRING);
+        xssfCell.setCellType(CellType.STRING);
         return xssfCell.getStringCellValue();
     }
     private static String getValue(HSSFCell hssfCell) {
@@ -247,8 +252,12 @@ public class DirectChargingSystemDelivery {
             return 7;
         }else if (val.equals("携号转网")){
             return 8;
+        }else if (val.equals("排队中")){
+            return 9;
+        }else if (val.equals("待充值（快充）") || val.equals("待充值(快充)")){
+            return 10;
         }else {
-            return 8;
+            return 1;
         }
     }
 }

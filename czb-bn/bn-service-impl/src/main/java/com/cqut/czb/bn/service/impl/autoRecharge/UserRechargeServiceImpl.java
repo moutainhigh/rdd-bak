@@ -177,7 +177,7 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             if (dropOrder){
                 petrolSalesRecordsMapperExtra.dropRecordById(recordId);
             }
-            System.out.println("大客户退款 用户：" + userId + "订单：" + order);
+            System.out.println("大客户退款 用户：" + userId + "订单：" + order.getRecordId());
             return isBalance;
         }
         return false;

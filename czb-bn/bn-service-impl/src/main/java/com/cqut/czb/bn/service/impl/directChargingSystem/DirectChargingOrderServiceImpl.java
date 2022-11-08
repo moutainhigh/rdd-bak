@@ -42,37 +42,38 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
     public JSONResult updateRecord(DirectChargingOrderDto directChargingOrderDto) {
         try {
             int num = directChargingOrderMapperExtra.updateRecordByOrderId(directChargingOrderDto);
-            if (num == 1 && directChargingOrderDto.getState()==2){
-                System.out.println("直充返佣進入方法");
-                try {
-                    directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
-                    if (!fanyongLogService.isContainFanyongLog(directChargingOrderDto.getOrderId())){
-                        String userId = directChargingOrderDto.getUserId();
-                        Double actualPayment = directChargingOrderDto.getRechargeAmount();
-                        Double money = directChargingOrderDto.getRealPrice();
-                        if (actualPayment == null && money!=null){
-                            actualPayment = money;
-                        }
-                        String orgId = directChargingOrderDto.getOrderId();
-                        System.out.println(userId+" "+actualPayment+" "+money+" "+orgId);
-                        boolean isSucceed = fanYongService.beginFanYong(7, "", userId, money, actualPayment, orgId);
-                        System.out.println("返佣"+isSucceed + " " + directChargingOrderDto.getOrderId());
-                    } else {
-                        System.out.println("已存在返佣记录  " + directChargingOrderDto.getOrderId());
-                    }
-                } catch (Exception e){
-                    System.out.println("返佣失败");
-                    e.printStackTrace();
-                }
-
-            }
+//            if (num == 1 && directChargingOrderDto.getState()==2){
+//                System.out.println("直充返佣進入方法");
+//                try {
+//                    directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+//                    if (!fanyongLogService.isContainFanyongLog(directChargingOrderDto.getOrderId())){
+//                        String userId = directChargingOrderDto.getUserId();
+//                        Double actualPayment = directChargingOrderDto.getRechargeAmount();
+//                        Double money = directChargingOrderDto.getRealPrice();
+//                        if (actualPayment == null && money!=null){
+//                            actualPayment = money;
+//                        }
+//                        String orgId = directChargingOrderDto.getOrderId();
+//                        System.out.println(userId+" "+actualPayment+" "+money+" "+orgId);
+//                        boolean isSucceed = fanYongService.beginFanYong(7, "", userId, money, actualPayment, orgId);
+//                        System.out.println("返佣"+isSucceed + " " + directChargingOrderDto.getOrderId());
+//                    } else {
+//                        System.out.println("已存在返佣记录  " + directChargingOrderDto.getOrderId());
+//                    }
+//                } catch (Exception e){
+//                    System.out.println("返佣失败");
+//                    e.printStackTrace();
+//                }
+//
+//            }
             if (num == 1 && directChargingOrderDto.getState()==4){
+                System.out.println("手动设置充值失败");
                 // 充值失败
                 try {
-                    if (null != petrolSalesRecordsMapperExtra.selectInfoByOrgId(directChargingOrderDto.getOrderId())){
-                        petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
+                    if (null != petrolSalesRecordsMapperExtra.selectInfoByOrgId(directChargingOrderDto.getOldOrderId())){
+                        petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOldOrderId());
                         // 退款
-                        userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
+                        userRechargeService.drawback(directChargingOrderDto.getOldOrderId(), false);
                         System.out.println("更变线下大客户充值订单成功");
                     }
                 } catch (Exception e){

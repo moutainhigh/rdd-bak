@@ -39,6 +39,8 @@ public interface OilCardRechargeService{
 
     JSONResult getOilOrderState(DirectChargingOrderDto directChargingOrderDto);
 
+    String fastCallBack(FastBackInfo backInfo);
+
     //    插入订单
     boolean insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto);
 
@@ -71,6 +73,8 @@ public interface OilCardRechargeService{
     String wechatPayReturn(HttpServletRequest request,String consumptionType);
 
     String getAccount(String userId);
+
+    String fastOilOrderSubmit(DirectChargingOrderDto directChargingOrderDto);
 
     String chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
 

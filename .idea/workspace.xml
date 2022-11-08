@@ -4,20 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="拼团">
-      <change afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/directChargingSystem/CallBackInfo.java" afterDir="false" />
+    <list default="true" id="00742032-a747-437d-9056-b34165632b84" name="Default Changelist" comment="2022.10.16">
+      <change afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/directChargingSystem/FastBackInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/autoRecharge/UserRechargeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/autoRecharge/UserRechargeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/directChargingSystem/OilCardRechargeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-api/src/main/java/com/cqut/czb/bn/api/controller/directChargingSystem/OilCardRechargeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/directChargingSystem/OilCardRechargeMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/directChargingSystem/OilCardRechargeMapperExtra.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/autoRecharge/UserRechargeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-entity/src/main/java/com/cqut/czb/bn/entity/dto/autoRecharge/UserRechargeDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/PetrolSalesRecordsMapperExtra.xml" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-dao/src/main/resources/com/cqut/czb/bn/dao/mapping/PetrolSalesRecordsMapperExtra.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/WeChatSmallProgram/SmallProgramOrderManageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/OfflineDistributorOfAdministratorServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/OfflineDistributorOfAdministratorServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/UserRechargeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/autoRecharge/UserRechargeServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/DirectChargingOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/DirectChargingOrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/DirectChargingSystemDelivery.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/DirectChargingSystemDelivery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/OilCardRechargeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/OilCardRechargeServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/BusinessProcessServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/payBack/BusinessProcessServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/autoRecharge/UserRechargeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/autoRecharge/UserRechargeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/directChargingSystem/OilCardRechargeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/czb-bn/bn-service/src/main/java/com/cqut/czb/bn/service/directChargingSystem/OilCardRechargeService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +103,7 @@
     <property name="javascript.nodejs.core.library.typings.version" value="14.17.6" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/czb-bn/bn-api/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="项目" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.35287356" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
@@ -219,8 +215,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.back:czb-bn:bn-api [bootRepackage]" />
-        <item itemvalue="应用程序.WCPCommodityInfoController" />
         <item itemvalue="Gradle.back:czb-bn:bn-api [build]" />
+        <item itemvalue="应用程序.WCPCommodityInfoController" />
         <item itemvalue="应用程序.WCPNoticeService" />
         <item itemvalue="应用程序.AESUtils" />
       </list>
@@ -506,7 +502,18 @@
       <workItem from="1665733980165" duration="354000" />
       <workItem from="1665747153094" duration="371000" />
       <workItem from="1665818844727" duration="4629000" />
-      <workItem from="1665894535857" duration="1143000" />
+      <workItem from="1665894535857" duration="2656000" />
+      <workItem from="1665981765606" duration="1913000" />
+      <workItem from="1666515682447" duration="4566000" />
+      <workItem from="1666536354651" duration="159000" />
+      <workItem from="1666587019013" duration="11255000" />
+      <workItem from="1666665120622" duration="2343000" />
+      <workItem from="1666667545992" duration="2811000" />
+      <workItem from="1666771941591" duration="2279000" />
+      <workItem from="1666859125845" duration="3670000" />
+      <workItem from="1667103766235" duration="655000" />
+      <workItem from="1667263804117" duration="1262000" />
+      <workItem from="1667397020498" duration="669000" />
     </task>
     <task id="LOCAL-00001" summary="水电返佣修改">
       <created>1640951174320</created>
@@ -571,7 +578,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664107880578</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="2022.10.16">
+      <created>1665895938991</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1665895938991</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -607,24 +621,25 @@
     <MESSAGE value="消息提示" />
     <MESSAGE value="小程序" />
     <MESSAGE value="拼团" />
-    <option name="LAST_COMMIT_MESSAGE" value="拼团" />
+    <MESSAGE value="2022.10.16" />
+    <option name="LAST_COMMIT_MESSAGE" value="2022.10.16" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/DirectChargingSystemDelivery.java</url>
-          <line>56</line>
+          <line>57</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/DirectChargingSystemDelivery.java</url>
-          <line>85</line>
+          <line>87</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/czb-bn/bn-service-impl/src/main/java/com/cqut/czb/bn/service/impl/directChargingSystem/OilCardRechargeServiceImpl.java</url>
-          <line>618</line>
+          <line>674</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>

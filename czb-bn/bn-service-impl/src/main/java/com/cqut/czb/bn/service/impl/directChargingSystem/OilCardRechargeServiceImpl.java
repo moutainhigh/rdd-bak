@@ -54,15 +54,18 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
 import java.nio.Buffer;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.stream.Collectors;
 
 @Service
 public class OilCardRechargeServiceImpl implements OilCardRechargeService {
@@ -613,6 +616,59 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public String fastOilOrderSubmit(DirectChargingOrderDto directChargingOrderDto){
+        String key = "5ee4707e4c8540e6891770d97310d881";
+        String url = "http://ad.anda888.cn/api/merchant/rec/oil";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("merchantId", "1ab1c7e09c324394814bef148e1ee46b");
+        params.put("cardNo", directChargingOrderDto.getRechargeAccount());
+        // 金额以分为单位
+        params.put("amount", directChargingOrderDto.getRechargeAmount().intValue()*100);
+        params.put("mobileNo", directChargingOrderDto.getCardholder());
+        params.put("outTradeNo", directChargingOrderDto.getOrderId());
+        params.put("requestTime", String.valueOf(System.currentTimeMillis()));
+        try {
+            params.put("notifyUrl", URLEncoder.encode("http://47.110.9.136:8090/oilCardRecharge/fastCallBack", "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        TreeSet<String> sortedSet = new TreeSet<>(params.keySet());
+        for (String p : sortedSet) {
+            System.out.println(p+":"+params.get(p));
+            sb.append(p).append("=").append(params.get(p)).append("&");
+        }
+        sb.append("key=").append(key);
+        System.out.println(sb.toString());
+        String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8");
+        params.put("sign", sign);
+        params.put("notifyUrl", "http://47.110.9.136:8090/oilCardRecharge/fastCallBack");
+        System.out.println("sign:"+sign);
+
+
+        //开始请求
+        String sr = HttpClient4.doPost(url, params);
+        System.out.println("油卡充值(快充)");
+        System.out.println(directChargingOrderDto.getOrderId());
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println(jsonObject);
+        Integer code = (Integer) jsonObject.get("code");
+
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (code == 0) {
+            directChargingOrderDto1.setState(5);
+        } else {
+            directChargingOrderDto1.setState(4);
+        }
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+
+        return sr;
+    }
+
+    @Override
     public String chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception {
         String URL="http://47.108.60.212:8088/api/ykOrder";
 
@@ -623,7 +679,8 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
         String account = directChargingOrderDto.getCardholder();
 
-        Integer id = 9100661;
+//        Integer id = 90033725; 1000元
+        Integer id = 9100661; //500元
 
         String key = "tcx16643742043021";
 
@@ -720,6 +777,53 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrderDto.setState(4);
         boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
         return "ok";
+    }
+
+    @Override
+    public String fastCallBack(FastBackInfo backInfo) {
+        System.out.println("快充油卡充值回调");
+        System.out.println(backInfo);
+        if (backInfo.getOutTradeNo() == null){
+            return "SUCCESS";
+        }
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getOutTradeNo());
+        if (directChargingOrderDto == null){
+            System.out.println("未找到订单");
+            return "SUCCESS";
+        }
+
+        try {
+            if (backInfo.getState().equals("SUCCESS")) {//交易成功
+                directChargingOrderDto.setState(2);
+                System.out.println("充值成功");
+//                try {
+//                    petrolSalesRecordsMapperExtra.recharge(directChargingOrderDto.getOrderId());
+//                    System.out.println("更变线下大客户充值订单成功");
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+
+            } else if (backInfo.getState().equals("FAIL")){//交易失败
+                directChargingOrderDto.setState(4);
+                System.out.println("充值失败");
+//                try {
+//                    // 标记问题卡号
+//                    petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
+//                    // 退款
+//                    userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
+//                    System.out.println("更变线下大客户充值订单成功");
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+            }
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "SUCCESS";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        directChargingOrderDto.setState(4);
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        return "SUCCESS";
     }
 
 
@@ -825,63 +929,65 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Override
     public JSONResult  getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto){
-        String URL = "https://api.36duojing.com/v1/mobile/query";
+//        String URL = "https://api.36duojing.com/v1/mobile/query";
+//
+//        //平台编码
+//        String appKey = "30000503";
+//        //密匙
+//        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
+//        //订单号
+//        String orderId = directChargingOrderDto.getOrderId();
+//
+//        TreeMap<String,Object> map = new TreeMap();
+//        map.put("appKey",appKey);
+//        map.put("orderId",orderId);
+//        String string = "";
+//        for (Map.Entry<String, Object> stringObjectEntry : map.entrySet()) {
+//            if (!string.equals("")) {
+//                string += "&";
+//            }
+//            string += stringObjectEntry;
+//        }
+//        string+="&key=" + appSecret;
+//        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
+//
+//        String params = "orderId=" + orderId +
+//                "&appKey=" + appKey +
+//                "&sign=" + sign;
+//
+//        //开始请求
+//        String sr= HttpRequest.httpRequestPost(URL, params);
+//        System.out.println(sr);
+//        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+//
+//        System.out.println("话费充值状态");
+//        System.out.println(sr);
+//        System.out.println(jsonObject);
+//        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+//        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+//        if(!jsonObject.get("result_code").equals("SUCCESS")){
+//            return new JSONResult<>("状态查询失败", ResponseCodeConstants.FAILURE, jsonObject.get("return_msg"));
+//        }
+//        System.out.println(jsonObject.get("data"));
+//        String status = (String) jsonObject.getJSONObject("data").get("status");
+//        System.out.println("状态查询--"+status);
+//        if (status.equals("WAIT")) {
+//            directChargingOrderDto1.setState(5);
+//        } else if (status.equals("SUCCESS")) {
+//            directChargingOrderDto1.setState(2);
+//
+//            directFanyong(directChargingOrderDto);
+//
+//        } else if (status.equals("FAIL")) {
+//            directChargingOrderDto1.setState(4);
+//        } else {
+//            directChargingOrderDto1.setState(4);
+//        }
+//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+//        System.out.println(directChargingOrderDto1.toString());
+//        return new JSONResult<>("状态查询成功", 200);
 
-        //平台编码
-        String appKey = "30000503";
-        //密匙
-        String appSecret = "Rw4lEFfnJqRnjKVuJuLp1rdnJyJ91S1-";
-        //订单号
-        String orderId = directChargingOrderDto.getOrderId();
-
-        TreeMap<String,Object> map = new TreeMap();
-        map.put("appKey",appKey);
-        map.put("orderId",orderId);
-        String string = "";
-        for (Map.Entry<String, Object> stringObjectEntry : map.entrySet()) {
-            if (!string.equals("")) {
-                string += "&";
-            }
-            string += stringObjectEntry;
-        }
-        string+="&key=" + appSecret;
-        String sign = MD5Util.MD5Encode(string,"UTF-8").toUpperCase();
-
-        String params = "orderId=" + orderId +
-                "&appKey=" + appKey +
-                "&sign=" + sign;
-
-        //开始请求
-        String sr= HttpRequest.httpRequestPost(URL, params);
-        System.out.println(sr);
-        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
-
-        System.out.println("话费充值状态");
-        System.out.println(sr);
-        System.out.println(jsonObject);
-        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
-        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-        if(!jsonObject.get("result_code").equals("SUCCESS")){
-            return new JSONResult<>("状态查询失败", ResponseCodeConstants.FAILURE, jsonObject.get("return_msg"));
-        }
-        System.out.println(jsonObject.get("data"));
-        String status = (String) jsonObject.getJSONObject("data").get("status");
-        System.out.println("状态查询--"+status);
-        if (status.equals("WAIT")) {
-            directChargingOrderDto1.setState(5);
-        } else if (status.equals("SUCCESS")) {
-            directChargingOrderDto1.setState(2);
-
-            directFanyong(directChargingOrderDto);
-
-        } else if (status.equals("FAIL")) {
-            directChargingOrderDto1.setState(4);
-        } else {
-            directChargingOrderDto1.setState(4);
-        }
-        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
-        System.out.println(directChargingOrderDto1.toString());
-        return new JSONResult<>("状态查询成功", 200);
+        return null;
         /*
         String URL="https://huafei.renduoduo2019.com/api/mobile/ordersta";
         //人多多的订单号（由我方生成）
@@ -1282,15 +1388,17 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         List<DirectChargingOrderDto> deliveryList = null;
         Map<String, DirectChargingOrderDto> deliveryMap = new HashMap<>();
         System.out.println("读取Excel");
+        System.out.println(file.getOriginalFilename());
         deliveryList = DirectChargingSystemDelivery.readExcel(file.getOriginalFilename(), inputStream);
         System.out.println(deliveryList);
         if(deliveryList != null){
             for (DirectChargingOrderDto directChargingOrderDto : deliveryList){
-                result = oilCardRechargeMapperExtra.importState(directChargingOrderDto);
-
-                if (directChargingOrderDto.getState() == 2){
-                    directFanyong(directChargingOrderDto);
-                }
+//                result = oilCardRechargeMapperExtra.importState(directChargingOrderDto);
+//
+//                if (directChargingOrderDto.getState() == 2){
+//                    directFanyong(directChargingOrderDto);
+//                }
+                result += this.insertOilCardOrder(directChargingOrderDto) ? 1 : 0;
             }
         }
         return result;
@@ -1461,8 +1569,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                 row.createCell(count++).setCellValue("当日超次数");
             }else if (8 == (list.get(i).getState())){
                 row.createCell(count++).setCellValue("携号转网");
-            }else {
-                row.createCell(count++).setCellValue("携号转网");
+            }else if (9 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("排队中");
+            }else if (10 == (list.get(i).getState())){
+                row.createCell(count++).setCellValue("待充值（快充）");
+            } else {
+                row.createCell(count++).setCellValue("其他");
             }
             row.createCell(count++).setCellValue(list.get(i).getCustomerNumber());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getCreateAt()));

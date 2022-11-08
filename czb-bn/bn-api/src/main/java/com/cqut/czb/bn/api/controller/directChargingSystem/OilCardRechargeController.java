@@ -279,6 +279,12 @@ public class OilCardRechargeController {
         return oilCardRechargeService.oilCardRechargeCallBack(backInfo);
     }
 
+    @PostMapping("/fastCallBack")
+    public String fastCallBack(FastBackInfo backInfo){
+        System.out.println(backInfo);
+        return oilCardRechargeService.fastCallBack(backInfo);
+    }
+
     @PostMapping("/onlineorderSubmission")
     @ResponseBody
     public JSONResult chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto){
@@ -296,6 +302,30 @@ public class OilCardRechargeController {
     @PostMapping("/insertOilCardOrder")
     @ResponseBody
     public JSONResult insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto){
+        if (oilCardRechargeService.insertOilCardOrder(directChargingOrderDto)){
+            return new JSONResult("新增成功", 200);
+        }
+        return new JSONResult("新增失败", 400);
+    }
+
+    @PostMapping("/fastOilOrderSubmit")
+    @ResponseBody
+    public JSONResult fastOilOrderSubmit(DirectChargingOrderDto directChargingOrderDto){
+        try {
+            if (directChargingOrderDto.getOrderId() == null){
+                directChargingOrderDto.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            }
+            String res = oilCardRechargeService.fastOilOrderSubmit(directChargingOrderDto);
+            return new JSONResult(res, 200);
+        } catch (Exception e) {
+            return new JSONResult(e.getMessage(), 400);
+        }
+    }
+
+    @PostMapping("/insertOilCardOrderFast")
+    @ResponseBody
+    public JSONResult insertOilCardOrderFast(DirectChargingOrderDto directChargingOrderDto){
+        directChargingOrderDto.setState(10);
         if (oilCardRechargeService.insertOilCardOrder(directChargingOrderDto)){
             return new JSONResult("新增成功", 200);
         }
