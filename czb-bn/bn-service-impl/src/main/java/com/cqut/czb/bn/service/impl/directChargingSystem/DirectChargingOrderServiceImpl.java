@@ -9,6 +9,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingOrderService;
+import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.fanyong.FanyongLogService;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
 
     @Autowired
     UserRechargeService userRechargeService;
+
+    @Autowired
+    OilCardRechargeService oilCardRechargeService;
 
     @Override
     public JSONResult updateRecord(DirectChargingOrderDto directChargingOrderDto) {
@@ -70,12 +74,8 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
                 System.out.println("手动设置充值失败");
                 // 充值失败
                 try {
-                    if (null != petrolSalesRecordsMapperExtra.selectInfoByOrgId(directChargingOrderDto.getOldOrderId())){
-                        petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOldOrderId());
-                        // 退款
-                        userRechargeService.drawback(directChargingOrderDto.getOldOrderId(), false);
-                        System.out.println("更变线下大客户充值订单成功");
-                    }
+                    directChargingOrderDto.setOrderId(directChargingOrderDto.getOldOrderId());
+                    oilCardRechargeService.dealOrderExtra(false, directChargingOrderDto);
                 } catch (Exception e){
                     e.printStackTrace();
                 }

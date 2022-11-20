@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.service.impl.directChargingSystem;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -9,16 +8,11 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapper;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
-import com.cqut.czb.bn.dao.mapper.electricityRecharge.ElectricityRechargeMapperExtra;
-import com.cqut.czb.bn.entity.dto.H5StockDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.*;
-import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
-import com.cqut.czb.bn.entity.entity.Dict;
-import com.cqut.czb.bn.entity.entity.User;
-import com.cqut.czb.bn.entity.entity.VipAreaConfig;
 import com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
@@ -27,45 +21,32 @@ import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
 import com.cqut.czb.bn.service.fanyong.FanyongLogService;
-import com.cqut.czb.bn.service.impl.h5Stock.H5StockDelivery;
-import com.cqut.czb.bn.service.impl.payBack.FanYongServiceImpl;
 import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.HttpRequest;
-import com.cqut.czb.bn.service.impl.payBack.petrolCoupons.luPay.util.LuPayApiConfig;
 import com.cqut.czb.bn.service.impl.personCenterImpl.AlipayConfig;
-import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
 import com.cqut.czb.bn.util.constants.SystemConstants;
 import com.cqut.czb.bn.util.md5.MD5Util;
 import com.cqut.czb.bn.util.method.HttpClient4;
 import com.cqut.czb.bn.util.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URLEncoder;
-import java.nio.Buffer;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.stream.Collectors;
 
 @Service
 public class OilCardRechargeServiceImpl implements OilCardRechargeService {
@@ -98,6 +79,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Autowired
     private UserRechargeService userRechargeService;
+
+    @Autowired
+    private DirectChargingOrderMapper directChargingOrderMapper;
 
     private TimeTaskManager timeTaskManager = new TimeTaskManager();
 
@@ -719,12 +703,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         } else {
             directChargingOrderDto1.setState(4);
 
-            if (null != petrolSalesRecordsMapperExtra.selectInfoByOrgId(directChargingOrderDto.getOrderId())){
-                petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
-                // 退款
-                userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
-                System.out.println("更变线下大客户充值订单成功");
-            }
+            dealOrderExtra(false, directChargingOrderDto);
         }
         oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
 
@@ -749,34 +728,69 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             if (backInfo.getStatus() == 2) {//交易成功
                 directChargingOrderDto.setState(2);
                 System.out.println("充值成功");
-                try {
-                    petrolSalesRecordsMapperExtra.recharge(directChargingOrderDto.getOrderId());
-                    System.out.println("更变线下大客户充值订单成功");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+                dealOrderExtra(true, directChargingOrderDto);
 
             } else if (backInfo.getStatus() == 3){//交易失败
                 directChargingOrderDto.setState(4);
-                System.out.println("充值失败");
-                try {
-                    // 标记问题卡号
-                    petrolSalesRecordsMapperExtra.updateMatterCard(directChargingOrderDto.getOrderId());
-                    // 退款
-                    userRechargeService.drawback(directChargingOrderDto.getOrderId(), false);
-                    System.out.println("更变线下大客户充值订单成功");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+                dealOrderExtra(false, directChargingOrderDto);
             }
             boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
             return "ok";
         } catch (Exception e) {
             e.printStackTrace();
+            directChargingOrderDto.setState(4);
+            dealOrderExtra(false, directChargingOrderDto);
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "ok";
         }
-        directChargingOrderDto.setState(4);
-        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
-        return "ok";
+    }
+
+    @Override
+    public void dealOrderExtra(boolean success, DirectChargingOrderDto directChargingOrderDto){
+        String orderId = directChargingOrderDto.getOrderId();
+
+        if (petrolSalesRecordsMapperExtra.selectInfoByOrgId(orderId) == null){
+            return;
+        }
+        DirectChargingOrderDto localOrder = oilCardRechargeMapperExtra.getOrder(orderId);
+        if (localOrder != null){
+            directChargingOrderDto = localOrder;
+        }
+        String notifyUrl = directChargingOrderDto.getCustomerOrderId();
+        String thirdOrderId = directChargingOrderDto.getThirdOrderId();
+
+        try {
+            if (success){
+                petrolSalesRecordsMapperExtra.recharge(orderId);
+                if (notifyUrl != null){
+                    ThirdOrderCallback back = new ThirdOrderCallback(200, "充值成功", thirdOrderId);
+                    HttpClient4.doPost(notifyUrl, JSONObject.fromObject(back), 0);
+                    System.out.println("第三方回调成功");
+                    System.out.println(back);
+                }
+                System.out.println("更变线下大客户充值订单成功");
+            } else {
+                // 标记问题卡号
+                petrolSalesRecordsMapperExtra.updateMatterCard(orderId);
+                // 退款
+                userRechargeService.drawback(orderId, false);
+
+                if (notifyUrl != null){
+                    ThirdOrderCallback back = new ThirdOrderCallback(400, "充值失败", thirdOrderId);
+                    HttpClient4.doPost(notifyUrl, JSONObject.fromObject(back), 0);
+                    System.out.println("第三方回调成功");
+                    System.out.println(back);
+                }
+                System.out.println("更变线下大客户充值订单成功");
+            }
+        } catch (Exception e){
+            System.out.println("通知第三方失败");
+            e.printStackTrace();
+            if (notifyUrl != null){
+                ThirdOrderCallback back = new ThirdOrderCallback(400, "充值失败", thirdOrderId);
+                HttpClient4.doPost(notifyUrl, JSONObject.fromObject(back), 0);
+            }
+        }
     }
 
     @Override
@@ -834,6 +848,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         DirectChargingOrderDto directChargingOrder = new DirectChargingOrderDto();
         directChargingOrder.setUserId(directChargingOrderDto.getUserId());
         directChargingOrder.setOrderId(directChargingOrderDto.getOrderId());
+        directChargingOrder.setThirdOrderId(directChargingOrder.getThirdOrderId());
         if (directChargingOrder.getOrderId() == null){
             directChargingOrder.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
         }
@@ -848,6 +863,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrder.setRechargeAccount(directChargingOrderDto.getRechargeAccount());
         directChargingOrder.setCardholder(directChargingOrderDto.getCardholder());
         directChargingOrder.setCustomerNumber(directChargingOrderDto.getCustomerNumber());
+        directChargingOrder.setCustomerOrderId(directChargingOrderDto.getCustomerOrderId());
 
         insertRecords=oilCardRechargeMapperExtra.insertOilOrder(directChargingOrder)>0;
 

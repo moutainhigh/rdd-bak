@@ -39,6 +39,8 @@ public interface OilCardRechargeService{
 
     JSONResult getOilOrderState(DirectChargingOrderDto directChargingOrderDto);
 
+    void dealOrderExtra(boolean success, DirectChargingOrderDto directChargingOrderDto);
+
     String fastCallBack(FastBackInfo backInfo);
 
     //    插入订单

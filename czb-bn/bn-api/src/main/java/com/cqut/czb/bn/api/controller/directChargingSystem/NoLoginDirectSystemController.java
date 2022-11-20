@@ -1,24 +1,21 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.api.controller.autoRecharge.UserRechargeController;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.UrlConfig;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.CustomerPhoneOrderDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.CustomerRechargeDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IDictService;
 import com.cqut.czb.bn.service.IRoleService;
+import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingCommodityService;
 import com.cqut.czb.bn.service.directChargingSystem.NoLoginDirectSystemService;
 import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -35,6 +32,9 @@ public class NoLoginDirectSystemController {
 
     @Autowired
     NoLoginDirectSystemService noLoginDirectSystemService;
+
+    @Autowired
+    UserRechargeService userRechargeService;
 
     @GetMapping("/getAllCommodity")
     public JSONResult getAllCommodity(PageDTO pageDTO) {
@@ -67,5 +67,15 @@ public class NoLoginDirectSystemController {
     @RequestMapping(value = "/getOrderDetails",method = RequestMethod.POST)
     public JSONResult getOrderDetails(CustomerPhoneOrderDto customerPhoneOrderDto){
         return noLoginDirectSystemService.getOrderDetails(customerPhoneOrderDto);
+    }
+
+    @PostMapping("/oil")
+    public ThirdOrderCallback insertOilOrder(ThirdOrder order){
+        try {
+            return userRechargeService.thirdInsert(order);
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ThirdOrderCallback(400, "下单失败", order.getOrderId());
+        }
     }
 }
