@@ -8,10 +8,23 @@ public class ThirdOrderCallback {
 
     String orderId;
 
+    String sign;
+
+    public ThirdOrderCallback() {
+    }
+
     public ThirdOrderCallback(int code, String msg, String orderId) {
         this.code = code;
         this.msg = msg;
         this.orderId = orderId;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 
     @Override
@@ -20,6 +33,7 @@ public class ThirdOrderCallback {
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", orderId='" + orderId + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 

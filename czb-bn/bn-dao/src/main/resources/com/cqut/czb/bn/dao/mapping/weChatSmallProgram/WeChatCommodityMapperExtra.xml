@@ -484,9 +484,7 @@
             <if test="jump != null">
                 jumpto = #{jumpto,jdbcType=VARCHAR},
             </if>
-            <if test="pintuanTarget != null" >
-                pintuan_target = #{pintuanTarget,jdbcType=DOUBLE},
-            </if>
+            pintuan_target = #{pintuanTarget},
         </set>
         where commodity_id = #{commodityId,jdbcType=VARCHAR}
     </update>

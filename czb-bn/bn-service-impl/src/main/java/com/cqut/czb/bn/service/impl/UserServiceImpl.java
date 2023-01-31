@@ -137,6 +137,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean assignRole(UserInputDTO userInputDTO) {
+        System.out.println("更变用户权限"+userInputDTO.getUserId()+"--"+userInputDTO.getRoleId());
         UserRole userRole = new UserRole();
         userRole.setUserId(userInputDTO.getUserId());
         List<UserRole> deleteList = userRoleMapperExtra.slectUserRoleList(userRole);

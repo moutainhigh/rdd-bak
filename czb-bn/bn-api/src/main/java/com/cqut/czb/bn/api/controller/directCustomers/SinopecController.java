@@ -26,6 +26,7 @@ public class SinopecController {
     // 个人卡订单状态查询文档
     @GetMapping("/ordersta")
     public JSONResult ordersta(DirectCustomersDto directCustomersDto){
-        return sinopecService.ordersta(directCustomersDto);
+//        return sinopecService.ordersta(directCustomersDto);
+        return null;
     }
 }

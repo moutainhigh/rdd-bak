@@ -86,8 +86,8 @@ public class HttpClient4 {
         HttpPost httpPost = new HttpPost(url);
         // 配置请求参数实例
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(35000)// 设置连接主机服务超时时间
-                .setConnectionRequestTimeout(35000)// 设置连接请求超时时间
-                .setSocketTimeout(60000)// 设置读取数据连接超时时间
+                .setConnectionRequestTimeout(5000)// 设置连接请求超时时间
+                .setSocketTimeout(10000)// 设置读取数据连接超时时间
                 .build();
         /**
          *
@@ -168,8 +168,8 @@ public class HttpClient4 {
         HttpPost httpPost = new HttpPost(url);
         // 配置请求参数实例
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(35000)// 设置连接主机服务超时时间
-                .setConnectionRequestTimeout(35000)// 设置连接请求超时时间
-                .setSocketTimeout(60000)// 设置读取数据连接超时时间
+                .setConnectionRequestTimeout(5000)// 设置连接请求超时时间
+                .setSocketTimeout(10000)// 设置读取数据连接超时时间
                 .build();
         /**
          *

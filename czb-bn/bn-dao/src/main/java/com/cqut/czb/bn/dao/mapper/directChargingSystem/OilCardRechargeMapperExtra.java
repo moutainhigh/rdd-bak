@@ -49,6 +49,8 @@ public interface OilCardRechargeMapperExtra {
 
     List<DirectChargingOrderDto> getAllOnceOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 
+    List<DirectChargingOrderDto> getCommonUserOrder(DirectChargingOrderDto directChargingOrderDto);
+
     DirectChargingOrderDto getTheStatics(DirectChargingOrderDto directChargingOrderDto);
 
     TotalConsumptionDto getTotalConsumption(@Param("type") int type);
@@ -84,4 +86,8 @@ public interface OilCardRechargeMapperExtra {
     List<DirectChargingOrderDto> getPartOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 
     int importState(DirectChargingOrderDto directChargingOrderDto);
+
+    int dropOrder(@Param("id") String id);
+
+    DirectChargingOrderDto getOrderByAccountToday(String account);
 }

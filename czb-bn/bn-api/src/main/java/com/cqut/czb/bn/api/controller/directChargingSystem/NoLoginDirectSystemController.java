@@ -1,23 +1,17 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
-import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.api.controller.autoRecharge.UserRechargeController;
 import com.cqut.czb.bn.entity.dto.PageDTO;
 import com.cqut.czb.bn.entity.dto.PayConfig.UrlConfig;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
-import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IDictService;
-import com.cqut.czb.bn.service.IRoleService;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.DirectChargingCommodityService;
 import com.cqut.czb.bn.service.directChargingSystem.NoLoginDirectSystemService;
-import com.cqut.czb.bn.service.directChargingSystem.PrepaidRefillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -35,6 +29,7 @@ public class NoLoginDirectSystemController {
 
     @Autowired
     UserRechargeService userRechargeService;
+
 
     @GetMapping("/getAllCommodity")
     public JSONResult getAllCommodity(PageDTO pageDTO) {
@@ -70,12 +65,23 @@ public class NoLoginDirectSystemController {
     }
 
     @PostMapping("/oil")
-    public ThirdOrderCallback insertOilOrder(ThirdOrder order){
+    public ThirdOrderCallback insertOilOrder(RechargeOrder order){
         try {
-            return userRechargeService.thirdInsert(order);
+            return userRechargeService.insertThirdOil(order);
         } catch (Exception e){
             e.printStackTrace();
             return new ThirdOrderCallback(400, "下单失败", order.getOrderId());
         }
     }
+
+    @PostMapping("/phone")
+    public ThirdOrderCallback insertPhoneOrder(RechargeOrder order){
+        try {
+            return userRechargeService.insertThirdPhone(order);
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ThirdOrderCallback(400, "下单失败", order.getOrderId());
+        }
+    }
+
 }

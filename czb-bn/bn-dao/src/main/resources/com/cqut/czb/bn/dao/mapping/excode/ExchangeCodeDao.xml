@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.czb.bn.dao.mapper.excode.ExchangeCodeDao">
+
+    <resultMap id="BaseResultMap" type="com.cqut.czb.bn.entity.entity.exchangeCode.ExchangeCode">
+        <!--@Table exchange_code-->
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="isuse" column="isuse" jdbcType="INTEGER"/>
+        <result property="amount" column="amount" jdbcType="NUMERIC"/>
+        <result property="userid" column="userid" jdbcType="VARCHAR"/>
+        <result property="useraccount" column="useraccount" jdbcType="VARCHAR"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          code, isuse, amount, userid, updatetime, useraccount
+        from exchange_code
+        where code = #{code}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          code, isuse, amount, userid, updatetime, useraccount
+        from exchange_code
+        <where>
+            <if test="query.code != null and query.code != ''">
+                and code = #{query.code}
+            </if>
+            <if test="query.isuse != null">
+                and isuse = #{query.isuse}
+            </if>
+            <if test="query.amount != null">
+                and amount = #{query.amount}
+            </if>
+            <if test="query.userid != null and query.userid != ''">
+                and userid = #{query.userid}
+            </if>
+            <if test="query.useraccount != null and query.useraccount != ''">
+                and useraccount = #{query.useraccount}
+            </if>
+            <if test="query.updatetime != null">
+                and updatetime = #{query.updatetime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          code, isuse, amount, userid, updatetime, useraccount
+        from czb.exchange_code
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from exchange_code
+        <where>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="isuse != null">
+                and isuse = #{isuse}
+            </if>
+            <if test="amount != null">
+                and amount = #{amount}
+            </if>
+            <if test="userid != null and userid != ''">
+                and userid = #{userid}
+            </if>
+            <if test="useraccount != null and useraccount != ''">
+                and useraccount = #{useraccount}
+            </if>
+            <if test="updatetime != null">
+                and updatetime = #{updatetime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="code" useGeneratedKeys="true">
+        insert into exchange_code(code, isuse, amount, userid, updatetime, useraccount)
+        values (#{code}, #{isuse}, #{amount}, #{userid}, #{updatetime}, #{useraccount})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="code" useGeneratedKeys="true">
+        insert into exchange_code(code, isuse, amount, userid, updatetime, useraccount)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.code}, #{entity.isuse}, #{entity.amount}, #{entity.userid}, #{entity.updatetime}, #{entity.useraccount})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="code" useGeneratedKeys="true">
+        insert into exchange_code(isuse, amount, userid, updatetime, useraccount)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.isuse}, #{entity.amount}, #{entity.userid}, #{entity.updatetime}, #{entity.useraccount})
+        </foreach>
+        on duplicate key update
+        isuse = values(isuse),
+        amount = values(amount),
+        userid = values(userid),
+        useraccount = values(useraccount),
+        updatetime = values(updatetime)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update exchange_code
+        <set>
+            <if test="isuse != null">
+                isuse = #{isuse},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="userid != null and userid != ''">
+                userid = #{userid},
+            </if>
+            <if test="useraccount != null and useraccount != ''">
+                useraccount = #{useraccount},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime},
+            </if>
+        </set>
+        where code = #{code}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from exchange_code where code = #{code}
+    </delete>
+
+</mapper>
+

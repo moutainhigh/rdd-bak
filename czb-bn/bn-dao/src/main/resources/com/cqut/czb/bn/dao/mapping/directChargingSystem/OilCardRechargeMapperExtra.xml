@@ -1,95 +1,110 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra" >
+<mapper namespace="com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra">
     <select id="getOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        SELECT
-            order_id orderId,
-            third_order_id thirdOrderId,
-            recharge_amount rechargeAmount,
-            real_price realPrice,
-            state state,
-            b.user_account userAccount,
-            sinopec_petrol_num sinopecPetrolNum,
-            petrolChina_petrol_num petrolChinaPetrolNum,
-            recharge_account rechargeAccount,
-            record_type recordType,
-            a.create_at createAt
-        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
-            left join czb_user_card_relation c on a.user_id = c.user_id
-        WHERE a.user_id = #{userId,jdbcType=VARCHAR} and record_type = 1 and state != 0
+        SELECT order_id               orderId,
+               third_order_id         thirdOrderId,
+               recharge_amount        rechargeAmount,
+               real_price             realPrice,
+               state                  state,
+               b.user_account         userAccount,
+               sinopec_petrol_num     sinopecPetrolNum,
+               petrolChina_petrol_num petrolChinaPetrolNum,
+               recharge_account       rechargeAccount,
+               record_type            recordType,
+               a.create_at            createAt
+        FROM czb_direct_charging_order a
+                 left join czb_user b on a.user_id = b.user_id
+                 left join czb_user_card_relation c on a.user_id = c.user_id
+        WHERE a.user_id = #{userId,jdbcType=VARCHAR}
+          and record_type = 1
+          and state != 0
         order by a.create_at DESC
     </select>
 
-    <select id="getOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        SELECT
-            order_id orderId,
-            third_order_id thirdOrderId,
-            recharge_amount rechargeAmount,
-            real_price realPrice,
-            state state,
-            b.user_account userAccount,
-            sinopec_petrol_num sinopecPetrolNum,
-            petrolChina_petrol_num petrolChinaPetrolNum,
-            record_type recordType,
-            recharge_account rechargeAccount,
-            a.create_at createAt
-        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
-                                         left join czb_user_card_relation c on a.user_id = c.user_id
-        WHERE a.user_id = #{userId,jdbcType=VARCHAR} and record_type != 1 and state != 0
+    <select id="getOilOrderInfoList"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT order_id               orderId,
+               third_order_id         thirdOrderId,
+               recharge_amount        rechargeAmount,
+               real_price             realPrice,
+               state                  state,
+               b.user_account         userAccount,
+               sinopec_petrol_num     sinopecPetrolNum,
+               petrolChina_petrol_num petrolChinaPetrolNum,
+               record_type            recordType,
+               recharge_account       rechargeAccount,
+               a.create_at            createAt
+        FROM czb_direct_charging_order a
+                 left join czb_user b on a.user_id = b.user_id
+                 left join czb_user_card_relation c on a.user_id = c.user_id
+        WHERE a.user_id = #{userId,jdbcType=VARCHAR}
+          and record_type != 1
+          and record_type != 8
+          and state != 0
         order by a.create_at DESC
     </select>
 
-    <select id="getOnceOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        SELECT
-            order_id orderId,
-            third_order_id thirdOrderId,
-            recharge_amount rechargeAmount,
-            real_price realPrice,
-            state state,
-            recharge_account userAccount,
-            record_type recordType,
-            create_at createAt
+    <select id="getOnceOrderInfoList"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT order_id         orderId,
+               third_order_id   thirdOrderId,
+               recharge_amount  rechargeAmount,
+               real_price       realPrice,
+               state            state,
+               recharge_account userAccount,
+               record_type      recordType,
+               create_at        createAt
         FROM czb_direct_charging_order
-        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type = 1 and state != 0
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+          and record_type = 1
+          and state != 0
         order by create_at DESC
     </select>
 
-    <select id="getOnceSOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        SELECT
-            order_id orderId,
-            third_order_id thirdOrderId,
-            recharge_amount rechargeAmount,
-            real_price realPrice,
-            state state,
-            recharge_account sinopecPetrolNum,
-            record_type recordType,
-            create_at createAt
+    <select id="getOnceSOilOrderInfoList"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT order_id         orderId,
+               third_order_id   thirdOrderId,
+               recharge_amount  rechargeAmount,
+               real_price       realPrice,
+               state            state,
+               recharge_account sinopecPetrolNum,
+               record_type      recordType,
+               create_at        createAt
         FROM czb_direct_charging_order
-        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type != 1 and state != 0
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+          and record_type != 1
+          and record_type != 8
+          and state != 0
         order by create_at DESC
     </select>
 
-    <select id="getOnceCOilOrderInfoList" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        SELECT
-            order_id orderId,
-            third_order_id thirdOrderId,
-            recharge_amount rechargeAmount,
-            real_price realPrice,
-            state state,
-            recharge_account petrolChinaPetrolNum,
-            record_type recordType,
-            create_at createAt
+    <select id="getOnceCOilOrderInfoList"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT order_id         orderId,
+               third_order_id   thirdOrderId,
+               recharge_amount  rechargeAmount,
+               real_price       realPrice,
+               state            state,
+               recharge_account petrolChinaPetrolNum,
+               record_type      recordType,
+               create_at        createAt
         FROM czb_direct_charging_order
-        WHERE user_id = #{userId,jdbcType=VARCHAR} and record_type != 1 and state != 0
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+          and record_type != 1
+          and record_type != 8
+          and state != 0
         order by create_at DESC
     </select>
 
-    <select id="getAllUserCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <select id="getAllUserCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
-            user_account userAccount,
-            sinopec_petrol_num sinopecPetrolNum,
-            petrolChina_petrol_num petrolChinaPetrolNum,
-            a.create_at createAt
+        user_account userAccount,
+        sinopec_petrol_num sinopecPetrolNum,
+        petrolChina_petrol_num petrolChinaPetrolNum,
+        a.create_at createAt
         FROM czb_user_card_relation a left join czb_user b on a.user_id = b.user_id
         <where>
             <if test="userAccount!= null and userAccount!= ''">
@@ -102,7 +117,9 @@
         </where>
     </select>
 
-    <select id="getAllOrderInfoList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <select id="getAllOrderInfoList"
+            parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
         a.order_id orderId,
         a.third_order_id thirdOrderId,
@@ -119,11 +136,8 @@
         left join czb_user cu on cu.user_id = b.superior_user
         left join czb_user_card_relation d on a.user_id = d.user_id
         <where>
-            <if test="recordType == 1">
-                a.record_type = 1
-            </if>
-            <if test="recordType != 1">
-                a.record_type = 2 or a.record_type = 3
+            <if test="recordType != null">
+                and (record_type = #{recordType})
             </if>
             <if test="startTime!= null and endTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -144,11 +158,16 @@
             <if test="superiorAccount!= null and superiorAccount!= ''">
                 and cu.user_account = #{superiorAccount,jdbcType=VARCHAR}
             </if>
+            <if test="upName != null and upName != ''">
+                and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
+            </if>
         </where>
         order by a.create_at DESC
     </select>
 
-    <select id="getAllOnceOrderInfoList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <select id="getAllOnceOrderInfoList"
+            parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
         order_id orderId,
         third_order_id thirdOrderId,
@@ -161,15 +180,13 @@
         customer_number customerNumber,
         customer_order_id customerOrderId,
         b.user_account theUserAccount,
-        cardholder cardholder
+        cardholder cardholder,
+        up_name upName
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
         <where>
             `state` != 0
-            <if test="recordType == 1">
-                and (record_type = 1 or record_type = 5)
-            </if>
-            <if test="recordType != 1">
-                and (record_type = 2 or record_type = 3 or record_type = 4)
+            <if test="recordType != null">
+                and (record_type = #{recordType})
             </if>
             <if test="startTime!= null and endTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -185,13 +202,54 @@
                 and `state` = #{state,jdbcType=INTEGER}
             </if>
             <if test="cardholder != null and cardholder != ''">
-                and cardholder like CONCAT('%',#{cardholder,jdbcType=VARCHAR},'%')
+                and cardholder like CONCAT(#{cardholder,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="upName != null and upName != ''">
+                and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
             </if>
         </where>
         order by a.create_at DESC
     </select>
 
-    <select id="getPartOrderInfoList" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <select id="getCommonUserOrder"
+            parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT
+        order_id orderId,
+        recharge_amount rechargeAmount,
+        state state,
+        a.create_at createAt,
+        a.user_id userId,
+        a.update_at updateAt,
+        recharge_account rechargeAccount,
+        record_type recordType,
+        b.user_account theUserAccount,
+        cardholder cardholder
+        FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
+        <where>
+            `state` != 0
+            <if test="userId != null and userId != ''">
+                and (a.user_id = #{userId})
+            </if>
+            <if test="recordType != null">
+                and (record_type = #{recordType})
+            </if>
+            <if test="rechargeAccount!= null and rechargeAccount!= ''">
+                and recharge_account = #{rechargeAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null">
+                and `state` = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="cardholder != null and cardholder != ''">
+                and cardholder like CONCAT(#{cardholder,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        order by a.update_at DESC
+    </select>
+
+    <select id="getOrderByAccountgetPartOrderInfoList"
+            parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
         order_id orderId,
         third_order_id thirdOrderId,
@@ -207,12 +265,10 @@
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
         <where>
             `state` != 0
-            <if test="recordType == 1">
-                and record_type = 1
+            <if test="recordType != null">
+                and (record_type = #{recordType})
             </if>
-            <if test="recordType != 1">
-                and (record_type = 2 or record_type = 3 or record_type = 4)
-            </if>
+
             <if test="startTime!= null and endTime!= null">
                 and a.create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
                 and a.create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
@@ -229,24 +285,28 @@
             <if test="cardholder != null and cardholder != ''">
                 and cardholder like CONCAT('%',#{cardholder,jdbcType=VARCHAR},'%')
             </if>
+            <if test="upName != null and upName != ''">
+                and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
+            </if>
         </where>
         order by a.create_at DESC
-        limit 0,5
     </select>
 
-    <select id="getTheStatics" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <select id="getTheStatics" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto"
+            resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         SELECT
         sum(recharge_amount) totalRechargeAmount,
         sum(real_price) totalRealPrice
         FROM czb_direct_charging_order
         <where>
             `state` != 0
-            <if test="recordType == 1">
-                and record_type = 1
+            <!--            <if test="recordType != 1">-->
+            <!--                and (record_type = 2 or record_type = 3 or record_type = 4 or record_type = 8)-->
+            <!--            </if>-->
+            <if test="recordType != null">
+                and (record_type = #{recordType})
             </if>
-            <if test="recordType != 1">
-                and (record_type = 2 or record_type = 3 or record_type = 4)
-            </if>
+
             <if test="startTime!= null and endTime!= null">
                 and create_at &gt;= #{startTime,jdbcType=TIMESTAMP}
                 and create_at &lt;= #{endTime,jdbcType=TIMESTAMP}
@@ -263,51 +323,55 @@
             <if test="cardholder != null and cardholder != ''">
                 and cardholder like CONCAT('%',#{cardholder,jdbcType=VARCHAR},'%')
             </if>
+            <if test="upName != null and upName != ''">
+                and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
+            </if>
         </where>
     </select>
 
     <select id="getTotalConsumption" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.TotalConsumptionDto">
         SELECT
-            *
+        *
         FROM
-            (
-                SELECT SUM( real_price ) realPrice,
-                       SUM( recharge_amount ) rechargeAmount,
-                       COUNT( order_id ) orderNumber
-                FROM
-                    czb_direct_charging_order
-                WHERE
-                    `state` != 0
-                    AND `state` != 3
-                    <if test="type == 1">
-                        AND record_type = 1
-                    </if>
-                    <if test="type == 2">
-                        AND (record_type = 2 OR record_type = 3)
-                    </if>
-            ) AS fnd1
-                JOIN (
-                SELECT
-                    SUM( real_price ) todayRealPrice,
-                    SUM( recharge_amount ) todayRechargeAmount,
-                    COUNT( order_id ) todayOrderNumber
-                FROM
-                    czb_direct_charging_order
-                WHERE
-                    `state` != 0
-                    AND `state` != 3
-                  AND TO_DAYS( create_at ) - TO_DAYS(
-                        NOW()) = 0
-                <if test="type == 1">
-                    AND record_type = 1
-                </if>
-                <if test="type == 2">
-                    AND (record_type = 2 OR record_type = 3)
-                </if>
-            ) AS fnd2
+        (
+        SELECT SUM( real_price ) realPrice,
+        SUM( recharge_amount ) rechargeAmount,
+        COUNT( order_id ) orderNumber
+        FROM
+        czb_direct_charging_order
+        WHERE
+        `state` != 0
+        AND `state` != 3
+        <if test="type == 1">
+            AND record_type = 1
+        </if>
+        <if test="type == 2">
+            and (record_type = 2 or record_type = 3 or record_type = 8)
+        </if>
+        ) AS fnd1
+        JOIN (
+        SELECT
+        SUM( real_price ) todayRealPrice,
+        SUM( recharge_amount ) todayRechargeAmount,
+        COUNT( order_id ) todayOrderNumber
+        FROM
+        czb_direct_charging_order
+        WHERE
+        `state` != 0
+        AND `state` != 3
+        AND TO_DAYS( create_at ) - TO_DAYS(
+        NOW()) = 0
+        <if test="type == 1">
+            AND record_type = 1
+        </if>
+        <if test="type == 2">
+            and (record_type = 2 or record_type = 3 or record_type = 8)
+        </if>
+        ) AS fnd2
     </select>
 
-    <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging" resultType="java.lang.Integer">
+    <select id="isExistOilCard" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.OilCardBinging"
+            resultType="java.lang.Integer">
         SELECT COUNT(record_id)
         FROM czb_user_card_relation
         <where>
@@ -343,41 +407,41 @@
         WHERE user_id = #{userId,jdbcType=VARCHAR}
     </update>
 
-    <update id="updateOrderState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <update id="updateOrderState"
+            parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         UPDATE czb_direct_charging_order
         set state = #{state,jdbcType=INTEGER}
+        <if test="upName != null and upName != ''">
+            ,up_name = #{upName,jdbcType=VARCHAR}
+        </if>
         WHERE order_id = #{orderId,jdbcType=VARCHAR}
     </update>
 
     <update id="importState" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         update czb_direct_charging_order
-            set state = #{state ,jdbcType=INTEGER}
-        where
-            order_id = #{orderId,jdbcType=VARCHAR}
+        set state = #{state ,jdbcType=INTEGER}
+        where order_id = #{orderId,jdbcType=VARCHAR}
     </update>
 
     <insert id="insertPetrolNum" parameterType="com.cqut.czb.bn.entity.entity.directChargingSystem.UserCardRelation">
         insert into czb_user_card_relation (record_id, user_id, sinopec_petrol_num,
-          petrolChina_petrol_num, create_at, update_at
-          )
+                                            petrolChina_petrol_num, create_at, update_at)
         values (#{recordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{sinopecPetrolNum,jdbcType=VARCHAR},
-          #{petrolchinaPetrolNum,jdbcType=VARCHAR}, now(), now()
-          )
+                #{petrolchinaPetrolNum,jdbcType=VARCHAR}, now(), now())
     </insert>
     <insert id="insertOrder" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        insert into
-        czb_direct_charging_order (order_id,
-                                   recharge_amount,
-                                   user_id,
-                                   payment_method,
-                                   state,
-                                   create_at,
-                                   update_at,
-                                   record_type,
-                                   real_price,
-                                   recharge_account,
-                                   customer_order_id
-        )
+        insert into czb_direct_charging_order (order_id,
+                                               recharge_amount,
+                                               user_id,
+                                               payment_method,
+                                               state,
+                                               create_at,
+                                               update_at,
+                                               record_type,
+                                               real_price,
+                                               recharge_account,
+                                               customer_order_id,
+                                               up_name)
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
                 #{userId,jdbcType=VARCHAR},
@@ -388,27 +452,26 @@
                 #{recordType,jdbcType=INTEGER },
                 #{realPrice,jdbcType=DOUBLE},
                 #{rechargeAccount,jdbcType=VARCHAR},
-                #{customerOrderId,jdbcType=VARCHAR}
-               )
+                #{customerOrderId,jdbcType=VARCHAR},
+                #{upName,jdbcType=VARCHAR})
     </insert>
 
     <insert id="insertOilOrder" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        insert into
-            czb_direct_charging_order (order_id,
-                                        third_order_id,
-                                       recharge_amount,
-                                       user_id,
-                                       payment_method,
-                                       state,
-                                       create_at,
-                                       update_at,
-                                       record_type,
-                                       real_price,
-                                       recharge_account,
-                                       cardholder,
-                                        customer_number,
-                                       customer_order_id
-        )
+        insert into czb_direct_charging_order (order_id,
+                                               third_order_id,
+                                               recharge_amount,
+                                               user_id,
+                                               payment_method,
+                                               state,
+                                               create_at,
+                                               update_at,
+                                               record_type,
+                                               real_price,
+                                               recharge_account,
+                                               cardholder,
+                                               customer_number,
+                                               customer_order_id,
+                                               up_name)
         values (#{orderId,jdbcType=VARCHAR},
                 #{thirdOrderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
@@ -422,51 +485,74 @@
                 #{rechargeAccount,jdbcType=VARCHAR},
                 #{cardholder,jdbcType=VARCHAR},
                 #{customerNumber,jdbcType=VARCHAR},
-                #{customerOrderId,jdbcType=VARCHAR}
-               )
+                #{customerOrderId,jdbcType=VARCHAR},
+                #{upName,jdbcType=VARCHAR})
     </insert>
 
-    <update id="updateRechargeRecord" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+    <update id="updateRechargeRecord"
+            parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
         update czb_direct_charging_order
-            set third_order_id = #{thirdOrderId,jdbcType=VARCHAR}
-            ,update_at = #{updateAt,jdbcType=TIMESTAMP}
-            ,state = #{state ,jdbcType=INTEGER}
-        where
-            order_id = #{orderId,jdbcType=VARCHAR}
+        set third_order_id = #{thirdOrderId,jdbcType=VARCHAR}
+          , update_at      = #{updateAt,jdbcType=TIMESTAMP}
+          , state          = #{state ,jdbcType=INTEGER}
+          , up_name        = #{upName,jdbcType=VARCHAR}
+        where order_id = #{orderId,jdbcType=VARCHAR}
     </update>
 
     <select id="getOrder" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
-        SELECT
-            order_id orderId,
-            recharge_amount rechargeAmount,
-            record_type recordType,
-            real_price realPrice,
-            recharge_account rechargeAccount,
-            cardholder cardholder,
-            customer_order_id customerOrderId,
-            customer_number customerNumber
+        SELECT order_id          orderId,
+               user_id           userId,
+               recharge_amount   rechargeAmount,
+               third_order_id    thirdOrderId,
+               record_type       recordType,
+               real_price        realPrice,
+               recharge_account  rechargeAccount,
+               cardholder        cardholder,
+               customer_order_id customerOrderId,
+               customer_number   customerNumber,
+               up_name           upName
         FROM czb_direct_charging_order
         WHERE order_id = #{orderId,jdbcType=VARCHAR}
     </select>
 
+    <select id="getOrderByAccountToday" resultType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
+        SELECT order_id          orderId,
+               user_id           userId,
+               recharge_amount   rechargeAmount,
+               third_order_id    thirdOrderId,
+               record_type       recordType,
+               real_price        realPrice,
+               recharge_account  rechargeAccount,
+               cardholder        cardholder,
+               customer_order_id customerOrderId,
+               customer_number   customerNumber,
+               up_name           upName
+        FROM czb_direct_charging_order
+        WHERE recharge_account = #{account,jdbcType=VARCHAR}
+        and create_at BETWEEN CONCAT(CURDATE(),' 00:00:00') AND CONCAT(CURDATE(),' 23:59:59')
+    </select>
+
     <select id="getAccount" resultType="java.lang.String">
-        SELECT
-            user_account
+        SELECT user_account
         FROM czb_user
         WHERE user_id = #{userId,jdbcType=VARCHAR}
     </select>
 
     <select id="getDirectRechargeAmount" resultType="java.lang.Double">
-        SELECT
-            account
+        SELECT account
         FROM czb_direct_charging_commodity
         WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
     </select>
 
     <select id="getMaxIntegralAmount" resultType="java.lang.Double">
-        SELECT
-            max_deduction_amount
+        SELECT max_deduction_amount
         FROM czb_integral_deduction_info
         WHERE commodity_id = #{commodityId,jdbcType=DOUBLE}
     </select>
+
+    <delete id="dropOrder">
+        DELETE
+        FROM czb_direct_charging_order
+        WHERE order_id = #{id,jdbcType=VARCHAR}
+    </delete>
 </mapper>

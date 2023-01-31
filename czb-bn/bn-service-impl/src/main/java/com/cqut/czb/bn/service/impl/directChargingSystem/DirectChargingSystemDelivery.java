@@ -113,6 +113,7 @@ public class DirectChargingSystemDelivery {
         directChargingOrderDto.setRechargeAccount(getStringValue(xssfRow.getCell(1)));
         directChargingOrderDto.setCardholder(getStringValue(xssfRow.getCell(2)));
         directChargingOrderDto.setState(getState(getStringValue(xssfRow.getCell(3))));
+        directChargingOrderDto.setRecordType(getType(getStringValue(xssfRow.getCell(4))));
 //        directChargingOrderDto.setOrderId(getStringValue(xssfRow.getCell(0)));
 //        directChargingOrderDto.setThirdOrderId(getStringValue(xssfRow.getCell(1)));
 //        directChargingOrderDto.setRechargeAccount(getStringValue(xssfRow.getCell(2)));
@@ -175,6 +176,7 @@ public class DirectChargingSystemDelivery {
         directChargingOrderDto.setRechargeAccount(getStringValue(hssfRow.getCell(1)));
         directChargingOrderDto.setCardholder(getStringValue(hssfRow.getCell(2)));
         directChargingOrderDto.setState(getState(getStringValue(hssfRow.getCell(3))));
+        directChargingOrderDto.setRecordType(getType(getStringValue(hssfRow.getCell(4))));
 
 //        directChargingOrderDto.setOrderId(getStringValue(hssfRow.getCell(0)));
 //        directChargingOrderDto.setThirdOrderId(getStringValue(hssfRow.getCell(1)));
@@ -258,6 +260,16 @@ public class DirectChargingSystemDelivery {
             return 10;
         }else {
             return 1;
+        }
+    }
+
+    private static int getType(String val) throws ParseException {
+        if (val.equals("油卡")){
+            return 2;
+        }else if (val.equals("话费")){
+            return 8;
+        } else {
+            throw new ParseException("不支持该类型", 0);
         }
     }
 }

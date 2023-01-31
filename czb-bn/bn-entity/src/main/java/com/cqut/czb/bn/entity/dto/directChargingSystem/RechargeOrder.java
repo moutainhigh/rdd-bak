@@ -1,6 +1,6 @@
 package com.cqut.czb.bn.entity.dto.directChargingSystem;
 
-public class ThirdOrder {
+public class RechargeOrder {
 
     String userId;
 

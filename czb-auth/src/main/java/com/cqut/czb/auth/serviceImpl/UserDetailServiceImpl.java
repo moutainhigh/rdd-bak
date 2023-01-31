@@ -11,11 +11,13 @@ import com.cqut.czb.bn.entity.dto.infoSpread.PartnerDTO;
 import com.cqut.czb.bn.entity.dto.user.EnterpriseUserDTO;
 import com.cqut.czb.bn.entity.dto.user.PersonalUserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserDTO;
+import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.EnterpriseInfo;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.entity.UserIncomeInfo;
 import com.cqut.czb.bn.entity.entity.integral.IntegralInfo;
+import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.service.InfoSpreadService;
 import com.cqut.czb.bn.util.date.DateUtil;
 import com.cqut.czb.bn.util.mapper.BeanMapper;
@@ -52,10 +54,16 @@ public class UserDetailServiceImpl implements UserDetailService {
     private final InfoSpreadService infoSpreadService;
 
     @Autowired
+    IUserService iUserService;
+
+    @Autowired
     IntegralInfoMapper integralInfoMapper;
 
     @Autowired
     DictMapperExtra dictMapperExtra;
+
+    @Autowired
+    RoleMapperExtra roleMapperExtra;
 
     @Value("${recharge.common.userType}")
     private Integer commonType;
@@ -80,15 +88,15 @@ public class UserDetailServiceImpl implements UserDetailService {
         VerificationCodeDTO verificationCodeDTO = BeanMapper.map(personalUserDTO, VerificationCodeDTO.class);
         if(verificationCodeMapperExtra.selectVerificationCode(verificationCodeDTO)==0) return "验证码校验失败";
         System.out.println("personalUserDTO" + personalUserDTO);
-        if (personalUserDTO.getIsH5Register() == 1) {
-            if (personalUserDTO.getMallPartnerAccount() != null && !personalUserDTO.getMallPartnerAccount().equals("")) {
-                User mallPartner = userMapperExtra.findUserByAccount(personalUserDTO.getMallPartnerAccount());
-                personalUserDTO.setMallPartner(mallPartner.getUserId());
-            } else {
-                System.out.println("合伙人账号：" + personalUserDTO.getMallPartnerAccount());
-                return String.valueOf("无法注册,请联系客服");
-            }
-        }
+//        if (personalUserDTO.getIsH5Register() == 1) {
+//            if (personalUserDTO.getMallPartnerAccount() != null && !personalUserDTO.getMallPartnerAccount().equals("")) {
+//                User mallPartner = userMapperExtra.findUserByAccount(personalUserDTO.getMallPartnerAccount());
+//                personalUserDTO.setMallPartner(mallPartner.getUserId());
+//            } else {
+//                System.out.println("合伙人账号：" + personalUserDTO.getMallPartnerAccount());
+//                return String.valueOf("无法注册,请联系客服");
+//            }
+//        }
 
         User user = BeanMapper.map(personalUserDTO, User.class);
         user.setUserId(StringUtil.createId());
@@ -164,6 +172,18 @@ public class UserDetailServiceImpl implements UserDetailService {
         integralInfo.setCreateAt(new Date());
         integralInfo.setUpdateAt(new Date());
         integralInfoMapper.insert(integralInfo);
+
+
+//        if (personalUserDTO.getIsH5Register() == 1){
+//            String roleId = roleMapperExtra.selectRoleIdByRoleName("线下大客户");
+//            if (roleId != null){
+//                UserInputDTO dto = new UserInputDTO();
+//                dto.setUserId(user.getUserId());
+//                dto.setRoleId(roleId);
+//                iUserService.assignRole(dto);
+//            }
+//        }
+
 
         return String.valueOf(true);
     }

@@ -148,7 +148,7 @@ public class SystemConstants {
     /**
      * 导出订单记录excel的头部
      */
-    public static final String[] OIL_CARD_RECHARGE_EXCEL_HEAD={"订单号","第三方订单号","充值账户","持卡人手机号","充值金额","支付金额","充值状态","客户账号","充值时间"};
+    public static final String[] OIL_CARD_RECHARGE_EXCEL_HEAD={"订单号","第三方订单号","充值账户","持卡人手机号","充值金额","支付金额","充值状态","客户账号","充值时间","上级"};
 
     /**
      * 导出直充代理人记录excel的头部

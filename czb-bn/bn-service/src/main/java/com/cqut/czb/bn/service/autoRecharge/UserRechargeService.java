@@ -1,12 +1,14 @@
 package com.cqut.czb.bn.service.autoRecharge;
 
 
-import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.ThirdOrder;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.RechargeOrder;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.ThirdOrderCallback;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
+import org.springframework.transaction.annotation.Transactional;
+
 public interface UserRechargeService {
 
     double getBalance(String userId);
@@ -17,9 +19,17 @@ public interface UserRechargeService {
 
     JSONResult insertBatchRecharge(User user, UserRechargeDTO userRechargeDTO);
 
-    ThirdOrderCallback thirdInsert(ThirdOrder order);
+    ThirdOrderCallback insertThirdOil(RechargeOrder order);
 
-    boolean drawback(String recordId, boolean dropOrder);
+    boolean drawbackWithPet(String recordId, boolean dropOrder);
+
+    boolean drawback(String recordId);
+
+    ThirdOrderCallback insertThirdPhone(RechargeOrder order);
 
     boolean updatePetrolNum(UserRechargeDTO userRechargeDTO);
+
+    JSONResult insertCommonOrder(User user, RechargeOrder order, int type);
+
+    JSONResult getCommonUserOrder(DirectChargingOrderDto directChargingOrderDto);
 }

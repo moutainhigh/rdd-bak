@@ -2,19 +2,23 @@ package com.cqut.czb.bn.api.controller;
 
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
+import com.cqut.czb.bn.dao.mapper.RoleMapperExtra;
 import com.cqut.czb.bn.entity.dto.PageDTO;
+import com.cqut.czb.bn.entity.dto.user.UserDTO;
 import com.cqut.czb.bn.entity.dto.user.UserIdDTO;
 import com.cqut.czb.bn.entity.dto.user.UserInputDTO;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.IUserService;
 import com.cqut.czb.bn.util.constants.ResponseCodeConstants;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * UserManagementController 用户管理接口
@@ -30,6 +34,9 @@ public class UserManagementController {
 
     @Autowired
     RedisUtils redisUtils;
+
+    @Autowired
+    RoleMapperExtra roleMapperExtra;
 
     @RequestMapping(value = "/deleteUser",method = RequestMethod.POST)
     public JSONResult deleteUser(@Validated @RequestBody UserIdDTO userIdDTO){
@@ -69,6 +76,26 @@ public class UserManagementController {
         } else {
             return new JSONResult(ResponseCodeConstants.FAILURE, "更新角色失败");
         }
+    }
+
+    @PermissionCheck(role = "管理员")
+    @RequestMapping(value = "/changeRoleAllUser",method = RequestMethod.GET)
+    public JSONResult selectUser(){
+        UserInputDTO userInputDTO = new UserInputDTO();
+        userInputDTO.setUserType(0);
+        userInputDTO.setPartner(0);
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setCurrentPage(1);
+        pageDTO.setCurrentPage(30000);
+        List<UserDTO> list = userService.selectUser(userInputDTO, pageDTO).getList();
+        String roleId = roleMapperExtra.selectRoleIdByRoleName("线下大客户");
+        for (UserDTO user : list) {
+            UserInputDTO dto = new UserInputDTO();
+            dto.setUserId(user.getUserId());
+            dto.setRoleId(roleId);
+            userService.assignRole(dto);
+        }
+        return null;
     }
 
     @RequestMapping(value = "/selectUserInfo", method = RequestMethod.GET)

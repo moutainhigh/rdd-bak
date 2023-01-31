@@ -1,13 +1,8 @@
 package com.cqut.czb.bn.service.directChargingSystem;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.appBuyPetrol.PetrolInputDTO;
-import com.cqut.czb.bn.entity.dto.appRechargeVip.RechargeVipDTO;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
-import com.cqut.czb.bn.entity.entity.Petrol;
-import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Component;
@@ -15,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public interface OilCardRechargeService{
@@ -45,6 +39,8 @@ public interface OilCardRechargeService{
 
     //    插入订单
     boolean insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto);
+
+    boolean insertPhoneOrder(DirectChargingOrderDto directChargingOrderDto);
 
     JSONResult getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto);
 
@@ -76,9 +72,13 @@ public interface OilCardRechargeService{
 
     String getAccount(String userId);
 
+    String fastPhoneOrderSubmit(DirectChargingOrderDto directChargingOrderDto);
+
     String fastOilOrderSubmit(DirectChargingOrderDto directChargingOrderDto);
 
     String chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
+
+    String chenxiePhoneRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
 
     String oilCardRechargeCallBack(CallBackInfo backInfo);
 
@@ -90,6 +90,12 @@ public interface OilCardRechargeService{
     JSONResult automaticSubmitPhone(AutoDirectDto autoDirectDto);
 
     JSONResult automaticSubmitOilCard(DictInputDTO dictInputDTO);
+
+    JSONResult automaticSubmitPhone(DictInputDTO phone);
+
+    JSONResult automaticSubmitPhoneFast(DictInputDTO phone);
+
+    JSONResult automaticSubmitOilCardFast(DictInputDTO oil);
 
     List<DirectChargingOrderDto> getPartOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 

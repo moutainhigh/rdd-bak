@@ -31,13 +31,15 @@ public class MobileController {
     // 话费订单状态查询文档
     @GetMapping("/ordersta")
     public JSONResult ordersta(DirectCustomersDto directCustomersDto){
-        return mobileService.ordersta(directCustomersDto);
+//        return mobileService.ordersta(directCustomersDto);
+        return null;
     }
 
     // 话费订单状态查询文档
     @GetMapping("/getState")
     public JSONResult getState(DirectCustomersDto directCustomersDto){
-        return mobileService.getState(directCustomersDto);
+//        return mobileService.getState(directCustomersDto);
+        return null;
     }
 
     // 余额查询文档

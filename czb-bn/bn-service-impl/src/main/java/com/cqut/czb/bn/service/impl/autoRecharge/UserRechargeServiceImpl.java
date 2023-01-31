@@ -1,20 +1,24 @@
 package com.cqut.czb.bn.service.impl.autoRecharge;
 
+import com.cqut.czb.bn.dao.mapper.DictMapperExtra;
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
 import com.cqut.czb.bn.dao.mapper.UserMapper;
 import com.cqut.czb.bn.dao.mapper.autoRecharge.UserRechargeMapper;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.IncomeIog;
 import com.cqut.czb.bn.entity.dto.OfflineRecharge.UserRecharge;
 import com.cqut.czb.bn.entity.dto.autoRecharge.UserRechargeDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
-import com.cqut.czb.bn.entity.dto.directChargingSystem.ThirdOrder;
+import com.cqut.czb.bn.entity.dto.directChargingSystem.RechargeOrder;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.ThirdOrderCallback;
+import com.cqut.czb.bn.entity.entity.Dict;
 import com.cqut.czb.bn.entity.entity.PetrolSalesRecords;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.util.string.StringUtil;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +44,27 @@ public class UserRechargeServiceImpl implements UserRechargeService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
+
+    @Autowired
+    DictMapperExtra dictMapperExtra;
+
+    private final static int[] amountLIst = new int[]{500, 200, 100};
+
+    private final static int[] autoAmountList = new int[]{500};
+
+    private final static int[] phoneList = new int[]{100, 200};
+
+    private boolean inList(int amount, int[] list) {
+        for (int a : list) {
+            if (amount == a){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private ReentrantLock lock = new ReentrantLock();
 
@@ -94,8 +119,8 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             return new JSONResult("充值失败，金额不能小于0.01",200);
         }
 
-        if((int)userRechargeDTO.getTurnoverAmount() != 500) {
-            return new JSONResult("暂时只支持500元",500);
+        if(!inList((int)userRechargeDTO.getTurnoverAmount(), amountLIst)) {
+            return new JSONResult("暂不支持该金额",500);
         }
 
         List<UserRecharge> userRecharge = new ArrayList<>();
@@ -162,8 +187,8 @@ public class UserRechargeServiceImpl implements UserRechargeService {
     }
 
     @Override
-    public synchronized ThirdOrderCallback thirdInsert(ThirdOrder order){
-        System.out.println("第三方订单");
+    public synchronized ThirdOrderCallback insertThirdOil(RechargeOrder order){
+        System.out.println("第三方油卡订单");
         System.out.println(order);
         Map<String, Object> map = new TreeMap<>();
         map.put("userId", order.getUserId());
@@ -179,6 +204,7 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         }
         String key = SignUtil.stringToMD5(order.getUserId());
         String sign = SignUtil.sign(key, map);
+        System.out.println(sign);
         if (!sign.equals(order.getSign())){
             return new ThirdOrderCallback(400, "签名错误", order.getOrderId());
         }
@@ -189,8 +215,8 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         if (amount == null) {
             return new ThirdOrderCallback(400, "参数错误", order.getOrderId());
         }
-        else if(amount.intValue() != 500){
-            return new ThirdOrderCallback(400, "仅支持500元", order.getOrderId());
+        else if(!inList(order.getAmount().intValue(), amountLIst)) {
+            return new ThirdOrderCallback(400, "暂不支持该金额", order.getOrderId());
         }
         else if(getBalance(order.getUserId()) < amount){
             return new ThirdOrderCallback(400, "余额不足", order.getOrderId());
@@ -223,14 +249,33 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         return new ThirdOrderCallback(400, "参数错误", order.getOrderId());
     }
 
-    private void insertOilOrder(ThirdOrder order, String id){
+    private void insertOilOrder(RechargeOrder order, String id){
         DirectChargingOrderDto o = new DirectChargingOrderDto();
         o.setOrderId(id);
         o.setThirdOrderId(order.getOrderId());
         o.setCardholder(order.getPhone());
         o.setRechargeAccount(order.getCard());
         o.setRechargeAmount(order.getAmount());
+        o.setUserId(order.getUserId());
         o.setState(1);
+        if (!inList(order.getAmount().intValue(), autoAmountList)){
+            o.setState(9);
+        }
+
+        Dict d = dictMapperExtra.selectDictByName("waiting_third");
+        if (d != null) {
+            System.out.println("等待中第三方");
+            String[] waiting = d.getContent().split(",");
+            for (String w : waiting) {
+                System.out.print(w);
+                if (order.getUserId()!=null && order.getUserId().equals(w.trim())) {
+                    o.setState(9);
+                    break;
+                }
+            }
+            System.out.println();
+        }
+
         String userAccount = userMapper.selectByPrimaryKey(order.getUserId()).getUserAccount();
         o.setCustomerNumber(userAccount);
         o.setCustomerOrderId(order.getNotifyUrl());
@@ -238,7 +283,7 @@ public class UserRechargeServiceImpl implements UserRechargeService {
     }
 
 
-    private boolean insertUserRecharge(ThirdOrder order, String orderId){
+    private boolean insertUserRecharge(RechargeOrder order, String orderId){
         UserRecharge petrol = new UserRecharge();
         petrol.setRecordId(orderId);
         petrol.setPetrolNum(order.getCard());
@@ -259,7 +304,7 @@ public class UserRechargeServiceImpl implements UserRechargeService {
 
 
     @Override
-    public boolean drawback(String recordId, boolean dropOrder){
+    public boolean drawbackWithPet(String recordId, boolean dropOrder){
         PetrolSalesRecords order = petrolSalesRecordsMapperExtra.selectInfoByOrgId(recordId);
         if (order != null){
             String userId = order.getBuyerId();
@@ -276,6 +321,114 @@ public class UserRechargeServiceImpl implements UserRechargeService {
             return isBalance;
         }
         return false;
+    }
+
+    @Override
+    public boolean drawback(String recordId){
+        DirectChargingOrderDto order = oilCardRechargeMapperExtra.getOrder(recordId);
+        if (order != null){
+            String userId = order.getUserId();
+            BigDecimal beforeBalance = new BigDecimal(String.valueOf(userRechargeMapper.getBalance(userId)));
+            BigDecimal afterBalance = null;
+            afterBalance = beforeBalance.add(BigDecimal.valueOf(order.getRechargeAmount()));
+            System.out.println(afterBalance.doubleValue());
+            //更新余额
+            boolean isBalance = userRechargeMapper.updateRecharge(userId,afterBalance.doubleValue());
+            System.out.println("大客户退款 用户：" + userId + "订单：" + order.getOrderId());
+            return isBalance;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized ThirdOrderCallback insertThirdPhone(RechargeOrder order){
+        System.out.println("第三方话费订单");
+        System.out.println(order);
+        Map<String, Object> map = new TreeMap<>();
+        map.put("userId", order.getUserId());
+        map.put("orderId", order.getOrderId());
+        map.put("phone", order.getPhone());
+        map.put("amount", order.getAmount().intValue());
+        map.put("notifyUrl", order.getNotifyUrl());
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (entry.getValue() == null){
+                return new ThirdOrderCallback(400, "参数错误", order.getOrderId());
+            }
+        }
+        String key = SignUtil.stringToMD5(order.getUserId());
+        String sign = SignUtil.sign(key, map);
+        System.out.println(sign);
+        if (!sign.equals(order.getSign())){
+            return new ThirdOrderCallback(400, "签名错误", order.getOrderId());
+        }
+        if (userMapper.selectByPrimaryKey(order.getUserId()) == null){
+            return new ThirdOrderCallback(400, "无用户信息", order.getOrderId());
+        }
+        Double amount = order.getAmount();
+        if (amount == null) {
+            return new ThirdOrderCallback(400, "参数错误", order.getOrderId());
+        }
+        else if(!inList(order.getAmount().intValue(), phoneList)) {
+            return new ThirdOrderCallback(400, "暂不支持该金额", order.getOrderId());
+        }
+        else if(getBalance(order.getUserId()) < amount){
+            return new ThirdOrderCallback(400, "余额不足", order.getOrderId());
+        }
+
+        String orderId = System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15);
+
+        IncomeIog incomeInfo = new IncomeIog();
+        incomeInfo.setRecordId(StringUtil.createId());
+        incomeInfo.setAmount(order.getAmount());
+        incomeInfo.setInfoId(userRechargeMapper.getInfoId(order.getUserId()));
+        incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(order.getUserId()));
+        boolean info = userRechargeMapper.insert(incomeInfo);
+
+        BigDecimal beforeBalance = new BigDecimal(String.valueOf(incomeInfo.getBeforeChangeIncome()));
+        BigDecimal afterBalance = null;
+        BigDecimal bignum1 = new BigDecimal(String.valueOf(amount));
+        afterBalance = beforeBalance.subtract(bignum1);
+        System.out.println(afterBalance.doubleValue());
+        //更新余额
+        boolean isBalance = userRechargeMapper.updateRecharge(order.getUserId(),afterBalance.doubleValue());
+        if(isBalance && info){
+            insertPhoneOrder(order, orderId);
+            return new ThirdOrderCallback(200, "下单成功", order.getOrderId());
+        }
+        return new ThirdOrderCallback(400, "参数错误", order.getOrderId());
+    }
+
+    private void insertPhoneOrder(RechargeOrder order, String id){
+        DirectChargingOrderDto o = new DirectChargingOrderDto();
+        o.setOrderId(id);
+        o.setThirdOrderId(order.getOrderId());
+        o.setRechargeAccount(order.getPhone());
+        o.setRechargeAmount(order.getAmount());
+        o.setState(1);
+
+        Dict d = dictMapperExtra.selectDictByName("waiting_third");
+        if (d != null) {
+            System.out.println("等待中第三方");
+            String[] waiting = d.getContent().split(",");
+            for (String w : waiting) {
+                System.out.print(w);
+                if (order.getUserId()!=null && order.getUserId().equals(w)) {
+                    o.setState(9);
+                    break;
+                }
+            }
+            System.out.println();
+        }
+        o.setRecordType(8);
+        o.setCardholder(order.getPhone());
+        o.setUserId(order.getUserId());
+//        if (!inList(order.getAmount().intValue(), autoAmountList)){
+//            o.setState(9);
+//        }
+        String userAccount = userMapper.selectByPrimaryKey(order.getUserId()).getUserAccount();
+        o.setCustomerNumber(userAccount);
+        o.setCustomerOrderId(order.getNotifyUrl());
+        oilCardRechargeService.insertPhoneOrder(o);
     }
 
     /**
@@ -341,9 +494,7 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         if(hashCodeV < 0) {//有可能是负数
             hashCodeV = - hashCodeV;
         }
-//         0 代表前面补充0     
-//         4 代表长度为4     
-//         d 代表参数为正数型
+
          return machineId + String.format("%015d", hashCodeV) + userId;
     }
 
@@ -351,5 +502,71 @@ public class UserRechargeServiceImpl implements UserRechargeService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String theDate = sdf.format(date);
         return theDate;
+    }
+
+    @Override
+    @Transactional
+    public synchronized JSONResult insertCommonOrder(User user, RechargeOrder order, int type) {
+        System.out.println("普通客户订单");
+        User u = userMapper.selectByPrimaryKey(user.getUserId());
+        if (u!=null){
+            user = u;
+        }
+        order.setUserId(user.getUserId());
+        //本次总充值金额
+        if(order.getAmount() < 1) {
+            return new JSONResult("充值金额不能小于1元",400);
+        }
+        else if(order.getAmount() > getBalance(user.getUserId())){
+            return new JSONResult("充值失败，余额不足",400);
+        }
+
+        if (type == 10){
+            if (oilCardRechargeMapperExtra.getOrderByAccountToday(order.getCard())!=null){
+                return new JSONResult("每个油卡单日限一次",400);
+            }
+        }
+
+        IncomeIog incomeInfo = new IncomeIog();
+        incomeInfo.setRecordId(StringUtil.createId());
+        incomeInfo.setAmount(order.getAmount());
+        incomeInfo.setInfoId(userRechargeMapper.getInfoId(user.getUserId()));
+        incomeInfo.setBeforeChangeIncome(userRechargeMapper.getBalance(user.getUserId()));
+        boolean info = userRechargeMapper.insert(incomeInfo);
+
+        BigDecimal beforeBalance = new BigDecimal(String.valueOf(incomeInfo.getBeforeChangeIncome()));
+        BigDecimal afterBalance = null;
+        BigDecimal bignum1 = new BigDecimal(String.valueOf(order.getAmount()));
+        afterBalance = beforeBalance.subtract(bignum1);
+        System.out.println(afterBalance.doubleValue());
+        //更新余额
+        boolean isBalance = userRechargeMapper.updateRecharge(user.getUserId(),afterBalance.doubleValue());
+
+        if(isBalance && info){
+            order.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15));
+            insertCommonOrder(order, type);
+            return new JSONResult("下单成功",200);
+        }
+        return new JSONResult("参数错误",400);
+    }
+
+    private void insertCommonOrder(RechargeOrder order, int type){
+        DirectChargingOrderDto o = new DirectChargingOrderDto();
+        o.setOrderId(order.getOrderId());
+        o.setRechargeAccount(order.getCard());
+        o.setCardholder(order.getPhone());
+        o.setRechargeAmount(order.getAmount());
+        o.setUserId(order.getUserId());
+        o.setState(1);
+        o.setRecordType(type);
+        oilCardRechargeService.insertOilCardOrder(o);
+    }
+
+    @Override
+    public JSONResult getCommonUserOrder(DirectChargingOrderDto directChargingOrderDto) {
+        PageHelper.startPage(directChargingOrderDto.getCurrentPage(), directChargingOrderDto.getPageSize(),true);
+        List<DirectChargingOrderDto> withdrawList = oilCardRechargeMapperExtra.getCommonUserOrder(directChargingOrderDto);
+        PageInfo<DirectChargingOrderDto> pageInfo = new PageInfo<>(withdrawList);
+        return new JSONResult("列表数据查询成功", 200, pageInfo);
     }
 }

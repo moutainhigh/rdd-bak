@@ -1,7 +1,6 @@
 package com.cqut.czb.bn.service.impl.directChargingSystem;
 
 import com.cqut.czb.bn.dao.mapper.PetrolSalesRecordsMapperExtra;
-import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapper;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.DirectChargingOrderMapperExtra;
 import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto;
@@ -14,9 +13,6 @@ import com.cqut.czb.bn.service.fanyong.FanyongLogService;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Service
 public class DirectChargingOrderServiceImpl implements DirectChargingOrderService {
@@ -45,8 +41,9 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
     @Override
     public JSONResult updateRecord(DirectChargingOrderDto directChargingOrderDto) {
         try {
+            DirectChargingOrderDto old = directChargingOrderMapperExtra.getRecordByOrderId(directChargingOrderDto.getOldOrderId());
             int num = directChargingOrderMapperExtra.updateRecordByOrderId(directChargingOrderDto);
-//            if (num == 1 && directChargingOrderDto.getState()==2){
+            if (num == 1 && directChargingOrderDto.getState()==2){
 //                System.out.println("直充返佣進入方法");
 //                try {
 //                    directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
@@ -68,9 +65,21 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
 //                    System.out.println("返佣失败");
 //                    e.printStackTrace();
 //                }
-//
-//            }
+
+                System.out.println("手动设置充值成功");
+                // 充值失败
+                try {
+                    directChargingOrderDto.setOrderId(directChargingOrderDto.getOldOrderId());
+                    oilCardRechargeService.dealOrderExtra(true, directChargingOrderDto);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
             if (num == 1 && directChargingOrderDto.getState()==4){
+                if (old != null && old.getState() == 4){
+                    return new JSONResult("更新成功");
+                }
                 System.out.println("手动设置充值失败");
                 // 充值失败
                 try {
@@ -81,11 +90,11 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
                 }
             }
             if (num == 1) {
-                return new JSONResult("更新成功");
+                return new JSONResult("更新成功",200);
             }
-            return new JSONResult("更新失败");
+            return new JSONResult("更新失败",400);
         } catch (DuplicateKeyException e) {
-            return new JSONResult("订单号已存在");
+            return new JSONResult("订单号已存在",400);
         }
     }
 
@@ -93,4 +102,38 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
     public JSONResult getRecordByOrderId(String orderId) {
         return new JSONResult(directChargingOrderMapperExtra.getRecordByOrderId(orderId));
     }
+
+    @Override
+    public JSONResult dropOrder(String orderId){
+        DirectChargingOrderDto old = directChargingOrderMapperExtra.getRecordByOrderId(orderId);
+        System.out.println("delete order:");
+        if (old == null){
+            return new JSONResult("订单不存在",400);
+        }
+        System.out.println(old.getOrderId());
+        System.out.println(old.getThirdOrderId());
+        if (old.getState() == 2 || old.getState() == 4){
+            int res = oilCardRechargeMapperExtra.dropOrder(orderId);
+            if (res > 0) {
+                return new JSONResult("删除成功",200);
+            }
+        }
+        return new JSONResult("删除失败，订单未完成",400);
+    }
+
+    @Override
+    public JSONResult dropOrders(String[] orderIds){
+        int count = 0;
+        if (orderIds == null){
+            return new JSONResult("删除失败", 500);
+        }
+        for (String id : orderIds) {
+            JSONResult res = dropOrder(id);
+            if (res.getCode() == 200){
+                count++;
+            }
+        }
+        return new JSONResult("删除成功数量："+count, 200);
+    }
+
 }

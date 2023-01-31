@@ -8,6 +8,16 @@ public class DictInputDTO {
 
     private String content;
 
+    private String extra;
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
+
     public String getDictId() {
         return dictId;
     }

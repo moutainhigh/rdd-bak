@@ -1,25 +1,21 @@
 package com.cqut.czb.bn.api.controller.directChargingSystem;
 
-import com.alibaba.fastjson.JSONObject;
 import com.cqut.czb.auth.interceptor.PermissionCheck;
 import com.cqut.czb.auth.util.RedisUtils;
-import com.cqut.czb.bn.entity.dto.PageDTO;
-import com.cqut.czb.bn.entity.dto.WCProgramConfig;
+import com.cqut.czb.bn.dao.mapper.directChargingSystem.OilCardRechargeMapperExtra;
 import com.cqut.czb.bn.entity.dto.dict.DictInputDTO;
 import com.cqut.czb.bn.entity.dto.directChargingSystem.*;
-import com.cqut.czb.bn.entity.dto.until.WXSign;
 import com.cqut.czb.bn.entity.entity.User;
 import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
+import com.cqut.czb.bn.service.impl.directChargingSystem.APIUP;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.cqut.czb.bn.entity.dto.weChatAppletPushNotification.sendNotification;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -28,13 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.cqut.czb.bn.entity.dto.until.WXSign.httpRequest;
-
 @RestController
 @RequestMapping("/oilCardRecharge")
 public class OilCardRechargeController {
     @Autowired
     OilCardRechargeService oilCardRechargeService;
+
+    @Autowired
+    OilCardRechargeMapperExtra oilCardRechargeMapperExtra;
 
     @Autowired
     RedisUtils redisUtils;
@@ -211,7 +208,7 @@ public class OilCardRechargeController {
             //点击下载之后出现下载对话框
             response.setContentType("application/x-download");
             String fileName = null;
-            fileName = "油卡订单记录.xlsx";
+            fileName = "订单记录.xlsx";
             //将中文转换为16进制
             fileName = URLEncoder.encode(fileName,"utf-8");
             //确保浏览器弹出对应文件的对话框
@@ -232,11 +229,11 @@ public class OilCardRechargeController {
     /**
      * 话费自动提交订单
      */
-    @PostMapping("/automaticSubmitPhone")
-    @ResponseBody
-    public JSONResult automaticSubmitPhone(AutoDirectDto autoDirectDto){
-        return oilCardRechargeService.automaticSubmitPhone(autoDirectDto);
-    }
+//    @PostMapping("/automaticSubmitPhone")
+//    @ResponseBody
+//    public JSONResult automaticSubmitPhone(AutoDirectDto autoDirectDto){
+//        return oilCardRechargeService.automaticSubmitPhone(autoDirectDto);
+//    }
 
     /**
      * 油卡充值状态
@@ -245,7 +242,46 @@ public class OilCardRechargeController {
     @PostMapping("/automaticSubmitOilCard")
     @ResponseBody
     public JSONResult automaticSubmitOilCard(DictInputDTO dictInputDTO){
-        return oilCardRechargeService.automaticSubmitOilCard(dictInputDTO);
+        if (dictInputDTO.getExtra().equals(APIUP.ANDA888_OIL.getValue())){
+            return oilCardRechargeService.automaticSubmitOilCardFast(dictInputDTO);
+        }
+        if (dictInputDTO.getExtra().equals(APIUP.CHENXIE_OIL.getValue())){
+            return oilCardRechargeService.automaticSubmitOilCard(dictInputDTO);
+        }
+        return null;
+    }
+
+    @PostMapping("/automaticSubmitPhone")
+    @ResponseBody
+    public JSONResult automaticSubmitPhone(DictInputDTO dictInputDTO){
+        if (dictInputDTO.getExtra().equals(APIUP.ANDA888_PHONE.getValue())){
+            return oilCardRechargeService.automaticSubmitPhoneFast(dictInputDTO);
+        }
+        if (dictInputDTO.getExtra().equals(APIUP.CHENXIE_PHONE.getValue())){
+            return oilCardRechargeService.automaticSubmitPhone(dictInputDTO);
+        }
+        return null;
+    }
+
+    class PairDict{
+        DictInputDTO oil;
+        DictInputDTO phone;
+
+        public DictInputDTO getOil() {
+            return oil;
+        }
+
+        public void setOil(DictInputDTO oil) {
+            this.oil = oil;
+        }
+
+        public DictInputDTO getPhone() {
+            return phone;
+        }
+
+        public void setPhone(DictInputDTO phone) {
+            this.phone = phone;
+        }
     }
 
     /*
@@ -281,19 +317,34 @@ public class OilCardRechargeController {
 
     @PostMapping("/fastCallBack")
     public String fastCallBack(FastBackInfo backInfo){
-        System.out.println(backInfo);
         return oilCardRechargeService.fastCallBack(backInfo);
+    }
+
+    @PostMapping("/testCallBack")
+    public String fastCallBack(@RequestBody ThirdOrderCallback callback, HttpServletRequest request){
+        Map<String, String[]> map = request.getParameterMap();
+        for (Map.Entry entry : map.entrySet()) {
+            System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+        }
+        System.out.println(callback);
+        return "ok";
     }
 
     @PostMapping("/onlineorderSubmission")
     @ResponseBody
     public JSONResult chenxieOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto){
         try {
-            if (directChargingOrderDto.getOrderId() == null){
-                directChargingOrderDto.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            if (directChargingOrderDto.getOrderId() != null){
+                DirectChargingOrderDto old = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+                if (old.getRecordType() == 8){
+                    String res = oilCardRechargeService.chenxiePhoneRechargeSubmit(old);
+                    return new JSONResult(res, 200);
+                } else {
+                    String res = oilCardRechargeService.chenxieOilRechargeSubmit(old);
+                    return new JSONResult(res, 200);
+                }
             }
-            String res = oilCardRechargeService.chenxieOilRechargeSubmit(directChargingOrderDto);
-            return new JSONResult(res, 200);
+            return new JSONResult("未找到订单", 400);
         } catch (Exception e) {
             return new JSONResult(e.getMessage(), 400);
         }
@@ -302,8 +353,14 @@ public class OilCardRechargeController {
     @PostMapping("/insertOilCardOrder")
     @ResponseBody
     public JSONResult insertOilCardOrder(DirectChargingOrderDto directChargingOrderDto){
-        if (oilCardRechargeService.insertOilCardOrder(directChargingOrderDto)){
-            return new JSONResult("新增成功", 200);
+        if (directChargingOrderDto.getRecordType()!= null && directChargingOrderDto.getRecordType() == 8) {
+            if (oilCardRechargeService.insertPhoneOrder(directChargingOrderDto)){
+                return new JSONResult("新增成功", 200);
+            }
+        } else {
+            if (oilCardRechargeService.insertOilCardOrder(directChargingOrderDto)){
+                return new JSONResult("新增成功", 200);
+            }
         }
         return new JSONResult("新增失败", 400);
     }
@@ -312,11 +369,17 @@ public class OilCardRechargeController {
     @ResponseBody
     public JSONResult fastOilOrderSubmit(DirectChargingOrderDto directChargingOrderDto){
         try {
-            if (directChargingOrderDto.getOrderId() == null){
-                directChargingOrderDto.setOrderId(System.currentTimeMillis() + UUID.randomUUID().toString().substring(10, 15).replace("-", ""));
+            if (directChargingOrderDto.getOrderId() != null){
+                DirectChargingOrderDto old = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+                if (old.getRecordType() == 8){
+                    String res = oilCardRechargeService.fastPhoneOrderSubmit(old);
+                    return new JSONResult(res, 200);
+                } else {
+                    String res = oilCardRechargeService.fastOilOrderSubmit(old);
+                    return new JSONResult(res, 200);
+                }
             }
-            String res = oilCardRechargeService.fastOilOrderSubmit(directChargingOrderDto);
-            return new JSONResult(res, 200);
+            return new JSONResult("未找到订单", 400);
         } catch (Exception e) {
             return new JSONResult(e.getMessage(), 400);
         }
@@ -330,6 +393,10 @@ public class OilCardRechargeController {
             return new JSONResult("新增成功", 200);
         }
         return new JSONResult("新增失败", 400);
+    }
+
+    public static void main(String[] args) {
+        OilCardRechargeController c = new OilCardRechargeController();
     }
 
 }

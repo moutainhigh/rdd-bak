@@ -67,6 +67,16 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String regional;
 
+    private String upName;
+
+    public String getUpName() {
+        return upName;
+    }
+
+    public void setUpName(String upName) {
+        this.upName = upName;
+    }
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createAt;
 
@@ -79,7 +89,7 @@ public class DirectChargingOrderDto extends PageDTO {
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
-    private Integer recordType; // 1 话费 2 中石油 3 中石化
+    private Integer recordType; // 2 中石油 3 中石化 8 话费
 
 
     public String getOldOrderId() {
@@ -138,6 +148,7 @@ public class DirectChargingOrderDto extends PageDTO {
         this.paymentMethod = paymentMethod;
     }
 
+    //0待充值 2成功 4失败 5充值中
     public Integer getState() {
         return state;
     }

@@ -18,6 +18,7 @@ public class TimeTaskManager {
      * 添加定时任务
      * */
     public boolean addTimerTask(String taskCode,AutoTimerTask timerTask){
+        System.out.println("添加任务："+taskCode);
         synchronized(this){
             if(timerTasks.containsKey(taskCode.toLowerCase())){
                 return false;
@@ -26,12 +27,17 @@ public class TimeTaskManager {
             timerTasks.put(taskCode,timerTask);
             autoTimer.schedule(timerTask);
         }
+        timerTasks.forEach((k,v) -> {
+            System.out.print(k);
+            System.out.println(v);
+        });
         return true;
     }
     /**
      * 删除定时任务
      * */
     public void deleteTimerTaskByCode(String taskCode,boolean cancelTask){
+        System.out.println("删除任务："+taskCode);
         Object obj=timerTasks.get(taskCode);
         if(obj!=null){
             if(cancelTask){
@@ -40,6 +46,10 @@ public class TimeTaskManager {
             }
             timerTasks.remove(taskCode);
         }
+        timerTasks.forEach((k,v) -> {
+            System.out.print(k);
+            System.out.println(v);
+        });
     }
 
     public int findTimerTaskByCode(String taskCode){

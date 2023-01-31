@@ -72,4 +72,12 @@ public abstract class AutoTimerTask extends TimerTask {
     public void setDelay(long delay) {
         this.delay = delay;
     }
+
+    @Override
+    public String toString() {
+        return "AutoTimerTask{" +
+                "taskCode='" + taskCode + '\'' +
+                ", period=" + period +
+                '}';
+    }
 }
