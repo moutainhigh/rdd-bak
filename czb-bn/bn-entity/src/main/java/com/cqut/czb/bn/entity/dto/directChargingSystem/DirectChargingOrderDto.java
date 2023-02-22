@@ -69,6 +69,16 @@ public class DirectChargingOrderDto extends PageDTO {
 
     private String upName;
 
+    private String operator;
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
     public String getUpName() {
         return upName;
     }

@@ -298,6 +298,17 @@ public class OilCardRechargeController {
         return new JSONResult(200, "success");
     }
 
+    @PostMapping("/importUpdate")
+    public JSONResult importUpdate(MultipartFile file, Integer recordType) {
+        try {
+            oilCardRechargeService.importUpdate(file,recordType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONResult(500, "failed");
+        }
+        return new JSONResult(200, "success");
+    }
+
     /**
      * 话费充值状态
      * @return

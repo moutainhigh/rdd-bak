@@ -181,7 +181,8 @@
         customer_order_id customerOrderId,
         b.user_account theUserAccount,
         cardholder cardholder,
-        up_name upName
+        up_name upName,
+        operator operator
         FROM czb_direct_charging_order a left join czb_user b on a.user_id = b.user_id
         <where>
             `state` != 0
@@ -441,7 +442,7 @@
                                                real_price,
                                                recharge_account,
                                                customer_order_id,
-                                               up_name)
+                                               up_name, operator)
         values (#{orderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
                 #{userId,jdbcType=VARCHAR},
@@ -453,7 +454,8 @@
                 #{realPrice,jdbcType=DOUBLE},
                 #{rechargeAccount,jdbcType=VARCHAR},
                 #{customerOrderId,jdbcType=VARCHAR},
-                #{upName,jdbcType=VARCHAR})
+                #{upName,jdbcType=VARCHAR},
+                #{operator,jdbcType=VARCHAR})
     </insert>
 
     <insert id="insertOilOrder" parameterType="com.cqut.czb.bn.entity.dto.directChargingSystem.DirectChargingOrderDto">
@@ -471,7 +473,7 @@
                                                cardholder,
                                                customer_number,
                                                customer_order_id,
-                                               up_name)
+                                               up_name, operator)
         values (#{orderId,jdbcType=VARCHAR},
                 #{thirdOrderId,jdbcType=VARCHAR},
                 #{rechargeAmount,jdbcType=DOUBLE},
@@ -486,7 +488,8 @@
                 #{cardholder,jdbcType=VARCHAR},
                 #{customerNumber,jdbcType=VARCHAR},
                 #{customerOrderId,jdbcType=VARCHAR},
-                #{upName,jdbcType=VARCHAR})
+                #{upName,jdbcType=VARCHAR},
+                #{operator,jdbcType=VARCHAR})
     </insert>
 
     <update id="updateRechargeRecord"
@@ -510,7 +513,8 @@
                cardholder        cardholder,
                customer_order_id customerOrderId,
                customer_number   customerNumber,
-               up_name           upName
+               up_name           upName,
+                operator         operator
         FROM czb_direct_charging_order
         WHERE order_id = #{orderId,jdbcType=VARCHAR}
     </select>
@@ -526,7 +530,8 @@
                cardholder        cardholder,
                customer_order_id customerOrderId,
                customer_number   customerNumber,
-               up_name           upName
+               up_name           upName,
+            operator             operator
         FROM czb_direct_charging_order
         WHERE recharge_account = #{account,jdbcType=VARCHAR}
         and create_at BETWEEN CONCAT(CURDATE(),' 00:00:00') AND CONCAT(CURDATE(),' 23:59:59')

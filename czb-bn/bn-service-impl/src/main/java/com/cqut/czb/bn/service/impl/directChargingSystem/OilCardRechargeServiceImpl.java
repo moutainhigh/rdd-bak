@@ -18,6 +18,7 @@ import com.cqut.czb.bn.entity.global.JSONResult;
 import com.cqut.czb.bn.service.PaymentProcess.BusinessProcessService;
 import com.cqut.czb.bn.service.PaymentProcess.FanYongService;
 import com.cqut.czb.bn.service.autoRecharge.UserRechargeService;
+import com.cqut.czb.bn.service.directChargingSystem.DirectChargingOrderService;
 import com.cqut.czb.bn.service.directChargingSystem.OilCardRechargeService;
 import com.cqut.czb.bn.service.electricityRecharge.ElectricityRechargeService;
 import com.cqut.czb.bn.service.fanyong.FanyongLogService;
@@ -83,6 +84,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Autowired
     private DirectChargingOrderMapper directChargingOrderMapper;
+
+    @Autowired
+    private DirectChargingOrderService directChargingOrderService;
 
     private TimeTaskManager timeTaskManager = new TimeTaskManager();
 
@@ -1070,10 +1074,25 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         directChargingOrder.setRechargeAccount(directChargingOrderDto.getRechargeAccount());
         directChargingOrder.setCustomerNumber(directChargingOrderDto.getCustomerNumber());
         directChargingOrder.setCustomerOrderId(directChargingOrderDto.getCustomerOrderId());
+        directChargingOrder.setOperator(getOperator(directChargingOrder.getRechargeAccount()));
 
         insertRecords=oilCardRechargeMapperExtra.insertOilOrder(directChargingOrder)>0;
 
         return insertRecords;
+    }
+
+    private String getOperator(String phone){
+        if (phone == null || phone.equals("")){
+            return null;
+        }
+        String url = "https://h5.10010.wiki/Shopping/Refills/GetPhoneNameArea";
+        String params = "phone=" + phone;
+        try {
+            return HttpRequest.httpRequestGet(url, params);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private String onlinemd5(OnlineorderDto onlineorderDto) {
@@ -1143,8 +1162,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Override
     public JSONResult  getPhoneOrderState(DirectChargingOrderDto directChargingOrderDto){
-
-
         return null;
 
     }
@@ -1616,6 +1633,37 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public int importUpdate(MultipartFile file, Integer recordType) throws Exception {
+        int result = 0;
+        InputStream inputStream = file.getInputStream();
+        List<DirectChargingOrderDto> deliveryList = null;
+        Map<String, DirectChargingOrderDto> deliveryMap = new HashMap<>();
+        System.out.println("读取Excel");
+        System.out.println(file.getOriginalFilename());
+        deliveryList = RechargeOrderUpdateImportHelper.readExcel(file.getOriginalFilename(), inputStream);
+        System.out.println(deliveryList);
+        if(deliveryList != null){
+            for (DirectChargingOrderDto orderDto : deliveryList){
+                try {
+                    DirectChargingOrderDto q = new DirectChargingOrderDto();
+                    q.setState(5);
+                    q.setRecordType(8);
+                    q.setRechargeAccount(orderDto.getRechargeAccount());
+                    List<DirectChargingOrderDto> list = oilCardRechargeMapperExtra.getAllOnceOrderInfoList(q);
+                    if (!list.isEmpty()) {
+                        orderDto.setOldOrderId(list.get(0).getOrderId());
+                        directChargingOrderService.updateRecord(orderDto);
+                    }
+                } catch (Exception e){
+                    result += 1;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    @Override
     public JSONResult submitSelectState(SelectOrderDto selectOrderDto) {
         int count = 0;
         System.out.println(selectOrderDto);
@@ -1783,6 +1831,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
             row.createCell(count++).setCellValue(list.get(i).getCustomerNumber());
             row.createCell(count++).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getCreateAt()));
             row.createCell(count++).setCellValue(list.get(i).getUpName());
+            row.createCell(count++).setCellValue(list.get(i).getOperator());
         }
         int index = 0;
         row = sheet.createRow(list.size()+1);

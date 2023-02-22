@@ -105,6 +105,8 @@ public interface OilCardRechargeService{
 
     int importData(MultipartFile file, Integer recordType) throws Exception;
 
+    int importUpdate(MultipartFile file, Integer recordType) throws Exception;
+
     JSONResult submitSelectState(SelectOrderDto selectOrderDto);
 
     boolean test();
