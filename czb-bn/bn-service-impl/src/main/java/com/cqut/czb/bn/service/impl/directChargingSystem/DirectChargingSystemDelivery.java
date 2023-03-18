@@ -258,6 +258,10 @@ public class DirectChargingSystemDelivery {
             return 9;
         }else if (val.equals("待充值（快充）") || val.equals("待充值(快充)")){
             return 10;
+        }else if (val.equals("部分成功")){
+            return 21;
+        }else if (val.equals("待流转")){
+            return 22;
         }else {
             return 1;
         }

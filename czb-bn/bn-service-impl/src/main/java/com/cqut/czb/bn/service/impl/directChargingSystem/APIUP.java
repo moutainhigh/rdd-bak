@@ -7,7 +7,10 @@ public enum APIUP {
     ANDA888_OIL("anda888Oil"),
     ANDA888_PHONE("anda888Phone"),
     CHENXIE_OIL("chenxieOil"),
-    CHENXIE_PHONE("chenxiePhone");
+    CHENXIE_PHONE("chenxiePhone"),
+    YF_PHONE("yfPhone"),
+    HX_PHONE("hxPhone"),
+    JH_OIL("jhOil");
 
     final String value;
 

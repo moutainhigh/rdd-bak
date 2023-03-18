@@ -65,6 +65,9 @@ public class DirectChargingOrderServiceImpl implements DirectChargingOrderServic
 //                    System.out.println("返佣失败");
 //                    e.printStackTrace();
 //                }
+                if (old != null && old.getState() == 2){
+                    return new JSONResult("更新成功");
+                }
 
                 System.out.println("手动设置充值成功");
                 // 充值失败

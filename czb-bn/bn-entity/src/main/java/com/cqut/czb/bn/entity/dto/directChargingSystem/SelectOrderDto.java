@@ -7,6 +7,8 @@ public class SelectOrderDto {
 
     private Integer state;
 
+    private String up;
+
     @Override
     public String toString() {
         return "SelectOrderDto{" +
@@ -29,5 +31,13 @@ public class SelectOrderDto {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public String getUp() {
+        return up;
+    }
+
+    public void setUp(String up) {
+        this.up = up;
     }
 }

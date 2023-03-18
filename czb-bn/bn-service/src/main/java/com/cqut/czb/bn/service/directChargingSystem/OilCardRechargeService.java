@@ -33,6 +33,18 @@ public interface OilCardRechargeService{
 
     JSONResult getOilOrderState(DirectChargingOrderDto directChargingOrderDto);
 
+    String yfPhoneRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
+
+    String yfCallBack(YFCallBack backInfo);
+
+    String hxPhoneRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
+
+    String hxCallBack(HXCallBack backInfo);
+
+    String jhOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception;
+
+    String jhCallBack(JHCallBack backInfo);
+
     void dealOrderExtra(boolean success, DirectChargingOrderDto directChargingOrderDto);
 
     String fastCallBack(FastBackInfo backInfo);
@@ -96,6 +108,12 @@ public interface OilCardRechargeService{
     JSONResult automaticSubmitPhoneFast(DictInputDTO phone);
 
     JSONResult automaticSubmitOilCardFast(DictInputDTO oil);
+
+    JSONResult automaticSubmitPhoneYF(DictInputDTO phone);
+
+    JSONResult automaticSubmitPhoneHX(DictInputDTO phone);
+
+    JSONResult automaticSubmitPhoneJH(DictInputDTO phone);
 
     List<DirectChargingOrderDto> getPartOrderInfoList(DirectChargingOrderDto directChargingOrderDto);
 

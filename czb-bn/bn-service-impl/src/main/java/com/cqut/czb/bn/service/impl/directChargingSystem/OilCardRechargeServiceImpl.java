@@ -479,59 +479,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Override
     public void phoneRechargeSubmission(DirectChargingOrderDto directChargingOrderDto){
-//        System.out.println(3);
-//        System.out.println(directChargingOrderDto);
-//        String url = "https://huafei.renduoduo2019.com/api/mobile/telorder";
-//        TelorderDto telorderDto = new TelorderDto();
-//        telorderDto.setPhoneno(directChargingOrderDto.getUserAccount());
-//        telorderDto.setOrdersn(directChargingOrderDto.getOrderId());
-//        telorderDto.setCardnum(String.valueOf(directChargingOrderDto.getRechargeAmount()));
-//        telorderDto.setAppId("7192701d-bdb6-4ad7-a558-247b4331bf86");
-//        telorderDto.setSign(phonemd5(telorderDto));
-//        System.out.println("telorderDto"+telorderDto.toString());
-//        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, telorderDto, String.class);
-//        String body = responseEntity.getBody();
-//        int begin = body.indexOf("code");
-//        int end = body.indexOf("result");
-//        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
-//        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
-//        if (body.substring(begin+6, end-2) == "0") {
-//            directChargingOrderDto1.setState(2);
-//        } else {
-//            directChargingOrderDto1.setState(4);
-//        }
-//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
-//        System.out.println("话费直冲");
-//        System.out.println(body);
-
-        //2021-12-29
-//        String URL="https://huafei.renduoduo2019.com/api/mobile/telorder";
-//        //人多多的订单号（由我方生成）
-//        String ordersn = directChargingOrderDto.getOrderId();
-//
-//        // 电话号码
-//        String phoneno = directChargingOrderDto.getUserAccount();
-//
-//        // 金额
-//        Integer cardnum = directChargingOrderDto.getRechargeAmount().intValue();
-//
-//        // appId
-//        String appId = "7192701d-bdb6-4ad7-a558-247b4331bf86";
-//
-//        String appSecret = "667cadbb-c0c5-40a4-bd05-ad2855e75143";
-//
-//        String string = appId + appSecret + phoneno + String.valueOf(cardnum) + ordersn;
-//        // sign
-//        String sign = MD5Util.MD5Encode(string,"UTF-8").toLowerCase();
-//
-//        //设置请求参数
-//        String params = "appId=" + appId +
-//                "&phoneno=" + phoneno +
-//                "&cardnum=" + cardnum +
-//                "&ordersn=" + ordersn +
-//                "&sign=" + sign;
-//
-//        System.out.println(params);
 
         String URL = "https://api.36duojing.com/v1/mobile/sloworder";
 
@@ -590,12 +537,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         }else {
             directChargingOrderDto1.setState(4);
         }
-//        if (sr.substring(begin+6, end-2).equals("0")) {
-//            directChargingOrderDto1.setState(5);
-//        } else {
-//            directChargingOrderDto1.setState(4);
-//        }
-//        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
         System.out.println("话费直冲");
     }
 
@@ -711,6 +652,42 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
 
         return sr;
+    }
+
+
+    @Override
+    public String fastCallBack(FastBackInfo backInfo) {
+        System.out.println("快充油卡话费充值回调");
+        System.out.println(backInfo);
+        if (backInfo.getOutTradeNo() == null){
+            return "SUCCESS";
+        }
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getOutTradeNo());
+        if (directChargingOrderDto == null){
+            System.out.println("未找到订单");
+            return "SUCCESS";
+        }
+
+        try {
+            if (backInfo.getState().equals("SUCCESS")) {//交易成功
+                directChargingOrderDto.setState(2);
+                dealOrderExtra(true, directChargingOrderDto);
+                System.out.println("充值成功");
+
+            } else if (backInfo.getState().equals("FAIL")){//交易失败
+                directChargingOrderDto.setState(4);
+                dealOrderExtra(false, directChargingOrderDto);
+                System.out.println("充值失败");
+
+            }
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "SUCCESS";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        directChargingOrderDto.setState(4);
+        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+        return "SUCCESS";
     }
 
     private static final Map<Integer, Integer> chenxieAmountMap = new HashMap<>();
@@ -883,6 +860,322 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
     }
 
     @Override
+    public String yfPhoneRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception {
+        System.out.println("yf话费充值");
+
+        String URL="http://42.192.125.149/yrapi.php/index/recharge";
+
+        String account = directChargingOrderDto.getRechargeAccount();
+
+        Integer amount = directChargingOrderDto.getRechargeAmount().intValue();
+
+        String operator = directChargingOrderDto.getOperator();
+
+        Integer id = YF_CONSTANT.getID(amount, operator);
+
+        if (id == null){
+            throw new Exception("暂不支持该金额或地区");
+        }
+
+        String userid = "79";
+
+        String key = "vV7RjDqMm9IKd4sYiguWLSrXo1yb02ex";
+
+        String no = directChargingOrderDto.getOrderId();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("out_trade_num", no);
+        params.put("product_id", id);
+        params.put("mobile", account);
+        params.put("notify_url", "http://47.110.9.136:8090/oilCardRecharge/yfCallBack");
+        params.put("userid", userid);
+        params.put("amount", amount);
+        params.put("price", 210);
+
+        StringBuilder sb = new StringBuilder();
+        TreeSet<String> sortedSet = new TreeSet<>(params.keySet());
+        for (String p : sortedSet) {
+            System.out.println(p+":"+params.get(p));
+            sb.append(p).append("=").append(params.get(p)).append("&");
+        }
+        sb.append("apikey=").append(key);
+        System.out.println(sb);
+        String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
+        System.out.println(sign);
+        params.put("sign", sign);
+
+        //开始请求
+        String sr = HttpClient4.doPost(URL, params);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println(jsonObject);
+        Integer code = (Integer) jsonObject.get("errno");
+
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (code == 0) {
+            directChargingOrderDto1.setState(5);
+        } else {
+            directChargingOrderDto1.setState(4);
+
+            dealOrderExtra(false, directChargingOrderDto);
+        }
+        directChargingOrderDto1.setUpName(APIUP.YF_PHONE.value);
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+
+        return sr;
+    }
+
+    @Override
+    public String yfCallBack(YFCallBack backInfo) {
+        System.out.println("yf话费充值回调");
+        System.out.println(backInfo);
+        if (backInfo.getOut_trade_num() == null){
+            return "success";
+        }
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getOut_trade_num());
+
+        if (directChargingOrderDto == null){
+            System.out.println("未找到订单");
+            return "success";
+        }
+
+        try {
+            if (backInfo.getState() == 1) {//交易成功
+                directChargingOrderDto.setState(2);
+                System.out.println("充值成功");
+                dealOrderExtra(true, directChargingOrderDto);
+
+            } else {//交易失败
+                directChargingOrderDto.setState(4);
+                dealOrderExtra(false, directChargingOrderDto);
+            }
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            directChargingOrderDto.setState(4);
+            dealOrderExtra(false, directChargingOrderDto);
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "success";
+        }
+    }
+
+
+    @Override
+    public String hxPhoneRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception {
+        System.out.println("hx话费充值");
+
+        String URL="http://cdn.ltae.xyz/api/receiveOrderPhone";
+        String account = directChargingOrderDto.getRechargeAccount();
+        Integer amount = directChargingOrderDto.getRechargeAmount().intValue();
+        String operator = directChargingOrderDto.getOperator();
+        Integer type = null;
+        String area = null;
+
+        if (operator.length() > 2) {
+            if (operator.endsWith("移动")) {
+                type = 1;
+            } else if (operator.endsWith("电信")) {
+                type = 2;
+            } else if (operator.endsWith("联通")) {
+                type = 3;
+            }
+            area = operator.substring(0, operator.length()-2);
+        }
+        if (type == null || area == null){
+            throw new Exception("暂不支持该运营商或地区");
+        }
+
+        String userid = "10133";
+
+        String key = "f1f33b3c8160c165ecad1b62440be476";
+
+        String no = directChargingOrderDto.getOrderId();
+
+        String notify_rul = "http://47.110.9.136:8090/oilCardRecharge/hxCallBack";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("partner_id", userid);
+        params.put("partner_order_no", no);
+        params.put("account", account);
+        params.put("amount", amount);
+        params.put("type", type);
+        params.put("area", area);
+        params.put("charge_type", 0);
+        params.put("notify_url", notify_rul);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(userid).append(no).append(account).append(amount).append(type).append(area).append(0).append(notify_rul).append(key);
+        System.out.println(sb);
+        String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8");
+        System.out.println(sign);
+        params.put("sign", sign);
+
+        //开始请求
+        String sr = HttpClient4.doPost(URL, params);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println(jsonObject);
+        Integer code = (Integer) jsonObject.get("code");
+
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (code == 1) {
+            directChargingOrderDto1.setState(5);
+        } else {
+            directChargingOrderDto1.setState(4);
+
+            dealOrderExtra(false, directChargingOrderDto);
+        }
+        directChargingOrderDto1.setUpName(APIUP.HX_PHONE.value);
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+
+        return sr;
+    }
+
+    @Override
+    public String hxCallBack(HXCallBack backInfo) {
+        System.out.println("hx话费充值回调");
+        System.out.println(backInfo);
+        if (backInfo.getPartner_order_no() == null){
+            return "success";
+        }
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getPartner_order_no());
+
+        if (directChargingOrderDto == null){
+            System.out.println("未找到订单");
+            return "success";
+        }
+
+        try {
+            if (backInfo.getStatus().equals("2")) {//交易成功
+                directChargingOrderDto.setState(2);
+                System.out.println("充值成功");
+                dealOrderExtra(true, directChargingOrderDto);
+            } else if (backInfo.getStatus().equals("1")) { // 部分成功
+                directChargingOrderDto.setState(21);
+            } else {//交易失败
+//                if (directChargingOrderDto.getState() == 21) {
+//                    directChargingOrderDto.setState(22);
+//                } else {
+//                    directChargingOrderDto.setState(4);
+//                    dealOrderExtra(false, directChargingOrderDto);
+//                }
+                directChargingOrderDto.setState(22);
+            }
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            directChargingOrderDto.setState(4);
+            dealOrderExtra(false, directChargingOrderDto);
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "success";
+        }
+    }
+
+    private static final Map<Integer, Integer> jhAmountMap = new HashMap<>();
+
+    static {
+        jhAmountMap.put(500, 9100661);
+    }
+    @Override
+    public String jhOilRechargeSubmit(DirectChargingOrderDto directChargingOrderDto) throws Exception {
+        System.out.println("jh油卡充值");
+
+        String URL="http://payapi.eyunpay.com/open/api/jy/recharge";
+
+        String appid = "WP1678939686678";
+
+        String phone = directChargingOrderDto.getRechargeAccount();
+
+        Integer amount = directChargingOrderDto.getRechargeAmount().intValue() * 100;
+
+        String key = "BdeDCWalkl1OrFc5zbY24IRbUDIN4qnF";
+
+        String orderId = directChargingOrderDto.getOrderId();
+
+        String asynchUrl = "http://47.110.9.136:8090/oilCardRecharge/jhCallBack";
+
+        //设置请求参数
+        Map<String, Object> params = new HashMap<>();
+        params.put("appid", appid);
+        params.put("orderId", orderId);
+        params.put("phone", phone);
+        params.put("amount", amount);
+        params.put("asynchUrl", asynchUrl);
+
+        StringBuilder sb = new StringBuilder();
+        TreeSet<String> sortedSet = new TreeSet<>(params.keySet());
+        for (String p : sortedSet) {
+            System.out.println(p+":"+params.get(p));
+            sb.append(p).append("=").append(params.get(p)).append("&");
+        }
+        sb.append("key=").append(key);
+        System.out.println(sb);
+        String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8");
+        params.put("sign", sign);
+        //开始请求
+        JSONObject json = JSONObject.fromObject(params);
+        System.out.println(json);
+        String sr = HttpClient4.doPostJson(URL, json);
+        System.out.println(sr);
+        net.sf.json.JSONObject jsonObject= JSONObject.fromObject(sr);
+        System.out.println(jsonObject);
+        Integer code = (Integer) jsonObject.get("code");
+
+        DirectChargingOrderDto directChargingOrderDto1 = new DirectChargingOrderDto();
+        directChargingOrderDto1.setOrderId(directChargingOrderDto.getOrderId());
+        if (code == 0) {
+            directChargingOrderDto1.setState(5);
+        } else {
+            directChargingOrderDto1.setState(4);
+
+            dealOrderExtra(false, directChargingOrderDto);
+        }
+        directChargingOrderDto1.setUpName(APIUP.JH_OIL.value);
+        oilCardRechargeMapperExtra.updateOrderState(directChargingOrderDto1);
+
+        return sr;
+    }
+
+    @Override
+    public String jhCallBack(JHCallBack backInfo) {
+        System.out.println("jh充值回调");
+        System.out.println(backInfo);
+        if (backInfo.getOrderId() == null){
+            return "success";
+        }
+        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getOrderId());
+
+        if (directChargingOrderDto == null){
+            System.out.println("未找到订单");
+            return "success";
+        }
+
+        try {
+            if (backInfo.getStatus() == 2) {//交易成功
+                directChargingOrderDto.setState(2);
+                System.out.println("充值成功");
+                dealOrderExtra(true, directChargingOrderDto);
+            } else if (backInfo.getStatus() == 3) { // 部分成功
+                directChargingOrderDto.setState(4);
+                System.out.println("充值失败");
+                dealOrderExtra(false, directChargingOrderDto);
+            } else {
+                return "success";
+            }
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            directChargingOrderDto.setState(4);
+            dealOrderExtra(false, directChargingOrderDto);
+            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
+            return "success";
+        }
+    }
+
+    @Override
     public void dealOrderExtra(boolean success, DirectChargingOrderDto directChargingOrderDto){
         String orderId = directChargingOrderDto.getOrderId();
         DirectChargingOrderDto localOrder = oilCardRechargeMapperExtra.getOrder(orderId);
@@ -980,40 +1273,6 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         }
     }
 
-    @Override
-    public String fastCallBack(FastBackInfo backInfo) {
-        System.out.println("快充油卡话费充值回调");
-        System.out.println(backInfo);
-        if (backInfo.getOutTradeNo() == null){
-            return "SUCCESS";
-        }
-        DirectChargingOrderDto directChargingOrderDto = oilCardRechargeMapperExtra.getOrder(backInfo.getOutTradeNo());
-        if (directChargingOrderDto == null){
-            System.out.println("未找到订单");
-            return "SUCCESS";
-        }
-
-        try {
-            if (backInfo.getState().equals("SUCCESS")) {//交易成功
-                directChargingOrderDto.setState(2);
-                dealOrderExtra(true, directChargingOrderDto);
-                System.out.println("充值成功");
-
-            } else if (backInfo.getState().equals("FAIL")){//交易失败
-                directChargingOrderDto.setState(4);
-                dealOrderExtra(false, directChargingOrderDto);
-                System.out.println("充值失败");
-
-            }
-            boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
-            return "SUCCESS";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        directChargingOrderDto.setState(4);
-        boolean update = oilCardRechargeMapperExtra.updateRechargeRecord(directChargingOrderDto) > 0;
-        return "SUCCESS";
-    }
 
 
     //    插入订单
@@ -1512,6 +1771,90 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
         return new JSONResult("更新失败", 500);
     }
 
+    @Override
+    public JSONResult automaticSubmitPhoneYF(DictInputDTO phone) {
+        System.out.println("传入的automaticSubmit为" + phone.getName() + " : " + phone.getContent());
+        System.out.println("话费自动");
+        int result = dictMapperExtra.updateDictByName(phone);
+        if (result > 0 ) {
+            System.out.println("yf话费自动");
+            String state = dictMapperExtra.selectDictByName("atp_yf").getContent();
+            if (state.equals("1")) {
+                Long rate = Long.parseLong(dictMapperExtra.selectDictByName("atp_yf_time").getContent());
+                AutoTimerTask task = new AutoTimerTask("atp_yf_task") {
+                    @Override
+                    public void execute() {
+                        autoSubmitPhoneM(APIUP.YF_PHONE);
+                    }
+                };
+                task.setPeriod(rate);
+                timeTaskManager.deleteTimerTaskByCode("atp_yf_task", true);
+                System.out.println("yf话费自动开始");
+                timeTaskManager.addTimerTask("atp_yf_task", task);
+            } else {
+                timeTaskManager.deleteTimerTaskByCode("atp_yf_task", true);
+            }
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public JSONResult automaticSubmitPhoneHX(DictInputDTO phone) {
+        System.out.println("传入的automaticSubmit为" + phone.getName() + " : " + phone.getContent());
+        System.out.println("话费自动");
+        int result = dictMapperExtra.updateDictByName(phone);
+        if (result > 0 ) {
+            System.out.println("hx话费自动");
+            String state = dictMapperExtra.selectDictByName("atp_hx").getContent();
+            if (state.equals("1")) {
+                Long rate = Long.parseLong(dictMapperExtra.selectDictByName("atp_hx_time").getContent());
+                AutoTimerTask task = new AutoTimerTask("atp_hx_task") {
+                    @Override
+                    public void execute() {
+                        autoSubmitPhoneM(APIUP.HX_PHONE);
+                    }
+                };
+                task.setPeriod(rate);
+                timeTaskManager.deleteTimerTaskByCode("atp_hx_task", true);
+                System.out.println("hx话费自动开始");
+                timeTaskManager.addTimerTask("atp_hx_task", task);
+            } else {
+                timeTaskManager.deleteTimerTaskByCode("atp_hx_task", true);
+            }
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
+    @Override
+    public JSONResult automaticSubmitPhoneJH(DictInputDTO phone) {
+        System.out.println("传入的automaticSubmit为" + phone.getName() + " : " + phone.getContent());
+        System.out.println("话费自动");
+        int result = dictMapperExtra.updateDictByName(phone);
+        if (result > 0 ) {
+            System.out.println("jh话费自动");
+            String state = dictMapperExtra.selectDictByName("atp_jh").getContent();
+            if (state.equals("1")) {
+                Long rate = Long.parseLong(dictMapperExtra.selectDictByName("atp_jh_time").getContent());
+                AutoTimerTask task = new AutoTimerTask("atp_jh_task") {
+                    @Override
+                    public void execute() {
+                        autoSubmitOilCardM(APIUP.JH_OIL);
+                    }
+                };
+                task.setPeriod(rate);
+                timeTaskManager.deleteTimerTaskByCode("atp_jh_task", true);
+                System.out.println("jh话费自动开始");
+                timeTaskManager.addTimerTask("atp_jh_task", task);
+            } else {
+                timeTaskManager.deleteTimerTaskByCode("atp_jh_task", true);
+            }
+            return new JSONResult("更新成功", 200);
+        }
+        return new JSONResult("更新失败", 500);
+    }
+
     private void autoSubmitOilCardM(APIUP up){
         DirectChargingOrderDto q = new DirectChargingOrderDto();
         System.out.println("油卡自动充值开始");
@@ -1530,6 +1873,9 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     break;
                 case CHENXIE_OIL:
                     chenxieOilRechargeSubmit(order);
+                    break;
+                case JH_OIL:
+                    jhOilRechargeSubmit(order);
                     break;
             }
         } catch (Exception e) {
@@ -1557,6 +1903,12 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                     break;
                 case CHENXIE_PHONE:
                     chenxiePhoneRechargeSubmit(order);
+                    break;
+                case YF_PHONE:
+                    yfPhoneRechargeSubmit(order);
+                    break;
+                case HX_PHONE:
+                    hxPhoneRechargeSubmit(order);
                     break;
             }
         } catch (Exception e) {
@@ -1634,33 +1986,41 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
 
     @Override
     public int importUpdate(MultipartFile file, Integer recordType) throws Exception {
-        int result = 0;
         InputStream inputStream = file.getInputStream();
         List<DirectChargingOrderDto> deliveryList = null;
         Map<String, DirectChargingOrderDto> deliveryMap = new HashMap<>();
         System.out.println("读取Excel");
         System.out.println(file.getOriginalFilename());
         deliveryList = RechargeOrderUpdateImportHelper.readExcel(file.getOriginalFilename(), inputStream);
-        System.out.println(deliveryList);
         if(deliveryList != null){
-            for (DirectChargingOrderDto orderDto : deliveryList){
-                try {
-                    DirectChargingOrderDto q = new DirectChargingOrderDto();
-                    q.setState(5);
-                    q.setRecordType(8);
-                    q.setRechargeAccount(orderDto.getRechargeAccount());
-                    List<DirectChargingOrderDto> list = oilCardRechargeMapperExtra.getAllOnceOrderInfoList(q);
-                    if (!list.isEmpty()) {
-                        orderDto.setOldOrderId(list.get(0).getOrderId());
-                        directChargingOrderService.updateRecord(orderDto);
+            List<DirectChargingOrderDto> finalDeliveryList = deliveryList;
+            new Thread(() -> {
+                for (DirectChargingOrderDto orderDto : finalDeliveryList){
+                    try {
+                        if (orderDto.getOrderId() == null || orderDto.getOrderId().equals("")){
+                            DirectChargingOrderDto q = new DirectChargingOrderDto();
+                            q.setState(5);
+                            q.setRecordType(8);
+                            q.setRechargeAccount(orderDto.getRechargeAccount());
+                            List<DirectChargingOrderDto> list = oilCardRechargeMapperExtra.getAllOnceOrderInfoList(q);
+                            if (!list.isEmpty()) {
+                                orderDto.setOldOrderId(list.get(0).getOrderId());
+                                directChargingOrderService.updateRecord(orderDto);
+                            }
+                        } else {
+                            DirectChargingOrderDto o = oilCardRechargeMapperExtra.getOrder(orderDto.getOrderId());
+                            if (o != null) {
+                                orderDto.setOldOrderId(o.getOrderId());
+                                directChargingOrderService.updateRecord(orderDto);
+                            }
+                        }
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
                     }
-                } catch (Exception e){
-                    result += 1;
                 }
-
-            }
+            }).start();
         }
-        return result;
+        return 0;
     }
 
     @Override

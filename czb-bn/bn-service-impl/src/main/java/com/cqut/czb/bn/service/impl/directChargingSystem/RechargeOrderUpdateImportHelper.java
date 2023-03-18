@@ -73,13 +73,20 @@ public class RechargeOrderUpdateImportHelper {
             if (xssfSheet == null) {
                 continue;
             }
+            String head = xssfSheet.getRow(0).getCell(0).getStringCellValue();
+            boolean isID = false;
+            if (head != null) {
+                if (head.trim().equals("orderId")) {
+                    isID = true;
+                }
+            }
             // Read the Row
             for (int rowNum = 1; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
                 XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                 System.out.println(getValue(xssfRow.getCell(0)));
                 // 解析文档
                 if (xssfRow != null && xssfRow.getLastCellNum() >= 2 && xssfRow.getCell(0) != null) {
-                    directChargingOrderDto = resolveXlsx(xssfRow);
+                    directChargingOrderDto = resolveXlsx(xssfRow, isID ? 1 : 2);
                     if (directChargingOrderDto != null) {
                         list.add(directChargingOrderDto);
                     }
@@ -96,7 +103,7 @@ public class RechargeOrderUpdateImportHelper {
      * @param xssfRow
      * @return
      */
-    private static DirectChargingOrderDto resolveXlsx(XSSFRow xssfRow) throws ParseException {
+    private static DirectChargingOrderDto resolveXlsx(XSSFRow xssfRow, int type) throws ParseException {
 
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
 
@@ -104,8 +111,14 @@ public class RechargeOrderUpdateImportHelper {
             return null;
         }
 
-        directChargingOrderDto.setRechargeAccount(getStringValue(xssfRow.getCell(0)));
-        directChargingOrderDto.setState(getState(getStringValue(xssfRow.getCell(1))));
+        if (type == 1) {
+            directChargingOrderDto.setOrderId(getStringValue(xssfRow.getCell(0)));
+            directChargingOrderDto.setState(getState(getStringValue(xssfRow.getCell(1))));
+        } else {
+            directChargingOrderDto.setRechargeAccount(getStringValue(xssfRow.getCell(0)));
+            directChargingOrderDto.setState(getState(getStringValue(xssfRow.getCell(1))));
+        }
+
         return directChargingOrderDto;
     }
 
@@ -125,6 +138,13 @@ public class RechargeOrderUpdateImportHelper {
             if (hssfSheet == null) {
                 continue;
             }
+            String head = hssfSheet.getRow(0).getCell(0).getStringCellValue();
+            boolean isID = false;
+            if (head != null) {
+                if (head.trim().equals("orderId")) {
+                    isID = true;
+                }
+            }
             // Read the Row
             HSSFRow hssfRow = null;
             DirectChargingOrderDto  obj = null;
@@ -133,7 +153,7 @@ public class RechargeOrderUpdateImportHelper {
                 // 解析文档
                 // System.out.println(rowNum);
                 if (hssfRow != null && hssfRow.getLastCellNum() >= 7 && hssfRow.getCell(0) != null) {
-                    obj = resolveXls(hssfRow);
+                    obj = resolveXls(hssfRow, isID ? 1 : 2);
                     if (obj != null) {
                         list.add(obj);
                     }
@@ -144,15 +164,20 @@ public class RechargeOrderUpdateImportHelper {
         return list;
     }
 
-    private static DirectChargingOrderDto resolveXls(HSSFRow hssfRow) throws ParseException {
+    private static DirectChargingOrderDto resolveXls(HSSFRow hssfRow, int type) throws ParseException {
         DirectChargingOrderDto directChargingOrderDto = new DirectChargingOrderDto();
 
         if (getValue(hssfRow.getCell(0)) == null || getValue(hssfRow.getCell(0)) == "") {
             return null;
         }
 
-        directChargingOrderDto.setRechargeAccount(getStringValue(hssfRow.getCell(0)));
-        directChargingOrderDto.setState(getState(getStringValue(hssfRow.getCell(1))));
+        if (type == 1) {
+            directChargingOrderDto.setOrderId(getStringValue(hssfRow.getCell(0)));
+            directChargingOrderDto.setState(getState(getStringValue(hssfRow.getCell(1))));
+        } else {
+            directChargingOrderDto.setRechargeAccount(getStringValue(hssfRow.getCell(0)));
+            directChargingOrderDto.setState(getState(getStringValue(hssfRow.getCell(1))));
+        }
 
         return directChargingOrderDto;
     }

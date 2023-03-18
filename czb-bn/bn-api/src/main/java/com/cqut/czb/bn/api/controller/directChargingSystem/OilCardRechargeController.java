@@ -22,7 +22,6 @@ import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/oilCardRecharge")
@@ -248,6 +247,9 @@ public class OilCardRechargeController {
         if (dictInputDTO.getExtra().equals(APIUP.CHENXIE_OIL.getValue())){
             return oilCardRechargeService.automaticSubmitOilCard(dictInputDTO);
         }
+        if (dictInputDTO.getExtra().equals(APIUP.JH_OIL.getValue())){
+            return oilCardRechargeService.automaticSubmitPhoneJH(dictInputDTO);
+        }
         return null;
     }
 
@@ -260,6 +262,13 @@ public class OilCardRechargeController {
         if (dictInputDTO.getExtra().equals(APIUP.CHENXIE_PHONE.getValue())){
             return oilCardRechargeService.automaticSubmitPhone(dictInputDTO);
         }
+        if (dictInputDTO.getExtra().equals(APIUP.YF_PHONE.getValue())){
+            return oilCardRechargeService.automaticSubmitPhoneYF(dictInputDTO);
+        }
+        if (dictInputDTO.getExtra().equals(APIUP.HX_PHONE.getValue())){
+            return oilCardRechargeService.automaticSubmitPhoneHX(dictInputDTO);
+        }
+
         return null;
     }
 
@@ -320,6 +329,40 @@ public class OilCardRechargeController {
         return oilCardRechargeService.submitSelectState(selectOrderDto);
     }
 
+    @PostMapping("/submitOrders")
+    @ResponseBody
+    public JSONResult submitOrders(SelectOrderDto selectOrderDto){
+        if (selectOrderDto == null || selectOrderDto.getOrderId() == null) {
+            return new JSONResult("请选择订单", 400);
+        }
+        int count = 0;
+        System.out.println(selectOrderDto);
+        String up = selectOrderDto.getUp();
+        for (int i = 0; i < selectOrderDto.getOrderId().length; i++) {
+            String id = selectOrderDto.getOrderId()[i];
+            DirectChargingOrderDto o = new DirectChargingOrderDto();
+            o.setOrderId(id);
+            JSONResult res = null;
+            if (up.equals(APIUP.YF_PHONE.getValue())) {
+                res = yfPhoneSubmit(o);
+            } else if (up.equals(APIUP.HX_PHONE.getValue())) {
+                res = hxPhoneSubmit(o);
+            } else if (up.equals(APIUP.ANDA888_OIL.getValue()) || up.equals(APIUP.ANDA888_PHONE.getValue())) {
+                res = fastOilOrderSubmit(o);
+            } else if (up.equals(APIUP.CHENXIE_OIL.getValue()) || up.equals(APIUP.CHENXIE_PHONE.getValue())) {
+                res = chenxieOilRechargeSubmit(o);
+            } else {
+                return new JSONResult("请选择可用渠道", 200);
+            }
+            if (res.getCode() == 200) {
+                count+=1;
+            }
+        }
+        return new JSONResult("更新成功数量："+count, 200);
+    }
+
+
+
     @PostMapping("/callBack")
     public String oilCardRechargeCallBack(CallBackInfo backInfo){
         System.out.println(backInfo);
@@ -329,6 +372,24 @@ public class OilCardRechargeController {
     @PostMapping("/fastCallBack")
     public String fastCallBack(FastBackInfo backInfo){
         return oilCardRechargeService.fastCallBack(backInfo);
+    }
+
+    @PostMapping("/yfCallBack")
+    public String yfCallBack(YFCallBack backInfo){
+        System.out.println(backInfo);
+        return oilCardRechargeService.yfCallBack(backInfo);
+    }
+
+    @PostMapping("/hxCallBack")
+    public String hxCallBack(HXCallBack backInfo){
+        System.out.println(backInfo);
+        return oilCardRechargeService.hxCallBack(backInfo);
+    }
+
+    @PostMapping("/jhCallBack")
+    public String jhCallBack(JHCallBack backInfo){
+        System.out.println(backInfo);
+        return oilCardRechargeService.jhCallBack(backInfo);
     }
 
     @PostMapping("/testCallBack")
@@ -405,6 +466,58 @@ public class OilCardRechargeController {
         }
         return new JSONResult("新增失败", 400);
     }
+
+    @PostMapping("/yfPhoneSubmit")
+    @ResponseBody
+    public JSONResult yfPhoneSubmit(DirectChargingOrderDto directChargingOrderDto){
+        try {
+            if (directChargingOrderDto.getOrderId() != null){
+                DirectChargingOrderDto old = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+                if (old.getRecordType() == 8){
+                    String res = oilCardRechargeService.yfPhoneRechargeSubmit(old);
+                    return new JSONResult(res, 200);
+                }
+            }
+            return new JSONResult("未找到订单", 400);
+        } catch (Exception e) {
+            return new JSONResult(e.getMessage(), 400);
+        }
+    }
+
+    @PostMapping("/hxPhoneSubmit")
+    @ResponseBody
+    public JSONResult hxPhoneSubmit(DirectChargingOrderDto directChargingOrderDto){
+        try {
+            if (directChargingOrderDto.getOrderId() != null){
+                DirectChargingOrderDto old = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+                if (old.getRecordType() == 8){
+                    String res = oilCardRechargeService.hxPhoneRechargeSubmit(old);
+                    return new JSONResult(res, 200);
+                }
+            }
+            return new JSONResult("未找到订单", 400);
+        } catch (Exception e) {
+            return new JSONResult(e.getMessage(), 400);
+        }
+    }
+
+    @PostMapping("/jhOilSubmit")
+    @ResponseBody
+    public JSONResult jhOilSubmit(DirectChargingOrderDto directChargingOrderDto){
+        try {
+            if (directChargingOrderDto.getOrderId() != null){
+                DirectChargingOrderDto old = oilCardRechargeMapperExtra.getOrder(directChargingOrderDto.getOrderId());
+                if (old.getRecordType() == 2){
+                    String res = oilCardRechargeService.jhOilRechargeSubmit(old);
+                    return new JSONResult(res, 200);
+                }
+            }
+            return new JSONResult("未找到订单", 400);
+        } catch (Exception e) {
+            return new JSONResult(e.getMessage(), 400);
+        }
+    }
+
 
     public static void main(String[] args) {
         OilCardRechargeController c = new OilCardRechargeController();

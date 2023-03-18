@@ -161,6 +161,9 @@
             <if test="upName != null and upName != ''">
                 and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
             </if>
+            <if test="operator != null and operator != ''">
+                and operator like CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
+            </if>
         </where>
         order by a.create_at DESC
     </select>
@@ -207,6 +210,9 @@
             </if>
             <if test="upName != null and upName != ''">
                 and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="operator != null and operator != ''">
+                and operator like CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
             </if>
         </where>
         order by a.create_at DESC
@@ -289,6 +295,9 @@
             <if test="upName != null and upName != ''">
                 and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
             </if>
+            <if test="operator != null and operator != ''">
+                and operator like CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
+            </if>
         </where>
         order by a.create_at DESC
     </select>
@@ -326,6 +335,9 @@
             </if>
             <if test="upName != null and upName != ''">
                 and up_name like CONCAT(#{upName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="operator != null and operator != ''">
+                and operator like CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
             </if>
         </where>
     </select>
