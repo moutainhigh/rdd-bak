@@ -351,6 +351,8 @@ public class OilCardRechargeController {
                 res = fastOilOrderSubmit(o);
             } else if (up.equals(APIUP.CHENXIE_OIL.getValue()) || up.equals(APIUP.CHENXIE_PHONE.getValue())) {
                 res = chenxieOilRechargeSubmit(o);
+            } else if (up.equals(APIUP.JH_OIL.getValue())) {
+                res = jhOilSubmit(o);
             } else {
                 return new JSONResult("请选择可用渠道", 200);
             }

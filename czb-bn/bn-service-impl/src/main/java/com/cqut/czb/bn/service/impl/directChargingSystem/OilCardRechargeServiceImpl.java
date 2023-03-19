@@ -1157,7 +1157,7 @@ public class OilCardRechargeServiceImpl implements OilCardRechargeService {
                 directChargingOrderDto.setState(2);
                 System.out.println("充值成功");
                 dealOrderExtra(true, directChargingOrderDto);
-            } else if (backInfo.getStatus() == 3) { // 部分成功
+            } else if (backInfo.getStatus() == 3) {
                 directChargingOrderDto.setState(4);
                 System.out.println("充值失败");
                 dealOrderExtra(false, directChargingOrderDto);
